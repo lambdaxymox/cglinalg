@@ -63,8 +63,66 @@ impl<S, const N: usize> Rotation<S, N>
 where 
     S: SimdScalarFloat 
 {
-    /// Get a reference to the underlying matrix that represents the 
-    /// rotation.
+    /// Get a reference to the underlying matrix that represents the rotation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// #     Vector2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let expected = Matrix2x2::new(
+    ///      0_f64,  1_f64,
+    ///     -1_f64,  0_f64
+    /// );
+    /// let result = rotation.matrix();
+    /// 
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let expected = Matrix3x3::new(
+    ///      0_f64,  1_f64,  0_f64,
+    ///     -1_f64,  0_f64,  0_f64,
+    ///      0_f64,  0_f64,  1_f64
+    /// );
+    /// let result = rotation.matrix();
+    /// 
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix<S, N, N> {
         &self.matrix
@@ -77,9 +135,8 @@ where
     /// `axis` by an angle `theta`, construct a rotation that rotates a 
     /// vector about the same axis by an angle `-theta`.
     /// 
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,    
@@ -98,7 +155,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -131,9 +189,8 @@ where
 
     /// Mutably invert a rotation in place.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -155,7 +212,8 @@ where
     /// assert_eq!(result, expected);
     /// ``` 
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -184,9 +242,8 @@ where
 
     /// Apply the rotation operation to a vector.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -211,7 +268,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -244,9 +302,8 @@ where
 
     /// Apply the rotation operation to a point.
     ///
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -271,7 +328,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -308,9 +366,8 @@ where
 
     /// Apply the inverse of the rotation to a vector.
     ///
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -340,7 +397,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -376,9 +434,8 @@ where
 
     /// Apply the inverse of the rotation to a point.
     ///
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -408,7 +465,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -451,9 +509,8 @@ where
     /// a vector or point by and angle of zero radians. The inverse operation
     /// will also rotate by zero radians.
     ///
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -469,7 +526,8 @@ where
     /// assert_eq!(rotation.inverse(), rotation);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -517,9 +575,8 @@ where
 {
     /// Convert a rotation to a generic transformation.
     /// 
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -549,7 +606,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -589,9 +647,8 @@ where
 
     /// Convert a rotation into a generic affine matrix.
     /// 
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -620,7 +677,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,

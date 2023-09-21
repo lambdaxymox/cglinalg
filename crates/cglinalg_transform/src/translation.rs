@@ -70,6 +70,46 @@ where
     S: SimdScalarSigned 
 {
     /// Construct a translation operator from a vector of displacements.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let translation = Translation2::from_vector(&vector);
+    /// let point = Point2::origin();
+    /// let expected = Point2::new(1_f64, 2_f64);
+    /// let result = translation.translate_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let translation = Translation3::from_vector(&vector);
+    /// let point = Point3::origin();
+    /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let result = translation.translate_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn from_vector(vector: &Vector<S, N>) -> Self {
         Self {
@@ -79,9 +119,8 @@ where
 
     /// Construct a translation between two vectors.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -101,7 +140,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     ///
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -129,9 +169,8 @@ where
 
     /// Construct a translation between two points.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -150,7 +189,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -181,9 +221,8 @@ where
     /// If `self` is a translation of a vector by a displacement `distance`, then its
     /// inverse will be a translation by a displacement `-distance`.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2, 
@@ -200,7 +239,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     ///
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3, 
@@ -223,9 +263,8 @@ where
 
     /// Mutably invert a translation in place.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2, 
@@ -241,7 +280,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3, 
@@ -263,9 +303,8 @@ where
     
     /// Apply the translation transformation to a point.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -284,7 +323,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -309,9 +349,8 @@ where
 
     /// Apply the translation transformation to a vector.
     ///
-    /// # Examples
-    ///
-    /// An example in two dimensions.
+    /// # Example (Two Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -329,7 +368,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -353,9 +393,8 @@ where
 
     /// Apply the inverse of the translation to a point.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -375,7 +414,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -401,9 +441,8 @@ where
 
     /// Apply the inverse of the translation to a vector.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2, 
@@ -419,7 +458,8 @@ where
     /// assert_eq!(translation.inverse_translate_vector(&vector), vector);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -444,9 +484,8 @@ where
     /// The identity transformation for translations, which displaces
     /// a vector or point zero distance.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2, 
@@ -461,7 +500,8 @@ where
     /// assert_eq!(translation.translate_point(&point), point);
     /// ```
     ///
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3, 
@@ -484,9 +524,8 @@ where
 
     /// Convert a translation into its equivalent shift vector.
     /// 
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions. 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -504,7 +543,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -534,12 +574,56 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     /// Convert a translation to a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     1_f64, 0_f64, 0_f64,
+    ///     0_f64, 1_f64, 0_f64,
+    ///     1_f64, 2_f64, 1_f64
+    /// ));
+    /// let result = translation.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     1_f64, 0_f64, 0_f64, 0_f64,
+    ///     0_f64, 1_f64, 0_f64, 0_f64,
+    ///     0_f64, 0_f64, 1_f64, 0_f64,
+    ///     1_f64, 2_f64, 3_f64, 1_f64
+    /// ));
+    /// let result = translation.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         Transform::from_specialized(self)
     }
 }
-
 
 impl<S, const N: usize> AsRef<Vector<S, N>> for Translation<S, N> {
     #[inline]

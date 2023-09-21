@@ -94,7 +94,7 @@ fn test_perspective_projection_fov_transformation() {
         0_f32,         0_f32,        -1.002002_f32, -1_f32, 
         0_f32,         0_f32,        -0.2002002_f32, 0_f32
     );
-    let result = PerspectiveFov3::new(vfov, aspect, near, far);
+    let result = PerspectiveFov3::from_fov(vfov, aspect, near, far);
 
     assert_relative_eq!(result.matrix(), &expected, epsilon = 1e-10);
 }
@@ -106,7 +106,7 @@ fn test_perspective_projection_unproject_point1() {
     let near = 0.1_f64;
     let far = 100_f64;
     let point = Point3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::new(vfov, aspect, near, far);
+    let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -121,7 +121,7 @@ fn test_perspective_projection_unproject_vector1() {
     let near = 0.1_f64;
     let far = 100_f64;
     let vector = Vector3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::new(vfov, aspect, near, far);
+    let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);

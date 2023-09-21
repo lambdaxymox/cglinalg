@@ -58,15 +58,107 @@ where
         }
     }
 
-    /// Construct a new transformation from a given homogeneous matrix. The input
-    /// matrix is not checked that it is a valid homogeneous matrix.
+    /// Construct a new transformation from a given homogeneous matrix. The 
+    /// function does not check that the input matrix is a valid homogeneous 
+    /// matrix.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix3x3::from_affine_angle(angle);
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = matrix * vector.to_homogeneous();
+    /// let result = transform.transform_vector(&vector).to_homogeneous();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix4x4::from_affine_angle_z(angle);
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = matrix * vector.to_homogeneous();
+    /// let result = transform.transform_vector(&vector).to_homogeneous();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn from_matrix_unchecked(matrix: Matrix<S, NPLUS1, NPLUS1>) -> Self {
         Self { matrix }
     }
 
-    /// Get a reference to the underlying matrix that represents the 
-    /// transformation.
+    /// Get a reference to the underlying matrix that represents the transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix3x3::from_affine_angle(angle);
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// 
+    /// assert_eq!(transform.matrix(), &matrix);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix4x4::from_affine_angle_z(angle);
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// 
+    /// assert_eq!(transform.matrix(), &matrix);
+    /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix<S, NPLUS1, NPLUS1> {
         &self.matrix
@@ -74,6 +166,53 @@ where
 
     /// Get a mutable reference to the underlying matrix that represents the 
     /// transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let mut transform = Transform2::identity();
+    /// {
+    ///     let matrix = transform.matrix_mut();
+    ///     matrix[0][0] = 2_f64;
+    ///     matrix[1][1] = 3_f64;
+    /// }
+    /// let expected = Matrix3x3::from_diagonal(&Vector3::new(2_f64, 3_f64, 1_f64));
+    /// let result = transform.matrix();
+    /// 
+    /// assert_eq!(result, &expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let mut transform = Transform3::identity();
+    /// {
+    ///     let matrix = transform.matrix_mut();
+    ///     matrix[0][0] = 2_f64;
+    ///     matrix[1][1] = 3_f64;
+    ///     matrix[2][2] = 4_f64;
+    /// }
+    /// let expected = Matrix4x4::from_diagonal(&Vector4::new(2_f64, 3_f64, 4_f64, 1_f64));
+    /// let result = transform.matrix();
+    /// 
+    /// assert_eq!(result, &expected);
+    /// ```
     #[inline]
     pub fn matrix_mut(&mut self) -> &mut Matrix<S, NPLUS1, NPLUS1> {
         &mut self.matrix
@@ -82,9 +221,8 @@ where
     /// The identity transformation for a generic transformation in homogeneous 
     /// coordinates.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -99,7 +237,8 @@ where
     /// assert_eq!(transform * point, point);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -130,9 +269,8 @@ where
 {
     /// Apply the transformation to a vector.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -155,7 +293,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -185,9 +324,8 @@ where
 
     /// Apply the inverse of the transformation to a point.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -210,7 +348,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,

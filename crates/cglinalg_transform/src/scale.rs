@@ -55,12 +55,90 @@ where
     S: SimdScalar 
 {
     /// Construct a scale transformation from a nonuniform scale across coordinates.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_vector = Vector2::new(5_f64, 7_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = Vector2::new(5_f64, 7_f64);
+    /// let result = scale.scale_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scale_vector = Vector3::new(5_f64, 7_f64, 11_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
+    /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
+    /// let result = scale.scale_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub const fn from_nonuniform_scale(vector: Vector<S, N>) -> Self {
-        Self { vector, }
+    pub const fn from_nonuniform_scale(vector: &Vector<S, N>) -> Self {
+        Self { 
+            vector: *vector, 
+        }
     }
 
     /// Construct a scale transformation from a uniform scale factor.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let scale_factor = 20_f64;
+    /// let scale = Scale2::from_scale(scale_factor);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector2::new(20_f64, 40_f64);
+    /// let result = scale.scale_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let scale_factor = 20_f64;
+    /// let scale = Scale3::from_scale(scale_factor);
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Vector3::new(20_f64, 40_f64, 60_f64);
+    /// let result = scale.scale_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn from_scale(scale: S) -> Self {
         Self {
@@ -70,9 +148,8 @@ where
 
     /// Apply a scale transformation to a vector.
     /// 
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -84,7 +161,7 @@ where
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
-    /// let scale = Scale2::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(2_f64, 3_f64);
     /// let result = scale.scale_vector(&vector);
@@ -92,7 +169,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3, 
@@ -105,7 +183,7 @@ where
     /// let scale_y = 3_f64;
     /// let scale_z = 4_f64;
     /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
-    /// let scale = Scale3::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let result = scale.scale_vector(&vector);
@@ -125,9 +203,8 @@ where
 
     /// Apply a scale transformation operation to a point.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions. 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -140,7 +217,7 @@ where
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
-    /// let scale = Scale2::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let point = Point2::new(1_f64, 1_f64);
     /// let expected = Point2::new(2_f64, 3_f64);
     /// let result = scale.scale_point(&point);
@@ -148,7 +225,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -162,7 +240,7 @@ where
     /// let scale_y = 3_f64;
     /// let scale_z = 4_f64;
     /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
-    /// let scale = Scale3::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let point = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Point3::new(2_f64, 3_f64, 4_f64);
     /// let result = scale.scale_point(&point);
@@ -185,9 +263,8 @@ where
     /// The identity is the scale transform with a scale factor of `1` for 
     /// each component.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,  
@@ -202,7 +279,8 @@ where
     /// assert_eq!(scale * point, point);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,  
@@ -223,6 +301,40 @@ where
 
     /// Convert a scaling transformation into a vector with the scaling factors
     /// in each component.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let expected = Vector2::new(5_f64, 7_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&expected);
+    /// let result = scale.to_vector();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&expected);
+    /// let result = scale.to_vector();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn to_vector(&self) -> Vector<S, N> {
         self.vector
@@ -237,6 +349,55 @@ where
     ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
 {
     /// Convert a scale transformation into a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let vector = Vector2::new(2_f64, 3_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&vector);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     2_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64,
+    ///     0_f64, 0_f64, 1_f64
+    /// ));
+    /// let result = scale.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&vector);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     2_f64, 0_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64, 0_f64,
+    ///     0_f64, 0_f64, 4_f64, 0_f64,
+    ///     0_f64, 0_f64, 0_f64, 1_f64
+    /// ));
+    /// let result = scale.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         Transform::from_specialized(self)
@@ -250,9 +411,8 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -264,8 +424,8 @@ where
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
-    /// let scale = Scale2::from_nonuniform_scale(scale_vector);
-    /// let expected = Scale2::from_nonuniform_scale(Vector2::new(
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
+    /// let expected = Scale2::from_nonuniform_scale(&Vector2::new(
     ///     1_f64 / scale_x, 
     ///     1_f64 / scale_y
     /// ));
@@ -274,7 +434,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -287,8 +448,8 @@ where
     /// let scale_y = 3_f64;
     /// let scale_z = 4_f64;
     /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
-    /// let scale = Scale3::from_nonuniform_scale(scale_vector);
-    /// let expected = Scale3::from_nonuniform_scale(Vector3::new(
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
+    /// let expected = Scale3::from_nonuniform_scale(&Vector3::new(
     ///     1_f64 / scale_x,
     ///     1_f64 / scale_y,
     ///     1_f64 / scale_z,
@@ -312,9 +473,8 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -326,7 +486,7 @@ where
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
-    /// let scale = Scale2::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector2::new(2_f64, 3_f64);
     /// let expected = Vector2::new(1_f64, 1_f64);
     /// let result = scale.inverse_scale_vector(&vector);
@@ -334,7 +494,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -347,7 +508,7 @@ where
     /// let scale_y = 3_f64;
     /// let scale_z = 4_f64;
     /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
-    /// let scale = Scale3::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let expected = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let result = scale.inverse_scale_vector(&vector);
@@ -370,9 +531,8 @@ where
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
     /// 
-    /// # Example
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -385,7 +545,7 @@ where
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
-    /// let scale = Scale2::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let point = Point2::new(2_f64, 3_f64);
     /// let expected = Point2::new(1_f64, 1_f64);
     /// let result = scale.inverse_scale_point(&point);
@@ -393,7 +553,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -407,7 +568,7 @@ where
     /// let scale_y = 3_f64;
     /// let scale_z = 4_f64;
     /// let scale_vector = Vector3::new(scale_x, scale_y, scale_z);
-    /// let scale = Scale3::from_nonuniform_scale(scale_vector);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let point = Point3::new(2_f64, 3_f64, 4_f64);
     /// let expected = Point3::new(1_f64, 1_f64, 1_f64);
     /// let result = scale.inverse_scale_point(&point);
@@ -566,7 +727,7 @@ where
     fn mul(self, other: Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
         
-        Scale::from_nonuniform_scale(vector)
+        Scale::from_nonuniform_scale(&vector)
     }
 }
 
@@ -580,7 +741,7 @@ where
     fn mul(self, other: &Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
         
-        Scale::from_nonuniform_scale(vector)
+        Scale::from_nonuniform_scale(&vector)
     }
 }
 
@@ -594,7 +755,7 @@ where
     fn mul(self, other: Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
         
-        Scale::from_nonuniform_scale(vector)
+        Scale::from_nonuniform_scale(&vector)
     }
 }
 
@@ -608,7 +769,7 @@ where
     fn mul(self, other: &'a Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
         
-        Scale::from_nonuniform_scale(vector)
+        Scale::from_nonuniform_scale(&vector)
     }
 }
 

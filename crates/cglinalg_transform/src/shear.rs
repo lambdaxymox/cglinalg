@@ -224,6 +224,28 @@ where
     }
 
     /// Convert a shear transformation into a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let shear = Shear2::from_shear(-5_f64, 7_f64);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///      1_f64, 7_f64, 0_f64,
+    ///     -5_f64, 1_f64, 0_f64,
+    ///      0_f64, 0_f64, 1_f64
+    /// ));
+    /// let result = shear.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
@@ -780,6 +802,33 @@ where
     }
 
     /// Convert a shear transformation into a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let shear = Shear3::from_shear(
+    ///     5_f64,  7_f64,
+    ///     11_f64, 13_f64,
+    ///     17_f64, 19_f64
+    /// );
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     1_f64, 11_f64, 17_f64, 0_f64,
+    ///     5_f64, 1_f64,  19_f64, 0_f64,
+    ///     7_f64, 13_f64, 1_f64,  0_f64,
+    ///     0_f64, 0_f64,  0_f64,  1_f64
+    /// ));
+    /// let result = shear.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)

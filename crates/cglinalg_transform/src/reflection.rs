@@ -37,6 +37,36 @@ where
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the **y-axis** using the origin as the bias.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// // Normal to the plane of reflection.
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let bias = Vector2::zero();
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let expected = Vector2::new(-1_f64, 2_f64);
+    /// let result = reflection.reflect_vector(&vector);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// // In two dimensions, we can just as well use the opposite normal.
+    /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
+    /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
+    /// let opposite_result = opposite_reflection.reflect_vector(&vector);
+    /// 
+    /// assert_eq!(opposite_result, expected);
+    /// ```
     #[inline]
     pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self {
         Self {
@@ -50,6 +80,26 @@ where
     ///
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the **y-axis** using the origin as the bias.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// // Normal to the plane of reflection.
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+    /// let bias = Vector2::zero();
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// 
+    /// assert_eq!(reflection.bias(), bias);
+    /// ```
     #[inline]
     pub const fn bias(&self) -> Vector2<S> {
         self.bias
@@ -60,12 +110,66 @@ where
     /// There is an ambiguity in the choice of normal to a line in
     /// two dimensions. One can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection transformation.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the **y-axis** using the origin as the bias.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// // Normal to the plane of reflection.
+    /// let normal = Vector2::unit_x();
+    /// let unit_normal: Unit<Vector2<f64>> = Unit::from_value(normal);
+    /// let bias = Vector2::zero();
+    /// let reflection = Reflection2::from_normal_bias(&unit_normal, &bias);
+    /// 
+    /// assert_eq!(reflection.normal(), normal);
+    /// ```
     #[inline]
     pub const fn normal(&self) -> Vector2<S> {
         self.normal
     }
 
-    /// The underlying matrix of the reflection transformation.
+    /// Return the underlying matrix of the reflection transformation.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the **y-axis** using the origin as the bias.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// // Normal to the plane of reflection.
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+    /// let bias = Vector2::zero();
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let expected = Matrix3x3::new(
+    ///     -1_f64, 0_f64, 0_f64,
+    ///      0_f64, 1_f64, 0_f64,
+    ///      0_f64, 0_f64, 1_f64
+    /// );
+    /// let result = reflection.matrix();
+    /// 
+    /// assert_eq!(result, &expected);
+    /// 
+    /// // In two dimensions, we can just as well use the opposite normal.
+    /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
+    /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
+    /// 
+    /// assert_eq!(opposite_reflection.matrix(), reflection.matrix());
+    /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix3x3<S> {
         &self.matrix
@@ -172,6 +276,36 @@ where
     }
 
     /// Convert a reflection into a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `y == 2 * x`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector2::new(-2_f64, 1_f64));
+    /// let bias = Vector2::zero();
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     -3_f64 / 5_f64, 4_f64 / 5_f64, 0_f64,
+    ///      4_f64 / 5_f64, 3_f64 / 5_f64, 0_f64,
+    ///      0_f64,         0_f64,         1_f64
+    /// ));
+    /// let result = reflection.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform2<S> {
         Transform2::from_specialized(self)
@@ -321,7 +455,6 @@ where
 }
 
 
-
 /// A reflection transformation about a plane in three dimensions.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -340,6 +473,31 @@ where
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
+    /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
+    /// let result = reflection.reflect_vector(&vector);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self {
         Self {
@@ -353,15 +511,92 @@ where
     ///
     /// The `bias` is the coordinates of a known point in the plane of 
     /// reflection.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// 
+    /// assert_eq!(reflection.bias(), bias);
+    /// ```
     #[inline]
     pub const fn bias(&self) -> Vector3<S> {
         self.bias
     }
 
     /// Return the normal vector to the reflection plane.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let normal = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let unit_normal = Unit::from_value(normal);
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&unit_normal, &bias);
+    /// let expected = normal / normal.norm();
+    /// let result = reflection.normal();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn normal(&self) -> Vector3<S> {
         self.normal
+    }
+
+    /// Return the underlying matrix of the reflection transformation.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let expected = Matrix4x4::new(
+    ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
+    ///      0_f64,          0_f64,          0_f64,         1_f64
+    /// );
+    /// let result = reflection.matrix();
+    /// 
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub const fn matrix(&self) -> &Matrix4x4<S> {
+        &self.matrix
     }
 
     /// Reflect a vector across the plane described by the reflection 
@@ -453,6 +688,37 @@ where
     }
 
     /// Convert a reflection to a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
+    /// let bias = Vector3::zero();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
+    ///      0_f64,          0_f64,          0_f64,         1_f64
+    /// ));
+    /// let result = reflection.to_transform();
+    /// 
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
         Transform3::from_specialized(self.matrix)

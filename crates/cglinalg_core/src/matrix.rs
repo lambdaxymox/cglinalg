@@ -2083,9 +2083,8 @@ where
     /// [`Self::from_nonuniform_scale`] with `scale` as each entry in the vector
     /// of scale factors.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2, 
@@ -2101,7 +2100,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2132,9 +2132,8 @@ where
     /// This is the most general case for scaling matrices: the scale factor
     /// in each dimension need not be identical.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2, 
@@ -2152,7 +2151,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2209,9 +2209,8 @@ where
     /// In particular, this is a special case of the more general form in 
     /// [`Self::from_affine_nonuniform_scale`].
     /// 
-    /// # Examples
+    /// # Examples (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2245,7 +2244,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Examples (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -2327,9 +2327,8 @@ where
     /// | 0        ...       ...  0             1 |
     /// ```
     ///
-    /// # Examples
+    /// # Examples (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2372,7 +2371,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Examples (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,

@@ -543,7 +543,7 @@ where
     S: SimdScalarFloat
 {
     /// Construct a new perspective projection transformation.
-    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
+    pub fn from_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let spec_vfov = vfov.into();
 
         Self {
@@ -556,29 +556,272 @@ where
     }
 
     /// Get the vertical field of view angle.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let vfov = Degrees(72_f32);
+    /// let aspect = 800_f32 / 600_f32;
+    /// let near_z = 0.1_f32;
+    /// let far_z = 100_f32;
+    /// let expected = vfov.into();
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.vfov();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub const fn vfov(&self) -> Radians<S> {
-        self.vfov
+    pub fn vfov(&self) -> Radians<S> {
+        // The perspective projection field of view matrix has the form
+        // ```text
+        // | m[0, 0]  0         0        0       |
+        // | 0        m[1, 1]   0        0       |
+        // | 0        0         m[2, 2]  m[3, 2] |
+        // | 0        0        -1              0 |
+        // ```
+        // where
+        // ```text
+        // m[0, 0] := 1 / (aspect * tan(vfov / 2))
+        // m[1, 1] := 1 / (tan(vfov / 2))
+        // m[2, 2] := -(far + near) / (far - near)
+        // m[3, 2] := - 2 * far * near / (far - near)
+        // ```
+        // We can reconstruct the vertical field of view component from the 
+        // `m[1, 1]` component follows. 
+        // ```text
+        // m[1, 1] := 1 / tan(vfov / 2) 
+        //     <==> tan(vfov / 2) == 1 / m[1, 1]
+        //     <==> vfov / 2 == atan(1 / m[1, 1])
+        //     <==> vfov = 2 * atan(1 / m[1, 1])
+        // ```
+        // so that `vfov == 2 * atan(1 / m[1, 1])`.
+        let one = S::one();
+        let two = one + one;
+        let vfov = (one / self.matrix[1][1]).atan() * two;
+
+        Radians(vfov)
     }
 
     /// Get the near plane along the **negative z-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let vfov = Degrees(72_f32);
+    /// let aspect = 800_f32 / 600_f32;
+    /// let near_z = 0.1_f32;
+    /// let far_z = 100_f32;
+    /// let expected = near_z;
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.near_z();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub const fn near_z(&self) -> S {
-        self.near
+    pub fn near_z(&self) -> S {
+        // The perspective projection field of view matrix has the form
+        // ```text
+        // | m[0, 0]  0         0        0       |
+        // | 0        m[1, 1]   0        0       |
+        // | 0        0         m[2, 2]  m[3, 2] |
+        // | 0        0        -1              0 |
+        // ```
+        // where
+        // ```text
+        // m[0, 0] := 1 / (aspect * tan(vfov / 2))
+        // m[1, 1] := 1 / (tan(vfov / 2))
+        // m[2, 2] := -(far + near) / (far - near)
+        // m[3, 2] := - 2 * far * near / (far - near)
+        // ```
+        // We can reconstruct the `near` parameter from the `m[2, 2]` and `m[3, 2]`
+        // components as follows. Define the `ratio` parameter
+        // ```text
+        // numerator := -m[2, 2] + 1
+        //           == ((far + near) / (far - near)) + 1
+        //           == (far + near) / (far - near) + (far - near) / (far - near)
+        //           == ((far + near) + (far - near)) / (far - near)
+        //           == 2 * far / (far - near)
+        // denominator := -m[2, 2] - 1
+        //             == ((far + near) / (far - near)) - 1
+        //             == ((far + near) / (far - near)) - ((far - near) / (far - near))
+        //             == ((far + near) - (far - near)) / (far - near)
+        //             == 2 * near / (far - near)
+        // ratio := numerator / denominator
+        //       == ((2 * far) / (far - near)) / ((2 * near) / (far - near))
+        //       == (2 * far) / (2 * near)
+        //       == far / near
+        // ```
+        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive 
+        // `near` we now use the `m[3, 2]` component. Observe that 
+        // `far == ratio * near`. We then have
+        // ```text
+        // m[3, 2] := (-2 * far * near) / (far - near)
+        //         == (-2 * ratio * near * near) / (ratio * near - near)
+        //         == (-(2 * ratio) * near * near) / ((ratio - 1) * near)
+        //         == (-2 * ratio * near) / (ratio - 1)
+        //         == (2 * ratio * near) / (1 - ratio)
+        //         == ((2 * ratio) / (1 - ratio)) * near
+        // ```
+        // From this we derive the formula for `near`
+        // ```text
+        // near == ((1 - ratio) / (2 * ratio)) * m[3, 2]
+        // ```
+        // which is in deed the formula we use.
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
+
+        ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
     /// Get the far plane along the **negative z-axis**.
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(72_f32);
+    /// let aspect = 800_f32 / 600_f32;
+    /// let near_z = 0.1_f32;
+    /// let far_z = 100_f32;
+    /// let expected = far_z;
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.far_z();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-4);
+    /// ```
     #[inline]
-    pub const fn far_z(&self) -> S {
-        self.far
+    pub fn far_z(&self) -> S {
+        // The perspective projection field of view matrix has the form
+        // ```text
+        // | m[0, 0]  0         0        0       |
+        // | 0        m[1, 1]   0        0       |
+        // | 0        0         m[2, 2]  m[3, 2] |
+        // | 0        0        -1              0 |
+        // ```
+        // where
+        // ```text
+        // m[0, 0] := 1 / (aspect * tan(vfov / 2))
+        // m[1, 1] := 1 / (tan(vfov / 2))
+        // m[2, 2] := -(far + near) / (far - near)
+        // m[3, 2] := - 2 * far * near / (far - near)
+        // ```
+        // We can reconstruct the `far` parameter from the `m[2, 2]` and `m[3, 2]`
+        // components as follows. Define the `ratio` parameter
+        // ```text
+        // numerator := -m[2, 2] + 1
+        //           == ((far + near) / (far - near)) + 1
+        //           == (far + near) / (far - near) + (far - near) / (far - near)
+        //           == ((far + near) + (far - near)) / (far - near)
+        //           == 2 * far / (far - near)
+        // denominator := -m[2, 2] - 1
+        //             == ((far + near) / (far - near)) - 1
+        //             == ((far + near) / (far - near)) - ((far - near) / (far - near))
+        //             == ((far + near) - (far - near)) / (far - near)
+        //             == 2 * near / (far - near)
+        // ratio := numerator / denominator
+        //       == ((2 * far) / (far - near)) / ((2 * near) / (far - near))
+        //       == (2 * far) / (2 * near)
+        //       == far / near
+        // ```
+        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive 
+        // `far` we now use the `m[3, 2]` component. Observe that 
+        // `near == far / ratio`. We then have
+        // ```text
+        // m[3, 2] := (-2 * far * near) / (far - near)
+        //         == (-2 * far * (far / ratio)) / (far - (far / ratio))
+        //         == ((-2 * (1 / ratio)) * far * far) / ((1 - (1 / ratio)) * far)
+        //         == ((-2 * (1 / ratio)) * far) / (1 - (1 / ratio))
+        //         == (-2 * (1 / ratio) * far) / ((1 / ratio) * (ratio - 1))
+        //         == (-2 / (ratio - 1)) * far
+        //         == (2 / (1 - ratio)) * far
+        // ```
+        // From this we derive the formula for `far`
+        // ```text
+        // far == ((1 - ratio) / 2) * m[3, 2]
+        // ```
+        // which is in deed the formula we use.
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
+
+        ((one - ratio) / two) * self.matrix[3][2]
     }
 
     /// Get the aspect ratio. The aspect ratio is the ratio of the 
     /// width of the viewing plane of the viewing frustum to the height of the 
     /// viewing plane of the viewing frustum.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let vfov = Degrees(72_f32);
+    /// let aspect = 800_f32 / 600_f32;
+    /// let near_z = 0.1_f32;
+    /// let far_z = 100_f32;
+    /// let expected = aspect;
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.aspect();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
-    pub const fn aspect(&self) -> S {
-        self.aspect
+    pub fn aspect(&self) -> S {
+        // The perspective projection field of view matrix has the form
+        // ```text
+        // | m[0, 0]  0         0        0       |
+        // | 0        m[1, 1]   0        0       |
+        // | 0        0         m[2, 2]  m[3, 2] |
+        // | 0        0        -1              0 |
+        // ```
+        // where
+        // ```text
+        // m[0, 0] := 1 / (aspect * tan(vfov / 2))
+        // m[1, 1] := 1 / (tan(vfov / 2))
+        // m[2, 2] := -(far + near) / (far - near)
+        // m[3, 2] := - 2 * far * near / (far - near)
+        // ```
+        // We can reconstruct the `aspect` parameter from the `m[0, 0]` and `m[1, 1]`
+        // components as follows. Observe that
+        // ```text
+        // m[1, 1] / m[0, 0] == (1 / tan(vfov / 2)) / (1 / (aspect * (1 / tan(vfov / 2))))
+        //                   == aspect * ((1 / tan(vfov / 2)) / (1 / tan(vfov / 2))
+        //                   == aspect
+        // ```
+        // which is the desired formula.
+        self.matrix[1][1] / self.matrix[0][0]
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -602,7 +845,7 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
@@ -647,7 +890,7 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
@@ -689,7 +932,7 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
@@ -732,7 +975,7 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = point;
     /// let projected_point = perspective.project_point(&point);
@@ -818,7 +1061,7 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::new(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = vector;
     /// let projected_vector = perspective.project_vector(&vector);

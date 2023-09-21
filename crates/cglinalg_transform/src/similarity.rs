@@ -62,6 +62,77 @@ where
 {
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let point = Point2::new(1_f64, 0_f64);
+    /// let expected = Point2::new(
+    ///     scale * (1_f64 / f64::sqrt(2_f64)) + 1_f64,
+    ///     scale * (-1_f64 / f64::sqrt(2_f64)) + 2_f64
+    /// );
+    /// let result = similarity.transform_point(&point);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let point = Point3::new(1_f64, 0_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     scale * (1_f64 / f64::sqrt(2_f64)) + 1_f64,
+    ///     scale * (-1_f64 / f64::sqrt(2_f64)) + 2_f64,
+    ///     scale * 3_f64 + 3_f64
+    /// );
+    /// let result = similarity.transform_point(&point);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     pub const fn from_parts(translation: &Translation<S, N>, rotation: &Rotation<S, N>, scale: S) -> Self {
         let isometry = Isometry::from_parts(translation, rotation);
@@ -71,9 +142,8 @@ where
 
     /// Construct a similarity transformation from a rotation only.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -100,7 +170,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -140,9 +211,8 @@ where
 
     /// Construct a similarity transformation from a scale factor only.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -160,7 +230,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3, 
@@ -186,9 +257,8 @@ where
 
     /// Construct a similarity transformation from a translation only.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -207,7 +277,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -237,9 +308,8 @@ where
 
     /// Construct a similarity transformation from an isometry.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -268,7 +338,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -307,18 +378,168 @@ where
     }
 
     /// Get the uniform scale factor of the similarity transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = scale;
+    /// let result = similarity.scale();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let expected = scale;
+    /// let result = similarity.scale();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn scale(&self) -> S {
         self.scale
     }
 
     /// Get the rotation part of the similarity transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = &rotation;
+    /// let result = similarity.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let expected = &rotation;
+    /// let result = similarity.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn rotation(&self) -> &Rotation<S, N> {
         self.isometry.rotation()
     }
 
     /// Get the translation part of the similarity transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = &translation;
+    /// let result = similarity.translation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 3_f64;
+    /// let angle = Radians(-f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let expected = &translation;
+    /// let result = similarity.translation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn translation(&self) -> &Translation<S, N> {
         self.isometry.translation()
@@ -326,9 +547,8 @@ where
 
     /// Construct an identity transformation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2, 
@@ -343,7 +563,8 @@ where
     /// assert_eq!(similarity * point, point);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3, 
@@ -374,6 +595,81 @@ where
     ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
 {
     /// Convert a similarity transformation to a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation2::new(2_f64, 3_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,
+    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,
+    ///     2_f64,                               3_f64,                              1_f64
+    /// ));
+    /// let result = similarity.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,         0_f64,
+    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,         0_f64,
+    ///     0_f64,                               0_f64,                              scale * 1_f64, 0_f64,
+    ///     2_f64,                               3_f64,                              4_f64,         1_f64
+    /// ));
+    /// let result = similarity.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         let matrix = self.to_affine_matrix();
@@ -383,9 +679,8 @@ where
 
     /// Convert a similarity transformation to an affine matrix.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -419,7 +714,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -479,9 +775,8 @@ where
 {
     /// Calculate the inverse of the similarity transformation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -514,7 +809,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -558,9 +854,8 @@ where
 
     /// Calculate the inverse of the similarity transformation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -594,7 +889,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -638,9 +934,8 @@ where
 
     /// Apply the inverse of a similarity transformation to a point.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -673,7 +968,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -714,9 +1010,8 @@ where
     
     /// Apply the inverse of a similarity transformation to a vector.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -749,7 +1044,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -792,9 +1088,8 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -826,7 +1121,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -871,9 +1167,8 @@ where
     /// The transformation applies the scaling, followed by the rotation,
     /// and finally the translation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -905,7 +1200,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,

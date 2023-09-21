@@ -68,6 +68,67 @@ where
     S: SimdScalarFloat
 {
     /// Construct a new isometry directly from a translation and a rotation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Translation2,
+    /// #     Rotation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let point = Point2::new(1_f64, 0_f64);
+    /// let expected = Point2::new(
+    ///     1_f64 / f64::sqrt(2_f64) + 1_f64, 
+    ///     1_f64 / f64::sqrt(2_f64) + 2_f64
+    /// );
+    /// let result = isometry.transform_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Translation3,
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let point = Point3::new(1_f64, 0_f64, 3_f64);
+    /// let expected = Point3::new(
+    ///     1_f64 / f64::sqrt(2_f64) + 1_f64, 
+    ///     1_f64 / f64::sqrt(2_f64) + 2_f64,
+    ///     3_f64
+    /// );
+    /// let result = isometry.transform_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn from_parts(translation: &Translation<S, N>, rotation: &Rotation<S, N>) -> Self {
         Self {
@@ -77,12 +138,106 @@ where
     }
 
     /// Construct a new isometry from a translation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Translation2, 
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_translation(&translation);
+    /// let point = Point2::origin();
+    /// let expected = Point2::new(1_f64, 2_f64);
+    /// let result = isometry.transform_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Translation3, 
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let isometry = Isometry3::from_translation(&translation);
+    /// let point = Point3::origin();
+    /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
+    /// let result = isometry.transform_point(&point);
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn from_translation(translation: &Translation<S, N>) -> Self {
         Self::from_parts(translation, &Rotation::identity())
     }
 
     /// Construct a new isometry from a rotation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Rotation2,    
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let point = Point2::new(1_f64, 0_f64);
+    /// let expected = Point2::new(0_f64, 1_f64);
+    /// let result = rotation.rotate_point(&point);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_2);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let point = Point3::new(1_f64, 0_f64, 0_f64);
+    /// let expected = Point3::new(0_f64, 1_f64, 0_f64);
+    /// let result = rotation.rotate_point(&point);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub fn from_rotation(rotation: &Rotation<S, N>) -> Self {
         Self::from_parts(&Translation::identity(), rotation)
@@ -97,6 +252,75 @@ where
     ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
 {
     /// Convert an isometry into a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation2::new(2_f64, 3_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///      1_f64 / 2_f64,            f64::sqrt(3_f64) / 2_f64, 0_f64,
+    ///     -f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64,            0_f64,
+    ///      2_f64,                    3_f64,                    1_f64
+    /// ));
+    /// let result = isometry.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     1_f64 / 2_f64,            f64::sqrt(3_f64) / 2_f64, 0_f64, 0_f64,
+    ///    -f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64,            0_f64, 0_f64,
+    ///     0_f64,                    0_f64,                    1_f64, 0_f64,
+    ///     2_f64,                    3_f64,                    4_f64, 1_f64
+    /// ));
+    /// let result = isometry.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         let matrix = self.to_affine_matrix();
@@ -106,9 +330,8 @@ where
 
     /// Convert an isometry to an equivalent affine transformation matrix.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -137,7 +360,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -185,13 +409,105 @@ impl<S, const N: usize> Isometry<S, N>
 where 
     S: SimdScalarFloat
 {
-    /// Get the rotation component of the isometry.
+    /// Get the rotation component of an isometry.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Translation2,
+    /// #     Rotation2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let expected = &rotation;
+    /// let result = isometry.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Translation3,
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let expected = &rotation;
+    /// let result = isometry.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn rotation(&self) -> &Rotation<S, N> {
         &self.rotation
     }
 
-    /// Get the translation part of the isometry.
+    /// Get the translation part of an isometry.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry2,
+    /// #     Translation2,
+    /// #     Rotation2,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let expected = &rotation;
+    /// let result = isometry.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Isometry3,
+    /// #     Translation3,
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_4);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let translation = Translation3::new(1_f64, 2_f64, 0_f64);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let expected = &rotation;
+    /// let result = isometry.rotation();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn translation(&self) -> &Translation<S, N> {
         &self.translation
@@ -199,9 +515,8 @@ where
 
     /// Construct the inverse isometry of an isometry.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -228,7 +543,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -268,9 +584,8 @@ where
 
     /// Mutably invert an isometry in place.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -296,7 +611,8 @@ where
     /// assert_eq!(result, expected);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -334,9 +650,8 @@ where
     ///
     /// The isometry applies the rotation followed by the translation.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     /// 
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -363,7 +678,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -402,9 +718,8 @@ where
     ///
     /// The isometry applies the rotation to the vector.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -430,7 +745,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -467,9 +783,8 @@ where
     /// The inverse isometry applies the inverse translation followed by the
     /// rotation. This is the reverse of the isometry.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -497,7 +812,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -535,9 +851,7 @@ where
     ///
     /// The inverse isometry applies the inverse rotation to vectors.
     ///
-    /// # Examples
-    ///
-    /// An example in two dimensions.
+    /// # Example (Two Dimensions)
     ///
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -565,7 +879,8 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -600,9 +915,8 @@ where
 
     /// Construct the identity isometry.
     ///
-    /// # Examples
+    /// # Example (Two Dimensions)
     ///
-    /// An example in two dimensions.
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -622,7 +936,8 @@ where
     /// assert_eq!(isometry * point, point);
     /// ```
     /// 
-    /// An example in three dimensions.
+    /// # Example (Three Dimensions)
+    /// 
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
