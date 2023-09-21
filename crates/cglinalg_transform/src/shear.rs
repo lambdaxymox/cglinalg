@@ -6,6 +6,7 @@ use cglinalg_core::{
     Const,
     ShapeConstraint,
     DimAdd,
+    DimEq,
     DimLt,
     Matrix,
     Matrix2x2,
@@ -304,7 +305,8 @@ where
 
 impl<S, const N: usize> From<Shear<S, N>> for Matrix<S, N, N> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
+    ShapeConstraint: DimEq<Const<N>, Const<N>>
 {
     fn from(shear: Shear<S, N>) -> Matrix<S, N, N> {
         shear.matrix
@@ -313,7 +315,8 @@ where
 
 impl<S, const N: usize> From<&Shear<S, N>> for Matrix<S, N, N> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
+    ShapeConstraint: DimEq<Const<N>, Const<N>>
 {
     #[inline]
     fn from(shear: &Shear<S, N>) -> Matrix<S, N, N> {
@@ -325,7 +328,8 @@ impl<S, const N: usize, const NPLUS1: usize> From<Shear<S, N>> for Matrix<S, NPL
 where 
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
 {
     #[inline]
     fn from(shear: Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -341,8 +345,8 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     #[inline]
-    fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from(&shear.matrix)
+    fn from(shear: &Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
+        Matrix::from(&shear.matrix)
     }
 }
 */
