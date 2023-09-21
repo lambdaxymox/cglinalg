@@ -28,6 +28,7 @@ use crate::unit::{
     Unit,
 };
 use crate::point::{
+    Point2,
     Point3,
 };
 use crate::vector::{
@@ -3636,7 +3637,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self {
+    pub fn from_affine_reflection(normal: &Unit<Vector2<S>>, bias: &Point2<S>) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -4916,7 +4917,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self {
+    pub fn from_affine_reflection(normal: &Unit<Vector3<S>>, bias: &Point3<S>) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;

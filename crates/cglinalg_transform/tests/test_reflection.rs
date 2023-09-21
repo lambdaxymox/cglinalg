@@ -19,7 +19,7 @@ mod reflection2_tests {
     #[test]
     fn test_reflection_x_line_point1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(1_f64, -1_f64);
@@ -31,7 +31,7 @@ mod reflection2_tests {
     #[test]
     fn test_reflection_x_line_vector1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(1_f64, -1_f64);
@@ -43,7 +43,7 @@ mod reflection2_tests {
     #[test]
     fn test_reflection_y_line_point1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(-1_f64, 1_f64);
@@ -55,7 +55,7 @@ mod reflection2_tests {
     #[test]
     fn test_reflection_y_line_vector1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(-1_f64, 1_f64);
@@ -75,7 +75,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 1_f64);
         let expected = Point2::new(1_f64, 2_f64);
@@ -95,7 +95,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 1_f64);
         let expected = Vector2::new(1_f64, 2_f64);
@@ -115,7 +115,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 1_f64);
         let expected = Point2::new(1_f64, 2_f64);
@@ -135,7 +135,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 1_f64);
         let expected = Vector2::new(1_f64, 2_f64);
@@ -155,7 +155,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 2_f64);
         let expected = Point2::new(2_f64, 2_f64);
@@ -175,7 +175,7 @@ mod reflection2_tests {
             -1_f64 / f64::sqrt(2_f64), 
              1_f64 / f64::sqrt(2_f64)
         ));
-        let bias = Vector2::zero();
+        let bias = Point2::origin();
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 2_f64);
         let expected = Vector2::new(2_f64, 2_f64);
@@ -192,7 +192,7 @@ mod reflection2_tests {
             -1_f64 / 2_f64, 
              1_f64
         ));
-        let bias = Vector2::new(0_f64, 1_f64);
+        let bias = Point2::new(0_f64, 1_f64);
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
@@ -209,7 +209,7 @@ mod reflection2_tests {
             -1_f64 / 2_f64, 
              1_f64
         ));
-        let bias = Vector2::new(0_f64, 1_f64);
+        let bias = Point2::new(0_f64, 1_f64);
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
@@ -238,7 +238,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_x_plane_point1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(-1_f64, 1_f64, 1_f64);
@@ -251,7 +251,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_x_plane_vector1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 1_f64, 1_f64);
@@ -264,7 +264,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_y_plane_point1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, -1_f64, 1_f64);
@@ -277,7 +277,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_y_plane_vector1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, -1_f64, 1_f64);
@@ -290,7 +290,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_z_plane_point1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 1_f64, -1_f64);
@@ -303,7 +303,7 @@ mod reflection3_tests {
     #[test]
     fn test_reflection_z_plane_vector1() {
         let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 1_f64, -1_f64);
@@ -324,7 +324,7 @@ mod reflection3_tests {
              1_f64 / f64::sqrt(2_f64),
              0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
@@ -345,7 +345,7 @@ mod reflection3_tests {
              1_f64 / f64::sqrt(2_f64),
              0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
@@ -366,7 +366,7 @@ mod reflection3_tests {
              1_f64 / f64::sqrt(2_f64),
              0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
@@ -387,7 +387,7 @@ mod reflection3_tests {
              1_f64 / f64::sqrt(2_f64),
              0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
@@ -408,7 +408,7 @@ mod reflection3_tests {
               1_f64 / f64::sqrt(2_f64),
               0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 2_f64, 1_f64);
         let expected = Point3::new(2_f64, 2_f64, 1_f64);
@@ -429,7 +429,7 @@ mod reflection3_tests {
              1_f64 / f64::sqrt(2_f64),
              0_f64
         ));
-        let bias = Vector3::zero();
+        let bias = Point3::origin();
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 2_f64, 1_f64);
         let expected = Vector3::new(2_f64, 2_f64, 1_f64);
@@ -447,7 +447,7 @@ mod reflection3_tests {
              1_f64,
              0_f64
         ));
-        let bias = Vector3::new(0_f64, 1_f64, 0_f64);
+        let bias = Point3::new(0_f64, 1_f64, 0_f64);
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 20_f64);
         let expected = Point3::new(3_f64 / 5_f64, 9_f64 / 5_f64, 20_f64);
@@ -465,7 +465,7 @@ mod reflection3_tests {
              1_f64,
              0_f64
         ));
-        let bias = Vector3::new(0_f64, 1_f64, 0_f64);
+        let bias = Point3::new(0_f64, 1_f64, 0_f64);
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 20_f64);
         let expected = Vector3::new(7_f64 / 5_f64, 1_f64 / 5_f64, 20_f64);
@@ -484,7 +484,7 @@ mod reflection3_tests {
             -1_f64 / f64::sqrt(3_f64),
              1_f64 / f64::sqrt(3_f64)
         ));
-        let bias = Vector3::new(0_f64, 0_f64, 2_f64);
+        let bias = Point3::new(0_f64, 0_f64, 2_f64);
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(-1_f64, -1_f64, 3_f64);
@@ -503,7 +503,7 @@ mod reflection3_tests {
             -1_f64 / f64::sqrt(3_f64),
              1_f64 / f64::sqrt(3_f64)
         ));
-        let bias = Vector3::new(0_f64, 0_f64, 2_f64);
+        let bias = Point3::new(0_f64, 0_f64, 2_f64);
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64 / 3_f64, 1_f64 / 3_f64, 5_f64 / 3_f64);

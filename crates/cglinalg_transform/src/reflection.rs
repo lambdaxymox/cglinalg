@@ -13,6 +13,8 @@ use cglinalg_core::{
     Vector2,
     Vector3,
     Point,
+    Point2,
+    Point3,
     Unit,
 };
 use crate::transform::{
@@ -39,7 +41,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     /// a known point on the plane of reflection.
-    bias: Vector<S, N>,
+    bias: Point<S, N>,
     /// The normal vector to the plane.
     normal: Vector<S, N>,
     /// The matrix representing the affine transformation.
@@ -65,12 +67,13 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// #
     /// // Normal to the plane of reflection.
     /// let normal = Unit::from_value(Vector2::unit_x());
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(-1_f64, 2_f64);
@@ -95,6 +98,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -102,7 +106,7 @@ where
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
@@ -134,12 +138,13 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// #
     /// // Normal to the plane of reflection.
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// 
     /// assert_eq!(reflection.bias(), bias);
@@ -154,17 +159,18 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// 
     /// assert_eq!(reflection.bias(), bias);
     /// ```
     #[inline]
-    pub const fn bias(&self) -> Vector<S, N> {
+    pub const fn bias(&self) -> Point<S, N> {
         self.bias
     }
 
@@ -183,13 +189,14 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// #
     /// // Normal to the plane of reflection.
     /// let normal = Vector2::unit_x();
     /// let unit_normal: Unit<Vector2<f64>> = Unit::from_value(normal);
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&unit_normal, &bias);
     /// 
     /// assert_eq!(reflection.normal(), normal);
@@ -204,12 +211,13 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// #
     /// let normal = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let unit_normal = Unit::from_value(normal);
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&unit_normal, &bias);
     /// let expected = normal / normal.norm();
     /// let result = reflection.normal();
@@ -233,12 +241,13 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// #
     /// // Normal to the plane of reflection.
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let expected = Matrix3x3::new(
     ///     -1_f64, 0_f64, 0_f64,
@@ -266,6 +275,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -273,7 +283,7 @@ where
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let expected = Matrix4x4::new(
     ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
@@ -306,6 +316,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -319,7 +330,7 @@ where
     ///     -1_f64 / 2_f64, 
     ///      1_f64
     /// ));
-    /// let bias = Vector2::new(0_f64, 1_f64);
+    /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
@@ -333,6 +344,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
@@ -340,7 +352,7 @@ where
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(1_f64, 1_f64, -1_f64);
@@ -375,7 +387,7 @@ where
     ///     -1_f64 / 2_f64, 
     ///      1_f64
     /// ));
-    /// let bias = Vector2::new(0_f64, 1_f64);
+    /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let point = Point2::new(1_f64, 1_f64);
     /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
@@ -397,7 +409,7 @@ where
     /// # };
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let point = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Point3::new(1_f64, 1_f64, -1_f64);
@@ -460,7 +472,7 @@ where
     #[inline]
     pub fn identity() -> Self {
         Self { 
-            bias: Vector::zero(),
+            bias: Point::origin(),
             normal: Vector::zero(), 
             matrix: Matrix::identity(),
         }
@@ -479,6 +491,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -486,7 +499,7 @@ where
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::new(-2_f64, 1_f64));
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
     ///     -3_f64 / 5_f64, 4_f64 / 5_f64, 0_f64,
@@ -509,6 +522,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -516,7 +530,7 @@ where
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
     ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
@@ -595,7 +609,7 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector::abs_diff_eq(&self.bias, &other.bias, epsilon)
+        Point::abs_diff_eq(&self.bias, &other.bias, epsilon)
             && Vector::abs_diff_eq(&self.normal, &other.normal, epsilon)
             && Matrix::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
     }
@@ -614,7 +628,7 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-       Vector::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
+       Point::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
            && Vector::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
            && Matrix::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
@@ -633,7 +647,7 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Vector::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
+        Point::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
             && Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
             && Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
@@ -716,12 +730,13 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// #
     /// // Normal to the plane of reflection.
     /// let normal = Unit::from_value(Vector2::unit_x());
-    /// let bias = Vector2::zero();
+    /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(-1_f64, 2_f64);
@@ -737,7 +752,7 @@ where
     /// assert_eq!(opposite_result, expected);
     /// ```
     #[inline]
-    pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Vector2<S>) -> Self {
+    pub fn from_normal_bias(normal: &Unit<Vector2<S>>, bias: &Point2<S>) -> Self {
         Self {
             bias: *bias,
             normal: normal.into_inner(),
@@ -762,6 +777,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// # use approx::{
@@ -769,7 +785,7 @@ where
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Vector3::zero();
+    /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
@@ -778,7 +794,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
-    pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Vector3<S>) -> Self {
+    pub fn from_normal_bias(normal: &Unit<Vector3<S>>, bias: &Point3<S>) -> Self {
         Self {
             bias: *bias,
             normal: normal.into_inner(),
