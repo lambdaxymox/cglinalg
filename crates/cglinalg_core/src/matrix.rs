@@ -3577,11 +3577,12 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit, 
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
-    /// let bias = Vector2::new(0_f64, 0_f64);
+    /// let bias = Point2::new(0_f64, 0_f64);
     /// let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
     /// let vector = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let expected = Vector3::new(2_f64, -2_f64, 0_f64);
@@ -3598,11 +3599,12 @@ where
     /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Vector2,
+    /// #     Point2,
     /// #     Unit, 
     /// # };
     /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
-    /// let bias = Vector2::new(0_f64, 0_f64);
+    /// let bias = Point2::new(0_f64, 0_f64);
     /// let matrix = Matrix3x3::from_affine_reflection(&minus_normal, &bias);
     /// let vector = Vector3::new(2_f64, 2_f64, 0_f64);
     /// let expected = Vector3::new(2_f64, -2_f64, 0_f64);
@@ -3617,14 +3619,15 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
-    /// #     Vector2, 
+    /// #     Vector2,
+    /// #     Point2,
     /// #     Unit,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,  
     /// # };
     /// #
-    /// let bias = Vector2::new(0_f64, 2_f64);
+    /// let bias = Point2::new(0_f64, 2_f64);
     /// let normal = Unit::from_value(
     ///     Vector2::new(-1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64))
     /// );
@@ -4900,10 +4903,11 @@ where
     /// #     Matrix4x4,
     /// #     Vector4,
     /// #     Vector3,
+    /// #     Point3,
     /// #     Unit,
     /// # };
     /// #
-    /// let bias = Vector3::new(0_f64, 0_f64, 0_f64);
+    /// let bias = Point3::new(0_f64, 0_f64, 0_f64);
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let expected = Matrix4x4::new(
     ///     1_f64, 0_f64,  0_f64, 0_f64,
