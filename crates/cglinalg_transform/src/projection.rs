@@ -106,12 +106,12 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = near;
-    /// let result = perspective.near_z();
+    /// let result = perspective.near();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub fn near(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
@@ -144,12 +144,12 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = far;
-    /// let result = perspective.far_z();
+    /// let result = perspective.far();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub fn far(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
@@ -182,16 +182,16 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = right;
-    /// let result = perspective.right_x();
+    /// let result = perspective.right();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn right_x(&self) -> S {
+    pub fn right(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (self.matrix[2][0] + one) / (self.matrix[2][0] - one);
-        let near = self.near_z();
+        let near = self.near();
 
         (two * near * (ratio / (ratio - one))) * (one / self.matrix[0][0])
     }
@@ -221,16 +221,16 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = left;
-    /// let result = perspective.left_x();
+    /// let result = perspective.left();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn left_x(&self)-> S {
+    pub fn left(&self)-> S {
         let one = S::one();
         let two = one + one;
         let ratio = (self.matrix[2][0] + one) / (self.matrix[2][0] - one);
-        let near = self.near_z();
+        let near = self.near();
 
         (two * near * (one / (ratio - one))) * (one / self.matrix[0][0])
     }
@@ -260,16 +260,16 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = top;
-    /// let result = perspective.top_y();
+    /// let result = perspective.top();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn top_y(&self) -> S {
+    pub fn top(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (self.matrix[2][1] + one) / (self.matrix[2][1] - one);
-        let near = self.near_z();
+        let near = self.near();
 
         (two * near * (ratio / (ratio - one))) * (one / self.matrix[1][1])
     }
@@ -299,16 +299,16 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = bottom;
-    /// let result = perspective.bottom_y();
+    /// let result = perspective.bottom();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn bottom_y(&self) -> S {
+    pub fn bottom(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (self.matrix[2][1] + one) / (self.matrix[2][1] - one);
-        let near = self.near_z();
+        let near = self.near();
 
         (two * near * (one / (ratio - one))) * (one / self.matrix[1][1])
     }
@@ -768,10 +768,10 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = vfov.into();
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let result = projection.vfov();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -827,16 +827,16 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
-    /// let expected = near_z;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.near_z();
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let expected = near;
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.near();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub fn near(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
         // | m[0, 0]  0         0        0       |
@@ -909,16 +909,16 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
-    /// let expected = far_z;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.far_z();
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let expected = far;
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.far();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub fn far(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
         // | m[0, 0]  0         0        0       |
@@ -991,10 +991,10 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = aspect;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let result = projection.aspect();
     /// 
     /// assert_eq!(result, expected);
@@ -1046,17 +1046,17 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.right_x();
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.right();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn right_x(&self) -> S {
-        let abs_near = self.near_z().abs();
+    pub fn right(&self) -> S {
+        let abs_near = self.near().abs();
 
         abs_near / self.matrix[0][0]
     }
@@ -1081,17 +1081,17 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.left_x();
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.left();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn left_x(&self) -> S {
-        -self.right_x()
+    pub fn left(&self) -> S {
+        -self.right()
     }
 
     /// Get the position of the top plane of the viewing 
@@ -1114,17 +1114,17 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.top_y();
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.top();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn top_y(&self) -> S {
-        let abs_near = self.near_z().abs();
+    pub fn top(&self) -> S {
+        let abs_near = self.near().abs();
         
         abs_near / self.matrix[1][1]
     }
@@ -1149,17 +1149,17 @@ where
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect = 800_f64 / 600_f64;
-    /// let near_z = 0.1_f64;
-    /// let far_z = 100_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
-    /// let result = projection.bottom_y();
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let result = projection.bottom();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn bottom_y(&self) -> S {
-        -self.top_y()
+    pub fn bottom(&self) -> S {
+        -self.top()
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -1674,12 +1674,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = near;
-    /// let result = orthographic.near_z();
+    /// let result = orthographic.near();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn near_z(&self) -> S {
+    pub fn near(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][2] + one) / (-self.matrix[3][2] - one);
@@ -1713,12 +1713,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = far;
-    /// let result = orthographic.far_z();
+    /// let result = orthographic.far();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn far_z(&self) -> S {
+    pub fn far(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][2] + one) / (-self.matrix[3][2] - one);
@@ -1752,12 +1752,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = right;
-    /// let result = orthographic.right_x();
+    /// let result = orthographic.right();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn right_x(&self) -> S {
+    pub fn right(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][0] + one) / (-self.matrix[3][0] - one);
@@ -1791,12 +1791,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = left;
-    /// let result = orthographic.left_x();
+    /// let result = orthographic.left();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn left_x(&self)-> S {
+    pub fn left(&self)-> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][0] + one) / (-self.matrix[3][0] - one);
@@ -1830,12 +1830,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = top;
-    /// let result = orthographic.top_y();
+    /// let result = orthographic.top();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn top_y(&self) -> S {
+    pub fn top(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);
@@ -1869,12 +1869,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     /// let expected = bottom;
-    /// let result = orthographic.bottom_y();
+    /// let result = orthographic.bottom();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn bottom_y(&self) -> S {
+    pub fn bottom(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);

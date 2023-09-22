@@ -71,12 +71,12 @@ fn test_perspective_projection_rectangular_parameters() {
     let far = 100_f64;
     let perspective = Perspective3::new(left, right, bottom, top, near, far);
 
-    assert_relative_eq!(perspective.left_x(),   left,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.right_x(),  right,  epsilon = 1e-10);
-    assert_relative_eq!(perspective.bottom_y(), bottom, epsilon = 1e-10);
-    assert_relative_eq!(perspective.top_y(),    top,    epsilon = 1e-10);
-    assert_relative_eq!(perspective.near_z(),   near,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.far_z(),    far,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.left(),   left,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.right(),  right,  epsilon = 1e-10);
+    assert_relative_eq!(perspective.bottom(), bottom, epsilon = 1e-10);
+    assert_relative_eq!(perspective.top(),    top,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.near(),   near,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.far(),    far,    epsilon = 1e-10);
 }
 
 #[rustfmt::skip]
@@ -138,12 +138,12 @@ fn test_perspective_projection_fov_rectangular_parameters() {
     let expected_bottom = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     let expected_top = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
 
-    assert_relative_eq!(perspective.left_x(),   expected_left,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.right_x(),  expected_right,  epsilon = 1e-10);
-    assert_relative_eq!(perspective.bottom_y(), expected_bottom, epsilon = 1e-10);
-    assert_relative_eq!(perspective.top_y(),    expected_top,    epsilon = 1e-10);
-    assert_relative_eq!(perspective.near_z(),   near,            epsilon = 1e-10);
-    assert_relative_eq!(perspective.far_z(),    far,             epsilon = 1e-10);
+    assert_relative_eq!(perspective.left(),   expected_left,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.right(),  expected_right,  epsilon = 1e-10);
+    assert_relative_eq!(perspective.bottom(), expected_bottom, epsilon = 1e-10);
+    assert_relative_eq!(perspective.top(),    expected_top,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.near(),   near,            epsilon = 1e-10);
+    assert_relative_eq!(perspective.far(),    far,             epsilon = 1e-10);
 }
 
 #[test]
@@ -157,8 +157,8 @@ fn test_perspective_projection_fov_fov_parameters() {
 
     assert_relative_eq!(perspective.vfov(),   expected_vfov, epsilon = 1e-10);
     assert_relative_eq!(perspective.aspect(), aspect,        epsilon = 1e-10);
-    assert_relative_eq!(perspective.near_z(), near,          epsilon = 1e-10);
-    assert_relative_eq!(perspective.far_z(),  far,           epsilon = 1e-10);
+    assert_relative_eq!(perspective.near(), near,          epsilon = 1e-10);
+    assert_relative_eq!(perspective.far(),  far,           epsilon = 1e-10);
 }
 
 #[test]
@@ -274,12 +274,12 @@ fn test_orthographic_projection_rectangular_parameters() {
     let far = 100_f64;
     let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
 
-    assert_relative_eq!(orthographic.left_x(),   left,   epsilon = 1e-10);
-    assert_relative_eq!(orthographic.right_x(),  right,  epsilon = 1e-10);
-    assert_relative_eq!(orthographic.bottom_y(), bottom, epsilon = 1e-10);
-    assert_relative_eq!(orthographic.top_y(),    top,    epsilon = 1e-10);
-    assert_relative_eq!(orthographic.near_z(),   near,   epsilon = 1e-10);
-    assert_relative_eq!(orthographic.far_z(),    far,    epsilon = 1e-10);
+    assert_relative_eq!(orthographic.left(),   left,   epsilon = 1e-10);
+    assert_relative_eq!(orthographic.right(),  right,  epsilon = 1e-10);
+    assert_relative_eq!(orthographic.bottom(), bottom, epsilon = 1e-10);
+    assert_relative_eq!(orthographic.top(),    top,    epsilon = 1e-10);
+    assert_relative_eq!(orthographic.near(),   near,   epsilon = 1e-10);
+    assert_relative_eq!(orthographic.far(),    far,    epsilon = 1e-10);
 }
 
 #[test]
