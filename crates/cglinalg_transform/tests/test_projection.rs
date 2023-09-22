@@ -55,9 +55,10 @@ fn test_perspective_projection_transformation() {
         0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
         0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
     );
-    let result = Perspective3::new(left, right, bottom, top, near, far);
+    let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    let result = perspective.matrix();
 
-    assert_eq!(result.matrix(), &expected);
+    assert_eq!(result, &expected);
 }
 
 #[rustfmt::skip]
@@ -91,9 +92,10 @@ fn test_perspective_projection_fov_transformation() {
         0_f32,         0_f32,        -1.002002_f32, -1_f32, 
         0_f32,         0_f32,        -0.2002002_f32, 0_f32
     );
-    let result = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    let result = perspective.matrix();
 
-    assert_relative_eq!(result.matrix(), &expected, epsilon = 1e-10);
+    assert_relative_eq!(result, &expected, epsilon = 1e-10);
 }
 
 #[test]
@@ -193,9 +195,10 @@ fn test_orthographic_projection_transformation() {
         0_f64,         0_f64,         -2_f64 / 99_f64,   0_f64,
         0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64
     );
-    let result = Orthographic3::new(left, right, bottom, top, near, far);
+    let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    let result = orthographic.matrix();
 
-    assert_eq!(result.matrix(), &expected);
+    assert_eq!(result, &expected);
 }
 
 #[test]

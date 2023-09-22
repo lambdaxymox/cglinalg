@@ -81,40 +81,236 @@ where
         }
     }
 
-    /// Get the near plane along the **negative z-axis**.
+    /// Get the position of the near plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = near;
+    /// let result = perspective.near_z();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn near_z(&self) -> S {
-        self.near
+    pub fn near_z(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
+
+        ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
-    /// Get the far plane along the **negative z-axis**.
+    /// Get the position of the far plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = far;
+    /// let result = perspective.far_z();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn far_z(&self) -> S {
-        self.far
+    pub fn far_z(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[2][2] + one) / (-self.matrix[2][2] - one);
+
+        ((one - ratio) / two) * self.matrix[3][2]
     }
 
-    /// Get the left plane along the **negative x-axis**.
+    /// Get the position of the right plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = right;
+    /// let result = perspective.right_x();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn left_x(&self)-> S {
-        self.left
+    pub fn right_x(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (self.matrix[2][0] + one) / (self.matrix[2][0] - one);
+        let near = self.near_z();
+
+        (two * near * (ratio / (ratio - one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the right plane along the **positive x-axis**.
+    /// Get the position of the left plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = left;
+    /// let result = perspective.left_x();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn right_x(&self) -> S {
-        self.right
+    pub fn left_x(&self)-> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (self.matrix[2][0] + one) / (self.matrix[2][0] - one);
+        let near = self.near_z();
+
+        (two * near * (one / (ratio - one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the bottom plane along the **negative y-axis**.
+    /// Get the position of the top plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = top;
+    /// let result = perspective.top_y();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn bottom_y(&self) -> S {
-        self.bottom
+    pub fn top_y(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (self.matrix[2][1] + one) / (self.matrix[2][1] - one);
+        let near = self.near_z();
+
+        (two * near * (ratio / (ratio - one))) * (one / self.matrix[1][1])
     }
 
-    /// Get the top plane along the **positive y-axis**.
+    /// Get the position of the bottom plane of the viewing 
+    /// frustum descibed by the perspective projection of the plane
+    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = bottom;
+    /// let result = perspective.bottom_y();
+    ///
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn top_y(&self) -> S {
-        self.top
+    pub fn bottom_y(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (self.matrix[2][1] + one) / (self.matrix[2][1] - one);
+        let near = self.near_z();
+
+        (two * near * (one / (ratio - one))) * (one / self.matrix[1][1])
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -148,7 +344,7 @@ where
     /// );
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
-    /// 
+    /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
@@ -180,7 +376,7 @@ where
     /// let expected = Point3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -219,7 +415,7 @@ where
     /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_vector(&vector);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -259,7 +455,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -333,7 +529,7 @@ where
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -613,8 +809,8 @@ where
     }
 
     /// Get the position of the near plane of the viewing 
-    /// frustum described by the perspective projection in the **zx-plane** 
-    /// positioned along the **negative z-axis**.
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     /// 
     /// # Example
     /// 
@@ -697,8 +893,8 @@ where
     }
 
     /// Get the position of the far plane of the viewing 
-    /// frustum described by the perspective projection in the **zx-plane** 
-    /// positioned along the **negative z-axis**.
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     /// 
     /// ```
     /// # use cglinalg_transform::{
@@ -830,9 +1026,9 @@ where
         self.matrix[1][1] / self.matrix[0][0]
     }
 
-    /// Get the position of the right-hand plane of the viewing 
-    /// frustum described by the perspective projection in the **yz-plane** 
-    /// positioned along the **positive x-axis**.
+    /// Get the position of the right plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     /// 
     /// # Example
     /// 
@@ -865,9 +1061,9 @@ where
         abs_near / self.matrix[0][0]
     }
 
-    /// Get the position of the left-hand plane of the viewing 
-    /// frustum described by the perspective projection in the **yz-plane** 
-    /// positioned along the **negative x-axis**.
+    /// Get the position of the left plane of the viewing 
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
     /// 
     /// # Example
     /// 
@@ -899,8 +1095,8 @@ where
     }
 
     /// Get the position of the top plane of the viewing 
-    /// frustum described by the perspective projection in the **yz-plane** 
-    /// positioned along the **positive y-axis**.
+    /// frustum described by the perspective projection of the plane 
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     /// 
     /// # Example
     /// 
@@ -934,8 +1130,8 @@ where
     }
 
     /// Get the position of the bottom plane of the viewing 
-    /// frustum descibed by the perspective projection in the **yz-plane** 
-    /// positioned along the **negative y-axis**.
+    /// frustum descibed by the perspective projection of the plane
+    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
     /// 
     /// # Example
     /// 
@@ -1037,7 +1233,7 @@ where
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse_w = -S::one() / point.z;
@@ -1079,7 +1275,7 @@ where
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1123,7 +1319,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1209,7 +1405,7 @@ where
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector); 
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1452,40 +1648,238 @@ where
         }
     }
 
-    /// Get the near plane along the **negative z-axis**.
+    /// Get the position of the near plane of the viewing 
+    /// volume described by the orthographic projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = near;
+    /// let result = orthographic.near_z();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn near_z(&self) -> S {
-        self.near
+    pub fn near_z(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][2] + one) / (-self.matrix[3][2] - one);
+
+        (-two / (ratio - one)) * (one / self.matrix[2][2])
     }
 
-    /// Get the far plane along the **negative z-axis**.
+    /// Get the position of the far plane of the viewing 
+    /// volume described by the orthographic projection of the plane 
+    /// parallel to the **xy-plane** positioned along the **negative z-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = far;
+    /// let result = orthographic.far_z();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn far_z(&self) -> S {
-        self.far
+    pub fn far_z(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][2] + one) / (-self.matrix[3][2] - one);
+
+        ((-two * ratio) / (ratio - one)) * (one / self.matrix[2][2])
     }
 
-    /// Get the left plane along the **negative x-axis**.
+    /// Get the position of the right plane of the viewing 
+    /// volume described by the orthographic projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = right;
+    /// let result = orthographic.right_x();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn left_x(&self)-> S {
-        self.left
+    pub fn right_x(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][0] + one) / (-self.matrix[3][0] - one);
+
+        ((two * ratio) / (ratio - one)) * (one / self.matrix[0][0])
     }
 
-    /// Get the right plane along the **positive x-axis**.
+    /// Get the position of the left plane of the viewing 
+    /// volume described by the orthographic projection of the plane 
+    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = left;
+    /// let result = orthographic.left_x();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn right_x(&self) -> S {
-        self.right
+    pub fn left_x(&self)-> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][0] + one) / (-self.matrix[3][0] - one);
+
+        (two / (ratio - one)) * (one / self.matrix[0][0])
     }
 
-    /// Get the bottom plane along the **negative y-axis**.
+    /// Get the position of the top plane of the viewing 
+    /// volume described by the orthographic projection of the plane 
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = top;
+    /// let result = orthographic.top_y();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn bottom_y(&self) -> S {
-        self.bottom
+    pub fn top_y(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);
+
+        ((two * ratio) / (ratio - one) ) * (one / self.matrix[1][1])
     }
 
-    /// Get the top plane along the **positive y-axis**.
+    /// Get the position of the bottom plane of the viewing 
+    /// volume descibed by the orthographic projection of the plane
+    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    /// let expected = bottom;
+    /// let result = orthographic.bottom_y();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
-    pub const fn top_y(&self) -> S {
-        self.top
+    pub fn bottom_y(&self) -> S {
+        let one = S::one();
+        let two = one + one;
+        let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);
+
+        (two / (ratio - one) ) * (one / self.matrix[1][1])
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
