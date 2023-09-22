@@ -570,7 +570,7 @@ where
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> EulerAngles<Radians<S>> {
-        let rotation_matrix = quaternion.to_matrix3x3();
+        let rotation_matrix = quaternion.to_matrix();
         Self::from_matrix(&rotation_matrix)
     }
 }

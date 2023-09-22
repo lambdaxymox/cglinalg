@@ -1267,7 +1267,7 @@ where
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Self {
         Self {
-            matrix: quaternion.to_matrix3x3(),
+            matrix: quaternion.to_matrix(),
         }
     }
 

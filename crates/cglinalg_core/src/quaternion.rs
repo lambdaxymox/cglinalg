@@ -1225,7 +1225,7 @@ where
         }
     }
 
-    /// Convert a quaternion to its equivalent 3x3 matrix form.
+    /// Convert a quaternion to its equivalent 3x3 rotation matrix.
     ///
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
@@ -1249,7 +1249,7 @@ where
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
     ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
     /// );
-    /// let result = quaternion.to_matrix3x3();
+    /// let result = quaternion.to_matrix();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1279,13 +1279,13 @@ where
     ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),
     ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
     /// );
-    /// let result = quaternion.to_matrix3x3();
+    /// let result = quaternion.to_matrix();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn to_matrix3x3(&self) -> Matrix3x3<S> {
+    pub fn to_matrix(&self) -> Matrix3x3<S> {
         let qs = self.coords[0];
         let qx = self.coords[1];
         let qy = self.coords[2];
@@ -1313,7 +1313,7 @@ where
         )
     }
 
-    /// Convert a quaternion to its equivalent 3x3 matrix form using 
+    /// Convert a quaternion to its equivalent 3x3 rotation matrix using 
     /// preallocated storage.
     ///
     /// The following example shows the result of converting an arbitrary 
@@ -1342,7 +1342,7 @@ where
     ///
     /// assert!(result.is_zero());
     ///
-    /// quaternion.to_matrix3x3_mut(&mut result);
+    /// quaternion.to_matrix_mut(&mut result);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1375,12 +1375,12 @@ where
     ///
     /// assert!(result.is_zero());
     ///
-    /// quaternion.to_matrix3x3_mut(&mut result);
+    /// quaternion.to_matrix_mut(&mut result);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn to_matrix3x3_mut(&self, matrix: &mut Matrix3x3<S>) {
+    pub fn to_matrix_mut(&self, matrix: &mut Matrix3x3<S>) {
         let qs = self.coords[0];
         let qx = self.coords[1];
         let qy = self.coords[2];
@@ -1402,7 +1402,7 @@ where
         matrix.c2r2 = one - s * qx * qx - s * qy * qy;
     }
 
-    /// Convert a quaternion to its equivalent affine 4x4 matrix form.
+    /// Convert a quaternion to its equivalent 4x4 affine rotation matrix.
     ///
     /// The following example shows the result of converting an arbitrary 
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
@@ -1427,7 +1427,7 @@ where
     ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64, 0_f64,
     ///     0_f64,                  0_f64,                  0_f64,                  1_f64
     /// );
-    /// let result = quaternion.to_matrix4x4();
+    /// let result = quaternion.to_affine_matrix();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1458,13 +1458,13 @@ where
     ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), 0_f64,
     ///     0_f64,                           0_f64,                           0_f64,                           1_f64
     /// );
-    /// let result = quaternion.to_matrix4x4();
+    /// let result = quaternion.to_affine_matrix();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn to_matrix4x4(&self) -> Matrix4x4<S> {
+    pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
         let qs = self.coords[0];
         let qx = self.coords[1];
         let qy = self.coords[2];
@@ -1502,7 +1502,7 @@ where
         )
     }
 
-    /// Convert a quaternion to its equivalent affine 4x4 matrix form using
+    /// Convert a quaternion to its equivalent 4x4 affine rotation matrix using
     /// preallocated storage.
     ///
     /// The following example shows the result of converting an arbitrary 
@@ -1532,7 +1532,7 @@ where
     ///
     /// assert!(result.is_zero());
     ///
-    /// quaternion.to_matrix4x4_mut(&mut result);
+    /// quaternion.to_affine_matrix_mut(&mut result);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1567,12 +1567,12 @@ where
     ///
     /// assert!(result.is_zero());
     ///
-    /// quaternion.to_matrix4x4_mut(&mut result);
+    /// quaternion.to_affine_matrix_mut(&mut result);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn to_matrix4x4_mut(&self, matrix: &mut Matrix4x4<S>) {
+    pub fn to_affine_matrix_mut(&self, matrix: &mut Matrix4x4<S>) {
         let qs = self.coords[0];
         let qx = self.coords[1];
         let qy = self.coords[2];
@@ -4044,7 +4044,7 @@ where
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix3x3<S> {
-        quaternion.to_matrix3x3()
+        quaternion.to_matrix()
     }
 }
 
@@ -4054,7 +4054,7 @@ where
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix3x3<S> {
-        quaternion.to_matrix3x3()
+        quaternion.to_matrix()
     }
 }
 
@@ -4064,7 +4064,7 @@ where
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Matrix4x4<S> {
-        quaternion.to_matrix4x4()
+        quaternion.to_affine_matrix()
     }
 }
 
@@ -4074,7 +4074,7 @@ where
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Matrix4x4<S> {
-        quaternion.to_matrix4x4()
+        quaternion.to_affine_matrix()
     }
 }
 
