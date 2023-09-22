@@ -674,6 +674,16 @@ where
     }
 }
 
+impl<S> From<Perspective3<S>> for Matrix4x4<S>
+where
+    S: SimdScalarFloat
+{
+    #[inline]
+    fn from(perspective: Perspective3<S>) -> Matrix4x4<S> {
+        perspective.to_projective_matrix()
+    }
+}
+
 impl<S> approx::AbsDiffEq for Perspective3<S> 
 where 
     S: SimdScalarFloat 
@@ -1643,6 +1653,16 @@ where
     }
 }
 
+impl<S> From<PerspectiveFov3<S>> for Matrix4x4<S>
+where
+    S: SimdScalarFloat
+{
+    #[inline]
+    fn from(perspective: PerspectiveFov3<S>) -> Matrix4x4<S> {
+        perspective.to_projective_matrix()
+    }
+}
+
 impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
 where 
     S: SimdScalarFloat
@@ -2325,6 +2345,16 @@ where
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Orthographic3 [{}]", self.matrix)
+    }
+}
+
+impl<S> From<Orthographic3<S>> for Matrix4x4<S>
+where
+    S: SimdScalarFloat
+{
+    #[inline]
+    fn from(orthographic: Orthographic3<S>) -> Matrix4x4<S> {
+        orthographic.to_projective_matrix()
     }
 }
 
