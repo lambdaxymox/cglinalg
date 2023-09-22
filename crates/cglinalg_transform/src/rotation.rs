@@ -781,28 +781,6 @@ impl<S, const N: usize> AsRef<Matrix<S, N, N>> for Rotation<S, N> {
     }
 }
 
-/*
-impl<S, const N: usize> From<Rotation<S, N>> for Matrix<S, N, N> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn from(rotation: Rotation<S, N>) -> Matrix<S, N, N> {
-        rotation.matrix
-    }
-}
-
-impl<S, const N: usize> From<&Rotation<S, N>> for Matrix<S, N, N> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn from(rotation: &Rotation<S, N>) -> Matrix<S, N, N> {
-        rotation.matrix
-    }
-}
-*/
-
 impl<S, const N: usize, const NPLUS1: usize> From<Rotation<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
     S: SimdScalarFloat,
@@ -1121,19 +1099,6 @@ where
         }
     }
 }
-
-/*
-impl<S> From<Rotation2<S>> for Matrix3x3<S> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn from(rotation: Rotation2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from(&rotation.matrix)
-    }
-}
-*/
-
 
 impl<S> Rotation3<S> 
 where 
@@ -1845,18 +1810,6 @@ where
         Quaternion::rotation_between_axis(v1, v2).map(|q| q.into())
     }
 }
-
-/*
-impl<S> From<Rotation3<S>> for Matrix4x4<S> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn from(rotation: Rotation3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from(&rotation.matrix)
-    }
-}
-*/
 
 impl<S> From<Quaternion<S>> for Rotation3<S> 
 where 

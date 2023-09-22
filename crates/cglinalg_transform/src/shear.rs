@@ -414,28 +414,6 @@ where
     }
 }
 
-/*
-impl<S, const N: usize> From<Shear<S, N>> for Matrix<S, N, N> 
-where 
-    S: SimdScalarSigned,
-    ShapeConstraint: DimEq<Const<N>, Const<N>>
-{
-    fn from(shear: Shear<S, N>) -> Matrix<S, N, N> {
-        shear.matrix
-    }
-}
-
-impl<S, const N: usize> From<&Shear<S, N>> for Matrix<S, N, N> 
-where 
-    S: SimdScalarSigned,
-    ShapeConstraint: DimEq<Const<N>, Const<N>>
-{
-    #[inline]
-    fn from(shear: &Shear<S, N>) -> Matrix<S, N, N> {
-        shear.matrix
-    }
-}
-*/
 impl<S, const N: usize, const NPLUS1: usize> From<Shear<S, N>> for Matrix<S, NPLUS1, NPLUS1>
 where 
     S: SimdScalarSigned,
@@ -768,28 +746,6 @@ where
     }
 }
 
-/*
-impl<S> From<Shear2<S>> for Matrix2x2<S> 
-where 
-    S: SimdScalarSigned 
-{
-    #[inline]
-    fn from(shear: Shear2<S>) -> Matrix2x2<S> {
-        shear.matrix
-    }
-}
-
-impl<S> From<&Shear2<S>> for Matrix2x2<S> 
-where 
-    S: SimdScalarSigned 
-{
-    #[inline]
-    fn from(shear: &Shear2<S>) -> Matrix2x2<S> {
-        &shear.matrix
-    }
-}
-*/
-
 impl<S> Shear3<S> 
 where 
     S: SimdScalarSigned 
@@ -1083,24 +1039,3 @@ where
     }
 }
 
-/*
-impl<S> From<Shear3<S>> for Matrix3x3<S> 
-where 
-    S: SimdScalarSigned 
-{
-    #[inline]
-    fn from(shear: Shear3<S>) -> Matrix3x3<S> {
-        shear.matrix
-    }
-}
-
-impl<S> From<&Shear3<S>> for Matrix3x3<S> 
-where 
-    S: SimdScalarSigned 
-{
-    #[inline]
-    fn from(shear: &Shear3<S>) -> Matrix3x3<S> {
-        shear.matrix
-    }
-}
-*/
