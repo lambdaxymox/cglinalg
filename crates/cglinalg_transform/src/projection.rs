@@ -10,6 +10,9 @@ use cglinalg_core::{
     Point3,
     Vector3,
 };
+use crate::transform::{
+    Transform3,
+};
 
 use core::fmt;
 use core::ops;
@@ -335,13 +338,13 @@ where
     /// let near = 1_f64;
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
-    /// let result = perspective.matrix();
     /// let expected = Matrix4x4::new(
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
     ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
     ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
     /// );
+    /// let result = perspective.matrix();
     ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
@@ -572,6 +575,87 @@ where
             c3r2 * inverse_w,
         )
     }
+
+    /// Convert a perspective projection to a projective matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
+    ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
+    ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    /// );
+    /// let result = perspective.to_projective_matrix();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
+        self.matrix
+    }
+
+    /// Convert a perspective projection to a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
+    ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
+    ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    /// ));
+    /// let result = perspective.to_transform();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform3<S> {
+        Transform3::from_matrix_unchecked(self.matrix)
+    }
 }
 
 impl<S> AsRef<Matrix4x4<S>> for Perspective3<S> {
@@ -586,11 +670,7 @@ where
     S: fmt::Display 
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "Perspective3 [{}]",
-            self.matrix
-        )
+        write!(formatter, "Perspective3 [{}]", self.matrix)
     }
 }
 
@@ -770,8 +850,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = vfov.into();
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = vfov.into();
     /// let result = projection.vfov();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -829,8 +909,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = near;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = near;
     /// let result = projection.near();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -911,8 +991,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = far;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = far;
     /// let result = projection.far();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -993,8 +1073,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = aspect;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = aspect;
     /// let result = projection.aspect();
     /// 
     /// assert_eq!(result, expected);
@@ -1083,8 +1163,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = projection.left();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1116,8 +1196,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = projection.top();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1151,8 +1231,8 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = projection.bottom();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1315,8 +1395,8 @@ where
     /// let far = 100_f64;
     /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
-    /// let expected = point;
     /// let projected_point = perspective.project_point(&point);
+    /// let expected = point;
     /// let result = perspective.unproject_point(&projected_point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1401,8 +1481,8 @@ where
     /// let far = 100_f64;
     /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
-    /// let expected = vector;
     /// let projected_vector = perspective.project_vector(&vector);
+    /// let expected = vector;
     /// let result = perspective.unproject_vector(&projected_vector); 
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1456,6 +1536,95 @@ where
             c3r2 * inverse_w,
         )
     }
+
+    /// Convert a perspective projection to a projective matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Angle,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
+    /// let c1r1 = 1_f64 / (tan_half_vfov);
+    /// let c2r2 = -(far + near) / (far - near);
+    /// let c3r2 = (-2_f64 * far * near) / (far - near);
+    /// let expected = Matrix4x4::new(
+    ///     c0r0,  0_f64, 0_f64,  0_f64,
+    ///     0_f64, c1r1,  0_f64,  0_f64,
+    ///     0_f64, 0_f64, c2r2,  -1_f64,
+    ///     0_f64, 0_f64, c3r2,   0_f64
+    /// );
+    /// let result = perspective.to_projective_matrix();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
+        self.matrix
+    }
+
+    /// Convert a perspective projection to a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// #     Angle,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
+    /// let c1r1 = 1_f64 / (tan_half_vfov);
+    /// let c2r2 = -(far + near) / (far - near);
+    /// let c3r2 = (-2_f64 * far * near) / (far - near);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     c0r0,  0_f64, 0_f64,  0_f64,
+    ///     0_f64, c1r1,  0_f64,  0_f64,
+    ///     0_f64, 0_f64, c2r2,  -1_f64,
+    ///     0_f64, 0_f64, c3r2,   0_f64
+    /// ));
+    /// let result = perspective.to_transform();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform3<S> {
+        Transform3::from_matrix_unchecked(self.matrix)
+    }
 }
 
 impl<S> AsRef<Matrix4x4<S>> for PerspectiveFov3<S> {
@@ -1470,11 +1639,7 @@ where
     S: fmt::Display
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "PerspectiveFov3 [{}]",
-            self.matrix
-        )
+        write!(formatter, "PerspectiveFov3 [{}]", self.matrix)
     }
 }
 
@@ -2007,8 +2172,8 @@ where
     /// let far = 101_f64;
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let point = Point3::new(2_f64, 3_f64, 30_f64);
-    /// let expected = point;
     /// let projected_point = orthographic.project_point(&point);
+    /// let expected = point;
     /// let result = orthographic.unproject_point(&projected_point);
     ///
     /// assert_eq!(result, expected);
@@ -2054,8 +2219,8 @@ where
     /// let far = 101_f64;
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
-    /// let expected = vector;
     /// let projected_vector = orthographic.project_vector(&vector);
+    /// let expected = vector;
     /// let result = orthographic.unproject_vector(&projected_vector);
     ///
     /// assert_eq!(result, expected);
@@ -2069,6 +2234,81 @@ where
         let c2r2 = -one_half * (self.far - self.near);
 
         Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
+    }
+
+    /// Convert an orthographic projection to a projective matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let expected = Matrix4x4::new(
+    ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    /// );
+    /// let result = orthographic.to_projective_matrix();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
+        self.matrix
+    }
+
+    /// Convert a orthographic projection to a generic transformation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    /// ));
+    /// let result = orthographic.to_transform();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform3<S> {
+        Transform3::from_matrix_unchecked(self.matrix)
     }
 }
 
@@ -2084,11 +2324,7 @@ where
     S: fmt::Display
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "Orthographic3 [{}]",
-            self.matrix
-        )
+        write!(formatter, "Orthographic3 [{}]", self.matrix)
     }
 }
 
