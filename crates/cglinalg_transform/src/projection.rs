@@ -21,8 +21,7 @@ use core::ops;
 /// A perspective projection transformation based on arbitrary `left`, `right`, 
 /// `bottom`, `top`, `near`, and `far` planes.
 ///
-/// We assume the following constraints to construct a useful perspective 
-/// projection
+/// The following constraints construct a useful perspective projection.
 /// ```text
 /// left   < right
 /// bottom < top
@@ -72,6 +71,66 @@ where
     ///
     /// The perspective projection transformation uses a right-handed 
     /// coordinate system where the **negative z-axis** is the depth direction.
+    /// 
+    /// # Parameters
+    /// 
+    /// The parameters must satisfy
+    /// ```text
+    /// left   < right
+    /// bottom < top
+    /// near   < far   (along the negative z-axis)
+    /// ```
+    /// to construct a useful perspective projection.
+    /// 
+    /// `left` is the horizontal position of the left plane in camera space.
+    /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
+    /// 
+    /// `right` is the horizontal position of the right plane in camera space.
+    /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
+    /// 
+    /// `bottom` is the vertical position of the bottom plane in camera space.
+    /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
+    /// 
+    /// `top` is the vertical position of the top plane in camera space.
+    /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
+    /// 
+    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    /// 
+    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    /// 
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -3_f64;
+    /// let right = 3_f64;
+    /// let bottom = -2_f64;
+    /// let top = 2_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    ///
+    /// assert_relative_eq!(perspective.left(),   left,   epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.right(),  right,  epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.bottom(), bottom, epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.top(),    top,    epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.near(),   near,   epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.far(),    far,    epsilon = 1e-10);
+    /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
             left,
@@ -829,6 +888,52 @@ where
     S: SimdScalarFloat
 {
     /// Construct a new perspective projection transformation.
+    /// 
+    /// # Parameters
+    /// 
+    /// The parameters must satisfy
+    /// ```text
+    /// near < far (along the negative z-axis)
+    /// ```
+    /// to construct a useful perspective projection.
+    /// 
+    /// `vfov` is the angle of the field of view of the perspective projection.
+    /// 
+    /// `aspect` is the ratio of the width of the horizontal span of the viewport to
+    /// height of the vertical span of the viewport. 
+    /// 
+    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    /// 
+    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// 
+    /// assert_relative_eq!(perspective.vfov(),   vfov.into(), epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.aspect(), aspect,      epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.near(),   near,        epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.far(),    far,         epsilon = 1e-10);
+    /// ```
     pub fn from_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
         let spec_vfov = vfov.into();
 
@@ -860,9 +965,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = vfov.into();
-    /// let result = projection.vfov();
+    /// let result = perspective.vfov();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -919,9 +1024,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = near;
-    /// let result = projection.near();
+    /// let result = perspective.near();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1001,9 +1106,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = far;
-    /// let result = projection.far();
+    /// let result = perspective.far();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1083,9 +1188,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = aspect;
-    /// let result = projection.aspect();
+    /// let result = perspective.aspect();
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -1138,9 +1243,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
-    /// let result = projection.right();
+    /// let result = perspective.right();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1173,9 +1278,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
-    /// let result = projection.left();
+    /// let result = perspective.left();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1206,9 +1311,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
-    /// let result = projection.top();
+    /// let result = perspective.top();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1241,9 +1346,9 @@ where
     /// let aspect = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
-    /// let result = projection.bottom();
+    /// let result = perspective.bottom();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1821,6 +1926,66 @@ where
     S: SimdScalarFloat
 {
     /// Construct a new orthographic projection.
+    /// 
+    /// # Parameters
+    /// 
+    /// The parameters must satisfy
+    /// ```text
+    /// left   < right
+    /// bottom < top
+    /// near   < far   (along the negative z-axis)
+    /// ```
+    /// to construct a useful orthographic projection.
+    /// 
+    /// `left` is the horizontal position of the left plane in camera space.
+    /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
+    /// 
+    /// `right` is the horizontal position of the right plane in camera space.
+    /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
+    /// 
+    /// `bottom` is the vertical position of the bottom plane in camera space.
+    /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
+    /// 
+    /// `top` is the vertical position of the top plane in camera space.
+    /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
+    /// 
+    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    /// 
+    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
+    /// the **negative z-axis**.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Orthographic3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let left = -6_f64;
+    /// let right = 6_f64;
+    /// let bottom = -4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 101_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
+    ///
+    /// assert_relative_eq!(orthographic.left(),   left,   epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.right(),  right,  epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.bottom(), bottom, epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.top(),    top,    epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.near(),   near,   epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.far(),    far,    epsilon = 1e-10);
+    /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
             left,
