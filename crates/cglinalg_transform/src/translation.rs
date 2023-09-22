@@ -676,7 +676,7 @@ where
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
-        Transform::from_specialized(self)
+        Transform::from_matrix_unchecked(self.to_affine_matrix())
     }
 }
 

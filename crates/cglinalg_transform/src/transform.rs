@@ -47,6 +47,7 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
+    /*
     /// Convert a matrix to a transformation. 
     /// This function is for internal use in implementing type conversions.
     #[inline]
@@ -57,6 +58,7 @@ where
             matrix: transform.into(),
         }
     }
+    */
 
     /// Construct a new transformation from a given homogeneous matrix. The 
     /// function does not check that the input matrix is a valid homogeneous 
