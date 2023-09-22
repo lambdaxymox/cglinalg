@@ -1,4 +1,5 @@
 use cglinalg_numeric::{
+    SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
 };
@@ -6,12 +7,10 @@ use cglinalg_core::{
     Const,
     ShapeConstraint,
     DimAdd,
-    DimEq,
     DimLt,
     Matrix,
     Matrix2x2,
     Matrix3x3,
-    Matrix4x4,
     Vector,
     Vector2,
     Vector3,
@@ -224,6 +223,65 @@ where
     }
 }
 
+impl<S, const N: usize> Shear<S, N>
+where
+    S: SimdScalar
+{
+    /// Convert a shear transformation to a matrix.
+    /// 
+    /// The resulting matrix is not an affine. For an affine matrix,
+    /// use [`Shear::to_affine_matrix`].
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix2x2,
+    /// # };
+    /// #
+    /// let shear = Shear2::from_shear(5_f64, 7_f64);
+    /// let expected = Matrix2x2::new(
+    ///     1_f64, 7_f64,
+    ///     5_f64, 1_f64
+    /// );
+    /// let result = shear.to_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let shear = Shear3::from_shear(
+    ///     2_f64, 3_f64,
+    ///     4_f64, 5_f64,
+    ///     6_f64, 7_f64
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     1_f64, 4_f64, 6_f64,
+    ///     2_f64, 1_f64, 7_f64,
+    ///     3_f64, 5_f64, 1_f64
+    /// );
+    /// let result = shear.to_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub const fn to_matrix(&self) -> Matrix<S, N, N> {
+        self.matrix
+    }
+}
+
 impl<S, const N: usize, const NPLUS1: usize> Shear<S, N> 
 where 
     S: SimdScalarSigned,
@@ -231,6 +289,59 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
 {
+    /// Convert a shear transformation to an affine matrix.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let shear = Shear2::from_shear(-5_f64, 7_f64);
+    /// let expected = Matrix3x3::new(
+    ///      1_f64, 7_f64, 0_f64,
+    ///     -5_f64, 1_f64, 0_f64,
+    ///      0_f64, 0_f64, 1_f64
+    /// );
+    /// let result = shear.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let shear = Shear3::from_shear(
+    ///     5_f64,  7_f64,
+    ///     11_f64, 13_f64,
+    ///     17_f64, 19_f64
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///     1_f64, 11_f64, 17_f64, 0_f64,
+    ///     5_f64, 1_f64,  19_f64, 0_f64,
+    ///     7_f64, 13_f64, 1_f64,  0_f64,
+    ///     0_f64, 0_f64,  0_f64,  1_f64
+    /// );
+    /// let result = shear.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        Matrix::from(&self.matrix)
+    }
+
     /// Convert a shear transformation into a generic transformation.
     /// 
     /// # Example (Two Dimensions)
@@ -303,6 +414,7 @@ where
     }
 }
 
+/*
 impl<S, const N: usize> From<Shear<S, N>> for Matrix<S, N, N> 
 where 
     S: SimdScalarSigned,
@@ -323,7 +435,7 @@ where
         shear.matrix
     }
 }
-/*
+*/
 impl<S, const N: usize, const NPLUS1: usize> From<Shear<S, N>> for Matrix<S, NPLUS1, NPLUS1>
 where 
     S: SimdScalarSigned,
@@ -333,23 +445,23 @@ where
 {
     #[inline]
     fn from(shear: Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        Matrix::from(&shear.matrix)
+        shear.to_affine_matrix()
     }
 }
-*/
-/*
+
 impl<S, const N: usize, const NPLUS1: usize> From<&Shear<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
 {
     #[inline]
     fn from(shear: &Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        Matrix::from(&shear.matrix)
+        shear.to_affine_matrix()
     }
 }
-*/
+
 
 impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N> 
 where 
@@ -656,26 +768,27 @@ where
     }
 }
 
-impl<S> From<Shear2<S>> for Matrix3x3<S> 
+/*
+impl<S> From<Shear2<S>> for Matrix2x2<S> 
 where 
     S: SimdScalarSigned 
 {
     #[inline]
-    fn from(shear: Shear2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from(&shear.matrix)
+    fn from(shear: Shear2<S>) -> Matrix2x2<S> {
+        shear.matrix
     }
 }
 
-impl<S> From<&Shear2<S>> for Matrix3x3<S> 
+impl<S> From<&Shear2<S>> for Matrix2x2<S> 
 where 
     S: SimdScalarSigned 
 {
     #[inline]
-    fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
-        Matrix3x3::from(&shear.matrix)
+    fn from(shear: &Shear2<S>) -> Matrix2x2<S> {
+        &shear.matrix
     }
 }
-
+*/
 
 impl<S> Shear3<S> 
 where 
@@ -970,23 +1083,24 @@ where
     }
 }
 
-impl<S> From<Shear3<S>> for Matrix4x4<S> 
+/*
+impl<S> From<Shear3<S>> for Matrix3x3<S> 
 where 
     S: SimdScalarSigned 
 {
     #[inline]
-    fn from(shear: Shear3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from(&shear.matrix)
+    fn from(shear: Shear3<S>) -> Matrix3x3<S> {
+        shear.matrix
     }
 }
 
-impl<S> From<&Shear3<S>> for Matrix4x4<S> 
+impl<S> From<&Shear3<S>> for Matrix3x3<S> 
 where 
     S: SimdScalarSigned 
 {
     #[inline]
-    fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
-        Matrix4x4::from(&shear.matrix)
+    fn from(shear: &Shear3<S>) -> Matrix3x3<S> {
+        shear.matrix
     }
 }
-
+*/

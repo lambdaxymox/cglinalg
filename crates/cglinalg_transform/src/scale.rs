@@ -339,37 +339,30 @@ where
     pub const fn to_vector(&self) -> Vector<S, N> {
         self.vector
     }
-}
 
-impl<S, const N: usize, const NPLUS1: usize> Scale<S, N>
-where
-    S: SimdScalar,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
-{
-    /// Convert a scale transformation into a generic transformation.
+    /// Convert a scale transformation to a matrix.
+    /// 
+    /// The resulting matrix is not an affine. For an affine matrix,
+    /// use [`Scale::to_affine_matrix`].
     /// 
     /// # Example (Two Dimensions)
     /// 
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
-    /// #     Transform2,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
     /// #
-    /// let vector = Vector2::new(2_f64, 3_f64);
-    /// let scale = Scale2::from_nonuniform_scale(&vector);
-    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
-    ///     2_f64, 0_f64, 0_f64,
-    ///     0_f64, 3_f64, 0_f64,
-    ///     0_f64, 0_f64, 1_f64
-    /// ));
-    /// let result = scale.to_transform();
+    /// let scale_vector = Vector2::new(5_f64, 7_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
+    /// let expected = Matrix2x2::new(
+    ///     5_f64, 0_f64,
+    ///     0_f64, 7_f64
+    /// );
+    /// let result = scale.to_matrix();
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -379,28 +372,26 @@ where
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
-    /// #     Transform3,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Matrix4x4,
+    /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
     /// #
-    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
-    /// let scale = Scale3::from_nonuniform_scale(&vector);
-    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
-    ///     2_f64, 0_f64, 0_f64, 0_f64,
-    ///     0_f64, 3_f64, 0_f64, 0_f64,
-    ///     0_f64, 0_f64, 4_f64, 0_f64,
-    ///     0_f64, 0_f64, 0_f64, 1_f64
-    /// ));
-    /// let result = scale.to_transform();
+    /// let scale_vector = Vector3::new(5_f64, 7_f64, 11_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
+    /// let expected = Matrix3x3::new(
+    ///     5_f64, 0_f64, 0_f64,
+    ///     0_f64, 7_f64, 0_f64,
+    ///     0_f64, 0_f64, 11_f64
+    /// );
+    /// let result = scale.to_matrix();
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
-        Transform::from_specialized(self)
+    pub fn to_matrix(&self) -> Matrix<S, N, N> {
+        Matrix::from_diagonal(&self.vector)
     }
 }
 
@@ -587,6 +578,122 @@ where
     }
 }
 
+impl<S, const N: usize, const NPLUS1: usize> Scale<S, N>
+where
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    /// Convert a scale transformation to an affine matrix.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let vector = Vector2::new(2_f64, 3_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&vector);
+    /// let expected = Matrix3x3::new(
+    ///     2_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64,
+    ///     0_f64, 0_f64, 1_f64
+    /// );
+    /// let result = scale.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&vector);
+    /// let expected = Matrix4x4::new(
+    ///     2_f64, 0_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64, 0_f64,
+    ///     0_f64, 0_f64, 4_f64, 0_f64,
+    ///     0_f64, 0_f64, 0_f64, 1_f64
+    /// );
+    /// let result = scale.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        Matrix::from_affine_nonuniform_scale(&self.vector)
+    }
+
+    /// Convert a scale transformation into a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// #
+    /// let vector = Vector2::new(2_f64, 3_f64);
+    /// let scale = Scale2::from_nonuniform_scale(&vector);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     2_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64,
+    ///     0_f64, 0_f64, 1_f64
+    /// ));
+    /// let result = scale.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
+    /// let scale = Scale3::from_nonuniform_scale(&vector);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     2_f64, 0_f64, 0_f64, 0_f64,
+    ///     0_f64, 3_f64, 0_f64, 0_f64,
+    ///     0_f64, 0_f64, 4_f64, 0_f64,
+    ///     0_f64, 0_f64, 0_f64, 1_f64
+    /// ));
+    /// let result = scale.to_transform();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
+        Transform::from_specialized(self)
+    }
+}
+
 impl<S, const N: usize> fmt::Display for Scale<S, N> 
 where 
     S: fmt::Display 
@@ -605,7 +712,7 @@ where
 {
     #[inline]
     fn from(scale: Scale<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        Matrix::from_affine_nonuniform_scale(&scale.vector)
+        scale.to_affine_matrix()
     }
 }
 
@@ -618,7 +725,7 @@ where
 {
     #[inline]
     fn from(scale: &Scale<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        Matrix::from_affine_nonuniform_scale(&scale.vector)
+        scale.to_affine_matrix()
     }
 }
 

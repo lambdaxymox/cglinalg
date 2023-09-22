@@ -258,6 +258,54 @@ where
             matrix: Matrix::identity(),
         }
     }
+
+    /// Convert a transform to its equivalent matrix representation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix3x3::from_affine_angle(angle);
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// 
+    /// assert_eq!(transform.to_matrix(), matrix);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use core::f64;
+    /// # 
+    /// let angle = Radians(f64::consts::FRAC_PI_6);
+    /// let matrix = Matrix4x4::from_affine_angle_z(angle);
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// 
+    /// assert_eq!(transform.to_matrix(), matrix);
+    /// ```
+    #[inline]
+    pub const fn to_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        self.matrix
+    }
 }
 
 impl<S, const N: usize, const NPLUS1: usize> Transform<S, N, NPLUS1> 
@@ -402,25 +450,25 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> From<Transform<S, N, NPLUS1>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
-    S: Copy,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     #[inline]
-    fn from(transformation: Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
-        transformation.matrix
+    fn from(transform: Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
+        transform.to_matrix()
     }
 }
 
 impl<S, const N: usize, const NPLUS1: usize> From<&Transform<S, N, NPLUS1>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
-    S: Copy,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     #[inline]
-    fn from(transformation: &Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
-        transformation.matrix
+    fn from(transform: &Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
+        transform.to_matrix()
     }
 }
 

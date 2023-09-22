@@ -478,6 +478,73 @@ where
         }
     }
 
+    /// Convert a reflection to an affine matrix.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// A reflection about the plane `y == 2 * x`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector2::new(-2_f64, 1_f64));
+    /// let bias = Point2::origin();
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let expected = Matrix3x3::new(
+    ///     -3_f64 / 5_f64, 4_f64 / 5_f64, 0_f64,
+    ///      4_f64 / 5_f64, 3_f64 / 5_f64, 0_f64,
+    ///      0_f64,         0_f64,         1_f64
+    /// );
+    /// let result = reflection.to_affine_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// A reflection about the plane `x + y == -z`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
+    /// let bias = Point3::origin();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let expected = Matrix4x4::new(
+    ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
+    ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
+    ///      0_f64,          0_f64,          0_f64,         1_f64
+    /// );
+    /// let result = reflection.to_affine_matrix();
+    /// 
+    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub const fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        self.matrix
+    }
+
     /// Convert a reflection to a generic transformation.
     /// 
     /// # Example (Two Dimensions)
@@ -572,25 +639,25 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> From<Reflection<S, N, NPLUS1>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
-    S: Copy,
+    S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     #[inline]
     fn from(transformation: Reflection<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
-        transformation.matrix
+        transformation.to_affine_matrix()
     }
 }
 
 impl<S, const N: usize, const NPLUS1: usize> From<&Reflection<S, N, NPLUS1>> for Matrix<S, NPLUS1, NPLUS1> 
 where 
-    S: Copy,
+    S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
     #[inline]
     fn from(transformation: &Reflection<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
-        transformation.matrix
+        transformation.to_affine_matrix()
     }
 }
 

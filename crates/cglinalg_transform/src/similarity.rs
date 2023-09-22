@@ -587,188 +587,6 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Similarity<S, N> 
-where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
-{
-    /// Convert a similarity transformation to a generic transformation.
-    /// 
-    /// # Example (Two Dimensions)
-    /// 
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Similarity2,
-    /// #     Isometry2,
-    /// #     Rotation2,
-    /// #     Translation2,
-    /// #     Transform2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// # use core::f64;
-    /// #
-    /// let scale = 12_f64;
-    /// let angle = Radians(f64::consts::FRAC_PI_3);
-    /// let translation = Translation2::new(2_f64, 3_f64);
-    /// let rotation = Rotation2::from_angle(angle);
-    /// let isometry = Isometry2::from_parts(&translation, &rotation);
-    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
-    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
-    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,
-    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,
-    ///     2_f64,                               3_f64,                              1_f64
-    /// ));
-    /// let result = similarity.to_transform();
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
-    /// ```
-    /// 
-    /// # Example (Three Dimensions)
-    /// 
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Similarity3,
-    /// #     Isometry3,
-    /// #     Rotation3,
-    /// #     Translation3,
-    /// #     Transform3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// # use core::f64;
-    /// #
-    /// let scale = 12_f64;
-    /// let angle = Radians(f64::consts::FRAC_PI_3);
-    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
-    /// let rotation = Rotation3::from_angle_z(angle);
-    /// let isometry = Isometry3::from_parts(&translation, &rotation);
-    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
-    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
-    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,         0_f64,
-    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,         0_f64,
-    ///     0_f64,                               0_f64,                              scale * 1_f64, 0_f64,
-    ///     2_f64,                               3_f64,                              4_f64,         1_f64
-    /// ));
-    /// let result = similarity.to_transform();
-    /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
-    /// ```
-    #[inline]
-    pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
-        let matrix = self.to_affine_matrix();
-
-        Transform::from_matrix_unchecked(matrix)
-    }
-
-    /// Convert a similarity transformation to an affine matrix.
-    ///
-    /// # Example (Two Dimensions)
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Similarity2,
-    /// #     Rotation2,
-    /// #     Translation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let scale = 2_f64;
-    /// let angle = Degrees(72_f64);
-    /// let rotation = Rotation2::from_angle(angle);
-    /// let translation = Translation2::new(2_f64, 3_f64);
-    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
-    /// let expected = Matrix3x3::new(
-    ///      scale * angle.cos(), scale * angle.sin(), 0_f64,
-    ///     -scale * angle.sin(), scale * angle.cos(), 0_f64,
-    ///      2_f64,               3_f64,               1_f64
-    /// );
-    /// let result = similarity.to_affine_matrix();
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
-    /// ```
-    /// 
-    /// # Example (Three Dimensions)
-    /// 
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// #     Vector3,
-    /// #     Unit,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Similarity3,
-    /// #     Rotation3,
-    /// #     Translation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let scale = 2_f64;
-    /// let axis = Unit::from_value(Vector3::new(1_f64, 1_f64, 0_f64));
-    /// let angle = Degrees(60_f64);
-    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
-    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
-    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
-    /// let sq_3_8 = f64::sqrt(3_f64 / 8_f64);
-    /// let expected = Matrix4x4::new(
-    ///      scale * 3_f64 / 4_f64, scale * 1_f64 / 4_f64, scale * -sq_3_8,       0_f64,
-    ///      scale * 1_f64 / 4_f64, scale * 3_f64 / 4_f64, scale *  sq_3_8,       0_f64,
-    ///      scale * sq_3_8,        scale * -sq_3_8,       scale * 1_f64 / 2_f64, 0_f64,
-    ///      2_f64,                 3_f64,                 4_f64,                 1_f64
-    /// );
-    /// let result = similarity.to_affine_matrix();
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
-        let translation = self.isometry.translation().as_ref();
-        let scale = self.scale;
-        let mut rotation = self.isometry.rotation().matrix().clone();
-        rotation.scale_mut(scale);
-        
-        let mut result = Matrix::from(rotation);
-        for i in 0..N {
-            result[N][i] = translation[i];
-        }
-
-        result
-    }
-}
-
 impl<S, const N: usize> Similarity<S, N> 
 where 
     S: SimdScalarFloat 
@@ -1242,6 +1060,187 @@ where
 
 }
 
+impl<S, const N: usize, const NPLUS1: usize> Similarity<S, N> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+{
+    /// Convert a similarity transformation to an affine matrix.
+    ///
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector2,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let scale = 2_f64;
+    /// let angle = Degrees(72_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let translation = Translation2::new(2_f64, 3_f64);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = Matrix3x3::new(
+    ///      scale * angle.cos(), scale * angle.sin(), 0_f64,
+    ///     -scale * angle.sin(), scale * angle.cos(), 0_f64,
+    ///      2_f64,               3_f64,               1_f64
+    /// );
+    /// let result = similarity.to_affine_matrix();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let scale = 2_f64;
+    /// let axis = Unit::from_value(Vector3::new(1_f64, 1_f64, 0_f64));
+    /// let angle = Degrees(60_f64);
+    /// let rotation = Rotation3::from_axis_angle(&axis, angle);
+    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let sq_3_8 = f64::sqrt(3_f64 / 8_f64);
+    /// let expected = Matrix4x4::new(
+    ///      scale * 3_f64 / 4_f64, scale * 1_f64 / 4_f64, scale * -sq_3_8,       0_f64,
+    ///      scale * 1_f64 / 4_f64, scale * 3_f64 / 4_f64, scale *  sq_3_8,       0_f64,
+    ///      scale * sq_3_8,        scale * -sq_3_8,       scale * 1_f64 / 2_f64, 0_f64,
+    ///      2_f64,                 3_f64,                 4_f64,                 1_f64
+    /// );
+    /// let result = similarity.to_affine_matrix();
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        let translation = self.isometry.translation().as_ref();
+        let scale = self.scale;
+        let mut rotation = self.isometry.rotation().matrix().clone();
+        rotation.scale_mut(scale);
+        
+        let mut result = Matrix::from(rotation);
+        for i in 0..N {
+            result[N][i] = translation[i];
+        }
+
+        result
+    }
+
+    /// Convert a similarity transformation to a generic transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity2,
+    /// #     Isometry2,
+    /// #     Rotation2,
+    /// #     Translation2,
+    /// #     Transform2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation2::new(2_f64, 3_f64);
+    /// let rotation = Rotation2::from_angle(angle);
+    /// let isometry = Isometry2::from_parts(&translation, &rotation);
+    /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
+    /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
+    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,
+    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,
+    ///     2_f64,                               3_f64,                              1_f64
+    /// ));
+    /// let result = similarity.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Similarity3,
+    /// #     Isometry3,
+    /// #     Rotation3,
+    /// #     Translation3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let scale = 12_f64;
+    /// let angle = Radians(f64::consts::FRAC_PI_3);
+    /// let translation = Translation3::new(2_f64, 3_f64, 4_f64);
+    /// let rotation = Rotation3::from_angle_z(angle);
+    /// let isometry = Isometry3::from_parts(&translation, &rotation);
+    /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     scale * (1_f64 / 2_f64),             scale * (f64::sqrt(3_f64) / 2_f64), 0_f64,         0_f64,
+    ///     scale * (-f64::sqrt(3_f64) / 2_f64), scale * (1_f64 / 2_f64),            0_f64,         0_f64,
+    ///     0_f64,                               0_f64,                              scale * 1_f64, 0_f64,
+    ///     2_f64,                               3_f64,                              4_f64,         1_f64
+    /// ));
+    /// let result = similarity.to_transform();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-14);
+    /// ```
+    #[inline]
+    pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
+        let matrix = self.to_affine_matrix();
+
+        Transform::from_matrix_unchecked(matrix)
+    }
+}
+
 impl<S, const N: usize> fmt::Display for Similarity<S, N> 
 where 
     S: fmt::Display 
@@ -1252,6 +1251,32 @@ where
             "Similarity{} [scale={}, rotation={}, translation={}]",
             N, self.scale, self.isometry.rotation, self.isometry.translation.vector
         )
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> From<Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+{
+    #[inline]
+    fn from(isometry: Similarity<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
+        isometry.to_affine_matrix()
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> From<&Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+{
+    #[inline]
+    fn from(isometry: &Similarity<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
+        isometry.to_affine_matrix()
     }
 }
 

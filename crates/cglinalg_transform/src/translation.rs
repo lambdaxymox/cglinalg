@@ -573,6 +573,61 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
+    /// Convert a translation to an affine matrix.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(1_f64, 2_f64);
+    /// let expected = Matrix3x3::new(
+    ///     1_f64, 0_f64, 0_f64,
+    ///     0_f64, 1_f64, 0_f64,
+    ///     1_f64, 2_f64, 1_f64
+    /// );
+    /// let result = translation.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
+    /// let expected = Matrix4x4::new(
+    ///     1_f64, 0_f64, 0_f64, 0_f64,
+    ///     0_f64, 1_f64, 0_f64, 0_f64,
+    ///     0_f64, 0_f64, 1_f64, 0_f64,
+    ///     1_f64, 2_f64, 3_f64, 1_f64
+    /// );
+    /// let result = translation.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = Matrix::identity();
+        for r in 0..N {
+            result[N][r] = self.vector[r];
+        }
+
+        result
+    }
+
     /// Convert a translation to a generic transformation.
     /// 
     /// # Example (Two Dimensions)
@@ -649,13 +704,7 @@ where
 {
     #[inline]
     fn from(transform: Translation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = Matrix::identity();
-        for r in 0..N {
-            result[N][r] = transform.vector[r];
-        }
-
-        result
+        transform.to_affine_matrix()
     }
 }
 
@@ -667,13 +716,7 @@ where
 {
     #[inline]
     fn from(transform: &Translation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = Matrix::identity();
-        for r in 0..N {
-            result[N][r] = transform.vector[r];
-        }
-
-        result
+        transform.to_affine_matrix()
     }
 }
 
