@@ -539,11 +539,11 @@ where
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
-            x: euler.x.into(),
-            y: euler.y.into(),
-            z: euler.z.into(),
-        };
+        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+            euler.x.into(),
+            euler.y.into(),
+            euler.z.into(),
+        );
         euler_radians.to_matrix()
     }
 }
@@ -555,11 +555,11 @@ where
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles {
-            x: euler.x.into(),
-            y: euler.y.into(),
-            z: euler.z.into(),
-        };
+        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+            euler.x.into(),
+            euler.y.into(),
+            euler.z.into(),
+        );
         euler_radians.to_affine_matrix()
     }
 }

@@ -565,18 +565,20 @@ where
     /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
-    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let vfov = Degrees(72_f32);
-    /// let aspect = 800_f32 / 600_f32;
-    /// let near_z = 0.1_f32;
-    /// let far_z = 100_f32;
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
     /// let expected = vfov.into();
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.vfov();
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
     pub fn vfov(&self) -> Radians<S> {
@@ -610,7 +612,9 @@ where
         Radians(vfov)
     }
 
-    /// Get the near plane along the **negative z-axis**.
+    /// Get the position of the near plane of the viewing 
+    /// frustum described by the perspective projection in the **zx-plane** 
+    /// positioned along the **negative z-axis**.
     /// 
     /// # Example
     /// 
@@ -620,18 +624,20 @@ where
     /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
-    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let vfov = Degrees(72_f32);
-    /// let aspect = 800_f32 / 600_f32;
-    /// let near_z = 0.1_f32;
-    /// let far_z = 100_f32;
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
     /// let expected = near_z;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.near_z();
     /// 
-    /// assert_eq!(result, expected);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
     pub fn near_z(&self) -> S {
@@ -690,7 +696,9 @@ where
         ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
-    /// Get the far plane along the **negative z-axis**.
+    /// Get the position of the far plane of the viewing 
+    /// frustum described by the perspective projection in the **zx-plane** 
+    /// positioned along the **negative z-axis**.
     /// 
     /// ```
     /// # use cglinalg_transform::{
@@ -698,21 +706,20 @@ where
     /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
-    /// #     Radians,
     /// # };
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
     /// #
-    /// let vfov = Degrees(72_f32);
-    /// let aspect = 800_f32 / 600_f32;
-    /// let near_z = 0.1_f32;
-    /// let far_z = 100_f32;
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
     /// let expected = far_z;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.far_z();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-4);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn far_z(&self) -> S {
@@ -773,8 +780,8 @@ where
     }
 
     /// Get the aspect ratio. The aspect ratio is the ratio of the 
-    /// width of the viewing plane of the viewing frustum to the height of the 
-    /// viewing plane of the viewing frustum.
+    /// width of the viewing plane of the view volume to the height of the 
+    /// viewing plane of the view volume.
     /// 
     /// # Example
     /// 
@@ -784,13 +791,12 @@ where
     /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
-    /// #     Radians,
     /// # };
     /// #
-    /// let vfov = Degrees(72_f32);
-    /// let aspect = 800_f32 / 600_f32;
-    /// let near_z = 0.1_f32;
-    /// let far_z = 100_f32;
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
     /// let expected = aspect;
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.aspect();
@@ -822,6 +828,142 @@ where
         // ```
         // which is the desired formula.
         self.matrix[1][1] / self.matrix[0][0]
+    }
+
+    /// Get the position of the right-hand plane of the viewing 
+    /// frustum described by the perspective projection in the **yz-plane** 
+    /// positioned along the **positive x-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
+    /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.right_x();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn right_x(&self) -> S {
+        let abs_near = self.near_z().abs();
+
+        abs_near / self.matrix[0][0]
+    }
+
+    /// Get the position of the left-hand plane of the viewing 
+    /// frustum described by the perspective projection in the **yz-plane** 
+    /// positioned along the **negative x-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
+    /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.left_x();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn left_x(&self) -> S {
+        -self.right_x()
+    }
+
+    /// Get the position of the top plane of the viewing 
+    /// frustum described by the perspective projection in the **yz-plane** 
+    /// positioned along the **positive y-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
+    /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.top_y();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn top_y(&self) -> S {
+        let abs_near = self.near_z().abs();
+        
+        abs_near / self.matrix[1][1]
+    }
+
+    /// Get the position of the bottom plane of the viewing 
+    /// frustum descibed by the perspective projection in the **yz-plane** 
+    /// positioned along the **negative y-axis**.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     PerspectiveFov3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Degrees,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect = 800_f64 / 600_f64;
+    /// let near_z = 0.1_f64;
+    /// let far_z = 100_f64;
+    /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
+    /// let result = projection.bottom_y();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// ```
+    #[inline]
+    pub fn bottom_y(&self) -> S {
+        -self.top_y()
     }
 
     /// Get the matrix that implements the perspective projection transformation.
@@ -1658,433 +1800,6 @@ where
 }
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> 
-where 
-    S: SimdScalarFloat
-{
-    type Output = Point3<S>;
-
-    #[inline]
-    fn mul(self, other: &'a Point3<S>) -> Self::Output {
-        self.project_point(other)
-    }
-}
-
-
-
-/// An orthographic projection based on the `near` plane, the `far` plane and 
-/// the vertical field of view angle `vfov` and the horizontal/vertical aspect 
-/// ratio `aspect`.
-///
-/// We assume the following constraints to make a useful orthographic projection 
-/// transformation.
-/// ```text
-/// 0 radians < vfov < pi radians
-/// aspect > 0
-/// near < far (along the negative z-axis)
-/// ```
-/// This orthographic projection model imposes some constraints on the more 
-/// general orthographic specification based on the arbitrary planes. The `vfov` 
-/// parameter combined with the aspect ratio `aspect` ensures that the top and 
-/// bottom planes are the same distance from the eye position along the vertical 
-/// axis on opposite side. They ensure that the `left` and `right` planes are 
-/// equidistant from the eye on opposite sides along the horizontal axis.
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub struct OrthographicFov3<S> {
-    /// The vertical field of view angle of the orthographic transformation
-    /// viewport.
-    vfov: Radians<S>, 
-    /// The ratio of the horizontal width to the vertical height.
-    aspect: S, 
-    /// The position of the near plane along the **negative z-axis**.
-    near: S, 
-    /// The position of the far plane along the **negative z-axis**.
-    far: S,
-    /// The underlying matrix that implements the orthographic projection.
-    matrix: Matrix4x4<S>,
-}
-
-impl<S> OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    /// Construct a new orthographic projection.
-    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
-        let vfov_rad = vfov.into();
-        Self {
-            vfov: vfov_rad,
-            aspect,
-            near,
-            far,
-            matrix: Matrix4x4::from_orthographic_fov(vfov_rad, aspect, near, far),
-        }
-    }
-
-    /// Get the vertical field of view angle.
-    #[inline]
-    pub const fn vfov(&self) -> Radians<S> {
-        self.vfov
-    }
-
-    /// Get the near plane along the **negative z-axis**.
-    #[inline]
-    pub const fn near_z(&self) -> S {
-        self.near
-    }
-
-    /// Get the far plane along the **negative z-axis**.
-    #[inline]
-    pub const fn far_z(&self) -> S {
-        self.far
-    }
-
-    /// Get the aspect ratio.
-    #[inline]
-    pub const fn aspect(&self) -> S {
-        self.aspect
-    }
-
-    /// Get the underlying matrix implementing the orthographic transformation.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     OrthographicFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 101_f64;
-    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
-    /// let expected = Matrix4x4::new(
-    ///     2_f64 / 101_f64, 0_f64,            0_f64,             0_f64, 
-    ///     0_f64,           8_f64 / 303_f64,  0_f64,             0_f64, 
-    ///     0_f64,           0_f64,           -2_f64 / 100_f64,   0_f64, 
-    ///     0_f64,           0_f64,           -102_f64 / 100_f64, 1_f64
-    /// );
-    /// let result = orthographic.matrix();
-    ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub const fn matrix(&self) -> &Matrix4x4<S> {
-        &self.matrix
-    }
-
-    /// Apply the orthographic projection transformation to a point.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     OrthographicFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 101_f64;
-    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
-    /// let point = Point3::new(2_f64, 3_f64, 50_f64);
-    /// let expected = Point3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -101_f64 / 50_f64);
-    /// let result = orthographic.project_point(&point);
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
-        Point3::new(
-            self.matrix.c0r0 * point.x + self.matrix.c3r0,
-            self.matrix.c1r1 * point.y + self.matrix.c3r1,
-            self.matrix.c2r2 * point.z + self.matrix.c3r2
-        )
-    }
-
-    /// Apply the orthographic projection transformation to a vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     OrthographicFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 101_f64;
-    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
-    /// let vector = Vector3::new(2_f64, 3_f64, 50_f64);
-    /// let expected = Vector3::new(4_f64 / 101_f64, 8_f64 / 101_f64, -1_f64);
-    /// let result = orthographic.project_vector(&vector);
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        Vector3::new(
-            self.matrix.c0r0 * vector.x,
-            self.matrix.c1r1 * vector.y,
-            self.matrix.c2r2 * vector.z
-        )
-    }
-
-    /// Unproject a point from normalized devices coordinates back to camera
-    /// view space. 
-    ///
-    /// This is the inverse operation of `project_point`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     OrthographicFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 101_f64;
-    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
-    /// let point = Point3::new(2_f64, 3_f64, 50_f64);
-    /// let expected = point;
-    /// let projected_point = orthographic.project_point(&point);
-    /// let result = orthographic.unproject_point(&projected_point);
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
-        let one = S::one();
-        let one_half = one / (one + one);
-        let width = self.far * Angle::tan(self.vfov * one_half);
-        let height = width / self.aspect;
-        let left = -width * one_half;
-        let right = width * one_half;
-        let bottom = -height * one_half;
-        let top = height * one_half;
-        let near = self.near;
-        let far = self.far;
-        let c0r0 =  one_half * (right - left);
-        let c1r1 =  one_half * (top - bottom);
-        let c2r2 = -one_half * (far - near);
-        let c3r0 =  one_half * (left + right);
-        let c3r1 =  one_half * (bottom + top);
-        let c3r2 = -one_half * (far + near);
-
-        Point3::new(
-            c0r0 * point.x + c3r0,
-            c1r1 * point.y + c3r1,
-            c2r2 * point.z + c3r2
-        )
-    }
-
-    /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. 
-    ///
-    /// This is the inverse operation of `project_vector`.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     OrthographicFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 101_f64;
-    /// let orthographic = OrthographicFov3::new(vfov, aspect, near, far);
-    /// let vector = Vector3::new(2_f64, 3_f64, 50_f64);
-    /// let expected = vector;
-    /// let projected_vector = orthographic.project_vector(&vector);
-    /// let result = orthographic.unproject_vector(&projected_vector);
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-8);
-    /// ```
-    #[inline]
-    pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
-        let one = S::one();
-        let one_half = one / (one + one);
-        let width = self.far * Angle::tan(self.vfov * one_half);
-        let height = width / self.aspect;
-        let left = -width * one_half;
-        let right = width * one_half;
-        let bottom = -height * one_half;
-        let top = height * one_half;
-        let near = self.near;
-        let far = self.far;
-        let c0r0 =  one_half * (right - left);
-        let c1r1 =  one_half * (top - bottom);
-        let c2r2 = -one_half * (far - near);
-
-        Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
-    }
-}
-
-impl<S> AsRef<Matrix4x4<S>> for OrthographicFov3<S> {
-    #[inline]
-    fn as_ref(&self) -> &Matrix4x4<S> {
-        &self.matrix
-    }
-}
-
-impl<S> fmt::Display for OrthographicFov3<S> 
-where 
-    S: fmt::Display
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "OrthographicFov3 [{}]",
-            self.matrix
-        )
-    }
-}
-
-impl<S> approx::AbsDiffEq for OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && Radians::abs_diff_eq(&self.vfov, &other.vfov, epsilon)
-            && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
-            && S::abs_diff_eq(&self.near, &other.near, epsilon)
-            && S::abs_diff_eq(&self.far, &other.far, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    #[inline]
-    fn default_max_relative() -> S::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
-        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && Radians::relative_eq(&self.vfov, &other.vfov, epsilon, max_relative)
-            && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
-            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
-            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
-        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && Radians::ulps_eq(&self.vfov, &other.vfov, epsilon, max_ulps)
-            && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
-            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
-            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
-    }
-}
-
-impl<S> ops::Mul<Point3<S>> for OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    type Output = Point3<S>;
-
-    #[inline]
-    fn mul(self, other: Point3<S>) -> Self::Output {
-        self.project_point(&other)
-    }
-}
-
-impl<S> ops::Mul<&Point3<S>> for OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat 
-{
-    type Output = Point3<S>;
-
-    #[inline]
-    fn mul(self, other: &Point3<S>) -> Self::Output {
-        self.project_point(other)
-    }
-}
-
-impl<S> ops::Mul<Point3<S>> for &OrthographicFov3<S> 
-where 
-    S: SimdScalarFloat
-{
-    type Output = Point3<S>;
-
-    #[inline]
-    fn mul(self, other: Point3<S>) -> Self::Output {
-        self.project_point(&other)
-    }
-}
-
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b OrthographicFov3<S> 
 where 
     S: SimdScalarFloat
 {

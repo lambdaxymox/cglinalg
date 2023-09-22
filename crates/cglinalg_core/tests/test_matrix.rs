@@ -3514,24 +3514,6 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_orthographic_fov() {
-        let vfov = Degrees(90_f64);
-        let aspect = 800_f64 / 600_f64;
-        let near = 1_f64;
-        let far = 100_f64;
-        let expected = Matrix4x4::new(
-            2_f64 / 100_f64, 0_f64,           0_f64,            0_f64, 
-            0_f64,           2_f64 / 75_f64,  0_f64,            0_f64, 
-            0_f64,           0_f64,          -2_f64 / 99_f64,   0_f64, 
-            0_f64,           0_f64,          -101_f64 / 99_f64, 1_f64
-        );
-        let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
-    
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
     #[test]
     fn test_look_at_rh_at_origin() {
         let eye = Point3::new(0_f64, 0_f64, 0_f64);

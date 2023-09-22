@@ -3,9 +3,7 @@ extern crate cglinalg_transform;
 
 
 use cglinalg_trigonometry::{
-    Angle,
     Degrees,
-    Radians,
 };
 use cglinalg_core::{
     Matrix4x4,
@@ -14,7 +12,6 @@ use cglinalg_core::{
 };
 use cglinalg_transform::{
     Orthographic3,
-    OrthographicFov3,
     Perspective3,
     PerspectiveFov3,
 };
@@ -226,74 +223,6 @@ fn test_orthographic_projection_unproject_vector() {
     let near = 1_f64;
     let far = 100_f64;
     let projection = Orthographic3::new(left, right, bottom, top, near, far);
-    let expected = Vector3::new(1_f64, 1_f64, 50_f64);
-    let projected_vector = projection.project_vector(&expected);
-    let result = projection.unproject_vector(&projected_vector);
-
-    assert_eq!(result, expected);
-}
-
-#[rustfmt::skip]
-#[test]
-fn test_orthographic_fov_projection_matrix() {
-    let aspect = 2_f64;
-    // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
-    let near = 1_f64;
-    let far = 100_f64;
-    let expected = Matrix4x4::new(
-        1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
-        0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
-        0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
-        0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
-    );
-    let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
-
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
-}
-
-#[rustfmt::skip]
-#[test]
-fn test_orthographic_fov_projecton_transformation() {
-    let aspect = 2_f64;
-    // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
-    let near = 1_f64;
-    let far = 100_f64;
-    let expected = Matrix4x4::new(
-        1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
-        0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
-        0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
-        0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
-    );
-    let result = OrthographicFov3::new(vfov, aspect, near, far);
-
-    assert_relative_eq!(result.matrix(), &expected, epsilon = 1e-10);
-}
-
-#[test]
-fn test_orthographic_fov_projection_unproject_point() {
-    let aspect = 2_f64;
-    // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
-    let near = 1_f64;
-    let far = 100_f64;
-    let projection = OrthographicFov3::new(vfov, aspect, near, far);
-    let expected = Point3::new(1_f64, 1_f64, 50_f64);
-    let projected_point = projection.project_point(&expected);
-    let result = projection.unproject_point(&projected_point);
-
-    assert_eq!(result, expected);
-}
-
-#[test]
-fn test_orthographic_fov_projection_unproject_vector() {
-    let aspect = 2_f64;
-    // 9.1478425198 Degrees.
-    let vfov = Degrees::from(Radians::atan2(8_f64, 100_f64) * 2_f64);
-    let near = 1_f64;
-    let far = 100_f64;
-    let projection = OrthographicFov3::new(vfov, aspect, near, far);
     let expected = Vector3::new(1_f64, 1_f64, 50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);

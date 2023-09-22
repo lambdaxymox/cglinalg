@@ -5238,53 +5238,6 @@ where
         )
     }
 
-    /// Construct a new three-dimensional orthographic projection matrix.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq, 
-    /// # };
-    /// #
-    /// let vfov = Degrees(90_f64);
-    /// let aspect = 800_f64 / 600_f64;
-    /// let near = 1_f64;
-    /// let far = 100_f64;
-    /// let expected = Matrix4x4::new(
-    ///     2_f64 / 100_f64, 0_f64,           0_f64,            0_f64, 
-    ///     0_f64,           2_f64 / 75_f64,  0_f64,            0_f64, 
-    ///     0_f64,           0_f64,          -2_f64 / 99_f64,   0_f64, 
-    ///     0_f64,           0_f64,          -101_f64 / 99_f64, 1_f64
-    /// );
-    /// let result = Matrix4x4::from_orthographic_fov(vfov, aspect, near, far);
-    ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// ```
-    #[rustfmt::skip]
-    #[inline]
-    pub fn from_orthographic_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
-        let one = S::one();
-        let one_half = one / (one + one);
-        let width = far * Angle::tan(vfov.into() * one_half);
-        let height = width / aspect;
-
-        Self::from_orthographic(
-            -width * one_half, 
-            width * one_half,
-            -height * one_half,
-            height * one_half,
-            near,
-            far
-        )
-    }
-
     /// Construct a new three-dimensional perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     ///
