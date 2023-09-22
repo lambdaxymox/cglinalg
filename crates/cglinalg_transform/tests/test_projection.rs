@@ -61,36 +61,64 @@ fn test_perspective_projection_transformation() {
     assert_eq!(result, &expected);
 }
 
+#[test]
+fn test_perspective_projection_rectangular_parameters() {
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 3_f64;
+    let near = 1_f64;
+    let far = 100_f64;
+    let perspective = Perspective3::new(left, right, bottom, top, near, far);
+
+    assert_relative_eq!(perspective.left_x(),   left,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.right_x(),  right,  epsilon = 1e-10);
+    assert_relative_eq!(perspective.bottom_y(), bottom, epsilon = 1e-10);
+    assert_relative_eq!(perspective.top_y(),    top,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.near_z(),   near,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.far_z(),    far,    epsilon = 1e-10);
+}
+
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_matrix() {
-    let vfov = Degrees(72_f32);
-    let aspect = 800_f32 / 600_f32;
-    let near = 0.1_f32;
-    let far = 100_f32;
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let tan_vfov_over_two = f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    let c0r0 = 3_f64 / (4_f64 * tan_vfov_over_two);
+    let c1r1 = 1_f64 / tan_vfov_over_two;
+    let c2r2 = -100.1_f64 / 99.9_f64;
+    let c3r2 = -2_f64 * (100_f64 * (1_f64 / 10_f64)) / (100_f64 - (1_f64 / 10_f64));
     let expected = Matrix4x4::new(
-        1.0322863_f32, 0_f32,         0_f32,         0_f32, 
-        0_f32,         1.3763818_f32, 0_f32,         0_f32, 
-        0_f32,         0_f32,        -1.002002_f32, -1_f32, 
-        0_f32,         0_f32,        -0.2002002_f32, 0_f32
+        c0r0, 0_f64,  0_f64,       0_f64, 
+        0_f64,        c1r1, 0_f64, 0_f64, 
+        0_f64,        0_f64,       c2r2, -1_f64, 
+        0_f64,        0_f64,       c3r2, 0_f64
     );
     let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
 
-    assert_relative_eq!(result, expected);
+    assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_transformation() {
-    let vfov = Degrees(72_f32);
-    let aspect = 800_f32 / 600_f32;
-    let near = 0.1_f32;
-    let far = 100_f32;
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let tan_vfov_over_two = f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    let c0r0 = 3_f64 / (4_f64 * tan_vfov_over_two);
+    let c1r1 = 1_f64 / tan_vfov_over_two;
+    let c2r2 = -100.1_f64 / 99.9_f64;
+    let c3r2 = -2_f64 * (100_f64 * (1_f64 / 10_f64)) / (100_f64 - (1_f64 / 10_f64));
     let expected = Matrix4x4::new(
-        1.0322863_f32, 0_f32,         0_f32,         0_f32, 
-        0_f32,         1.3763818_f32, 0_f32,         0_f32, 
-        0_f32,         0_f32,        -1.002002_f32, -1_f32, 
-        0_f32,         0_f32,        -0.2002002_f32, 0_f32
+        c0r0, 0_f64,  0_f64,       0_f64, 
+        0_f64,        c1r1, 0_f64, 0_f64, 
+        0_f64,        0_f64,       c2r2, -1_f64, 
+        0_f64,        0_f64,       c3r2, 0_f64
     );
     let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
     let result = perspective.matrix();
@@ -99,7 +127,42 @@ fn test_perspective_projection_fov_transformation() {
 }
 
 #[test]
-fn test_perspective_projection_unproject_point1() {
+fn test_perspective_projection_fov_rectangular_parameters() {
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    let expected_left = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    let expected_right = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    let expected_bottom = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    let expected_top = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+
+    assert_relative_eq!(perspective.left_x(),   expected_left,   epsilon = 1e-10);
+    assert_relative_eq!(perspective.right_x(),  expected_right,  epsilon = 1e-10);
+    assert_relative_eq!(perspective.bottom_y(), expected_bottom, epsilon = 1e-10);
+    assert_relative_eq!(perspective.top_y(),    expected_top,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.near_z(),   near,            epsilon = 1e-10);
+    assert_relative_eq!(perspective.far_z(),    far,             epsilon = 1e-10);
+}
+
+#[test]
+fn test_perspective_projection_fov_fov_parameters() {
+    let vfov = Degrees(72_f64);
+    let aspect = 800_f64 / 600_f64;
+    let near = 0.1_f64;
+    let far = 100_f64;
+    let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    let expected_vfov = vfov.into();
+
+    assert_relative_eq!(perspective.vfov(),   expected_vfov, epsilon = 1e-10);
+    assert_relative_eq!(perspective.aspect(), aspect,        epsilon = 1e-10);
+    assert_relative_eq!(perspective.near_z(), near,          epsilon = 1e-10);
+    assert_relative_eq!(perspective.far_z(),  far,           epsilon = 1e-10);
+}
+
+#[test]
+fn test_perspective_projection_fov_unproject_point() {
     let vfov = Degrees(72_f64);
     let aspect = 800_f64 / 600_f64;
     let near = 0.1_f64;
@@ -114,7 +177,7 @@ fn test_perspective_projection_unproject_point1() {
 }
 
 #[test]
-fn test_perspective_projection_unproject_vector1() {
+fn test_perspective_projection_fov_unproject_vector() {
     let vfov = Degrees(72_f64);
     let aspect = 800_f64 / 600_f64;
     let near = 0.1_f64;
@@ -129,7 +192,7 @@ fn test_perspective_projection_unproject_vector1() {
 }
 
 #[test]
-fn test_perspective_projection_unproject_point2() {
+fn test_perspective_projection_unproject_point() {
     let left = -4_f64;
     let right = 4_f64;
     let bottom = -2_f64;
@@ -145,7 +208,7 @@ fn test_perspective_projection_unproject_point2() {
 }
 
 #[test]
-fn test_perspective_projection_unproject_vector2() {
+fn test_perspective_projection_unproject_vector() {
     let left = -4_f64;
     let right = 4_f64;
     let bottom = -2_f64;
@@ -199,6 +262,24 @@ fn test_orthographic_projection_transformation() {
     let result = orthographic.matrix();
 
     assert_eq!(result, &expected);
+}
+
+#[test]
+fn test_orthographic_projection_rectangular_parameters() {
+    let left = -4_f64;
+    let right = 4_f64;
+    let bottom = -2_f64;
+    let top = 2_f64;
+    let near = 1_f64;
+    let far = 100_f64;
+    let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+
+    assert_relative_eq!(orthographic.left_x(),   left,   epsilon = 1e-10);
+    assert_relative_eq!(orthographic.right_x(),  right,  epsilon = 1e-10);
+    assert_relative_eq!(orthographic.bottom_y(), bottom, epsilon = 1e-10);
+    assert_relative_eq!(orthographic.top_y(),    top,    epsilon = 1e-10);
+    assert_relative_eq!(orthographic.near_z(),   near,   epsilon = 1e-10);
+    assert_relative_eq!(orthographic.far_z(),    far,    epsilon = 1e-10);
 }
 
 #[test]

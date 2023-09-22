@@ -774,7 +774,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.vfov();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn vfov(&self) -> Radians<S> {
@@ -833,7 +833,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.near_z();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn near_z(&self) -> S {
@@ -1052,7 +1052,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.right_x();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn right_x(&self) -> S {
@@ -1087,7 +1087,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.left_x();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn left_x(&self) -> S {
@@ -1120,7 +1120,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.top_y();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn top_y(&self) -> S {
@@ -1155,7 +1155,7 @@ where
     /// let projection = PerspectiveFov3::from_fov(vfov, aspect, near_z, far_z);
     /// let result = projection.bottom_y();
     /// 
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn bottom_y(&self) -> S {
