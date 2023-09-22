@@ -47,19 +47,6 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
-    /*
-    /// Convert a matrix to a transformation. 
-    /// This function is for internal use in implementing type conversions.
-    #[inline]
-    pub(crate) fn from_specialized<T: Into<Matrix<S, NPLUS1, NPLUS1>>>(transform: T) -> Self {
-        // TODO: Make this function const when const fn stabilizes for traits other than
-        // Sized. See issue #57563: <https://github.com/rust-lang/rust/issues/57563>.
-        Self {
-            matrix: transform.into(),
-        }
-    }
-    */
-
     /// Construct a new transformation from a given homogeneous matrix. The 
     /// function does not check that the input matrix is a valid homogeneous 
     /// matrix.
