@@ -198,7 +198,7 @@ where
 
     /// Get the position of the left plane of the viewing 
     /// frustum described by the perspective projection of the plane 
-    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
     ///
@@ -276,7 +276,7 @@ where
 
     /// Get the position of the bottom plane of the viewing 
     /// frustum descibed by the perspective projection of the plane
-    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example
     ///
@@ -1063,7 +1063,7 @@ where
 
     /// Get the position of the left plane of the viewing 
     /// frustum described by the perspective projection of the plane 
-    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     /// 
     /// # Example
     /// 
@@ -1131,7 +1131,7 @@ where
 
     /// Get the position of the bottom plane of the viewing 
     /// frustum descibed by the perspective projection of the plane
-    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     /// 
     /// # Example
     /// 
@@ -1767,7 +1767,7 @@ where
 
     /// Get the position of the left plane of the viewing 
     /// volume described by the orthographic projection of the plane 
-    /// parallel to the **yz-plane** positioned along the **negative x-axis**.
+    /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
     ///
@@ -1845,7 +1845,7 @@ where
 
     /// Get the position of the bottom plane of the viewing 
     /// volume descibed by the orthographic projection of the plane
-    /// parallel to the **zx-plane** positioned along the **negative y-axis**.
+    /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example
     ///
