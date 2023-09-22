@@ -295,7 +295,7 @@ fn test_orthographic_projection_unproject_point() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_eq!(result, expected);
+    assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 
 #[test]
@@ -311,6 +311,6 @@ fn test_orthographic_projection_unproject_vector() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_eq!(result, expected);
+    assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
 

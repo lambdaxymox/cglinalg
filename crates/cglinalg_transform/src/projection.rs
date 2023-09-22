@@ -39,27 +39,6 @@ use core::ops;
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective3<S> {
-    /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    left: S,
-    /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    right: S,
-    /// The vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the **zx-plane** at the origin.
-    bottom: S,
-    /// The vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the **zx-plane** at the origin.
-    top: S,
-    /// The distance along the **negative z-axis** of the near plane from the eye.
-    /// The near plane is a plane parallel to the **xy-plane** at the origin.
-    near: S,
-    /// the distance along the **negative z-axis** of the far plane from the eye.
-    /// The far plane is a plane parallel to the **xy-plane** at the origin.
-    far: S,
-    /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
 
@@ -133,12 +112,6 @@ where
     /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
-            left,
-            right,
-            bottom,
-            top,
-            near,
-            far,
             matrix: Matrix4x4::from_perspective(left, right, bottom, top, near, far),
         }
     }
@@ -544,13 +517,13 @@ where
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
-        let c0r0 = (self.right - self.left) / (two * self.near);
-        let c1r1 = (self.top - self.bottom) / (two * self.near);
-        let c2r3 =  (self.near - self.far) / (two * self.far * self.near);
-        let c3r0 =  (self.left + self.right) / (two * self.near);
-        let c3r1 =  (self.bottom + self.top) / (two * self.near);
+        let c0r0 = (self.right() - self.left()) / (two * self.near());
+        let c1r1 = (self.top() - self.bottom()) / (two * self.near());
+        let c2r3 =  (self.near() - self.far()) / (two * self.far() * self.near());
+        let c3r0 =  (self.left() + self.right()) / (two * self.near());
+        let c3r1 =  (self.bottom() + self.top()) / (two * self.near());
         let c3r2 = -one;
-        let c3r3 =  (self.far + self.near) / (two * self.far * self.near);
+        let c3r3 =  (self.far() + self.near()) / (two * self.far() * self.near());
         let w = c2r3 * point.z + c3r3;
         let inverse_w = one / w;
 
@@ -618,13 +591,13 @@ where
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
-        let c0r0 = (self.right - self.left) / (two * self.near);
-        let c1r1 = (self.top - self.bottom) / (two * self.near);
-        let c2r3 =  (self.near - self.far) / (two * self.far * self.near);
-        let c3r0 =  (self.left + self.right) / (two * self.near);
-        let c3r1 =  (self.bottom + self.top) / (two * self.near);
+        let c0r0 = (self.right() - self.left()) / (two * self.near());
+        let c1r1 = (self.top() - self.bottom()) / (two * self.near());
+        let c2r3 =  (self.near() - self.far()) / (two * self.far() * self.near());
+        let c3r0 =  (self.left() + self.right()) / (two * self.near());
+        let c3r1 =  (self.bottom() + self.top()) / (two * self.near());
         let c3r2 = -one;
-        let c3r3 =  (self.far + self.near) / (two * self.far * self.near);
+        let c3r3 =  (self.far() + self.near()) / (two * self.far() * self.near());
         let w = c2r3 * vector.z + c3r3;
         let inverse_w = one / w;
 
@@ -757,12 +730,6 @@ where
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && S::abs_diff_eq(&self.left, &other.left, epsilon)
-            && S::abs_diff_eq(&self.right, &other.right, epsilon)
-            && S::abs_diff_eq(&self.bottom, &other.bottom, epsilon)
-            && S::abs_diff_eq(&self.top, &other.top, epsilon)
-            && S::abs_diff_eq(&self.near, &other.near, epsilon)
-            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -778,12 +745,6 @@ where
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && S::relative_eq(&self.left, &other.left, epsilon, max_relative)
-            && S::relative_eq(&self.right, &other.right, epsilon, max_relative)
-            && S::relative_eq(&self.bottom, &other.bottom, epsilon, max_relative)
-            && S::relative_eq(&self.top, &other.top, epsilon, max_relative)
-            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
-            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -799,12 +760,6 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && S::ulps_eq(&self.left, &other.left, epsilon, max_ulps)
-            && S::ulps_eq(&self.right, &other.right, epsilon, max_ulps)
-            && S::ulps_eq(&self.bottom, &other.bottom, epsilon, max_ulps)
-            && S::ulps_eq(&self.top, &other.top, epsilon, max_ulps)
-            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
-            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
@@ -870,16 +825,6 @@ where
 /// occlusion detection.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov3<S> {
-    /// The vertical field of view angle of the perspective transformation
-    /// viewport.
-    vfov: Radians<S>,
-    /// The ratio of the horizontal width to the vertical height.
-    aspect: S,
-    /// The position of the near plane along the **negative z-axis**.
-    near: S,
-    /// The position of the far plane along the **negative z-axis**.
-    far: S,
-    /// The underlying matrix implementing the perspective projection.
     matrix: Matrix4x4<S>,
 }
 
@@ -938,10 +883,6 @@ where
         let spec_vfov = vfov.into();
 
         Self {
-            vfov: spec_vfov,
-            aspect,
-            near,
-            far,
             matrix: Matrix4x4::from_perspective_fov(spec_vfov, aspect, near, far),
         }
     }
@@ -1541,12 +1482,12 @@ where
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
-        let near = self.near;
-        let far = self.far;
-        let tan_vfov_div_2 = Radians::tan(self.vfov / two); 
-        let top = self.near * tan_vfov_div_2;
+        let near = self.near();
+        let far = self.far();
+        let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
+        let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
-        let right = self.aspect * top;
+        let right = self.aspect() * top;
         let left = -right;
 
         let c0r0 = (right - left) / (two * near);
@@ -1627,12 +1568,12 @@ where
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
-        let near = self.near;
-        let far = self.far;
-        let tan_vfov_div_2 = Radians::tan(self.vfov / two); 
-        let top = self.near * tan_vfov_div_2;
+        let near = self.near();
+        let far = self.far();
+        let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
+        let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
-        let right = self.aspect * top;
+        let right = self.aspect() * top;
         let left = -right;
 
         let c0r0 = (right - left) / (two * near);
@@ -1782,10 +1723,6 @@ where
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && Radians::abs_diff_eq(&self.vfov, &other.vfov, epsilon)
-            && S::abs_diff_eq(&self.aspect, &other.aspect, epsilon)
-            && S::abs_diff_eq(&self.near, &other.near, epsilon)
-            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -1801,10 +1738,6 @@ where
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && Radians::relative_eq(&self.vfov, &other.vfov, epsilon, max_relative)
-            && S::relative_eq(&self.aspect, &other.aspect, epsilon, max_relative)
-            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
-            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -1820,10 +1753,6 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && Radians::ulps_eq(&self.vfov, &other.vfov, epsilon, max_ulps)
-            && S::ulps_eq(&self.aspect, &other.aspect, epsilon, max_ulps)
-            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
-            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
@@ -1897,27 +1826,6 @@ where
 /// located from the viewing plane.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Orthographic3<S> {
-    /// The horizontal position of the left-hand plane in camera space.
-    /// The left-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    left: S,
-    /// The horizontal position of the right-hand plane in camera space.
-    /// The right-hand plane is a plane parallel to the **yz-plane** at
-    /// the origin.
-    right: S,
-    /// The vertical position of the **bottom plane** in camera space.
-    /// The bottom plane is a plane parallel to the **zx-plane** at the origin.
-    bottom: S,
-    /// The vertical position of the **top plane** in camera space.
-    /// the top plane is a plane parallel to the **zx-plane** at the origin.
-    top: S,
-    /// The distance along the **negative z-axis** of the **near plane** from the eye.
-    /// The near plane is a plane parallel to the **xy-plane** at the origin.
-    near: S,
-    /// the distance along the **negative z-axis** of the **far plane** from the eye.
-    /// The far plane is a plane parallel to the **xy-plane** at the origin.
-    far: S,
-    /// The underlying matrix that implements the orthographic projection.
     matrix: Matrix4x4<S>,
 }
 
@@ -1988,12 +1896,6 @@ where
     /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
-            left,
-            right,
-            bottom,
-            top,
-            near,
-            far,
             matrix: Matrix4x4::from_orthographic(left, right, bottom, top, near, far),
         }
     }
@@ -2367,12 +2269,12 @@ where
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one = S::one();
         let one_half = one / (one + one);
-        let c0r0 =  one_half * (self.right - self.left);
-        let c1r1 =  one_half * (self.top - self.bottom);
-        let c2r2 = -one_half * (self.far - self.near);
-        let c3r0 =  one_half * (self.left + self.right);
-        let c3r1 =  one_half * (self.bottom + self.top);
-        let c3r2 = -one_half * (self.far + self.near);
+        let c0r0 =  one_half * (self.right() - self.left());
+        let c1r1 =  one_half * (self.top() - self.bottom());
+        let c2r2 = -one_half * (self.far() - self.near());
+        let c3r0 =  one_half * (self.left() + self.right());
+        let c3r1 =  one_half * (self.bottom() + self.top());
+        let c3r2 = -one_half * (self.far() + self.near());
 
         Point3::new(
             c0r0 * point.x + c3r0,
@@ -2414,9 +2316,9 @@ where
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one = S::one();
         let one_half = one / (one + one);
-        let c0r0 =  one_half * (self.right - self.left);
-        let c1r1 =  one_half * (self.top - self.bottom);
-        let c2r2 = -one_half * (self.far - self.near);
+        let c0r0 =  one_half * (self.right() - self.left());
+        let c1r1 =  one_half * (self.top() - self.bottom());
+        let c2r2 = -one_half * (self.far() - self.near());
 
         Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }
@@ -2537,12 +2439,6 @@ where
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-            && S::abs_diff_eq(&self.left, &other.left, epsilon)
-            && S::abs_diff_eq(&self.right, &other.right, epsilon)
-            && S::abs_diff_eq(&self.bottom, &other.bottom, epsilon)
-            && S::abs_diff_eq(&self.top, &other.top, epsilon)
-            && S::abs_diff_eq(&self.near, &other.near, epsilon)
-            && S::abs_diff_eq(&self.far, &other.far, epsilon)
     }
 }
 
@@ -2558,12 +2454,6 @@ where
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
         Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-            && S::relative_eq(&self.left, &other.left, epsilon, max_relative)
-            && S::relative_eq(&self.right, &other.right, epsilon, max_relative)
-            && S::relative_eq(&self.bottom, &other.bottom, epsilon, max_relative)
-            && S::relative_eq(&self.top, &other.top, epsilon, max_relative)
-            && S::relative_eq(&self.near, &other.near, epsilon, max_relative)
-            && S::relative_eq(&self.far, &other.far, epsilon, max_relative)
     }
 }
 
@@ -2579,12 +2469,6 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-            && S::ulps_eq(&self.left, &other.left, epsilon, max_ulps)
-            && S::ulps_eq(&self.right, &other.right, epsilon, max_ulps)
-            && S::ulps_eq(&self.bottom, &other.bottom, epsilon, max_ulps)
-            && S::ulps_eq(&self.top, &other.top, epsilon, max_ulps)
-            && S::ulps_eq(&self.near, &other.near, epsilon, max_ulps)
-            && S::ulps_eq(&self.far, &other.far, epsilon, max_ulps)
     }
 }
 
