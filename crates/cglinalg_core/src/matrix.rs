@@ -2080,8 +2080,8 @@ where
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
-    /// calling `from_scale(scale)` is equivalent to calling 
-    /// [`Self::from_nonuniform_scale`] with `scale` as each entry in the vector
+    /// calling [`Matrix::from_scale(scale)`] is equivalent to calling 
+    /// [`Matrix::from_nonuniform_scale`] with `scale` as each entry in the vector
     /// of scale factors.
     ///
     /// # Example (Two Dimensions)
@@ -2171,7 +2171,6 @@ where
     /// 
     /// assert_eq!(result, expected);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn from_nonuniform_scale(scale: &Vector<S, N>) -> Self {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -2691,7 +2690,6 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
@@ -5576,7 +5574,6 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!((result * direction).normalize(), unit_z, epsilon = 1e-10);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_lh(eye, &(target - eye), up)
@@ -5623,7 +5620,6 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!((result * direction).normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_rh(eye, &(target - eye), up)
@@ -5801,7 +5797,6 @@ where
     /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_lh_inv(eye, &(target - eye), up)
@@ -5850,7 +5845,6 @@ where
     /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
     /// ```
-    #[rustfmt::skip]
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         Self::look_to_rh_inv(eye, &(target - eye), up)
