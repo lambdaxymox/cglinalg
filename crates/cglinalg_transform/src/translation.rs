@@ -86,7 +86,7 @@ where
     /// let translation = Translation2::from_vector(&vector);
     /// let point = Point2::origin();
     /// let expected = Point2::new(1_f64, 2_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -106,7 +106,7 @@ where
     /// let translation = Translation3::from_vector(&vector);
     /// let point = Point3::origin();
     /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -135,7 +135,7 @@ where
     /// let translation = Translation2::between_vectors(&vector1, &vector2);
     /// let point = Point2::new(0_f64, 0_f64);
     /// let expected = Point2::new(2_f64, 2_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -156,7 +156,7 @@ where
     /// let translation = Translation3::between_vectors(&vector1, &vector2);
     /// let point = Point3::new(0_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(6_f64, 7_f64, 8_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -184,7 +184,7 @@ where
     /// let translation = Translation2::between_points(&point1, &point2);
     /// let point = Point2::new(0_f64, 0_f64);
     /// let expected = Point2::new(2_f64, 2_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -204,7 +204,7 @@ where
     /// let translation = Translation3::between_points(&point1, &point2);
     /// let point = Point3::new(0_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(6_f64, 7_f64, 8_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -318,7 +318,7 @@ where
     /// let translation = Translation2::from_vector(&distance);
     /// let point = Point2::new(0_f64, 0_f64);
     /// let expected = Point2::new(4_f64, 8_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -338,12 +338,12 @@ where
     /// let translation = Translation3::from_vector(&distance);
     /// let point = Point3::new(0_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
-    /// let result = translation.translate_point(&point);
+    /// let result = translation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn translate_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         point + self.vector
     }
 
@@ -363,7 +363,7 @@ where
     /// let translation = Translation2::from_vector(&distance);
     /// let vector = Vector2::new(0_f64, 0_f64);
     /// let expected = vector;
-    /// let result = translation.translate_vector(&vector);
+    /// let result = translation.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -382,12 +382,12 @@ where
     /// let translation = Translation3::from_vector(&distance);
     /// let vector = Vector3::new(0_f64, 0_f64, 0_f64);
     /// let expected = vector;
-    /// let result = translation.translate_vector(&vector);
+    /// let result = translation.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub const fn translate_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub const fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         *vector
     }
 
@@ -408,8 +408,8 @@ where
     /// let translation = Translation2::from_vector(&distance);
     /// let translation_inv = translation.inverse();
     /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = translation_inv.translate_point(&point);
-    /// let result = translation.inverse_translate_point(&point);
+    /// let expected = translation_inv.apply_point(&point);
+    /// let result = translation.inverse_apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -429,13 +429,13 @@ where
     /// let translation = Translation3::from_vector(&distance);
     /// let point = Point3::new(0_f64, 0_f64, 0_f64);
     /// let expected = point;
-    /// let translated_point = translation.translate_point(&point);
-    /// let result = translation.inverse_translate_point(&translated_point);
+    /// let translated_point = translation.apply_point(&point);
+    /// let result = translation.inverse_apply_point(&translated_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_translate_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         point - self.vector
     }
 
@@ -455,7 +455,7 @@ where
     /// let translation = Translation2::from_vector(&distance);
     /// let vector = Vector2::new(1_f64, 2_f64);
     ///
-    /// assert_eq!(translation.inverse_translate_vector(&vector), vector);
+    /// assert_eq!(translation.inverse_apply_vector(&vector), vector);
     /// ```
     /// 
     /// # Example (Three Dimensions)
@@ -472,12 +472,12 @@ where
     /// let translation = Translation3::from_vector(&distance);
     /// let vector = Vector3::new(0_f64, 0_f64, 0_f64);
     /// let expected = vector;
-    /// let result = translation.inverse_translate_vector(&vector);
+    /// let result = translation.inverse_apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub const fn inverse_translate_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub const fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         *vector
     }
 
@@ -497,7 +497,7 @@ where
     /// let translation = Translation2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
     /// 
-    /// assert_eq!(translation.translate_point(&point), point);
+    /// assert_eq!(translation.apply_point(&point), point);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -513,7 +513,7 @@ where
     /// let translation = Translation3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// 
-    /// assert_eq!(translation.translate_point(&point), point);
+    /// assert_eq!(translation.apply_point(&point), point);
     /// ```
     #[inline]
     pub fn identity() -> Self {
@@ -537,7 +537,7 @@ where
     /// let translation = Translation2::new(1_f64, 2_f64);
     /// let shift = translation.to_vector();
     /// let point = Point2::origin();
-    /// let expected = translation.translate_point(&point);
+    /// let expected = translation.apply_point(&point);
     /// let result = point + shift;
     /// 
     /// assert_eq!(result, expected);
@@ -556,7 +556,7 @@ where
     /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
     /// let shift = translation.to_vector();
     /// let point = Point3::origin();
-    /// let expected = translation.translate_point(&point);
+    /// let expected = translation.apply_point(&point);
     /// let result = point + shift;
     /// 
     /// assert_eq!(result, expected);
@@ -775,7 +775,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, N>) -> Self::Output {
-        self.translate_vector(&other)
+        self.apply_vector(&other)
     }
 }
 
@@ -787,7 +787,7 @@ where
 
     #[inline]
     fn mul(self, other: &Vector<S, N>) -> Self::Output {
-        self.translate_vector(other)
+        self.apply_vector(other)
     }
 }
 
@@ -799,7 +799,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, N>) -> Self::Output {
-        self.translate_vector(&other)
+        self.apply_vector(&other)
     }
 }
 
@@ -811,7 +811,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
-        self.translate_vector(other)
+        self.apply_vector(other)
     }
 }
 
@@ -823,7 +823,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.translate_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -835,7 +835,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.translate_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -847,7 +847,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.translate_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -859,7 +859,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.translate_point(other)
+        self.apply_point(other)
     }
 }
 

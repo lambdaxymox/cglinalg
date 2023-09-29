@@ -25,27 +25,27 @@ mod isometry2_tests {
 
 
     #[test]
-    fn test_isometry_transform_point() {
+    fn test_isometry_apply_point() {
         let vector = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&vector);
         let rotation = Rotation2::from_angle(Degrees(90_f64));
         let isometry = Isometry2::from_parts(&translation, &rotation);
         let point = Point2::new(4_f64, 5_f64);
         let expected = Point2::new(-4_f64, 6_f64);
-        let result = isometry.transform_point(&point);
+        let result = isometry.apply_point(&point);
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_isometry_transform_vector() {
+    fn test_isometry_apply_vector() {
         let distance = Vector2::new(1_f64, 2_f64);
         let translation = Translation2::from_vector(&distance);
         let rotation = Rotation2::from_angle(Degrees(90_f64));
         let isometry = Isometry2::from_parts(&translation, &rotation);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(-2_f64, 1_f64);
-        let result = isometry.transform_vector(&vector);
+        let result = isometry.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -55,7 +55,7 @@ mod isometry2_tests {
         let isometry = Isometry2::from_angle(Degrees(90_f64));
         let vector = Vector2::unit_x();
         let expected = Vector2::unit_y();
-        let result = isometry.transform_vector(&vector);
+        let result = isometry.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -87,7 +87,7 @@ mod isometry2_tests {
         let unit_y: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
         let isometry = Isometry2::rotation_between_axis(&unit_x, &unit_y);
         let expected = unit_y.into_inner();
-        let result = isometry.transform_vector(&unit_x.into_inner());
+        let result = isometry.apply_vector(&unit_x.into_inner());
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -99,7 +99,7 @@ mod isometry2_tests {
         let isometry = Isometry2::rotation_between(&vector1, &vector2);
         let point = Point2::new(203_f64, 0_f64);
         let expected = Point2::new(0_f64, 203_f64);
-        let result = isometry.transform_point(&point);
+        let result = isometry.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -141,7 +141,7 @@ mod isometry2_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_inverse_transform_point() {
+    fn test_inverse_apply_point() {
         let angle = Degrees(72_f64);
         let cos_neg_angle = (-angle).cos();
         let sin_neg_angle = (-angle).sin();
@@ -153,14 +153,14 @@ mod isometry2_tests {
             cos_neg_angle * diff.x - sin_neg_angle * diff.y,
             sin_neg_angle * diff.x + cos_neg_angle * diff.y
         );
-        let result = isometry.inverse_transform_point(&point);
+        let result = isometry.inverse_apply_point(&point);
 
         assert_eq!(result, expected);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_inverse_transform_vector() {
+    fn test_inverse_apply_vector() {
         let angle = Degrees(72_f64);
         let cos_neg_angle = (-angle).cos();
         let sin_neg_angle = (-angle).sin();
@@ -171,7 +171,7 @@ mod isometry2_tests {
             cos_neg_angle * vector.x - sin_neg_angle * vector.y,
             sin_neg_angle * vector.x + cos_neg_angle * vector.y
         );
-        let result = isometry.inverse_transform_vector(&vector);
+        let result = isometry.inverse_apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -211,7 +211,7 @@ mod isometry3_tests {
 
 
     #[test]
-    fn test_isometry_transform_point() {
+    fn test_isometry_apply_point() {
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let translation = Translation3::from_vector(&vector);
         let angle = Degrees(90_f64);
@@ -220,13 +220,13 @@ mod isometry3_tests {
         let isometry = Isometry3::from_parts(&translation, &rotation);
         let point = Point3::new(4_f64, 5_f64, 6_f64);
         let expected = Point3::new(-4_f64, 6_f64, 9_f64);
-        let result = isometry.transform_point(&point);
+        let result = isometry.apply_point(&point);
     
         assert_eq!(result, expected);
     }
     
     #[test]
-    fn test_isometry_transform_vector() {
+    fn test_isometry_apply_vector() {
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let translation = Translation3::from_vector(&vector);
         let angle = Degrees(90_f64);
@@ -235,7 +235,7 @@ mod isometry3_tests {
         let isometry = Isometry3::from_parts(&translation, &rotation);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
-        let result = isometry.transform_vector(&vector);
+        let result = isometry.apply_vector(&vector);
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -247,7 +247,7 @@ mod isometry3_tests {
         let isometry = Isometry3::from_axis_angle(&axis, angle);
         let vector = Vector3::unit_x();
         let expected = Vector3::unit_y();
-        let result = isometry.transform_vector(&vector);
+        let result = isometry.apply_vector(&vector);
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -280,7 +280,7 @@ mod isometry3_tests {
         let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
         let isometry = Isometry3::rotation_between_axis(&unit_x, &unit_y).unwrap();
         let expected = unit_y.into_inner();
-        let result = isometry.transform_vector(&unit_x.into_inner());
+        let result = isometry.apply_vector(&unit_x.into_inner());
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -292,7 +292,7 @@ mod isometry3_tests {
         let isometry = Isometry3::rotation_between(&vector1, &vector2).unwrap();
         let point = Point3::new(203_f64, 0_f64, 0_f64);
         let expected = Point3::new(0_f64, 203_f64, 0_f64);
-        let result = isometry.transform_point(&point);
+        let result = isometry.apply_point(&point);
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -336,7 +336,7 @@ mod isometry3_tests {
     }
 
     #[test]
-    fn test_inverse_transform_point() {
+    fn test_inverse_apply_point() {
         let axis = Unit::from_value(Vector3::unit_z());
         let angle = Degrees(72_f64);
         let cos_neg_angle = (-angle).cos();
@@ -350,14 +350,14 @@ mod isometry3_tests {
             sin_neg_angle * diff.x + cos_neg_angle * diff.y,
             diff.z
         );
-        let result = isometry.inverse_transform_point(&point);
+        let result = isometry.inverse_apply_point(&point);
     
         assert_eq!(result, expected);
     }
 
     #[rustfmt::skip]
     #[test]
-    fn test_inverse_transform_vector() {
+    fn test_inverse_apply_vector() {
         let axis = Unit::from_value(Vector3::unit_z());
         let angle = Degrees(72_f64);
         let cos_neg_angle = (-angle).cos();
@@ -370,7 +370,7 @@ mod isometry3_tests {
             sin_neg_angle * vector.x + cos_neg_angle * vector.y,
             vector.z
         );
-        let result = isometry.inverse_transform_vector(&vector);
+        let result = isometry.inverse_apply_vector(&vector);
     
         assert_eq!(result, expected);
     }

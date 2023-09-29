@@ -94,7 +94,7 @@ where
     ///     1_f64 / f64::sqrt(2_f64) + 1_f64, 
     ///     1_f64 / f64::sqrt(2_f64) + 2_f64
     /// );
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -125,7 +125,7 @@ where
     ///     1_f64 / f64::sqrt(2_f64) + 2_f64,
     ///     3_f64
     /// );
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -154,7 +154,7 @@ where
     /// let isometry = Isometry2::from_translation(&translation);
     /// let point = Point2::origin();
     /// let expected = Point2::new(1_f64, 2_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -174,7 +174,7 @@ where
     /// let isometry = Isometry3::from_translation(&translation);
     /// let point = Point3::origin();
     /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -207,7 +207,7 @@ where
     /// let rotation = Rotation2::from_angle(angle);
     /// let point = Point2::new(1_f64, 0_f64);
     /// let expected = Point2::new(0_f64, 1_f64);
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
@@ -234,7 +234,7 @@ where
     /// let rotation = Rotation3::from_angle_z(angle);
     /// let point = Point3::new(1_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(0_f64, 1_f64, 0_f64);
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
@@ -415,7 +415,7 @@ where
     pub fn inverse(&self) -> Self {
         let rotation = self.rotation.inverse();
         let distance = self.translation.as_ref();
-        let vector = rotation.rotate_vector(&(-distance));
+        let vector = rotation.apply_vector(&(-distance));
         let translation = Translation::from_vector(&vector);
         
         Self::from_parts(&translation, &rotation)
@@ -444,8 +444,8 @@ where
     /// isometry_mut.inverse_mut();
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let transformed_point = isometry.transform_point(&point);
-    /// let result = isometry_mut.transform_point(&transformed_point);
+    /// let transformed_point = isometry.apply_point(&point);
+    /// let result = isometry_mut.apply_point(&transformed_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -473,8 +473,8 @@ where
     /// isometry_mut.inverse_mut();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let transformed_point = isometry.transform_point(&point);
-    /// let result = isometry_mut.transform_point(&transformed_point);
+    /// let transformed_point = isometry.apply_point(&point);
+    /// let result = isometry_mut.apply_point(&transformed_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -482,7 +482,7 @@ where
     pub fn inverse_mut(&mut self) {
         self.rotation.inverse_mut();
         self.translation.inverse_mut();
-        self.translation.vector = self.rotation.rotate_vector(&self.translation.vector);
+        self.translation.vector = self.rotation.apply_vector(&self.translation.vector);
     }
 
     /// Transform a point with the isometry.
@@ -512,7 +512,7 @@ where
     /// let isometry = Isometry2::from_angle_translation(angle, &distance);
     /// let point = Point2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = Point2::new(1_f64, 4_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -542,15 +542,15 @@ where
     /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     /// let point = Point3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = Point3::new(1_f64, 4_f64, f64::sqrt(2_f64) + 3_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn transform_point(&self, point: &Point<S, N>) -> Point<S, N> {
-        let rotated_point = self.rotation.rotate_point(point);
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        let rotated_point = self.rotation.apply_point(point);
 
-        self.translation.translate_point(&rotated_point)
+        self.translation.apply_point(&rotated_point)
     }
 
     /// Transform a vector with the isometry.
@@ -579,7 +579,7 @@ where
     /// let isometry = Isometry2::from_angle_translation(angle, &distance);
     /// let vector = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = Vector2::new(0_f64, 2_f64);
-    /// let result = isometry.transform_vector(&vector);
+    /// let result = isometry.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -608,13 +608,13 @@ where
     /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     /// let vector = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = Vector3::new(0_f64, 2_f64, f64::sqrt(2_f64));
-    /// let result = isometry.transform_vector(&vector);
+    /// let result = isometry.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn transform_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
-        self.rotation.rotate_vector(vector)
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        self.rotation.apply_vector(vector)
     }
 
     /// Transform a point with the inverse of an isometry.
@@ -644,9 +644,9 @@ where
     /// let distance = Vector2::new(1_f64, 2_f64);
     /// let isometry = Isometry2::from_angle_translation(angle, &distance);
     /// let point = Point2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
-    /// let transformed_point = isometry.transform_point(&point);
+    /// let transformed_point = isometry.apply_point(&point);
     /// let expected = point;
-    /// let result = isometry.inverse_transform_point(&transformed_point);
+    /// let result = isometry.inverse_apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -676,14 +676,14 @@ where
     /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     /// let point = Point3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = point;
-    /// let transformed_point = isometry.transform_point(&point);
-    /// let result = isometry.inverse_transform_point(&transformed_point);
+    /// let transformed_point = isometry.apply_point(&point);
+    /// let result = isometry.inverse_apply_point(&transformed_point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_point(&self, point: &Point<S, N>) -> Point<S, N> {
-        self.rotation.inverse_rotate_point(&(point - self.translation.as_ref()))
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        self.rotation.inverse_apply_point(&(point - self.translation.as_ref()))
     }
     
     /// Transform a vector with the inverse of an isometry.
@@ -711,9 +711,9 @@ where
     /// let distance = Vector2::new(1_f64, 2_f64);
     /// let isometry = Isometry2::from_angle_translation(angle, &distance);
     /// let vector = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
-    /// let transformed_vector = isometry.transform_vector(&vector);
+    /// let transformed_vector = isometry.apply_vector(&vector);
     /// let expected = vector;
-    /// let result = isometry.inverse_transform_vector(&transformed_vector);
+    /// let result = isometry.inverse_apply_vector(&transformed_vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -742,14 +742,14 @@ where
     /// let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
     /// let vector = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = vector;
-    /// let transformed_vector = isometry.transform_vector(&vector);
-    /// let result = isometry.inverse_transform_vector(&transformed_vector);
+    /// let transformed_vector = isometry.apply_vector(&vector);
+    /// let result = isometry.inverse_apply_vector(&transformed_vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
-        self.rotation.inverse_rotate_vector(vector)
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        self.rotation.inverse_apply_vector(vector)
     }
 
     /// Construct the identity isometry.
@@ -1090,7 +1090,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -1102,7 +1102,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -1114,7 +1114,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -1126,7 +1126,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -1139,7 +1139,7 @@ where
 
     #[inline]
     fn mul(self, other: Isometry<S, N>) -> Self::Output {
-        let shift = self.rotation.rotate_vector(&other.translation.vector);
+        let shift = self.rotation.apply_vector(&other.translation.vector);
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
@@ -1157,7 +1157,7 @@ where
 
     #[inline]
     fn mul(self, other: &Isometry<S, N>) -> Self::Output {
-        let shift = self.rotation.rotate_vector(&other.translation.vector);
+        let shift = self.rotation.apply_vector(&other.translation.vector);
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
@@ -1175,7 +1175,7 @@ where
 
     #[inline]
     fn mul(self, other: Isometry<S, N>) -> Self::Output {
-        let shift = self.rotation.rotate_vector(&other.translation.vector);
+        let shift = self.rotation.apply_vector(&other.translation.vector);
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
@@ -1193,7 +1193,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Isometry<S, N>) -> Self::Output {
-        let shift = self.rotation.rotate_vector(&other.translation.vector);
+        let shift = self.rotation.apply_vector(&other.translation.vector);
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
@@ -1264,7 +1264,7 @@ where
     /// let isometry = Isometry2::from_angle(Degrees(45_f64));
     /// let point = Point2::new(f64::sqrt(8_f64), f64::sqrt(8_f64));
     /// let expected = Point2::new(0_f64, 4_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1296,7 +1296,7 @@ where
     /// let vector2 = Unit::from_value(Vector2::unit_x());
     /// let isometry = Isometry2::rotation_between_axis(&vector1, &vector2);
     /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -1329,7 +1329,7 @@ where
     /// let vector2 = 6_f64 * Vector2::unit_x();
     /// let isometry = Isometry2::rotation_between(&vector1, &vector2);
     /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
-    /// let result = isometry.transform_point(&point);
+    /// let result = isometry.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -1533,7 +1533,7 @@ where
     /// let vector2 = 12_f64 * Vector3::unit_x();
     /// let isometry = Isometry3::rotation_between(&vector1, &vector2).unwrap();
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
-    /// let result = isometry.transform_vector(&vector);
+    /// let result = isometry.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1573,7 +1573,7 @@ where
     /// let unit2 = Unit::from_value(12_f64 * Vector3::unit_x());
     /// let isometry = Isometry3::rotation_between_axis(&unit1, &unit2).unwrap();
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
-    /// let result = isometry.transform_vector(&vector);
+    /// let result = isometry.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1621,12 +1621,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(), 
     ///     unit_z, 
     ///     epsilon = 1e-10,
     /// );
@@ -1674,12 +1674,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(), 
     ///     minus_unit_z, 
     ///     epsilon = 1e-10,
     /// );
@@ -1727,12 +1727,12 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(), 
     ///     unit_z, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin, 
     ///     epsilon = 1e-10,
     /// );
@@ -1780,12 +1780,12 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(), 
     ///     minus_unit_z, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin, 
     ///     epsilon = 1e-10,
     /// );
@@ -1834,7 +1834,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&unit_z).normalize(), 
+    ///     isometry.apply_vector(&unit_z).normalize(), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1882,7 +1882,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1930,7 +1930,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&unit_z), 
+    ///     isometry.apply_vector(&unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1978,7 +1978,7 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );

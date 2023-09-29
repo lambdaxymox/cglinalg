@@ -71,7 +71,7 @@ where
     /// let transform = Transform2::from_matrix_unchecked(matrix);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = matrix * vector.to_homogeneous();
-    /// let result = transform.transform_vector(&vector).to_homogeneous();
+    /// let result = transform.apply_vector(&vector).to_homogeneous();
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -96,7 +96,7 @@ where
     /// let transform = Transform3::from_matrix_unchecked(matrix);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = matrix * vector.to_homogeneous();
-    /// let result = transform.transform_vector(&vector).to_homogeneous();
+    /// let result = transform.apply_vector(&vector).to_homogeneous();
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -325,7 +325,7 @@ where
     /// let transform = Transform2::from_matrix_unchecked(matrix);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(22_f64, 25_f64);
-    /// let result = transform.transform_vector(&vector);
+    /// let result = transform.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -350,12 +350,12 @@ where
     /// let transform = Transform3::from_matrix_unchecked(matrix);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(45_f64, 61_f64, 48_f64);
-    /// let result = transform.transform_vector(&vector);
+    /// let result = transform.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn transform_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
@@ -380,7 +380,7 @@ where
     /// let transform = Transform2::from_matrix_unchecked(matrix);
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = Point2::new(24_f64, 28_f64);
-    /// let result = transform.transform_point(&point);
+    /// let result = transform.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -405,12 +405,12 @@ where
     /// let transform = Transform3::from_matrix_unchecked(matrix);
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Point3::new(51_f64, 67_f64, 54_f64);
-    /// let result = transform.transform_point(&point);
+    /// let result = transform.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn transform_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         Point::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 }
@@ -526,7 +526,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -542,7 +542,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -558,7 +558,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -574,7 +574,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -707,15 +707,15 @@ where
     /// let transform = Transform2::from_matrix_unchecked(matrix);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Some(vector);
-    /// let transformed_vector = transform.transform_vector(&vector);
-    /// let result = transform.inverse_transform_vector(&transformed_vector);
+    /// let transformed_vector = transform.apply_vector(&vector);
+    /// let result = transform.inverse_apply_vector(&transformed_vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_transform_vector(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
+    pub fn inverse_apply_vector(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
         self.inverse()
-            .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+            .map(|matrix_inverse| matrix_inverse.apply_vector(vector))
     }
 
     /// Apply the inverse of the transformation to a point.
@@ -739,15 +739,15 @@ where
     /// let transform = Transform2::from_matrix_unchecked(matrix);
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = Some(point);
-    /// let transformed_point = transform.transform_point(&point);
-    /// let result = transform.inverse_transform_point(&transformed_point);
+    /// let transformed_point = transform.apply_point(&point);
+    /// let result = transform.inverse_apply_point(&transformed_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_transform_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
+    pub fn inverse_apply_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
         self.inverse()
-            .map(|matrix_inverse| matrix_inverse.transform_point(point))
+            .map(|matrix_inverse| matrix_inverse.apply_point(point))
     }
 }
 
@@ -809,15 +809,15 @@ where
     /// let transform = Transform3::from_matrix_unchecked(matrix);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = vector;
-    /// let transformed_vector = transform.transform_vector(&vector);
-    /// let result = transform.inverse_transform_vector(&transformed_vector).unwrap();
+    /// let transformed_vector = transform.apply_vector(&vector);
+    /// let result = transform.inverse_apply_vector(&transformed_vector).unwrap();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
+    pub fn inverse_apply_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
         self.inverse()
-            .map(|matrix_inverse| matrix_inverse.transform_vector(vector))
+            .map(|matrix_inverse| matrix_inverse.apply_vector(vector))
     }
 
     /// Apply the inverse of the transformation to a point.
@@ -845,15 +845,15 @@ where
     /// let transform = Transform3::from_matrix_unchecked(matrix);
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let transformed_point = transform.transform_point(&point);
-    /// let result = transform.inverse_transform_point(&transformed_point).unwrap();
+    /// let transformed_point = transform.apply_point(&point);
+    /// let result = transform.inverse_apply_point(&transformed_point).unwrap();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
+    pub fn inverse_apply_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
         self.inverse()
-            .map(|matrix_inverse| matrix_inverse.transform_point(point))
+            .map(|matrix_inverse| matrix_inverse.apply_point(point))
     }
 }
 

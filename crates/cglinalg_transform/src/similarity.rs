@@ -93,7 +93,7 @@ where
     ///     scale * (1_f64 / f64::sqrt(2_f64)) + 1_f64,
     ///     scale * (-1_f64 / f64::sqrt(2_f64)) + 2_f64
     /// );
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -129,7 +129,7 @@ where
     ///     scale * (-1_f64 / f64::sqrt(2_f64)) + 2_f64,
     ///     scale * 3_f64 + 3_f64
     /// );
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -165,7 +165,7 @@ where
     /// let similarity = Similarity2::from_rotation(&rotation);
     /// let vector = Vector2::new(2_f64, 0_f64);
     /// let expected = Vector2::new(f64::sqrt(2_f64), f64::sqrt(2_f64));
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -195,7 +195,7 @@ where
     /// let similarity = Similarity3::from_rotation(&rotation);
     /// let vector = Vector3::new(2_f64, 0_f64, 5_f64);
     /// let expected = Vector3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), 5_f64);
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -225,7 +225,7 @@ where
     /// let similarity = Similarity2::from_scale(scale);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(10_f64, 20_f64);
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -244,7 +244,7 @@ where
     /// let similarity = Similarity3::from_scale(scale);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(15_f64, 30_f64, 45_f64);
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -272,7 +272,7 @@ where
     /// let similarity = Similarity2::from_translation(&translation);
     /// let point = Point2::new(5_f64, 5_f64);
     /// let expected = Point2::new(6_f64, 7_f64);
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -333,7 +333,7 @@ where
     /// let similarity = Similarity2::from_isometry(&isometry);
     /// let point = Point2::new(2_f64, 0_f64);
     /// let expected = Point2::new(6_f64, f64::sqrt(3_f64) + 5_f64);
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -365,7 +365,7 @@ where
     /// let similarity = Similarity3::from_isometry(&isometry);
     /// let point = Point3::new(2_f64, 0_f64, 13_f64);
     /// let expected = Point3::new(6_f64, f64::sqrt(3_f64) + 5_f64, 13_f64);
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -621,8 +621,8 @@ where
     /// let similarity_inv = similarity.inverse();
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity_inv.transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity_inv.apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -657,8 +657,8 @@ where
     /// let similarity_inv = similarity.inverse();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity_inv.transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity_inv.apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -701,8 +701,8 @@ where
     /// similarity_mut.inverse_mut();
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity_mut.transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity_mut.apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -738,8 +738,8 @@ where
     /// similarity_mut.inverse_mut();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity_mut.transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity_mut.apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -780,8 +780,8 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity.inverse_transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity.inverse_apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -816,14 +816,14 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let transformed_point = similarity.transform_point(&point);
-    /// let result = similarity.inverse_transform_point(&transformed_point);
+    /// let transformed_point = similarity.apply_point(&point);
+    /// let result = similarity.inverse_apply_point(&transformed_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_point(&self, point: &Point<S, N>) -> Point<S, N> {
-        self.isometry.inverse_transform_point(point) / self.scale
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        self.isometry.inverse_apply_point(point) / self.scale
     }
     
     /// Apply the inverse of a similarity transformation to a vector.
@@ -856,8 +856,8 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let vector = Vector2::unit_x();
     /// let expected = vector;
-    /// let transformed_vector = similarity.transform_vector(&vector);
-    /// let result = similarity.inverse_transform_vector(&transformed_vector);
+    /// let transformed_vector = similarity.apply_vector(&vector);
+    /// let result = similarity.inverse_apply_vector(&transformed_vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -891,14 +891,14 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let vector = Vector3::unit_x();
     /// let expected = vector;
-    /// let transformed_vector = similarity.transform_vector(&vector);
-    /// let result = similarity.inverse_transform_vector(&transformed_vector);
+    /// let transformed_vector = similarity.apply_vector(&vector);
+    /// let result = similarity.inverse_apply_vector(&transformed_vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_transform_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
-        self.isometry.inverse_transform_vector(vector) / self.scale
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        self.isometry.inverse_apply_vector(vector) / self.scale
     }
 
     /// Apply a similarity transformation to a point.
@@ -934,7 +934,7 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = Point2::new(-22_f64, 14_f64);
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -969,15 +969,15 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Point3::new(-22_f64, 14_f64, 38_f64);
-    /// let result = similarity.transform_point(&point);
+    /// let result = similarity.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn transform_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         let scaled_point = point * self.scale;
         
-        self.isometry.transform_point(&scaled_point)
+        self.isometry.apply_point(&scaled_point)
     }
 
     /// Apply a similarity transformation to a vector.
@@ -1013,7 +1013,7 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let vector = Vector2::unit_x();
     /// let expected = scale * Vector2::unit_y();
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1047,15 +1047,15 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let vector = Vector3::unit_x();
     /// let expected = scale * Vector3::unit_y();
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn transform_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         let scaled_vector = vector * self.scale;
         
-        self.isometry.transform_vector(&scaled_vector)
+        self.isometry.apply_vector(&scaled_vector)
     }
 
 }
@@ -1338,7 +1338,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -1350,7 +1350,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -1362,7 +1362,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.transform_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -1374,7 +1374,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.transform_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -1387,7 +1387,7 @@ where
 
     #[inline]
     fn mul(self, other: Isometry<S, N>) -> Self::Output {
-        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let shift = self.isometry.rotation.apply_vector(&other.translation.vector) * self.scale();
         let translation = Translation::from_vector(&(self.isometry.translation.vector + shift));
         let rotation = self.isometry.rotation * other.rotation;
 
@@ -1404,7 +1404,7 @@ where
 
     #[inline]
     fn mul(self, other: &Isometry<S, N>) -> Self::Output {
-        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let shift = self.isometry.rotation.apply_vector(&other.translation.vector) * self.scale();
         let translation = Translation::from_vector(&(self.isometry.translation.vector + shift));
         let rotation = self.isometry.rotation * other.rotation;
 
@@ -1421,7 +1421,7 @@ where
 
     #[inline]
     fn mul(self, other: Isometry<S, N>) -> Self::Output {
-        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let shift = self.isometry.rotation.apply_vector(&other.translation.vector) * self.scale();
         let translation = Translation::from_vector(&(self.isometry.translation.vector + shift));
         let rotation = self.isometry.rotation * other.rotation;
 
@@ -1438,7 +1438,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Isometry<S, N>) -> Self::Output {
-        let shift = self.isometry.rotation.rotate_vector(&other.translation.vector) * self.scale();
+        let shift = self.isometry.rotation.apply_vector(&other.translation.vector) * self.scale();
         let translation = Translation::from_vector(&(self.isometry.translation.vector + shift));
         let rotation = self.isometry.rotation * other.rotation;
 
@@ -1539,7 +1539,7 @@ where
     /// let unit_x = Vector2::unit_x();
     /// let unit_y = Vector2::unit_y();
     /// let expected = unit_y;
-    /// let result = similarity.transform_vector(&unit_x);
+    /// let result = similarity.apply_vector(&unit_x);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1582,7 +1582,7 @@ where
     /// let similarity = Similarity3::from_axis_angle(&axis, angle);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(-1_f64 / f64::sqrt(2_f64), 3_f64 / f64::sqrt(2_f64), 3_f64);
-    /// let result = similarity.transform_vector(&vector);
+    /// let result = similarity.apply_vector(&vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1631,12 +1631,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(), 
     ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
@@ -1683,12 +1683,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_point(&eye), 
+    ///     isometry.apply_point(&eye), 
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&direction).normalize(),
+    ///     isometry.apply_vector(&direction).normalize(),
     ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
@@ -1735,12 +1735,12 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     similarity.transform_vector(&direction).normalize(),
+    ///     similarity.apply_vector(&direction).normalize(),
     ///     unit_z, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     similarity.transform_point(&eye), 
+    ///     similarity.apply_point(&eye), 
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
@@ -1786,12 +1786,12 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     similarity.transform_vector(&direction).normalize(), 
+    ///     similarity.apply_vector(&direction).normalize(), 
     ///     minus_unit_z, 
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     similarity.transform_point(&eye),
+    ///     similarity.apply_point(&eye),
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
@@ -1837,7 +1837,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&unit_z), 
+    ///     isometry.apply_vector(&unit_z), 
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1883,7 +1883,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z), 
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1929,7 +1929,7 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&unit_z), 
+    ///     isometry.apply_vector(&unit_z), 
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1975,7 +1975,7 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.transform_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z), 
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );

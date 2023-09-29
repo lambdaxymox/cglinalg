@@ -70,7 +70,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(5_f64, 7_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -89,7 +89,7 @@ where
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -116,7 +116,7 @@ where
     /// let scale = Scale2::from_scale(scale_factor);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(20_f64, 40_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -135,7 +135,7 @@ where
     /// let scale = Scale3::from_scale(scale_factor);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(20_f64, 40_f64, 60_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -164,7 +164,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(2_f64, 3_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -186,12 +186,12 @@ where
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(2_f64, 3_f64, 4_f64);
-    /// let result = scale.scale_vector(&vector);
+    /// let result = scale.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn scale_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Vector::zero();
         for i in 0..N {
@@ -220,7 +220,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let point = Point2::new(1_f64, 1_f64);
     /// let expected = Point2::new(2_f64, 3_f64);
-    /// let result = scale.scale_point(&point);
+    /// let result = scale.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -243,12 +243,12 @@ where
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let point = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Point3::new(2_f64, 3_f64, 4_f64);
-    /// let result = scale.scale_point(&point);
+    /// let result = scale.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn scale_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Point::origin();
         for i in 0..N {
@@ -480,7 +480,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector2::new(2_f64, 3_f64);
     /// let expected = Vector2::new(1_f64, 1_f64);
-    /// let result = scale.inverse_scale_vector(&vector);
+    /// let result = scale.inverse_apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -502,12 +502,12 @@ where
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let expected = Vector3::new(1_f64, 1_f64, 1_f64);
-    /// let result = scale.inverse_scale_vector(&vector);
+    /// let result = scale.inverse_apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_scale_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Vector::default();
         for i in 0..N {
@@ -539,7 +539,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let point = Point2::new(2_f64, 3_f64);
     /// let expected = Point2::new(1_f64, 1_f64);
-    /// let result = scale.inverse_scale_point(&point);
+    /// let result = scale.inverse_apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -562,12 +562,12 @@ where
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let point = Point3::new(2_f64, 3_f64, 4_f64);
     /// let expected = Point3::new(1_f64, 1_f64, 1_f64);
-    /// let result = scale.inverse_scale_point(&point);
+    /// let result = scale.inverse_apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_scale_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Point::default();
         for i in 0..N {
@@ -784,7 +784,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.scale_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -796,7 +796,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.scale_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -808,7 +808,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.scale_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -820,7 +820,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.scale_point(other)
+        self.apply_point(other)
     }
 }
 

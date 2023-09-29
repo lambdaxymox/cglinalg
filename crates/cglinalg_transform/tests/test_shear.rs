@@ -21,7 +21,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_x(shear_x_with_y);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(5_f64, 2_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -32,7 +32,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_x(shear_x_with_y);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(5_f64, 2_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -43,7 +43,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_y(shear_y_with_x);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(1_f64, 7_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -54,7 +54,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_y(shear_y_with_x);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(1_f64, 7_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -66,7 +66,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(21_f64, 7_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -78,7 +78,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(21_f64, 7_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -89,7 +89,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_x(shear_x_with_y);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(-3_f64, 2_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -100,7 +100,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_x(shear_x_with_y);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(-3_f64, 2_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -111,7 +111,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_y(shear_y_with_x);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(1_f64, -3_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -122,7 +122,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear_y(shear_y_with_x);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(1_f64, -3_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -134,7 +134,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(19_f64 / 49_f64, 3_f64 / 49_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -146,7 +146,7 @@ mod shear2_tests {
         let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(19_f64 / 49_f64, 3_f64 / 49_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -168,7 +168,7 @@ mod shear2_tests {
         let shear = Shear2::identity();
         let point = Point2::new(1_f64, 2_f64);
         let expected = point;
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -178,7 +178,7 @@ mod shear2_tests {
         let shear = Shear2::identity();
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = vector;
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -205,7 +205,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(20_f64, 2_f64, 3_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -217,7 +217,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(20_f64, 2_f64, 3_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -229,7 +229,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_y(shear_y_with_x, shear_y_with_z);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(1_f64, 52_f64, 3_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -241,7 +241,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_y(shear_y_with_x, shear_y_with_z);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(1_f64, 52_f64, 3_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -253,7 +253,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_z(shear_z_with_x, shear_z_with_y);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(1_f64, 2_f64, 38_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -265,7 +265,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_z(shear_z_with_x, shear_z_with_y);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(1_f64, 2_f64, 38_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -288,7 +288,7 @@ mod shear3_tests {
         );
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(6_f64, 10_f64, 12_f64);
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -311,7 +311,7 @@ mod shear3_tests {
         );
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(6_f64, 10_f64, 12_f64);
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -323,7 +323,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(-18_f64, 2_f64, 3_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -335,7 +335,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(-18_f64, 2_f64, 3_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -347,7 +347,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_y(shear_y_with_x, shear_y_with_z);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(1_f64, -16_f64, 3_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -359,7 +359,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_y(shear_y_with_x, shear_y_with_z);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(1_f64, -16_f64, 3_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -371,7 +371,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_z(shear_z_with_x, shear_z_with_y);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(1_f64, 2_f64, -10_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -383,7 +383,7 @@ mod shear3_tests {
         let shear = Shear3::from_shear_z(shear_z_with_x, shear_z_with_y);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(1_f64, 2_f64, -10_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -406,7 +406,7 @@ mod shear3_tests {
         );
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = Point3::new(1_f64 / 4_f64, 1_f64 / 4_f64, 1_f64 / 4_f64);
-        let result = shear.inverse_shear_point(&point);
+        let result = shear.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -429,7 +429,7 @@ mod shear3_tests {
         );
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(1_f64 / 4_f64, 1_f64 / 4_f64, 1_f64 / 4_f64);
-        let result = shear.inverse_shear_vector(&vector);
+        let result = shear.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -462,7 +462,7 @@ mod shear3_tests {
         let shear = Shear3::identity();
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let expected = point;
-        let result = shear.shear_point(&point);
+        let result = shear.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
@@ -472,7 +472,7 @@ mod shear3_tests {
         let shear = Shear3::identity();
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = vector;
-        let result = shear.shear_vector(&vector);
+        let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }

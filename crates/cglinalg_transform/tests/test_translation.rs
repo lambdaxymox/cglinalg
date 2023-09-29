@@ -18,7 +18,7 @@ mod translation2_tests {
         let distance = Vector2::new(4_f64, 4_f64);
         let translation = Translation2::from_vector(&distance);
         let expected = Point2::new(1_f64 + 4_f64, 2_f64 + 4_f64);
-        let result = translation.translate_point(&point);
+        let result = translation.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -30,7 +30,7 @@ mod translation2_tests {
         let distance = Vector2::new(4_f64, 4_f64);
         let translation = Translation2::from_vector(&distance);
         let expected = vector;
-        let result = translation.translate_vector(&vector);
+        let result = translation.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -41,7 +41,7 @@ mod translation2_tests {
         let distance = Vector2::new(4_f64, 4_f64);
         let translation = Translation2::from_vector(&distance);
         let expected = Point2::new(1_f64 - 4_f64, 2_f64 - 4_f64);
-        let result = translation.inverse_translate_point(&point);
+        let result = translation.inverse_apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -53,7 +53,7 @@ mod translation2_tests {
         let distance = Vector2::new(4_f64, 4_f64);
         let translation = Translation2::from_vector(&distance);
         let expected = vector;
-        let result = translation.inverse_translate_vector(&vector);
+        let result = translation.inverse_apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -129,7 +129,7 @@ mod translation3_tests {
         let distance = Vector3::new(4_f64, 4_f64, 4_f64);
         let translation = Translation3::from_vector(&distance);
         let expected = Point3::new(1_f64 + 4_f64, 2_f64 + 4_f64, 3_f64 + 4_f64);
-        let result = translation.translate_point(&point);
+        let result = translation.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -141,7 +141,7 @@ mod translation3_tests {
         let distance = Vector3::new(4_f64, 4_f64, 4_f64);
         let translation = Translation3::from_vector(&distance);
         let expected = vector;
-        let result = translation.translate_vector(&vector);
+        let result = translation.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -152,7 +152,7 @@ mod translation3_tests {
     let distance = Vector3::new(4_f64, 4_f64, 4_f64);
     let translation = Translation3::from_vector(&distance);
     let expected = Point3::new(1_f64 - 4_f64, 2_f64 - 4_f64, 3_f64 - 4_f64);
-    let result = translation.inverse_translate_point(&point);
+    let result = translation.inverse_apply_point(&point);
 
     assert_eq!(result, expected);
     }
@@ -164,7 +164,7 @@ mod translation3_tests {
         let distance = Vector3::new(4_f64, 4_f64, 4_f64);
         let translation = Translation3::from_vector(&distance);
         let expected = vector;
-        let result = translation.inverse_translate_vector(&vector);
+        let result = translation.inverse_apply_vector(&vector);
 
         assert_eq!(result, expected);
     }

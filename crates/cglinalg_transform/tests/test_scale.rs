@@ -21,7 +21,7 @@ mod scale2_tests {
         let scale_vector = Vector2::new(10_f64, 20_f64);
         let scale = Scale2::from_nonuniform_scale(&scale_vector);
         let expected = Point2::new(10_f64, 40_f64);
-        let result = scale.scale_point(&point);
+        let result = scale.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -32,7 +32,7 @@ mod scale2_tests {
         let scale_vector = Vector2::new(10_f64, 20_f64);
         let scale = Scale2::from_nonuniform_scale(&scale_vector);
         let expected = Vector2::new(10_f64, 40_f64);
-        let result = scale.scale_vector(&vector);
+        let result = scale.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -43,7 +43,7 @@ mod scale2_tests {
         let scale_vector = Vector2::new(10_f64, 20_f64);
         let scale = Scale2::from_nonuniform_scale(&scale_vector);
         let expected = Point2::new(1_f64, 2_f64);
-        let result = scale.inverse_scale_point(&point);
+        let result = scale.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -54,7 +54,7 @@ mod scale2_tests {
         let scale_vector = Vector2::new(10_f64, 20_f64);
         let scale = Scale2::from_nonuniform_scale(&scale_vector);
         let expected = Vector2::new(1_f64, 2_f64);
-        let result = scale.inverse_scale_vector(&vector);
+        let result = scale.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -80,7 +80,7 @@ mod scale3_tests {
         let scale_vector = Vector3::new(10_f64, 20_f64, 30_f64);
         let scale = Scale3::from_nonuniform_scale(&scale_vector);
         let expected = Point3::new(10_f64, 40_f64, 90_f64);
-        let result = scale.scale_point(&point);
+        let result = scale.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -91,7 +91,7 @@ mod scale3_tests {
         let scale_vector = Vector3::new(10_f64, 20_f64, 30_f64);
         let scale = Scale3::from_nonuniform_scale(&scale_vector);
         let expected = Vector3::new(10_f64, 40_f64, 90_f64);
-        let result = scale.scale_vector(&vector);
+        let result = scale.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -102,7 +102,7 @@ mod scale3_tests {
         let scale_vector = Vector3::new(10_f64, 20_f64, 30_f64);
         let scale = Scale3::from_nonuniform_scale(&scale_vector);
         let expected = Point3::new(1_f64, 2_f64, 3_f64);
-        let result = scale.inverse_scale_point(&point);
+        let result = scale.inverse_apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -113,7 +113,7 @@ mod scale3_tests {
         let scale_vector = Vector3::new(10_f64, 20_f64, 30_f64);
         let scale = Scale3::from_nonuniform_scale(&scale_vector);
         let expected = Vector3::new(1_f64, 2_f64, 3_f64);
-        let result = scale.inverse_scale_vector(&vector);
+        let result = scale.inverse_apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }

@@ -77,14 +77,14 @@ where
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(-1_f64, 2_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// 
     /// // In two dimensions, we can just as well use the opposite normal.
     /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
     /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
-    /// let opposite_result = opposite_reflection.reflect_vector(&vector);
+    /// let opposite_result = opposite_reflection.apply_vector(&vector);
     /// 
     /// assert_eq!(opposite_result, expected);
     /// ```
@@ -110,7 +110,7 @@ where
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
@@ -334,7 +334,7 @@ where
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -356,12 +356,12 @@ where
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(1_f64, 1_f64, -1_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn reflect_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
 
@@ -391,7 +391,7 @@ where
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let point = Point2::new(1_f64, 1_f64);
     /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
-    /// let result = reflection.reflect_point(&point);
+    /// let result = reflection.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -413,12 +413,12 @@ where
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let point = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Point3::new(1_f64, 1_f64, -1_f64);
-    /// let result = reflection.reflect_point(&point);
+    /// let result = reflection.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn reflect_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         Point::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
 }
@@ -447,7 +447,7 @@ where
     /// let reflection = Reflection2::identity();
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = vector;
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -465,7 +465,7 @@ where
     /// let reflection = Reflection3::identity();
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = vector;
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -731,7 +731,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.reflect_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -746,7 +746,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.reflect_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -761,7 +761,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.reflect_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -776,7 +776,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.reflect_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -807,14 +807,14 @@ where
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(-1_f64, 2_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// 
     /// // In two dimensions, we can just as well use the opposite normal.
     /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
     /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
-    /// let opposite_result = opposite_reflection.reflect_vector(&vector);
+    /// let opposite_result = opposite_reflection.apply_vector(&vector);
     /// 
     /// assert_eq!(opposite_result, expected);
     /// ```
@@ -856,7 +856,7 @@ where
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
     /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
-    /// let result = reflection.reflect_vector(&vector);
+    /// let result = reflection.apply_vector(&vector);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```

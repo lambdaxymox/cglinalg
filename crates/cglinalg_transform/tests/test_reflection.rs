@@ -23,7 +23,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(1_f64, -1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -35,7 +35,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(1_f64, -1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -47,7 +47,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(-1_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -59,7 +59,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(-1_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -79,7 +79,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 1_f64);
         let expected = Point2::new(1_f64, 2_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -99,7 +99,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 1_f64);
         let expected = Vector2::new(1_f64, 2_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -119,7 +119,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 1_f64);
         let expected = Point2::new(1_f64, 2_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -139,7 +139,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 1_f64);
         let expected = Vector2::new(1_f64, 2_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -159,7 +159,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(2_f64, 2_f64);
         let expected = Point2::new(2_f64, 2_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -179,7 +179,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(2_f64, 2_f64);
         let expected = Vector2::new(2_f64, 2_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -196,7 +196,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let point = Point2::new(1_f64, 1_f64);
         let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -213,7 +213,7 @@ mod reflection2_tests {
         let reflection = Reflection2::from_normal_bias(&normal, &bias);
         let vector = Vector2::new(1_f64, 1_f64);
         let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -242,7 +242,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(-1_f64, 1_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -255,7 +255,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 1_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -268,7 +268,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, -1_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -281,7 +281,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, -1_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -294,7 +294,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 1_f64, -1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_eq!(result, expected);
     }
@@ -307,7 +307,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 1_f64, -1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_eq!(result, expected);
     }
@@ -328,7 +328,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -349,7 +349,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8); 
     }
@@ -370,7 +370,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 1_f64, 1_f64);
         let expected = Point3::new(1_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -391,7 +391,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -412,7 +412,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(2_f64, 2_f64, 1_f64);
         let expected = Point3::new(2_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -433,7 +433,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(2_f64, 2_f64, 1_f64);
         let expected = Vector3::new(2_f64, 2_f64, 1_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -451,7 +451,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 20_f64);
         let expected = Point3::new(3_f64 / 5_f64, 9_f64 / 5_f64, 20_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -469,7 +469,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 20_f64);
         let expected = Vector3::new(7_f64 / 5_f64, 1_f64 / 5_f64, 20_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -488,7 +488,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(-1_f64, -1_f64, 3_f64);
-        let result = reflection.reflect_point(&point);
+        let result = reflection.apply_point(&point);
         
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
@@ -507,7 +507,7 @@ mod reflection3_tests {
         let reflection = Reflection3::from_normal_bias(&normal, &bias);
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(1_f64 / 3_f64, 1_f64 / 3_f64, 5_f64 / 3_f64);
-        let result = reflection.reflect_vector(&vector);
+        let result = reflection.apply_vector(&vector);
         
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }

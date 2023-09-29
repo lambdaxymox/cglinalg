@@ -64,7 +64,7 @@ where
     ///     1_f64 + shear_x_with_y * vector.y, 
     ///     2_f64 + shear_y_with_x * vector.x
     /// );
-    /// let result = shear.shear_vector(&vector);
+    /// let result = shear.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -99,12 +99,12 @@ where
     ///     2_f64 + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
     ///     3_f64 + shear_z_with_x * vector.x + shear_z_with_y * vector.y
     /// );
-    /// let result = shear.shear_vector(&vector);
+    /// let result = shear.apply_vector(&vector);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn shear_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         self.matrix * vector
     }
 
@@ -128,7 +128,7 @@ where
     ///     1_f64 + shear_x_with_y * point.y, 
     ///     2_f64 + shear_y_with_x * point.x
     /// );
-    /// let result = shear.shear_point(&point);
+    /// let result = shear.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -163,12 +163,12 @@ where
     ///     2_f64 + shear_y_with_x * point.x + shear_y_with_z * point.z,
     ///     3_f64 + shear_z_with_x * point.x + shear_z_with_y * point.y
     /// );
-    /// let result = shear.shear_point(&point);
+    /// let result = shear.apply_point(&point);
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn shear_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         let vector = point.to_vector();
         let result = self.matrix * vector;
 
@@ -193,7 +193,7 @@ where
     /// let shear = Shear2::identity();
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = vector;
-    /// let result = shear.shear_vector(&vector);
+    /// let result = shear.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -211,7 +211,7 @@ where
     /// let shear = Shear3::identity();
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = vector;
-    /// let result = shear.shear_vector(&vector);
+    /// let result = shear.apply_vector(&vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -496,7 +496,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.shear_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -508,7 +508,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.shear_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -520,7 +520,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.shear_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -532,7 +532,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.shear_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -666,8 +666,8 @@ where
     /// let shear_inv = shear.inverse();
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let sheared_point = shear.shear_point(&point);
-    /// let result = shear_inv.shear_point(&sheared_point);
+    /// let sheared_point = shear.apply_point(&point);
+    /// let result = shear_inv.apply_point(&sheared_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -702,13 +702,13 @@ where
     /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = vector;
-    /// let sheared_vector = shear.shear_vector(&vector);
-    /// let result = shear.inverse_shear_vector(&sheared_vector);
+    /// let sheared_vector = shear.apply_vector(&vector);
+    /// let result = shear.inverse_apply_vector(&sheared_vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_shear_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
+    pub fn inverse_apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
         let inverse = self.inverse();
     
         inverse.matrix * vector
@@ -731,13 +731,13 @@ where
     /// let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
     /// let point = Point2::new(1_f64, 2_f64);
     /// let expected = point;
-    /// let sheared_point = shear.shear_point(&point);
-    /// let result = shear.inverse_shear_point(&sheared_point);
+    /// let sheared_point = shear.apply_point(&point);
+    /// let result = shear.inverse_apply_point(&sheared_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_shear_point(&self, point: &Point2<S>) -> Point2<S> {
+    pub fn inverse_apply_point(&self, point: &Point2<S>) -> Point2<S> {
         let inverse = self.inverse();
         let vector = Vector2::new(point.x, point.y);
         let result = inverse.matrix * vector;
@@ -945,8 +945,8 @@ where
     /// let shear_inv = shear.inverse();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let sheared_point = shear.shear_point(&point);
-    /// let result = shear_inv.shear_point(&sheared_point);
+    /// let sheared_point = shear.apply_point(&point);
+    /// let result = shear_inv.apply_point(&sheared_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -995,13 +995,13 @@ where
     /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = vector;
-    /// let sheared_vector = shear.shear_vector(&vector);
-    /// let result = shear.inverse_shear_vector(&sheared_vector);
+    /// let sheared_vector = shear.apply_vector(&vector);
+    /// let result = shear.inverse_apply_vector(&sheared_vector);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_shear_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
+    pub fn inverse_apply_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let inverse = self.inverse();
 
         inverse.matrix * vector
@@ -1024,13 +1024,13 @@ where
     /// let shear = Shear3::from_shear_x(shear_x_with_y, shear_x_with_z);
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = point;
-    /// let sheared_point = shear.shear_point(&point);
-    /// let result = shear.inverse_shear_point(&sheared_point);
+    /// let sheared_point = shear.apply_point(&point);
+    /// let result = shear.inverse_apply_point(&sheared_point);
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse_shear_point(&self, point: &Point3<S>) -> Point3<S> {
+    pub fn inverse_apply_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse = self.inverse();
         let vector = Vector3::new(point.x, point.y, point.z);
         let result = inverse.matrix * vector;

@@ -262,7 +262,7 @@ where
     /// let rotation = Rotation2::from_angle(angle);
     /// let vector = Vector2::unit_x();
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.rotate_vector(&vector);
+    /// let result = rotation.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -290,12 +290,12 @@ where
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
     /// let vector = Vector3::unit_x();
     /// let expected = -Vector3::unit_y();
-    /// let result = rotation.rotate_vector(&vector);
+    /// let result = rotation.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotate_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         self.matrix * vector
     }
 
@@ -322,7 +322,7 @@ where
     /// let rotation = Rotation2::from_angle(angle);
     /// let point = Point2::new(1_f64, 0_f64);
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -351,12 +351,12 @@ where
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
     /// let point = Point3::new(1_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(0_f64, -1_f64, 0_f64);
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotate_point(&self, point: &Point<S, N>) -> Point<S, N> { 
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> { 
         let vector = point.to_vector();
         let result = self.matrix * vector;
 
@@ -386,12 +386,12 @@ where
     /// let rotation = Rotation2::from_angle(angle);
     /// let vector = Vector2::unit_x();
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.rotate_vector(&vector);
+    /// let result = rotation.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     ///
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.inverse_rotate_vector(&vector);
+    /// let result = rotation.inverse_apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -419,13 +419,13 @@ where
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
     /// let vector = Vector3::unit_x();
     /// let expected = vector;
-    /// let rotated_vector = rotation.rotate_vector(&vector);
-    /// let result = rotation.inverse_rotate_vector(&rotated_vector);
+    /// let rotated_vector = rotation.apply_vector(&vector);
+    /// let result = rotation.inverse_apply_vector(&rotated_vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```   
     #[inline]
-    pub fn inverse_rotate_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         let inverse = self.inverse();
         
         inverse.matrix * vector
@@ -454,12 +454,12 @@ where
     /// let rotation = Rotation2::from_angle(angle);
     /// let point = Point2::new(1_f64, 0_f64);
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     ///
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
-    /// let result = rotation.inverse_rotate_point(&point);
+    /// let result = rotation.inverse_apply_point(&point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -488,13 +488,13 @@ where
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
     /// let point = Point3::new(1_f64, 0_f64, 0_f64);
     /// let expected = point;
-    /// let rotated_point = rotation.rotate_point(&point);
-    /// let result = rotation.inverse_rotate_point(&rotated_point);
+    /// let rotated_point = rotation.apply_point(&point);
+    /// let result = rotation.inverse_apply_point(&rotated_point);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn inverse_rotate_point(&self, point: &Point<S, N>) -> Point<S, N> {
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         let inverse = self.inverse();
         let vector = point.to_vector();
         let result = inverse.matrix * vector;
@@ -862,7 +862,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, N>) -> Self::Output {
-        self.rotate_vector(&other)
+        self.apply_vector(&other)
     }
 }
 
@@ -874,7 +874,7 @@ where
 
     #[inline]
     fn mul(self, other: &Vector<S, N>) -> Self::Output {
-        self.rotate_vector(other)
+        self.apply_vector(other)
     }
 }
 
@@ -886,7 +886,7 @@ where
 
     #[inline]
     fn mul(self, other: Vector<S, N>) -> Self::Output {
-        self.rotate_vector(&other)
+        self.apply_vector(&other)
     }
 }
 
@@ -898,7 +898,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
-        self.rotate_vector(other)
+        self.apply_vector(other)
     }
 }
 
@@ -910,7 +910,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.rotate_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -922,7 +922,7 @@ where
 
     #[inline]
     fn mul(self, other: &Point<S, N>) -> Self::Output {
-        self.rotate_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -934,7 +934,7 @@ where
 
     #[inline]
     fn mul(self, other: Point<S, N>) -> Self::Output {
-        self.rotate_point(&other)
+        self.apply_point(&other)
     }
 }
 
@@ -946,7 +946,7 @@ where
 
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
-        self.rotate_point(other)
+        self.apply_point(other)
     }
 }
 
@@ -1068,7 +1068,7 @@ where
     /// let unit_y = Vector2::unit_y();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&unit_x), unit_y, epsilon = 1e-8
+    ///     rotation.apply_vector(&unit_x), unit_y, epsilon = 1e-8
     /// );
     /// ```
     #[inline]
@@ -1098,7 +1098,7 @@ where
     /// let vector2 = Unit::from_value(Vector2::unit_x());
     /// let rotation = Rotation2::rotation_between_axis(&vector1, &vector2);
     /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -1131,7 +1131,7 @@ where
     /// let vector2 = 6_f64 * Vector2::unit_x();
     /// let rotation = Rotation2::rotation_between(&vector1, &vector2);
     /// let expected = Point2::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64);
-    /// let result = rotation.rotate_point(&point);
+    /// let result = rotation.apply_point(&point);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -1352,7 +1352,7 @@ where
     /// // Rotate a vector ninety degrees.
     /// let unit_x = Vector3::unit_x();
     /// let expected = Vector3::unit_y();
-    /// let result = rotation.rotate_vector(&unit_x);
+    /// let result = rotation.apply_vector(&unit_x);
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1488,7 +1488,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&direction).normalize(), 
+    ///     rotation.apply_vector(&direction).normalize(), 
     ///     unit_z, 
     ///     epsilon = 1e-10,
     /// );
@@ -1529,7 +1529,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&direction).normalize(), 
+    ///     rotation.apply_vector(&direction).normalize(), 
     ///     minus_unit_z, 
     ///     epsilon = 1e-10,
     /// );
@@ -1570,7 +1570,7 @@ where
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let direction = target - eye;
     /// let rotation = Rotation3::look_at_lh(&eye, &target, &up);
-    /// let result = rotation.rotate_vector(&direction).normalize();
+    /// let result = rotation.apply_vector(&direction).normalize();
     /// let expected = Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1611,7 +1611,7 @@ where
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let direction = target - eye;
     /// let rotation = Rotation3::look_at_rh(&eye, &target, &up);
-    /// let result = rotation.rotate_vector(&direction).normalize();
+    /// let result = rotation.apply_vector(&direction).normalize();
     /// let expected = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -1653,7 +1653,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&unit_z), 
+    ///     rotation.apply_vector(&unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1695,7 +1695,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&minus_unit_z), 
+    ///     rotation.apply_vector(&minus_unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1740,7 +1740,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&unit_z), 
+    ///     rotation.apply_vector(&unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1785,7 +1785,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.rotate_vector(&minus_unit_z), 
+    ///     rotation.apply_vector(&minus_unit_z), 
     ///     direction.normalize(), 
     ///     epsilon = 1e-10,
     /// );
@@ -1820,7 +1820,7 @@ where
     /// let vector2 = 12_f64 * Vector3::unit_x();
     /// let rotation = Rotation3::rotation_between(&vector1, &vector2).unwrap();
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
-    /// let result = rotation.rotate_vector(&vector);
+    /// let result = rotation.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
@@ -1851,7 +1851,7 @@ where
     /// let unit2 = Unit::from_value(12_f64 * Vector3::unit_x());
     /// let rotation = Rotation3::rotation_between_axis(&unit1, &unit2).unwrap();
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
-    /// let result = rotation.rotate_vector(&vector);
+    /// let result = rotation.apply_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
