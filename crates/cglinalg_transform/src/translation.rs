@@ -767,9 +767,57 @@ where
     }
 }
 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Translation<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.translate_vector(&other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Translation<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.translate_vector(other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Translation<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.translate_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Translation<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.translate_vector(other)
+    }
+}
+
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -781,7 +829,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -793,7 +841,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -805,7 +853,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Point<S, N>;
 
@@ -817,7 +865,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Translation<S, N>;
 
@@ -830,7 +878,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Translation<S, N>;
 
@@ -843,7 +891,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Translation<S, N>;
 
@@ -856,7 +904,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Translation<S, N>> for &'b Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     type Output = Translation<S, N>;
 
@@ -872,6 +920,27 @@ where
     S: SimdScalarSigned 
 {
     /// Construct a translation from the components of the translation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// # };
+    /// #
+    /// let translation = Translation2::new(5_i32, 7_i32);
+    /// let expected = Matrix3x3::new(
+    ///     1_i32, 0_i32, 0_i32,
+    ///     0_i32, 1_i32, 0_i32,
+    ///     5_i32, 7_i32, 1_i32
+    /// );
+    /// let result = translation.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self {
@@ -885,6 +954,28 @@ where
     S: SimdScalarSigned 
 {
     /// Construct a translation from the components of the translation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Translation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// # };
+    /// #
+    /// let translation = Translation3::new(5_i32, 7_i32, 11_i32);
+    /// let expected = Matrix4x4::new(
+    ///     1_i32, 0_i32, 0_i32,  0_i32,
+    ///     0_i32, 1_i32, 0_i32,  0_i32,
+    ///     0_i32, 0_i32, 1_i32,  0_i32,
+    ///     5_i32, 7_i32, 11_i32, 1_i32
+    /// );
+    /// let result = translation.to_affine_matrix();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self {
