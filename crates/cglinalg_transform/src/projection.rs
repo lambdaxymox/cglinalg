@@ -21,22 +21,35 @@ use core::ops;
 /// A perspective projection transformation based on arbitrary `left`, `right`, 
 /// `bottom`, `top`, `near`, and `far` planes.
 ///
-/// The following constraints construct a useful perspective projection.
+/// The `near` and `far` parameters are the absolute values of the positions 
+/// of the **near plane** and the **far** plane, respectively, along the 
+/// **negative z-axis**. In particular, the position of the **near plane** is
+/// `z == -near` and the position of the **far plane** is `z == -far`.
+/// 
+/// This data type represents a homogeneous matrix representing a perspective 
+/// projection transformation with a right-handed coordinate system where the 
+/// perspective camera faces the **negative z-axis** with the **positive x-axis** 
+/// going to the right, and the **positive y-axis** going up. The perspective view 
+/// volume is the frustum contained in 
+/// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device 
+/// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// 
+/// The underlying matrix is identical to the one used by OpenGL, provided here for
+/// reference
 /// ```text
-/// left   < right
-/// bottom < top
-/// near   < far   (along the negative z-axis)
+/// | m[0, 0]  0         m[2, 0]  0       |
+/// | 0        m[1, 1]   m[2, 1]  0       |
+/// | 0        0         m[2, 2]  m[3, 2] |
+/// | 0        0        -1        0       |
+/// where
+/// m[0, 0] == 2 * n / (r - l)
+/// m[2, 0] == (r + l) / (r - l)
+/// m[1, 1] == 2 * n / (t - b)
+/// m[2, 1] == (t + b) / (t - b)
+/// m[2, 2] == -(f + n) / (f - n)
+/// m[3, 2] == - 2 * f * n / (f - n)
 /// ```
-/// Each parameter in the specification is a description of the position along
-/// an axis of a plane that the axis is perpendicular to.
-///
-/// Orthographic projections differ from perspective projections because
-/// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. Perspective 
-/// projections preserve the spatial ordering of points in the distance they 
-/// are located from the viewing plane. This property of perspective projection 
-/// transformations is important for operations such as z-buffering and 
-/// occlusion detection.
+/// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective3<S> {
     matrix: Matrix4x4<S>,
@@ -49,17 +62,19 @@ where
     /// Construct a new perspective projection transformation.
     ///
     /// The perspective projection transformation uses a right-handed 
-    /// coordinate system where the **negative z-axis** is the depth direction.
+    /// coordinate system where the **negative z-axis** is the camera view direction.
     /// 
     /// # Parameters
     /// 
     /// The parameters must satisfy
     /// ```text
-    /// left   < right
+    /// left < right
     /// bottom < top
-    /// near   < far   (along the negative z-axis)
+    /// 0 < near < far
     /// ```
-    /// to construct a useful perspective projection.
+    /// to construct a useful perspective projection. In particular, `near` and 
+    /// `far` are the respective absolute values of the placement of the near and 
+    /// far planes along the **z-axis**.
     /// 
     /// `left` is the horizontal position of the left plane in camera space.
     /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
@@ -816,13 +831,41 @@ where
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates based on the perspective field of view model.
 ///
-/// Orthographic projections differ from perspective projections because
-/// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. Perspective 
-/// projections preserve the spatial ordering of points in the distance they 
-/// are located from the viewing plane. This property of perspective projection 
-/// transformations is important for operations such as z-buffering and 
-/// occlusion detection.
+/// The `near` and `far` parameters are the absolute values of the positions 
+/// of the **near plane** and the **far** plane, respectively, along the 
+/// **negative z-axis**. In particular, the position of the **near plane** is
+/// `z == -near` and the position of the **far plane** is `z == -far`. The 
+/// parameter `aspect_ratio` is the ratio of the width of the viewport to the 
+/// height of the viewport.
+/// 
+/// This data type represents a homogeneous matrix representing a perspective 
+/// projection transformation with a right-handed coordinate system where the 
+/// perspective camera faces the **negative z-axis** with the **positive x-axis** 
+/// going to the right, and the **positive y-axis** going up. The perspective view 
+/// volume is the symmetric frustum contained in 
+/// `[-right, right] x [-top, top] x [-near, -far]`, where 
+/// ```text
+/// tan(vfov / 2) == top / near
+/// right == aspect_ratio * top == aspect_ratio * n * tan(vfov / 2)
+/// top == near * tan(vfov / 2)
+/// ```
+/// The normalized device coordinates this transformation maps to are 
+/// `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// 
+/// The underlying matrix is identical to the one used by OpenGL, provided here for
+/// reference
+/// ```text
+/// | m[0, 0] 0         0        0       |
+/// | 0       m[1, 1]   0        0       |
+/// | 0       0         m[2, 2]  m[3, 2] |
+/// | 0       0        -1        0       |
+/// where
+/// m[0, 0] == 1 / (aspect_ratio * tan(vfov / 2))
+/// m[1, 1] == 1 / tan(vfov / 2)
+/// m[2, 2] == -(f + n) / (f - n)
+/// m[3, 2] == -2 * f * n / (f - n)
+/// ```
+/// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct PerspectiveFov3<S> {
     matrix: Matrix4x4<S>,
@@ -838,9 +881,11 @@ where
     /// 
     /// The parameters must satisfy
     /// ```text
-    /// near < far (along the negative z-axis)
+    /// 0 < near < far (along the negative z-axis)
     /// ```
-    /// to construct a useful perspective projection.
+    /// to construct a useful perspective projection. In particular, `near` and 
+    /// `far` are the respective absolute values of the placement of the near and 
+    /// far planes along the **z-axis**.
     /// 
     /// `vfov` is the angle of the field of view of the perspective projection.
     /// 
@@ -872,14 +917,14 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// 
     /// assert_relative_eq!(perspective.vfov(),         vfov.into(),  epsilon = 1e-10);
     /// assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio, epsilon = 1e-10);
     /// assert_relative_eq!(perspective.near(),         near,         epsilon = 1e-10);
     /// assert_relative_eq!(perspective.far(),          far,          epsilon = 1e-10);
     /// ```
-    pub fn from_fov<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
+    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
         let spec_vfov = vfov.into();
 
         Self {
@@ -906,7 +951,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = vfov.into();
     /// let result = perspective.vfov();
     /// 
@@ -965,7 +1010,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = near;
     /// let result = perspective.near();
     /// 
@@ -1047,7 +1092,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = far;
     /// let result = perspective.far();
     /// 
@@ -1129,7 +1174,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = aspect_ratio;
     /// let result = perspective.aspect_ratio();
     /// 
@@ -1184,7 +1229,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.right();
     /// 
@@ -1219,7 +1264,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.left();
     /// 
@@ -1252,7 +1297,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.top();
     /// 
@@ -1287,7 +1332,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.bottom();
     /// 
@@ -1319,7 +1364,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
@@ -1364,7 +1409,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
@@ -1406,7 +1451,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
@@ -1449,7 +1494,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let projected_point = perspective.project_point(&point);
     /// let expected = point;
@@ -1535,7 +1580,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let projected_vector = perspective.project_vector(&vector);
     /// let expected = vector;
@@ -1617,7 +1662,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
@@ -1662,7 +1707,7 @@ where
     /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
@@ -1809,21 +1854,35 @@ where
 /// An orthographic projection with arbitrary `left`, `right`, 
 /// `top`, `bottom`, `near`, and `far` planes.
 ///
-/// We assume the following constraints to construct a useful orthographic 
-/// projection
+/// The `near` and `far` parameters are the absolute values of the positions 
+/// of the **near plane** and the **far** plane, respectively, along the 
+/// **negative z-axis**. In particular, the position of the **near plane** is
+/// `z == -near` and the position of the **far plane** is `z == -far`.
+/// 
+/// This data type represents a homogeneous matrix representing an orthographic 
+/// projection transformation with a right-handed coordinate system where the 
+/// orthographic camera faces the **negative z-axis** with the **positive x-axis** 
+/// going to the right, and the **positive y-axis** going up. The orthographic view 
+/// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The 
+/// normalized device coordinates this transformation maps to are 
+/// `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// 
+/// The underlying matrix is identical to the one used by OpenGL. We provide 
+/// it here for reference
 /// ```text
-/// left   < right
-/// bottom < top
-/// near   < far   (along the negative z-axis).
+/// | m[0, 0]  0        0        m[3, 0] |
+/// | 0        m[1, 1]  0        m[3, 1] |
+/// | 0        0        m[2, 2]  m[3, 2] |
+/// | 0        0        0        1       |
+/// where
+/// m[0, 0] == 2 / (r - l)
+/// m[3, 0] == -(r + l) / (r - l)
+/// m[1, 1] == 2 / (t - b)
+/// m[3, 1] == -(t + b) / (t - b)
+/// m[2, 2] == -2 / (f - n)
+/// m[3, 2] == -(f + n) / (f - n)
 /// ```
-/// Each parameter in the specification is a description of the position along 
-/// an axis of a plane that the axis is perpendicular to.
-///
-/// Orthographic projections differ from perspective projections in that 
-/// orthographic projections keeps parallel lines parallel, whereas perspective 
-/// projections preserve the perception of distance. Perspective 
-/// projections preserve the spatial ordering in the distance that points are 
-/// located from the viewing plane.
+/// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Orthographic3<S> {
     matrix: Matrix4x4<S>,
@@ -1839,11 +1898,13 @@ where
     /// 
     /// The parameters must satisfy
     /// ```text
-    /// left   < right
+    /// left < right
     /// bottom < top
-    /// near   < far   (along the negative z-axis)
+    /// 0 < near < far
     /// ```
-    /// to construct a useful orthographic projection.
+    /// to construct a useful orthographic projection. In particular, `near` and 
+    /// `far` are the respective absolute values of the placement of the near and 
+    /// far planes along the **z-axis**.
     /// 
     /// `left` is the horizontal position of the left plane in camera space.
     /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.

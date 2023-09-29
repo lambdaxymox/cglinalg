@@ -5383,7 +5383,7 @@ where
     /// parameter `aspect_ratio` is the ratio of the width of the viewport to the 
     /// height of the viewport.
     /// 
-    /// This functions returns a homogeneous matrix representing a perspective 
+    /// This function returns a homogeneous matrix representing a perspective 
     /// projection transformation with a right-handed coordinate system where the 
     /// perspective camera faces the **negative z-axis** with the **positive x-axis** 
     /// going to the right, and the **positive y-axis** going up. The perspective view 

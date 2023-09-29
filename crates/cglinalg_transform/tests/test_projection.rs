@@ -120,7 +120,7 @@ fn test_perspective_projection_fov_transformation() {
         0_f64,        0_f64,       c2r2, -1_f64, 
         0_f64,        0_f64,       c3r2, 0_f64
     );
-    let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let result = perspective.matrix();
 
     assert_relative_eq!(result, &expected, epsilon = 1e-10);
@@ -132,7 +132,7 @@ fn test_perspective_projection_fov_rectangular_parameters() {
     let aspect_ratio = 800_f64 / 600_f64;
     let near = 0.1_f64;
     let far = 100_f64;
-    let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let expected_left = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     let expected_right = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     let expected_bottom = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
@@ -152,7 +152,7 @@ fn test_perspective_projection_fov_fov_parameters() {
     let aspect_ratio = 800_f64 / 600_f64;
     let near = 0.1_f64;
     let far = 100_f64;
-    let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let expected_vfov = vfov.into();
 
     assert_relative_eq!(perspective.vfov(),         expected_vfov, epsilon = 1e-10);
@@ -168,7 +168,7 @@ fn test_perspective_projection_fov_unproject_point() {
     let near = 0.1_f64;
     let far = 100_f64;
     let point = Point3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    let projection = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -183,7 +183,7 @@ fn test_perspective_projection_fov_unproject_vector() {
     let near = 0.1_f64;
     let far = 100_f64;
     let vector = Vector3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    let projection = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
