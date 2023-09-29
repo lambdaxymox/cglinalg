@@ -191,6 +191,12 @@ fn strategy_angle_any() -> impl Strategy<Value = Radians<f64>> {
 }
 
 
+/// Rotation matrices always have a determinant of one.
+/// 
+/// Given a rotation matrix `R`
+/// ```text
+/// det(matrix(R)) == 1
+/// ```
 fn prop_approx_rotation2_matrix_determinant_one<S>(r: Rotation2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -200,6 +206,12 @@ where
     Ok(())
 }
 
+/// Rotation matrices always have a determinant of one.
+/// 
+/// Given a rotation matrix `R`
+/// ```text
+/// det(matrix(R)) == 1
+/// ```
 fn prop_approx_rotation3_matrix_determinant_one<S>(r: Rotation3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -209,6 +221,12 @@ where
     Ok(())
 }
 
+/// Rotation matrices preserve vector norms.
+/// 
+/// Given a rotation matrix `R` and a vector `v`
+/// ```text
+/// norm(R * v) == norm(v)
+/// ```
 fn prop_approx_rotation_vector_preserves_norm<S, const N: usize>(
     r: Rotation<S, N>, 
     v: Vector<S, N>, 
@@ -226,19 +244,36 @@ where
     Ok(())
 }
 
+/// All Rotations are invertible. Rotations always commute with their inverses.
+/// 
+/// Given a rotation `R` and the identity rotation `1`
+/// ```text
+/// R * inverse(R) == inverse(R) * R == 1
+/// ```
 fn prop_approx_rotation_rotation_inverse<S, const N: usize, const NN: usize>(r: Rotation<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
 {
+    let identity = Rotation::identity();
     let lhs = r * r.inverse();
     let rhs = r.inverse() * r;
 
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, identity, epsilon = tolerance));
+    prop_assert!(relative_eq!(rhs, identity, epsilon = tolerance));
 
     Ok(())
 }
 
+/// The product of a rotation with its inverse always acts as the identity 
+/// pointwise.
+/// 
+/// Given a rotation `R` and a point `p`
+/// ```text
+/// R * (inverse(R) * p) == p
+/// inverse(R) * (R * p) == p
+/// ```
 fn prop_approx_rotation_rotation_inverse_pointwise_point<S, const N: usize, const NN: usize>(
     r: Rotation<S, N>, 
     p: Point<S, N>,
@@ -262,6 +297,14 @@ where
     Ok(())
 }
 
+/// The product of a rotation with its inverse always acts as the identity 
+/// pointwise.
+/// 
+/// Given a rotation `R` and a vector `v`
+/// ```text
+/// R * (inverse(R) * v) == v
+/// inverse(R) * (R * v) == v
+/// ```
 fn prop_approx_rotation_rotation_inverse_pointwise_vector<S, const N: usize, const NN: usize>(
     r: Rotation<S, N>, 
     v: Vector<S, N>,
@@ -285,6 +328,13 @@ where
     Ok(())
 }
 
+/// In two dimensions, the composition of rotations is the same as 
+/// one rotation with the angles added up.
+/// 
+/// Given a rotation R that rotates the **xy-plane**, and angles `angle1` and `angle2`
+/// ```text
+/// R(angle1) * R(angle2) == R(angle1 + angle2)
+/// ```
 fn prop_approx_rotation2_composition_same_axis_equals_addition_of_angles<S>(
     angle1: Radians<S>, 
     angle2: Radians<S>,
@@ -304,6 +354,14 @@ where
     Ok(())
 }
 
+/// In three dimensions, the composition of rotations about the same axis is the 
+/// same as one rotation about the same axis with the angles added up.
+/// 
+/// Given a rotation R that rotates the plane perpendicular to the unit vector `axis`, and 
+/// angles `angle1` and `angle2`
+/// ```text
+/// R(axis, angle1) * R(axis, angle2) == R(axis, angle1 + angle2)
+/// ```
 fn prop_approx_rotation3_composition_same_axis_equals_addition_of_angles<S>(
     axis: Unit<Vector3<S>>,
     angle1: Radians<S>,
@@ -324,6 +382,13 @@ where
     Ok(())
 }
 
+/// A rotation constructed from an angle returns the same angle modulo two pi 
+/// radians.
+/// 
+/// Given an angle `angle`, let `R` be the result of calling `from_angle`, then
+/// ```text
+/// angle(R) == angle (mod (2 * pi))
+/// ```
 fn prop_approx_rotation2_from_angle_angle<S>(angle: Radians<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat

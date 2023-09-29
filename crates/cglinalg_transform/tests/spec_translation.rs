@@ -113,7 +113,7 @@ where
 /// 
 /// Given a translation `T`
 /// ```text
-/// T * inverse(T) == inverse(T) * T
+/// T * inverse(T) == inverse(T) * T == Identity
 /// ```
 fn prop_translation_translation_inverse<S, const N: usize>(t: Translation<S, N>) -> Result<(), TestCaseError>
 where
@@ -121,8 +121,11 @@ where
 {
     let lhs = t * t.inverse();
     let rhs = t.inverse() * t;
+    let identity = Translation::identity();
 
     prop_assert_eq!(lhs, rhs);
+    prop_assert_eq!(lhs, identity);
+    prop_assert_eq!(rhs, identity);
 
     Ok(())
 }
@@ -150,69 +153,108 @@ where
 }
 
 
-macro_rules! exact_translation_point_props {
-    ($TestModuleName:ident, $MatrixType:ident, $PointType:ident, $ScalarType:ty, $MatrixGen:ident, $PointGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_translation_preserves_point_differences(
-                t in super::$MatrixGen(),
-                p1 in super::$PointGen(),
-                p2 in super::$PointGen() 
-            ) {
-                let t: super::$MatrixType<$ScalarType> = t;
-                let p1: super::$PointType<$ScalarType> = p1;
-                let p2: super::$PointType<$ScalarType> = p2;
-                super::prop_translation_preserves_point_differences(t, p1, p2)?
-            }
-
-            #[test]
-            fn prop_translation_translation_inverse_is_original_point(t in super::$MatrixGen(), p in super::$PointGen()) {
-                let t: super::$MatrixType<$ScalarType> = t;
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_translation_translation_inverse_is_original_point(t, p)?
-            }
+#[cfg(test)]
+mod translation2_i32_point_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_translation_preserves_point_differences(
+            t in super::strategy_translation_any(),
+            p1 in super::strategy_point_any(),
+            p2 in super::strategy_point_any() 
+        ) {
+            let t: super::Translation2<i32> = t;
+            let p1: super::Point2<i32> = p1;
+            let p2: super::Point2<i32> = p2;
+            super::prop_translation_preserves_point_differences(t, p1, p2)?
         }
-    }
+
+        #[test]
+        fn prop_translation_translation_inverse_is_original_point(
+            t in super::strategy_translation_any(), 
+            p in super::strategy_point_any()
+        ) {
+            let t: super::Translation2<i32> = t;
+            let p: super::Point2<i32> = p;
+            super::prop_translation_translation_inverse_is_original_point(t, p)?
+        }
     }
 }
 
-exact_translation_point_props!(translation2_point_props, Translation2, Point2, i32, strategy_translation_any, strategy_point_any);
-exact_translation_point_props!(translation3_point_props, Translation3, Point3, i32, strategy_translation_any, strategy_point_any);
-
-
-macro_rules! exact_composition_props {
-    ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_translation_translation_inverse(
-                t in super::$MatrixGen()
-            ) {
-                let t: super::$MatrixType<$ScalarType> = t;
-                super::prop_translation_translation_inverse(t)?
-            }
-
-            #[test]
-            fn prop_translation_composition_associative(
-                t1 in super::$MatrixGen(), 
-                t2 in super::$MatrixGen(), 
-                t3 in super::$MatrixGen()
-            ) {
-                let t1: super::$MatrixType<$ScalarType> = t1;
-                let t2: super::$MatrixType<$ScalarType> = t2;
-                let t3: super::$MatrixType<$ScalarType> = t3;
-                super::prop_translation_composition_associative(t1, t2, t3)?
-            }
+#[cfg(test)]
+mod translation3_i32_point_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_translation_preserves_point_differences(
+            t in super::strategy_translation_any(),
+            p1 in super::strategy_point_any(),
+            p2 in super::strategy_point_any() 
+        ) {
+            let t: super::Translation3<i32> = t;
+            let p1: super::Point3<i32> = p1;
+            let p2: super::Point3<i32> = p2;
+            super::prop_translation_preserves_point_differences(t, p1, p2)?
         }
-    }
+
+        #[test]
+        fn prop_translation_translation_inverse_is_original_point(
+            t in super::strategy_translation_any(), 
+            p in super::strategy_point_any()
+        ) {
+            let t: super::Translation3<i32> = t;
+            let p: super::Point3<i32> = p;
+            super::prop_translation_translation_inverse_is_original_point(t, p)?
+        }
     }
 }
 
-exact_composition_props!(translation2_composition_props, Translation2, i32, strategy_translation_any);
-exact_composition_props!(translation3_composition_props, Translation3, i32, strategy_translation_any);
+
+#[cfg(test)]
+mod translation2_i32_composition_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_translation_translation_inverse(t in super::strategy_translation_any()) {
+            let t: super::Translation2<i32> = t;
+            super::prop_translation_translation_inverse(t)?
+        }
+
+        #[test]
+        fn prop_translation_composition_associative(
+            t1 in super::strategy_translation_any(), 
+            t2 in super::strategy_translation_any(), 
+            t3 in super::strategy_translation_any()
+        ) {
+            let t1: super::Translation2<i32> = t1;
+            let t2: super::Translation2<i32> = t2;
+            let t3: super::Translation2<i32> = t3;
+            super::prop_translation_composition_associative(t1, t2, t3)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod translation3_i32_composition_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_translation_translation_inverse(t in super::strategy_translation_any()) {
+            let t: super::Translation3<i32> = t;
+            super::prop_translation_translation_inverse(t)?
+        }
+
+        #[test]
+        fn prop_translation_composition_associative(
+            t1 in super::strategy_translation_any(), 
+            t2 in super::strategy_translation_any(), 
+            t3 in super::strategy_translation_any()
+        ) {
+            let t1: super::Translation3<i32> = t1;
+            let t2: super::Translation3<i32> = t2;
+            let t3: super::Translation3<i32> = t3;
+            super::prop_translation_composition_associative(t1, t2, t3)?
+        }
+    }
+}
 
