@@ -3480,7 +3480,7 @@ mod matrix4x4_tests {
     #[test]
     fn test_from_perspective_fov() {
         let vfov = Degrees(72_f32);
-        let aspect = 800_f32 / 600_f32;
+        let aspect_ratio = 800_f32 / 600_f32;
         let near = 0.1_f32;
         let far = 100_f32;
         let expected = Matrix4x4::new(
@@ -3489,7 +3489,7 @@ mod matrix4x4_tests {
             0_f32,         0_f32,         -1.002002_f32, -1_f32, 
             0_f32,         0_f32,         -0.2002002_f32, 0_f32
         );
-        let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
+        let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
     
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }

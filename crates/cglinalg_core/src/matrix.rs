@@ -5191,7 +5191,37 @@ where
         )
     }
 
-    /// Construct a new three-dimensional orthographic projection matrix.
+    /// Construct a new orthographic projection matrix.
+    /// 
+    /// The `near` and `far` parameters are the absolute values of the positions 
+    /// of the **near plane** and the **far** plane, respectively, along the 
+    /// **negative z-axis**. In particular, the position of the **near plane** is
+    /// `z == -near` and the position of the **far plane** is `z == -far`.
+    /// 
+    /// This function returns a homogeneous matrix representing an orthographic 
+    /// projection transformation with a right-handed coordinate system where the 
+    /// orthographic camera faces the **negative z-axis** with the **positive x-axis** 
+    /// going to the right, and the **positive y-axis** going up. The orthographic view 
+    /// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The 
+    /// normalized device coordinates this transformation maps to are 
+    /// `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// 
+    /// The resulting matrix is identical to the one used by OpenGL. We provide 
+    /// it here for reference
+    /// ```text
+    /// | m[0, 0]  0        0        m[3, 0] |
+    /// | 0        m[1, 1]  0        m[3, 1] |
+    /// | 0        0        m[2, 2]  m[3, 2] |
+    /// | 0        0        0        1       |
+    /// where
+    /// m[0, 0] == 2 / (r - l)
+    /// m[3, 0] == -(r + l) / (r - l)
+    /// m[1, 1] == 2 / (t - b)
+    /// m[3, 1] == -(t + b) / (t - b)
+    /// m[2, 2] == -2 / (f - n)
+    /// m[3, 2] == -(f + n) / (f - n)
+    /// ```
+    /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
     ///
@@ -5243,7 +5273,6 @@ where
         let c3r2 = -(far + near) / (far - near);
         let c3r3 = one;
 
-        // We use the same orthographic projection matrix that OpenGL uses.
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
@@ -5252,8 +5281,38 @@ where
         )
     }
 
-    /// Construct a new three-dimensional perspective projection matrix based
+    /// Construct a new possibly off-center perspective projection matrix based 
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
+    ///
+    /// The `near` and `far` parameters are the absolute values of the positions 
+    /// of the **near plane** and the **far** plane, respectively, along the 
+    /// **negative z-axis**. In particular, the position of the **near plane** is
+    /// `z == -near` and the position of the **far plane** is `z == -far`.
+    /// 
+    /// This function returns a homogeneous matrix representing a perspective 
+    /// projection transformation with a right-handed coordinate system where the 
+    /// perspective camera faces the **negative z-axis** with the **positive x-axis** 
+    /// going to the right, and the **positive y-axis** going up. The perspective view 
+    /// volume is the frustum contained in 
+    /// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device 
+    /// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// 
+    /// The resulting matrix is identical to the one used by OpenGL, provided here for
+    /// reference
+    /// ```text
+    /// | m[0, 0]  0         m[2, 0]  0       |
+    /// | 0        m[1, 1]   m[2, 1]  0       |
+    /// | 0        0         m[2, 2]  m[3, 2] |
+    /// | 0        0        -1        0       |
+    /// where
+    /// m[0, 0] == 2 * n / (r - l)
+    /// m[2, 0] == (r + l) / (r - l)
+    /// m[1, 1] == 2 * n / (t - b)
+    /// m[2, 1] == (t + b) / (t - b)
+    /// m[2, 2] == -(f + n) / (f - n)
+    /// m[3, 2] == - 2 * f * n / (f - n)
+    /// ```
+    /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
     ///
@@ -5305,7 +5364,6 @@ where
         let c3r2 = -(two * far * near) / (far - near);
         let c3r3 = zero;
 
-        // We use the same perspective projection matrix that OpenGL uses.
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
@@ -5316,8 +5374,44 @@ where
 
     /// Construct a perspective projection matrix based on the `near` 
     /// plane, the `far` plane and the vertical field of view angle `vfov` and 
-    /// the horizontal/vertical aspect ratio `aspect`.
+    /// the horizontal/vertical aspect ratio `aspect_ratio`.
     ///
+    /// The `near` and `far` parameters are the absolute values of the positions 
+    /// of the **near plane** and the **far** plane, respectively, along the 
+    /// **negative z-axis**. In particular, the position of the **near plane** is
+    /// `z == -near` and the position of the **far plane** is `z == -far`. The 
+    /// parameter `aspect_ratio` is the ratio of the width of the viewport to the 
+    /// height of the viewport.
+    /// 
+    /// This functions returns a homogeneous matrix representing a perspective 
+    /// projection transformation with a right-handed coordinate system where the 
+    /// perspective camera faces the **negative z-axis** with the **positive x-axis** 
+    /// going to the right, and the **positive y-axis** going up. The perspective view 
+    /// volume is the symmetric frustum contained in 
+    /// `[-right, right] x [-top, top] x [-near, -far]`, where 
+    /// ```text
+    /// tan(vfov / 2) == top / near
+    /// right == aspect_ratio * top == aspect_ratio * n * tan(vfov / 2)
+    /// top == near * tan(vfov / 2)
+    /// ```
+    /// The normalized device coordinates this transformation maps to are 
+    /// `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// 
+    /// The resulting matrix is identical to the one used by OpenGL, provided here for
+    /// reference
+    /// ```text
+    /// | m[0, 0] 0         0        0       |
+    /// | 0       m[1, 1]   0        0       |
+    /// | 0       0         m[2, 2]  m[3, 2] |
+    /// | 0       0        -1        0       |
+    /// where
+    /// m[0, 0] == 1 / (aspect_ratio * tan(vfov / 2))
+    /// m[1, 1] == 1 / tan(vfov / 2)
+    /// m[2, 2] == -(f + n) / (f - n)
+    /// m[3, 2] == -2 * f * n / (f - n)
+    /// ```
+    /// where the matrix entries are indexed in column-major order.
+    /// 
     /// # Example
     ///
     /// ```
@@ -5332,7 +5426,7 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f32);
-    /// let aspect = 800_f32 / 600_f32;
+    /// let aspect_ratio = 800_f32 / 600_f32;
     /// let near = 0.1_f32;
     /// let far = 100_f32;
     /// let expected = Matrix4x4::new(
@@ -5341,19 +5435,19 @@ where
     ///     0_f32,         0_f32,         -1.002002_f32,  -1_f32,
     ///     0_f32,         0_f32,         -0.2002002_f32,  0_f32
     /// );
-    /// let result = Matrix4x4::from_perspective_fov(vfov, aspect, near, far);
+    /// let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-6);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
+    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
         let range = Angle::tan(vfov.into() / two) * near;
 
-        let c0r0 = (two * near) / (range * aspect + range * aspect);
+        let c0r0 = (two * near) / (range * aspect_ratio + range * aspect_ratio);
         let c0r1 = zero;
         let c0r2 = zero;
         let c0r3 = zero;
@@ -5373,7 +5467,6 @@ where
         let c3r2 = -(two * far * near) / (far - near);
         let c3r3 = zero;
         
-        // We use the same perspective projection matrix that OpenGL uses.
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,

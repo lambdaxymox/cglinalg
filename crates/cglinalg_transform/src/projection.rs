@@ -869,21 +869,21 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// 
-    /// assert_relative_eq!(perspective.vfov(),   vfov.into(), epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.aspect(), aspect,      epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.near(),   near,        epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.far(),    far,         epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.vfov(),         vfov.into(),  epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio, epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.near(),         near,         epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.far(),          far,          epsilon = 1e-10);
     /// ```
-    pub fn from_fov<A: Into<Radians<S>>>(vfov: A, aspect: S, near: S, far: S) -> Self {
+    pub fn from_fov<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
         let spec_vfov = vfov.into();
 
         Self {
-            matrix: Matrix4x4::from_perspective_fov(spec_vfov, aspect, near, far),
+            matrix: Matrix4x4::from_perspective_fov(spec_vfov, aspect_ratio, near, far),
         }
     }
 
@@ -903,10 +903,10 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = vfov.into();
     /// let result = perspective.vfov();
     /// 
@@ -962,10 +962,10 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = near;
     /// let result = perspective.near();
     /// 
@@ -1044,10 +1044,10 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = far;
     /// let result = perspective.far();
     /// 
@@ -1126,17 +1126,17 @@ where
     /// # };
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
-    /// let expected = aspect;
-    /// let result = perspective.aspect();
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let expected = aspect_ratio;
+    /// let result = perspective.aspect_ratio();
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn aspect(&self) -> S {
+    pub fn aspect_ratio(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
         // | m[0, 0]  0         0        0       |
@@ -1146,17 +1146,17 @@ where
         // ```
         // where
         // ```text
-        // m[0, 0] := 1 / (aspect * tan(vfov / 2))
+        // m[0, 0] := 1 / (aspect_ratio * tan(vfov / 2))
         // m[1, 1] := 1 / (tan(vfov / 2))
         // m[2, 2] := -(far + near) / (far - near)
         // m[3, 2] := - 2 * far * near / (far - near)
         // ```
-        // We can reconstruct the `aspect` parameter from the `m[0, 0]` and `m[1, 1]`
+        // We can reconstruct the `aspect_ratio` parameter from the `m[0, 0]` and `m[1, 1]`
         // components as follows. Observe that
         // ```text
-        // m[1, 1] / m[0, 0] == (1 / tan(vfov / 2)) / (1 / (aspect * (1 / tan(vfov / 2))))
-        //                   == aspect * ((1 / tan(vfov / 2)) / (1 / tan(vfov / 2))
-        //                   == aspect
+        // m[1, 1] / m[0, 0] == (1 / tan(vfov / 2)) / (1 / (aspect_ratio * (1 / tan(vfov / 2))))
+        //                   == aspect_ratio * ((1 / tan(vfov / 2)) / (1 / tan(vfov / 2))
+        //                   == aspect_ratio
         // ```
         // which is the desired formula.
         self.matrix[1][1] / self.matrix[0][0]
@@ -1181,10 +1181,10 @@ where
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.right();
     /// 
@@ -1216,10 +1216,10 @@ where
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.left();
     /// 
@@ -1249,10 +1249,10 @@ where
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.top();
     /// 
@@ -1284,10 +1284,10 @@ where
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 0.1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.bottom();
     /// 
@@ -1316,11 +1316,11 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
-    /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
     /// let c3r2 = (-2_f64 * far * near) / (far - near);
@@ -1361,10 +1361,10 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
@@ -1403,10 +1403,10 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
@@ -1446,10 +1446,10 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let projected_point = perspective.project_point(&point);
     /// let expected = point;
@@ -1487,7 +1487,7 @@ where
         let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
         let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
-        let right = self.aspect() * top;
+        let right = self.aspect_ratio() * top;
         let left = -right;
 
         let c0r0 = (right - left) / (two * near);
@@ -1532,10 +1532,10 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let projected_vector = perspective.project_vector(&vector);
     /// let expected = vector;
@@ -1573,7 +1573,7 @@ where
         let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
         let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
-        let right = self.aspect() * top;
+        let right = self.aspect_ratio() * top;
         let left = -right;
 
         let c0r0 = (right - left) / (two * near);
@@ -1614,11 +1614,11 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
-    /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
     /// let c3r2 = (-2_f64 * far * near) / (far - near);
@@ -1659,11 +1659,11 @@ where
     /// #
     /// let vfov = Degrees(90_f64);
     /// let tan_half_vfov = (vfov / 2_f64).tan();
-    /// let aspect = 800_f64 / 600_f64;
+    /// let aspect_ratio = 800_f64 / 600_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect, near, far);
-    /// let c0r0 = 1_f64 / (aspect * tan_half_vfov);
+    /// let perspective = PerspectiveFov3::from_fov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
     /// let c1r1 = 1_f64 / (tan_half_vfov);
     /// let c2r2 = -(far + near) / (far - near);
     /// let c3r2 = (-2_f64 * far * near) / (far - near);
