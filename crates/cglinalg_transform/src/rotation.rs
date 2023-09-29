@@ -1187,7 +1187,7 @@ where
 
     /// Compute the axis of the rotation if it exists.
     ///
-    /// If the rotation angle is zero or `pi`, axis returns `None`.
+    /// Returns `None` if the rotation angle is `0` or `pi`.
     ///
     /// # Examples
     ///
@@ -1252,6 +1252,8 @@ where
 
     /// Compute the axis and angle of the rotation.
     ///
+    /// Returns `None` if the rotation angle is `0` or `pi`.
+    /// 
     /// # Example
     ///
     /// ```
