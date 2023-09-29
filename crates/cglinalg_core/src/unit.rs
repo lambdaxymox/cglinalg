@@ -202,3 +202,50 @@ where
     }
 }
 
+impl<T> approx::AbsDiffEq for Unit<T>
+where
+    T: approx::AbsDiffEq
+{
+    type Epsilon = <T as approx::AbsDiffEq>::Epsilon;
+
+    #[inline]
+    fn default_epsilon() -> Self::Epsilon {
+        T::default_epsilon()
+    }
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        T::abs_diff_eq(&self.value, &other.value, epsilon)
+    }
+}
+
+impl<T> approx::RelativeEq for Unit<T>
+where 
+    T: approx::RelativeEq
+{
+    #[inline]
+    fn default_max_relative() -> Self::Epsilon {
+        T::default_max_relative()
+    }
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
+        T::relative_eq(&self.value, &other.value, epsilon, max_relative)
+    }
+}
+
+impl<T> approx::UlpsEq for Unit<T>
+where 
+    T: approx::UlpsEq
+{
+    #[inline]
+    fn default_max_ulps() -> u32 {
+        T::default_max_ulps()
+    }
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
+        T::ulps_eq(&self.value, &other.value, epsilon, max_ulps)
+    }
+}
+

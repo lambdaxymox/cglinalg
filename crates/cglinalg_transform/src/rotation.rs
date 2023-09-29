@@ -829,12 +829,12 @@ where
     S: SimdScalarFloat 
 {
     #[inline]
-    fn default_max_relative() -> S::Epsilon {
+    fn default_max_relative() -> Self::Epsilon {
         S::default_max_relative()
     }
 
     #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
         Matrix::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
     }
 }
@@ -849,8 +849,56 @@ where
     }
 
     #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.rotate_vector(&other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Rotation<S, N> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.rotate_vector(other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Rotation<S, N> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.rotate_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Rotation<S, N> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.rotate_vector(other)
     }
 }
 
@@ -1132,9 +1180,9 @@ where
     #[inline]
     pub fn angle(&self) -> Radians<S> {
         let two = cglinalg_numeric::cast(2);
-        Radians::acos((
-            self.matrix.c0r0 + self.matrix.c1r1 + self.matrix.c2r2 - S::one()) / two
-        )
+        let trace_self = self.matrix.c0r0 + self.matrix.c1r1 + self.matrix.c2r2;
+
+        Radians::acos((trace_self - S::one()) / two)
     }
 
     /// Compute the axis of the rotation if it exists.

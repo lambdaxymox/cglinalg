@@ -582,12 +582,12 @@ where
     type Epsilon = A::Epsilon;
 
     #[inline]
-    fn default_epsilon() -> A::Epsilon {
+    fn default_epsilon() -> Self::Epsilon {
         A::default_epsilon()
     }
 
     #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: A::Epsilon) -> bool {
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         A::abs_diff_eq(&self.x, &other.x, epsilon) && 
         A::abs_diff_eq(&self.y, &other.y, epsilon) && 
         A::abs_diff_eq(&self.z, &other.z, epsilon)
@@ -604,7 +604,7 @@ where
     }
 
     #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: A::Epsilon, max_relative: A::Epsilon) -> bool {
+    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
         A::relative_eq(&self.x, &other.x, epsilon, max_relative) && 
         A::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
         A::relative_eq(&self.z, &other.z, epsilon, max_relative)
@@ -621,7 +621,7 @@ where
     }
 
     #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: A::Epsilon, max_ulps: u32) -> bool {
+    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         A::ulps_eq(&self.x, &other.x, epsilon, max_ulps) && 
         A::ulps_eq(&self.y, &other.y, epsilon, max_ulps) && 
         A::ulps_eq(&self.z, &other.z, epsilon, max_ulps)

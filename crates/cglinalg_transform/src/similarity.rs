@@ -1303,12 +1303,12 @@ where
     S: SimdScalarFloat 
 {
     #[inline]
-    fn default_max_relative() -> S::Epsilon {
+    fn default_max_relative() -> Self::Epsilon {
         S::default_max_relative()
     }
 
     #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
         Isometry::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative) 
             && S::relative_eq(&self.scale, &other.scale, epsilon, max_relative)
     }
@@ -1324,7 +1324,7 @@ where
     }
 
     #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         Isometry::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps) 
             && S::ulps_eq(&self.scale, &other.scale, epsilon, max_ulps)
     }

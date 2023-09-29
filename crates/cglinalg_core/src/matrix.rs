@@ -1567,14 +1567,22 @@ where
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix{}x{} [", R, C).unwrap();
+        
         for c in 0..(C - 1) {
             write!(formatter, "[").unwrap();
             for r in 0..(R - 1) {
                 write!(formatter, "{}, ", self.data[c][r]).unwrap();
             }
-            write!(formatter, "{}]", self.data[c][R - 1]).unwrap();
+            write!(formatter, "{}], ", self.data[c][R - 1]).unwrap();
         }
-        write!(formatter, "{}]", self.data[C - 1][R - 1])
+
+        write!(formatter, "[").unwrap();
+        for r in 0..(R - 1) {
+            write!(formatter, "{}, ", self.data[C - 1][r]).unwrap();
+        }
+        write!(formatter, "{}]", self.data[C - 1][R - 1]).unwrap();
+        
+        write!(formatter, "]")
     }
 }
 
@@ -2946,7 +2954,7 @@ impl<S> Matrix2x2<S>
 where 
     S: SimdScalarFloat
 {
-    /// Construct a rotation matrix in two-dimensions that rotates a vector
+    /// Construct a rotation matrix in two dimensions that rotates a vector
     /// in the **xy-plane** by an angle `angle`.
     ///
     /// # Example
@@ -7198,12 +7206,12 @@ where
     S: SimdScalarFloat
 {
     #[inline]
-    fn default_max_relative() -> S::Epsilon {
+    fn default_max_relative() -> Self::Epsilon {
         S::default_max_relative()
     }
 
     #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: S::Epsilon, max_relative: S::Epsilon) -> bool {
+    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for c in 0..C {
@@ -7226,7 +7234,7 @@ where
     }
 
     #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: S::Epsilon, max_ulps: u32) -> bool {
+    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for c in 0..C {
