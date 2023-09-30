@@ -130,6 +130,12 @@ fn strategy_scale_f64_any<const N: usize>() -> impl Strategy<Value = Scale<f64, 
 }
 
 
+/// The composition of scaling transformations is commutative.
+/// 
+/// Given scales `s1` and `s2`
+/// ```text
+/// s1 * s2 == s2 * s1
+/// ```
 fn prop_scale_composition_commutative<S, const N: usize>(s1: Scale<S, N>, s2: Scale<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
@@ -139,6 +145,12 @@ where
     Ok(())
 }
 
+/// The composition of scaling transformations over exact scalars is associative.
+/// 
+/// Given scales `s1`, `s2`, and `s3`
+/// ```text
+/// (s1 * s2) * s3 == s1 * (s2 * s3)
+/// ```
 fn prop_scale_composition_associative<S, const N: usize>(
     s1: Scale<S, N>,
     s2: Scale<S, N>,
@@ -155,6 +167,12 @@ where
     Ok(())
 }
 
+/// Every scaling transformation commutates with its inverse.
+/// 
+/// Given a scale `s`
+/// ```text
+/// s * inverse(s) == inverse(s) * s == 1
+/// ```
 fn prop_scale_scale_inverse_commutative<S, const N: usize>(s: Scale<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -164,6 +182,12 @@ where
     Ok(())
 }
 
+/// The composition of a scaling transformation with its inverse is the identity.
+/// 
+/// Given a scale `s`
+/// ```text
+/// s * inverse(s) == inverse(s) * s == 1
+/// ```
 fn prop_approx_scale_scale_inverse_identity<S, const N: usize>(s: Scale<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -176,6 +200,12 @@ where
     Ok(())
 }
 
+/// The composition of scaling transformations is commutative pointwise.
+/// 
+/// Given scales `s1` and `s2`, and a point `p`
+/// ```text
+/// (s1 * s2) * p == (s2 * s1) * p
+/// ```
 fn prop_scale_composition_commutative_pointwise_point<S, const N: usize>(
     s1: Scale<S, N>,
     s2: Scale<S, N>,
@@ -192,6 +222,12 @@ where
     Ok(())
 }
 
+/// The composition of scaling transformations is commutative pointwise.
+/// 
+/// Given scales `s1` and `s2`, and a vector `v`
+/// ```text
+/// (s1 * s2) * v == (s2 * s1) * v
+/// ```
 fn prop_scale_composition_commutative_pointwise_vector<S, const N: usize>(
     s1: Scale<S, N>,
     s2: Scale<S, N>,
@@ -208,6 +244,12 @@ where
     Ok(())
 }
 
+/// The composition of scaling transformations is commutative pointwise.
+/// 
+/// Given scales `s1` and `s2`, and a point `p`
+/// ```text
+/// (s1 * s2) * p == (s2 * s1) * p
+/// ```
 fn prop_approx_scale_composition_commutative_pointwise_point<S, const N: usize>(
     s1: Scale<S, N>,
     s2: Scale<S, N>,
@@ -225,6 +267,12 @@ where
     Ok(())
 }
 
+/// The composition of scaling transformations is commutative pointwise.
+/// 
+/// Given scales `s1` and `s2`, and a vector `v`
+/// ```text
+/// (s1 * s2) * v == (s2 * s1) * v
+/// ```
 fn prop_approx_scale_composition_commutative_pointwise_vector<S, const N: usize>(
     s1: Scale<S, N>,
     s2: Scale<S, N>,
@@ -242,6 +290,13 @@ where
     Ok(())
 }
 
+/// The composition of a scaling transformation with its inverse
+/// is the identity.
+/// 
+/// Given a scale `s` and a point `p`
+/// ```text
+/// (s * inverse(s)) * p == (inverse(s) * s) * p == p
+/// ```
 fn prop_approx_scale_scale_inverse_identity_pointwise_point<S, const N: usize>(
     s: Scale<S, N>,
     p: Point<S, N>,
@@ -258,6 +313,13 @@ where
     Ok(())
 }
 
+/// The composition of a scaling transformation with its inverse
+/// is the identity.
+/// 
+/// Given a scale `s` and a vector `v`
+/// ```text
+/// (s * inverse(s)) * v == (inverse(s) * s) * v == v
+/// ```
 fn prop_approx_scale_scale_inverse_identity_pointwise_vector<S, const N: usize>(
     s: Scale<S, N>,
     v: Vector<S, N>,

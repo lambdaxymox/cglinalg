@@ -168,6 +168,13 @@ fn strategy_transform3_i32_any() -> impl Strategy<Value = Transform3<i32>> {
 }
 
 
+/// The composition of homogeneous transformations is associative over exact
+/// scalars.
+/// 
+/// Given transformations `t1`, `t2`, and `t3`
+/// ```text
+/// (t1 * t2) * t3 == t1 * (t2 * t3)
+/// ```
 fn prop_transform_composition_associative<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
     t2: Transform<S, N, NPLUS1>, 
@@ -189,6 +196,12 @@ where
     Ok(())
 }
 
+/// The composition of transformations satisfies the following.
+/// 
+/// Given transformations `t1` and `t2`, and a point `p`
+/// ```text
+/// (t1 * t2) * p == t1 * (t2 * p)
+/// ```
 fn prop_transform_composition_pointwise_point<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
     t2: Transform<S, N, NPLUS1>,
@@ -212,6 +225,12 @@ where
     Ok(())
 }
 
+/// The composition of transformations satisfies the following.
+/// 
+/// Given transformations `t1` and `t2`, and a vector `v`
+/// ```text
+/// (t1 * t2) * v == t1 * (t2 * v)
+/// ```
 fn prop_transform_composition_pointwise_vector<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
     t2: Transform<S, N, NPLUS1>,
