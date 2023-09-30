@@ -778,7 +778,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -790,7 +790,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -802,7 +802,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -814,7 +814,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Point<S, N>;
 
@@ -824,9 +824,57 @@ where
     }
 }
 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Scale<S, N> 
+where 
+    S: SimdScalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Scale<S, N> 
+where 
+    S: SimdScalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Scale<S, N> 
+where 
+    S: SimdScalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Scale<S, N> 
+where 
+    S: SimdScalar
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
 impl<S, const N: usize> ops::Mul<Scale<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Scale<S, N>;
 
@@ -840,7 +888,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Scale<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Scale<S, N>;
 
@@ -854,7 +902,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Scale<S, N>> for &Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Scale<S, N>;
 
@@ -868,7 +916,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Scale<S, N>> for &'b Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalar
 {
     type Output = Scale<S, N>;
 
