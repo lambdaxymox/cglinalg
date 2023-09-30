@@ -182,6 +182,30 @@ mod translation2_i32_point_props {
 }
 
 #[cfg(test)]
+mod translation2_i32_composition_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_translation_translation_inverse(t in super::strategy_translation_any()) {
+            let t: super::Translation2<i32> = t;
+            super::prop_translation_translation_inverse(t)?
+        }
+
+        #[test]
+        fn prop_translation_composition_associative(
+            t1 in super::strategy_translation_any(), 
+            t2 in super::strategy_translation_any(), 
+            t3 in super::strategy_translation_any()
+        ) {
+            let t1: super::Translation2<i32> = t1;
+            let t2: super::Translation2<i32> = t2;
+            let t3: super::Translation2<i32> = t3;
+            super::prop_translation_composition_associative(t1, t2, t3)?
+        }
+    }
+}
+
+#[cfg(test)]
 mod translation3_i32_point_props {
     use proptest::prelude::*;
     proptest! {
@@ -205,31 +229,6 @@ mod translation3_i32_point_props {
             let t: super::Translation3<i32> = t;
             let p: super::Point3<i32> = p;
             super::prop_translation_translation_inverse_is_original_point(t, p)?
-        }
-    }
-}
-
-
-#[cfg(test)]
-mod translation2_i32_composition_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_translation_translation_inverse(t in super::strategy_translation_any()) {
-            let t: super::Translation2<i32> = t;
-            super::prop_translation_translation_inverse(t)?
-        }
-
-        #[test]
-        fn prop_translation_composition_associative(
-            t1 in super::strategy_translation_any(), 
-            t2 in super::strategy_translation_any(), 
-            t3 in super::strategy_translation_any()
-        ) {
-            let t1: super::Translation2<i32> = t1;
-            let t2: super::Translation2<i32> = t2;
-            let t3: super::Translation2<i32> = t3;
-            super::prop_translation_composition_associative(t1, t2, t3)?
         }
     }
 }

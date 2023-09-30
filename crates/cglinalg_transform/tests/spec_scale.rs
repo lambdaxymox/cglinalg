@@ -139,6 +139,22 @@ where
     Ok(())
 }
 
+fn prop_scale_composition_associative<S, const N: usize>(
+    s1: Scale<S, N>,
+    s2: Scale<S, N>,
+    s3: Scale<S, N>
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarSigned
+{
+    let lhs = (s1 * s2) * s3;
+    let rhs = s1 * (s2 * s3);
+
+    prop_assert_eq!(lhs, rhs);
+
+    Ok(())
+}
+
 fn prop_scale_scale_inverse_commutative<S, const N: usize>(s: Scale<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -269,6 +285,18 @@ mod scale2_i32_composition_props {
             let s2: super::Scale2<i32> = s2;
             super::prop_scale_composition_commutative(s1, s2)?
         }
+
+        #[test]
+        fn prop_scale_composition_associative(
+            s1 in super::strategy_scale_i32_any(), 
+            s2 in super::strategy_scale_i32_any(), 
+            s3 in super::strategy_scale_i32_any()
+        ) {
+            let s1: super::Scale2<i32> = s1;
+            let s2: super::Scale2<i32> = s2;
+            let s3: super::Scale2<i32> = s3;
+            super::prop_scale_composition_associative(s1, s2, s3)?
+        }
     }
 }
 
@@ -386,6 +414,18 @@ mod scale3_i32_composition_props {
             let s1: super::Scale3<i32> = s1;
             let s2: super::Scale3<i32> = s2;
             super::prop_scale_composition_commutative(s1, s2)?
+        }
+
+        #[test]
+        fn prop_scale_composition_associative(
+            s1 in super::strategy_scale_i32_any(), 
+            s2 in super::strategy_scale_i32_any(), 
+            s3 in super::strategy_scale_i32_any()
+        ) {
+            let s1: super::Scale3<i32> = s1;
+            let s2: super::Scale3<i32> = s2;
+            let s3: super::Scale3<i32> = s3;
+            super::prop_scale_composition_associative(s1, s2, s3)?
         }
     }
 }
