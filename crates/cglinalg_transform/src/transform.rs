@@ -299,7 +299,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>> + CanContract<Const<NPLUS1>, Const<N>>
@@ -516,7 +516,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Point<S, N>> for Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
@@ -532,7 +532,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> ops::Mul<&Point<S, N>> for Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
@@ -548,7 +548,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Point<S, N>> for &Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
@@ -564,7 +564,7 @@ where
 
 impl<'a, 'b, S, const N: usize, const NPLUS1: usize> ops::Mul<&'a Point<S, N>> for &'b Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
@@ -578,9 +578,73 @@ where
     }
 }
 
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for Transform<S, N, NPLUS1> 
+where 
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<&Vector<S, N>> for Transform<S, N, NPLUS1> 
+where 
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for &Transform<S, N, NPLUS1> 
+where 
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize, const NPLUS1: usize> ops::Mul<&'a Vector<S, N>> for &'b Transform<S, N, NPLUS1> 
+where 
+    S: SimdScalar,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: CanContract<Const<NPLUS1>, Const<N>>,
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
 impl<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize> ops::Mul<Transform<S, N, NPLUS1>> for Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
@@ -599,7 +663,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize> ops::Mul<&Transform<S, N, NPLUS1>> for Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
@@ -618,7 +682,7 @@ where
 
 impl<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize> ops::Mul<Transform<S, N, NPLUS1>> for &Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
@@ -637,7 +701,7 @@ where
 
 impl<'a, 'b, S, const N: usize, const NPLUS1: usize, const NP1NP1: usize> ops::Mul<&'a Transform<S, N, NPLUS1>> for &'b Transform<S, N, NPLUS1> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,

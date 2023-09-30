@@ -182,6 +182,17 @@ mod shear2_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
     }
+
+    #[test]
+    fn test_shear_trace() {
+        let shear_x_with_y = 10_f64;
+        let shear_y_with_x = 5_f64;
+        let shear = Shear2::from_shear(shear_x_with_y, shear_y_with_x);
+        let expected = 2_f64;
+        let result = shear.to_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
 }
 
 #[cfg(test)]
@@ -475,6 +486,28 @@ mod shear3_tests {
         let result = shear.apply_vector(&vector);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10)
+    }
+
+    #[test]
+    fn test_shear_trace() {
+        let shear_x_with_y = 1_f64;
+        let shear_x_with_z = 2_f64;
+        let shear_y_with_x = 3_f64;
+        let shear_y_with_z = 4_f64;
+        let shear_z_with_x = 5_f64;
+        let shear_z_with_y = 6_f64;
+        let shear = Shear3::from_shear(
+            shear_x_with_y, 
+            shear_x_with_z, 
+            shear_y_with_x, 
+            shear_y_with_z, 
+            shear_z_with_x, 
+            shear_z_with_y
+        );
+        let expected = 3_f64;
+        let result = shear.to_matrix().trace();
+
+        assert_eq!(result, expected);
     }
 }
 
