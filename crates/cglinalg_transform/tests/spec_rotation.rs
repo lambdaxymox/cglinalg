@@ -416,18 +416,6 @@ mod rotation2_determinant_props {
 }
 
 #[cfg(test)]
-mod rotation3_determinant_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_approx_rotation3_matrix_determinant_one(r in super::strategy_rotation3_any()) {
-            let r: super::Rotation3<f64> = r;
-            super::prop_approx_rotation3_matrix_determinant_one(r, 1e-10)?
-        }
-    }
-}
-
-#[cfg(test)]
 mod rotation2_invariant_props {
     use proptest::prelude::*;
     proptest! {
@@ -435,19 +423,6 @@ mod rotation2_invariant_props {
         fn prop_approx_rotation_vector_preserves_norm(r in super::strategy_rotation2_any(), v in super::strategy_vector_f64_any()) {
             let r: super::Rotation2<f64> = r;
             let v: super::Vector2<f64> = v;
-            super::prop_approx_rotation_vector_preserves_norm(r, v, 1e-10, 1e-10)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod rotation3_invariant_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_approx_rotation_vector_preserves_norm(r in super::strategy_rotation3_any(), v in super::strategy_vector_f64_any()) {
-            let r: super::Rotation3<f64> = r;
-            let v: super::Vector3<f64> = v;
             super::prop_approx_rotation_vector_preserves_norm(r, v, 1e-10, 1e-10)?
         }
     }
@@ -496,6 +471,43 @@ mod rotation2_composition_props {
 }
 
 #[cfg(test)]
+mod rotation2_constructor_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_rotation2_from_angle_angle(angle in super::strategy_angle_any()) {
+            let angle: super::Radians<f64> = angle;
+            super::prop_approx_rotation2_from_angle_angle(angle, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod rotation3_determinant_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_rotation3_matrix_determinant_one(r in super::strategy_rotation3_any()) {
+            let r: super::Rotation3<f64> = r;
+            super::prop_approx_rotation3_matrix_determinant_one(r, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod rotation3_invariant_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_rotation_vector_preserves_norm(r in super::strategy_rotation3_any(), v in super::strategy_vector_f64_any()) {
+            let r: super::Rotation3<f64> = r;
+            let v: super::Vector3<f64> = v;
+            super::prop_approx_rotation_vector_preserves_norm(r, v, 1e-10, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
 mod rotation3_composition_props {
     use proptest::prelude::*;
     proptest! {
@@ -535,18 +547,6 @@ mod rotation3_composition_props {
             let angle1: super::Radians<f64> = angle1;
             let angle2: super::Radians<f64> = angle2;
             super::prop_approx_rotation3_composition_same_axis_equals_addition_of_angles(axis, angle1, angle2, 1e-10)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod rotation2_constructor_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_approx_rotation2_from_angle_angle(angle in super::strategy_angle_any()) {
-            let angle: super::Radians<f64> = angle;
-            super::prop_approx_rotation2_from_angle_angle(angle, 1e-10)?
         }
     }
 }
