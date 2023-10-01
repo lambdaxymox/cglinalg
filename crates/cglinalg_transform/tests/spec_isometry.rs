@@ -13,14 +13,8 @@ use cglinalg_trigonometry::{
 };
 use cglinalg_core::{
     ShapeConstraint,
-    CanMultiply,
-    CanContract,
-    CanExtend,
     Const,
-    DimAdd,
     DimMul,
-    Matrix3x3,
-    Matrix4x4,
     Point,
     Point2,
     Point3,
