@@ -183,7 +183,7 @@ fn strategy_rotation3_any() -> impl Strategy<Value = Rotation3<f64>> {
     strategy_rotation3_from_range(min_angle, max_angle)
 }
 
-fn strategy_angle_any() -> impl Strategy<Value = Radians<f64>> {
+fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
     let min_value = 0_f64;
     let max_value = 50_f64 * f64::two_pi();
 
@@ -331,7 +331,7 @@ where
 /// In two dimensions, the composition of rotations is the same as 
 /// one rotation with the angles added up.
 /// 
-/// Given a rotation R that rotates the **xy-plane**, and angles `angle1` and `angle2`
+/// Given a rotation `R` that rotates the **xy-plane**, and angles `angle1` and `angle2`
 /// ```text
 /// R(angle1) * R(angle2) == R(angle1 + angle2)
 /// ```
@@ -357,7 +357,7 @@ where
 /// In three dimensions, the composition of rotations about the same axis is the 
 /// same as one rotation about the same axis with the angles added up.
 /// 
-/// Given a rotation R that rotates the plane perpendicular to the unit vector `axis`, and 
+/// Given a rotation `R` that rotates the plane perpendicular to the unit vector `axis`, and 
 /// angles `angle1` and `angle2`
 /// ```text
 /// R(axis, angle1) * R(axis, angle2) == R(axis, angle1 + angle2)
@@ -460,8 +460,8 @@ mod rotation2_composition_props {
 
         #[test]
         fn prop_approx_rotation2_composition_same_axis_equals_addition_of_angles(
-            angle1 in super::strategy_angle_any(),
-            angle2 in super::strategy_angle_any(),
+            angle1 in super::strategy_angle_f64_any(),
+            angle2 in super::strategy_angle_f64_any(),
         ) {
             let angle1: super::Radians<f64> = angle1;
             let angle2: super::Radians<f64> = angle2;
@@ -475,7 +475,7 @@ mod rotation2_constructor_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_approx_rotation2_from_angle_angle(angle in super::strategy_angle_any()) {
+        fn prop_approx_rotation2_from_angle_angle(angle in super::strategy_angle_f64_any()) {
             let angle: super::Radians<f64> = angle;
             super::prop_approx_rotation2_from_angle_angle(angle, 1e-10)?
         }
@@ -540,8 +540,8 @@ mod rotation3_composition_props {
         #[test]
         fn prop_approx_rotation3_composition_same_axis_equals_addition_of_angles(
             axis in super::strategy_unit_vector_f64_any(),
-            angle1 in super::strategy_angle_any(),
-            angle2 in super::strategy_angle_any(),
+            angle1 in super::strategy_angle_f64_any(),
+            angle2 in super::strategy_angle_f64_any(),
         ) {
             let axis: super::Unit<super::Vector3<f64>> = axis;
             let angle1: super::Radians<f64> = angle1;
