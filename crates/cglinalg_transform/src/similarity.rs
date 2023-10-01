@@ -1378,6 +1378,54 @@ where
     }
 }
 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Similarity<S, N> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Similarity<S, N> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Similarity<S, N> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Similarity<S, N> 
+where 
+    S: SimdScalarFloat 
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Similarity<S, N> 
 where 
     S: SimdScalarFloat,
