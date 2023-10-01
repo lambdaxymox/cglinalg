@@ -217,6 +217,22 @@ mod reflection2_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
+
+    /// Test the reflection through the line `y = (1/2)*x + 1.
+    #[rustfmt::skip]
+    #[test]
+    fn test_reflection_arbitrary_line_matrix_determinant() {
+        let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+            -1_f64 / 2_f64, 
+            1_f64
+        ));
+        let bias = Point2::new(0_f64, 1_f64);
+        let reflection = Reflection2::from_normal_bias(&normal, &bias);
+        let expected = -1_f64;
+        let result = reflection.to_affine_matrix().determinant();
+    
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
 }
 
 #[cfg(test)]
@@ -510,6 +526,23 @@ mod reflection3_tests {
         let result = reflection.apply_vector(&vector);
         
         assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    /// Test the reflection through the plane `y = (1/2)*x + 1.
+    #[rustfmt::skip]
+    #[test]
+    fn test_reflection_arbitrary_plane_matrix_determinant() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(
+            -1_f64 / 2_f64, 
+             1_f64,
+             0_f64
+        ));
+        let bias = Point3::new(0_f64, 1_f64, 0_f64);
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let expected = -1_f64;
+        let result = reflection.to_affine_matrix().determinant();
+    
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 

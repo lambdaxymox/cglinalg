@@ -429,6 +429,56 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
+    /// Compute the inversse of a reflection.
+    /// 
+    /// The inverse of a reflection transformation is the reflection transformation
+    /// itself. That is, given a reflection `r`
+    /// ```text
+    /// inverse(r) == r
+    /// ```
+    /// 
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// #
+    /// let reflection = Reflection2::identity();
+    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let reflection_inv = reflection.inverse();
+    /// let expected = vector;
+    /// let result = reflection_inv * (reflection * vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3, 
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// #
+    /// let reflection = Reflection3::identity();
+    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let reflection_inv = reflection.inverse();
+    /// let expected = vector;
+    /// let result = reflection_inv * (reflection * vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        *self
+    }
+
     /// Compute the identity reflection. 
     ///
     /// The identity reflection is a reflection that does not move a point 
@@ -477,6 +527,8 @@ where
             matrix: Matrix::identity(),
         }
     }
+
+
 
     /// Convert a reflection to an affine matrix.
     /// 
@@ -777,6 +829,66 @@ where
     #[inline]
     fn mul(self, other: &'a Point<S, N>) -> Self::Output {
         self.apply_point(other)
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for Reflection<S, N, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<&Vector<S, N>> for Reflection<S, N, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
+    }
+}
+
+impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: Vector<S, N>) -> Self::Output {
+        self.apply_vector(&other)
+    }
+}
+
+impl<'a, 'b, S, const N: usize, const NPLUS1: usize> ops::Mul<&'a Vector<S, N>> for &'b Reflection<S, N, NPLUS1> 
+where 
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    type Output = Vector<S, N>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector<S, N>) -> Self::Output {
+        self.apply_vector(other)
     }
 }
 
