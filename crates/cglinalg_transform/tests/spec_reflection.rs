@@ -228,6 +228,31 @@ where
     Ok(())
 }
 
+/// Reflections preserve vector norms, i.e. every reflection is an isometry.
+/// 
+/// Given a reflection `r` and a vector `v`
+/// ```text
+/// norm(r * v) == norm(v)
+/// ```
+fn prop_approx_reflection_preserves_norm<S, const N: usize, const NPLUS1: usize>(
+    r: Reflection<S, N, NPLUS1>,
+    v: Vector<S, N>,
+    tolerance: S
+) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+{
+    let lhs = (r * v).norm();
+    let rhs = v.norm();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
 /// Every reflection is its own inverse, i.e. reflecting a point twice with
 /// the same reflection matrix yields the original point.
 /// 
@@ -282,13 +307,23 @@ where
 
 
 #[cfg(test)]
-mod reflection2_determinant_props {
+mod reflection2_invariant_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
         fn prop_approx_reflection2_determinant_minus_one(r in super::strategy_reflection2_f64_any()) {
             let r: super::Reflection2<f64> = r;
             super::prop_approx_reflection2_determinant_minus_one(r, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_reflection_preserves_norm(
+            r in super::strategy_reflection2_f64_any(),
+            v in super::strategy_vector_f64_any()
+        ) {
+            let r: super::Reflection2<f64> = r;
+            let v: super::Vector2<f64> = v;
+            super::prop_approx_reflection_preserves_norm(r, v, 1e-8)?
         }
     }
 }
@@ -320,13 +355,23 @@ mod reflection2_composition_props {
 }
 
 #[cfg(test)]
-mod reflection3_determinant_props {
+mod reflection3_invariant_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
         fn prop_approx_reflection3_determinant_minus_one(r in super::strategy_reflection3_f64_any()) {
             let r: super::Reflection3<f64> = r;
             super::prop_approx_reflection3_determinant_minus_one(r, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_reflection_preserves_norm(
+            r in super::strategy_reflection3_f64_any(),
+            v in super::strategy_vector_f64_any()
+        ) {
+            let r: super::Reflection3<f64> = r;
+            let v: super::Vector3<f64> = v;
+            super::prop_approx_reflection_preserves_norm(r, v, 1e-8)?
         }
     }
 }

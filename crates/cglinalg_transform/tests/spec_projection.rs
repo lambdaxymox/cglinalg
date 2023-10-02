@@ -414,6 +414,14 @@ where
 }
 
 
+/// The perspective projection matrix maps every point on the near plane
+/// to a `z` position of `-1` in normalized device coordinates.
+/// 
+/// Given a perspective projection `m` and a point `p` on the **xy-plane**
+/// at `-near`
+/// ```text
+/// (m * p).z == -1
+/// ```
 fn prop_approx_perspective_projection_near_plane_point<S>(
     m: PerspectiveFov3<S>, 
     p: Point2<S>,
@@ -431,6 +439,14 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix maps every vector on the near plane
+/// to a `z` position of `-1` in normalized device coordinates.
+/// 
+/// Given a perspective projection `m` and a vector `v` on the **xy-plane**
+/// at `-near`
+/// ```text
+/// (m * v).z == -1
+/// ```
 fn prop_approx_perspective_projection_near_plane_vector<S>(
     m: PerspectiveFov3<S>, 
     v: Vector2<S>,
@@ -448,6 +464,14 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix maps every point on the far plane
+/// to a `z` position of `1` in normalized device coordinates.
+/// 
+/// Given a perspective projection `m` and a point `p` on the **xy-plane**
+/// at `-far`
+/// ```text
+/// (m * p).z == 1
+/// ```
 fn prop_approx_perspective_projection_far_plane_point<S>(
     m: PerspectiveFov3<S>, 
     p: Point2<S>,
@@ -465,6 +489,14 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix maps every vector on the far plane
+/// to a `z` position of `1` in normalized device coordinates.
+/// 
+/// Given a perspective projection `m` and a vector `v` on the **xy-plane**
+/// at `-far`
+/// ```text
+/// (m * v).z == 1
+/// ```
 fn prop_approx_perspective_projection_far_plane_vector<S>(
     m: PerspectiveFov3<S>, 
     v: Vector2<S>,
@@ -482,6 +514,13 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix preserves depth ordering of points.
+/// 
+/// Given a perspective projection `m` and points `p1`, `p2` such that
+/// `p1.z < p2.z` inside the viewing frustum
+/// ```text
+/// (m * p1).z < (m * p2).z
+/// ```
 fn prop_perspective_projection_preserves_z_depth_ordering_point<S>(
     m: PerspectiveFov3<S>,
     l: PointLine<S>,
@@ -508,6 +547,13 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix preserves depth ordering of vectors.
+/// 
+/// Given a perspective projection `m` and vectors `v1`, `v2` such that
+/// `v1.z < v2.z` inside the viewing frustum
+/// ```text
+/// (m * v1).z < (m * v2).z
+/// ```
 fn prop_perspective_projection_preserves_z_depth_ordering_vector<S>(
     m: PerspectiveFov3<S>,
     l: VectorLine<S>,
@@ -534,6 +580,8 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix maps lines through the origin in eye 
+/// space to lines parallel to the **z-axis** in normalized device coordinates.
 fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_point<S>(
     m: PerspectiveFov3<S>, 
     l: PointLine<S>,
@@ -554,6 +602,8 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix maps lines through the origin in eye 
+/// space to lines parallel to the **z-axis** in normalized device coordinates.
 fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_vector<S>(
     m: PerspectiveFov3<S>, 
     l: VectorLine<S>,
