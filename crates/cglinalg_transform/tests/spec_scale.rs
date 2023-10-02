@@ -1,6 +1,7 @@
 extern crate cglinalg_numeric;
 extern crate cglinalg_core;
 extern crate cglinalg_transform;
+extern crate approx;
 extern crate proptest;
 
 

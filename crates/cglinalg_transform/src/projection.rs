@@ -826,6 +826,53 @@ where
     }
 }
 
+impl<S> ops::Mul<Vector3<S>> for Perspective3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<S> ops::Mul<&Vector3<S>> for Perspective3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &Vector3<S>) -> Self::Output {
+        self.project_vector(other)
+    }
+}
+
+impl<S> ops::Mul<Vector3<S>> for &Perspective3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Perspective3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector3<S>) -> Self::Output {
+        self.project_vector(other)
+    }
+}
 
 
 /// A perspective projection transformation for converting from camera space to
@@ -1849,6 +1896,53 @@ where
     }
 }
 
+impl<S> ops::Mul<Vector3<S>> for PerspectiveFov3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<S> ops::Mul<&Vector3<S>> for PerspectiveFov3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &Vector3<S>) -> Self::Output {
+        self.project_vector(other)
+    }
+}
+
+impl<S> ops::Mul<Vector3<S>> for &PerspectiveFov3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b PerspectiveFov3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector3<S>) -> Self::Output {
+        self.project_vector(other)
+    }
+}
 
 
 /// An orthographic projection with arbitrary `left`, `right`, 
@@ -2578,6 +2672,54 @@ where
     #[inline]
     fn mul(self, other: &'a Point3<S>) -> Self::Output {
         self.project_point(other)
+    }
+}
+
+impl<S> ops::Mul<Vector3<S>> for Orthographic3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<S> ops::Mul<&Vector3<S>> for Orthographic3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &Vector3<S>) -> Self::Output {
+        self.project_vector(other)
+    }
+}
+
+impl<S> ops::Mul<Vector3<S>> for &Orthographic3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: Vector3<S>) -> Self::Output {
+        self.project_vector(&other)
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Orthographic3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Vector3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Vector3<S>) -> Self::Output {
+        self.project_vector(other)
     }
 }
 
