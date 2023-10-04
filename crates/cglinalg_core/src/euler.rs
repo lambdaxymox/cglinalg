@@ -525,12 +525,11 @@ where
     /// Extract Euler angles from a rotation matrix, in units of radians.
     ///
     /// We explain the method because the formulas are not exactly obvious. 
-    /// The method is based on the method derived by Ken Shoemake in [1].
     ///
     /// ## The Setup For Extracting Euler Angles
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
-    /// of three axial rotations: one for each axis in thee dimensions (x, y, z).
+    /// of three axial rotations: one for each axis in three dimensions `(x, y, z)`.
     /// The rotation matrix described by Euler angles can be decomposed into a 
     /// product of rotation matrices about each axis: let `R_x(roll)`, 
     /// `R_y(yaw)`, and `R_z(pitch)` denote the rotations about the 
@@ -573,101 +572,84 @@ where
     /// 
     /// ## The Method For Extracting Euler Angles
     ///
-    /// We can now extract Euler angles from the matrix. Consider the 
-    /// entries `m[2, 1]` and `m[2, 2]`. If we negate `m[2, 1]` and divide 
-    /// by `m[2, 2]` we obtain
+    /// We can now extract Euler angles from the matrix. From the entry `m[2, 0]` we
+    /// immediately notice that
     /// ```text
-    ///     -m[2, 1]        -(-cos(yaw) * sin(roll))        cos(yaw) * sin(roll)  
-    ///   ------------ == ---------------------------- == ------------------------ 
-    ///      m[2, 2]          cos(yaw) * cos(roll)          cos(yaw) * cos(roll)   
+    /// sin(yaw) == m[2, 0]
+    /// ```
+    /// which immediately implies that
+    /// ```text
+    /// yaw == asin(m[2, 0])
+    /// ```
+    /// There are two situations to consider: when `cos(yaw) != 0` and when
+    /// `cos(yaw) == 0`.
+    /// 
+    /// ### Cos(yaw) != 0
+    /// 
+    /// When `cos(yaw) != 0`, the entries `m[2, 1]` and `m[2, 2]` are positive multiples
+    /// of `cos(yaw)`, so we can use them to compute the `roll` angle. If we negate
+    /// the entry `m[2, 1]` and divide by the entry `m[2, 2]` we obtain
+    /// ```text
+    ///   -m[2, 1]        -(-cos(yaw) * sin(roll))        cos(yaw) * sin(roll)  
+    /// ------------ == ---------------------------- == ------------------------ 
+    ///    m[2, 2]          cos(yaw) * cos(roll)          cos(yaw) * cos(roll)   
     ///
-    ///                     sin(roll)
-    ///                == ------------- =: tan(roll)
-    ///                     cos(roll)
+    ///                   sin(roll)
+    ///              == ------------- =: tan(roll)
+    ///                   cos(roll)
     /// ```
     /// We now derive the formula for the `roll` angle
     /// ```text
     /// roll == atan2(-m[2, 1], m[2, 2])
     /// ```
-    /// To derive the formula for the `yaw` angle, observe the entries `m[0, 0]` 
-    /// and `m[1, 0]` from the matrix.
+    /// To derive the formula for the `pitch` angle, we make use of the entries `m[1, 0]`
+    /// and `m[0, 0]`. If we negate the entry `m[1, 0]` and divide by the entry 
+    /// `m[0, 0]`, we obtain
     /// ```text
-    /// m[0, 0]^2 + m[1, 0]^2 == [cos(yaw) * cos(pitch)]^2 + [cos(yaw) * sin(pitch)]^2
-    ///                       == cos(yaw)^2  * cos(pitch)^2 + cos(yaw)^2 * sin(pitch)^2
-    ///                       == cos(yaw)^2 * [cos(pitch)^2 + sin(pitch)^2]
-    ///                       == cos(yaw)^2
+    ///   -m[1, 0]        -(-cos(yaw) * sin(pitch))        cos(yaw) * sin(pitch)
+    /// ------------ == ----------------------------- == -------------------------
+    ///    m[0, 0]          cos(yaw) * cos(pitch)          cos(yaw) * cos(pitch)
+    /// 
+    ///                   sin(pitch)
+    ///              == -------------- =: tan(pitch)
+    ///                   cos(pitch)
+    /// ```
+    /// We now derive the formula for the `pitch` angle
+    /// ```text
+    /// pitch == atan2(-m[1, 0], m[0, 0])
+    /// ```
+    /// 
+    /// ### Cos(yaw) == 0
+    /// 
+    /// When `cos(yaw) == 0`, the entries `m[2, 1]` and `m[2, 2]` cannot be used since 
+    /// they are both zero. In this case, the `pitch` and `roll` angles are not unique:
+    /// multiple Euler rotations can produce the same axis and angle. By convention, we 
+    /// choose 
+    /// ```text
+    /// pitch == 0
     /// ``` 
-    /// which implies that
+    /// and then we can make use of the remaining entries in the matrix to compute 
+    /// the `roll` angle. When `pitch == 0` and `cos(yaw) == 0`, the entries `m[1, 1]` 
+    /// and `m[1, 2]` take the form
     /// ```text
-    /// cos(yaw) == sqrt(m[0, 0] * m[0, 0] + m[1, 0] * m[1, 0])
+    /// m[1, 1] == cos(roll)
+    /// m[1, 2] == sin(roll)
     /// ```
-    /// Also note that we get the sine of the `yaw` angle directly from the 
-    /// `m[2, 0]` entry
+    /// so that
     /// ```text
-    /// sin(yaw) == m[2, 0]
+    ///   m[1, 2]        sin(roll)
+    /// ----------- == ------------- =: tan(roll)
+    ///   m[1, 1]        cos(roll)
     /// ```
-    /// and the ratio of these gives us
+    /// and we obtain the formula for the `roll` angle
     /// ```text
-    ///               sin(yaw)                        m[2, 0]
-    /// tan(yaw) == ------------ == -----------------------------------------------
-    ///               cos(yaw)        sqrt(m[0, 0] * m[0, 0] + m[1, 0] * m[1, 0])
+    /// roll = atan2(m[1, 2], m[1, 1])
     /// ```
-    /// which yield the formula for the `yaw` angle. 
-    /// ```text
-    /// yaw == atan2(m[2, 0], sqrt(m[0, 0] * m[0, 0] + m[1, 0] * m[1, 0]))
-    /// ```
-    /// To extract the `pitch` angle
-    /// consider the lower left 2x2 square of the matrix. We have the following equations
-    /// ```text
-    /// m[0, 1] := cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
-    /// m[0, 2] := sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
-    /// m[1, 1] := cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
-    /// m[1, 2] := cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
-    /// ```
-    /// Define the following values
-    /// ```text
-    /// s1 := sin(roll)
-    /// c1 := cos(roll)
-    /// c2 := cos(yaw)
-    /// ```
-    /// which are all values we can obtain immediately since we can calculate both the
-    /// `roll` and the `yaw` angles. Let's multiply entry entry `m[0, 1]` by `c1`, 
-    /// entry `m[0, 2]` by `s1`, entry `m[1, 1]` by `c1`, and entry `m[1, 2]` by `s1`. 
-    //// We obtain the relations
-    /// ```text
-    /// c1 * m[0, 1] == c1 * c1 * sin(pitch) - s1 * c1 * m[2, 0] * cos(pitch)
-    /// s1 * m[0, 2] == s1 * s1 * sin(pitch) + s1 * c1 * m[2, 0] * cos(pitch)
-    /// c1 * m[1, 1] == c1 * c1 * cos(pitch) - c1 * s1 * m[2, 0] * sin(pitch) 
-    /// s1 * m[1, 2] == s1 * s1 * cos(pitch) + c1 * s1 * m[2, 0] * sin(pitch)
-    /// ```
-    /// Adding the first two equations together and the last two equations together,
-    /// respectively, reduces to the following relations
-    /// ```text
-    /// sin(pitch) == s1 * m[0, 2] + c1 * m[0, 1]
-    /// cos(pitch) == c1 * m[1, 1] + s1 * m[1, 2]
-    /// ```
-    /// and we obtain a relation for the `pitch` angle
-    /// ```text
-    ///                 sin(pitch)        s1 * m[0, 2] + c1 * m[0, 1]
-    /// tan(pitch) == -------------- == -------------------------------
-    ///                 cos(pitch)        c1 * m[1, 1] + s1 * m[1, 2]
-    /// ```
-    /// and the formula for the pitch angle
-    /// ```text
-    /// y := sin(roll) * m[0, 2] + cos(roll) * m[0, 1]
-    /// x := cos(roll) * m[1, 1] + sin(roll) * m[1, 2]
-    /// pitch == atan2(y, x)
-    /// ```
-    /// this gives us the Euler angles for the rotation matrix.
+    /// This gives us the Euler angles for the rotation matrix.
     /// 
     /// ### Note
     /// The method here is just one method of extracting Euler angles. More than one 
     /// set of Euler angles can generate the same axis and rotation.
-    /// 
-    /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. 
-    ///     The Graphics Gems Series, Vol. 4. Academic Press. DOI:10.5555/180895. 
-    ///     pp. 222-229_
-    /// 
     /// 
     /// # Example
     /// 
@@ -716,17 +698,21 @@ where
     /// ```
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
-        let x = Radians::atan2(-matrix.c2r1, matrix.c2r2);
-        let cos_y = S::sqrt(matrix.c0r0 * matrix.c0r0 + matrix.c1r0 * matrix.c1r0);
-        let y = Radians::atan2(matrix.c2r0, cos_y);
-        let sin_x = Radians::sin(x);
-        let cos_roll_zx = Radians::cos(x);
+        let yaw = Radians::asin(matrix[2][0]);
+        let cos_yaw = Radians::cos(yaw);
+        let (pitch, roll) = if cos_yaw.abs().is_zero() {
+            let _pitch = Radians::zero();
+            let _roll = Radians::atan2(matrix[1][2], matrix[1][1]);
 
-        let numerator = sin_x * matrix.c0r2 + cos_roll_zx * matrix.c0r1;
-        let denominator = cos_roll_zx * matrix.c1r1 + sin_x * matrix.c1r2;
-        let z = Radians::atan2(numerator, denominator);
+            (_pitch, _roll)
+        } else {
+            let _pitch = Radians::atan2(-matrix[1][0], matrix[0][0]);
+            let _roll = Radians::atan2(-matrix[2][1], matrix[2][2]);
+            
+            (_pitch, _roll)
+        };
 
-        EulerAngles::new(x, y, z)
+        EulerAngles::new(roll, yaw, pitch)
     }
 }
 
