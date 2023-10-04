@@ -751,3 +751,87 @@ mod rotation3_tests {
     }
 }
 
+
+#[cfg(test)]
+mod rotation3_euler_angle_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
+    use cglinalg_core::{
+        EulerAngles,
+    };
+    use cglinalg_transform::{
+        Rotation3,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
+    #[test]
+    fn test_euler_angles_from_matrix_roll_yz() {
+        let roll_yz: Radians<f64> = Radians::full_turn_div_6();
+        let yaw_zx: Radians<f64> = Radians::zero();
+        let pitch_xy: Radians<f64> = Radians::zero();
+        let rotation = Rotation3::from_angle_x(roll_yz);
+        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let result = rotation.euler_angles();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_euler_angles_from_matrix_yaw_zx() {
+        let roll_yz: Radians<f64> = Radians::zero();
+        let yaw_zx: Radians<f64> = Radians::full_turn_div_6();
+        let pitch_xy: Radians<f64> = Radians::zero();
+        let rotation = Rotation3::from_angle_y(yaw_zx);
+        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let result = rotation.euler_angles();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_euler_angles_from_matrix_pitch_xy() {
+        let roll_yz: Radians<f64> = Radians::zero();
+        let yaw_zx: Radians<f64> = Radians::zero();
+        let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
+        let rotation = Rotation3::from_angle_z(pitch_xy);
+        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let result = rotation.euler_angles();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_euler_angles_from_matrix_rotation_matrix1() {
+        let roll_yz: Radians<f64> = Radians::full_turn_div_2();
+        let yaw_zx: Radians<f64> = Radians::full_turn_div_8();
+        let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
+        let rotation_yz = Rotation3::from_angle_x(roll_yz);
+        let rotation_zx = Rotation3::from_angle_y(yaw_zx);
+        let rotation_xy = Rotation3::from_angle_z(pitch_xy);
+        let rotation = rotation_yz * rotation_zx * rotation_xy;
+        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let result = rotation.euler_angles();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_euler_angles_from_matrix_rotation_matrix2() {
+        let roll_yz: Radians<f64> = Radians::full_turn_div_2();
+        let yaw_zx: Radians<f64> = Radians::full_turn_div_4();
+        let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
+        let rotation_yz = Rotation3::from_angle_x(roll_yz);
+        let rotation_zx = Rotation3::from_angle_y(yaw_zx);
+        let rotation_xy = Rotation3::from_angle_z(pitch_xy);
+        let rotation = rotation_yz * rotation_zx * rotation_xy;
+        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let result = rotation.euler_angles();
+
+        assert_eq!(result, expected);
+    }
+}

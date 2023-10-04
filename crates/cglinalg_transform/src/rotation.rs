@@ -21,6 +21,7 @@ use cglinalg_core::{
     Vector3,
     Quaternion,
     Unit,
+    EulerAngles,
 };
 use crate::transform::{
     Transform,
@@ -1859,6 +1860,275 @@ where
     pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
         Quaternion::rotation_between_axis(v1, v2).map(|q| q.into())
     }
+
+    /// Construct a rotation matrix from a set of Euler angles.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     EulerAngles,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let euler_angles = {
+    ///     let roll = Radians(f64::consts::FRAC_PI_6);
+    ///     let yaw = Radians(f64::consts::FRAC_PI_4);
+    ///     let pitch = Radians(f64::consts::FRAC_PI_3);
+    /// 
+    ///     EulerAngles::new(roll, yaw, pitch)
+    /// };
+    /// let expected = {
+    ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
+    ///     let frac_1_2 = 1_f64 / 2_f64;
+    ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
+    /// 
+    ///     Matrix3x3::new(
+    ///          frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
+    ///         
+    ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          
+    ///          frac_1_sqrt_2,
+    ///         -frac_1_2 * frac_1_sqrt_2,
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2
+    ///     )
+    /// };
+    /// let rotation = Rotation3::from_euler_angles(&euler_angles);
+    /// let result = rotation.to_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self 
+    where
+        A: Angle + Into<Radians<S>>
+    {
+        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+            euler_angles.x.into(),
+            euler_angles.y.into(),
+            euler_angles.z.into()
+        );
+
+        Self {
+            matrix: euler_radians.to_matrix(),
+        }
+    }
+
+    /// Extract Euler angles from a rotation matrix, in units of radians.
+    ///
+    /// We explain the method because the formulas are not exactly obvious. 
+    ///
+    /// ## The Setup For Extracting Euler Angles
+    ///
+    /// A set of Euler angles describes an arbitrary rotation as a sequence
+    /// of three axial rotations: one for each axis in three dimensions `(x, y, z)`.
+    /// The rotation matrix described by Euler angles can be decomposed into a 
+    /// product of rotation matrices about each axis: let `R_x(roll)`, 
+    /// `R_y(yaw)`, and `R_z(pitch)` denote the rotations about the 
+    /// **x-axis**, **y-axis**, and **z-axis**, respectively. The Euler rotation
+    /// is decomposed as follows
+    /// ```text
+    /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
+    /// ```
+    /// The corresponding rotation matrices are
+    /// ```text
+    ///               | 1   0            0         |
+    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
+    ///               | 0   sin(rol)     cos(roll) |
+    /// 
+    ///               |  cos(yaw)   0   sin(yaw) |
+    /// R_y(yaw)   := |  0          1   0        |
+    ///               | -sin(yaw)   0   cos(yaw) |
+    ///
+    ///               | cos(pitch)   -sin(pitch)   0 |
+    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
+    ///               | 0             0            1 |
+    /// ```
+    /// Multiplying out the axial rotations yields the following rotation matrix.
+    /// ```text
+    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
+    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
+    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    /// where (indexing from zero in column-major order `m[column, row]`)
+    /// m[0, 0] :=  cos(yaw) * cos(pitch)
+    /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
+    /// m[0, 2] :=  sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
+    /// m[1, 0] := -cos(yaw) * cos(pitch)
+    /// m[1, 1] :=  cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
+    /// m[1, 2] :=  cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
+    /// m[2, 0] :=  sin(yaw)
+    /// m[2, 1] := -cos(yaw) * sin(roll)
+    /// m[2, 2] :=  cos(yaw) * cos(roll)
+    /// ```
+    /// from which the angles can be extracted.
+    /// 
+    /// ## The Method For Extracting Euler Angles
+    ///
+    /// We can now extract Euler angles from the matrix. From the entry `m[2, 0]` we
+    /// immediately notice that
+    /// ```text
+    /// sin(yaw) == m[2, 0]
+    /// ```
+    /// which immediately implies that
+    /// ```text
+    /// yaw == asin(m[2, 0])
+    /// ```
+    /// There are two situations to consider: when `cos(yaw) != 0` and when
+    /// `cos(yaw) == 0`.
+    /// 
+    /// ### Cos(yaw) != 0
+    /// 
+    /// When `cos(yaw) != 0`, the entries `m[2, 1]` and `m[2, 2]` are positive multiples
+    /// of `cos(yaw)`, so we can use them to compute the `roll` angle. If we negate
+    /// the entry `m[2, 1]` and divide by the entry `m[2, 2]` we obtain
+    /// ```text
+    ///   -m[2, 1]        -(-cos(yaw) * sin(roll))        cos(yaw) * sin(roll)  
+    /// ------------ == ---------------------------- == ------------------------ 
+    ///    m[2, 2]          cos(yaw) * cos(roll)          cos(yaw) * cos(roll)   
+    ///
+    ///                   sin(roll)
+    ///              == ------------- =: tan(roll)
+    ///                   cos(roll)
+    /// ```
+    /// We now derive the formula for the `roll` angle
+    /// ```text
+    /// roll == atan2(-m[2, 1], m[2, 2])
+    /// ```
+    /// To derive the formula for the `pitch` angle, we make use of the entries `m[1, 0]`
+    /// and `m[0, 0]`. If we negate the entry `m[1, 0]` and divide by the entry 
+    /// `m[0, 0]`, we obtain
+    /// ```text
+    ///   -m[1, 0]        -(-cos(yaw) * sin(pitch))        cos(yaw) * sin(pitch)
+    /// ------------ == ----------------------------- == -------------------------
+    ///    m[0, 0]          cos(yaw) * cos(pitch)          cos(yaw) * cos(pitch)
+    /// 
+    ///                   sin(pitch)
+    ///              == -------------- =: tan(pitch)
+    ///                   cos(pitch)
+    /// ```
+    /// We now derive the formula for the `pitch` angle
+    /// ```text
+    /// pitch == atan2(-m[1, 0], m[0, 0])
+    /// ```
+    /// 
+    /// ### Cos(yaw) == 0
+    /// 
+    /// When `cos(yaw) == 0`, the entries `m[2, 1]` and `m[2, 2]` cannot be used since 
+    /// they are both zero. In this case, the `pitch` and `roll` angles are not unique:
+    /// multiple Euler rotations can produce the same axis and angle. By convention, we 
+    /// choose 
+    /// ```text
+    /// pitch == 0
+    /// ``` 
+    /// and then we can make use of the remaining entries in the matrix to compute 
+    /// the `roll` angle. When `pitch == 0` and `cos(yaw) == 0`, the entries `m[1, 1]` 
+    /// and `m[1, 2]` take the form
+    /// ```text
+    /// m[1, 1] == cos(roll)
+    /// m[1, 2] == sin(roll)
+    /// ```
+    /// so that
+    /// ```text
+    ///   m[1, 2]        sin(roll)
+    /// ----------- == ------------- =: tan(roll)
+    ///   m[1, 1]        cos(roll)
+    /// ```
+    /// and we obtain the formula for the `roll` angle
+    /// ```text
+    /// roll = atan2(m[1, 2], m[1, 1])
+    /// ```
+    /// This gives us the Euler angles for the rotation matrix.
+    /// 
+    /// ### Note
+    /// The method here is just one method of extracting Euler angles. More than one 
+    /// set of Euler angles can generate the same axis and rotation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Rotation3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// #     Matrix3x3,
+    /// # }; 
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// # let matrix = {
+    /// #     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
+    /// #     let frac_1_2 = 1_f64 / 2_f64;
+    /// #     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
+    /// # 
+    /// #     Matrix3x3::new(
+    /// #          frac_1_sqrt_2 * frac_1_2, 
+    /// #          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    /// #          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
+    /// #        
+    /// #         -frac_1_sqrt_2 * frac_sqrt_3_2,
+    /// #          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    /// #          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    /// #         
+    /// #          frac_1_sqrt_2,
+    /// #         -frac_1_2 * frac_1_sqrt_2,
+    /// #          frac_sqrt_3_2 * frac_1_sqrt_2,
+    /// #     )
+    /// # };
+    /// # 
+    /// let expected = {
+    ///     let roll = Radians(f64::consts::FRAC_PI_6);
+    ///     let yaw = Radians(f64::consts::FRAC_PI_4);
+    ///     let pitch = Radians(f64::consts::FRAC_PI_3);
+    ///     
+    ///     EulerAngles::new(roll, yaw, pitch)
+    /// };
+    /// let rotation = Rotation3::from_euler_angles(&expected);
+    /// #
+    /// # // Internal test for checking the integrity of the doctest.
+    /// # assert_relative_eq!(rotation.to_matrix(), matrix, epsilon = 1e-10);
+    /// #
+    /// let result = rotation.euler_angles();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn euler_angles(&self) -> EulerAngles<Radians<S>> {
+        let yaw = Radians::asin(self.matrix[2][0]);
+        let cos_yaw = Radians::cos(yaw);
+        let (pitch, roll) = if cos_yaw.abs().is_zero() {
+            let _pitch = Radians::zero();
+            let _roll = Radians::atan2(self.matrix[1][2], self.matrix[1][1]);
+
+            (_pitch, _roll)
+        } else {
+            let _pitch = Radians::atan2(-self.matrix[1][0], self.matrix[0][0]);
+            let _roll = Radians::atan2(-self.matrix[2][1], self.matrix[2][2]);
+            
+            (_pitch, _roll)
+        };
+
+        EulerAngles::new(roll, yaw, pitch)
+    }
 }
 
 impl<S> From<Quaternion<S>> for Rotation3<S> 
@@ -1868,6 +2138,16 @@ where
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Rotation3<S> {
         Rotation3::from_quaternion(&quaternion)
+    }
+}
+
+impl<S> From<&Quaternion<S>> for Rotation3<S> 
+where 
+    S: SimdScalarFloat 
+{
+    #[inline]
+    fn from(quaternion: &Quaternion<S>) -> Rotation3<S> {
+        Rotation3::from_quaternion(quaternion)
     }
 }
 
@@ -1883,6 +2163,43 @@ where
             rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2
         );
         Quaternion::from(&matrix)
+    }
+}
+
+impl<S> From<&Rotation3<S>> for Quaternion<S> 
+where 
+    S: SimdScalarFloat 
+{
+    #[inline]
+    fn from(rotation: &Rotation3<S>) -> Quaternion<S> {
+        let matrix = Matrix3x3::new(
+            rotation.matrix.c0r0, rotation.matrix.c0r1, rotation.matrix.c0r2,
+            rotation.matrix.c1r0, rotation.matrix.c1r1, rotation.matrix.c1r2,
+            rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2
+        );
+        Quaternion::from(&matrix)
+    }
+}
+
+impl<S, A> From<EulerAngles<A>> for Rotation3<S>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S> + Into<Radians<S>>
+{
+    #[inline]
+    fn from(euler_angles: EulerAngles<A>) -> Rotation3<S> {
+        Rotation3::from_euler_angles(&euler_angles)
+    }
+}
+
+impl<S, A> From<&EulerAngles<A>> for Rotation3<S>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S> + Into<Radians<S>>
+{
+    #[inline]
+    fn from(euler_angles: &EulerAngles<A>) -> Rotation3<S> {
+        Rotation3::from_euler_angles(euler_angles)
     }
 }
 
