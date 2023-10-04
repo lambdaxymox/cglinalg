@@ -1,0 +1,155 @@
+extern crate cglinalg_numeric;
+extern crate cglinalg_core;
+extern crate proptest;
+
+
+use cglinalg_numeric::{
+    SimdScalarFloat,
+};
+use cglinalg_core::{
+    EulerAngles,
+};
+use cglinalg_trigonometry::{
+    Radians,
+    Angle,
+};
+use approx::{
+    relative_eq,
+};
+
+use proptest::prelude::*;
+
+
+fn strategy_euler_angles_radians_from_range<S>(
+    min_roll: S, 
+    max_roll: S, 
+    min_yaw: S, 
+    max_yaw: S, 
+    min_pitch: S, 
+    max_pitch: S
+) -> impl Strategy<Value = EulerAngles<Radians<S>>>
+where
+    S: SimdScalarFloat + Arbitrary
+{
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarFloat
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<(S, S, S)>().prop_map(move |(_roll, _yaw, _pitch)| {
+        let roll = Radians(rescale(_roll, min_roll, max_roll));
+        let yaw = Radians(rescale(_yaw, min_yaw, max_yaw));
+        let pitch = Radians(rescale(_pitch, min_pitch, max_pitch));
+
+        EulerAngles::new(roll, yaw, pitch)
+    })
+}
+
+fn strategy_euler_angles_radians_f64_any() -> impl Strategy<Value = EulerAngles<Radians<f64>>> {
+    let min_roll = -f64::pi();
+    let max_roll = f64::pi();
+    let min_yaw = -f64::frac_pi_2();
+    let max_yaw = f64::frac_pi_2();
+    let min_pitch = -f64::pi();
+    let max_pitch = f64::pi();
+    
+    strategy_euler_angles_radians_from_range(min_roll, max_roll, min_yaw, max_yaw, min_pitch, max_pitch)
+}
+
+fn prop_approx_euler_matrix_inverse_equals_transpose<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
+{
+    let matrix = euler_angles.to_matrix();
+    let lhs = matrix.inverse().unwrap();
+    let rhs = matrix.transpose();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_approx_euler_affine_matrix_inverse_equals_transpose<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
+{
+    let matrix = euler_angles.to_affine_matrix();
+    let lhs = matrix.inverse().unwrap();
+    let rhs = matrix.transpose();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_approx_euler_matrix_determinant_equals_one<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
+{
+    let matrix = euler_angles.to_matrix();
+    let lhs = matrix.determinant();
+    let rhs = S::one();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+fn prop_approx_euler_affine_matrix_determinant_equals_one<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
+{
+    let matrix = euler_angles.to_affine_matrix();
+    let lhs = matrix.determinant();
+    let rhs = S::one();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+
+    Ok(())
+}
+
+
+#[cfg(test)]
+mod euler_angles_f64_tests {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_approx_euler_matrix_inverse_equals_transpose(
+            euler_angles in super::strategy_euler_angles_radians_f64_any()
+        ) {
+            let euler_angles: super::EulerAngles<super::Radians<f64>> = euler_angles;
+            super::prop_approx_euler_matrix_inverse_equals_transpose(euler_angles, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_euler_affine_matrix_inverse_equals_transpose(
+            euler_angles in super::strategy_euler_angles_radians_f64_any()
+        ) {
+            let euler_angles: super::EulerAngles<super::Radians<f64>> = euler_angles;
+            super::prop_approx_euler_affine_matrix_inverse_equals_transpose(euler_angles, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_euler_matrix_determinant_equals_one(
+            euler_angles in super::strategy_euler_angles_radians_f64_any()
+        ) {
+            let euler_angles: super::EulerAngles<super::Radians<f64>> = euler_angles;
+            super::prop_approx_euler_matrix_determinant_equals_one(euler_angles, 1e-10)?
+        }
+
+        #[test]
+        fn prop_approx_euler_affine_matrix_determinant_equals_one(
+            euler_angles in super::strategy_euler_angles_radians_f64_any()
+        ) {
+            let euler_angles: super::EulerAngles<super::Radians<f64>> = euler_angles;
+            super::prop_approx_euler_affine_matrix_determinant_equals_one(euler_angles, 1e-10)?
+        }
+    }
+}
+

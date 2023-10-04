@@ -204,9 +204,10 @@ impl<A> EulerAngles<A> {
     }
 }
 
-impl<S> EulerAngles<Radians<S>> 
+impl<S, A> EulerAngles<A> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
 {
     /// Construct a zero element of the set of Euler angles.
     ///
@@ -231,7 +232,7 @@ where
     /// ```
     #[inline]
     pub fn zero() -> Self {
-        EulerAngles::new(Radians::zero(), Radians::zero(), Radians::zero())
+        EulerAngles::new(A::zero(), A::zero(), A::zero())
     }
     
     /// Test whether an Euler angle is self.
@@ -355,9 +356,9 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix(&self) -> Matrix3x3<S> {
-        let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
-        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
-        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.z);
+        let (sin_roll, cos_roll) = self.x.sin_cos();
+        let (sin_yaw, cos_yaw) = self.y.sin_cos();
+        let (sin_pitch, cos_pitch) = self.z.sin_cos();
         
         let c0r0 =  cos_yaw * cos_pitch;
         let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
@@ -486,9 +487,9 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
-        let (sin_roll, cos_roll) = Radians::sin_cos(self.x);
-        let (sin_yaw, cos_yaw) = Radians::sin_cos(self.y);
-        let (sin_pitch, cos_pitch) = Radians::sin_cos(self.z);
+        let (sin_roll, cos_roll) = self.x.sin_cos();
+        let (sin_yaw, cos_yaw) = self.y.sin_cos();
+        let (sin_pitch, cos_pitch) = self.z.sin_cos();
         let zero = S::zero();
         let one = S::one();
 
@@ -553,73 +554,53 @@ where
     }
 }
 
-impl<A, S> From<EulerAngles<A>> for Matrix3x3<S> 
+impl<S, A> From<EulerAngles<A>> for Matrix3x3<S> 
 where 
-    A: Angle + Into<Radians<S>>,
     S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
-            euler.x.into(),
-            euler.y.into(),
-            euler.z.into(),
-        );
-        euler_radians.to_matrix()
+        euler.to_matrix()
     }
 }
 
-impl<A, S> From<&EulerAngles<A>> for Matrix3x3<S> 
+impl<S, A> From<&EulerAngles<A>> for Matrix3x3<S> 
 where 
-    A: Angle + Into<Radians<S>>,
     S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
 {
     #[inline]
     fn from(euler: &EulerAngles<A>) -> Matrix3x3<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
-            euler.x.into(),
-            euler.y.into(),
-            euler.z.into(),
-        );
-        euler_radians.to_matrix()
+        euler.to_matrix()
     }
 }
 
 impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> 
 where 
-    A: Angle + Into<Radians<S>>,
     S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
-            euler.x.into(),
-            euler.y.into(),
-            euler.z.into(),
-        );
-        euler_radians.to_affine_matrix()
+        euler.to_affine_matrix()
     }
 }
 
 impl<A, S> From<&EulerAngles<A>> for Matrix4x4<S> 
 where 
-    A: Angle + Into<Radians<S>>,
     S: SimdScalarFloat,
+    A: Angle<Dimensionless = S>
 {
     #[inline]
     fn from(euler: &EulerAngles<A>) -> Matrix4x4<S> {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
-            euler.x.into(),
-            euler.y.into(),
-            euler.z.into(),
-        );
-        euler_radians.to_affine_matrix()
+        euler.to_affine_matrix()
     }
 }
 
 impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> EulerAngles<Radians<S>> {
@@ -630,7 +611,7 @@ where
 
 impl<S> From<&Quaternion<S>> for EulerAngles<Radians<S>> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> EulerAngles<Radians<S>> {

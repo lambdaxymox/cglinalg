@@ -50,6 +50,22 @@ where
     /// ```
     fn zero() -> Self;
 
+    /// Determine whether a typed angle is zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// assert!(Radians(0_f64).is_zero());
+    /// assert!(Degrees(0_f64).is_zero());
+    /// ```
+    fn is_zero(self) -> bool;
+
     /// The value of a full rotation around the unit circle.
     /// 
     /// # Example
@@ -1534,6 +1550,11 @@ where
     }
 
     #[inline]
+    fn is_zero(self) -> bool {
+        self.0.is_zero()
+    }
+
+    #[inline]
     fn full_turn() -> Self {
         Self(cglinalg_numeric::cast(2_f64 * f64::consts::PI))
     }
@@ -1583,6 +1604,11 @@ where
     #[inline]
     fn zero() -> Self {
         Degrees(S::zero())
+    }
+
+    #[inline]
+    fn is_zero(self) -> bool {
+        self.0.is_zero()
     }
 
     #[inline]
