@@ -173,3 +173,4 @@ fn test_euler_angles_to_matrix_rotation_matrix2() {
 
     assert_eq!(result, expected);
 }
+
