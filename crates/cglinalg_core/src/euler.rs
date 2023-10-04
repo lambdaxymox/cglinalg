@@ -19,7 +19,7 @@ use core::fmt;
 /// A data type storing a set of Euler angles for representing a rotation about
 /// an arbitrary axis in three dimensions.
 ///
-/// The rotations are defined in the ZYX rotation order. That is, the Euler 
+/// The rotations are defined in the **ZYX** rotation order. That is, the Euler 
 /// rotation applies a rotation to the **z-axis**, followed by the **y-axis**, and 
 /// lastly the **x-axis**. The ranges of each axis are 
 /// ```text
@@ -27,7 +27,9 @@ use core::fmt;
 /// y in [-pi/2, pi/2]
 /// z in [-pi, pi]
 /// ```
-/// where each interval includes its endpoints.
+/// where each interval includes its endpoints. There is no one correct way to 
+/// apply Euler angles, but the ZYX rotation order is one of the most commonly
+/// use rotation orders used in computer graphics.
 ///
 /// ## Note
 /// 
@@ -133,7 +135,7 @@ use core::fmt;
 /// # use approx::{
 /// #    assert_ulps_eq,
 /// # };
-///
+/// #
 /// // Gimbal lock the x-axis.
 /// let roll = Degrees(45_f64);
 /// let yaw = Degrees(90_f64);
@@ -175,6 +177,27 @@ pub struct EulerAngles<A> {
 
 impl<A> EulerAngles<A> {
     /// Construct a new set of Euler angles.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let euler_angles = EulerAngles::new(
+    ///     Radians(1_f64), 
+    ///     Radians(2_f64), 
+    ///     Radians(3_f64)
+    /// );
+    /// 
+    /// assert_eq!(euler_angles.x, Radians(1_f64));
+    /// assert_eq!(euler_angles.y, Radians(2_f64));
+    /// assert_eq!(euler_angles.z, Radians(3_f64));
+    /// ```
     #[inline]
     pub const fn new(x: A, y: A, z: A) -> Self {
         Self { x, y, z }
@@ -188,12 +211,53 @@ where
     /// Construct a zero element of the set of Euler angles.
     ///
     /// The zero element is the element where each Euler angle is zero.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
+    /// 
+    /// assert!(euler_angles.is_zero());
+    /// assert!(euler_angles.x.is_zero());
+    /// assert!(euler_angles.y.is_zero());
+    /// assert!(euler_angles.z.is_zero());
+    /// ```
     #[inline]
     pub fn zero() -> Self {
         EulerAngles::new(Radians::zero(), Radians::zero(), Radians::zero())
     }
     
     /// Test whether an Euler angle is self.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// #
+    /// let euler_angles = EulerAngles::new(
+    ///     Radians(0.1_f64), 
+    ///     Radians(0.2_f64), 
+    ///     Radians(0.3_f64)
+    /// );
+    /// 
+    /// assert!(!euler_angles.is_zero());
+    /// 
+    /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
+    /// 
+    /// assert!(euler_angles.is_zero());
+    /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.x.is_zero() && self.y.is_zero() && self.z.is_zero()
@@ -243,6 +307,52 @@ where
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
     /// This yields the entries in the rotation matrix.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// #     Matrix3x3,
+    /// # }; 
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let euler_angles = {
+    ///     let roll = Radians(f64::consts::FRAC_PI_6);
+    ///     let yaw = Radians(f64::consts::FRAC_PI_4);
+    ///     let pitch = Radians(f64::consts::FRAC_PI_3);
+    /// 
+    ///     EulerAngles::new(roll, yaw, pitch)
+    /// };
+    /// let expected = {
+    ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
+    ///     let frac_1_2 = 1_f64 / 2_f64;
+    ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
+    /// 
+    ///     Matrix3x3::new(
+    ///          frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
+    ///         
+    ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          
+    ///          frac_1_sqrt_2,
+    ///         -frac_1_2 * frac_1_sqrt_2,
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2
+    ///     )
+    /// };
+    /// let result = euler_angles.to_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn to_matrix(&self) -> Matrix3x3<S> {
@@ -321,6 +431,60 @@ where
     ///                        | 0         0         0         1 |
     /// ```
     /// as desired.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// #     Matrix4x4,
+    /// # }; 
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let euler_angles = { 
+    ///     let roll = Radians(f64::consts::FRAC_PI_6);
+    ///     let yaw = Radians(f64::consts::FRAC_PI_4);
+    ///     let pitch = Radians(f64::consts::FRAC_PI_3);
+    /// 
+    ///     EulerAngles::new(roll, yaw, pitch)
+    /// };
+    /// let expected = {
+    ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
+    ///     let frac_1_2 = 1_f64 / 2_f64;
+    ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
+    /// 
+    ///     Matrix4x4::new(
+    ///          frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
+    ///          0_f64,
+    ///         
+    ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          0_f64,
+    ///          
+    ///          frac_1_sqrt_2,
+    ///         -frac_1_2 * frac_1_sqrt_2,
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2,
+    ///          0_f64,
+    /// 
+    ///          0_f64,
+    ///          0_f64,
+    ///          0_f64,
+    ///          1_f64
+    ///     )
+    /// };
+    /// let result = euler_angles.to_affine_matrix();
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
@@ -455,10 +619,10 @@ where
     /// To extract the `pitch` angle
     /// consider the lower left 2x2 square of the matrix. We have the following equations
     /// ```text
-    /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
-    /// m[0, 2] :=  sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
-    /// m[1, 1] :=  cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
-    /// m[1, 2] :=  cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
+    /// m[0, 1] := cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
+    /// m[0, 2] := sin(pitch) * sin(roll) - cos(pitch) * cos(roll) * sin(yaw)
+    /// m[1, 1] := cos(pitch) * cos(roll) - sin(yaw) * sin(pitch) * sin(roll)
+    /// m[1, 2] := cos(pitch) * sin(roll) + cos(roll) * sin(yaw) * sin(pitch)
     /// ```
     /// Define the following values
     /// ```text
@@ -503,6 +667,53 @@ where
     /// [1] _Paul S. Heckbert (Ed.). 1994. Graphics Gems IV. 
     ///     The Graphics Gems Series, Vol. 4. Academic Press. DOI:10.5555/180895. 
     ///     pp. 222-229_
+    /// 
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     EulerAngles,
+    /// #     Matrix3x3,
+    /// # }; 
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let matrix = {
+    ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
+    ///     let frac_1_2 = 1_f64 / 2_f64;
+    ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
+    /// 
+    ///     Matrix3x3::new(
+    ///          frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
+    ///         
+    ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
+    ///          
+    ///          frac_1_sqrt_2,
+    ///         -frac_1_2 * frac_1_sqrt_2,
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2,
+    ///     )
+    /// };
+    /// let expected = {
+    ///     let roll = Radians(f64::consts::FRAC_PI_6);
+    ///     let yaw = Radians(f64::consts::FRAC_PI_4);
+    ///     let pitch = Radians(f64::consts::FRAC_PI_3);
+    ///     
+    ///     EulerAngles::new(roll, yaw, pitch)
+    /// };
+    /// let result = EulerAngles::from_matrix(&matrix);
+    /// 
+    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// ```
     #[inline]
     pub fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
         let x = Radians::atan2(-matrix.c2r1, matrix.c2r2);
