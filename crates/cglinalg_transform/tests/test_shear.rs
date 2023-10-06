@@ -17,8 +17,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_x_point() {
-        let shear_x_with_y = 2_f64;
-        let shear = Shear2::from_shear_x(shear_x_with_y);
+        let shear_factor = 2_f64;
+        let shear = Shear2::from_shear_x(shear_factor);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(5_f64, 2_f64);
         let result = shear.apply_point(&point);
@@ -28,8 +28,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_x_vector() {
-        let shear_x_with_y = 2_f64;
-        let shear = Shear2::from_shear_x(shear_x_with_y);
+        let shear_factor = 2_f64;
+        let shear = Shear2::from_shear_x(shear_factor);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(5_f64, 2_f64);
         let result = shear.apply_vector(&vector);
@@ -39,8 +39,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_y_point() {
-        let shear_y_with_x = 5_f64;
-        let shear = Shear2::from_shear_y(shear_y_with_x);
+        let shear_factor = 5_f64;
+        let shear = Shear2::from_shear_y(shear_factor);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(1_f64, 7_f64);
         let result = shear.apply_point(&point);
@@ -50,8 +50,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_y_vector() {
-        let shear_y_with_x = 5_f64;
-        let shear = Shear2::from_shear_y(shear_y_with_x);
+        let shear_factor = 5_f64;
+        let shear = Shear2::from_shear_y(shear_factor);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(1_f64, 7_f64);
         let result = shear.apply_vector(&vector);
@@ -85,8 +85,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_x_inverse_point() {
-        let shear_x_with_y = 2_f64;
-        let shear = Shear2::from_shear_x(shear_x_with_y);
+        let shear_factor = 2_f64;
+        let shear = Shear2::from_shear_x(shear_factor);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(-3_f64, 2_f64);
         let result = shear.inverse_apply_point(&point);
@@ -96,8 +96,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_x_inverse_vector() {
-        let shear_x_with_y = 2_f64;
-        let shear = Shear2::from_shear_x(shear_x_with_y);
+        let shear_factor = 2_f64;
+        let shear = Shear2::from_shear_x(shear_factor);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(-3_f64, 2_f64);
         let result = shear.inverse_apply_vector(&vector);
@@ -107,8 +107,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_y_inverse_point() {
-        let shear_y_with_x = 5_f64;
-        let shear = Shear2::from_shear_y(shear_y_with_x);
+        let shear_factor = 5_f64;
+        let shear = Shear2::from_shear_y(shear_factor);
         let point = Point2::new(1_f64, 2_f64);
         let expected = Point2::new(1_f64, -3_f64);
         let result = shear.inverse_apply_point(&point);
@@ -118,8 +118,8 @@ mod shear2_tests {
 
     #[test]
     fn test_from_shear_y_inverse_vector() {
-        let shear_y_with_x = 5_f64;
-        let shear = Shear2::from_shear_y(shear_y_with_x);
+        let shear_factor = 5_f64;
+        let shear = Shear2::from_shear_y(shear_factor);
         let vector = Vector2::new(1_f64, 2_f64);
         let expected = Vector2::new(1_f64, -3_f64);
         let result = shear.inverse_apply_vector(&vector);

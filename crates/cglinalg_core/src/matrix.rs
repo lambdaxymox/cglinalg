@@ -2771,9 +2771,9 @@ impl<S> Matrix2x2<S>
 where 
     S: SimdScalar 
 {
-    /// Construct a shearing matrix along the x-axis, holding the **y-axis** constant.
+    /// Construct a shearing matrix along the **x-axis**, holding the **y-axis** constant.
     ///
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
+    /// The parameter `shear_factor` denotes the factor scaling the
     /// contribution of the **y-axis** to shearing along the **x-axis**.
     ///
     /// # Example
@@ -2784,26 +2784,26 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let shear_x_with_y = 3_u32;
-    /// let matrix = Matrix2x2::from_shear_x(shear_x_with_y);
-    /// let vector = Vector2::new(1, 1);
-    /// let expected = Vector2::new(1 + 3*1, 1);
+    /// let shear_factor = 3_i32;
+    /// let matrix = Matrix2x2::from_shear_x(shear_factor);
+    /// let vector = Vector2::new(1_i32, 1_i32);
+    /// let expected = Vector2::new(1_i32 + 3_i32 * 1_i32, 1_i32);
     /// let result = matrix * vector;
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S) -> Self {
+    pub fn from_shear_x(shear_factor: S) -> Self {
         Self::new(
-            S::one(),       S::zero(),
-            shear_x_with_y, S::one(),
+            S::one(),     S::zero(),
+            shear_factor, S::one(),
         )
     }
 
-    /// Construct a shearing matrix along the y-axis, holding the **x-axis** constant.
+    /// Construct a shearing matrix along the **y-axis**, holding the **x-axis** constant.
     ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
+    /// The parameter `shear_factor denotes the factor scaling the
     /// contribution of the **x-axis** to shearing along the **y-axis**.
     ///
     /// # Example
@@ -2814,23 +2814,28 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let shear_y_with_x = 3_u32;
-    /// let matrix = Matrix2x2::from_shear_y(shear_y_with_x);
-    /// let vector = Vector2::new(1, 1);
-    /// let expected = Vector2::new(1, 1 + 3*1);
+    /// let shear_factor = 3_i32;
+    /// let matrix = Matrix2x2::from_shear_y(shear_factor);
+    /// let vector = Vector2::new(1_i32, 1_i32);
+    /// let expected = Vector2::new(1_i32, 1_i32 + 3_i32 * 1_i32);
     /// let result = matrix * vector;
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S) -> Self {
+    pub fn from_shear_y(shear_factor: S) -> Self {
         Self::new(
-            S::one(),  shear_y_with_x,
+            S::one(),  shear_factor,
             S::zero(), S::one(),
         )
     }
-    
+}
+
+impl<S> Matrix2x2<S> 
+where 
+    S: SimdScalarFloat
+{
     /// Construct a general shearing matrix in two dimensions. There are two 
     /// possible parameters describing a shearing transformation in two 
     /// dimensions.
@@ -2842,29 +2847,124 @@ where
     ///
     /// # Example 
     /// 
+    /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the 
+    /// line `y == (1 / 2) * x`.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2, 
     /// #     Vector2,
+    /// #     Unit,
     /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Radians,
+    /// #     Angle,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
-    /// let shear_x_with_y = 15_u32;
-    /// let shear_y_with_x = 4_u32;
-    /// let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
-    /// let vector = Vector2::new(1, 1);
-    /// let expected = Vector2::new(1 + 15*1, 1 + 4*1);
-    /// let result = matrix * vector;
-    ///
-    /// assert_eq!(result, expected);
+    /// # #[derive(Copy, Clone, Debug, PartialEq)]
+    /// struct Quad2 {
+    ///     vertices: [Vector2<f64>; 4],
+    /// }
+    /// 
+    /// #
+    /// # impl Quad2 {
+    /// #     #[inline]
+    /// #     const fn new(
+    /// #         vertex_0: Vector2<f64>, 
+    /// #         vertex_1: Vector2<f64>, 
+    /// #         vertex_2: Vector2<f64>, 
+    /// #         vertex_3: Vector2<f64>
+    /// #     ) -> Self {
+    /// #         Self {
+    /// #             vertices: [vertex_0, vertex_1, vertex_2, vertex_3],
+    /// #         }
+    /// #     }
+    /// # }
+    /// #
+    /// let shear_factor = 3_f64;
+    /// let shear_direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+    /// let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+    /// let matrix = Matrix2x2::from_shear(shear_factor, &shear_direction, &normal);
+    /// #
+    /// # let rotation_angle = Radians(f64::atan2(1_f64, 2_f64));
+    /// # assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+    /// # assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+    /// #
+    /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x`.
+    /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x`.
+    /// let rotated_square = Quad2::new(
+    ///     Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64)),
+    ///     Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64)),
+    ///     Vector2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64)),
+    ///     Vector2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64)),
+    /// );
+    /// #
+    /// # let square = Quad2::new(
+    /// #     Vector2::new( 1_f64,  1_f64),
+    /// #     Vector2::new(-1_f64,  1_f64),
+    /// #     Vector2::new(-1_f64, -1_f64),
+    /// #     Vector2::new( 1_f64, -1_f64),
+    /// # );
+    /// # let rotation = Matrix2x2::from_angle(rotation_angle);
+    /// # let result_square = Quad2::new(
+    /// #     rotation * square.vertices[0],
+    /// #     rotation * square.vertices[1],
+    /// #     rotation * square.vertices[2],
+    /// #     rotation * square.vertices[3],
+    /// # );
+    /// #
+    /// # assert_relative_eq!(result_square.vertices[0], rotated_square.vertices[0], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_square.vertices[1], rotated_square.vertices[1], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_square.vertices[2], rotated_square.vertices[2], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_square.vertices[3], rotated_square.vertices[3], epsilon = 1e-10);
+    /// #
+    /// let expected = {
+    ///     let vertex_0 = Vector2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+    ///     );
+    ///     let vertex_1 = Vector2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+    ///     );
+    ///     let vertex_2 = Vector2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+    ///     );
+    ///     let vertex_3 = Vector2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+    ///     );
+    /// 
+    ///     Quad2::new(vertex_0, vertex_1, vertex_2, vertex_3)
+    /// };
+    /// let result = Quad2::new(
+    ///     matrix * rotated_square.vertices[0],
+    ///     matrix * rotated_square.vertices[1],
+    ///     matrix * rotated_square.vertices[2],
+    ///     matrix * rotated_square.vertices[3],
+    /// );
+    /// 
+    /// assert_relative_eq!(result.vertices[0], expected.vertices[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result.vertices[1], expected.vertices[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result.vertices[2], expected.vertices[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result.vertices[3], expected.vertices[3], epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear(shear_x_with_y: S, shear_y_with_x: S) -> Self {
+    pub fn from_shear(shear_factor: S, direction: &Unit<Vector2<S>>, normal: &Unit<Vector2<S>>) -> Self {
         let one = S::one();
+        let c0r0 = one + shear_factor * normal[0] * direction[0];
+        let c0r1 = shear_factor * normal[0] * direction[1];
+        let c1r0 = shear_factor * normal[1] * direction[0];
+        let c1r1 = one + shear_factor * normal[1] * direction[1];
 
         Self::new(
-            one,            shear_y_with_x,
-            shear_x_with_y, one
+            c0r0, c0r1,
+            c1r0, c1r1
         )
     }
 }

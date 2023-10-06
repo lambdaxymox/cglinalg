@@ -730,9 +730,9 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_from_shear_x() {
-        let shear_x_with_y = 5_i32;
-        let matrix = Matrix2x2::from_shear_x(shear_x_with_y);
-        let expected = Vector2::new(1_i32 + shear_x_with_y, 1_i32);
+        let shear_factor = 5_i32;
+        let matrix = Matrix2x2::from_shear_x(shear_factor);
+        let expected = Vector2::new(1_i32 + shear_factor, 1_i32);
         let result = matrix * Vector2::new(1_i32, 1_i32);
 
         assert_eq!(result, expected);
@@ -740,21 +740,152 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_from_shear_y() {
-        let shear_y_with_x = 5_i32;
-        let matrix = Matrix2x2::from_shear_y(shear_y_with_x);
-        let expected = Vector2::new(1_i32, 1_i32 + shear_y_with_x);
+        let shear_factor = 5_i32;
+        let matrix = Matrix2x2::from_shear_y(shear_factor);
+        let expected = Vector2::new(1_i32, 1_i32 + shear_factor);
         let result = matrix * Vector2::new(1_i32, 1_i32);
 
         assert_eq!(result, expected);
     }
 
+    /// Shearing about the line `y == (1 / 2) * x`.
     #[test]
-    fn test_from_shear() {
-        let shear_x_with_y = 5_i32;
-        let shear_y_with_x = 7_i32;
-        let matrix = Matrix2x2::from_shear(shear_x_with_y, shear_y_with_x);
-        let expected = Vector2::new(1_i32 + shear_x_with_y, 1_i32 + shear_y_with_x);
-        let result = matrix * Vector2::new(1_i32, 1_i32);
+    fn test_from_shear1() {
+        let shear_factor = 5_f64;
+        let shear_direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+        let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+        let matrix = Matrix2x2::from_shear(shear_factor, &shear_direction, &normal);
+
+        let vector_0 = Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64));
+        let vector_1 = Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64));
+        let vector_2 = Vector2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64));
+        let vector_3 = Vector2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64));
+
+        let rotation_angle = Radians(f64::atan2(1_f64, 2_f64));
+        
+        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        
+        let rotation = Matrix2x2::from_angle(rotation_angle);
+        let vector_parallel_to_x_axis_0 = Vector2::new( 1_f64,  1_f64);
+        let vector_parallel_to_x_axis_1 = Vector2::new(-1_f64,  1_f64);
+        let vector_parallel_to_x_axis_2 = Vector2::new(-1_f64, -1_f64);
+        let vector_parallel_to_x_axis_3 = Vector2::new( 1_f64, -1_f64);
+        let rotated_vector_0 = rotation * vector_parallel_to_x_axis_0;
+        let rotated_vector_1 = rotation * vector_parallel_to_x_axis_1;
+        let rotated_vector_2 = rotation * vector_parallel_to_x_axis_2;
+        let rotated_vector_3 = rotation * vector_parallel_to_x_axis_3;
+
+        assert_relative_eq!(rotated_vector_0, vector_0, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_1, vector_1, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_2, vector_2, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_3, vector_3, epsilon = 1e-10);
+
+        let expected_0 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_1 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_2 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_3 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+        );
+        let result_0 = matrix * vector_0;
+        let result_1 = matrix * vector_1;
+        let result_2 = matrix * vector_2;
+        let result_3 = matrix * vector_3;
+
+        assert_relative_eq!(result_0, expected_0, epsilon = 1e-10);
+        assert_relative_eq!(result_1, expected_1, epsilon = 1e-10);
+        assert_relative_eq!(result_2, expected_2, epsilon = 1e-10);
+        assert_relative_eq!(result_3, expected_3, epsilon = 1e-10);
+    }
+
+    /// Shearing about the line `y == (1 / 2) * x`.
+    #[test]
+    fn test_from_shear2() {
+        let shear_factor = 5_f64;
+        let shear_direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+        let normal = Unit::from_value(-Vector2::new(-1_f64, 2_f64));
+        let matrix = Matrix2x2::from_shear(shear_factor, &shear_direction, &normal);
+    
+        let vector_0 = Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64));
+        let vector_1 = Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64));
+        let vector_2 = Vector2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64));
+        let vector_3 = Vector2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64));
+    
+        let rotation_angle = Radians(f64::atan2(1_f64, 2_f64));
+            
+        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+            
+        let rotation = Matrix2x2::from_angle(rotation_angle);
+        let vector_parallel_to_x_axis_0 = Vector2::new( 1_f64,  1_f64);
+        let vector_parallel_to_x_axis_1 = Vector2::new(-1_f64,  1_f64);
+        let vector_parallel_to_x_axis_2 = Vector2::new(-1_f64, -1_f64);
+        let vector_parallel_to_x_axis_3 = Vector2::new( 1_f64, -1_f64);
+        let rotated_vector_0 = rotation * vector_parallel_to_x_axis_0;
+        let rotated_vector_1 = rotation * vector_parallel_to_x_axis_1;
+        let rotated_vector_2 = rotation * vector_parallel_to_x_axis_2;
+        let rotated_vector_3 = rotation * vector_parallel_to_x_axis_3;
+    
+        assert_relative_eq!(rotated_vector_0, vector_0, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_1, vector_1, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_2, vector_2, epsilon = 1e-10);
+        assert_relative_eq!(rotated_vector_3, vector_3, epsilon = 1e-10);
+    
+        let expected_0 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) + 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_1 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) - 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) + 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_2 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) + 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) - 2_f64 / f64::sqrt(5_f64),
+        );
+        let expected_3 = Vector2::new(
+            (2_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) + 1_f64 / f64::sqrt(5_f64),
+            (1_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) - 2_f64 / f64::sqrt(5_f64),
+        );
+        let result_0 = matrix * vector_0;
+        let result_1 = matrix * vector_1;
+        let result_2 = matrix * vector_2;
+        let result_3 = matrix * vector_3;
+    
+        assert_relative_eq!(result_0, expected_0, epsilon = 1e-10);
+        assert_relative_eq!(result_1, expected_1, epsilon = 1e-10);
+        assert_relative_eq!(result_2, expected_2, epsilon = 1e-10);
+        assert_relative_eq!(result_3, expected_3, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_shear_from_shear_x() {
+        let shear_factor = 7_f64;
+        let direction = Unit::from_value(Vector2::unit_x());
+        let normal = Unit::from_value(Vector2::unit_y());
+        let expected = Matrix2x2::from_shear_x(shear_factor);
+        let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_from_shear_y() {
+        let shear_factor = 7_f64;
+        let direction = Unit::from_value(Vector2::unit_y());
+        let normal = Unit::from_value(Vector2::unit_x());
+        let expected = Matrix2x2::from_shear_y(shear_factor);
+        let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
 
         assert_eq!(result, expected);
     }

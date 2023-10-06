@@ -557,18 +557,18 @@ where
     /// #     Shear2,
     /// # };
     /// #
-    /// let shear_x_with_y = 3_f64;
-    /// let shear = Shear2::from_shear_x(shear_x_with_y);
+    /// let shear_factor = 3_f64;
+    /// let shear = Shear2::from_shear_x(shear_factor);
     /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = Point2::new(1_f64 + shear_x_with_y * point.y, 2_f64);
+    /// let expected = Point2::new(1_f64 + shear_factor * point.y, 2_f64);
     /// let result = shear * point;
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S) -> Self {
+    pub fn from_shear_x(shear_factor: S) -> Self {
         Self {
-            matrix: Matrix2x2::from_shear_x(shear_x_with_y),
+            matrix: Matrix2x2::from_shear_x(shear_factor),
         }
     }
 
@@ -588,21 +588,26 @@ where
     /// #     Shear2,
     /// # };
     /// #
-    /// let shear_y_with_x = 3_f64;
-    /// let shear = Shear2::from_shear_y(shear_y_with_x);
+    /// let shear_factor = 3_f64;
+    /// let shear = Shear2::from_shear_y(shear_factor);
     /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = Point2::new(1_f64, 2_f64 + shear_y_with_x * point.x);
+    /// let expected = Point2::new(1_f64, 2_f64 + shear_factor * point.x);
     /// let result = shear * point;
     /// 
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S) -> Self {
+    pub fn from_shear_y(shear_factor: S) -> Self {
         Self {
-            matrix: Matrix2x2::from_shear_y(shear_y_with_x),
+            matrix: Matrix2x2::from_shear_y(shear_factor),
         }
     }
+}
 
+impl<S> Shear2<S> 
+where 
+    S: SimdScalarFloat
+{
     /// Construct a general shearing transformations in two dimensions. 
     ///
     /// There are two parameters describing a shearing transformation 
