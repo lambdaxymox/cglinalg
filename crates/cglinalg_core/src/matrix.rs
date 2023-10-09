@@ -2786,9 +2786,24 @@ where
     /// #
     /// let shear_factor = 3_i32;
     /// let matrix = Matrix2x2::from_shear_x(shear_factor);
-    /// let vector = Vector2::new(1_i32, 1_i32);
-    /// let expected = Vector2::new(1_i32 + 3_i32 * 1_i32, 1_i32);
-    /// let result = matrix * vector;
+    /// let square = [
+    ///     Vector2::new( 1_i32,  1_i32),
+    ///     Vector2::new(-1_i32,  1_i32),
+    ///     Vector2::new(-1_i32, -1_i32),
+    ///     Vector2::new( 1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector2::new( 1_i32 + shear_factor,  1_i32),
+    ///     Vector2::new(-1_i32 + shear_factor,  1_i32),
+    ///     Vector2::new(-1_i32 - shear_factor, -1_i32),
+    ///     Vector2::new( 1_i32 - shear_factor, -1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * square[0],
+    ///     matrix * square[1],
+    ///     matrix * square[2],
+    ///     matrix * square[3],
+    /// ];
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -2816,9 +2831,24 @@ where
     /// #
     /// let shear_factor = 3_i32;
     /// let matrix = Matrix2x2::from_shear_y(shear_factor);
-    /// let vector = Vector2::new(1_i32, 1_i32);
-    /// let expected = Vector2::new(1_i32, 1_i32 + 3_i32 * 1_i32);
-    /// let result = matrix * vector;
+    /// let square = [
+    ///     Vector2::new( 1_i32,  1_i32),
+    ///     Vector2::new(-1_i32,  1_i32),
+    ///     Vector2::new(-1_i32, -1_i32),
+    ///     Vector2::new( 1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector2::new( 1_i32,  1_i32 + shear_factor),
+    ///     Vector2::new(-1_i32,  1_i32 - shear_factor),
+    ///     Vector2::new(-1_i32, -1_i32 - shear_factor),
+    ///     Vector2::new( 1_i32, -1_i32 + shear_factor),
+    /// ];
+    /// let result = [
+    ///     matrix * square[0],
+    ///     matrix * square[1],
+    ///     matrix * square[2],
+    ///     matrix * square[3],
+    /// ];
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -3496,9 +3526,24 @@ where
     /// #
     /// let shear_factor = 3_i32;
     /// let matrix = Matrix3x3::from_affine_shear_x(shear_factor);
-    /// let vector = Vector3::new(1_i32, 1_i32, 0_i32);
-    /// let expected = Vector3::new(4_i32, 1_i32, 0_i32);
-    /// let result = matrix * vector;
+    /// let square = [
+    ///     Vector3::new( 1_i32,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, 1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32 + shear_factor,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32 + shear_factor,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32 - shear_factor, -1_i32, 1_i32),
+    ///     Vector3::new( 1_i32 - shear_factor, -1_i32, 1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * square[0],
+    ///     matrix * square[1],
+    ///     matrix * square[2],
+    ///     matrix * square[3],
+    /// ];
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -3531,9 +3576,24 @@ where
     /// #
     /// let shear_factor = 3_i32;
     /// let matrix = Matrix3x3::from_affine_shear_y(shear_factor);
-    /// let vector = Vector3::new(1_i32, 1_i32, 0_i32);
-    /// let expected = Vector3::new(1_i32, 4_i32, 0_i32);
-    /// let result = matrix * vector;
+    /// let square = [
+    ///     Vector3::new( 1_i32,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, 1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, 1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32,  1_i32 + shear_factor, 1_i32),
+    ///     Vector3::new(-1_i32,  1_i32 - shear_factor, 1_i32),
+    ///     Vector3::new(-1_i32, -1_i32 - shear_factor, 1_i32),
+    ///     Vector3::new( 1_i32, -1_i32 + shear_factor, 1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * square[0],
+    ///     matrix * square[1],
+    ///     matrix * square[2],
+    ///     matrix * square[3],
+    /// ];
     ///
     /// assert_eq!(result, expected);
     /// ```
