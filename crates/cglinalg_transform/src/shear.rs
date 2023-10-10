@@ -568,7 +568,7 @@ where
     #[inline]
     pub fn from_shear_x(shear_factor: S) -> Self {
         Self {
-            matrix: Matrix2x2::from_shear_x(shear_factor),
+            matrix: Matrix2x2::from_shear_xy(shear_factor),
         }
     }
 
@@ -599,7 +599,7 @@ where
     #[inline]
     pub fn from_shear_y(shear_factor: S) -> Self {
         Self {
-            matrix: Matrix2x2::from_shear_y(shear_factor),
+            matrix: Matrix2x2::from_shear_yx(shear_factor),
         }
     }
 }

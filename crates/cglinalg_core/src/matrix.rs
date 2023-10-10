@@ -2785,7 +2785,7 @@ where
     /// # };
     /// #
     /// let shear_factor = 3_i32;
-    /// let matrix = Matrix2x2::from_shear_x(shear_factor);
+    /// let matrix = Matrix2x2::from_shear_xy(shear_factor);
     /// let square = [
     ///     Vector2::new( 1_i32,  1_i32),
     ///     Vector2::new(-1_i32,  1_i32),
@@ -2809,7 +2809,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_factor: S) -> Self {
+    pub fn from_shear_xy(shear_factor: S) -> Self {
         Self::new(
             S::one(),     S::zero(),
             shear_factor, S::one(),
@@ -2830,7 +2830,7 @@ where
     /// # };
     /// #
     /// let shear_factor = 3_i32;
-    /// let matrix = Matrix2x2::from_shear_y(shear_factor);
+    /// let matrix = Matrix2x2::from_shear_yx(shear_factor);
     /// let square = [
     ///     Vector2::new( 1_i32,  1_i32),
     ///     Vector2::new(-1_i32,  1_i32),
@@ -2854,7 +2854,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_factor: S) -> Self {
+    pub fn from_shear_yx(shear_factor: S) -> Self {
         Self::new(
             S::one(),  shear_factor,
             S::zero(), S::one(),
@@ -3525,7 +3525,7 @@ where
     /// # };
     /// #
     /// let shear_factor = 3_i32;
-    /// let matrix = Matrix3x3::from_affine_shear_x(shear_factor);
+    /// let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
     /// let square = [
     ///     Vector3::new( 1_i32,  1_i32, 1_i32),
     ///     Vector3::new(-1_i32,  1_i32, 1_i32),
@@ -3549,7 +3549,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_x(shear_factor: S) -> Self {
+    pub fn from_affine_shear_xy(shear_factor: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 
@@ -3575,7 +3575,7 @@ where
     /// # };
     /// #
     /// let shear_factor = 3_i32;
-    /// let matrix = Matrix3x3::from_affine_shear_y(shear_factor);
+    /// let matrix = Matrix3x3::from_affine_shear_yx(shear_factor);
     /// let square = [
     ///     Vector3::new( 1_i32,  1_i32, 1_i32),
     ///     Vector3::new(-1_i32,  1_i32, 1_i32),
@@ -3599,7 +3599,7 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_y(shear_factor: S) -> Self {
+    pub fn from_affine_shear_yx(shear_factor: S) -> Self {
         let zero = S::zero();
         let one = S::one();
 

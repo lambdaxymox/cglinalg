@@ -729,9 +729,9 @@ mod matrix2x2_tests {
     }
 
     #[test]
-    fn test_from_shear_x() {
+    fn test_from_shear_xy() {
         let shear_factor = 5_i32;
-        let matrix = Matrix2x2::from_shear_x(shear_factor);
+        let matrix = Matrix2x2::from_shear_xy(shear_factor);
         let vectors = [
             Vector2::new( 1_i32,  1_i32),
             Vector2::new(-1_i32,  1_i32),
@@ -755,9 +755,9 @@ mod matrix2x2_tests {
     }
 
     #[test]
-    fn test_from_shear_y() {
+    fn test_from_shear_yx() {
         let shear_factor = 5_i32;
-        let matrix = Matrix2x2::from_shear_y(shear_factor);
+        let matrix = Matrix2x2::from_shear_yx(shear_factor);
         let vectors = [
             Vector2::new( 1_i32,  1_i32),
             Vector2::new(-1_i32,  1_i32),
@@ -901,22 +901,22 @@ mod matrix2x2_tests {
     }
 
     #[test]
-    fn test_from_shear_from_shear_x() {
+    fn test_from_shear_from_shear_xy() {
         let shear_factor = 7_f64;
         let direction = Unit::from_value(Vector2::unit_x());
         let normal = Unit::from_value(Vector2::unit_y());
-        let expected = Matrix2x2::from_shear_x(shear_factor);
+        let expected = Matrix2x2::from_shear_xy(shear_factor);
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_shear_from_shear_y() {
+    fn test_from_shear_from_shear_yx() {
         let shear_factor = 7_f64;
         let direction = Unit::from_value(Vector2::unit_y());
         let normal = Unit::from_value(Vector2::unit_x());
-        let expected = Matrix2x2::from_shear_y(shear_factor);
+        let expected = Matrix2x2::from_shear_yx(shear_factor);
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
 
         assert_eq!(result, expected);
@@ -1952,9 +1952,9 @@ mod matrix3x3_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_x1() {
+    fn test_from_affine_shear_xy1() {
         let shear_factor = 5_i32;
-        let matrix = Matrix3x3::from_affine_shear_x(shear_factor);
+        let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
         let vectors = [
             Vector3::new( 1_i32,  1_i32, 1_i32),
             Vector3::new(-1_i32,  1_i32, 1_i32),
@@ -1979,22 +1979,22 @@ mod matrix3x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_x2() {
+    fn test_from_affine_shear_xy2() {
         let shear_factor = 5_i32;
         let expected = Matrix3x3::new(
             1_i32,        0_i32, 0_i32,
             shear_factor, 1_i32, 0_i32,
             0_i32,        0_i32, 1_i32
         );
-        let result = Matrix3x3::from_affine_shear_x(shear_factor);
+        let result = Matrix3x3::from_affine_shear_xy(shear_factor);
         
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_x_does_not_change_last_coordinate() {
+    fn test_from_affine_shear_xy_does_not_change_last_coordinate() {
         let shear_factor = 5_i32;
-        let matrix = Matrix3x3::from_affine_shear_x(shear_factor);
+        let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
         let unit_z = Vector3::unit_z();
         let expected = unit_z;
         let result = matrix * unit_z;
@@ -2003,9 +2003,9 @@ mod matrix3x3_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_y1() {
+    fn test_from_affine_shear_yx1() {
         let shear_factor = 3_i32;
-        let matrix = Matrix3x3::from_affine_shear_y(shear_factor);
+        let matrix = Matrix3x3::from_affine_shear_yx(shear_factor);
         let vectors = [
             Vector3::new( 1_i32,  1_i32, 1_i32),
             Vector3::new(-1_i32,  1_i32, 1_i32),
@@ -2030,22 +2030,22 @@ mod matrix3x3_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_y2() {
+    fn test_from_affine_shear_yx2() {
         let shear_factor = 5_i32;
         let expected = Matrix3x3::new(
             1_i32, shear_factor, 0_i32,
             0_i32, 1_i32,        0_i32,
             0_i32, 0_i32,        1_i32
         );
-        let result = Matrix3x3::from_affine_shear_y(shear_factor);
+        let result = Matrix3x3::from_affine_shear_yx(shear_factor);
         
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_y_does_not_change_last_coordinate() {
+    fn test_from_affine_shear_yx_does_not_change_last_coordinate() {
         let shear_factor = 3_i32;
-        let matrix = Matrix3x3::from_affine_shear_y(shear_factor);
+        let matrix = Matrix3x3::from_affine_shear_yx(shear_factor);
         let unit_z = Vector3::unit_z();
         let expected = unit_z;
         let result = matrix * unit_z;
@@ -2054,24 +2054,24 @@ mod matrix3x3_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_from_affine_shear_x() {
+    fn test_from_affine_shear_from_affine_shear_xy() {
         let shear_factor = 5_f64;
         let origin = Point2::new(0_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
         let normal = Unit::from_value(Vector2::unit_y());
-        let expected = Matrix3x3::from_affine_shear_x(shear_factor);
+        let expected = Matrix3x3::from_affine_shear_xy(shear_factor);
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_from_affine_shear_y() {
+    fn test_from_affine_shear_from_affine_shear_yx() {
         let shear_factor = 5_f64;
         let origin = Point2::new(0_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
         let normal = Unit::from_value(Vector2::unit_x());
-        let expected = Matrix3x3::from_affine_shear_y(shear_factor);
+        let expected = Matrix3x3::from_affine_shear_yx(shear_factor);
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
         assert_eq!(result, expected);
