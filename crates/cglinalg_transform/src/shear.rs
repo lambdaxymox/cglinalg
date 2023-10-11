@@ -787,7 +787,7 @@ where
     #[inline]
     pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
         Self {
-            matrix: Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z),
+            matrix: Matrix3x3::from_shear_xy(shear_x_with_y, shear_x_with_z),
         }
     }
 
@@ -823,7 +823,7 @@ where
     #[inline]
     pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
         Self {
-            matrix: Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z),
+            matrix: Matrix3x3::from_shear_yx(shear_y_with_x, shear_y_with_z),
         }
     }
 
@@ -859,7 +859,7 @@ where
     #[inline]
     pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
         Self {
-            matrix: Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y),
+            matrix: Matrix3x3::from_shear_zx(shear_z_with_x, shear_z_with_y),
         }
     }
 

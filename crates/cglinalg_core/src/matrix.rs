@@ -2784,9 +2784,9 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let shear_factor = 3_i32;
+    /// let shear_factor = 4_i32;
     /// let matrix = Matrix2x2::from_shear_xy(shear_factor);
-    /// let square = [
+    /// let vertices = [
     ///     Vector2::new( 1_i32,  1_i32),
     ///     Vector2::new(-1_i32,  1_i32),
     ///     Vector2::new(-1_i32, -1_i32),
@@ -2799,10 +2799,10 @@ where
     ///     Vector2::new( 1_i32 - shear_factor, -1_i32),
     /// ];
     /// let result = [
-    ///     matrix * square[0],
-    ///     matrix * square[1],
-    ///     matrix * square[2],
-    ///     matrix * square[3],
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
     /// ];
     ///
     /// assert_eq!(result, expected);
@@ -2829,9 +2829,9 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let shear_factor = 3_i32;
+    /// let shear_factor = 4_i32;
     /// let matrix = Matrix2x2::from_shear_yx(shear_factor);
-    /// let square = [
+    /// let vertices = [
     ///     Vector2::new( 1_i32,  1_i32),
     ///     Vector2::new(-1_i32,  1_i32),
     ///     Vector2::new(-1_i32, -1_i32),
@@ -2844,10 +2844,10 @@ where
     ///     Vector2::new( 1_i32, -1_i32 + shear_factor),
     /// ];
     /// let result = [
-    ///     matrix * square[0],
-    ///     matrix * square[1],
-    ///     matrix * square[2],
-    ///     matrix * square[3],
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
     /// ];
     ///
     /// assert_eq!(result, expected);
@@ -2905,31 +2905,31 @@ where
     /// #
     /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x`.
     /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x`.
-    /// let rotated_square = [
+    /// let vertices = [
     ///     Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64)),
     ///     Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64)),
     ///     Vector2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64)),
     ///     Vector2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64)),
     /// ];
     /// #
-    /// # let square = [
+    /// # let rotated_vertices = [
     /// #     Vector2::new( 1_f64,  1_f64),
     /// #     Vector2::new(-1_f64,  1_f64),
     /// #     Vector2::new(-1_f64, -1_f64),
     /// #     Vector2::new( 1_f64, -1_f64),
     /// # ];
     /// # let rotation = Matrix2x2::from_angle(rotation_angle);
-    /// # let result_square = [
-    /// #     rotation * square[0],
-    /// #     rotation * square[1],
-    /// #     rotation * square[2],
-    /// #     rotation * square[3],
+    /// # let result_vertices = [
+    /// #     rotation * rotated_vertices[0],
+    /// #     rotation * rotated_vertices[1],
+    /// #     rotation * rotated_vertices[2],
+    /// #     rotation * rotated_vertices[3],
     /// # ];
     /// #
-    /// # assert_relative_eq!(result_square[0], rotated_square[0], epsilon = 1e-10);
-    /// # assert_relative_eq!(result_square[1], rotated_square[1], epsilon = 1e-10);
-    /// # assert_relative_eq!(result_square[2], rotated_square[2], epsilon = 1e-10);
-    /// # assert_relative_eq!(result_square[3], rotated_square[3], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_vertices[0], vertices[0], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_vertices[1], vertices[1], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_vertices[2], vertices[2], epsilon = 1e-10);
+    /// # assert_relative_eq!(result_vertices[3], vertices[3], epsilon = 1e-10);
     /// #
     /// let expected = [
     ///     Vector2::new(
@@ -2950,10 +2950,10 @@ where
     ///     ),
     /// ];
     /// let result = [
-    ///     matrix * rotated_square[0],
-    ///     matrix * rotated_square[1],
-    ///     matrix * rotated_square[2],
-    ///     matrix * rotated_square[3],
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
     /// ];
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
@@ -2965,10 +2965,10 @@ where
     #[inline]
     pub fn from_shear(shear_factor: S, direction: &Unit<Vector2<S>>, normal: &Unit<Vector2<S>>) -> Self {
         let one = S::one();
-        let c0r0 = one + shear_factor * normal[0] * direction[0];
-        let c0r1 = shear_factor * normal[0] * direction[1];
-        let c1r0 = shear_factor * normal[1] * direction[0];
-        let c1r1 = one + shear_factor * normal[1] * direction[1];
+        let c0r0 = one + shear_factor * direction[0] * normal[0];
+        let c0r1 = shear_factor * direction[1] * normal[0];
+        let c1r0 = shear_factor * direction[0] * normal[1];
+        let c1r1 = one + shear_factor * direction[1] * normal[1];
 
         Self::new(
             c0r0, c0r1,
@@ -3345,25 +3345,110 @@ where
     /// #     Vector3, 
     /// # };
     /// #
-    /// let shear_x_with_y = 3_i32;
-    /// let shear_x_with_z = 8_i32;
-    /// let matrix = Matrix3x3::from_shear_x(shear_x_with_y, shear_x_with_z);
-    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
-    /// let expected = Vector3::new(12_i32, 1_i32, 1_i32);
-    /// let result = matrix * vector;
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_xy(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32 - shear_factor, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32 - shear_factor, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32 + shear_factor,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32 + shear_factor,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
+    pub fn from_shear_xy(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
         Self::new(
-            one,            zero, zero,
-            shear_x_with_y, one,  zero, 
-            shear_x_with_z, zero, one
+            one,          zero, zero,
+            shear_factor, one,  zero, 
+            zero,         zero, one
+        )
+    }
+
+    /// Construct a shearing matrix shearing along the **x-axis** in the **xy-plane** 
+    /// with the **z-axis** as the normal vector to the plane.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_xz(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32 + shear_factor, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32 + shear_factor, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32 - shear_factor,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32 - shear_factor,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_shear_xz(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,          zero, zero,
+            zero,         one,  zero,
+            shear_factor, zero, one
         )
     }
 
@@ -3382,25 +3467,110 @@ where
     /// #     Vector3, 
     /// # };
     /// #
-    /// let shear_y_with_x = 3_i32;
-    /// let shear_y_with_z = 8_i32;
-    /// let matrix = Matrix3x3::from_shear_y(shear_y_with_x, shear_y_with_z);
-    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
-    /// let expected = Vector3::new(1_i32, 12_i32, 1_i32);
-    /// let result = matrix * vector;
-    ///
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_yx(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32 - shear_factor,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32 - shear_factor,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32 + shear_factor, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
+    pub fn from_shear_yx(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
         Self::new(
-            one,  shear_y_with_x, zero,
-            zero, one,            zero,
-            zero, shear_y_with_z, one
+            one,  shear_factor, zero,
+            zero, one,          zero,
+            zero, zero,         one
+        )
+    }
+
+    /// Construct a shearing matrix shearing along the **y-axis** in the **xy-plane** 
+    /// with the **z-axis** as the normal vector to the plane.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_yz(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_shear_yz(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,  zero,         zero,
+            zero, one,          zero,
+            zero, shear_factor, one
         )
     }
 
@@ -3419,28 +3589,118 @@ where
     /// #     Vector3, 
     /// # };
     /// #
-    /// let shear_z_with_x = 3_i32;
-    /// let shear_z_with_y = 8_i32;
-    /// let matrix = Matrix3x3::from_shear_z(shear_z_with_x, shear_z_with_y);
-    /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
-    /// let expected = Vector3::new(1_i32, 1_i32, 12_i32);
-    /// let result = matrix * vector;
-    ///
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_zx(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32 - shear_factor),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32 + shear_factor),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32 - shear_factor),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
     /// assert_eq!(result, expected);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
+    pub fn from_shear_zx(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
         Self::new(
-            one,  zero, shear_z_with_x,
-            zero, one,  shear_z_with_y,
+            one,  zero, shear_factor,
+            zero, one,  zero,
             zero, zero, one   
         )
     }
 
+    /// Construct a shearing matrix shearing along the **z-axis** in the **zx-plane** 
+    /// with the **y-axis** as the normal vector to the plane.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Vector3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let matrix = Matrix3x3::from_shear_zy(shear_factor);
+    /// let vertices = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Vector3::new( 1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Vector3::new( 1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
+    ///     Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_shear_zy(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,  zero, zero,
+            zero, one,  shear_factor,
+            zero, zero, one
+        )
+    }
+}
+
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalarFloat
+{
     /// Construct a general shearing matrix in three dimensions. There are six
     /// parameters describing a shearing transformation in three dimensions.
     /// 
@@ -3468,48 +3728,83 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3, 
+    /// #     Unit,
     /// # };
     /// #
-    /// let shear_x_with_y = 1_usize;
-    /// let shear_x_with_z = 2_usize;
-    /// let shear_y_with_x = 3_usize;
-    /// let shear_y_with_z = 4_usize;
-    /// let shear_z_with_x = 5_usize;
-    /// let shear_z_with_y = 6_usize;
-    /// let matrix = Matrix3x3::from_shear(
-    ///     shear_x_with_y, 
-    ///     shear_x_with_z,
-    ///     shear_y_with_x,
-    ///     shear_y_with_z,
-    ///     shear_z_with_x,
-    ///     shear_z_with_y,
+    /// let shear_factor = 8_f64;
+    /// let direction = Unit::from_value(Vector3::unit_x());
+    /// let normal = Unit::from_value(-Vector3::unit_y());
+    /// let expected_matrix = Matrix3x3::new(
+    ///      1_f64,        0_f64, 0_f64,
+    ///     -shear_factor, 1_f64, 0_f64,
+    ///      0_f64,        0_f64, 1_f64
     /// );
-    /// let vector = Vector3::new(1_usize, 1_usize, 1_usize);
-    /// let expected = Vector3::new(
-    ///     vector.x + shear_x_with_y * vector.y + shear_x_with_z * vector.z,
-    ///     vector.y + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
-    ///     vector.z + shear_z_with_x * vector.x + shear_z_with_y * vector.y
-    /// );
-    /// let result = matrix * vector;
-    ///
+    /// let result_matrix = Matrix3x3::from_shear(shear_factor, &direction, &normal);
+    /// 
+    /// assert_eq!(result_matrix, expected_matrix);
+    /// 
+    /// let vertices = [
+    ///     Vector3::new( 1_f64,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64, -1_f64, -1_f64),
+    ///     Vector3::new( 1_f64, -1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_f64 - shear_factor,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64 - shear_factor,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64 + shear_factor, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64 + shear_factor, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64 - shear_factor,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64 - shear_factor,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64 + shear_factor, -1_f64, -1_f64),
+    ///     Vector3::new( 1_f64 + shear_factor, -1_f64, -1_f64),
+    /// ];
+    /// let result = [
+    ///     result_matrix * vertices[0],
+    ///     result_matrix * vertices[1],
+    ///     result_matrix * vertices[2],
+    ///     result_matrix * vertices[3],
+    ///     result_matrix * vertices[4],
+    ///     result_matrix * vertices[5],
+    ///     result_matrix * vertices[6],
+    ///     result_matrix * vertices[7],
+    /// ];
+    /// 
     /// assert_eq!(result, expected);
     /// ``` 
     #[rustfmt::skip]
     #[inline]
-    pub fn from_shear(
-        shear_x_with_y: S, shear_x_with_z: S, 
-        shear_y_with_x: S, shear_y_with_z: S, 
-        shear_z_with_x: S, shear_z_with_y: S) -> Self 
-    {
+    pub fn from_shear(shear_factor: S, direction: &Unit<Vector3<S>>, normal: &Unit<Vector3<S>>) -> Self {
         let one = S::one();
 
+        let c0r0 = one + shear_factor * direction[0] * normal[0];
+        let c0r1 = shear_factor * direction[1] * normal[0];
+        let c0r2 = shear_factor * direction[2] * normal[0];
+
+        let c1r0 = shear_factor * direction[0] * normal[1];
+        let c1r1 = one + shear_factor * direction[1] * normal[1];
+        let c1r2 = shear_factor * direction[2] * normal[1];
+
+        let c2r0 = shear_factor * direction[0] * normal[2];
+        let c2r1 = shear_factor * direction[1] * normal[2];
+        let c2r2 = one + shear_factor * direction[2] * normal[2];
+
         Self::new(
-            one,            shear_y_with_x, shear_z_with_x,
-            shear_x_with_y, one,            shear_z_with_y,
-            shear_x_with_z, shear_y_with_z, one
+            c0r0, c0r1, c0r2,
+            c1r0, c1r1, c1r2,
+            c2r0, c2r1, c2r2
         )
     }
+}
 
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalar
+{
     /// Construct a two-dimensional affine shearing matrix along the 
     /// **x-axis**, holding the **y-axis** constant.
     ///
