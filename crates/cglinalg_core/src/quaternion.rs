@@ -551,7 +551,7 @@ where
     /// #     Quaternion,
     /// # };
     /// #
-    /// let quaternion = Quaternion::from_real(1_u32);
+    /// let quaternion = Quaternion::from_real(1_i32);
     ///
     /// assert!(quaternion.is_real());
     /// assert!(!quaternion.is_pure());
@@ -571,7 +571,7 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let quaternion = Quaternion::from_pure(vector);
     ///
     /// assert!(quaternion.is_pure());

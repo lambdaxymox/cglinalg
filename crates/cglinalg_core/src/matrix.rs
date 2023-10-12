@@ -387,7 +387,7 @@ where
     /// #     Matrix3x3,  
     /// # };
     /// #
-    /// let fill_value = 3_u32;
+    /// let fill_value = 3_i32;
     /// let expected = Matrix3x3::new(
     ///     fill_value, fill_value, fill_value,
     ///     fill_value, fill_value, fill_value,
@@ -2100,10 +2100,10 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let scale = 11_u32;
+    /// let scale = 11_i32;
     /// let matrix = Matrix2x2::from_scale(scale);
-    /// let vector = Vector2::new(1, 2);
-    /// let expected = Vector2::new(11, 22);
+    /// let vector = Vector2::new(1_i32, 2_i32);
+    /// let expected = Vector2::new(11_i32, 22_i32);
     /// let result = matrix * vector;
     ///
     /// assert_eq!(result, expected);
@@ -2149,12 +2149,12 @@ where
     /// #     Vector2,
     /// # };
     /// #
-    /// let scale_x = 3_u32;
-    /// let scale_y = 5_u32;
+    /// let scale_x = 3_i32;
+    /// let scale_y = 5_i32;
     /// let scale_vector = Vector2::new(scale_x, scale_y);
     /// let matrix = Matrix2x2::from_nonuniform_scale(&scale_vector);
-    /// let vector = Vector2::new(1, 2);
-    /// let expected = Vector2::new(3, 10);
+    /// let vector = Vector2::new(1_i32, 2_i32);
+    /// let expected = Vector2::new(3_i32, 10_i32);
     /// let result = matrix * vector;
     ///
     /// assert_eq!(result, expected);

@@ -132,8 +132,8 @@ where
     /// #     Point3, 
     /// # };
     /// #
-    /// let fill_value = 3_u32;
-    /// let expected = Point3::new(3_u32, 3_u32, 3_u32);
+    /// let fill_value = 3_i32;
+    /// let expected = Point3::new(3_i32, 3_i32, 3_i32);
     /// let result = Point3::from_fill(fill_value);
     ///
     /// assert_eq!(result, expected);
@@ -218,8 +218,8 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let vector = Vector3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
+    /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = Point3::new(1_i32, 2_i32, 3_i32);
     /// let result = Point3::from_vector(&vector);
     ///
     /// assert_eq!(result, expected);
@@ -244,8 +244,8 @@ where
     /// #     Vector3,
     /// # };
     /// #
-    /// let point = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected = Vector3::new(1_u32, 2_u32, 3_u32);
+    /// let point = Point3::new(1_i32, 2_i32, 3_i32);
+    /// let expected = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let result = point.to_vector();
     ///
     /// assert_eq!(result, expected);
@@ -448,9 +448,9 @@ where
     /// #     Point3,    
     /// # };
     /// #
-    /// let point = Point2::new(1_u32, 2_u32);
-    /// let expected = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let result = point.extend(3_u32);
+    /// let point = Point2::new(1_i32, 2_i32);
+    /// let expected = Point3::new(1_i32, 2_i32, 3_i32);
+    /// let result = point.extend(3_i32);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -507,8 +507,8 @@ where
     /// #     Point2, 
     /// # };
     /// #
-    /// let point = Point2::new(1_u32, 2_u32);
-    /// let expected = Point1::new(1_u32);
+    /// let point = Point2::new(1_i32, 2_i32);
+    /// let expected = Point1::new(1_i32);
     /// let result = point.contract();
     /// 
     /// assert_eq!(result, expected);
