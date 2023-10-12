@@ -132,6 +132,7 @@ mod matrix2x2_tests {
         assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix2x2::new(
@@ -153,6 +154,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix2x2::new(
@@ -174,6 +176,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix2x2::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix2x2::new(
@@ -195,6 +198,7 @@ mod matrix2x2_tests {
         assert_eq!(zero_times_b_matrix, Matrix2x2::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix2x2::new(
@@ -218,6 +222,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix2x2::new(
@@ -239,6 +244,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix2x2::new(
@@ -258,6 +264,7 @@ mod matrix2x2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix2() {
         let a_matrix = Matrix2x2::new(
@@ -279,6 +286,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero2() {
         let a_matrix = Matrix2x2::new(
@@ -300,6 +308,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix2x2::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero2() {
         let a_matrix = Matrix2x2::new(
@@ -321,6 +330,7 @@ mod matrix2x2_tests {
         assert_eq!(zero_times_b_matrix, Matrix2x2::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix2() {
         let a_matrix = Matrix2x2::new(
@@ -365,6 +375,7 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let a_matrix = Matrix2x2::new(
@@ -755,6 +766,29 @@ mod matrix2x2_tests {
     }
 
     #[test]
+    fn test_from_shear_xy_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix2x2::from_shear_xy(shear_factor);
+        let vertices = [
+            Vector2::new( 1_i32, 0_i32),
+            Vector2::new( 0_i32, 0_i32),
+            Vector2::new(-1_i32, 0_i32),
+        ];
+        let expected = [
+            Vector2::new( 1_i32, 0_i32),
+            Vector2::new( 0_i32, 0_i32),
+            Vector2::new(-1_i32, 0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_from_shear_yx() {
         let shear_factor = 5_i32;
         let matrix = Matrix2x2::from_shear_yx(shear_factor);
@@ -775,6 +809,29 @@ mod matrix2x2_tests {
             matrix * vertices[1],
             matrix * vertices[2],
             matrix * vertices[3],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix2x2::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector2::new(0_i32,  1_i32),
+            Vector2::new(0_i32 , 0_i32),
+            Vector2::new(0_i32, -1_i32),
+        ];
+        let expected = [
+            Vector2::new(0_i32,  1_i32),
+            Vector2::new(0_i32,  0_i32),
+            Vector2::new(0_i32, -1_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
         ];
 
         assert_eq!(result, expected);
@@ -904,6 +961,41 @@ mod matrix2x2_tests {
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
         
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_shear_shearing_plane() {
+        let shear_factor = 5_f64;
+        let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+        let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+        let matrix = Matrix2x2::from_shear(shear_factor, &direction, &normal);
+        let vertices = [
+            Vector2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new( 0_f64, 0_f64),
+        ];
+        let expected = [
+            Vector2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64))),
+            Vector2::new( 0_f64, 0_f64),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+
+        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
     }
 
     #[test]
@@ -1230,6 +1322,7 @@ mod matrix3x3_tests {
         assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix3x3::new(
@@ -1254,6 +1347,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix3x3::new(
@@ -1278,6 +1372,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix3x3::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix3x3::new(
@@ -1302,6 +1397,7 @@ mod matrix3x3_tests {
         assert_eq!(zero_times_b_matrix, Matrix3x3::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix3x3::new(
@@ -1328,6 +1424,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix3x3::new(
@@ -1352,6 +1449,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix3x3::new(
@@ -1374,6 +1472,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix2() {
         let a_matrix = Matrix3x3::new(
@@ -1398,6 +1497,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero2() {
         let a_matrix = Matrix3x3::new(
@@ -1422,6 +1522,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix3x3::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero2() {
         let a_matrix = Matrix3x3::new(
@@ -1446,6 +1547,7 @@ mod matrix3x3_tests {
         assert_eq!(zero_times_b_matrix, Matrix3x3::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix2() {
         let a_matrix = Matrix3x3::new(
@@ -1472,6 +1574,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix2() {
         let a_matrix = Matrix3x3::new(
@@ -1496,6 +1599,7 @@ mod matrix3x3_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let a_matrix = Matrix3x3::new(
@@ -1963,6 +2067,35 @@ mod matrix3x3_tests {
     }
 
     #[test]
+    fn test_from_shear_xy_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_xy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_from_shear_xz() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_shear_xz(shear_factor);
@@ -1995,6 +2128,35 @@ mod matrix3x3_tests {
             matrix * vertices[5],
             matrix * vertices[6],
             matrix * vertices[7],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_xz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32, -1_i32,  0_i32),
+            Vector3::new( 1_i32, -1_i32,  0_i32),
+            Vector3::new( 0_i32,  0_i32,  0_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32, -1_i32,  0_i32),
+            Vector3::new( 1_i32, -1_i32,  0_i32),
+            Vector3::new( 0_i32,  0_i32,  0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
         ];
 
         assert_eq!(result, expected);
@@ -2039,6 +2201,35 @@ mod matrix3x3_tests {
     }
 
     #[test]
+    fn test_from_shear_yx_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_from_shear_yz() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_shear_yz(shear_factor);
@@ -2071,6 +2262,35 @@ mod matrix3x3_tests {
             matrix * vertices[5],
             matrix * vertices[6],
             matrix * vertices[7],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_yz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32, -1_i32, 0_i32),
+            Vector3::new( 1_i32, -1_i32, 0_i32),
+            Vector3::new( 0_i32,  0_i32, 0_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32, -1_i32, 0_i32),
+            Vector3::new( 1_i32, -1_i32, 0_i32),
+            Vector3::new( 0_i32,  0_i32, 0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
         ];
 
         assert_eq!(result, expected);
@@ -2115,6 +2335,35 @@ mod matrix3x3_tests {
     }
 
     #[test]
+    fn test_from_shear_zx_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_zx(shear_factor);
+        let vertices = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_from_shear_zy() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_shear_zy(shear_factor);
@@ -2152,10 +2401,39 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[test]
+    fn test_from_shear_zy_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_shear_zy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+
+        assert_eq!(result, expected);
+    }
 
     /// Shearing along the plane `(1 / sqrt(3)) * x + (1 / sqrt(3)) * y - z == 0`
     /// with direction `[sqrt(3 / 10), sqrt(3 / 10), sqrt(4 / 10)]` and normal
     /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear1_coordinates() {
         // let shear_factor = 15_f64;
@@ -2297,6 +2575,7 @@ mod matrix3x3_tests {
     /// Shearing along the plane `(1 / sqrt(3)) * x + (1 / sqrt(3)) * y - z == 0`
     /// with direction `[sqrt(3 / 10), sqrt(3 / 10), sqrt(4 / 10)]` and normal
     /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear1() {
         let shear_factor = 15_f64;
@@ -2419,6 +2698,7 @@ mod matrix3x3_tests {
     /// Shearing along the plane `(1 / sqrt(3)) * x + (1 / sqrt(3)) * y - z == 0`
     /// with direction `[sqrt(3 / 10), sqrt(3 / 10), sqrt(4 / 10)]` and normal
     /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear2() {
         let shear_factor = 15_f64;
@@ -2454,6 +2734,92 @@ mod matrix3x3_tests {
         let result = Matrix3x3::from_shear(shear_factor, &direction, &normal);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_shear_shearing_plane() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::new(
+            f64::sqrt(3_f64 / 10_f64),
+            f64::sqrt(3_f64 / 10_f64),
+            f64::sqrt(4_f64 / 10_f64)
+        ));
+        let normal = Unit::from_value(Vector3::new(
+            -f64::sqrt(2_f64 / 10_f64),
+            -f64::sqrt(2_f64 / 10_f64),
+             f64::sqrt(6_f64 / 10_f64)
+        ));
+        let matrix = Matrix3x3::from_shear(shear_factor, &direction, &normal);
+        let vertices = [
+            Vector3::new(
+                f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                -f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
+                f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+            ),
+            Vector3::new(
+                0_f64, 
+                0_f64, 
+                0_f64
+            ),
+        ];
+        let expected = vertices;
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+            matrix * vertices[5],
+            matrix * vertices[6],
+            matrix * vertices[7],
+            matrix * vertices[8],
+        ];
+
+        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
+        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
+        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+        assert_relative_eq!(result[8], expected[8], epsilon = 1e-10);
     }
 
     #[test]
@@ -2563,6 +2929,29 @@ mod matrix3x3_tests {
     }
 
     #[test]
+    fn test_from_affine_shear_xy_shearing_plane() {
+        let shear_factor = 5_i32;
+        let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  0_i32, 1_i32),
+            Vector3::new(-1_i32,  0_i32, 1_i32),
+            Vector3::new( 0_i32,  0_i32, 1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  0_i32, 1_i32),
+            Vector3::new(-1_i32,  0_i32, 1_i32),
+            Vector3::new( 0_i32,  0_i32, 1_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
     fn test_from_affine_shear_xy_does_not_change_last_coordinate() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
@@ -2610,6 +2999,29 @@ mod matrix3x3_tests {
         );
         let result = Matrix3x3::from_affine_shear_yx(shear_factor);
         
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_shearing_plane() {
+        let shear_factor = 3_i32;
+        let matrix = Matrix3x3::from_affine_shear_yx(shear_factor);
+        let vertices = [
+            Vector3::new(0_i32,  1_i32, 1_i32),
+            Vector3::new(0_i32, -1_i32, 1_i32),
+            Vector3::new(0_i32,  0_i32, 1_i32),
+        ];
+        let expected = [
+            Vector3::new(0_i32,  1_i32, 1_i32),
+            Vector3::new(0_i32, -1_i32, 1_i32),
+            Vector3::new(0_i32,  0_i32, 1_i32),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+        ];
+
         assert_eq!(result, expected);
     }
 
@@ -2677,6 +3089,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear2() {
         let shear_factor = 7_f64;
@@ -2689,6 +3102,32 @@ mod matrix3x3_tests {
             0_f64,        0_f64, 1_f64
         );
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear1_shearing_plane() {
+        let shear_factor = 7_f64;
+        let origin = Point2::new(-2_f64, 0_f64);
+        let direction = Unit::from_value(Vector2::unit_x());
+        let normal = Unit::from_value(Vector2::unit_y());
+        let matrix = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64, 0_f64, 1_f64),
+            Vector3::new(-1_f64, 0_f64, 1_f64),
+            Vector3::new( 0_f64, 0_f64, 0_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64, 0_f64, 1_f64),
+            Vector3::new(-1_f64, 0_f64, 1_f64),
+            Vector3::new( 0_f64, 0_f64, 0_f64),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+        ];
 
         assert_eq!(result, expected);
     }
@@ -2722,6 +3161,7 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear4() {
         let shear_factor = 7_f64;
@@ -2738,6 +3178,33 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    #[test]
+    fn test_from_affine_shear3_shearing_plane() {
+        let shear_factor = 7_f64;
+        let origin = Point2::new(-2_f64, 0_f64);
+        let direction = Unit::from_value(Vector2::unit_y());
+        let normal = Unit::from_value(Vector2::unit_x());
+        let matrix = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new(-2_f64,  1_f64, 1_f64),
+            Vector3::new(-2_f64, -1_f64, 1_f64),
+            Vector3::new(-2_f64,  0_f64, 1_f64),
+        ];
+        let expected = [
+            Vector3::new(-2_f64,  1_f64, 1_f64),
+            Vector3::new(-2_f64, -1_f64, 1_f64),
+            Vector3::new(-2_f64,  0_f64, 1_f64),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+        ];
+
+        assert_eq!(result, expected);
+    }
+
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear5_coordinates() {
         // let shear_factor = 7_f64;
@@ -2819,6 +3286,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result_normal, expected_normal, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear5() {
         let shear_factor = 7_f64;
@@ -2867,6 +3335,7 @@ mod matrix3x3_tests {
         assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear6() {
         let shear_factor = 7_f64;
@@ -2881,6 +3350,44 @@ mod matrix3x3_tests {
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_affine_shear5_shearing_plane() {
+        let shear_factor = 7_f64;
+        let origin = Point2::new(2_f64, 2_f64);
+        let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+        let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+        let matrix = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new( 0_f64, 1_f64, 1_f64),
+
+        ];
+        let expected = [
+            Vector3::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
+            Vector3::new( 0_f64, 1_f64, 1_f64),
+        ];
+        let result = [
+            matrix * vertices[0],
+            matrix * vertices[1],
+            matrix * vertices[2],
+            matrix * vertices[3],
+            matrix * vertices[4],
+        ];
+    
+        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
     }
 
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
@@ -3413,6 +3920,7 @@ mod matrix4x4_tests {
         assert_eq!(zero_matrix * zero_matrix, zero_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix4x4::new(
@@ -3440,6 +3948,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix4x4::new(
@@ -3467,6 +3976,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix4x4::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix4x4::new(
@@ -3494,6 +4004,7 @@ mod matrix4x4_tests {
         assert_eq!(zero_times_b_matrix, Matrix4x4::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix4x4::new(
@@ -3523,6 +4034,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix4x4::new(
@@ -3550,6 +4062,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix4x4::new(
@@ -3575,6 +4088,7 @@ mod matrix4x4_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_matrix2() {
         let a_matrix = Matrix4x4::new(
@@ -3602,6 +4116,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_identity, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_zero_equals_zero2() {
         let a_matrix = Matrix4x4::new(
@@ -3629,6 +4144,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_zero_matrix, Matrix4x4::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_zero_times_matrix_equals_zero2() {
         let a_matrix = Matrix4x4::new(
@@ -3656,6 +4172,7 @@ mod matrix4x4_tests {
         assert_eq!(zero_times_b_matrix, Matrix4x4::zero());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix2() {
         let a_matrix = Matrix4x4::new(
@@ -3685,6 +4202,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix2() {
         let a_matrix = Matrix4x4::new(
@@ -3712,6 +4230,7 @@ mod matrix4x4_tests {
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_multiplication2() {
         let a_matrix = Matrix4x4::new(
