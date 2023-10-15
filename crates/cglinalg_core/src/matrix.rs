@@ -5818,7 +5818,23 @@ where
     /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
     /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
     /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
-    /// ``` 
+    /// 
+    /// let vertices_in_plane = [
+    ///     Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
+    ///     Vector4::new(-1_f64,  1_f64, 0_f64, 1_f64),
+    ///     Vector4::new(-1_f64, -1_f64, 0_f64, 1_f64),
+    ///     Vector4::new( 1_f64, -1_f64, 0_f64, 1_f64),
+    ///     Vector4::new( 0_f64,  0_f64, 0_f64, 1_f64),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
+    /// 
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(
