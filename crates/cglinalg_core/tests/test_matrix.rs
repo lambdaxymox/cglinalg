@@ -4,14 +4,9 @@ extern crate cglinalg_core;
 
 #[cfg(test)]
 mod matrix2x2_tests {
-    use cglinalg_trigonometry::{
-        Angle,
-        Radians,
-    };
     use cglinalg_core::{
         Vector2,
         Matrix2x2,
-        Unit,
     };
     use approx::{
         assert_relative_eq,
@@ -738,6 +733,82 @@ mod matrix2x2_tests {
 
         assert_eq!(result, expected);
     }
+}
+
+
+#[cfg(test)]
+mod matrix2x2_rotation_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
+    use cglinalg_core::{
+        Vector2,
+        Matrix2x2,
+        Unit,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
+    #[test]
+    fn test_from_angle() {
+        let matrix: Matrix2x2<f64> = Matrix2x2::from_angle(Radians::full_turn_div_4());
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_y;
+        let result = matrix * unit_x;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+
+        let expected = -unit_x;
+        let result = matrix * unit_y;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_rotation_between() {
+        let unit_x: Vector2<f64> = Vector2::unit_x();
+        let unit_y: Vector2<f64> = Vector2::unit_y();
+        let expected = Matrix2x2::new(
+             0_f64, 1_f64,
+            -1_f64, 0_f64,
+        );
+        let result = Matrix2x2::rotation_between(&unit_x, &unit_y);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_rotation_between_axis() {
+        let unit_x: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+        let unit_y: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
+        let expected = Matrix2x2::new(
+             0_f64, 1_f64,
+            -1_f64, 0_f64,
+        );
+        let result = Matrix2x2::rotation_between_axis(&unit_x, &unit_y);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+}
+
+
+#[cfg(test)]
+mod matrix2x2_reflection_tests {
+    use cglinalg_core::{
+        Vector2,
+        Matrix2x2,
+        Unit,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
 
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
@@ -842,51 +913,8 @@ mod matrix2x2_tests {
             
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-
-    #[test]
-    fn test_from_angle() {
-        let matrix: Matrix2x2<f64> = Matrix2x2::from_angle(Radians::full_turn_div_4());
-        let unit_x = Vector2::unit_x();
-        let unit_y = Vector2::unit_y();
-        let expected = unit_y;
-        let result = matrix * unit_x;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-
-        let expected = -unit_x;
-        let result = matrix * unit_y;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_rotation_between() {
-        let unit_x: Vector2<f64> = Vector2::unit_x();
-        let unit_y: Vector2<f64> = Vector2::unit_y();
-        let expected = Matrix2x2::new(
-             0_f64, 1_f64,
-            -1_f64, 0_f64,
-        );
-        let result = Matrix2x2::rotation_between(&unit_x, &unit_y);
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_rotation_between_axis() {
-        let unit_x: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
-        let unit_y: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
-        let expected = Matrix2x2::new(
-             0_f64, 1_f64,
-            -1_f64, 0_f64,
-        );
-        let result = Matrix2x2::rotation_between_axis(&unit_x, &unit_y);
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
 }
+
 
 #[cfg(test)]
 mod matrix2x2_shear_tests {
@@ -1234,18 +1262,10 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod matrix3x3_tests {
-    use cglinalg_trigonometry::{
-        Angle,
-        Radians,
-    };
     use cglinalg_core::{
         Vector2,
         Vector3,
-        Normed,
         Matrix3x3,
-        Unit,
-        Point2,
-        Point3,
     };
     use approx::{
         assert_relative_eq,
@@ -2090,6 +2110,204 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
+    /// An affine translation should only displace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
+    #[test]
+    fn test_from_affine_translation_point() {
+        let distance = Vector2::new(3_i32, 7_i32);
+        let matrix = Matrix3x3::from_affine_translation(&distance);
+        let point = Vector3::new(0_i32, 0_i32, 1_i32);
+        let expected = Vector3::new(3_i32, 7_i32, 1_i32);
+        let result = matrix * point;
+
+        assert_eq!(result, expected);
+    }
+
+    /// An affine translation should only displace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
+    #[test]
+    fn test_from_affine_translation_vector() {
+        let distance = Vector2::new(3_i32, 7_i32);
+        let matrix = Matrix3x3::from_affine_translation(&distance);
+        let vector = Vector3::zero();
+        let expected = vector;
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+}
+
+
+#[cfg(test)]
+mod matrix3x3_rotation_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
+    use cglinalg_core::{
+        Vector2,
+        Vector3,
+        Normed,
+        Matrix3x3,
+        Unit,
+        Point3,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
+    #[test]
+    fn test_from_angle_x() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let matrix = Matrix3x3::from_angle_x(angle);
+        let expected = unit_z;
+        let result = matrix * unit_y;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_from_angle_y() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_z = Vector3::unit_z();
+        let unit_x = Vector3::unit_x();
+        let matrix = Matrix3x3::from_angle_y(angle);
+        let expected = unit_x;
+        let result = matrix * unit_z;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_from_angle_z() {
+        let angle: Radians<f64> = Radians::full_turn_div_4();
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let matrix = Matrix3x3::from_angle_z(angle);
+        let expected = unit_y;
+        let result = matrix * unit_x;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_from_axis_angle() {
+        let angle: Radians<f64> = Radians::full_turn_div_2();
+        let axis = Unit::from_value(
+            (1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64)
+        );
+        let vector = Vector3::new(1_f64, 1_f64, -1_f64);
+        let matrix = Matrix3x3::from_axis_angle(&axis, angle);
+        let expected = Vector3::new(1_f64, 1_f64, 1_f64);
+        let result = matrix * vector;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_from_affine_angle() {
+        let matrix: Matrix3x3<f64> = Matrix3x3::from_affine_angle(Radians::full_turn_div_4());
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+        let expected = unit_y.extend(0_f64);
+        let result = matrix * unit_x.extend(0_f64);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+
+        let expected = -unit_x.extend(0_f64);
+        let result = matrix * unit_y.extend(0_f64);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_look_to_lh() {
+        let direction = Vector3::new(1_f64, 1_f64, 1_f64);
+        let up = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let look_to = Matrix3x3::look_to_lh(&direction, &up);
+        let expected = unit_z;
+        let result = look_to * direction.normalize();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_look_to_rh() {
+        let direction = Vector3::new(1_f64, 1_f64, 1_f64).normalize();
+        let up = Vector3::unit_y();
+        let minus_unit_z = -Vector3::unit_z();
+        let look_to = Matrix3x3::look_to_rh(&direction, &up);
+        let expected = minus_unit_z;
+        let result = look_to * direction;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_look_at_lh() {
+        let eye = Point3::new(-1_f64, -1_f64, -1_f64);
+        let target = Point3::origin();
+        let direction = target - eye;
+        let up = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+        let look_at = Matrix3x3::look_at_lh(&eye, &target, &up);
+        let expected = unit_z;
+        let result = look_at * direction.normalize();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[test]
+    fn test_look_at_rh() {
+        let eye = Point3::new(-1_f64, -1_f64, -1_f64);
+        let target = Point3::origin();
+        let direction = target - eye;
+        let up = Vector3::unit_y();
+        let minus_unit_z = -Vector3::unit_z();
+        let look_at = Matrix3x3::look_at_rh(&eye, &target, &up);
+        let expected = minus_unit_z;
+        let result = look_at * direction.normalize();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_rotation_between() {
+        let unit_x: Vector3<f64> = Vector3::unit_x();
+        let unit_y: Vector3<f64> = Vector3::unit_y();
+        let expected = Matrix3x3::new(
+             0_f64, 1_f64, 0_f64, 
+            -1_f64, 0_f64, 0_f64,
+             0_f64, 0_f64, 1_f64
+        );
+        let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+}
+
+
+#[cfg(test)]
+mod matrix3x3_reflection_tests {
+    use cglinalg_core::{
+        Vector2,
+        Vector3,
+        Matrix3x3,
+        Unit,
+        Point2,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
@@ -2282,167 +2500,6 @@ mod matrix3x3_tests {
         let result = Matrix3x3::from_reflection(&normal);
 
         assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_from_angle_x() {
-        let angle: Radians<f64> = Radians::full_turn_div_4();
-        let unit_y = Vector3::unit_y();
-        let unit_z = Vector3::unit_z();
-        let matrix = Matrix3x3::from_angle_x(angle);
-        let expected = unit_z;
-        let result = matrix * unit_y;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_from_angle_y() {
-        let angle: Radians<f64> = Radians::full_turn_div_4();
-        let unit_z = Vector3::unit_z();
-        let unit_x = Vector3::unit_x();
-        let matrix = Matrix3x3::from_angle_y(angle);
-        let expected = unit_x;
-        let result = matrix * unit_z;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_from_angle_z() {
-        let angle: Radians<f64> = Radians::full_turn_div_4();
-        let unit_x = Vector3::unit_x();
-        let unit_y = Vector3::unit_y();
-        let matrix = Matrix3x3::from_angle_z(angle);
-        let expected = unit_y;
-        let result = matrix * unit_x;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_from_axis_angle() {
-        let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = Unit::from_value(
-            (1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64)
-        );
-        let vector = Vector3::new(1_f64, 1_f64, -1_f64);
-        let matrix = Matrix3x3::from_axis_angle(&axis, angle);
-        let expected = Vector3::new(1_f64, 1_f64, 1_f64);
-        let result = matrix * vector;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_from_affine_angle() {
-        let matrix: Matrix3x3<f64> = Matrix3x3::from_affine_angle(Radians::full_turn_div_4());
-        let unit_x = Vector2::unit_x();
-        let unit_y = Vector2::unit_y();
-        let expected = unit_y.extend(0_f64);
-        let result = matrix * unit_x.extend(0_f64);
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-
-        let expected = -unit_x.extend(0_f64);
-        let result = matrix * unit_y.extend(0_f64);
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
-    /// by using a `0` in the last coordinate.
-    #[test]
-    fn test_from_affine_translation_point() {
-        let distance = Vector2::new(3_i32, 7_i32);
-        let matrix = Matrix3x3::from_affine_translation(&distance);
-        let point = Vector3::new(0_i32, 0_i32, 1_i32);
-        let expected = Vector3::new(3_i32, 7_i32, 1_i32);
-        let result = matrix * point;
-
-        assert_eq!(result, expected);
-    }
-
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
-    /// by using a `0` in the last coordinate.
-    #[test]
-    fn test_from_affine_translation_vector() {
-        let distance = Vector2::new(3_i32, 7_i32);
-        let matrix = Matrix3x3::from_affine_translation(&distance);
-        let vector = Vector3::zero();
-        let expected = vector;
-        let result = matrix * vector;
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_look_to_lh() {
-        let direction = Vector3::new(1_f64, 1_f64, 1_f64);
-        let up = Vector3::unit_y();
-        let unit_z = Vector3::unit_z();
-        let look_to = Matrix3x3::look_to_lh(&direction, &up);
-        let expected = unit_z;
-        let result = look_to * direction.normalize();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_look_to_rh() {
-        let direction = Vector3::new(1_f64, 1_f64, 1_f64).normalize();
-        let up = Vector3::unit_y();
-        let minus_unit_z = -Vector3::unit_z();
-        let look_to = Matrix3x3::look_to_rh(&direction, &up);
-        let expected = minus_unit_z;
-        let result = look_to * direction;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_look_at_lh() {
-        let eye = Point3::new(-1_f64, -1_f64, -1_f64);
-        let target = Point3::origin();
-        let direction = target - eye;
-        let up = Vector3::unit_y();
-        let unit_z = Vector3::unit_z();
-        let look_at = Matrix3x3::look_at_lh(&eye, &target, &up);
-        let expected = unit_z;
-        let result = look_at * direction.normalize();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[test]
-    fn test_look_at_rh() {
-        let eye = Point3::new(-1_f64, -1_f64, -1_f64);
-        let target = Point3::origin();
-        let direction = target - eye;
-        let up = Vector3::unit_y();
-        let minus_unit_z = -Vector3::unit_z();
-        let look_at = Matrix3x3::look_at_rh(&eye, &target, &up);
-        let expected = minus_unit_z;
-        let result = look_at * direction.normalize();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_rotation_between() {
-        let unit_x: Vector3<f64> = Vector3::unit_x();
-        let unit_y: Vector3<f64> = Vector3::unit_y();
-        let expected = Matrix3x3::new(
-             0_f64, 1_f64, 0_f64, 
-            -1_f64, 0_f64, 0_f64,
-             0_f64, 0_f64, 1_f64
-        );
-        let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
-
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
 
@@ -3985,17 +4042,12 @@ mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
 #[cfg(test)]
 mod matrix4x4_tests {
     use cglinalg_trigonometry::{
-        Angle,
-        Radians,
         Degrees,
     };
     use cglinalg_core::{
         Vector3,
         Vector4,
-        Normed,
         Matrix4x4,
-        Unit,
-        Point3,
     };
     use approx::{
         assert_relative_eq,
@@ -4954,92 +5006,127 @@ mod matrix4x4_tests {
         assert_eq!(matrix * unit_w, unit_w);
     }
 
-    #[rustfmt::skip]
+    /// An affine translation should only displace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
-    fn test_from_affine_reflection_xy_plane() {
-        let bias = Point3::origin();
-        let normal = Unit::from_value(Vector3::unit_z());
-        let expected = Matrix4x4::new(
-            1_f64, 0_f64,  0_f64, 0_f64,
-            0_f64, 1_f64,  0_f64, 0_f64,
-            0_f64, 0_f64, -1_f64, 0_f64,
-            0_f64, 0_f64,  0_f64, 1_f64
-        );
-        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
+    fn test_from_affine_translation_point() {
+        let distance = Vector3::new(3_i32, 7_i32, 11_i32);
+        let matrix = Matrix4x4::from_affine_translation(&distance);
+        let point = Vector4::new(0_i32, 0_i32, 0_i32, 1_i32);
+        let expected = Vector4::new(3_i32, 7_i32, 11_i32, 1_i32);
+        let result = matrix * point;
 
         assert_eq!(result, expected);
     }
 
-    #[rustfmt::skip]
+    /// An affine translation should only displace points and not vectors. We 
+    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// by using a `0` in the last coordinate.
     #[test]
-    fn test_from_affine_reflection_zx_plane() {
-        let bias = Point3::origin();
-        let normal = Unit::from_value(-Vector3::unit_y());
-        let expected = Matrix4x4::new(
-            1_f64,  0_f64, 0_f64, 0_f64,
-            0_f64, -1_f64, 0_f64, 0_f64,
-            0_f64,  0_f64, 1_f64, 0_f64,
-            0_f64,  0_f64, 0_f64, 1_f64
-        );
-        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
-
-        assert_eq!(result, expected);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_affine_reflection_yz_plane() {
-        let bias = Point3::origin();
-        let normal = Unit::from_value(Vector3::unit_x());
-        let expected = Matrix4x4::new(
-            -1_f64,  0_f64, 0_f64,  0_f64,
-             0_f64,  1_f64, 0_f64,  0_f64,
-             0_f64,  0_f64, 1_f64,  0_f64,
-             0_f64,  0_f64, 0_f64,  1_f64
-        );
-        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_from_affine_reflection_plane1() {
-        // The plane `z = 1`.
-        let bias = Point3::new(0_f64, 0_f64, 1_f64);
-        let normal = Unit::from_value(Vector3::new(0_f64, 0_f64, 1_f64));
-        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
-        let vector = Vector4::new(1_f64, 1_f64, 0.5_f64, 1_f64);
-        let expected = Vector4::new(1_f64,1_f64,1.5_f64, 1_f64);
+    fn test_from_affine_translation_vector() {
+        let distance = Vector3::new(3_i32, 7_i32, 11_i32);
+        let matrix = Matrix4x4::from_affine_translation(&distance);
+        let vector = Vector4::new(0_i32, 0_i32, 0_i32, 0_i32);
+        let expected = vector;
         let result = matrix * vector;
 
         assert_eq!(result, expected);
     }
+}
 
+
+#[cfg(test)]
+mod matrix4x4_projection_tests {
+    use cglinalg_trigonometry::{
+        Degrees,
+    };
+    use cglinalg_core::{
+        Matrix4x4,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
+    #[rustfmt::skip]
     #[test]
-    fn test_from_affine_reflection_plane2() {
-        // The plane `x = -1`.
-        let bias = Point3::new(-1_f64, 0_f64, 0_f64);
-        let normal = Unit::from_value(Vector3::new(1_f64, 0_f64, 0_f64));
-        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
-        let vector = Vector4::new(-2_f64, 1_f64, 1_f64, 1_f64);
-        let expected = Vector4::new(0_f64,1_f64,1_f64, 1_f64);
-        let result = matrix * vector;
-
+    fn test_from_orthographic() {
+        let left = -4_f64;
+        let right = 4_f64;
+        let bottom = -2_f64;
+        let top = 2_f64;
+        let near = 1_f64;
+        let far = 100_f64;
+        let expected = Matrix4x4::new(
+            1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
+            0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
+            0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
+            0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
+        );
+        let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
+    
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
-    fn test_from_affine_reflection_plane3() {
-        // The plane `y = 1`.
-        let bias = Point3::new(0_f64, 1_f64, 0_f64);
-        let normal = Unit::from_value(Vector3::new(0_f64, 1_f64, 0_f64));
-        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
-        let vector = Vector4::new(0_f64, 0_f64, 0_f64, 1_f64);
-        let expected = Vector4::new(0_f64,2_f64, 0_f64, 1_f64);
-        let result = matrix * vector;
+    fn test_from_perspective_fov() {
+        let vfov = Degrees(72_f32);
+        let aspect_ratio = 800_f32 / 600_f32;
+        let near = 0.1_f32;
+        let far = 100_f32;
+        let expected = Matrix4x4::new(
+            1.0322863_f32, 0_f32,          0_f32,         0_f32, 
+            0_f32,         1.3763818_f32,  0_f32,         0_f32, 
+            0_f32,         0_f32,         -1.002002_f32, -1_f32, 
+            0_f32,         0_f32,         -0.2002002_f32, 0_f32
+        );
+        let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
+    
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
 
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_perspective() {
+        let left = -4_f64;
+        let right = 4_f64;
+        let bottom = -2_f64;
+        let top = 3_f64;
+        let near = 1_f64;
+        let far = 100_f64;
+        let expected = Matrix4x4::new(
+            1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
+            0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
+            0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
+            0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+        );
+        let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
+    
         assert_eq!(result, expected);
     }
+}
+
+
+#[cfg(test)]
+mod matrix4x4_rotation_tests {
+    use cglinalg_trigonometry::{
+        Angle,
+        Radians,
+    };
+    use cglinalg_core::{
+        Vector3,
+        Vector4,
+        Normed,
+        Matrix4x4,
+        Unit,
+        Point3,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
 
     #[test]
     fn test_from_angle_x() {
@@ -5125,92 +5212,6 @@ mod matrix4x4_tests {
         let result = matrix * vector;
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
-    }
-
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
-    /// by using a `0` in the last coordinate.
-    #[test]
-    fn test_from_affine_translation_point() {
-        let distance = Vector3::new(3_i32, 7_i32, 11_i32);
-        let matrix = Matrix4x4::from_affine_translation(&distance);
-        let point = Vector4::new(0_i32, 0_i32, 0_i32, 1_i32);
-        let expected = Vector4::new(3_i32, 7_i32, 11_i32, 1_i32);
-        let result = matrix * point;
-
-        assert_eq!(result, expected);
-    }
-
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
-    /// by using a `0` in the last coordinate.
-    #[test]
-    fn test_from_affine_translation_vector() {
-        let distance = Vector3::new(3_i32, 7_i32, 11_i32);
-        let matrix = Matrix4x4::from_affine_translation(&distance);
-        let vector = Vector4::new(0_i32, 0_i32, 0_i32, 0_i32);
-        let expected = vector;
-        let result = matrix * vector;
-
-        assert_eq!(result, expected);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_orthographic() {
-        let left = -4_f64;
-        let right = 4_f64;
-        let bottom = -2_f64;
-        let top = 2_f64;
-        let near = 1_f64;
-        let far = 100_f64;
-        let expected = Matrix4x4::new(
-            1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
-            0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
-            0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
-            0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
-        );
-        let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
-    
-        assert_eq!(result, expected);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_perspective_fov() {
-        let vfov = Degrees(72_f32);
-        let aspect_ratio = 800_f32 / 600_f32;
-        let near = 0.1_f32;
-        let far = 100_f32;
-        let expected = Matrix4x4::new(
-            1.0322863_f32, 0_f32,          0_f32,         0_f32, 
-            0_f32,         1.3763818_f32,  0_f32,         0_f32, 
-            0_f32,         0_f32,         -1.002002_f32, -1_f32, 
-            0_f32,         0_f32,         -0.2002002_f32, 0_f32
-        );
-        let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
-    
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_perspective() {
-        let left = -4_f64;
-        let right = 4_f64;
-        let bottom = -2_f64;
-        let top = 3_f64;
-        let near = 1_f64;
-        let far = 100_f64;
-        let expected = Matrix4x4::new(
-            1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
-            0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
-            0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
-            0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
-        );
-        let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
-    
-        assert_eq!(result, expected);
     }
 
     #[test]
@@ -5314,6 +5315,106 @@ mod matrix4x4_tests {
         let result = look_to * (-direction).normalize().to_homogeneous();
     
         assert_relative_eq!(result, expected, epsilon = 1e-8);
+    }
+}
+
+
+#[cfg(test)]
+mod matrix4x4_reflection_tests {
+    use cglinalg_core::{
+        Vector3,
+        Vector4,
+        Matrix4x4,
+        Unit,
+        Point3,
+    };
+
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_affine_reflection_xy_plane() {
+        let bias = Point3::origin();
+        let normal = Unit::from_value(Vector3::unit_z());
+        let expected = Matrix4x4::new(
+            1_f64, 0_f64,  0_f64, 0_f64,
+            0_f64, 1_f64,  0_f64, 0_f64,
+            0_f64, 0_f64, -1_f64, 0_f64,
+            0_f64, 0_f64,  0_f64, 1_f64
+        );
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
+
+        assert_eq!(result, expected);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_affine_reflection_zx_plane() {
+        let bias = Point3::origin();
+        let normal = Unit::from_value(-Vector3::unit_y());
+        let expected = Matrix4x4::new(
+            1_f64,  0_f64, 0_f64, 0_f64,
+            0_f64, -1_f64, 0_f64, 0_f64,
+            0_f64,  0_f64, 1_f64, 0_f64,
+            0_f64,  0_f64, 0_f64, 1_f64
+        );
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
+
+        assert_eq!(result, expected);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_from_affine_reflection_yz_plane() {
+        let bias = Point3::origin();
+        let normal = Unit::from_value(Vector3::unit_x());
+        let expected = Matrix4x4::new(
+            -1_f64,  0_f64, 0_f64,  0_f64,
+             0_f64,  1_f64, 0_f64,  0_f64,
+             0_f64,  0_f64, 1_f64,  0_f64,
+             0_f64,  0_f64, 0_f64,  1_f64
+        );
+        let result = Matrix4x4::from_affine_reflection(&normal, &bias);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_reflection_plane1() {
+        // The plane `z = 1`.
+        let bias = Point3::new(0_f64, 0_f64, 1_f64);
+        let normal = Unit::from_value(Vector3::new(0_f64, 0_f64, 1_f64));
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
+        let vector = Vector4::new(1_f64, 1_f64, 0.5_f64, 1_f64);
+        let expected = Vector4::new(1_f64,1_f64,1.5_f64, 1_f64);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_reflection_plane2() {
+        // The plane `x = -1`.
+        let bias = Point3::new(-1_f64, 0_f64, 0_f64);
+        let normal = Unit::from_value(Vector3::new(1_f64, 0_f64, 0_f64));
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
+        let vector = Vector4::new(-2_f64, 1_f64, 1_f64, 1_f64);
+        let expected = Vector4::new(0_f64,1_f64,1_f64, 1_f64);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_reflection_plane3() {
+        // The plane `y = 1`.
+        let bias = Point3::new(0_f64, 1_f64, 0_f64);
+        let normal = Unit::from_value(Vector3::new(0_f64, 1_f64, 0_f64));
+        let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
+        let vector = Vector4::new(0_f64, 0_f64, 0_f64, 1_f64);
+        let expected = Vector4::new(0_f64,2_f64, 0_f64, 1_f64);
+        let result = matrix * vector;
+
+        assert_eq!(result, expected);
     }
 }
 
