@@ -4265,7 +4265,8 @@ where
         origin: &Point2<S>, 
         direction: &Unit<Vector2<S>>, 
         normal: &Unit<Vector2<S>>
-    ) -> Self {
+    ) -> Self
+    {
         let zero = S::zero();
         let one = S::one();
         let translation = direction.into_inner() * (-shear_factor * origin.to_vector().dot(normal));
@@ -4539,6 +4540,7 @@ where
     /// A := cross(a) := | a.z   0    -a.x |
     ///                  | -a.y  a.x   0   |
     /// ```
+    /// where `a.*` denote the components of the vector `a`.
     /// 
     /// # Example
     /// 
@@ -5424,12 +5426,11 @@ where
     /// #     Vector4, 
     /// # };
     /// #
-    /// let shear_x_with_y = 3_i32;
-    /// let shear_x_with_z = 19_i32;
-    /// let matrix = Matrix4x4::from_affine_shear_x(shear_x_with_y, shear_x_with_z);
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_xy(shear_factor);
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
     /// let expected = Vector4::new(
-    ///     1_i32 + shear_x_with_y * 1_i32 + shear_x_with_z * 1_i32,
+    ///     1_i32 + shear_factor * 1_i32,
     ///     1_i32,
     ///     1_i32,
     ///     1_i32
@@ -5440,15 +5441,137 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_x(shear_x_with_y: S, shear_x_with_z: S) -> Self {
+    pub fn from_affine_shear_xy(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
         
         Self::new(
-            one,            zero, zero, zero,
-            shear_x_with_y, one,  zero, zero,
-            shear_x_with_z, zero, one,  zero,
-            zero,           zero, zero, one
+            one,          zero, zero, zero,
+            shear_factor, one,  zero, zero,
+            zero,         zero, one,  zero,
+            zero,         zero, zero, one
+        )
+    }
+
+    /// Construct an affine shearing matrix for shearing along the **x-axis** 
+    /// in the **xy-plane** with the **z-axis** as the normal vector to the plane
+    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_xz(shear_factor);
+    /// let vertices = [
+    ///     Vector4::new( 1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32, -1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector4::new( 1_i32 + shear_factor,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32 + shear_factor,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32 + shear_factor, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32 + shear_factor, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32 - shear_factor,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32 - shear_factor,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
+    ///     Vector4::new( 1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear_xz(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,          zero, zero, zero,
+            zero,         one,  zero, zero,
+            shear_factor, zero, one,  zero,
+            zero,         zero, zero, one
+        )
+    }
+
+    /// Construct an affine shearing matrix for shearing along the **y-axis** 
+    /// in the **yz-plane** with the **x-axis** as the normal vector to the plane
+    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_yx(shear_factor);
+    /// let vertices = [
+    ///     Vector4::new( 1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32, -1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector4::new( 1_i32,  1_i32 + shear_factor,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32 - shear_factor,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32 - shear_factor,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32 + shear_factor,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32,  1_i32 + shear_factor, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32 - shear_factor, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32 + shear_factor, -1_i32, 1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear_yx(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,  shear_factor, zero, zero,
+            zero, one,          zero, zero,
+            zero, zero,         one,  zero,
+            zero, zero,         zero, one
         )
     }
 
@@ -5469,13 +5592,12 @@ where
     /// #     Vector4, 
     /// # };
     /// #
-    /// let shear_y_with_x = 3_i32;
-    /// let shear_y_with_z = 19_i32;
-    /// let matrix = Matrix4x4::from_affine_shear_y(shear_y_with_x, shear_y_with_z);
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_yz(shear_factor);
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
     /// let expected = Vector4::new(
     ///     1_i32,
-    ///     1_i32 + shear_y_with_x * 1_i32 + shear_y_with_z * 1_i32,
+    ///     1_i32 + shear_factor * 1_i32,
     ///     1_i32,
     ///     1_i32
     /// );
@@ -5485,15 +5607,15 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_y(shear_y_with_x: S, shear_y_with_z: S) -> Self {
+    pub fn from_affine_shear_yz(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
         Self::new(
-            one,  shear_y_with_x, zero, zero,
-            zero, one,            zero, zero,
-            zero, shear_y_with_z, one,  zero,
-            zero, zero,           zero, one
+            one,  zero,         zero, zero,
+            zero, one,          zero, zero,
+            zero, shear_factor, one,  zero,
+            zero, zero,         zero, one
         )
     }
 
@@ -5514,14 +5636,13 @@ where
     /// #     Vector4, 
     /// # };
     /// #
-    /// let shear_z_with_x = 3_i32;
-    /// let shear_z_with_y = 19_i32;
-    /// let matrix = Matrix4x4::from_affine_shear_z(shear_z_with_x, shear_z_with_y);
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_zx(shear_factor);
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
     /// let expected = Vector4::new(
     ///     1_i32,
     ///     1_i32,
-    ///     1_i32 + shear_z_with_x * 1_i32 + shear_z_with_y * 1_i32,
+    ///     1_i32 + shear_factor * 1_i32,
     ///     1_i32
     /// );
     /// let result = matrix * vector;
@@ -5530,18 +5651,84 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_shear_z(shear_z_with_x: S, shear_z_with_y: S) -> Self {
+    pub fn from_affine_shear_zx(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
 
         Self::new(
-            one,  zero, shear_z_with_x, zero,
-            zero, one,  shear_z_with_y, zero,
-            zero, zero, one,            zero,
-            zero, zero, zero,           one
+            one,  zero, shear_factor, zero,
+            zero, one,  zero,         zero,
+            zero, zero, one,          zero,
+            zero, zero, zero,         one
         )
     }
 
+    /// Construct an affine shearing matrix for shearing along the **z-axis** 
+    /// in the **zx-plane** with the **y-axis** as the normal vector to the plane
+    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector4,
+    /// # };
+    /// #
+    /// let shear_factor = 19_i32;
+    /// let matrix = Matrix4x4::from_affine_shear_zy(shear_factor);
+    /// let vertices = [
+    ///     Vector4::new( 1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32,  1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32,  1_i32, 1_i32),
+    ///     Vector4::new( 1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32, -1_i32, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32, -1_i32, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32, -1_i32, 1_i32),
+    /// ];
+    /// let expected = [
+    ///     Vector4::new( 1_i32,  1_i32,  1_i32 + shear_factor, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32,  1_i32 + shear_factor, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32,  1_i32 - shear_factor, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32,  1_i32 - shear_factor, 1_i32),
+    ///     Vector4::new( 1_i32,  1_i32, -1_i32 + shear_factor, 1_i32),
+    ///     Vector4::new(-1_i32,  1_i32, -1_i32 + shear_factor, 1_i32),
+    ///     Vector4::new(-1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
+    ///     Vector4::new( 1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[rustfmt::skip]
+    #[inline]
+    pub fn from_affine_shear_zy(shear_factor: S) -> Self {
+        let one = S::one();
+        let zero = S::zero();
+
+        Self::new(
+            one,  zero, zero,         zero,
+            zero, one,  shear_factor, zero,
+            zero, zero, one,          zero,
+            zero, zero, zero,         one
+        )
+    }
+}
+
+impl<S> Matrix4x4<S>
+where
+    S: SimdScalarFloat
+{
     /// Construct a general shearing affine matrix in three dimensions. 
     ///
     /// There are six parameters describing a shearing transformation in three 
@@ -5573,49 +5760,103 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,   
+    /// #     Vector4,
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
     /// #
-    /// let shear_x_with_y = 1_usize;
-    /// let shear_x_with_z = 2_usize;
-    /// let shear_y_with_x = 3_usize;
-    /// let shear_y_with_z = 4_usize;
-    /// let shear_z_with_x = 5_usize;
-    /// let shear_z_with_y = 6_usize;
-    /// let matrix = Matrix4x4::from_affine_shear(
-    ///     shear_x_with_y, 
-    ///     shear_x_with_z,
-    ///     shear_y_with_x,
-    ///     shear_y_with_z,
-    ///     shear_z_with_x,
-    ///     shear_z_with_y,
-    /// );
-    /// let vector = Vector4::new(1_usize, 1_usize, 1_usize, 1_usize);
-    /// let expected = Vector4::new(
-    ///     vector.x + shear_x_with_y * vector.y + shear_x_with_z * vector.z,
-    ///     vector.y + shear_y_with_x * vector.x + shear_y_with_z * vector.z,
-    ///     vector.z + shear_z_with_x * vector.x + shear_z_with_y * vector.y,
-    ///     1_usize
-    /// );
-    /// let result = matrix * vector;
-    ///
-    /// assert_eq!(result, expected);
+    /// let shear_factor = 15_f64;
+    /// let origin = Point3::origin();
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     1_f64 / f64::sqrt(2_f64),
+    ///     1_f64 / f64::sqrt(2_f64),
+    ///     0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// let vertices = [
+    ///     Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+    ///     Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+    ///     Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+    ///     Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+    ///     Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+    ///     Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+    ///     Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+    ///     Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+    /// ];
+    /// let expected = [
+    ///     Vector4::new( 1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64, 1_f64),
+    ///     Vector4::new(-1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64, 1_f64),
+    ///     Vector4::new(-1_f64 + shear_factor / f64::sqrt(2_f64), -1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64, 1_f64),
+    ///     Vector4::new( 1_f64 + shear_factor / f64::sqrt(2_f64), -1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64, 1_f64),
+    ///     Vector4::new( 1_f64 - shear_factor / f64::sqrt(2_f64),  1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
+    ///     Vector4::new(-1_f64 - shear_factor / f64::sqrt(2_f64),  1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
+    ///     Vector4::new(-1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
+    ///     Vector4::new( 1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
+    /// ];
+    /// let result = [
+    ///     matrix * vertices[0],
+    ///     matrix * vertices[1],
+    ///     matrix * vertices[2],
+    ///     matrix * vertices[3],
+    ///     matrix * vertices[4],
+    ///     matrix * vertices[5],
+    ///     matrix * vertices[6],
+    ///     matrix * vertices[7],
+    /// ];
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
+    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
+    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
     /// ``` 
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(
-        shear_x_with_y: S, shear_x_with_z: S, 
-        shear_y_with_x: S, shear_y_with_z: S, 
-        shear_z_with_x: S, shear_z_with_y: S) -> Self
+        shear_factor: S, 
+        origin: &Point3<S>, 
+        direction: &Unit<Vector3<S>>, 
+        normal: &Unit<Vector3<S>>
+    ) -> Self 
     {
         let zero = S::zero();
         let one = S::one();
+        let translation = direction.into_inner() * (-shear_factor * origin.to_vector().dot(normal));
+
+        let c0r0 = one + shear_factor * direction[0] * normal[0];
+        let c0r1 = shear_factor * direction[1] * normal[0];
+        let c0r2 = shear_factor * direction[2] * normal[0];
+        let c0r3 = zero;
+
+        let c1r0 = shear_factor * direction[0] * normal[1];
+        let c1r1 = one + shear_factor * direction[1] * normal[1];
+        let c1r2 = shear_factor * direction[2] * normal[1];
+        let c1r3 = zero;
+
+        let c2r0 = shear_factor * direction[0] * normal[2];
+        let c2r1 = shear_factor * direction[1] * normal[2];
+        let c2r2 = one + shear_factor * direction[2] * normal[2];
+        let c2r3 = zero;
+
+        let c3r0 = translation[0];
+        let c3r1 = translation[1];
+        let c3r2 = translation[2];
+        let c3r3 = one;
 
         Self::new(
-            one,            shear_y_with_x, shear_z_with_x, zero,
-            shear_x_with_y, one,            shear_z_with_y, zero,
-            shear_x_with_z, shear_y_with_z, one,            zero,
-            zero,           zero,           zero,           one
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
         )
     }
 }
