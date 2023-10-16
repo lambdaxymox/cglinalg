@@ -1094,6 +1094,15 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         )
     }
 
+    fn shear_matrix_xy() -> Matrix2x2<f64> {
+        let shear_factor = shear_factor();
+
+        Matrix2x2::new(
+            1_f64,        0_f64,
+            shear_factor, 1_f64
+        )
+    }
+
 
     #[test]
     fn test_from_shear_rotation_angle() {
@@ -1123,7 +1132,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_shear_coordinates1() {
+    fn test_from_shear_vertices_xy() {
         let vertices = [
             Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64)),
             Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64)),
@@ -1226,6 +1235,20 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         );
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
         
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_shear_matrix_alternative_method() {
+        let shear_factor = shear_factor();
+        let direction = direction();
+        let normal = normal();
+        let rotation = rotation();
+        let rotation_inv = rotation_inv();
+        let shear_matrix_xy = shear_matrix_xy();
+        let expected = Matrix2x2::from_shear(shear_factor, &direction, &normal);
+        let result = rotation * shear_matrix_xy * rotation_inv;
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -3072,6 +3095,36 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         )
     }
 
+    #[rustfmt::skip]
+    fn rotation() -> Matrix3x3<f64> {
+        Matrix3x3::new(
+             f64::sqrt(3_f64 / 10_f64), f64::sqrt(3_f64 / 10_f64), f64::sqrt(2_f64 / 5_f64),
+            -1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
+            -1_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64),  f64::sqrt(3_f64 / 5_f64)
+
+        )
+    }
+
+    #[rustfmt::skip]
+    fn rotation_inv() -> Matrix3x3<f64> {
+        Matrix3x3::new(
+            f64::sqrt(3_f64 / 10_f64), -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(5_f64),
+            f64::sqrt(3_f64/ 10_f64),   1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(5_f64),
+            f64::sqrt(2_f64 / 5_f64),   0_f64,                          f64::sqrt(3_f64 / 5_f64)
+        )
+    }
+
+    #[rustfmt::skip]
+    fn shear_matrix_xz() -> Matrix3x3<f64> {
+        let shear_factor = shear_factor();
+
+        Matrix3x3::new(
+            1_f64,        0_f64, 0_f64,
+            0_f64,        1_f64, 0_f64,
+            shear_factor, 0_f64, 1_f64
+        )
+    }
+
 
     #[test]
     fn test_from_shear_rotation_angle_z_xy() {
@@ -3130,12 +3183,31 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     }
 
     #[test]
+    fn test_from_shear_rotation() {
+        let rotation_z_xy = rotation_z_xy();
+        let rotation_y_zx = rotation_y_zx();
+        let expected = rotation();
+        let result = rotation_z_xy * rotation_y_zx;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_shear_rotation_inv() {
+        let rotation_z_xy_inv = rotation_z_xy_inv();
+        let rotation_y_zx_inv = rotation_y_zx_inv();
+        let expected = rotation_inv();
+        let result = rotation_y_zx_inv * rotation_z_xy_inv;
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
     fn test_from_shear_direction_xz() {
         let direction = direction();
-        let rotation_y_zx_inv = rotation_y_zx_inv();
-        let rotation_z_xy_inv = rotation_z_xy_inv();
+        let rotation_inv = rotation_inv();
         let expected = Vector3::unit_x();
-        let result = rotation_y_zx_inv * rotation_z_xy_inv * direction.into_inner();
+        let result = rotation_inv * direction.into_inner();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -3143,10 +3215,9 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     #[test]
     fn test_from_shear_normal_xz() {
         let normal = normal();
-        let rotation_y_zx_inv = rotation_y_zx_inv();
-        let rotation_z_xy_inv = rotation_z_xy_inv();
+        let rotation_inv = rotation_inv();
         let expected = Vector3::unit_z();
-        let result = rotation_y_zx_inv * rotation_z_xy_inv * normal.into_inner();
+        let result = rotation_inv * normal.into_inner();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -3154,8 +3225,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_vertices_xz() {
-        let rotation_z_xy = rotation_z_xy();
-        let rotation_y_zx = rotation_y_zx();
+        let rotation = rotation();
         let vertices = [
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
@@ -3210,14 +3280,14 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         ];
         let expected = vertices;
         let result = [
-            rotation_z_xy * rotation_y_zx * rotated_vertices[0],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[1],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[2],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[3],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[4],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[5],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[6],
-            rotation_z_xy * rotation_y_zx * rotated_vertices[7],
+            rotation * rotated_vertices[0],
+            rotation * rotated_vertices[1],
+            rotation * rotated_vertices[2],
+            rotation * rotated_vertices[3],
+            rotation * rotated_vertices[4],
+            rotation * rotated_vertices[5],
+            rotation * rotated_vertices[6],
+            rotation * rotated_vertices[7],
         ];
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
@@ -3232,7 +3302,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_shear1() {
+    fn test_from_shear_vertices() {
         let shear_factor = shear_factor();
         let direction = direction();
         let normal = normal();
@@ -3368,6 +3438,20 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             )
         };
         let result = Matrix3x3::from_shear(shear_factor, &direction, &normal);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_shear_matrix_alternative_path() {
+        let shear_factor = shear_factor();
+        let direction = direction();
+        let normal = normal();
+        let rotation = rotation();
+        let rotation_inv = rotation_inv();
+        let shear_matrix_xz = shear_matrix_xz();
+        let expected = Matrix3x3::from_shear(shear_factor, &direction, &normal);
+        let result = rotation * shear_matrix_xz * rotation_inv;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -3753,8 +3837,8 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         let direction = Unit::from_value(Vector2::unit_y());
         let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix3x3::new(
-            1_f64, shear_factor,              0_f64,
-            0_f64, 1_f64,                     0_f64,
+            1_f64,  shear_factor,              0_f64,
+            0_f64,  1_f64,                     0_f64,
             0_f64, -origin[0] * shear_factor, 1_f64
         );
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -3786,6 +3870,9 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 }
 
 
+/// Shearing along the plane `(1 / 2) * x + 1 - y == 0`
+/// with origin `[2, 2]`, direction `[2 / sqrt(5), 1 / sqrt(5)]`, and
+/// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
 mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
     use cglinalg_trigonometry::{
@@ -3847,6 +3934,17 @@ mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
             2_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64), 0_f64,
             1_f64 / f64::sqrt(5_f64),  2_f64 / f64::sqrt(5_f64), 0_f64,
             0_f64,                           0_f64,                         1_f64
+        )
+    }
+
+    #[rustfmt::skip]
+    fn shear_matrix_xy() -> Matrix3x3<f64> {
+        let shear_factor = shear_factor();
+
+        Matrix3x3::new(
+            1_f64,        0_f64, 0_f64,
+            shear_factor, 1_f64, 0_f64,
+            0_f64,        0_f64, 1_f64
         )
     }
 
@@ -4005,6 +4103,23 @@ mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[test]
+    fn test_from_affine_shear_matrix_alternative_path() {
+        let shear_factor = shear_factor();
+        let origin = origin();
+        let direction = direction();
+        let normal = normal();
+        let translation = translation();
+        let translation_inv = translation_inv();
+        let rotation = rotation();
+        let rotation_inv = rotation_inv();
+        let shear_matrix_xy = shear_matrix_xy();
+        let expected = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let result = (translation * rotation) * shear_matrix_xy * (rotation_inv * translation_inv);
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_shearing_plane() {
@@ -4041,9 +4156,6 @@ mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
 
 #[cfg(test)]
 mod matrix4x4_tests {
-    use cglinalg_trigonometry::{
-        Degrees,
-    };
     use cglinalg_core::{
         Vector3,
         Vector4,
@@ -5971,6 +6083,9 @@ mod matrix4x4_affine_shear_tests {
 }
 
 
+/// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
+/// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`, 
+/// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
 #[cfg(test)]
 mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     use cglinalg_trigonometry::{
@@ -5997,6 +6112,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Point3::new(2_f64, 3_f64, 3_f64)
     }
 
+    #[rustfmt::skip]
     fn direction() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
             2_f64 / f64::sqrt(17_f64), 
@@ -6005,6 +6121,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         ))
     }
 
+    #[rustfmt::skip]
     fn normal() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
             0_f64, 
@@ -6129,6 +6246,18 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         )
     }
 
+    #[rustfmt::skip]
+    fn shear_matrix_xz() -> Matrix4x4<f64> {
+        let shear_factor = shear_factor();
+
+        Matrix4x4::new(
+            1_f64,        0_f64, 0_f64, 0_f64,
+            0_f64,        1_f64, 0_f64, 0_f64,
+            shear_factor, 0_f64, 1_f64, 0_f64,
+            0_f64,        0_f64, 0_f64, 1_f64
+        )
+    }
+
 
     #[test]
     fn test_rotation_angle_x_yz() {
@@ -6167,28 +6296,28 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     #[test]
     fn test_from_affine_shear_rotation_x_yz_inv() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
-        let rotation_x_yz_inv = rotation_x_yz_inv();
-        let computed_rotation_x_yz_inv = Matrix4x4::from_affine_angle_x(-rotation_angle_x_yz);
+        let expected = rotation_x_yz_inv();
+        let result = Matrix4x4::from_affine_angle_x(-rotation_angle_x_yz);
 
-        assert_relative_eq!(computed_rotation_x_yz_inv, rotation_x_yz_inv, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_from_affine_shear_rotation_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
-        let rotation_z_xy = rotation_z_xy();
-        let computed_rotation_z_xy = Matrix4x4::from_affine_angle_z(rotation_angle_z_xy);
+        let expected = rotation_z_xy();
+        let result = Matrix4x4::from_affine_angle_z(rotation_angle_z_xy);
 
-        assert_relative_eq!(computed_rotation_z_xy, rotation_z_xy, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_from_affine_shear_rotation_z_xy_inv() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
-        let rotation_z_xy_inv = rotation_z_xy_inv();
-        let computed_rotation_z_xy_inv = Matrix4x4::from_affine_angle_z(-rotation_angle_z_xy);
+        let expected = rotation_z_xy_inv();
+        let result = Matrix4x4::from_affine_angle_z(-rotation_angle_z_xy);
 
-        assert_relative_eq!(computed_rotation_z_xy_inv, rotation_z_xy_inv, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
     
     #[test]
@@ -6203,11 +6332,11 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
 
     #[test]
     fn test_from_affine_shear_rotation_inv() {
-        let rotation_inv = rotation_inv();
+        let expected = rotation_inv();
         let rotation = rotation();
-        let computed_rotation_inv = rotation.inverse().unwrap();
+        let result = rotation.inverse().unwrap();
 
-        assert_relative_eq!(computed_rotation_inv, rotation_inv, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -6230,26 +6359,26 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     fn test_from_affine_shear_direction_xz() {
         let direction = direction();
         let rotation_inv = rotation_inv();
-        let expected_direction = Vector4::unit_x();
-        let result_direction = {
+        let expected = Vector4::unit_x();
+        let result = {
             let _direction = direction.into_inner().extend(0_f64);
             rotation_inv * _direction
         };
 
-        assert_relative_eq!(result_direction, expected_direction, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
     fn test_from_affine_shear_normal_xz() {
         let normal = normal();
         let rotation_inv = rotation_inv();
-        let expected_normal = Vector4::unit_z();
-        let result_normal = {
+        let expected = Vector4::unit_z();
+        let result = {
             let _normal = normal.into_inner().extend(0_f64);
             rotation_inv * _normal
         };
 
-        assert_relative_eq!(result_normal, expected_normal, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
@@ -6501,6 +6630,23 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         };
         let result = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
         
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_affine_shear_matrix_alternative_path() {
+        let shear_factor = shear_factor();
+        let origin = origin();
+        let direction = direction();
+        let normal = normal();
+        let translation = translation();
+        let translation_inv = translation_inv();
+        let rotation = rotation();
+        let rotation_inv = rotation_inv();
+        let shear_matrix_xz = shear_matrix_xz();
+        let expected = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let result = (translation * rotation) * shear_matrix_xz * (rotation_inv * translation_inv);
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 

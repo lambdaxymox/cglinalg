@@ -2771,10 +2771,16 @@ impl<S> Matrix2x2<S>
 where 
     S: SimdScalar 
 {
-    /// Construct a shearing matrix along the **x-axis**, holding the **y-axis** constant.
-    ///
-    /// The parameter `shear_factor` denotes the factor scaling the
-    /// contribution of the **y-axis** to shearing along the **x-axis**.
+    /// Construct a shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix2x2::from_shear`].
     ///
     /// # Example
     /// 
@@ -2830,10 +2836,16 @@ where
         )
     }
 
-    /// Construct a shearing matrix along the **y-axis**, holding the **x-axis** constant.
-    ///
-    /// The parameter `shear_factor denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **y-axis**.
+    /// Construct a shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix2x2::from_shear`].
     ///
     /// # Example
     /// 
@@ -2894,15 +2906,69 @@ impl<S> Matrix2x2<S>
 where 
     S: SimdScalarFloat
 {
-    /// Construct a general shearing matrix in two dimensions. There are two 
-    /// possible parameters describing a shearing transformation in two 
-    /// dimensions.
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **y-axis**.
-    /// The parameter `shear_x_with_y` denotes the factor scaling the 
-    /// contribution of the **y-component** to the shearing of the **x-component**. 
-    ///
+    /// Construct a general shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0]` so there is no translation term to account for.
+    /// 
+    /// # Parameters
+    /// 
+    /// The shearing matrix constructor has the following parameters
+    /// * `shear_factor`: The amount by which a point in a line parallel to the shearing 
+    ///    line gets sheared.
+    /// * `direction`: The direction along which the shearing happens.
+    /// * `normal`: The normal vector to the shearing line.
+    /// 
+    /// # Discussion
+    /// 
+    /// The displacement of a point with respect to the shearing line is a function 
+    /// of the signed distance of the point from the shearing line. In particular, it 
+    /// is a function of the value of the component of the point projected along the 
+    /// normal vector of the shearing line.
+    /// 
+    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal 
+    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n` 
+    /// form a coordinate frame in conjunction with the origin. Let `m` be the shearing 
+    /// factor. Let `q` be the point that results from applying the shearing 
+    /// transformation to `p`. The point `q` is defined precisely as
+    /// ```text
+    /// q := p + (m * p_n) * v
+    /// ```
+    /// where `p_n` is the component of `p` projected onto the normal vector `n`. 
+    /// In particular, `p_n := dot(p, n)`, so `q` is given by
+    /// ```text
+    /// q == p + (m * dot(p, n)) * v
+    ///   == I * p + (m * dot(p, n)) * v == I * p + m * (dot(p, n) * v)
+    ///   == I * p + m * (v * n^T) * p
+    ///   == (I + m * (v * n^T)) * p
+    /// ```
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// in geometric form is given by
+    /// ```text
+    /// M := I + m * (v * n^T) == I + m * outer(v, n)
+    /// ```
+    /// where `I` denotes the identity matrix. In the standard basis in Euclidean 
+    /// space, the outer product of `v` and `n` is given by
+    /// ```text
+    /// outer(v, n) := | v.x * n.x   v.x * n.y |
+    ///                | v.y * n.x   v.y * n.y |
+    /// ```
+    /// so the right-hand side of the expression for the shearing matrix is
+    /// ```text
+    /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
+    ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
+    /// 
+    ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
+    ///                        | m * v.y * n.x       1 + m * v.y * n.y |
+    /// ```
+    /// which leads to the formula used to implement the shearing transformation
+    /// ```text
+    /// M == | 1 + m * v.x * n.x   m * v.x * n.y     |
+    ///      | m * v.y * n.x       1 + m * v.y * n.y |
+    /// ```
+    /// 
     /// # Example 
     /// 
     /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the 
@@ -3360,12 +3426,16 @@ impl<S> Matrix3x3<S>
 where 
     S: SimdScalar
 {
-    /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// **x-axis**, holding the **y-axis** constant and the **z-axis** constant.
-    ///
-    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
-    /// multiplicative factors for the contributions of the **y-axis** and the 
-    /// **z-axis**, respectively to shearing along the **x-axis**.
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
     ///
@@ -3441,8 +3511,16 @@ where
         )
     }
 
-    /// Construct a shearing matrix shearing along the **x-axis** in the **xy-plane** 
-    /// with the **z-axis** as the normal vector to the plane.
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     /// 
     /// # Example
     /// 
@@ -3518,12 +3596,16 @@ where
         )
     }
 
-    /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// **y-axis**, holding the **x-axis** constant and the **z-axis** constant.
-    ///
-    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the
-    /// multiplicative factors for the contributions of the **x-axis**, and the 
-    /// **z-axis**, respectively to shearing along the **y-axis**.
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
     ///
@@ -3599,8 +3681,16 @@ where
         )
     }
 
-    /// Construct a shearing matrix shearing along the **y-axis** in the **xy-plane** 
-    /// with the **z-axis** as the normal vector to the plane.
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **z-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
     /// 
@@ -3676,12 +3766,16 @@ where
         )
     }
 
-    /// Construct a three-dimensional shearing matrix for shearing along the 
-    /// **z-axis**, holding the **x-axis** constant and the **y-axis** constant.
-    ///
-    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the multiplicative
-    /// factors for the contributions of the **x-axis**, and the **y-axis**, 
-    /// respectively to shearing along the **z-axis**. 
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
     ///
@@ -3757,8 +3851,16 @@ where
         )
     }
 
-    /// Construct a shearing matrix shearing along the **z-axis** in the **zx-plane** 
-    /// with the **y-axis** as the normal vector to the plane.
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
     /// 
     /// # Example
     /// 
@@ -3839,26 +3941,72 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalarFloat
 {
-    /// Construct a general shearing matrix in three dimensions. There are six
-    /// parameters describing a shearing transformation in three dimensions.
+    /// Construct a general shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`.
     /// 
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the **y-component** to shearing of the **x-component**.
-    ///
-    /// The parameter `shear_x_with_z` denotes the factor scaling the 
-    /// contribution  of the **z-component** to the shearing of the **x-component**.
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **x-component** to shearing of the **y-component**.
-    ///
-    /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the **z-axis** to the shearing of the **y-component**. 
-    ///
-    /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing of the **z-axis**.
-    ///
-    /// The parameter `shear_z_with_y` denotes the factor scaling the 
-    /// contribution of the **y-component** to the shearing of the **z-component**. 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term to account for.
+    /// 
+    /// # Parameters
+    /// 
+    /// The shearing matrix constructor has the following parameters
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    ///    plane gets sheared.
+    /// * `direction`: The direction along which the shearing happens.
+    /// * `normal`: The normal vector to the shearing plane.
+    /// 
+    /// # Discussion
+    /// 
+    /// The displacement of a point with respect to the shearing plane is a function 
+    /// of the signed distance of the point from the shearing plane. In particular, it 
+    /// is a function of the value of the component of the point projected along the 
+    /// normal vector of the shearing plane.
+    /// 
+    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal 
+    /// to `v`, and let `p` be a point. In three dimensions, the unit vectors `v`, `n`, and
+    /// `v x n` form a coordinate frame in conjunction with the origin. Let `m` be the 
+    /// shearing factor. Let `q` be the point that results from applying the shearing 
+    /// transformation to `p`. The point `q` is defined precisely as
+    /// ```text
+    /// q := p + (m * p_n) * v
+    /// ```
+    /// where `p_n` is the component of `p` projected onto the normal vector `n`. 
+    /// In particular, `p_n := dot(p, n)`, so `q` is given by
+    /// ```text
+    /// q == p + (m * dot(p, n)) * v
+    ///   == I * p + (m * dot(p, n)) * v == I * p + m * (dot(p, n) * v)
+    ///   == I * p + m * (v * n^T) * p
+    ///   == (I + m * (v * n^T)) * p
+    /// ```
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// in geometric form is given by
+    /// ```text
+    /// M := I + m * (v * n^T) == I + m * outer(v, n)
+    /// ```
+    /// where `I` denotes the identity matrix. In the standard basis in Euclidean 
+    /// space, the outer product of `v` and `n` is given by
+    /// ```text
+    ///                | v.x * n.x   v.x * n.y   v.x * n.z |
+    /// outer(v, n) := | v.y * n.x   v.y * n.y   v.y * n.z |
+    ///                | v.z * n.x   v.z * n.y   v.z * n.z |
+    /// ```
+    /// so the right-hand side of the expression for the shearing matrix is
+    /// ```text
+    ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
+    /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
+    ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
+    ///  
+    ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
+    ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
+    ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    /// ```
+    /// which leads to the formula used to implement the shearing transformation
+    /// ```text
+    ///      | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
+    /// M == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
+    ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    /// ```
     ///
     /// # Example
     ///
@@ -3963,11 +4111,12 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalar
 {
-    /// Construct a two-dimensional affine shearing matrix along the 
-    /// **x-axis**, holding the **y-axis** constant.
-    ///
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the **y-axis** to shearing along the **x-axis**.
+    /// Construct an affine shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix3x3::from_affine_shear`].
     ///
     /// # Example 
     /// 
@@ -4013,11 +4162,12 @@ where
         )
     }
 
-    /// Construct a two-dimensional affine shearing matrix along the 
-    /// **y-axis**, holding the **x-axis** constant.
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **y-axis** to shearing along the **x-axis**.
+    /// Construct an affine shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix3x3::from_affine_shear`].
     ///
     /// # Example 
     /// 
@@ -4068,15 +4218,74 @@ impl<S> Matrix3x3<S>
 where 
     S: SimdScalarFloat
 {
-    /// Construct a general affine shearing matrix in two dimensions. There are 
-    /// two possible parameters describing a shearing transformation in two 
-    /// dimensions.
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **y-axis**.
-    ///
-    /// The parameter `shear_x_with_y` denotes the factor scaling the contribution 
-    /// of the **y-axis** to the shearing along the **x-axis**.
+    /// Construct a general affine shearing matrix in two dimensions with respect to 
+    /// a line passing through the origin `origin`, not necessarily `[0, 0]`.
+    /// 
+    /// # Parameters
+    /// 
+    /// The affine shearing matrix constructor has four parameters
+    /// * `origin`: The origin of the affine frame for the shearing transformation.
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    ///    line gets sheared.
+    /// * `direction`: The direction along which the shearing happens in the shearing line.
+    /// * `normal`: The normal vector to the shearing line.
+    /// 
+    /// # Discussion
+    /// 
+    /// The displacement of a point with respect to the shearing line is a function 
+    /// of the signed distance of the point from the shearing line. In particular, it 
+    /// is a function of the value of the component of the difference between the point 
+    /// and the origin of the affine frame projected along the normal vector of the 
+    /// shearing line.
+    /// 
+    /// More precisely, let `Q` be the origin of the affine frame for the shearing 
+    /// transformation, let `v` be the shearing direction, let `n` be a vector normal 
+    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n` 
+    /// form a coordinate frame in conjunction with the origin `Q`. Let `m` be the shearing 
+    /// factor. Let `q` be the point that results from applying the shearing 
+    /// transformation to `p`. The point `q` is defined precisely as
+    /// ```text
+    /// q := p + (m * (p - Q)_n) * v
+    /// ```
+    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`. 
+    /// In particular, `(p - Q)_n := dot(p - Q, n)`, so `q` is given by
+    /// ```text
+    /// q == p + (m * dot(p - Q, n)) * v
+    ///   == I * p + (m * dot(p - Q, n)) * v == I * p + m * (dot(p - Q, n) * v)
+    ///   == I * p + m * dot(p, n) * v - m * dot(Q, n) * v
+    ///   == I * p + m * (v * n^T) * p - m * dot(Q, n) * v
+    ///   == (I + m * (v * n^T)) * p - m * dot(Q, n) * v
+    /// ```
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// in geometric form is given by
+    /// ```text
+    /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
+    ///      | 0^T                  1                 |
+    /// 
+    ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
+    ///      | 0^T                    1                 |
+    /// ```
+    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of 
+    /// the zero vector. In the standard basis in Euclidean space, the outer product 
+    /// of `v` and `n` is given by
+    /// ```text
+    /// outer(v, n) := | v.x * n.x   v.x * n.y |
+    ///                | v.y * n.x   v.y * n.y |
+    /// ```
+    /// so the right-hand side of the expression for the shearing matrix is
+    /// ```text
+    /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
+    ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
+    /// 
+    ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
+    ///                        | m * v.y * n.x       1 + m * v.y * n.y |
+    /// ```
+    /// which leads to the formula used to implement the shearing transformation
+    /// ```text
+    ///      | 1 + m * v.x * n.x   m * v.x * n.y      -m * dot(Q, n) * v |
+    /// M == | m * v.y * n.x       1 + m* v.y * n.y   -m * dot(Q, n) * v |
+    ///      | 0                   0                   1                 |
+    /// ```
     ///
     /// # Examples
     /// 
@@ -5408,15 +5617,12 @@ impl<S> Matrix4x4<S>
 where 
     S: SimdScalar
 {
-    /// Construct a three-dimensional affine shearing matrix for shearing 
-    /// along the **x-axis**, holding the **y-axis** constant and the **z-axis** 
-    /// constant.
-    ///
-    /// The parameters `shear_x_with_y` and `shear_x_with_z` are the 
-    /// multiplicative factors for the contributions of the **y-axis**, and the
-    /// **z-axis**, respectively to shearing along the **x-axis**. Since this is an 
-    /// affine transformation the `w` component of four-dimensional vectors is 
-    /// unaffected.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
     ///
@@ -5453,9 +5659,12 @@ where
         )
     }
 
-    /// Construct an affine shearing matrix for shearing along the **x-axis** 
-    /// in the **xy-plane** with the **z-axis** as the normal vector to the plane
-    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **z-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     /// 
     /// # Example
     /// 
@@ -5514,9 +5723,12 @@ where
         )
     }
 
-    /// Construct an affine shearing matrix for shearing along the **y-axis** 
-    /// in the **yz-plane** with the **x-axis** as the normal vector to the plane
-    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     /// 
     /// # Example
     /// 
@@ -5575,14 +5787,12 @@ where
         )
     }
 
-    /// Construct a three-dimensional affine shearing matrix for shearing along 
-    /// the **y-axis**, holding the **x-axis** constant and the **z-axis** constant.
-    ///
-    /// The parameters `shear_y_with_x` and `shear_y_with_z` are the 
-    /// multiplicative factors for the contributions of the **x-axis**, and the 
-    /// **z-axis**, respectively to shearing along the **y-axis**. Since this is 
-    /// an affine transformation the `w` component of four-dimensional vectors 
-    /// is unaffected.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **z-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
     ///
@@ -5619,14 +5829,12 @@ where
         )
     }
 
-    /// Construct a three-dimensional affine shearing matrix for shearing along 
-    /// the **z-axis**, holding the **x-axis** constant and the **y-axis** constant.
-    ///
-    /// The parameters `shear_z_with_x` and `shear_z_with_y` are the 
-    /// multiplicative factors for the contributions of the **x-axis**, and the 
-    /// **y-axis**, respectively to shearing along the **z-axis**. Since this is an 
-    /// affine transformation the `w` component of four-dimensional vectors is 
-    /// unaffected.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
     ///
@@ -5663,9 +5871,12 @@ where
         )
     }
 
-    /// Construct an affine shearing matrix for shearing along the **z-axis** 
-    /// in the **zx-plane** with the **y-axis** as the normal vector to the plane
-    /// using the `[0, 0, 0]` as the origin of the local affine coordinate frame.
+    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     /// 
     /// # Example
     /// 
@@ -5729,31 +5940,79 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalarFloat
 {
-    /// Construct a general shearing affine matrix in three dimensions. 
-    ///
-    /// There are six parameters describing a shearing transformation in three 
-    /// dimensions.
+    /// Construct a general affine shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `origin`, not necessarily `[0, 0]`.
     /// 
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the **y-axis** to shearing along the **x-axis**.
+    /// # Parameters
+    /// 
+    /// The affine shearing matrix constructor has four parameters
+    /// * `origin`: The origin of the affine frame for the shearing transformation.
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    ///    line gets sheared.
+    /// * `direction`: The direction along which the shearing happens in the shearing line.
+    /// * `normal`: The normal vector to the shearing line.
+    /// 
+    /// # Discussion
+    /// 
+    /// The displacement of a point with respect to the shearing plane is a function 
+    /// of the signed distance of the point from the shearing plane. In particular, it 
+    /// is a function of the value of the component of the difference between the point 
+    /// and the origin of the affine frame projected along the normal vector of the 
+    /// shearing plane.
+    /// 
+    /// More precisely, let `Q` be the origin of the affine frame for the shearing 
+    /// transformation, let `v` be the shearing direction, let `n` be a vector normal 
+    /// to `v`, and let `p` be a point. In three dimensions, the unit vectors `v`, `n`, and
+    /// `v x n` form a coordinate frame in conjunction with the origin `Q`. Let `m` be the 
+    /// shearing factor. Let `q` be the point that results from applying the shearing 
+    /// transformation to `p`. The point `q` is defined precisely as
+    /// ```text
+    /// q := p + (m * (p - Q)_n) * v
+    /// ```
+    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`. 
+    /// In particular, `(p - Q)_n := dot(p - Q, n)`, so `q` is given by
+    /// ```text
+    /// q == p + (m * dot(p - Q, n)) * v
+    ///   == I * p + (m * dot(p - Q, n)) * v == I * p + m * (dot(p - Q, n) * v)
+    ///   == I * p + m * dot(p, n) * v - m * dot(Q, n) * v
+    ///   == I * p + m * (v * n^T) * p - m * dot(Q, n) * v
+    ///   == (I + m * (v * n^T)) * p - m * dot(Q, n) * v
+    /// ```
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// in geometric form is given by
+    /// ```text
+    /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
+    ///      | 0^T                  1                 |
+    /// 
+    ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
+    ///      | 0^T                    1                 |
+    /// ```
+    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of 
+    /// the zero vector. In the standard basis in Euclidean space, the outer product 
+    /// of `v` and `n` is given by
+    /// ```text
+    ///                | v.x * n.x   v.x * n.y   v.x * n.z |
+    /// outer(v, n) := | v.y * n.x   v.y * n.y   v.y * n.z |
+    ///                | v.z * n.x   v.z * n.y   v.z * n.z |
+    /// ```
+    /// so the right-hand side of the expression for the shearing matrix is
+    /// ```text
+    ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
+    /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
+    ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
+    /// 
+    ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
+    ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
+    ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    /// ```
+    /// which leads to the formula used to implement the shearing transformation
+    /// ```text
+    ///      | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z       -m * dot(Q, n) * v |
+    /// M == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z       -m * dot(Q, n) * v |
+    ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z   -m * dot(Q, n) * v |
+    ///      | 0                   0                   0                    1                 |
+    /// ```
     ///
-    /// The parameter `shear_x_with_z` denotes the factor scaling the 
-    /// contribution of the **z-axis** to the shearing along the **x-axis**. 
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **y-axis**.
-    ///
-    /// The parameter `shear_y_with_z` denotes the factor scaling the 
-    /// contribution of the **z-axis** to the shearing along the **y-axis**. 
-    ///
-    /// The parameter `shear_z_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **z-axis**.
-    ///
-    /// The parameter `shear_z_with_y` denotes the factor scaling the 
-    /// contribution of the **y-axis** to the shearing along the **z-axis**. 
-    ///
-    /// Since this is an affine transformation the `w` component
-    /// of four-dimensional vectors is unaffected.
     ///
     /// # Example
     ///
