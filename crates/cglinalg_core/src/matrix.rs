@@ -2969,6 +2969,29 @@ where
     ///      | m * v.y * n.x       1 + m * v.y * n.y |
     /// ```
     /// 
+    /// # An Equivalent Interpretation Of The Shearing Factor
+    /// 
+    /// The projection of the vector `p` onto `v` is given by `p_v := dot(p, v) * v`.
+    /// Observe that
+    /// ```text
+    /// q - p == m * dot(p, n) * v
+    /// p - p_v == p_n * n == dot(p, n) * n
+    /// ```
+    /// With the two vectors define above as a vector with a purely `v` component,
+    /// and a purely `n` component, respectively, the three points form a triangle.
+    /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
+    /// is then given by
+    /// ```text
+    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    ///          == dot(q - p, v) / dot(p - p_v, n)
+    ///          == (m * dot(p, n) * dot(v, v)) / (dot(p, n) * dot(n, n))
+    ///          == m * (dot(p, n) / dot(p, n))
+    ///          == m
+    /// ```
+    /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
+    /// with respect to the unit normal `n`.
+    /// 
+    /// 
     /// # Example 
     /// 
     /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the 
@@ -4008,6 +4031,28 @@ where
     ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
     /// ```
     ///
+    /// # An Equivalent Interpretation Of The Shearing Factor
+    /// 
+    /// The projection of the vector `p` onto `v` is given by `p_v := dot(p, v) * v`.
+    /// Observe that
+    /// ```text
+    /// q - p == m * dot(p, n) * v
+    /// p - p_v == p_n * n == dot(p, n) * n
+    /// ```
+    /// With the two vectors define above as a vector with a purely `v` component,
+    /// and a purely `n` component, respectively, the three points form a triangle.
+    /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
+    /// is then given by
+    /// ```text
+    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    ///          == dot(q - p, v) / dot(p - p_v, n)
+    ///          == (m * dot(p, n) * dot(v, v)) / (dot(p, n) * dot(n, n))
+    ///          == m * (dot(p, n) / dot(p, n))
+    ///          == m
+    /// ```
+    /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
+    /// with respect to the unit normal `n`.
+    /// 
     /// # Example
     ///
     /// ```
@@ -4287,6 +4332,28 @@ where
     ///      | 0                   0                   1                 |
     /// ```
     ///
+    /// # An Equivalent Interpretation Of The Shearing Factor
+    /// 
+    /// The projection of the vector `p - Q` onto `v` is given by `p_v := dot(p - Q, v) * v`.
+    /// Observe that
+    /// ```text
+    /// q - p == m * dot(p - Q, n) * v
+    /// p - p_v == (p - Q)_n * n == dot(p - Q, n) * n
+    /// ```
+    /// With the two vectors define above as a vector with a purely `v` component,
+    /// and a purely `n` component, respectively, the three points form a triangle.
+    /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
+    /// is then given by
+    /// ```text
+    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    ///          == dot(q - p, v) / dot(p - p_v, n)
+    ///          == (m * dot(p - Q, n) * dot(v, v)) / (dot(p - Q, n) * dot(n, n))
+    ///          == m * (dot(p - Q, n) / dot(p - Q, n))
+    ///          == m
+    /// ```
+    /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
+    /// with respect to the unit normal `n`.
+    /// 
     /// # Examples
     /// 
     /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
@@ -6012,7 +6079,28 @@ where
     ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z   -m * dot(Q, n) * v |
     ///      | 0                   0                   0                    1                 |
     /// ```
-    ///
+    /// 
+    /// # An Equivalent Interpretation Of The Shearing Factor
+    /// 
+    /// The projection of the vector `p - Q` onto `v` is given by `p_v := dot(p - Q, v) * v`.
+    /// Observe that
+    /// ```text
+    /// q - p == m * dot(p - Q, n) * v
+    /// p - p_v == (p - Q)_n * n == dot(p - Q, n) * n
+    /// ```
+    /// With the two vectors define above as a vector with a purely `v` component,
+    /// and a purely `n` component, respectively, the three points form a triangle.
+    /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
+    /// is then given by
+    /// ```text
+    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    ///          == dot(q - p, v) / dot(p - p_v, n)
+    ///          == (m * dot(p - Q, n) * dot(v, v)) / (dot(p - Q, n) * dot(n, n))
+    ///          == m * (dot(p - Q, n) / dot(p - Q, n))
+    ///          == m
+    /// ```
+    /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
+    /// with respect to the unit normal `n`.
     ///
     /// # Example
     ///
