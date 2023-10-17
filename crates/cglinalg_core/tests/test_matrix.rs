@@ -3874,7 +3874,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 /// with origin `[2, 2]`, direction `[2 / sqrt(5), 1 / sqrt(5)]`, and
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
-mod matrix3x3_affine_shear_noncoordinate_plane2_tests {
+mod matrix3x3_affine_shear_noncoordinate_plane_tests {
     use cglinalg_trigonometry::{
         Angle,
         Radians,

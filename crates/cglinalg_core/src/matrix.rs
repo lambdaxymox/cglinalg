@@ -4126,7 +4126,7 @@ where
     /// ];
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
-    /// ``` 
+    /// ```
     #[rustfmt::skip]
     #[inline]
     pub fn from_shear(shear_factor: S, direction: &Unit<Vector3<S>>, normal: &Unit<Vector3<S>>) -> Self {
