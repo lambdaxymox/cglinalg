@@ -941,12 +941,7 @@ mod matrix2x2_shear_tests {
             Vector2::new(-1_i32 - shear_factor, -1_i32),
             Vector2::new( 1_i32 - shear_factor, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -965,11 +960,7 @@ mod matrix2x2_shear_tests {
             Vector2::new( 0_i32, 0_i32),
             Vector2::new(-1_i32, 0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -990,12 +981,7 @@ mod matrix2x2_shear_tests {
             Vector2::new(-1_i32, -1_i32 - shear_factor),
             Vector2::new( 1_i32, -1_i32 + shear_factor),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -1014,11 +1000,7 @@ mod matrix2x2_shear_tests {
             Vector2::new(0_i32,  0_i32),
             Vector2::new(0_i32, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -1147,12 +1129,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
             Vector2::new( 1_f64, -1_f64),
         ];
         let expected = vertices;
-        let result = [
-            rotation * vertices_xy[0],
-            rotation * vertices_xy[1],
-            rotation * vertices_xy[2],
-            rotation * vertices_xy[3],
-        ];
+        let result = vertices_xy.map(|v| rotation * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -1210,12 +1187,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
                 (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
             ),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -1266,13 +1238,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
             Vector2::new( 0_f64, 0_f64),
         ];
         let expected = vertices;
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -2560,16 +2526,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2592,13 +2549,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2627,16 +2578,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2659,13 +2601,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, -1_i32,  0_i32),
             Vector3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2694,16 +2630,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2726,13 +2653,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(0_i32, -1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2761,16 +2682,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2793,13 +2705,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, -1_i32, 0_i32),
             Vector3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2828,16 +2734,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2860,13 +2757,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(0_i32,  1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2895,16 +2786,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -2927,14 +2809,8 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
-
+        let result = vertices.map(|v| matrix * v);
+        
         assert_eq!(result, expected);
     }
 
@@ -3279,16 +3155,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             Vector3::new( 1_f64, -1_f64, -1_f64),
         ];
         let expected = vertices;
-        let result = [
-            rotation * rotated_vertices[0],
-            rotation * rotated_vertices[1],
-            rotation * rotated_vertices[2],
-            rotation * rotated_vertices[3],
-            rotation * rotated_vertices[4],
-            rotation * rotated_vertices[5],
-            rotation * rotated_vertices[6],
-            rotation * rotated_vertices[7],
-        ];
+        let result = rotated_vertices.map(|v| rotation * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -3391,16 +3258,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
                 f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -3511,17 +3369,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             ),
         ];
         let expected = vertices;
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-            matrix * vertices[8],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -3563,12 +3411,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, 1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3601,11 +3444,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(-1_i32,  0_i32, 1_i32),
             Vector3::new( 0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3637,12 +3476,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, 1_i32),
             Vector3::new( 1_i32, -1_i32 + shear_factor, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3675,11 +3509,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(0_i32, -1_i32, 1_i32),
             Vector3::new(0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3751,12 +3581,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
             Vector3::new(-1_f64 - shear_factor, -1_f64, 1_f64),
             Vector3::new( 1_f64 - shear_factor, -1_f64, 1_f64),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3791,11 +3616,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
             Vector3::new( 0_f64, 0_f64, 0_f64),
         ];
         let expected = vertices;
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3819,12 +3640,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
             Vector3::new(-1_f64, -1_f64 + shear_factor,         1_f64),
             Vector3::new( 1_f64, -1_f64 + 3_f64 * shear_factor, 1_f64),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3859,11 +3675,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
             Vector3::new(-2_f64,  0_f64, 1_f64),
         ];
         let expected = vertices;
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -3983,12 +3795,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
             Vector3::new( 1_f64, -1_f64, 1_f64),
         ];
         let expected = vertices;
-        let result = [
-            translation * rotation * rotated_vertices[0],
-            translation * rotation * rotated_vertices[1],
-            translation * rotation * rotated_vertices[2],
-            translation * rotation * rotated_vertices[3],
-        ];
+        let result = rotated_vertices.map(|v| translation * rotation * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -4073,12 +3880,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
                  1_f64,
             ),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-        ];
+        let result = vertices.map(|v| matrix * v);
     
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -4137,13 +3939,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
 
         ];
         let expected = vertices;
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
     
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -5566,16 +5362,8 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
             Vector4::new( 1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
+
         assert_eq!(result, expected);
     }
 
@@ -5597,13 +5385,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
             Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5643,16 +5425,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
             Vector4::new( 1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5675,13 +5448,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, -1_i32,  0_i32, 1_i32),
             Vector4::new( 0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5721,16 +5488,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
             Vector4::new( 1_i32, -1_i32 + shear_factor, -1_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5753,13 +5511,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(0_i32, -1_i32, -1_i32, 1_i32),
             Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5799,16 +5551,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
             Vector4::new( 1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5831,13 +5574,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, -1_i32, 0_i32, 1_i32),
             Vector4::new( 0_i32,  0_i32, 0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5877,16 +5614,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
             Vector4::new( 1_i32, -1_i32, -1_i32 + shear_factor, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5909,13 +5637,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(0_i32,  1_i32, -1_i32, 1_i32),
             Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5955,16 +5677,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(-1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
             Vector4::new( 1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -5987,13 +5700,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
             Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
     }
@@ -6445,16 +6152,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
             Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
         ];
-        let result = [
-            translation * rotation * vertices_xz[0],
-            translation * rotation * vertices_xz[1],
-            translation * rotation * vertices_xz[2],
-            translation * rotation * vertices_xz[3],
-            translation * rotation * vertices_xz[4],
-            translation * rotation * vertices_xz[5],
-            translation * rotation * vertices_xz[6],
-            translation * rotation * vertices_xz[7],
-        ];
+        let result = vertices_xz.map(|v| translation * rotation * v);
 
         assert_relative_eq!(result[0], vertices[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], vertices[1], epsilon = 1e-10);
@@ -6573,16 +6271,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
                  1_f64
             ),
         ];
-        let result = [
-            matrix * vertices[0],
-            matrix * vertices[1],
-            matrix * vertices[2],
-            matrix * vertices[3],
-            matrix * vertices[4],
-            matrix * vertices[5],
-            matrix * vertices[6],
-            matrix * vertices[7],
-        ];
+        let result = vertices.map(|v| matrix * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);

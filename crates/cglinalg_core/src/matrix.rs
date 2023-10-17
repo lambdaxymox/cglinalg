@@ -2804,12 +2804,7 @@ where
     ///     Vector2::new(-1_i32 - shear_factor, -1_i32),
     ///     Vector2::new( 1_i32 - shear_factor, -1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
     /// 
@@ -2819,11 +2814,7 @@ where
     ///     Vector2::new( 0_i32, 0_i32),
     /// ];
     /// let expected_in_line = vertices_in_line;
-    /// let result_in_line = [
-    ///     matrix * vertices_in_line[0],
-    ///     matrix * vertices_in_line[1],
-    ///     matrix * vertices_in_line[2],
-    /// ];
+    /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
@@ -2869,12 +2860,7 @@ where
     ///     Vector2::new(-1_i32, -1_i32 - shear_factor),
     ///     Vector2::new( 1_i32, -1_i32 + shear_factor),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
     /// 
@@ -2884,11 +2870,7 @@ where
     ///     Vector2::new(0_i32,  0_i32),
     /// ];
     /// let expected_in_line = vertices_in_line;
-    /// let result_in_line = [
-    ///     matrix * vertices_in_line[0],
-    ///     matrix * vertices_in_line[1],
-    ///     matrix * vertices_in_line[2],
-    /// ];
+    /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
@@ -3046,12 +3028,7 @@ where
     ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
     ///     ),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -3066,13 +3043,7 @@ where
     ///     Vector2::new( 0_f64, 0_f64),
     /// ];
     /// let expected_in_line = vertices_in_line;
-    /// let result_in_line = [
-    ///     matrix * vertices_in_line[0],
-    ///     matrix * vertices_in_line[1],
-    ///     matrix * vertices_in_line[2],
-    ///     matrix * vertices_in_line[3],
-    ///     matrix * vertices_in_line[4],
-    /// ];
+    /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
@@ -3490,16 +3461,7 @@ where
     ///     Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
     ///     Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
     /// 
@@ -3511,13 +3473,7 @@ where
     ///     Vector3::new( 0_i32, 0_i32,  0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -3575,16 +3531,7 @@ where
     ///     Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
     ///     Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -3596,13 +3543,7 @@ where
     ///     Vector3::new( 0_i32,  0_i32,  0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -3660,16 +3601,7 @@ where
     ///     Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
     ///     Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -3681,13 +3613,7 @@ where
     ///     Vector3::new(0_i32,  0_i32,  0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -3745,16 +3671,7 @@ where
     ///     Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
     ///     Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -3766,13 +3683,7 @@ where
     ///     Vector3::new( 0_i32,  0_i32, 0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -3830,16 +3741,7 @@ where
     ///     Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
     ///     Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -3851,13 +3753,7 @@ where
     ///     Vector3::new(0_i32,  0_i32,  0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -3915,16 +3811,7 @@ where
     ///     Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
     ///     Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -3936,13 +3823,7 @@ where
     ///     Vector3::new( 0_i32, 0_i32,  0_i32),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -4095,16 +3976,7 @@ where
     ///     Vector3::new(-1_f64 + shear_factor, -1_f64, -1_f64),
     ///     Vector3::new( 1_f64 + shear_factor, -1_f64, -1_f64),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// 
@@ -4117,13 +3989,7 @@ where
     /// ];
     /// // Points in the shearing plane don't move.
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
@@ -4185,12 +4051,7 @@ where
     ///     Vector3::new(-1_i32 - shear_factor, -1_i32, 1_i32),
     ///     Vector3::new( 1_i32 - shear_factor, -1_i32, 1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -4236,12 +4097,7 @@ where
     ///     Vector3::new(-1_i32, -1_i32 - shear_factor, 1_i32),
     ///     Vector3::new( 1_i32, -1_i32 + shear_factor, 1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -4387,12 +4243,7 @@ where
     ///     Vector3::new(-1_f64 - shear_factor, -1_f64, 1_f64),
     ///     Vector3::new( 1_f64 - shear_factor, -1_f64, 1_f64),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -4405,11 +4256,7 @@ where
     ///     Vector3::new( 0_f64, 0_f64, 1_f64),
     /// ];
     /// let expected_in_line = vertices_in_line;
-    /// let result_in_line = [
-    ///     matrix * vertices_in_line[0],
-    ///     matrix * vertices_in_line[1],
-    ///     matrix * vertices_in_line[2],
-    /// ];
+    /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
@@ -4460,12 +4307,7 @@ where
     /// # let rotation_angle = Radians(f64::atan2(1_f64, 2_f64));
     /// # let rotation = Matrix3x3::from_affine_angle(rotation_angle);
     /// # let translation = Matrix3x3::from_affine_translation(&Vector2::new(0_f64, 1_f64));
-    /// # let result_vertices = [
-    /// #     translation * rotation * rotated_vertices[0],
-    /// #     translation * rotation * rotated_vertices[1],
-    /// #     translation * rotation * rotated_vertices[2],
-    /// #     translation * rotation * rotated_vertices[3],
-    /// # ];
+    /// # let result_vertices = rotated_vertices.map(|v| translation * rotation * v);
     /// #
     /// # assert_relative_eq!(result_vertices[0], vertices[0], epsilon = 1e-10);
     /// # assert_relative_eq!(result_vertices[1], vertices[1], epsilon = 1e-10);
@@ -4500,12 +4342,7 @@ where
     ///          1_f64,
     ///     ),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -4520,13 +4357,7 @@ where
     ///     Vector3::new( 0_f64, 1_f64, 1_f64),
     /// ];
     /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = [
-    ///     matrix * vertices_in_plane[0],
-    ///     matrix * vertices_in_plane[1],
-    ///     matrix * vertices_in_plane[2],
-    ///     matrix * vertices_in_plane[3],
-    ///     matrix * vertices_in_plane[4],
-    /// ];
+    /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
@@ -5763,16 +5594,7 @@ where
     ///     Vector4::new(-1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
     ///     Vector4::new( 1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -5827,16 +5649,7 @@ where
     ///     Vector4::new(-1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
     ///     Vector4::new( 1_i32, -1_i32 + shear_factor, -1_i32, 1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -5975,16 +5788,7 @@ where
     ///     Vector4::new(-1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
     ///     Vector4::new( 1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_eq!(result, expected);
     /// ```
@@ -6146,16 +5950,7 @@ where
     ///     Vector4::new(-1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
     ///     Vector4::new( 1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
     /// ];
-    /// let result = [
-    ///     matrix * vertices[0],
-    ///     matrix * vertices[1],
-    ///     matrix * vertices[2],
-    ///     matrix * vertices[3],
-    ///     matrix * vertices[4],
-    ///     matrix * vertices[5],
-    ///     matrix * vertices[6],
-    ///     matrix * vertices[7],
-    /// ];
+    /// let result = vertices.map(|v| matrix * v);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
