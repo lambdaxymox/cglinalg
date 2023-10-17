@@ -718,20 +718,40 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2, 
-    /// # };
     /// # use cglinalg_transform::{
     /// #     Shear2,
     /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// #
-    /// let shear_factor = 3_f64;
+    /// let shear_factor = 4_i32;
     /// let shear = Shear2::from_shear_xy(shear_factor);
-    /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = Point2::new(1_f64 + shear_factor * point.y, 2_f64);
-    /// let result = shear * point;
-    /// 
+     /// let vertices = [
+    ///     Point2::new( 1_i32,  1_i32),
+    ///     Point2::new(-1_i32,  1_i32),
+    ///     Point2::new(-1_i32, -1_i32),
+    ///     Point2::new( 1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point2::new( 1_i32 + shear_factor,  1_i32),
+    ///     Point2::new(-1_i32 + shear_factor,  1_i32),
+    ///     Point2::new(-1_i32 - shear_factor, -1_i32),
+    ///     Point2::new( 1_i32 - shear_factor, -1_i32),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    ///
     /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_line = [
+    ///     Point2::new( 1_i32, 0_i32),
+    ///     Point2::new(-1_i32, 0_i32),
+    ///     Point2::new( 0_i32, 0_i32),
+    /// ];
+    /// let expected_in_line = vertices_in_line;
+    /// let result_in_line = vertices_in_line.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[inline]
     pub fn from_shear_xy(shear_factor: S) -> Self {
@@ -760,20 +780,40 @@ where
     /// # Example
     /// 
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2, 
-    /// # };
     /// # use cglinalg_transform::{
     /// #     Shear2,
     /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// # };
     /// #
-    /// let shear_factor = 3_f64;
-    /// let shear = Shear2::from_shear_y(shear_factor);
-    /// let point = Point2::new(1_f64, 2_f64);
-    /// let expected = Point2::new(1_f64, 2_f64 + shear_factor * point.x);
-    /// let result = shear * point;
-    /// 
+    /// let shear_factor = 4_i32;
+    /// let shear = Shear2::from_shear_yx(shear_factor);
+    /// let vertices = [
+    ///     Point2::new( 1_i32,  1_i32),
+    ///     Point2::new(-1_i32,  1_i32),
+    ///     Point2::new(-1_i32, -1_i32),
+    ///     Point2::new( 1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point2::new( 1_i32,  1_i32 + shear_factor),
+    ///     Point2::new(-1_i32,  1_i32 - shear_factor),
+    ///     Point2::new(-1_i32, -1_i32 - shear_factor),
+    ///     Point2::new( 1_i32, -1_i32 + shear_factor),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    ///
     /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_line = [
+    ///     Point2::new(0_i32,  1_i32),
+    ///     Point2::new(0_i32, -1_i32),
+    ///     Point2::new(0_i32,  0_i32),
+    /// ];
+    /// let expected_in_line = vertices_in_line;
+    /// let result_in_line = vertices_in_line.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[inline]
     pub fn from_shear_yx(shear_factor: S) -> Self {
@@ -831,10 +871,10 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let shear_factor = 3_f64;
+    /// let shear_factor = 4_f64;
     /// let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
     /// let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
-    /// let matrix = Shear2::from_shear(shear_factor, &direction, &normal);
+    /// let shear = Shear2::from_shear(shear_factor, &direction, &normal);
     /// 
     /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x`.
     /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x`.
@@ -862,7 +902,7 @@ where
     ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
     ///     ),
     /// ];
-    /// let result = vertices.map(|p| matrix * p);
+    /// let result = vertices.map(|p| shear * p);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -877,7 +917,7 @@ where
     ///     Point2::new( 0_f64, 0_f64),
     /// ];
     /// let expected_in_line = vertices_in_line;
-    /// let result_in_line = vertices_in_line.map(|p| matrix * p);
+    /// let result_in_line = vertices_in_line.map(|p| shear * p);
     /// 
     /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
@@ -920,7 +960,7 @@ where
     /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
     /// 
     /// ```
-    /// # use cgalinalg_transform::{
+    /// # use cglinalg_transform::{
     /// #     Shear2,
     /// # };
     /// # use cglinalg_core::{
@@ -949,7 +989,7 @@ where
     ///     Point2::new(-1_f64 - shear_factor, -1_f64),
     ///     Point2::new( 1_f64 - shear_factor, -1_f64),
     /// ];
-    /// let result = vertices.map(|p| shear * p)
+    /// let result = vertices.map(|p| shear * p);
     /// 
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -1190,221 +1230,6 @@ where
     */
 }
 
-impl<S> Shear3<S> 
-where 
-    S: SimdScalarSigned 
-{
-    /// Construct a shearing matrix in three dimensions with respect to 
-    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
-    /// as the shearing direction, and the **y-axis** as the normal vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3, 
-    /// # };
-    /// #
-    /// let shear_factor = 8_i32;
-    /// let shear = Shear3::from_shear_xy(shear_factor);
-    /// let vertices = [
-    ///     Point3::new( 1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32, -1_i32, -1_i32),
-    ///     Point3::new( 1_i32, -1_i32, -1_i32),
-    /// ];
-    /// let expected = [
-    ///     Point3::new( 1_i32 + shear_factor,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32 + shear_factor,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32 - shear_factor, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32 - shear_factor, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32 + shear_factor,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32 + shear_factor,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
-    ///     Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
-    /// ];
-    /// let result = vertices.map(|p| shear * p);
-    ///
-    /// assert_eq!(result, expected);
-    /// 
-    /// let vertices_in_plane = [
-    ///     Point3::new( 1_i32, 0_i32,  1_i32),
-    ///     Point3::new(-1_i32, 0_i32,  1_i32),
-    ///     Point3::new(-1_i32, 0_i32, -1_i32),
-    ///     Point3::new( 1_i32, 0_i32, -1_i32),
-    ///     Point3::new( 0_i32, 0_i32,  0_i32),
-    /// ];
-    /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = vertices.map(|p| shear * p);
-    /// 
-    /// assert_eq!(result_in_plane, expected_in_plane);
-    /// ```
-    #[inline]
-    pub fn from_shear_xy(shear_factor: S) -> Self {
-        Self {
-            shear_factor,
-            origin: Point3::origin(),
-            direction: Vector3::unit_x(),
-            normal: Vector3::unit_y(),
-        }
-    }
-    /*
-    #[inline]
-    pub fn from_shear_xy(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_xy(shear_factor),
-        }
-    }
-    */
-
-    /// Construct a shearing matrix in three dimensions with respect to 
-    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
-    /// as the shearing direction, and the **z-axis** as the normal vector.
-    ///
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// #
-    /// let shear_factor = 8_i32;
-    /// let shear = Shear3::from_shear_yz(shear_factor);
-    /// let vertices = [
-    ///     Point3::new( 1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32, -1_i32, -1_i32),
-    ///     Point3::new( 1_i32, -1_i32, -1_i32),
-    /// ];
-    /// let expected = [
-    ///     Point3::new( 1_i32,  1_i32 + shear_factor,  1_i32),
-    ///     Point3::new(-1_i32,  1_i32 + shear_factor,  1_i32),
-    ///     Point3::new(-1_i32, -1_i32 + shear_factor,  1_i32),
-    ///     Point3::new( 1_i32, -1_i32 + shear_factor,  1_i32),
-    ///     Point3::new( 1_i32,  1_i32 - shear_factor, -1_i32),
-    ///     Point3::new(-1_i32,  1_i32 - shear_factor, -1_i32),
-    ///     Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
-    ///     Point3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
-    /// ];
-    /// let result = vertices.map(|p| shear * p);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// let vertices_in_plane = [
-    ///     Vector3::new( 1_i32,  1_i32, 0_i32),
-    ///     Vector3::new(-1_i32,  1_i32, 0_i32),
-    ///     Vector3::new(-1_i32, -1_i32, 0_i32),
-    ///     Vector3::new( 1_i32, -1_i32, 0_i32),
-    ///     Vector3::new( 0_i32,  0_i32, 0_i32),
-    /// ];
-    /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
-    /// 
-    /// assert_eq!(result_in_plane, expected_in_plane);
-    /// ```
-    #[inline]
-    pub fn from_shear_yz(shear_factor: S) -> Self {
-        Self {
-            shear_factor,
-            origin: Point3::origin(),
-            direction: Vector3::unit_y(),
-            normal: Vector3::unit_z(),
-        }
-    }
-    /*
-    #[inline]
-    pub fn from_shear_yz(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_yx(shear_factor),
-        }
-    }
-    */
-
-    /// Construct a shearing matrix in three dimensions with respect to 
-    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
-    /// as the shearing direction, and the **x-axis** as the normal vector.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3, 
-    /// # };
-    /// #
-    /// let shear_factor = 8_i32;
-    /// let shear = Shear3::from_shear_zx(shear_factor);
-    /// let vertices = [
-    ///     Point3::new( 1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32,  1_i32,  1_i32),
-    ///     Point3::new(-1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32, -1_i32,  1_i32),
-    ///     Point3::new( 1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32,  1_i32, -1_i32),
-    ///     Point3::new(-1_i32, -1_i32, -1_i32),
-    ///     Point3::new( 1_i32, -1_i32, -1_i32),
-    /// ];
-    /// let expected = [
-    ///     Point3::new( 1_i32,  1_i32,  1_i32 + shear_factor),
-    ///     Point3::new(-1_i32,  1_i32,  1_i32 - shear_factor),
-    ///     Point3::new(-1_i32, -1_i32,  1_i32 - shear_factor),
-    ///     Point3::new( 1_i32, -1_i32,  1_i32 + shear_factor),
-    ///     Point3::new( 1_i32,  1_i32, -1_i32 + shear_factor),
-    ///     Point3::new(-1_i32,  1_i32, -1_i32 - shear_factor),
-    ///     Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
-    ///     Point3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
-    /// ];
-    /// let result = vertices.map(|p|, shear * p);
-    /// 
-    /// assert_eq!(result, expected);
-    /// 
-    /// let vertices_in_plane = [
-    ///     Vector3::new(0_i32,  1_i32,  1_i32),
-    ///     Vector3::new(0_i32, -1_i32,  1_i32),
-    ///     Vector3::new(0_i32, -1_i32, -1_i32),
-    ///     Vector3::new(0_i32,  1_i32, -1_i32),
-    ///     Vector3::new(0_i32,  0_i32,  0_i32),
-    /// ];
-    /// let expected_in_plane = vertices_in_plane;
-    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
-    /// 
-    /// assert_eq!(result_in_plane, expected_in_plane);
-    /// ```
-    #[inline]
-    pub fn from_shear_zx(shear_factor: S) -> Self {
-        Self {
-            shear_factor,
-            origin: Point3::origin(),
-            direction: Vector3::unit_z(),
-            normal: Vector3::unit_x(),
-        }
-    }
-    /*
-    #[inline]
-    pub fn from_shear_zx(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_zx(shear_factor),
-        }
-    }
-    */
-}
-
 impl<S> Shear2<S> 
 where 
     S: SimdScalarFloat,
@@ -1488,6 +1313,414 @@ where
     }
 }
 
+
+impl<S> Shear3<S> 
+where 
+    S: SimdScalarSigned 
+{
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_xy(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32 - shear_factor, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32 - shear_factor, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32 + shear_factor,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32 + shear_factor,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    ///
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_i32, 0_i32,  1_i32),
+    ///     Point3::new(-1_i32, 0_i32,  1_i32),
+    ///     Point3::new(-1_i32, 0_i32, -1_i32),
+    ///     Point3::new( 1_i32, 0_i32, -1_i32),
+    ///     Point3::new( 0_i32, 0_i32,  0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_xy(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_x(),
+            normal: Vector3::unit_y(),
+        }
+    }
+    /*
+    #[inline]
+    pub fn from_shear_xy(shear_factor: S) -> Self {
+        Self {
+            matrix: Matrix3x3::from_shear_xy(shear_factor),
+        }
+    }
+    */
+
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_xz(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32 + shear_factor,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32 + shear_factor, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32 + shear_factor, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32 - shear_factor,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32 - shear_factor,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_i32,  1_i32, 0_i32),
+    ///     Point3::new(-1_i32,  1_i32, 0_i32),
+    ///     Point3::new(-1_i32, -1_i32, 0_i32),
+    ///     Point3::new( 1_i32, -1_i32, 0_i32),
+    ///     Point3::new( 0_i32,  0_i32, 0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_xz(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_x(),
+            normal: Vector3::unit_z(),
+        }
+    }
+
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    /// 
+    /// This version of the shearing transformation is a linear transformation because 
+    /// the origin of the coordinate frame for applying the shearing transformation 
+    /// is `[0, 0, 0]` so there is no translation term.
+    /// 
+    /// For a more in depth exposition on the geometrical underpinnings of the shearing
+    /// transformation in general, see [`Matrix3x3::from_shear`].
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_yx(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32 - shear_factor,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32 - shear_factor,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32 + shear_factor, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new(0_i32,  1_i32,  1_i32),
+    ///     Point3::new(0_i32, -1_i32,  1_i32),
+    ///     Point3::new(0_i32, -1_i32, -1_i32),
+    ///     Point3::new(0_i32,  1_i32, -1_i32),
+    ///     Point3::new(0_i32,  0_i32,  0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_yx(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_y(),
+            normal: Vector3::unit_x(),
+        }
+    }
+
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **z-axis** as the normal vector.
+    ///
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_yz(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32 + shear_factor,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32 + shear_factor,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32 - shear_factor, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_i32,  1_i32, 0_i32),
+    ///     Point3::new(-1_i32,  1_i32, 0_i32),
+    ///     Point3::new(-1_i32, -1_i32, 0_i32),
+    ///     Point3::new( 1_i32, -1_i32, 0_i32),
+    ///     Point3::new( 0_i32,  0_i32, 0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_yz(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_y(),
+            normal: Vector3::unit_z(),
+        }
+    }
+    /*
+    #[inline]
+    pub fn from_shear_yz(shear_factor: S) -> Self {
+        Self {
+            matrix: Matrix3x3::from_shear_yx(shear_factor),
+        }
+    }
+    */
+
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3, 
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_zx(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32 - shear_factor),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32 + shear_factor),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32 - shear_factor),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new(0_i32,  1_i32,  1_i32),
+    ///     Point3::new(0_i32, -1_i32,  1_i32),
+    ///     Point3::new(0_i32, -1_i32, -1_i32),
+    ///     Point3::new(0_i32,  1_i32, -1_i32),
+    ///     Point3::new(0_i32,  0_i32,  0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_zx(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_z(),
+            normal: Vector3::unit_x(),
+        }
+    }
+    /*
+    #[inline]
+    pub fn from_shear_zx(shear_factor: S) -> Self {
+        Self {
+            matrix: Matrix3x3::from_shear_zx(shear_factor),
+        }
+    }
+    */
+
+    /// Construct a shearing matrix in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// # };
+    /// #
+    /// let shear_factor = 8_i32;
+    /// let shear = Shear3::from_shear_zy(shear_factor);
+    /// let vertices = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Point3::new(-1_i32,  1_i32,  1_i32 + shear_factor),
+    ///     Point3::new(-1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Point3::new( 1_i32, -1_i32,  1_i32 - shear_factor),
+    ///     Point3::new( 1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Point3::new(-1_i32,  1_i32, -1_i32 + shear_factor),
+    ///     Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
+    ///     Point3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_i32, 0_i32,  1_i32),
+    ///     Point3::new(-1_i32, 0_i32,  1_i32),
+    ///     Point3::new(-1_i32, 0_i32, -1_i32),
+    ///     Point3::new( 1_i32, 0_i32, -1_i32),
+    ///     Point3::new( 0_i32, 0_i32,  0_i32),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear_zy(shear_factor: S) -> Self {
+        Self {
+            shear_factor,
+            origin: Point3::origin(),
+            direction: Vector3::unit_z(),
+            normal: Vector3::unit_y(),
+        }
+    }
+}
 
 impl<S> Shear3<S> 
 where 
