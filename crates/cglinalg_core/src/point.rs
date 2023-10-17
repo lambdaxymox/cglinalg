@@ -104,9 +104,9 @@ where
     /// #     Point3,   
     /// # };
     /// #
-    /// let point: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected: Option<Point3<i32>> = Some(Point3::new(1_i32, 2_i32, 3_i32));
-    /// let result = point.try_cast::<i32>();
+    /// let point: Point3<i32> = Point3::new(1_i32, 2_i32, 3_i32);
+    /// let expected: Option<Point3<f64>> = Some(Point3::new(1_f64, 2_f64, 3_f64));
+    /// let result = point.try_cast::<f64>();
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -155,9 +155,9 @@ where
     /// #     Point3,  
     /// # };
     /// #
-    /// let vector: Point3<u32> = Point3::new(1_u32, 2_u32, 3_u32);
-    /// let expected: Point3<i32> = Point3::new(2_i32, 3_i32, 4_i32);
-    /// let result: Point3<i32> = vector.map(|comp| (comp + 1) as i32);
+    /// let vector: Point3<i32> = Point3::new(1_i32, 2_i32, 3_i32);
+    /// let expected: Point3<f64> = Point3::new(2_f64, 3_f64, 4_f64);
+    /// let result: Point3<f64> = vector.map(|comp| (comp + 1) as f64);
     ///
     /// assert_eq!(result, expected);
     /// ```

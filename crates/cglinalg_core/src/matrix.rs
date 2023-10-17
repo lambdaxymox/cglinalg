@@ -477,18 +477,18 @@ where
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
-    ///     1_u32,  2_u32,  3_u32,  4_u32, 
-    ///     5_u32,  6_u32,  7_u32,  8_u32,
-    ///     9_u32,  10_u32, 11_u32, 12_u32,
-    ///     13_u32, 14_u32, 15_u32, 16_u32
+    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     5_i32,  6_i32,  7_i32,  8_i32,
+    ///     9_i32,  10_i32, 11_i32, 12_i32,
+    ///     13_i32, 14_i32, 15_i32, 16_i32
     /// );
     /// let expected = Matrix4x4::new(
-    ///     2_i32,  4_i32,  6_i32,  8_i32,
-    ///     10_i32, 12_i32, 14_i32, 16_i32,
-    ///     18_i32, 20_i32, 22_i32, 24_i32,
-    ///     26_i32, 28_i32, 30_i32, 32_i32
+    ///     2_f64,  4_f64,  6_f64,  8_f64,
+    ///     10_f64, 12_f64, 14_f64, 16_f64,
+    ///     18_f64, 20_f64, 22_f64, 24_f64,
+    ///     26_f64, 28_f64, 30_f64, 32_f64
     /// );
-    /// let result = matrix.map(|comp| (2 * comp) as i32);
+    /// let result = matrix.map(|comp| (2 * comp) as f64);
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -685,9 +685,9 @@ where
     /// #     Matrix2x2,   
     /// # };
     /// # 
-    /// let matrix: Matrix2x2<u32> = Matrix2x2::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Matrix2x2<i32>> = Some(Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = matrix.try_cast::<i32>();
+    /// let matrix: Matrix2x2<i32> = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected: Option<Matrix2x2<f64>> = Some(Matrix2x2::new(1_f64, 2_f64, 3_f64, 4_f64));
+    /// let result = matrix.try_cast::<f64>();
     ///
     /// assert_eq!(result, expected);
     /// ```

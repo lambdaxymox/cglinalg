@@ -103,9 +103,9 @@ where
     /// #     Vector4,   
     /// # };
     /// #
-    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Vector4<i32>> = Some(Vector4::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = vector.try_cast::<i32>();
+    /// let vector: Vector4<i32> = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected: Option<Vector4<f64>> = Some(Vector4::new(1_f64, 2_f64, 3_f64, 4_f64));
+    /// let result = vector.try_cast::<f64>();
     ///
     /// assert_eq!(result, expected);
     /// ```
@@ -168,9 +168,9 @@ where
     /// #     Vector4,  
     /// # };
     /// #
-    /// let vector: Vector4<u32> = Vector4::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Vector4<i32> = Vector4::new(2_i32, 3_i32, 4_i32, 5_i32);
-    /// let result: Vector4<i32> = vector.map(|comp| (comp + 1) as i32);
+    /// let vector: Vector4<i32> = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected: Vector4<f64> = Vector4::new(2_f64, 3_f64, 4_f64, 5_f64);
+    /// let result: Vector4<f64> = vector.map(|comp| (comp + 1) as f64);
     ///
     /// assert_eq!(result, expected);
     /// ```

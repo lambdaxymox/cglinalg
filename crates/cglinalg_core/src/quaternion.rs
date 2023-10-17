@@ -121,9 +121,9 @@ where
     /// #     Quaternion,   
     /// # };
     /// #
-    /// let quaternion: Quaternion<u32> = Quaternion::new(1_u32, 2_u32, 3_u32, 4_u32);
-    /// let expected: Option<Quaternion<i32>> = Some(Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32));
-    /// let result = quaternion.try_cast::<i32>();
+    /// let quaternion: Quaternion<i32> = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
+    /// let expected: Option<Quaternion<f64>> = Some(Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64));
+    /// let result = quaternion.try_cast::<f64>();
     ///
     /// assert_eq!(result, expected);
     /// ```
