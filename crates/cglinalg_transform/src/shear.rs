@@ -39,9 +39,6 @@ pub struct Shear<S, const N: usize> {
     origin: Point<S, N>,
     direction: Vector<S, N>,
     normal: Vector<S, N>,
-    /*
-    matrix: Matrix<S, N, N>,
-    */
 }
 
 impl<S, const N: usize> Shear<S, N> 
@@ -114,12 +111,6 @@ where
 
         vector + self.direction * factor
     }
-    /*
-    #[inline]
-    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
-        self.matrix * vector
-    }
-    */
 
     /// Apply a shear transformation to a point.
     ///
@@ -186,15 +177,6 @@ where
 
         point + self.direction * factor
     }
-    /*
-    #[inline]
-    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
-        let vector = point.to_vector();
-        let result = self.matrix * vector;
-
-        Point::from_vector(&result)
-    }
-    */
 
     /// Construct the identity shear transformation.
     ///
@@ -250,14 +232,6 @@ where
             normal,
         }
     }
-    /*
-    #[inline]
-    pub fn identity() -> Self {
-        Self { 
-            matrix: Matrix::identity(),
-        }
-    }
-    */
 }
 
 impl<S, const N: usize> Shear<S, N>
@@ -317,12 +291,6 @@ where
     pub fn to_matrix(&self) -> Matrix<S, N, N> {
         todo!()
     }
-    /*
-    #[inline]
-    pub const fn to_matrix(&self) -> Matrix<S, N, N> {
-        self.matrix
-    }
-    */
 }
 /*
 impl<S, const N: usize, const NPLUS1: usize> Shear<S, N> 
@@ -444,14 +412,6 @@ where
     }
 }
 */
-/*
-impl<S, const N: usize> AsRef<Matrix<S, N, N>> for Shear<S, N> {
-    #[inline]
-    fn as_ref(&self) -> &Matrix<S, N, N> {
-        &self.matrix
-    }
-}
-*/
 
 impl<S, const N: usize> fmt::Display for Shear<S, N> 
 where 
@@ -467,43 +427,6 @@ where
     }
 }
 
-/*
-impl<S, const N: usize> fmt::Display for Shear<S, N> 
-where 
-    S: fmt::Display 
-{
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Shear{} [{}]", N, self.matrix)
-    }
-}
-*/
-/*
-impl<S, const N: usize, const NPLUS1: usize> From<Shear<S, N>> for Matrix<S, NPLUS1, NPLUS1>
-where 
-    S: SimdScalarSigned,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
-{
-    #[inline]
-    fn from(shear: Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        shear.to_affine_matrix()
-    }
-}
-
-impl<S, const N: usize, const NPLUS1: usize> From<&Shear<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
-    S: SimdScalarSigned,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
-{
-    #[inline]
-    fn from(shear: &Shear<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
-        shear.to_affine_matrix()
-    }
-}
-*/
 impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N> 
 where 
     S: SimdScalarFloat 
@@ -559,54 +482,6 @@ where
             && Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N> 
-where 
-    S: SimdScalarFloat 
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Shear<S, N> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Shear<S, N> 
-where 
-    S: SimdScalarFloat 
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Shear<S, N> 
 where 
@@ -727,7 +602,7 @@ where
     /// #
     /// let shear_factor = 4_i32;
     /// let shear = Shear2::from_shear_xy(shear_factor);
-     /// let vertices = [
+    /// let vertices = [
     ///     Point2::new( 1_i32,  1_i32),
     ///     Point2::new(-1_i32,  1_i32),
     ///     Point2::new(-1_i32, -1_i32),
@@ -762,14 +637,6 @@ where
             normal: Vector2::unit_y(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear_xy(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix2x2::from_shear_xy(shear_factor),
-        }
-    }
-    */
 
     /// Construct a shearing transformation along the **y-axis**, holding the 
     /// **x-axis** constant.
@@ -824,14 +691,6 @@ where
             normal: Vector2::unit_x(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear_yx(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix2x2::from_shear_yx(shear_factor),
-        }
-    }
-    */
 }
 
 impl<S> Shear2<S> 
@@ -934,14 +793,6 @@ where
             normal: normal.into_inner(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear(shear_factor: S, direction: &Unit<Vector2<S>>, normal: &Unit<Vector2<S>>) -> Self {
-        Self {
-            matrix: Matrix2x2::from_shear(shear_factor, direction, normal),
-        }
-    }
-    */
 
     /// Construct a general affine shearing matrix in two dimensions with respect to 
     /// a line passing through the origin `origin`, not necessarily `[0, 0]`.
@@ -1134,22 +985,6 @@ where
             normal: self.normal,
         }
     }
-
-    /*
-    #[rustfmt::skip]
-    #[inline]
-    pub fn inverse(&self) -> Self {
-        let shear_y_with_x = self.matrix.c0r1;
-        let shear_x_with_y = self.matrix.c1r0;
-        let det_inverse = S::one() / (shear_x_with_y * shear_y_with_x - S::one());
-        let matrix = Matrix2x2::new(
-            -S::one() * det_inverse,        shear_y_with_x * det_inverse,
-             shear_x_with_y * det_inverse, -S::one() * det_inverse
-        );
-            
-        Self { matrix }
-    }
-    */
     
     /// Apply the inverse of the shear transformation to a vector.
     ///
@@ -1180,14 +1015,6 @@ where
 
         vector - self.direction * factor
     }
-    /*
-    #[inline]
-    pub fn inverse_apply_vector(&self, vector: &Vector2<S>) -> Vector2<S> {
-        let inverse = self.inverse();
-    
-        inverse.matrix * vector
-    }
-    */
     
     /// Apply the inverse of the shear transformation to a point.
     ///
@@ -1217,17 +1044,6 @@ where
 
         point - self.direction * factor
     }
-
-    /*
-    #[inline]
-    pub fn inverse_apply_point(&self, point: &Point2<S>) -> Point2<S> {
-        let inverse = self.inverse();
-        let vector = Vector2::new(point.x, point.y);
-        let result = inverse.matrix * vector;
-    
-        Point2::new(result.x, result.y)
-    }
-    */
 }
 
 impl<S> Shear2<S> 
@@ -1379,14 +1195,6 @@ where
             normal: Vector3::unit_y(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear_xy(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_xy(shear_factor),
-        }
-    }
-    */
 
     /// Construct a shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
@@ -1580,14 +1388,6 @@ where
             normal: Vector3::unit_z(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear_yz(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_yx(shear_factor),
-        }
-    }
-    */
 
     /// Construct a shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
@@ -1650,14 +1450,6 @@ where
             normal: Vector3::unit_x(),
         }
     }
-    /*
-    #[inline]
-    pub fn from_shear_zx(shear_factor: S) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear_zx(shear_factor),
-        }
-    }
-    */
 
     /// Construct a shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
@@ -1799,15 +1591,7 @@ where
             direction: direction.into_inner(),
             normal: normal.into_inner(),
         }
-    } 
-    /*
-    #[inline]
-    pub fn from_shear(shear_factor: S, direction: &Unit<Vector3<S>>, normal: &Unit<Vector3<S>>) -> Self {
-        Self {
-            matrix: Matrix3x3::from_shear(shear_factor, direction, normal),
-        }
     }
-    */
 
     /// Construct a general affine shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
@@ -1946,35 +1730,6 @@ where
             normal: self.normal,
         }
     }
-    /*
-    #[rustfmt::skip]
-    #[inline]
-    pub fn inverse(&self) -> Self {
-        let shear_x_with_y = self.matrix.c1r0;
-        let shear_x_with_z = self.matrix.c2r0;
-        let shear_y_with_x = self.matrix.c0r1;
-        let shear_y_with_z = self.matrix.c2r1;
-        let shear_z_with_x = self.matrix.c0r2;
-        let shear_z_with_y = self.matrix.c1r2;
-        let det_inverse = S::one() / self.matrix.determinant();
-        let c0r0 = det_inverse * (S::one() - shear_y_with_z * shear_z_with_y);
-        let c0r1 = det_inverse * (shear_y_with_z * shear_z_with_x - shear_y_with_x);
-        let c0r2 = det_inverse * (shear_y_with_x * shear_z_with_y - shear_z_with_x);
-        let c1r0 = det_inverse * (shear_x_with_z * shear_z_with_y - shear_x_with_y);
-        let c1r1 = det_inverse * (S::one() - shear_x_with_z * shear_z_with_x);
-        let c1r2 = det_inverse * (shear_x_with_y * shear_z_with_x - shear_z_with_y);
-        let c2r0 = det_inverse * (shear_x_with_y * shear_y_with_z - shear_x_with_z);
-        let c2r1 = det_inverse * (shear_x_with_z * shear_y_with_x - shear_y_with_z);
-        let c2r2 = det_inverse * (S::one() - shear_x_with_y * shear_y_with_x);
-        let matrix = Matrix3x3::new(
-            c0r0, c0r1, c0r2, 
-            c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
-        );
-        
-        Self { matrix }
-    }
-    */
 
     /// Apply the inverse of the shear transformation to a vector.
     ///
@@ -2034,16 +1789,6 @@ where
 
         point - self.direction * factor
     }
-    /*
-    #[inline]
-    pub fn inverse_apply_point(&self, point: &Point3<S>) -> Point3<S> {
-        let inverse = self.inverse();
-        let vector = Vector3::new(point.x, point.y, point.z);
-        let result = inverse.matrix * vector;
-
-        Point3::new(result.x, result.y, result.z)
-    }
-    */
 }
 
 impl<S> Shear3<S> 
