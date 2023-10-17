@@ -351,8 +351,8 @@ fn prop_shear_trace<S, const N: usize>(s: Shear<S, N>) -> Result<(), TestCaseErr
 where
     S: SimdScalarSigned
 {
-    let lhs = s.to_matrix().trace();
-    let rhs = cglinalg_numeric::cast(N);
+    let lhs = s.to_affine_matrix().trace();
+    let rhs = cglinalg_numeric::cast(N + 1);
 
     prop_assert_eq!(lhs, rhs);
 
@@ -369,7 +369,7 @@ fn prop_shear2_determinant<S>(s: Shear2<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    let lhs = s.to_matrix().determinant();
+    let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
     prop_assert_eq!(lhs, rhs);
@@ -387,7 +387,7 @@ fn prop_shear3_determinant<S>(s: Shear3<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned
 {
-    let lhs = s.to_matrix().determinant();
+    let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
     prop_assert_eq!(lhs, rhs);
@@ -405,7 +405,7 @@ fn prop_shear2_composition_determinant<S>(s1: Shear2<S>, s2: Shear2<S>) -> Resul
 where
     S: SimdScalarSigned
 {
-    let lhs = (s1.to_matrix() * s2.to_matrix()).determinant();
+    let lhs = (s1.to_affine_matrix() * s2.to_affine_matrix()).determinant();
     let rhs = S::one();
 
     prop_assert_eq!(lhs, rhs);
@@ -423,7 +423,7 @@ fn prop_shear3_composition_determinant<S>(s1: Shear3<S>, s2: Shear3<S>) -> Resul
 where
     S: SimdScalarSigned
 {
-    let lhs = (s1.to_matrix() * s2.to_matrix()).determinant();
+    let lhs = (s1.to_affine_matrix() * s2.to_affine_matrix()).determinant();
     let rhs = S::one();
 
     prop_assert_eq!(lhs, rhs);

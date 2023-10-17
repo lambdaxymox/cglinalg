@@ -68,7 +68,7 @@ mod shear2_tests {
             Point2::new(-1_i32, 0_i32),
         ];
         let expected = vertices;
-        let result = vertices.map(|v| shear.apply_point(&v));
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -197,7 +197,7 @@ mod shear2_tests {
             Point2::new(-1_f64,  1_f64),
         ];
         let expected = vertices;
-        let result = vertices.map(|v| shear.apply_point(&v));
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -851,7 +851,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xy_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xy(shear_factor);
+        let shear = Shear3::from_shear_xy(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -872,7 +872,7 @@ mod shear3_tests {
             Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -880,7 +880,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xy_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xy(shear_factor);
+        let shear = Shear3::from_shear_xy(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -901,7 +901,7 @@ mod shear3_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -909,7 +909,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xy_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xy(shear_factor);
+        let shear = Shear3::from_shear_xy(shear_factor);
         let vertices = [
             Point3::new( 1_i32, 0_i32,  1_i32),
             Point3::new(-1_i32, 0_i32,  1_i32),
@@ -924,7 +924,7 @@ mod shear3_tests {
             Point3::new( 1_i32, 0_i32, -1_i32),
             Point3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -932,7 +932,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xy_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xy(shear_factor);
+        let shear = Shear3::from_shear_xy(shear_factor);
         let vertices = [
             Vector3::new( 1_i32, 0_i32,  1_i32),
             Vector3::new(-1_i32, 0_i32,  1_i32),
@@ -947,7 +947,7 @@ mod shear3_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -955,7 +955,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xz_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xz(shear_factor);
+        let shear = Shear3::from_shear_xz(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -976,7 +976,7 @@ mod shear3_tests {
             Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -984,7 +984,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xz_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xz(shear_factor);
+        let shear = Shear3::from_shear_xz(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -1005,7 +1005,7 @@ mod shear3_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1013,7 +1013,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xz_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xz(shear_factor);
+        let shear = Shear3::from_shear_xz(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  0_i32),
             Point3::new(-1_i32,  1_i32,  0_i32),
@@ -1028,7 +1028,7 @@ mod shear3_tests {
             Point3::new( 1_i32, -1_i32,  0_i32),
             Point3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1036,7 +1036,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_xz_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_xz(shear_factor);
+        let shear = Shear3::from_shear_xz(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  0_i32),
             Vector3::new(-1_i32,  1_i32,  0_i32),
@@ -1051,7 +1051,7 @@ mod shear3_tests {
             Vector3::new( 1_i32, -1_i32,  0_i32),
             Vector3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1059,7 +1059,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yx_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yx(shear_factor);
+        let shear = Shear3::from_shear_yx(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -1080,7 +1080,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Point3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1088,7 +1088,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yx_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yx(shear_factor);
+        let shear = Shear3::from_shear_yx(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -1109,7 +1109,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1117,7 +1117,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yx_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yx(shear_factor);
+        let shear = Shear3::from_shear_yx(shear_factor);
         let vertices = [
             Point3::new(0_i32,  1_i32,  1_i32),
             Point3::new(0_i32, -1_i32,  1_i32),
@@ -1132,7 +1132,7 @@ mod shear3_tests {
             Point3::new(0_i32, -1_i32, -1_i32),
             Point3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1140,7 +1140,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yx_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yx(shear_factor);
+        let shear = Shear3::from_shear_yx(shear_factor);
         let vertices = [
             Vector3::new(0_i32,  1_i32,  1_i32),
             Vector3::new(0_i32, -1_i32,  1_i32),
@@ -1155,7 +1155,7 @@ mod shear3_tests {
             Vector3::new(0_i32, -1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1163,7 +1163,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yz_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yz(shear_factor);
+        let shear = Shear3::from_shear_yz(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -1184,7 +1184,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Point3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1192,7 +1192,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yz_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yz(shear_factor);
+        let shear = Shear3::from_shear_yz(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -1213,7 +1213,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1221,7 +1221,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yz_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yz(shear_factor);
+        let shear = Shear3::from_shear_yz(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32, 0_i32),
             Point3::new(-1_i32,  1_i32, 0_i32),
@@ -1236,7 +1236,7 @@ mod shear3_tests {
             Point3::new( 1_i32, -1_i32, 0_i32),
             Point3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1244,7 +1244,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_yz_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_yz(shear_factor);
+        let shear = Shear3::from_shear_yz(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32, 0_i32),
             Vector3::new(-1_i32,  1_i32, 0_i32),
@@ -1259,7 +1259,7 @@ mod shear3_tests {
             Vector3::new( 1_i32, -1_i32, 0_i32),
             Vector3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1267,7 +1267,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zx_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zx(shear_factor);
+        let shear = Shear3::from_shear_zx(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -1288,7 +1288,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Point3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1296,7 +1296,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zx_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zx(shear_factor);
+        let shear = Shear3::from_shear_zx(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -1317,7 +1317,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1325,7 +1325,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zx_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zx(shear_factor);
+        let shear = Shear3::from_shear_zx(shear_factor);
         let vertices = [
             Point3::new(0_i32,  1_i32,  1_i32),
             Point3::new(0_i32, -1_i32,  1_i32),
@@ -1340,7 +1340,7 @@ mod shear3_tests {
             Point3::new(0_i32,  1_i32, -1_i32),
             Point3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1348,7 +1348,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zx_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zx(shear_factor);
+        let shear = Shear3::from_shear_zx(shear_factor);
         let vertices = [
             Vector3::new(0_i32,  1_i32,  1_i32),
             Vector3::new(0_i32, -1_i32,  1_i32),
@@ -1363,7 +1363,7 @@ mod shear3_tests {
             Vector3::new(0_i32,  1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1371,7 +1371,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zy_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zy(shear_factor);
+        let shear = Shear3::from_shear_zy(shear_factor);
         let vertices = [
             Point3::new( 1_i32,  1_i32,  1_i32),
             Point3::new(-1_i32,  1_i32,  1_i32),
@@ -1392,7 +1392,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Point3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1400,7 +1400,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zy_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zy(shear_factor);
+        let shear = Shear3::from_shear_zy(shear_factor);
         let vertices = [
             Vector3::new( 1_i32,  1_i32,  1_i32),
             Vector3::new(-1_i32,  1_i32,  1_i32),
@@ -1421,7 +1421,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }
@@ -1429,7 +1429,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zy_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zy(shear_factor);
+        let shear = Shear3::from_shear_zy(shear_factor);
         let vertices = [
             Point3::new( 1_i32, 0_i32,  1_i32),
             Point3::new(-1_i32, 0_i32,  1_i32),
@@ -1444,7 +1444,7 @@ mod shear3_tests {
             Point3::new( 1_i32, 0_i32, -1_i32),
             Point3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|p| shear * p);
 
         assert_eq!(result, expected);
     }
@@ -1452,7 +1452,7 @@ mod shear3_tests {
     #[test]
     fn test_from_shear_zy_shearing_plane_vector() {
         let shear_factor = 5_i32;
-        let matrix = Shear3::from_shear_zy(shear_factor);
+        let shear = Shear3::from_shear_zy(shear_factor);
         let vertices = [
             Vector3::new( 1_i32, 0_i32,  1_i32),
             Vector3::new(-1_i32, 0_i32,  1_i32),
@@ -1467,7 +1467,7 @@ mod shear3_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let result = vertices.map(|v| matrix * v);
+        let result = vertices.map(|v| shear * v);
 
         assert_eq!(result, expected);
     }

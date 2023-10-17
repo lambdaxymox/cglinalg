@@ -234,65 +234,6 @@ where
     }
 }
 
-impl<S, const N: usize> Shear<S, N>
-where
-    S: SimdScalar
-{
-    /// Convert a shear transformation to a matrix.
-    /// 
-    /// The resulting matrix is not an affine. For an affine matrix,
-    /// use [`Shear::to_affine_matrix`].
-    /// 
-    /// # Example (Two Dimensions)
-    /// 
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
-    /// #
-    /// let shear = Shear2::from_shear(5_f64, 7_f64);
-    /// let expected = Matrix2x2::new(
-    ///     1_f64, 7_f64,
-    ///     5_f64, 1_f64
-    /// );
-    /// let result = shear.to_matrix();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    /// 
-    /// # Example (Three Dimensions)
-    /// 
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
-    /// #
-    /// let shear = Shear3::from_shear(
-    ///     2_f64, 3_f64,
-    ///     4_f64, 5_f64,
-    ///     6_f64, 7_f64
-    /// );
-    /// let expected = Matrix3x3::new(
-    ///     1_f64, 4_f64, 6_f64,
-    ///     2_f64, 1_f64, 7_f64,
-    ///     3_f64, 5_f64, 1_f64
-    /// );
-    /// let result = shear.to_matrix();
-    /// 
-    /// assert_eq!(result, expected);
-    /// ```
-    #[inline]
-    pub fn to_matrix(&self) -> Matrix<S, N, N> {
-        todo!()
-    }
-}
-
 impl<S, const N: usize> fmt::Display for Shear<S, N> 
 where 
     S: fmt::Display 
