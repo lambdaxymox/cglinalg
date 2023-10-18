@@ -955,11 +955,7 @@ mod matrix2x2_shear_tests {
             Vector2::new( 0_i32, 0_i32),
             Vector2::new(-1_i32, 0_i32),
         ];
-        let expected = [
-            Vector2::new( 1_i32, 0_i32),
-            Vector2::new( 0_i32, 0_i32),
-            Vector2::new(-1_i32, 0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -995,11 +991,7 @@ mod matrix2x2_shear_tests {
             Vector2::new(0_i32 , 0_i32),
             Vector2::new(0_i32, -1_i32),
         ];
-        let expected = [
-            Vector2::new(0_i32,  1_i32),
-            Vector2::new(0_i32,  0_i32),
-            Vector2::new(0_i32, -1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2542,13 +2534,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32, -1_i32),
-            Vector3::new( 1_i32, 0_i32, -1_i32),
-            Vector3::new( 0_i32, 0_i32,  0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2594,13 +2580,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, -1_i32,  0_i32),
             Vector3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32, -1_i32,  0_i32),
-            Vector3::new( 1_i32, -1_i32,  0_i32),
-            Vector3::new( 0_i32,  0_i32,  0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2646,13 +2626,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(0_i32, -1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new(0_i32,  1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32,  1_i32),
-            Vector3::new(0_i32,  1_i32, -1_i32),
-            Vector3::new(0_i32, -1_i32, -1_i32),
-            Vector3::new(0_i32,  0_i32,  0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2698,13 +2672,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, -1_i32, 0_i32),
             Vector3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32,  1_i32, 0_i32),
-            Vector3::new(-1_i32,  1_i32, 0_i32),
-            Vector3::new(-1_i32, -1_i32, 0_i32),
-            Vector3::new( 1_i32, -1_i32, 0_i32),
-            Vector3::new( 0_i32,  0_i32, 0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2750,13 +2718,7 @@ mod matrix3x3_shear_tests {
             Vector3::new(0_i32,  1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new(0_i32,  1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32, -1_i32),
-            Vector3::new(0_i32,  1_i32, -1_i32),
-            Vector3::new(0_i32,  0_i32,  0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -2802,13 +2764,7 @@ mod matrix3x3_shear_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32, -1_i32),
-            Vector3::new( 1_i32, 0_i32, -1_i32),
-            Vector3::new( 0_i32, 0_i32,  0_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
         
         assert_eq!(result, expected);
@@ -3439,11 +3395,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(-1_i32,  0_i32, 1_i32),
             Vector3::new( 0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32,  0_i32, 1_i32),
-            Vector3::new(-1_i32,  0_i32, 1_i32),
-            Vector3::new( 0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -3504,11 +3456,7 @@ mod matrix3x3_affine_shear_tests {
             Vector3::new(0_i32, -1_i32, 1_i32),
             Vector3::new(0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector3::new(0_i32,  1_i32, 1_i32),
-            Vector3::new(0_i32, -1_i32, 1_i32),
-            Vector3::new(0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -3563,7 +3511,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 
 
     #[test]
-    fn test_from_affine_shear_vertices1() {
+    fn test_from_affine_shear_xy() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -3588,7 +3536,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_matrix1() {
+    fn test_from_affine_shear_xy_matrix() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -3604,7 +3552,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_shearing_plane1() {
+    fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -3622,7 +3570,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_vertices2() {
+    fn test_from_affine_shear_yx() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -3647,7 +3595,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_matrix2() {
+    fn test_from_affine_shear_yx_matrix() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -3663,7 +3611,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_shearing_plane2() {
+    fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -5378,13 +5326,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
             Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new( 1_i32, 0_i32,  1_i32, 1_i32),
-            Vector4::new(-1_i32, 0_i32,  1_i32, 1_i32),
-            Vector4::new(-1_i32, 0_i32, -1_i32, 1_i32),
-            Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
-            Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5441,13 +5383,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, -1_i32,  0_i32, 1_i32),
             Vector4::new( 0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new( 1_i32,  1_i32,  0_i32, 1_i32),
-            Vector4::new(-1_i32,  1_i32,  0_i32, 1_i32),
-            Vector4::new(-1_i32, -1_i32,  0_i32, 1_i32),
-            Vector4::new( 1_i32, -1_i32,  0_i32, 1_i32),
-            Vector4::new( 0_i32,  0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5504,13 +5440,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(0_i32, -1_i32, -1_i32, 1_i32),
             Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new(0_i32,  1_i32,  1_i32, 1_i32),
-            Vector4::new(0_i32, -1_i32,  1_i32, 1_i32),
-            Vector4::new(0_i32,  1_i32, -1_i32, 1_i32),
-            Vector4::new(0_i32, -1_i32, -1_i32, 1_i32),
-            Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5567,13 +5497,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, -1_i32, 0_i32, 1_i32),
             Vector4::new( 0_i32,  0_i32, 0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new( 1_i32,  1_i32, 0_i32, 1_i32),
-            Vector4::new(-1_i32,  1_i32, 0_i32, 1_i32),
-            Vector4::new(-1_i32, -1_i32, 0_i32, 1_i32),
-            Vector4::new( 1_i32, -1_i32, 0_i32, 1_i32),
-            Vector4::new( 0_i32,  0_i32, 0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5630,13 +5554,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new(0_i32,  1_i32, -1_i32, 1_i32),
             Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new(0_i32,  1_i32,  1_i32, 1_i32),
-            Vector4::new(0_i32, -1_i32,  1_i32, 1_i32),
-            Vector4::new(0_i32, -1_i32, -1_i32, 1_i32),
-            Vector4::new(0_i32,  1_i32, -1_i32, 1_i32),
-            Vector4::new(0_i32,  0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5693,13 +5611,7 @@ mod matrix4x4_affine_shear_tests {
             Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
             Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
         ];
-        let expected = [
-            Vector4::new( 1_i32, 0_i32,  1_i32, 1_i32),
-            Vector4::new(-1_i32, 0_i32,  1_i32, 1_i32),
-            Vector4::new(-1_i32, 0_i32, -1_i32, 1_i32),
-            Vector4::new( 1_i32, 0_i32, -1_i32, 1_i32),
-            Vector4::new( 0_i32, 0_i32,  0_i32, 1_i32),
-        ];
+        let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
         assert_eq!(result, expected);
@@ -5784,6 +5696,415 @@ mod matrix4x4_affine_shear_tests {
         let normal = Unit::from_value(Vector3::unit_y());
         let expected = Matrix4x4::from_affine_shear_zy(shear_factor);
         let result = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+
+        assert_eq!(result, expected);
+    }
+}
+
+
+#[cfg(test)]
+mod matrix4x4_affine_shear_coordinate_plane_tests {
+    use cglinalg_core::{
+        Matrix4x4,
+        Vector4,
+        Point3,
+        Vector3,
+        Unit,
+    };
+
+
+    #[test]
+    fn test_from_affine_shear_xy() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64 + shear_factor,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64 + shear_factor,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64 - shear_factor, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64 - shear_factor, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64 + shear_factor,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64 + shear_factor,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64 - shear_factor, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64 - shear_factor, -1_f64, -1_f64, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xy_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64, 0_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, 0_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, 0_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, 0_f64, -1_f64, 1_f64),
+            Vector4::new( 0_f64, 0_f64,  0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xy_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64 + shear_factor,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64 + shear_factor,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64 + shear_factor, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64 + shear_factor, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64 - shear_factor,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64 - shear_factor,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64 - shear_factor, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64 - shear_factor, -1_f64, -1_f64, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  0_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  0_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  0_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  0_f64, 1_f64),
+            Vector4::new( 0_f64,  0_f64,  0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64,  1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64 - shear_factor,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64 - shear_factor,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64 + shear_factor, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64 - shear_factor, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64 - shear_factor, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64 + shear_factor, -1_f64, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new(0_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(0_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new(0_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(0_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new(0_f64,  0_f64,  0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64,  1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64 + shear_factor,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64 - shear_factor, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64 - shear_factor, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64 - shear_factor, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64 - shear_factor, -1_f64, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, 0_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, 0_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, 0_f64, 1_f64),
+            Vector4::new( 0_f64,  0_f64, 0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64,  1_f64,  1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64 - shear_factor, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64 - shear_factor, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64 + shear_factor, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64 - shear_factor, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64 - shear_factor, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64 + shear_factor, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new(0_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(0_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new(0_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new(0_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(0_f64,  0_f64,  0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+        ];
+        let expected = [
+            Vector4::new( 1_f64,  1_f64,  1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64,  1_f64,  1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64, -1_f64,  1_f64 - shear_factor, 1_f64),
+            Vector4::new( 1_f64, -1_f64,  1_f64 - shear_factor, 1_f64),
+            Vector4::new( 1_f64,  1_f64, -1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64,  1_f64, -1_f64 + shear_factor, 1_f64),
+            Vector4::new(-1_f64, -1_f64, -1_f64 - shear_factor, 1_f64),
+            Vector4::new( 1_f64, -1_f64, -1_f64 - shear_factor, 1_f64),
+        ];
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_shearing_plane() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector4::new( 1_f64, 0_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, 0_f64,  1_f64, 1_f64),
+            Vector4::new(-1_f64, 0_f64, -1_f64, 1_f64),
+            Vector4::new( 1_f64, 0_f64, -1_f64, 1_f64),
+            Vector4::new( 0_f64, 0_f64,  0_f64, 1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| matrix * v);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_does_not_change_homogeneous_coordinate() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let unit_w = Vector4::unit_w();
+        let expected = unit_w;
+        let result = matrix * unit_w;
 
         assert_eq!(result, expected);
     }

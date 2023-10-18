@@ -772,7 +772,7 @@ where
 
 impl<S> Shear2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     /// Compute the inverse of the shear transformation.
     ///
@@ -1517,7 +1517,7 @@ where
 
 impl<S> Shear3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarSigned
 {
     /// Calculate the inverse of a shear transformation.
     ///

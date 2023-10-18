@@ -265,156 +265,274 @@ mod shear2_tests {
     }
 }
 
-/*
 #[cfg(test)]
-mod shear2_affine_shear_tests {
+mod shear2_inverse_tests {
+    use cglinalg_core::{
+        Point2,
+        Vector2,
+        Unit,
+    };
     use cglinalg_transform::{
         Shear2,
     };
-    use cglinalg_core::{
-        Vector2,
-        Vector3,
-        Matrix3x3,
-        Unit,
-        Point2,
+    use approx::{
+        assert_relative_eq,
     };
 
 
     #[test]
-    fn test_from_affine_shear_xy1() {
+    fn test_from_shear_xy_inverse_point() {
         let shear_factor = 5_i32;
-        let shear = Shear2::from_affine_shear_xy(shear_factor);
+        let shear = Shear2::from_shear_xy(shear_factor);
         let vertices = [
-            Vector3::new( 1_i32,  1_i32, 1_i32),
-            Vector3::new(-1_i32,  1_i32, 1_i32),
-            Vector3::new(-1_i32, -1_i32, 1_i32),
-            Vector3::new( 1_i32, -1_i32, 1_i32),
+            Point2::new( 1_i32,  1_i32),
+            Point2::new(-1_i32,  1_i32),
+            Point2::new(-1_i32, -1_i32),
+            Point2::new( 1_i32, -1_i32),
         ];
         let expected = [
-            Vector3::new( 1_i32 + shear_factor,  1_i32, 1_i32),
-            Vector3::new(-1_i32 + shear_factor,  1_i32, 1_i32),
-            Vector3::new(-1_i32 - shear_factor, -1_i32, 1_i32),
-            Vector3::new( 1_i32 - shear_factor, -1_i32, 1_i32),
+            Point2::new( 1_i32 - shear_factor,  1_i32),
+            Point2::new(-1_i32 - shear_factor,  1_i32),
+            Point2::new(-1_i32 + shear_factor, -1_i32),
+            Point2::new( 1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| shear.apply_vector(&v));
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
 
         assert_eq!(result, expected);
     }
 
-    #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_xy2() {
+    fn test_from_shear_xy_inverse_vector() {
         let shear_factor = 5_i32;
-        let shear = Shear2::from_affine_shear_xy(shear_factor);
-        let expected = Matrix3x3::new(
-            1_i32,        0_i32, 0_i32,
-            shear_factor, 1_i32, 0_i32,
-            0_i32,        0_i32, 1_i32
-        );
-        let result = shear.to_affine_matrix();
-        
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_from_affine_shear_xy_shearing_plane() {
-        let shear_factor = 5_i32;
-        let shear = Shear2::from_affine_shear_xy(shear_factor);
+        let shear = Shear2::from_shear_xy(shear_factor);
         let vertices = [
-            Vector3::new( 1_i32,  0_i32, 1_i32),
-            Vector3::new(-1_i32,  0_i32, 1_i32),
-            Vector3::new( 0_i32,  0_i32, 1_i32),
+            Vector2::new( 1_i32,  1_i32),
+            Vector2::new(-1_i32,  1_i32),
+            Vector2::new(-1_i32, -1_i32),
+            Vector2::new( 1_i32, -1_i32),
         ];
         let expected = [
-            Vector3::new( 1_i32,  0_i32, 1_i32),
-            Vector3::new(-1_i32,  0_i32, 1_i32),
-            Vector3::new( 0_i32,  0_i32, 1_i32),
+            Vector2::new( 1_i32 - shear_factor,  1_i32),
+            Vector2::new(-1_i32 - shear_factor,  1_i32),
+            Vector2::new(-1_i32 + shear_factor, -1_i32),
+            Vector2::new( 1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| shear.apply_vector(&v));
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_yx1() {
-        let shear_factor = 3_i32;
-        let shear = Shear2::from_affine_shear_yx(shear_factor);
-        let vertices = [
-            Vector3::new( 1_i32,  1_i32, 1_i32),
-            Vector3::new(-1_i32,  1_i32, 1_i32),
-            Vector3::new(-1_i32, -1_i32, 1_i32),
-            Vector3::new( 1_i32, -1_i32, 1_i32),
-        ];
-        let expected = [
-            Vector3::new( 1_i32,  1_i32 + shear_factor, 1_i32),
-            Vector3::new(-1_i32,  1_i32 - shear_factor, 1_i32),
-            Vector3::new(-1_i32, -1_i32 - shear_factor, 1_i32),
-            Vector3::new( 1_i32, -1_i32 + shear_factor, 1_i32),
-        ];
-        let result = vertices.map(|v| shear.apply_vector(&v));
-
-        assert_eq!(result, expected);
-    }
-
-    #[rustfmt::skip]
-    #[test]
-    fn test_from_affine_shear_yx2() {
+    fn test_from_shear_xy_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
-        let shear = Shear2::from_affine_shear_yx(shear_factor);
-        let expected = Matrix3x3::new(
-            1_i32, shear_factor, 0_i32,
-            0_i32, 1_i32,        0_i32,
-            0_i32, 0_i32,        1_i32
-        );
-        let result = shear.to_affine_matrix();
-        
+        let shear = Shear2::from_shear_xy(shear_factor);
+        let vertices = [
+            Point2::new( 1_i32, 0_i32),
+            Point2::new( 0_i32, 0_i32),
+            Point2::new(-1_i32, 0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_yx_shearing_plane() {
-        let shear_factor = 3_i32;
-        let shear = Shear2::from_affine_shear_yx(shear_factor);
+    fn test_from_shear_xy_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear2::from_shear_xy(shear_factor);
         let vertices = [
-            Vector3::new(0_i32,  1_i32, 1_i32),
-            Vector3::new(0_i32, -1_i32, 1_i32),
-            Vector3::new(0_i32,  0_i32, 1_i32),
+            Vector2::new( 1_i32, 0_i32),
+            Vector2::new( 0_i32, 0_i32),
+            Vector2::new(-1_i32, 0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear2::from_shear_yx(shear_factor);
+        let vertices = [
+            Point2::new( 1_i32,  1_i32),
+            Point2::new(-1_i32,  1_i32),
+            Point2::new(-1_i32, -1_i32),
+            Point2::new( 1_i32, -1_i32),
         ];
         let expected = [
-            Vector3::new(0_i32,  1_i32, 1_i32),
-            Vector3::new(0_i32, -1_i32, 1_i32),
-            Vector3::new(0_i32,  0_i32, 1_i32),
+            Point2::new( 1_i32,  1_i32 - shear_factor),
+            Point2::new(-1_i32,  1_i32 + shear_factor),
+            Point2::new(-1_i32, -1_i32 + shear_factor),
+            Point2::new( 1_i32, -1_i32 - shear_factor),
         ];
-        let result = vertices.map(|v| shear.apply_vector(&v));
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_from_affine_shear_xy() {
-        let shear_factor = 5_f64;
-        let origin = Point2::new(0_f64, 0_f64);
+    fn test_from_shear_yx_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear2::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector2::new( 1_i32,  1_i32),
+            Vector2::new(-1_i32,  1_i32),
+            Vector2::new(-1_i32, -1_i32),
+            Vector2::new( 1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector2::new( 1_i32,  1_i32 - shear_factor),
+            Vector2::new(-1_i32,  1_i32 + shear_factor),
+            Vector2::new(-1_i32, -1_i32 + shear_factor),
+            Vector2::new( 1_i32, -1_i32 - shear_factor),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear2::from_shear_yx(shear_factor);
+        let vertices = [
+            Point2::new(0_i32,  1_i32),
+            Point2::new(0_i32 , 0_i32),
+            Point2::new(0_i32, -1_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear2::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector2::new(0_i32,  1_i32),
+            Vector2::new(0_i32 , 0_i32),
+            Vector2::new(0_i32, -1_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_xy_inverse() {
+        let shear_factor = 7_f64;
         let direction = Unit::from_value(Vector2::unit_x());
         let normal = Unit::from_value(Vector2::unit_y());
-        let expected = Shear2::from_affine_shear_xy(shear_factor);
-        let result = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear2::from_shear_xy(-shear_factor);
+        let result = shear.inverse();
 
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn test_from_affine_shear_from_affine_shear_yx() {
-        let shear_factor = 5_f64;
-        let origin = Point2::new(0_f64, 0_f64);
+    fn test_from_shear_inverse_from_shear_yx_inverse() {
+        let shear_factor = 7_f64;
         let direction = Unit::from_value(Vector2::unit_y());
         let normal = Unit::from_value(Vector2::unit_x());
-        let expected = Shear2::from_affine_shear_yx(shear_factor);
-        let result = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear2::from_shear_yx(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_identity_shear_inverse_point() {
+        let shear = Shear2::identity();
+        let vertices = [
+            Point2::new( 0_f64 , 0_f64),
+            Point2::new( 0_f64,  1_f64),
+            Point2::new( 1_f64,  0_f64),
+            Point2::new( 1_f64,  1_f64),
+            Point2::new( 0_f64, -1_f64),
+            Point2::new(-1_f64,  0_f64),
+            Point2::new(-1_f64, -1_f64),
+            Point2::new( 1_f64, -1_f64),
+            Point2::new(-1_f64,  1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_identity_shear_inverse_vector() {
+        let shear = Shear2::identity();
+        let vertices = [
+            Vector2::new( 0_f64 , 0_f64),
+            Vector2::new( 0_f64,  1_f64),
+            Vector2::new( 1_f64,  0_f64),
+            Vector2::new( 1_f64,  1_f64),
+            Vector2::new( 0_f64, -1_f64),
+            Vector2::new(-1_f64,  0_f64),
+            Vector2::new(-1_f64, -1_f64),
+            Vector2::new( 1_f64, -1_f64),
+            Vector2::new(-1_f64,  1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xy_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector2::unit_x());
+        let normal = Unit::from_value(Vector2::unit_y());
+        let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 3_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector2::unit_y());
+        let normal = Unit::from_value(Vector2::unit_x());
+        let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 3_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector2::new(
+            -f64::sqrt(9_f64 / 13_f64), 
+            -f64::sqrt(4_f64 / 13_f64)
+        ));
+        let normal = Unit::from_value(Vector2::new(
+             f64::sqrt(4_f64 / 13_f64),
+            -f64::sqrt(9_f64 / 13_f64)
+        ));
+        let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 3_f64;
+        let result = shear_inv.to_affine_matrix().trace();
 
         assert_eq!(result, expected);
     }
 }
-*/
 
 #[cfg(test)]
 mod shear2_coordinate_plane_tests {
@@ -431,7 +549,7 @@ mod shear2_coordinate_plane_tests {
 
 
     #[test]
-    fn test_from_affine_shear_vertices1() {
+    fn test_from_affine_shear_xy() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -456,7 +574,7 @@ mod shear2_coordinate_plane_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_matrix1() {
+    fn test_from_affine_shear_xy_matrix() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -473,7 +591,7 @@ mod shear2_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_shearing_plane1() {
+    fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_x());
@@ -491,7 +609,7 @@ mod shear2_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_vertices2() {
+    fn test_from_affine_shear_yx() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -516,7 +634,7 @@ mod shear2_coordinate_plane_tests {
 
     #[rustfmt::skip]
     #[test]
-    fn test_from_affine_shear_matrix2() {
+    fn test_from_affine_shear_yx_matrix() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -533,7 +651,7 @@ mod shear2_coordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_shearing_plane2() {
+    fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 7_f64;
         let origin = Point2::new(-2_f64, 0_f64);
         let direction = Unit::from_value(Vector2::unit_y());
@@ -872,7 +990,7 @@ mod shear3_tests {
             Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -901,7 +1019,7 @@ mod shear3_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| shear * v);
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -917,14 +1035,8 @@ mod shear3_tests {
             Point3::new( 1_i32, 0_i32, -1_i32),
             Point3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Point3::new( 1_i32, 0_i32,  1_i32),
-            Point3::new(-1_i32, 0_i32,  1_i32),
-            Point3::new(-1_i32, 0_i32, -1_i32),
-            Point3::new( 1_i32, 0_i32, -1_i32),
-            Point3::new( 0_i32, 0_i32,  0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -940,14 +1052,8 @@ mod shear3_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32, -1_i32),
-            Vector3::new( 1_i32, 0_i32, -1_i32),
-            Vector3::new( 0_i32, 0_i32,  0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -976,7 +1082,7 @@ mod shear3_tests {
             Point3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Point3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1005,8 +1111,7 @@ mod shear3_tests {
             Vector3::new(-1_i32 - shear_factor, -1_i32, -1_i32),
             Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
         ];
-        let result = vertices.map(|v| shear * v);
-
+        let result = vertices.map(|v| shear.apply_vector(&v));
         assert_eq!(result, expected);
     }
 
@@ -1021,14 +1126,8 @@ mod shear3_tests {
             Point3::new( 1_i32, -1_i32,  0_i32),
             Point3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Point3::new( 1_i32,  1_i32,  0_i32),
-            Point3::new(-1_i32,  1_i32,  0_i32),
-            Point3::new(-1_i32, -1_i32,  0_i32),
-            Point3::new( 1_i32, -1_i32,  0_i32),
-            Point3::new( 0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1044,14 +1143,8 @@ mod shear3_tests {
             Vector3::new( 1_i32, -1_i32,  0_i32),
             Vector3::new( 0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32, -1_i32,  0_i32),
-            Vector3::new( 1_i32, -1_i32,  0_i32),
-            Vector3::new( 0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1080,7 +1173,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Point3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1109,7 +1202,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| shear * v);
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1125,14 +1218,8 @@ mod shear3_tests {
             Point3::new(0_i32, -1_i32, -1_i32),
             Point3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Point3::new(0_i32,  1_i32,  1_i32),
-            Point3::new(0_i32, -1_i32,  1_i32),
-            Point3::new(0_i32,  1_i32, -1_i32),
-            Point3::new(0_i32, -1_i32, -1_i32),
-            Point3::new(0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1148,14 +1235,8 @@ mod shear3_tests {
             Vector3::new(0_i32, -1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new(0_i32,  1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32,  1_i32),
-            Vector3::new(0_i32,  1_i32, -1_i32),
-            Vector3::new(0_i32, -1_i32, -1_i32),
-            Vector3::new(0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1184,7 +1265,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Point3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1213,7 +1294,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32 - shear_factor, -1_i32),
             Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
         ];
-        let result = vertices.map(|v| shear * v);
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1229,14 +1310,8 @@ mod shear3_tests {
             Point3::new( 1_i32, -1_i32, 0_i32),
             Point3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let expected = [
-            Point3::new( 1_i32,  1_i32, 0_i32),
-            Point3::new(-1_i32,  1_i32, 0_i32),
-            Point3::new(-1_i32, -1_i32, 0_i32),
-            Point3::new( 1_i32, -1_i32, 0_i32),
-            Point3::new( 0_i32,  0_i32, 0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1252,14 +1327,8 @@ mod shear3_tests {
             Vector3::new( 1_i32, -1_i32, 0_i32),
             Vector3::new( 0_i32,  0_i32, 0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32,  1_i32, 0_i32),
-            Vector3::new(-1_i32,  1_i32, 0_i32),
-            Vector3::new(-1_i32, -1_i32, 0_i32),
-            Vector3::new( 1_i32, -1_i32, 0_i32),
-            Vector3::new( 0_i32,  0_i32, 0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1288,7 +1357,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Point3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1317,7 +1386,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
         ];
-        let result = vertices.map(|v| shear * v);
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1333,14 +1402,8 @@ mod shear3_tests {
             Point3::new(0_i32,  1_i32, -1_i32),
             Point3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Point3::new(0_i32,  1_i32,  1_i32),
-            Point3::new(0_i32, -1_i32,  1_i32),
-            Point3::new(0_i32, -1_i32, -1_i32),
-            Point3::new(0_i32,  1_i32, -1_i32),
-            Point3::new(0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1356,14 +1419,8 @@ mod shear3_tests {
             Vector3::new(0_i32,  1_i32, -1_i32),
             Vector3::new(0_i32,  0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new(0_i32,  1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32,  1_i32),
-            Vector3::new(0_i32, -1_i32, -1_i32),
-            Vector3::new(0_i32,  1_i32, -1_i32),
-            Vector3::new(0_i32,  0_i32,  0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1392,7 +1449,7 @@ mod shear3_tests {
             Point3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Point3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
         ];
-        let result = vertices.map(|p| shear * p);
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1421,7 +1478,7 @@ mod shear3_tests {
             Vector3::new(-1_i32, -1_i32, -1_i32 - shear_factor),
             Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
         ];
-        let result = vertices.map(|v| shear * v);
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1437,14 +1494,8 @@ mod shear3_tests {
             Point3::new( 1_i32, 0_i32, -1_i32),
             Point3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Point3::new( 1_i32, 0_i32,  1_i32),
-            Point3::new(-1_i32, 0_i32,  1_i32),
-            Point3::new(-1_i32, 0_i32, -1_i32),
-            Point3::new( 1_i32, 0_i32, -1_i32),
-            Point3::new( 0_i32, 0_i32,  0_i32),
-        ];
-        let result = vertices.map(|p| shear * p);
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
 
         assert_eq!(result, expected);
     }
@@ -1460,14 +1511,8 @@ mod shear3_tests {
             Vector3::new( 1_i32, 0_i32, -1_i32),
             Vector3::new( 0_i32, 0_i32,  0_i32),
         ];
-        let expected = [
-            Vector3::new( 1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32,  1_i32),
-            Vector3::new(-1_i32, 0_i32, -1_i32),
-            Vector3::new( 1_i32, 0_i32, -1_i32),
-            Vector3::new( 0_i32, 0_i32,  0_i32),
-        ];
-        let result = vertices.map(|v| shear * v);
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
 
         assert_eq!(result, expected);
     }
@@ -1706,6 +1751,1458 @@ mod shear3_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
+
+
+#[cfg(test)]
+mod shear3_inverse_tests {
+    use cglinalg_transform::{
+        Shear3,
+    };
+    use cglinalg_core::{
+        Vector3,
+        Matrix3x3,
+        Point3,
+        Unit,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+
+    #[test]
+    fn test_from_shear_xy_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xy(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32 - shear_factor,  1_i32,  1_i32),
+            Point3::new(-1_i32 - shear_factor,  1_i32,  1_i32),
+            Point3::new(-1_i32 + shear_factor, -1_i32,  1_i32),
+            Point3::new( 1_i32 + shear_factor, -1_i32,  1_i32),
+            Point3::new( 1_i32 - shear_factor,  1_i32, -1_i32),
+            Point3::new(-1_i32 - shear_factor,  1_i32, -1_i32),
+            Point3::new(-1_i32 + shear_factor, -1_i32, -1_i32),
+            Point3::new( 1_i32 + shear_factor, -1_i32, -1_i32),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xy_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32 - shear_factor,  1_i32,  1_i32),
+            Vector3::new(-1_i32 - shear_factor,  1_i32,  1_i32),
+            Vector3::new(-1_i32 + shear_factor, -1_i32,  1_i32),
+            Vector3::new( 1_i32 + shear_factor, -1_i32,  1_i32),
+            Vector3::new( 1_i32 - shear_factor,  1_i32, -1_i32),
+            Vector3::new(-1_i32 - shear_factor,  1_i32, -1_i32),
+            Vector3::new(-1_i32 + shear_factor, -1_i32, -1_i32),
+            Vector3::new( 1_i32 + shear_factor, -1_i32, -1_i32),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xy_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xy(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32, 0_i32,  1_i32),
+            Point3::new(-1_i32, 0_i32,  1_i32),
+            Point3::new(-1_i32, 0_i32, -1_i32),
+            Point3::new( 1_i32, 0_i32, -1_i32),
+            Point3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xy_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xz(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32 - shear_factor,  1_i32,  1_i32),
+            Point3::new(-1_i32 - shear_factor,  1_i32,  1_i32),
+            Point3::new(-1_i32 - shear_factor, -1_i32,  1_i32),
+            Point3::new( 1_i32 - shear_factor, -1_i32,  1_i32),
+            Point3::new( 1_i32 + shear_factor,  1_i32, -1_i32),
+            Point3::new(-1_i32 + shear_factor,  1_i32, -1_i32),
+            Point3::new(-1_i32 + shear_factor, -1_i32, -1_i32),
+            Point3::new( 1_i32 + shear_factor, -1_i32, -1_i32),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32 - shear_factor,  1_i32,  1_i32),
+            Vector3::new(-1_i32 - shear_factor,  1_i32,  1_i32),
+            Vector3::new(-1_i32 - shear_factor, -1_i32,  1_i32),
+            Vector3::new( 1_i32 - shear_factor, -1_i32,  1_i32),
+            Vector3::new( 1_i32 + shear_factor,  1_i32, -1_i32),
+            Vector3::new(-1_i32 + shear_factor,  1_i32, -1_i32),
+            Vector3::new(-1_i32 + shear_factor, -1_i32, -1_i32),
+            Vector3::new( 1_i32 + shear_factor, -1_i32, -1_i32),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xz(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  0_i32),
+            Point3::new(-1_i32,  1_i32,  0_i32),
+            Point3::new(-1_i32, -1_i32,  0_i32),
+            Point3::new( 1_i32, -1_i32,  0_i32),
+            Point3::new( 0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_xz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32,  1_i32,  0_i32),
+            Vector3::new(-1_i32, -1_i32,  0_i32),
+            Vector3::new( 1_i32, -1_i32,  0_i32),
+            Vector3::new( 0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yx(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32,  1_i32 - shear_factor,  1_i32),
+            Point3::new(-1_i32,  1_i32 + shear_factor,  1_i32),
+            Point3::new(-1_i32, -1_i32 + shear_factor,  1_i32),
+            Point3::new( 1_i32, -1_i32 - shear_factor,  1_i32),
+            Point3::new( 1_i32,  1_i32 - shear_factor, -1_i32),
+            Point3::new(-1_i32,  1_i32 + shear_factor, -1_i32),
+            Point3::new(-1_i32, -1_i32 + shear_factor, -1_i32),
+            Point3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32 - shear_factor,  1_i32),
+            Vector3::new(-1_i32,  1_i32 + shear_factor,  1_i32),
+            Vector3::new(-1_i32, -1_i32 + shear_factor,  1_i32),
+            Vector3::new( 1_i32, -1_i32 - shear_factor,  1_i32),
+            Vector3::new( 1_i32,  1_i32 - shear_factor, -1_i32),
+            Vector3::new(-1_i32,  1_i32 + shear_factor, -1_i32),
+            Vector3::new(-1_i32, -1_i32 + shear_factor, -1_i32),
+            Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yx(shear_factor);
+        let vertices = [
+            Point3::new(0_i32,  1_i32,  1_i32),
+            Point3::new(0_i32, -1_i32,  1_i32),
+            Point3::new(0_i32,  1_i32, -1_i32),
+            Point3::new(0_i32, -1_i32, -1_i32),
+            Point3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yx(shear_factor);
+        let vertices = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yz(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32,  1_i32 - shear_factor,  1_i32),
+            Point3::new(-1_i32,  1_i32 - shear_factor,  1_i32),
+            Point3::new(-1_i32, -1_i32 - shear_factor,  1_i32),
+            Point3::new( 1_i32, -1_i32 - shear_factor,  1_i32),
+            Point3::new( 1_i32,  1_i32 + shear_factor, -1_i32),
+            Point3::new(-1_i32,  1_i32 + shear_factor, -1_i32),
+            Point3::new(-1_i32, -1_i32 + shear_factor, -1_i32),
+            Point3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32 - shear_factor,  1_i32),
+            Vector3::new(-1_i32,  1_i32 - shear_factor,  1_i32),
+            Vector3::new(-1_i32, -1_i32 - shear_factor,  1_i32),
+            Vector3::new( 1_i32, -1_i32 - shear_factor,  1_i32),
+            Vector3::new( 1_i32,  1_i32 + shear_factor, -1_i32),
+            Vector3::new(-1_i32,  1_i32 + shear_factor, -1_i32),
+            Vector3::new(-1_i32, -1_i32 + shear_factor, -1_i32),
+            Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yz(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32, 0_i32),
+            Point3::new(-1_i32,  1_i32, 0_i32),
+            Point3::new(-1_i32, -1_i32, 0_i32),
+            Point3::new( 1_i32, -1_i32, 0_i32),
+            Point3::new( 0_i32,  0_i32, 0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_yz(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32, -1_i32, 0_i32),
+            Vector3::new( 1_i32, -1_i32, 0_i32),
+            Vector3::new( 0_i32,  0_i32, 0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zx_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zx(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32,  1_i32,  1_i32 - shear_factor),
+            Point3::new(-1_i32,  1_i32,  1_i32 + shear_factor),
+            Point3::new(-1_i32, -1_i32,  1_i32 + shear_factor),
+            Point3::new( 1_i32, -1_i32,  1_i32 - shear_factor),
+            Point3::new( 1_i32,  1_i32, -1_i32 - shear_factor),
+            Point3::new(-1_i32,  1_i32, -1_i32 + shear_factor),
+            Point3::new(-1_i32, -1_i32, -1_i32 + shear_factor),
+            Point3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zx_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zx(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32,  1_i32 - shear_factor),
+            Vector3::new(-1_i32,  1_i32,  1_i32 + shear_factor),
+            Vector3::new(-1_i32, -1_i32,  1_i32 + shear_factor),
+            Vector3::new( 1_i32, -1_i32,  1_i32 - shear_factor),
+            Vector3::new( 1_i32,  1_i32, -1_i32 - shear_factor),
+            Vector3::new(-1_i32,  1_i32, -1_i32 + shear_factor),
+            Vector3::new(-1_i32, -1_i32, -1_i32 + shear_factor),
+            Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zx_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zx(shear_factor);
+        let vertices = [
+            Point3::new(0_i32,  1_i32,  1_i32),
+            Point3::new(0_i32, -1_i32,  1_i32),
+            Point3::new(0_i32, -1_i32, -1_i32),
+            Point3::new(0_i32,  1_i32, -1_i32),
+            Point3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zx_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zx(shear_factor);
+        let vertices = [
+            Vector3::new(0_i32,  1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32,  1_i32),
+            Vector3::new(0_i32, -1_i32, -1_i32),
+            Vector3::new(0_i32,  1_i32, -1_i32),
+            Vector3::new(0_i32,  0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zy_inverse_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zy(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32,  1_i32,  1_i32),
+            Point3::new(-1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32, -1_i32,  1_i32),
+            Point3::new( 1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32,  1_i32, -1_i32),
+            Point3::new(-1_i32, -1_i32, -1_i32),
+            Point3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Point3::new( 1_i32,  1_i32,  1_i32 - shear_factor),
+            Point3::new(-1_i32,  1_i32,  1_i32 - shear_factor),
+            Point3::new(-1_i32, -1_i32,  1_i32 + shear_factor),
+            Point3::new( 1_i32, -1_i32,  1_i32 + shear_factor),
+            Point3::new( 1_i32,  1_i32, -1_i32 - shear_factor),
+            Point3::new(-1_i32,  1_i32, -1_i32 - shear_factor),
+            Point3::new(-1_i32, -1_i32, -1_i32 + shear_factor),
+            Point3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
+        ];
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zy_inverse_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32,  1_i32,  1_i32),
+            Vector3::new(-1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32, -1_i32,  1_i32),
+            Vector3::new( 1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32,  1_i32, -1_i32),
+            Vector3::new(-1_i32, -1_i32, -1_i32),
+            Vector3::new( 1_i32, -1_i32, -1_i32),
+        ];
+        let expected = [
+            Vector3::new( 1_i32,  1_i32,  1_i32 - shear_factor),
+            Vector3::new(-1_i32,  1_i32,  1_i32 - shear_factor),
+            Vector3::new(-1_i32, -1_i32,  1_i32 + shear_factor),
+            Vector3::new( 1_i32, -1_i32,  1_i32 + shear_factor),
+            Vector3::new( 1_i32,  1_i32, -1_i32 - shear_factor),
+            Vector3::new(-1_i32,  1_i32, -1_i32 - shear_factor),
+            Vector3::new(-1_i32, -1_i32, -1_i32 + shear_factor),
+            Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
+        ];
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zy_inverse_shearing_plane_point() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zy(shear_factor);
+        let vertices = [
+            Point3::new( 1_i32, 0_i32,  1_i32),
+            Point3::new(-1_i32, 0_i32,  1_i32),
+            Point3::new(-1_i32, 0_i32, -1_i32),
+            Point3::new( 1_i32, 0_i32, -1_i32),
+            Point3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zy_inverse_shearing_plane_vector() {
+        let shear_factor = 5_i32;
+        let shear = Shear3::from_shear_zy(shear_factor);
+        let vertices = [
+            Vector3::new( 1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32,  1_i32),
+            Vector3::new(-1_i32, 0_i32, -1_i32),
+            Vector3::new( 1_i32, 0_i32, -1_i32),
+            Vector3::new( 0_i32, 0_i32,  0_i32),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_xy_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_xy(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_xz_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_xz(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_yx_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_yx(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_yz_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_yz(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_zx_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_zx(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_from_shear_zy_inverse() {
+        let shear_factor = 15_f64;
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = Shear3::from_shear_zy(-shear_factor);
+        let result = shear.inverse();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_identity_shear_inverse_point() {
+        let shear = Shear3::identity();
+        let vertices = [
+            Point3::new( 0_f64 , 0_f64,  0_f64),
+            Point3::new( 0_f64,  1_f64,  0_f64),
+            Point3::new( 1_f64,  0_f64,  0_f64),
+            Point3::new( 1_f64,  1_f64,  0_f64),
+            Point3::new( 0_f64, -1_f64,  0_f64),
+            Point3::new(-1_f64,  0_f64,  0_f64),
+            Point3::new(-1_f64, -1_f64,  0_f64),
+            Point3::new( 1_f64, -1_f64,  0_f64),
+            Point3::new(-1_f64,  1_f64,  0_f64),
+            Point3::new( 0_f64 , 0_f64,  1_f64),
+            Point3::new( 0_f64,  1_f64,  1_f64),
+            Point3::new( 1_f64,  0_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new( 0_f64, -1_f64,  1_f64),
+            Point3::new(-1_f64,  0_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new( 0_f64 , 0_f64, -1_f64),
+            Point3::new( 0_f64,  1_f64, -1_f64),
+            Point3::new( 1_f64,  0_f64, -1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new( 0_f64, -1_f64, -1_f64),
+            Point3::new(-1_f64,  0_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.inverse_apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_identity_shear_inverse_vector() {
+        let shear = Shear3::identity();
+        let vertices = [
+            Vector3::new( 0_f64 , 0_f64,  0_f64),
+            Vector3::new( 0_f64,  1_f64,  0_f64),
+            Vector3::new( 1_f64,  0_f64,  0_f64),
+            Vector3::new( 1_f64,  1_f64,  0_f64),
+            Vector3::new( 0_f64, -1_f64,  0_f64),
+            Vector3::new(-1_f64,  0_f64,  0_f64),
+            Vector3::new(-1_f64, -1_f64,  0_f64),
+            Vector3::new( 1_f64, -1_f64,  0_f64),
+            Vector3::new(-1_f64,  1_f64,  0_f64),
+            Vector3::new( 0_f64 , 0_f64,  1_f64),
+            Vector3::new( 0_f64,  1_f64,  1_f64),
+            Vector3::new( 1_f64,  0_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new( 0_f64, -1_f64,  1_f64),
+            Vector3::new(-1_f64,  0_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new( 0_f64 , 0_f64, -1_f64),
+            Vector3::new( 0_f64,  1_f64, -1_f64),
+            Vector3::new( 1_f64,  0_f64, -1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new( 0_f64, -1_f64, -1_f64),
+            Vector3::new(-1_f64,  0_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xy_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = 4_f64;
+        let result = shear.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_xz_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = 4_f64;
+        let result = shear.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yx_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let expected = 4_f64;
+        let result = shear.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_yz_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 4_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zx_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 4_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_zy_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 4_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_shear_inverse_trace() {
+        let shear_factor = 10_f64;
+        let direction = Unit::from_value(Vector3::new(
+            -f64::sqrt(4_f64 / 10_f64), 
+            -f64::sqrt(1_f64 / 10_f64),
+             f64::sqrt(5_f64 / 10_f64)
+        ));
+        let normal = Unit::from_value(Vector3::new(
+            f64::sqrt(4_f64 / 10_f64),
+            f64::sqrt(1_f64 / 10_f64),
+            f64::sqrt(5_f64 / 10_f64)
+        ));
+        let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+        let shear_inv = shear.inverse();
+        let expected = 4_f64;
+        let result = shear_inv.to_affine_matrix().trace();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+}
+
+
+#[cfg(test)]
+mod shear3_coordinate_plane_tests {
+    use cglinalg_transform::{
+        Shear3,
+    };
+    use cglinalg_core::{
+        Point3,
+        Vector3,
+        Unit,
+    };
+
+
+    #[test]
+    fn test_from_affine_shear_xy_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64 + shear_factor,  1_f64,  1_f64),
+            Point3::new(-1_f64 + shear_factor,  1_f64,  1_f64),
+            Point3::new(-1_f64 - shear_factor, -1_f64,  1_f64),
+            Point3::new( 1_f64 - shear_factor, -1_f64,  1_f64),
+            Point3::new( 1_f64 + shear_factor,  1_f64, -1_f64),
+            Point3::new(-1_f64 + shear_factor,  1_f64, -1_f64),
+            Point3::new(-1_f64 - shear_factor, -1_f64, -1_f64),
+            Point3::new( 1_f64 - shear_factor, -1_f64, -1_f64),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xy_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64 + shear_factor,  1_f64,  1_f64),
+            Vector3::new(-1_f64 + shear_factor,  1_f64,  1_f64),
+            Vector3::new(-1_f64 - shear_factor, -1_f64,  1_f64),
+            Vector3::new( 1_f64 - shear_factor, -1_f64,  1_f64),
+            Vector3::new( 1_f64 + shear_factor,  1_f64, -1_f64),
+            Vector3::new(-1_f64 + shear_factor,  1_f64, -1_f64),
+            Vector3::new(-1_f64 - shear_factor, -1_f64, -1_f64),
+            Vector3::new( 1_f64 - shear_factor, -1_f64, -1_f64),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xy_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64, 0_f64,  1_f64),
+            Point3::new(-1_f64, 0_f64,  1_f64),
+            Point3::new(-1_f64, 0_f64, -1_f64),
+            Point3::new( 1_f64, 0_f64, -1_f64),
+            Point3::new( 0_f64, 0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xy_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64, 0_f64,  1_f64),
+            Vector3::new(-1_f64, 0_f64,  1_f64),
+            Vector3::new(-1_f64, 0_f64, -1_f64),
+            Vector3::new( 1_f64, 0_f64, -1_f64),
+            Vector3::new( 0_f64, 0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64 + shear_factor,  1_f64,  1_f64),
+            Point3::new(-1_f64 + shear_factor,  1_f64,  1_f64),
+            Point3::new(-1_f64 + shear_factor, -1_f64,  1_f64),
+            Point3::new( 1_f64 + shear_factor, -1_f64,  1_f64),
+            Point3::new( 1_f64 - shear_factor,  1_f64, -1_f64),
+            Point3::new(-1_f64 - shear_factor,  1_f64, -1_f64),
+            Point3::new(-1_f64 - shear_factor, -1_f64, -1_f64),
+            Point3::new( 1_f64 - shear_factor, -1_f64, -1_f64),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64 + shear_factor,  1_f64,  1_f64),
+            Vector3::new(-1_f64 + shear_factor,  1_f64,  1_f64),
+            Vector3::new(-1_f64 + shear_factor, -1_f64,  1_f64),
+            Vector3::new( 1_f64 + shear_factor, -1_f64,  1_f64),
+            Vector3::new( 1_f64 - shear_factor,  1_f64, -1_f64),
+            Vector3::new(-1_f64 - shear_factor,  1_f64, -1_f64),
+            Vector3::new(-1_f64 - shear_factor, -1_f64, -1_f64),
+            Vector3::new( 1_f64 - shear_factor, -1_f64, -1_f64),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  0_f64),
+            Point3::new(-1_f64,  1_f64,  0_f64),
+            Point3::new(-1_f64, -1_f64,  0_f64),
+            Point3::new( 1_f64, -1_f64,  0_f64),
+            Point3::new( 0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_xz_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_x());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  0_f64),
+            Vector3::new(-1_f64,  1_f64,  0_f64),
+            Vector3::new(-1_f64, -1_f64,  0_f64),
+            Vector3::new( 1_f64, -1_f64,  0_f64),
+            Vector3::new( 0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64,  1_f64 + shear_factor,  1_f64),
+            Point3::new(-1_f64,  1_f64 - shear_factor,  1_f64),
+            Point3::new(-1_f64, -1_f64 - shear_factor,  1_f64),
+            Point3::new( 1_f64, -1_f64 + shear_factor,  1_f64),
+            Point3::new( 1_f64,  1_f64 + shear_factor, -1_f64),
+            Point3::new(-1_f64,  1_f64 - shear_factor, -1_f64),
+            Point3::new(-1_f64, -1_f64 - shear_factor, -1_f64),
+            Point3::new( 1_f64, -1_f64 + shear_factor, -1_f64),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64,  1_f64 + shear_factor,  1_f64),
+            Vector3::new(-1_f64,  1_f64 - shear_factor,  1_f64),
+            Vector3::new(-1_f64, -1_f64 - shear_factor,  1_f64),
+            Vector3::new( 1_f64, -1_f64 + shear_factor,  1_f64),
+            Vector3::new( 1_f64,  1_f64 + shear_factor, -1_f64),
+            Vector3::new(-1_f64,  1_f64 - shear_factor, -1_f64),
+            Vector3::new(-1_f64, -1_f64 - shear_factor, -1_f64),
+            Vector3::new( 1_f64, -1_f64 + shear_factor, -1_f64),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new(0_f64,  1_f64,  1_f64),
+            Point3::new(0_f64, -1_f64,  1_f64),
+            Point3::new(0_f64,  1_f64, -1_f64),
+            Point3::new(0_f64, -1_f64, -1_f64),
+            Point3::new(0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yx_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new(0_f64,  1_f64,  1_f64),
+            Vector3::new(0_f64, -1_f64,  1_f64),
+            Vector3::new(0_f64,  1_f64, -1_f64),
+            Vector3::new(0_f64, -1_f64, -1_f64),
+            Vector3::new(0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64,  1_f64 + shear_factor,  1_f64),
+            Point3::new(-1_f64,  1_f64 + shear_factor,  1_f64),
+            Point3::new(-1_f64, -1_f64 + shear_factor,  1_f64),
+            Point3::new( 1_f64, -1_f64 + shear_factor,  1_f64),
+            Point3::new( 1_f64,  1_f64 - shear_factor, -1_f64),
+            Point3::new(-1_f64,  1_f64 - shear_factor, -1_f64),
+            Point3::new(-1_f64, -1_f64 - shear_factor, -1_f64),
+            Point3::new( 1_f64, -1_f64 - shear_factor, -1_f64),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64,  1_f64 + shear_factor,  1_f64),
+            Vector3::new(-1_f64,  1_f64 + shear_factor,  1_f64),
+            Vector3::new(-1_f64, -1_f64 + shear_factor,  1_f64),
+            Vector3::new( 1_f64, -1_f64 + shear_factor,  1_f64),
+            Vector3::new( 1_f64,  1_f64 - shear_factor, -1_f64),
+            Vector3::new(-1_f64,  1_f64 - shear_factor, -1_f64),
+            Vector3::new(-1_f64, -1_f64 - shear_factor, -1_f64),
+            Vector3::new( 1_f64, -1_f64 - shear_factor, -1_f64),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64, 0_f64),
+            Point3::new(-1_f64,  1_f64, 0_f64),
+            Point3::new(-1_f64, -1_f64, 0_f64),
+            Point3::new( 1_f64, -1_f64, 0_f64),
+            Point3::new( 0_f64,  0_f64, 0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_yz_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 2_f64, 0_f64);
+        let direction = Unit::from_value(Vector3::unit_y());
+        let normal = Unit::from_value(Vector3::unit_z());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64, 0_f64),
+            Vector3::new(-1_f64,  1_f64, 0_f64),
+            Vector3::new(-1_f64, -1_f64, 0_f64),
+            Vector3::new( 1_f64, -1_f64, 0_f64),
+            Vector3::new( 0_f64,  0_f64, 0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64,  1_f64,  1_f64 + shear_factor),
+            Point3::new(-1_f64,  1_f64,  1_f64 - shear_factor),
+            Point3::new(-1_f64, -1_f64,  1_f64 - shear_factor),
+            Point3::new( 1_f64, -1_f64,  1_f64 + shear_factor),
+            Point3::new( 1_f64,  1_f64, -1_f64 + shear_factor),
+            Point3::new(-1_f64,  1_f64, -1_f64 - shear_factor),
+            Point3::new(-1_f64, -1_f64, -1_f64 - shear_factor),
+            Point3::new( 1_f64, -1_f64, -1_f64 + shear_factor),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64,  1_f64,  1_f64 + shear_factor),
+            Vector3::new(-1_f64,  1_f64,  1_f64 - shear_factor),
+            Vector3::new(-1_f64, -1_f64,  1_f64 - shear_factor),
+            Vector3::new( 1_f64, -1_f64,  1_f64 + shear_factor),
+            Vector3::new( 1_f64,  1_f64, -1_f64 + shear_factor),
+            Vector3::new(-1_f64,  1_f64, -1_f64 - shear_factor),
+            Vector3::new(-1_f64, -1_f64, -1_f64 - shear_factor),
+            Vector3::new( 1_f64, -1_f64, -1_f64 + shear_factor),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new(0_f64,  1_f64,  1_f64),
+            Point3::new(0_f64, -1_f64,  1_f64),
+            Point3::new(0_f64, -1_f64, -1_f64),
+            Point3::new(0_f64,  1_f64, -1_f64),
+            Point3::new(0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zx_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(0_f64, 2_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_x());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new(0_f64,  1_f64,  1_f64),
+            Vector3::new(0_f64, -1_f64,  1_f64),
+            Vector3::new(0_f64, -1_f64, -1_f64),
+            Vector3::new(0_f64,  1_f64, -1_f64),
+            Vector3::new(0_f64,  0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Point3::new( 1_f64,  1_f64,  1_f64 + shear_factor),
+            Point3::new(-1_f64,  1_f64,  1_f64 + shear_factor),
+            Point3::new(-1_f64, -1_f64,  1_f64 - shear_factor),
+            Point3::new( 1_f64, -1_f64,  1_f64 - shear_factor),
+            Point3::new( 1_f64,  1_f64, -1_f64 + shear_factor),
+            Point3::new(-1_f64,  1_f64, -1_f64 + shear_factor),
+            Point3::new(-1_f64, -1_f64, -1_f64 - shear_factor),
+            Point3::new( 1_f64, -1_f64, -1_f64 - shear_factor),
+        ];
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64,  1_f64,  1_f64),
+            Vector3::new(-1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64, -1_f64,  1_f64),
+            Vector3::new( 1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64,  1_f64, -1_f64),
+            Vector3::new(-1_f64, -1_f64, -1_f64),
+            Vector3::new( 1_f64, -1_f64, -1_f64),
+        ];
+        let expected = [
+            Vector3::new( 1_f64,  1_f64,  1_f64 + shear_factor),
+            Vector3::new(-1_f64,  1_f64,  1_f64 + shear_factor),
+            Vector3::new(-1_f64, -1_f64,  1_f64 - shear_factor),
+            Vector3::new( 1_f64, -1_f64,  1_f64 - shear_factor),
+            Vector3::new( 1_f64,  1_f64, -1_f64 + shear_factor),
+            Vector3::new(-1_f64,  1_f64, -1_f64 + shear_factor),
+            Vector3::new(-1_f64, -1_f64, -1_f64 - shear_factor),
+            Vector3::new( 1_f64, -1_f64, -1_f64 - shear_factor),
+        ];
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_shearing_plane_point() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Point3::new( 1_f64, 0_f64,  1_f64),
+            Point3::new(-1_f64, 0_f64,  1_f64),
+            Point3::new(-1_f64, 0_f64, -1_f64),
+            Point3::new( 1_f64, 0_f64, -1_f64),
+            Point3::new( 0_f64, 0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|p| shear.apply_point(&p));
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_from_affine_shear_zy_shearing_plane_vector() {
+        let shear_factor = 11_f64;
+        let origin = Point3::new(2_f64, 0_f64, 2_f64);
+        let direction = Unit::from_value(Vector3::unit_z());
+        let normal = Unit::from_value(Vector3::unit_y());
+        let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let vertices = [
+            Vector3::new( 1_f64, 0_f64,  1_f64),
+            Vector3::new(-1_f64, 0_f64,  1_f64),
+            Vector3::new(-1_f64, 0_f64, -1_f64),
+            Vector3::new( 1_f64, 0_f64, -1_f64),
+            Vector3::new( 0_f64, 0_f64,  0_f64),
+        ];
+        let expected = vertices;
+        let result = vertices.map(|v| shear.apply_vector(&v));
+
+        assert_eq!(result, expected);
+    }
+}
+
 
 /*
 #[cfg(test)]
