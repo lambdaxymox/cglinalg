@@ -3,13 +3,13 @@ extern crate cglinalg_transform;
 
 #[cfg(test)]
 mod shear2_tests {
+    use cglinalg_transform::{
+        Shear2,
+    };
     use cglinalg_core::{
         Point2,
         Vector2,
         Unit,
-    };
-    use cglinalg_transform::{
-        Shear2,
     };
     use approx::{
         assert_relative_eq,
@@ -267,13 +267,13 @@ mod shear2_tests {
 
 #[cfg(test)]
 mod shear2_inverse_tests {
+    use cglinalg_transform::{
+        Shear2,
+    };
     use cglinalg_core::{
         Point2,
         Vector2,
         Unit,
-    };
-    use cglinalg_transform::{
-        Shear2,
     };
     use approx::{
         assert_relative_eq,
@@ -542,7 +542,6 @@ mod shear2_coordinate_plane_tests {
     use cglinalg_core::{
         Matrix3x3,
         Vector2,
-        Vector3,
         Unit,
         Point2,
     };
@@ -957,7 +956,6 @@ mod shear3_tests {
     };
     use cglinalg_core::{
         Vector3,
-        Matrix3x3,
         Point3,
         Unit,
     };
@@ -1760,7 +1758,6 @@ mod shear3_inverse_tests {
     };
     use cglinalg_core::{
         Vector3,
-        Matrix3x3,
         Point3,
         Unit,
     };

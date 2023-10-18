@@ -1,5 +1,4 @@
 use cglinalg_numeric::{
-    SimdScalar,
     SimdScalarSigned,
     SimdScalarFloat,
 };
