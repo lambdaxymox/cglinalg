@@ -8527,3 +8527,27 @@ where
     }
 }
 
+impl<S, const R: usize, const C: usize> ops::Neg for Unit<Matrix<S, R, C>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Matrix<S, R, C>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S, const R: usize, const C: usize> ops::Neg for &Unit<Matrix<S, R, C>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Matrix<S, R, C>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+

@@ -7,6 +7,11 @@ use cglinalg_numeric::{
 use crate::normed::{
     Normed,
 };
+use crate::unit::{
+    Unit,
+};
+
+use core::ops;
 
 
 impl<S> Normed for Complex<S>
@@ -77,6 +82,30 @@ where
 
     fn distance(&self, other: &Self) -> Self::Output {
         (self - other).modulus()
+    }
+}
+
+impl<S> ops::Neg for Unit<Complex<S>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Complex<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S> ops::Neg for &Unit<Complex<S>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Complex<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
     }
 }
 

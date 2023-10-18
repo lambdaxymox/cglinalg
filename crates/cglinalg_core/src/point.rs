@@ -21,6 +21,9 @@ use crate::vector::{
     Vector2,
     Vector3,
 };
+use crate::unit::{
+    Unit,
+};
 use crate::{
     impl_coords,
     impl_coords_deref,
@@ -1159,6 +1162,30 @@ where
     #[inline]
     fn distance(&self, other: &Self) -> Self::Output {
         self.coords.metric_distance(&other.coords)
+    }
+}
+
+impl<S, const N: usize> ops::Neg for Unit<Point<S, N>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Point<S, N>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S, const N: usize> ops::Neg for &Unit<Point<S, N>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Point<S, N>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
     }
 }
 

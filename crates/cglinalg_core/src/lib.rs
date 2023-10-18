@@ -1,4 +1,4 @@
-mod complex_normed_impl;
+mod complex_impl;
 mod euler;
 mod normed;
 mod matrix_euler;
@@ -13,7 +13,7 @@ mod constraints;
 
 
 pub use constraints::*;
-pub use complex_normed_impl::*;
+pub use complex_impl::*;
 pub use euler::*;
 pub use normed::*;
 pub use matrix_euler::*;

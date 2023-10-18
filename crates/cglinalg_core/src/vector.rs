@@ -17,6 +17,9 @@ use crate::normed::{
     Normed,
     Norm,
 };
+use crate::unit::{
+    Unit,
+};
 use crate::{
     impl_coords,
     impl_coords_deref,
@@ -1799,6 +1802,30 @@ where
         }
 
         result
+    }
+}
+
+impl<S, const N: usize> ops::Neg for Unit<Vector<S, N>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Vector<S, N>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S, const N: usize> ops::Neg for &Unit<Vector<S, N>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Vector<S, N>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
     }
 }
 

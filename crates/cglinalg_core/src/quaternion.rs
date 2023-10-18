@@ -4728,3 +4728,27 @@ where
     }
 }
 
+impl<S> ops::Neg for Unit<Quaternion<S>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Quaternion<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S> ops::Neg for &Unit<Quaternion<S>>
+where
+    S: SimdScalarFloat
+{
+    type Output = Unit<Quaternion<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
