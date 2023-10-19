@@ -80,20 +80,6 @@ where
     })
 }
 
-fn strategy_vector_f64_any<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
-    let min_value = 0_f64;
-    let max_value = 1_000_000_f64;
-
-    strategy_vector_signed_from_abs_range(min_value, max_value)
-}
-
-fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, N>> {
-    let min_value = 0_f64;
-    let max_value = 1_000_000_f64;
-
-    strategy_point_signed_from_abs_range(min_value, max_value)
-}
-
 fn strategy_shear2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear2<S>>
 where
     S: SimdScalarFloat + Arbitrary

@@ -11,9 +11,6 @@ mod shear2_tests {
         Vector2,
         Unit,
     };
-    use approx::{
-        assert_relative_eq,
-    };
 
 
     #[test]
@@ -274,9 +271,6 @@ mod shear2_inverse_tests {
         Point2,
         Vector2,
         Unit,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -685,7 +679,6 @@ mod shear2_noncoordinate_plane_tests {
     };
     use cglinalg_core::{
         Vector2,
-        Vector3,
         Matrix3x3,
         Unit,
         Point2,
@@ -772,10 +765,18 @@ mod shear2_noncoordinate_plane_tests {
 
     #[test]
     fn test_from_affine_rotation_matrix() {
-        let rotation_angle = rotation_angle();
-        let rotation = Rotation2::from_angle(rotation_angle);
+        let rotation = rotation();
         let expected = rotation_matrix();
         let result = rotation.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_from_affine_rotation_inv_matrix() {
+        let rotation_inv = rotation_inv();
+        let expected = rotation_matrix_inv();
+        let result = rotation_inv.to_affine_matrix();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
