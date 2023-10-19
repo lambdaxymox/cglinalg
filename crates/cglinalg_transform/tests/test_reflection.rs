@@ -17,6 +17,34 @@ mod reflection2_tests {
 
 
     #[test]
+    fn test_reflection_normal_x_basis_vectors() {
+        let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
+        let bias = Point2::origin();
+        let reflection = Reflection2::from_normal_bias(&normal, &bias);
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+
+        assert_eq!(reflection.apply_vector(&unit_x),    -unit_x);
+        assert_eq!(reflection.apply_vector(&(-unit_x)),  unit_x);
+        assert_eq!(reflection.apply_vector(&unit_y),     unit_y);
+        assert_eq!(reflection.apply_vector(&(-unit_y)), -unit_y);
+    }
+
+    #[test]
+    fn test_reflection_normal_y_basis_vectors() {
+        let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
+        let bias = Point2::origin();
+        let reflection = Reflection2::from_normal_bias(&normal, &bias);
+        let unit_x = Vector2::unit_x();
+        let unit_y = Vector2::unit_y();
+
+        assert_eq!(reflection.apply_vector(&unit_x),     unit_x);
+        assert_eq!(reflection.apply_vector(&(-unit_x)), -unit_x);
+        assert_eq!(reflection.apply_vector(&unit_y),    -unit_y);
+        assert_eq!(reflection.apply_vector(&(-unit_y)),  unit_y);
+    }
+
+    #[test]
     fn test_reflection_x_line_point1() {
         let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_y());
         let bias = Point2::origin();
@@ -249,6 +277,57 @@ mod reflection3_tests {
         assert_relative_eq,
     };
 
+
+    #[test]
+    fn test_reflection_normal_x_basis_vectors() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
+        let bias = Point3::origin();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+
+        assert_eq!(reflection.apply_vector(&unit_x),    -unit_x);
+        assert_eq!(reflection.apply_vector(&(-unit_x)),  unit_x);
+        assert_eq!(reflection.apply_vector(&unit_y),     unit_y);
+        assert_eq!(reflection.apply_vector(&(-unit_y)), -unit_y);
+        assert_eq!(reflection.apply_vector(&unit_z),     unit_z);
+        assert_eq!(reflection.apply_vector(&(-unit_z)), -unit_z);
+    }
+
+    #[test]
+    fn test_reflection_normal_y_basis_vectors() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
+        let bias = Point3::origin();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+
+        assert_eq!(reflection.apply_vector(&unit_x),     unit_x);
+        assert_eq!(reflection.apply_vector(&(-unit_x)), -unit_x);
+        assert_eq!(reflection.apply_vector(&unit_y),    -unit_y);
+        assert_eq!(reflection.apply_vector(&(-unit_y)),  unit_y);
+        assert_eq!(reflection.apply_vector(&unit_z),     unit_z);
+        assert_eq!(reflection.apply_vector(&(-unit_z)), -unit_z);
+    }
+
+    #[test]
+    fn test_reflection_normal_z_basis_vectors() {
+        let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+        let bias = Point3::origin();
+        let reflection = Reflection3::from_normal_bias(&normal, &bias);
+        let unit_x = Vector3::unit_x();
+        let unit_y = Vector3::unit_y();
+        let unit_z = Vector3::unit_z();
+
+        assert_eq!(reflection.apply_vector(&unit_x),     unit_x);
+        assert_eq!(reflection.apply_vector(&(-unit_x)), -unit_x);
+        assert_eq!(reflection.apply_vector(&unit_y),     unit_y);
+        assert_eq!(reflection.apply_vector(&(-unit_y)), -unit_y);
+        assert_eq!(reflection.apply_vector(&unit_z),    -unit_z);
+        assert_eq!(reflection.apply_vector(&(-unit_z)),  unit_z);
+    }
 
     /// Test reflecting points through the plane `x = 0`.
     #[test]
