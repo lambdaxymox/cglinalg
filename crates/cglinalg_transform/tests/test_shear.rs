@@ -3432,7 +3432,7 @@ mod shear3_noncoordinate_plane_tests {
 
 
     #[test]
-    fn test_rotation_angle_x_yz() {
+    fn test_from_affine_shear_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         
         assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64),  epsilon = 1e-10);
@@ -3440,7 +3440,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_rotation_angle_z_xy() {
+    fn test_from_affine_shear_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         
         assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64),  epsilon = 1e-10);
@@ -3448,7 +3448,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_translation_inv() {
+    fn test_from_affine_shear_translation_inv() {
         let translation = translation();
         let expected = translation_inv();
         let result = translation.inverse();
@@ -3457,7 +3457,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_x_yz() {
+    fn test_from_affine_shear_rotation_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz();
         let result = Rotation3::from_angle_x(rotation_angle_x_yz);
@@ -3466,7 +3466,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_x_yz_inv() {
+    fn test_from_affine_shear_rotation_x_yz_inv() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz_inv();
         let result = Rotation3::from_angle_x(-rotation_angle_x_yz);
@@ -3475,7 +3475,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_z_xy() {
+    fn test_from_affine_shear_rotation_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy();
         let result = Rotation3::from_angle_z(rotation_angle_z_xy);
@@ -3484,7 +3484,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_z_xy_inv() {
+    fn test_from_affine_shear_rotation_z_xy_inv() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy_inv();
         let result = Rotation3::from_angle_z(-rotation_angle_z_xy);
@@ -3493,7 +3493,7 @@ mod shear3_noncoordinate_plane_tests {
     }
     
     #[test]
-    fn test_shear_rotation() {
+    fn test_from_affine_shear_rotation() {
         let expected = rotation_matrix();
         let rotation = rotation();
         let result = rotation.to_affine_matrix();
@@ -3502,7 +3502,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_inv() {
+    fn test_from_affine_shear_rotation_inv() {
         let expected = rotation_inv_matrix();
         let rotation_inv = rotation_inv();
         let result = rotation_inv.to_affine_matrix();
@@ -3511,7 +3511,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_x_yz_matrix() {
+    fn test_from_affine_shear_rotation_x_yz_matrix() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz_matrix();
         let rotation = Rotation3::from_angle_x(rotation_angle_x_yz);
@@ -3521,7 +3521,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_x_yz_inv_matrix() {
+    fn test_from_affine_shear_rotation_x_yz_inv_matrix() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz_inv_matrix();
         let rotation = Rotation3::from_angle_x(-rotation_angle_x_yz);
@@ -3531,7 +3531,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_z_xy_matrix() {
+    fn test_from_affine_shear_rotation_z_xy_matrix() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy_matrix();
         let rotation = Rotation3::from_angle_z(rotation_angle_z_xy);
@@ -3541,7 +3541,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_rotation_z_xy_inv_matrix() {
+    fn test_from_affine_shear_rotation_z_xy_inv_matrix() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy_inv_matrix();
         let rotation = Rotation3::from_angle_z(-rotation_angle_z_xy);
@@ -3551,7 +3551,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_xz_matrix() {
+    fn test_from_affine_shear_xz_matrix() {
         let shear = shear_matrix_xz();
         let expected = shear_matrix_xz_matrix();
         let result = shear.to_affine_matrix();
@@ -3560,7 +3560,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_origin_xz() {
+    fn test_from_affine_shear_origin_xz() {
         let translation = translation();
         let rotation = rotation();
         let origin = origin();
@@ -3572,7 +3572,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_direction_xz() {
+    fn test_from_affine_shear_direction_xz() {
         let direction = direction();
         let rotation_inv = rotation_inv();
         let expected = Vector3::unit_x();
@@ -3585,7 +3585,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_normal_xz() {
+    fn test_from_affine_shear_normal_xz() {
         let normal = normal();
         let rotation_inv = rotation_inv();
         let expected = Vector3::unit_z();
@@ -3598,7 +3598,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_coordinates_vertices() {
+    fn test_from_affine_shear_coordinates_vertices() {
         let vertices = [
             Point3::new( 
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
@@ -3666,7 +3666,7 @@ mod shear3_noncoordinate_plane_tests {
     }
     
     #[test]
-    fn test_shear_vertices() {
+    fn test_from_affine_shear_vertices() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
@@ -3769,7 +3769,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_matrix() {
+    fn test_from_affine_shear_matrix() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
@@ -3809,7 +3809,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_shear_matrix_alternative_path() {
+    fn test_from_affine_shear_matrix_alternative_path() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
