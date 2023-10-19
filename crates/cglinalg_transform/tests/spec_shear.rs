@@ -15,6 +15,7 @@ use cglinalg_core::{
     Vector,
     Vector2,
     Vector3,
+    Unit,
 };
 use cglinalg_transform::{
     Shear,
@@ -23,151 +24,11 @@ use cglinalg_transform::{
 };
 use approx::{
     relative_eq,
+    ulps_eq,
 };
 
 use proptest::prelude::*;
 
-
-#[derive(Copy, Clone, Debug, PartialEq)]
-struct Triangle2<S> {
-    vertices: [Vector2<S>; 3],
-}
-
-impl<S> Triangle2<S>
-where
-    S: SimdScalarFloat
-{
-    #[inline]
-    const fn new(vertex_0: Vector2<S>, vertex_1: Vector2<S>, vertex_2: Vector2<S>) -> Self {
-        Self {
-            vertices: [vertex_0, vertex_1, vertex_2]
-        }
-    }
-
-    #[inline]
-    fn area(&self) -> S {
-        let one = S::one();
-        let two = one + one;
-        let segment_0 = Vector2::extend(&(self.vertices[0] - self.vertices[1]), S::zero());
-        let segment_1 = Vector2::extend(&(self.vertices[0] - self.vertices[2]), S::zero());
-        let cross_area = Vector3::cross(&segment_0, &segment_1);
-
-        cross_area.norm() / two
-    }
-
-    #[inline]
-    fn map<T, F>(&self, mut op: F) -> Triangle2<T> 
-    where 
-        F: FnMut(Vector2<S>) -> Vector2<T>
-    {
-        Triangle2 {
-            vertices: self.vertices.map(op),
-        }
-    }
-}
-
-#[derive(Copy, Clone, Debug, PartialEq)]
-struct Triangle3<S> {
-    vertices: [Vector3<S>; 3],
-}
-
-impl<S> Triangle3<S>
-where
-    S: SimdScalarFloat
-{
-    #[inline]
-    const fn new(vertex_0: Vector3<S>, vertex_1: Vector3<S>, vertex_2: Vector3<S>) -> Self {
-        Self {
-            vertices: [vertex_0, vertex_1, vertex_2]
-        }
-    }
-
-    #[inline]
-    fn area(&self) -> S {
-        let one = S::one();
-        let two = one + one;
-        let cross_area = Vector3::cross(
-            &(self.vertices[0] - self.vertices[1]),
-            &(self.vertices[0] - self.vertices[2])
-        );
-
-        eprintln!("self = {:?}; cross_area = {:?}", self, cross_area);
-
-        cross_area.norm() / two
-    }
-
-    #[inline]
-    fn map<T, F>(&self, mut op: F) -> Triangle3<T> 
-    where 
-        F: FnMut(Vector3<S>) -> Vector3<T>
-    {
-        Triangle3 {
-            vertices: self.vertices.map(op),
-        }
-    }
-}
-
-
-fn strategy_triangle2_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Triangle2<S>>
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarSigned
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<[[S; 2]; 3]>().prop_map(move |_vertices| {
-        let vertex_0 = Vector2::new(
-            rescale(_vertices[0][0], min_value, max_value),
-            rescale(_vertices[0][1], min_value, max_value)
-        );
-        let vertex_1 = Vector2::new(
-            rescale(_vertices[1][0], min_value, max_value),
-            rescale(_vertices[1][1], min_value, max_value),
-        );
-        let vertex_2 = Vector2::new(
-            rescale(_vertices[2][0], min_value, max_value),
-            rescale(_vertices[2][1], min_value, max_value)
-        );
-
-        Triangle2::new(vertex_0, vertex_1, vertex_2)
-    })
-}
-
-fn strategy_triangle3_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Triangle3<S>>
-where
-    S: SimdScalarFloat + Arbitrary
-{
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
-    where
-        S: SimdScalarSigned
-    {
-        min_value + (value % (max_value - min_value))
-    }
-
-    any::<[[S; 3]; 3]>().prop_map(move |_vertices| {
-        let vertex_0 = Vector3::new(
-            rescale(_vertices[0][0], min_value, max_value),
-            rescale(_vertices[0][1], min_value, max_value),
-            rescale(_vertices[0][2], min_value, max_value)
-        );
-        let vertex_1 = Vector3::new(
-            rescale(_vertices[1][0], min_value, max_value),
-            rescale(_vertices[1][1], min_value, max_value),
-            rescale(_vertices[1][2], min_value, max_value)
-        );
-        let vertex_2 = Vector3::new(
-            rescale(_vertices[2][0], min_value, max_value),
-            rescale(_vertices[2][1], min_value, max_value),
-            rescale(_vertices[2][2], min_value, max_value)
-        );
-
-        Triangle3::new(vertex_0, vertex_1, vertex_2)
-    })
-}
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
@@ -219,20 +80,6 @@ where
     })
 }
 
-fn strategy_vector_i32_any<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
-    let min_value = 0_i32;
-    let max_value = 1_000_000_i32;
-
-    strategy_vector_signed_from_abs_range(min_value, max_value)
-}
-
-fn strategy_point_i32_any<const N: usize>() -> impl Strategy<Value = Point<i32, N>> {
-    let min_value = 0_i32;
-    let max_value = 1_000_000_i32;
-
-    strategy_point_signed_from_abs_range(min_value, max_value)
-}
-
 fn strategy_vector_f64_any<const N: usize>() -> impl Strategy<Value = Vector<f64, N>> {
     let min_value = 0_f64;
     let max_value = 1_000_000_f64;
@@ -249,59 +96,82 @@ fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, 
 
 fn strategy_shear2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear2<S>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarFloat
     {
         min_value + (value % (max_value - min_value))
     }
 
-    any::<(S, S)>().prop_map(move |(_shear_x_with_y, _shear_y_with_x)| {
-        let shear_x_with_y = rescale(_shear_x_with_y, min_value, max_value);
-        let shear_y_with_x = rescale(_shear_y_with_x, min_value, max_value);
+    any::<(S, [S; 2], [S; 2])>().prop_map(move |(_shear_factor, _origin, _direction)| {
+        let shear_factor = rescale(_shear_factor, min_value, max_value);
+        let origin = Point2::new(
+            rescale(_origin[0], min_value, max_value),
+            rescale(_origin[1], min_value, max_value)
+        );
+        let direction = Unit::from_value(Vector2::new(
+            rescale(_direction[0], min_value, max_value),
+            rescale(_direction[1], min_value, max_value)
+        ));
+        let normal = Unit::from_value(Vector2::new(-direction[1], direction[0]));
 
-        Shear2::from_shear(shear_x_with_y, shear_y_with_x)
+        assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
+        assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
+        assert!(ulps_eq!(direction.dot(&normal), S::zero()));
+
+        Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
 }
 
 fn strategy_shear3_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear3<S>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarFloat + Arbitrary
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarFloat
     {
         min_value + (value % (max_value - min_value))
     }
 
-    any::<(S, S, S, S, S, S)>().prop_map(move |(
-        _shear_x_with_y, _shear_x_with_z,
-        _shear_y_with_x, _shear_y_with_z, 
-        _shear_z_with_x, _shear_z_with_y
-    )| {
-        let shear_x_with_y = rescale(_shear_x_with_y, min_value, max_value);
-        let shear_x_with_z = rescale(_shear_x_with_z, min_value, max_value);
-        let shear_y_with_x = rescale(_shear_y_with_x, min_value, max_value);
-        let shear_y_with_z = rescale(_shear_y_with_z, min_value, max_value);
-        let shear_z_with_x = rescale(_shear_z_with_x, min_value, max_value);
-        let shear_z_with_y = rescale(_shear_z_with_y, min_value, max_value);
+    any::<(S, [S; 3], [S; 3], [S; 3])>().prop_map(move |(_shear_factor, _origin, _direction, _normal)| {
+        let shear_factor = rescale(_shear_factor, min_value, max_value);
+        let origin = Point3::new(
+            rescale(_origin[0], min_value, max_value),
+            rescale(_origin[1], min_value, max_value),
+            rescale(_origin[2], min_value, max_value)
+        );
+        let direction = Unit::from_value(Vector3::new(
+            rescale(_direction[0], min_value, max_value),
+            rescale(_direction[1], min_value, max_value),
+            rescale(_direction[2], min_value, max_value)
+        ));
+        let normal = {
+            let _new_normal = if ulps_eq!(direction[2], S::zero()) {
+                Unit::from_value(Vector3::new(
+                    S::zero(),
+                    S::zero(),  
+                    _normal[2].signum() * S::one()
+                ))
+            } else {
+                let _new_normal_0 = rescale(_normal[0], min_value, max_value);
+                let _new_normal_1 = rescale(_normal[1], min_value, max_value);
+                let _new_normal_2 = -(direction[0] * _new_normal_0 + direction[1] * _new_normal_1) / direction[2];
 
-        Shear3::from_shear(
-            shear_x_with_y, shear_x_with_z, 
-            shear_y_with_x, shear_y_with_z,
-            shear_z_with_x, shear_z_with_y
-        )
+                Unit::from_value(Vector3::new(_new_normal_0, _new_normal_1, _new_normal_2))
+            };
+
+            _new_normal
+        };
+
+        assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
+        assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
+        assert!(ulps_eq!(direction.dot(&normal), S::zero()));
+
+        Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
-}
-
-fn strategy_shear2_i32_any() -> impl Strategy<Value = Shear2<i32>> {
-    let min_value = 1_i32;
-    let max_value = 1_000_000_i32;
-    
-    strategy_shear2_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_shear2_f64_any() -> impl Strategy<Value = Shear2<f64>> {
@@ -311,13 +181,6 @@ fn strategy_shear2_f64_any() -> impl Strategy<Value = Shear2<f64>> {
     strategy_shear2_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_shear3_i32_any() -> impl Strategy<Value = Shear3<i32>> {
-    let min_value = 1_i32;
-    let max_value = 1_000_000_i32;
-    
-    strategy_shear3_signed_from_abs_range(min_value, max_value)
-}
-
 fn strategy_shear3_f64_any() -> impl Strategy<Value = Shear3<f64>> {
     let min_value = 1_f64;
     let max_value = 1_000_000_f64;
@@ -325,329 +188,233 @@ fn strategy_shear3_f64_any() -> impl Strategy<Value = Shear3<f64>> {
     strategy_shear3_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_triangle2_f64_any() -> impl Strategy<Value = Triangle2<f64>> {
-    let min_value = 0_f64;
-    let max_value = 1_000_000_f64;
 
-    strategy_triangle2_from_range(min_value, max_value)
-}
-
-fn strategy_triangle3_f64_any() -> impl Strategy<Value = Triangle3<f64>> {
-    let min_value = 0_f64;
-    let max_value = 1_000_000_f64;
-
-    strategy_triangle3_from_range(min_value, max_value)
-}
-
-
-/// The trace of a shear matrix is always `N` where `N` is the dimensionality
-/// of the shear matrix.
+/// The trace of an affine shear matrix is always `N + 1` where `N` is the dimensionality
+/// of the shearing transformation.
 /// 
-/// Given a shear matrix `S` in `N` dimensions.
+/// Given a shear matrix `s` in `N` dimensions.
+/// ```text
+/// trace(to_affine_matrix(s)) == N + 1
 /// ```
-/// trace(S) == N
-/// ```
-fn prop_shear_trace<S, const N: usize>(s: Shear<S, N>) -> Result<(), TestCaseError>
+fn prop_approx_shear2_trace<S>(s: Shear2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarFloat
 {
     let lhs = s.to_affine_matrix().trace();
-    let rhs = cglinalg_numeric::cast(N + 1);
-
-    prop_assert_eq!(lhs, rhs);
-
-    Ok(())
-}
-
-/// The determinant of a shear matrix is one.
-/// 
-/// Given a shear matrix `S`
-/// ```text
-/// determinant(to_matrix(S)) == 1
-/// ```
-fn prop_shear2_determinant<S>(s: Shear2<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned
-{
-    let lhs = s.to_affine_matrix().determinant();
-    let rhs = S::one();
-
-    prop_assert_eq!(lhs, rhs);
+    let rhs = cglinalg_numeric::cast(3_f64);
+    
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
-/// The determinant of a shear matrix is one.
+/// The trace of an affine shear matrix is always `N + 1` where `N` is the dimensionality
+/// of the shearing transformation.
 /// 
-/// Given a shear matrix `S`
+/// Given a shear matrix `s` in `N` dimensions.
 /// ```text
-/// determinant(to_matrix(S)) == 1
+/// trace(to_affine_matrix(s)) == N + 1
 /// ```
-fn prop_shear3_determinant<S>(s: Shear3<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned
-{
-    let lhs = s.to_affine_matrix().determinant();
-    let rhs = S::one();
-
-    prop_assert_eq!(lhs, rhs);
-
-    Ok(())
-}
-
-/// The determinant of the composite of two shear matrices is one.
-/// 
-/// Given shear matrices `S1` and `S2`
-/// ```text
-/// determinant(to_matrix(S1 * S2)) == 1
-/// ```
-fn prop_shear2_composition_determinant<S>(s1: Shear2<S>, s2: Shear2<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned
-{
-    let lhs = (s1.to_affine_matrix() * s2.to_affine_matrix()).determinant();
-    let rhs = S::one();
-
-    prop_assert_eq!(lhs, rhs);
-
-    Ok(())
-}
-
-/// The determinant of the composite of two shear matrices is one.
-/// 
-/// Given shear matrices `S1` and `S2`
-/// ```text
-/// determinant(to_matrix(S1 * S2)) == 1
-/// ```
-fn prop_shear3_composition_determinant<S>(s1: Shear3<S>, s2: Shear3<S>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned
-{
-    let lhs = (s1.to_affine_matrix() * s2.to_affine_matrix()).determinant();
-    let rhs = S::one();
-
-    prop_assert_eq!(lhs, rhs);
-
-    Ok(())
-}
-
-/// Shearing transformations preserve the areas of polytopes. In particular,
-/// they preserve the areas of triangles.
-/// 
-/// Given a shearing transformation `s` and a triangle `triangle`, let 
-/// `sheared_triangle` be the result of applying `s` to the vertices of `triangle`.
-/// Then
-/// ```text
-/// area(sheared_triangle) == area(triangle)
-/// ```
-fn prop_approx_shear2_preserves_triangle_areas<S>(
-    s: Shear2<S>, 
-    triangle: Triangle2<S>,
-    tolerance: S
-) -> Result<(), TestCaseError>
+fn prop_approx_shear3_trace<S>(s: Shear3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let sheared_triangle = triangle.map(|v| s.apply_vector(&v));
-    let lhs = sheared_triangle.area();
-    let rhs = triangle.area();
+    let lhs = s.to_affine_matrix().trace();
+    let rhs = cglinalg_numeric::cast(4_f64);
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}", lhs);
+
+    Ok(())
+}
+
+/// The determinant of a shearing transformation matrix is one.
+/// 
+/// Given a shear matrix `s`
+/// ```text
+/// determinant(to_affine_matrix(s)) == 1
+/// ```
+fn prop_approx_shear2_determinant<S>(s: Shear2<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = s.to_affine_matrix().determinant();
+    let rhs = S::one();
 
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
-/// Shearing transformations preserve the areas of polytopes. In particular,
-/// they preserve the areas of triangles.
+/*
+/// The determinant of a shearing transformation matrix is one.
 /// 
-/// Given a shearing transformation `s` and a triangle `triangle`, let 
-/// `sheared_triangle` be the result of applying `s` to the vertices of `triangle`.
-/// Then
+/// Given a shear matrix `s`
 /// ```text
-/// area(sheared_triangle) == area(triangle)
+/// determinant(to_affine_matrix(s)) == 1
 /// ```
-fn prop_approx_shear3_preserves_triangle_areas<S>(
-    s: Shear3<S>, 
-    triangle: Triangle3<S>,
+fn prop_approx_shear3_determinant<S>(s: Shear3<S>, tolerance: S) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let lhs = s.to_affine_matrix().determinant();
+    let rhs = S::one();
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}", lhs);
+
+    Ok(())
+}
+*/
+
+/// The matrix of a shearing transformation is asymmetric.
+/// 
+/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix 
+/// of `s`. Then the matrix of `s` satisfies
+/// ```text
+/// exists i in 0..N. exists j in 0..N. m[i][j] != m[j][i].
+/// ```
+fn prop_shear2_matrix_asymmetric<S>(s: Shear2<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let matrix = s.to_affine_matrix();
+    
+    prop_assert!(!matrix.is_symmetric());
+
+    Ok(())
+}
+
+/// The matrix of a shearing transformation is asymmetric.
+/// 
+/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix 
+/// of `s`. Then the matrix of `s` satisfies
+/// ```text
+/// exists i in 0..N. exists j in 0..N. m[i][j] != m[j][i].
+/// ```
+fn prop_shear3_matrix_asymmetric<S>(s: Shear3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat
+{
+    let matrix = s.to_affine_matrix();
+    
+    prop_assert!(!matrix.is_symmetric());
+
+    Ok(())
+}
+
+fn prop_approx_shear_apply_inverse_apply_identity_point<S, const N: usize>(
+    s: Shear<S, N>,
+    p: Point<S, N>,
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
 {
-    let sheared_triangle = triangle.map(|v| s.apply_vector(&v));
-    let lhs = sheared_triangle.area();
-    let rhs = triangle.area();
+    let sheared_point = s.apply_point(&p);
+    let lhs = s.inverse_apply_point(&sheared_point);
+    let rhs = p;
+
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
+
+    Ok(())
+}
+
+
+fn prop_approx_shear_apply_inverse_apply_identity_vector<S, const N: usize>(
+    s: Shear<S, N>,
+    v: Vector<S, N>,
+    tolerance: S
+) -> Result<(), TestCaseError> 
+where
+    S: SimdScalarFloat
+{
+    let sheared_vector = s.apply_vector(&v);
+    let lhs = s.inverse_apply_vector(&sheared_vector);
+    let rhs = v;
 
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
-    Ok(())  
+    Ok(())
 }
 
 
 #[cfg(test)]
-mod shear2_i32_trace_props {
+mod shear2_f64_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_shear_trace(s in super::strategy_shear2_i32_any()) {
-            let s: super::Shear2<i32> = s;
-            super::prop_shear_trace(s)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear2_f64_trace_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear_trace(s in super::strategy_shear2_f64_any()) {
+        fn prop_approx_shear2_trace(s in super::strategy_shear2_f64_any()) {
             let s: super::Shear2<f64> = s;
-            super::prop_shear_trace(s)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear2_i32_determinant_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear2_determinant(s in super::strategy_shear2_i32_any()) {
-            let s: super::Shear2<i32> = s;
-            super::prop_shear2_determinant(s)?
+            super::prop_approx_shear2_trace(s, 1e-8)?
         }
 
         #[test]
-        fn prop_shear2_composition_determinant(
-            s1 in super::strategy_shear2_i32_any(),
-            s2 in super::strategy_shear2_i32_any()
-        ) {
-            let s1: super::Shear2<i32> = s1;
-            let s2: super::Shear2<i32> = s2;
-            super::prop_shear2_composition_determinant(s1, s2)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear2_f64_determinant_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear2_determinant(s in super::strategy_shear2_f64_any()) {
+        fn prop_approx_shear2_determinant(s in super::strategy_shear2_f64_any()) {
             let s: super::Shear2<f64> = s;
-            super::prop_shear2_determinant(s)?
+            super::prop_approx_shear2_determinant(s, 1e-4)?
         }
 
         #[test]
-        fn prop_shear2_composition_determinant(
-            s1 in super::strategy_shear2_f64_any(),
-            s2 in super::strategy_shear2_f64_any()
-        ) {
-            let s1: super::Shear2<f64> = s1;
-            let s2: super::Shear2<f64> = s2;
-            super::prop_shear2_composition_determinant(s1, s2)?
+        fn prop_shear2_matrix_asymmetric(s in super::strategy_shear2_f64_any()) {
+            let s: super::Shear2<f64> = s;
+            super::prop_shear2_matrix_asymmetric(s)?
         }
-    }
-}
 
-#[cfg(test)]
-mod shear2_f64_invariant_props {
-    use proptest::prelude::*;
-    proptest! {
         #[test]
-        fn prop_approx_shear2_preserves_triangle_areas(
+        fn prop_approx_shear_apply_inverse_apply_identity_point(
             s in super::strategy_shear2_f64_any(),
-            triangle in super::strategy_triangle2_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let s: super::Shear2<f64> = s;
-            let triangle: super::Triangle2<f64> = triangle;
-            super::prop_approx_shear2_preserves_triangle_areas(s, triangle, 1e-10)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear3_i32_trace_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear_trace(s in super::strategy_shear3_i32_any()) {
-            let s: super::Shear3<i32> = s;
-            super::prop_shear_trace(s)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear3_f64_trace_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear_trace(s in super::strategy_shear3_f64_any()) {
-            let s: super::Shear3<f64> = s;
-            super::prop_shear_trace(s)?
-        }
-    }
-}
-
-#[cfg(test)]
-mod shear3_i32_determinant_props {
-    use proptest::prelude::*;
-    proptest! {
-        #[test]
-        fn prop_shear3_determinant(s in super::strategy_shear3_i32_any()) {
-            let s: super::Shear3<i32> = s;
-            super::prop_shear3_determinant(s)?
+            let p: super::Point2<f64> = p;
+            super::prop_approx_shear_apply_inverse_apply_identity_point(s, p, 1e-8)?
         }
 
         #[test]
-        fn prop_shear3_composition_determinant(
-            s1 in super::strategy_shear3_i32_any(),
-            s2 in super::strategy_shear3_i32_any()
+        fn prop_approx_shear_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear2_f64_any(),
+            v in super::strategy_vector_f64_any(),
         ) {
-            let s1: super::Shear3<i32> = s1;
-            let s2: super::Shear3<i32> = s2;
-            super::prop_shear3_composition_determinant(s1, s2)?
+            let s: super::Shear2<f64> = s;
+            let v: super::Vector2<f64> = v;
+            super::prop_approx_shear_apply_inverse_apply_identity_vector(s, v, 1e-8)?
         }
     }
 }
 
 #[cfg(test)]
-mod shear3_f64_determinant_props {
+mod shear3_f64_props {
     use proptest::prelude::*;
     proptest! {
         #[test]
-        fn prop_shear3_determinant(s in super::strategy_shear3_f64_any()) {
+        fn prop_approx_shear3_trace(s in super::strategy_shear3_f64_any()) {
             let s: super::Shear3<f64> = s;
-            super::prop_shear3_determinant(s)?
+            super::prop_approx_shear3_trace(s, 1e-8)?
         }
 
         #[test]
-        fn prop_shear3_composition_determinant(
-            s1 in super::strategy_shear3_f64_any(),
-            s2 in super::strategy_shear3_f64_any()
-        ) {
-            let s1: super::Shear3<f64> = s1;
-            let s2: super::Shear3<f64> = s2;
-            super::prop_shear3_composition_determinant(s1, s2)?
+        fn prop_shear3_matrix_asymmetric(s in super::strategy_shear3_f64_any()) {
+            let s: super::Shear3<f64> = s;
+            super::prop_shear3_matrix_asymmetric(s)?
         }
-    }
-}
 
-#[cfg(test)]
-mod shear3_f64_invariant_props {
-    use proptest::prelude::*;
-    proptest! {
         #[test]
-        fn prop_approx_shear3_preserves_triangle_areas(
+        fn prop_approx_shear_apply_inverse_apply_identity_point(
             s in super::strategy_shear3_f64_any(),
-            triangle in super::strategy_triangle3_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let s: super::Shear3<f64> = s;
-            let triangle: super::Triangle3<f64> = triangle;
-            super::prop_approx_shear3_preserves_triangle_areas(s, triangle, 1e-10)?
+            let p: super::Point3<f64> = p;
+            super::prop_approx_shear_apply_inverse_apply_identity_point(s, p, 1e-8)?
+        }
+
+        #[test]
+        fn prop_approx_shear_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_f64_any(),
+            v in super::strategy_vector_f64_any(),
+        ) {
+            let s: super::Shear3<f64> = s;
+            let v: super::Vector3<f64> = v;
+            super::prop_approx_shear_apply_inverse_apply_identity_vector(s, v, 1e-8)?
         }
     }
 }

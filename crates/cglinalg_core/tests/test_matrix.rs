@@ -6677,6 +6677,132 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
 
 
 #[cfg(test)]
+mod matrix4x4_trace_determinant_tests {
+    use cglinalg_core::{
+        Matrix4x4,
+        Point3,
+        Vector3,
+        Unit,
+    };
+    use approx::{
+        assert_relative_eq,
+    };
+
+    fn shear_factor() -> f64 {
+        -372203_f64
+    }
+
+    fn direction() -> Unit<Vector3<f64>> {
+        Unit::from_value(Vector3::new(
+            f64::sqrt(1_f64 / 3_f64),
+            f64::sqrt(1_f64 / 3_f64),
+            f64::sqrt(1_f64 / 3_f64)
+        ))
+    }
+
+    fn normal() -> Unit<Vector3<f64>> {
+        Unit::from_value(Vector3::new(
+             f64::sqrt(1_f64 / 6_f64),
+             f64::sqrt(1_f64 / 6_f64),
+            -f64::sqrt(4_f64 / 6_f64)
+        ))
+    }
+
+    fn shear_matrix() -> Matrix4x4<f64> {
+        let shear_factor = shear_factor();
+        let origin = Point3::new(1_f64, 1_f64, 1_f64);
+        let direction = direction();
+        let normal = normal();
+
+        Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal)
+    }
+
+    fn expected_matrix() -> Matrix4x4<f64> {
+        let shear_factor = shear_factor();
+
+        let c0r0 = 1_f64 + f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c0r1 = f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c0r2 = f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c0r3 = 0_f64;
+
+        let c1r0 = f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c1r1 = 1_f64 + f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c1r2 = f64::sqrt(1_f64 / 18_f64) * shear_factor;
+        let c1r3 = 0_f64;
+
+        let c2r0 = -f64::sqrt(4_f64 / 18_f64) * shear_factor;
+        let c2r1 = -f64::sqrt(4_f64 / 18_f64) * shear_factor;
+        let c2r2 = 1_f64 - f64::sqrt(4_f64 / 18_f64) * shear_factor;
+        let c2r3 = 0_f64;
+
+        let c3r0 = 0_f64;
+        let c3r1 = 0_f64;
+        let c3r2 = 0_f64;
+        let c3r3 = 1_f64;
+
+        Matrix4x4::new(
+            c0r0, c0r1, c0r2, c0r3,
+            c1r0, c1r1, c1r2, c1r3,
+            c2r0, c2r1, c2r2, c2r3,
+            c3r0, c3r1, c3r2, c3r3
+        )
+    }
+
+    #[test]
+    fn test_shear_matrix_direction_normal() {
+        let direction = direction();
+        let normal = normal();
+
+        assert_relative_eq!(direction.dot(&normal), 0_f64, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_matrix() {
+        let expected = expected_matrix();
+        let result = shear_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-15);
+    }
+
+    #[test]
+    fn test_shear_expected_matrix_trace() {
+        let matrix = expected_matrix();
+        let expected = 4_f64;
+        let result = matrix.trace();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_expected_matrix_determinant() {
+        let matrix = expected_matrix();
+        let expected = 1_f64;
+        let result = matrix.determinant();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_shear_matrix_trace() {
+        let matrix = shear_matrix();
+        let expected = 4_f64;
+        let result = matrix.trace();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_shear_matrix_determinant() {
+        let matrix = shear_matrix();
+        let expected = 1_f64;
+        let result = matrix.determinant();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+}
+
+
+#[cfg(test)]
 mod matrix1x2_tests {
     use cglinalg_core::{
         Vector1,
