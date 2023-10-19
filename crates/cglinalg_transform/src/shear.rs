@@ -39,6 +39,224 @@ pub struct Shear<S, const N: usize> {
     normal: Vector<S, N>,
 }
 
+impl<S, const N: usize> Shear<S, N>
+where
+    S: Copy
+{
+    /// Get the shear factor of the shearing transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let origin = Point2::new(0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector2::unit_y());
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.shear_factor(), shear_factor);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let origin = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     -1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / f64::sqrt(2_f64),
+    ///      0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.shear_factor(), shear_factor);
+    /// ```
+    #[inline]
+    pub const fn shear_factor(&self) -> S {
+        self.shear_factor
+    }
+
+    /// Get the origin of the affine frame of the shearing transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let origin = Point2::new(0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector2::unit_y());
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.origin(), origin);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let origin = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     -1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / f64::sqrt(2_f64),
+    ///      0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.origin(), origin);
+    /// ```
+    #[inline]
+    pub const fn origin(&self) -> Point<S, N> {
+        self.origin
+    }
+
+    /// Get the direction vector of shearing in the shearing plane of the 
+    /// shearing transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let origin = Point2::new(0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector2::unit_y());
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.direction(), direction.into_inner());
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let origin = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     -1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / f64::sqrt(2_f64),
+    ///      0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.direction(), direction.into_inner());
+    /// ```
+    #[inline]
+    pub const fn direction(&self) -> Vector<S, N> {
+        self.direction
+    }
+
+    /// Get the normal vector to the shearing plane of the shearing transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let origin = Point2::new(0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector2::unit_y());
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.normal(), normal.into_inner());
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let origin = Point3::new(0_f64, 0_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     -1_f64 / f64::sqrt(2_f64),
+    ///      1_f64 / f64::sqrt(2_f64),
+    ///      0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// 
+    /// assert_eq!(shear.normal(), normal.into_inner());
+    /// ```
+    #[inline]
+    pub const fn normal(&self) -> Vector<S, N> {
+        self.normal
+    }
+}
+
 impl<S, const N: usize> Shear<S, N> 
 where 
     S: SimdScalarSigned 
