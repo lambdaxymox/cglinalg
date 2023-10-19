@@ -174,6 +174,25 @@ where
     })
 }
 
+fn strategy_shear_axis_signed_from_abs_range<F, S, const N: usize>(constructor: F, min_value: S, max_value: S) -> impl Strategy<Value = Shear<S, N>>
+where
+    S: SimdScalarSigned + Arbitrary,
+    F: Fn(S) -> Shear<S, N>
+{
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    where
+        S: SimdScalarSigned
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    any::<S>().prop_map(move |_shear_factor| {
+        let shear_factor = rescale(_shear_factor, min_value, max_value);
+
+        constructor(shear_factor)
+    })
+}
+
 fn strategy_shear2_f64_any() -> impl Strategy<Value = Shear2<f64>> {
     let min_value = 1_f64;
     let max_value = 1_000_000_f64;
@@ -186,6 +205,62 @@ fn strategy_shear3_f64_any() -> impl Strategy<Value = Shear3<f64>> {
     let max_value = 1_000_000_f64;
 
     strategy_shear3_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_shear_i32_any<F, const N: usize>(constructor: F) -> impl Strategy<Value = Shear<i32, N>> 
+where
+    F: Fn(i32) -> Shear<i32, N>
+{
+    let min_value = -100_000_i32;
+    let max_value = 100_000_i32;
+
+    strategy_shear_axis_signed_from_abs_range(constructor, min_value, max_value)
+}
+
+fn strategy_shear2_xy_i32_any() -> impl Strategy<Value = Shear2<i32>> {
+    strategy_shear_i32_any(Shear2::from_shear_xy)
+}
+
+fn strategy_shear2_yx_i32_any() -> impl Strategy<Value = Shear2<i32>> {
+    strategy_shear_i32_any(Shear2::from_shear_yx)
+}
+
+fn strategy_shear3_xy_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_xy)
+}
+
+fn strategy_shear3_xz_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_xz)
+}
+
+fn strategy_shear3_yx_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_yx)
+}
+
+fn strategy_shear3_yz_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_yz)
+}
+
+fn strategy_shear3_zx_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_zx)
+}
+
+fn strategy_shear3_zy_i32_any() -> impl Strategy<Value = Shear3<i32>> {
+    strategy_shear_i32_any(Shear3::from_shear_zy)
+}
+
+fn strategy_vector_i32_any<const N: usize>() -> impl Strategy<Value = Vector<i32, N>> {
+    let min_value = 0_i32;
+    let max_value = 1_000_000_i32;
+
+    strategy_vector_signed_from_abs_range(min_value, max_value)
+}
+
+fn strategy_point_i32_any<const N: usize>() -> impl Strategy<Value = Point<i32, N>> {
+    let min_value = 0_i32;
+    let max_value = 1_000_000_i32;
+
+    strategy_point_signed_from_abs_range(min_value, max_value)
 }
 
 
@@ -301,37 +376,40 @@ where
     Ok(())
 }
 
-fn prop_approx_shear_apply_inverse_apply_identity_point<S, const N: usize>(
-    s: Shear<S, N>,
-    p: Point<S, N>,
-    tolerance: S
-) -> Result<(), TestCaseError>
+/// The shearing transformation satisfies the following property.
+/// 
+/// Given a shearing transformation `s` and a point `p`
+/// ```text
+/// inverse_apply_point(apply_point(p)) == p
+/// ```
+fn prop_shear_apply_inverse_apply_identity_point<S, const N: usize>(s: Shear<S, N>, p: Point<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarSigned
 {
     let sheared_point = s.apply_point(&p);
     let lhs = s.inverse_apply_point(&sheared_point);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
+    prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
 
-
-fn prop_approx_shear_apply_inverse_apply_identity_vector<S, const N: usize>(
-    s: Shear<S, N>,
-    v: Vector<S, N>,
-    tolerance: S
-) -> Result<(), TestCaseError> 
+/// The shearing transformation satisfies the following property.
+/// 
+/// Given a shearing transformation `s` and a point `v`
+/// ```text
+/// inverse_apply_vector(apply_vector(v)) == v
+/// ```
+fn prop_shear_apply_inverse_apply_identity_vector<S, const N: usize>(s: Shear<S, N>, v: Vector<S, N>,) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarSigned
 {
     let sheared_vector = s.apply_vector(&v);
     let lhs = s.inverse_apply_vector(&sheared_vector);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
@@ -358,26 +436,6 @@ mod shear2_f64_props {
             let s: super::Shear2<f64> = s;
             super::prop_shear2_matrix_asymmetric(s)?
         }
-
-        #[test]
-        fn prop_approx_shear_apply_inverse_apply_identity_point(
-            s in super::strategy_shear2_f64_any(),
-            p in super::strategy_point_f64_any(),
-        ) {
-            let s: super::Shear2<f64> = s;
-            let p: super::Point2<f64> = p;
-            super::prop_approx_shear_apply_inverse_apply_identity_point(s, p, 1e-8)?
-        }
-
-        #[test]
-        fn prop_approx_shear_apply_inverse_apply_identity_vector(
-            s in super::strategy_shear2_f64_any(),
-            v in super::strategy_vector_f64_any(),
-        ) {
-            let s: super::Shear2<f64> = s;
-            let v: super::Vector2<f64> = v;
-            super::prop_approx_shear_apply_inverse_apply_identity_vector(s, v, 1e-8)?
-        }
     }
 }
 
@@ -396,25 +454,179 @@ mod shear3_f64_props {
             let s: super::Shear3<f64> = s;
             super::prop_shear3_matrix_asymmetric(s)?
         }
+    }
+}
 
+
+#[cfg(test)]
+mod shear2_i32_apply_props {
+    use proptest::prelude::*;
+    proptest! {
         #[test]
-        fn prop_approx_shear_apply_inverse_apply_identity_point(
-            s in super::strategy_shear3_f64_any(),
-            p in super::strategy_point_f64_any(),
+        fn prop_shear_xy_apply_inverse_apply_identity_point(
+            s in super::strategy_shear2_xy_i32_any(),
+            p in super::strategy_point_i32_any(),
         ) {
-            let s: super::Shear3<f64> = s;
-            let p: super::Point3<f64> = p;
-            super::prop_approx_shear_apply_inverse_apply_identity_point(s, p, 1e-8)?
+            let s: super::Shear2<i32> = s;
+            let p: super::Point2<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
         }
 
         #[test]
-        fn prop_approx_shear_apply_inverse_apply_identity_vector(
-            s in super::strategy_shear3_f64_any(),
-            v in super::strategy_vector_f64_any(),
+        fn prop_shear_xy_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear2_xy_i32_any(),
+            v in super::strategy_vector_i32_any(),
         ) {
-            let s: super::Shear3<f64> = s;
-            let v: super::Vector3<f64> = v;
-            super::prop_approx_shear_apply_inverse_apply_identity_vector(s, v, 1e-8)?
+            let s: super::Shear2<i32> = s;
+            let v: super::Vector2<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_yx_apply_inverse_apply_identity_point(
+            s in super::strategy_shear2_yx_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear2<i32> = s;
+            let p: super::Point2<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_yx_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear2_yx_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear2<i32> = s;
+            let v: super::Vector2<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod shear3_i32_apply_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_shear_xy_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_xy_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_xy_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_xy_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_xz_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_xz_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_xz_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_xz_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_yx_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_yx_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_yx_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_yx_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_yz_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_yz_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_yz_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_yz_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_zx_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_zx_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_zx_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_zx_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
+        }
+
+        #[test]
+        fn prop_shear_zy_apply_inverse_apply_identity_point(
+            s in super::strategy_shear3_zy_i32_any(),
+            p in super::strategy_point_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let p: super::Point3<i32> = p;
+            super::prop_shear_apply_inverse_apply_identity_point(s, p)?
+        }
+
+        #[test]
+        fn prop_shear_zy_apply_inverse_apply_identity_vector(
+            s in super::strategy_shear3_zy_i32_any(),
+            v in super::strategy_vector_i32_any(),
+        ) {
+            let s: super::Shear3<i32> = s;
+            let v: super::Vector3<i32> = v;
+            super::prop_shear_apply_inverse_apply_identity_vector(s, v)?
         }
     }
 }
