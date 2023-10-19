@@ -740,7 +740,7 @@ mod shear2_noncoordinate_plane_tests {
         Matrix3x3::new(
             2_f64 / f64::sqrt(5_f64), 1_f64 / f64::sqrt(5_f64), 0_f64,
            -1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64), 0_f64,
-            0_f64,                          0_f64,                         1_f64
+            0_f64,                    0_f64,                    1_f64
         )
     }
 
@@ -3204,7 +3204,8 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 }
-/*
+
+
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
 /// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`, 
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
@@ -3273,8 +3274,46 @@ mod shear3_noncoordinate_plane_tests {
         Translation3::from_vector(&Vector3::new(0_f64, 0_f64, -1_f64))
     }
 
-    #[rustfmt::skip]
     fn rotation_x_yz() -> Rotation3<f64> {
+        let rotation_angle_x_yz = rotation_angle_x_yz();
+
+        Rotation3::from_angle_x(rotation_angle_x_yz)
+    }
+
+    fn rotation_x_yz_inv() -> Rotation3<f64> {
+        let rotation_angle_x_yz = rotation_angle_x_yz();
+
+        Rotation3::from_angle_x(-rotation_angle_x_yz)
+    }
+
+    fn rotation_z_xy() -> Rotation3<f64> {
+        let rotation_angle_z_xy = rotation_angle_z_xy();
+
+        Rotation3::from_angle_z(rotation_angle_z_xy)
+    }
+
+    fn rotation_z_xy_inv() -> Rotation3<f64> {
+        let rotation_angle_z_xy = rotation_angle_z_xy();
+
+        Rotation3::from_angle_z(-rotation_angle_z_xy)
+    }
+
+    fn rotation() -> Rotation3<f64> {
+        let rotation_x_yz = rotation_x_yz();
+        let rotation_z_xy = rotation_z_xy();
+        
+        rotation_x_yz * rotation_z_xy
+    }
+
+    fn rotation_inv() -> Rotation3<f64> {
+        let rotation_x_yz_inv = rotation_x_yz_inv();
+        let rotation_z_xy_inv = rotation_z_xy_inv();
+        
+        rotation_z_xy_inv * rotation_x_yz_inv
+    }
+
+    #[rustfmt::skip]
+    fn rotation_x_yz_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
             1_f64,  0_f64,                           0_f64,                          0_f64,
             0_f64,  f64::sqrt(9_f64 / 13_f64), f64::sqrt(4_f64 / 13_f64), 0_f64,
@@ -3284,7 +3323,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[rustfmt::skip]
-    fn rotation_x_yz_inv() -> Rotation3<f64> {
+    fn rotation_x_yz_inv_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
             1_f64, 0_f64,                            0_f64,                          0_f64,
             0_f64, f64::sqrt(9_f64 / 13_f64), -f64::sqrt(4_f64 / 13_f64), 0_f64,
@@ -3294,17 +3333,17 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[rustfmt::skip]
-    fn rotation_z_xy() -> Rotation3<f64> {
+    fn rotation_z_xy_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
            -f64::sqrt(13_f64 / 17_f64), f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
             0_f64,                            0_f64,                           1_f64, 0_f64,
             0_f64,                            0_f64,                           0_f64, 1_f64
-       )
+        )
     }
 
     #[rustfmt::skip]
-    fn rotation_z_xy_inv() -> Rotation3<f64> {
+    fn rotation_z_xy_inv_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  -f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
             f64::sqrt(13_f64 / 17_f64),  f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
@@ -3314,7 +3353,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[rustfmt::skip]
-    fn rotation() -> Rotation3<f64> {
+    fn rotation_matrix() -> Matrix4x4<f64> {
         let c0r0 = f64::sqrt(4_f64 / 17_f64);
         let c0r1 = f64::sqrt(9_f64 / 17_f64);
         let c0r2 = f64::sqrt(4_f64 / 17_f64);
@@ -3344,7 +3383,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[rustfmt::skip]
-    fn rotation_inv() -> Rotation3<f64> {
+    fn rotation_inv_matrix() -> Matrix4x4<f64> {
         let c0r0 = f64::sqrt(4_f64 / 17_f64);
         let c0r1 = -f64::sqrt(13_f64 / 17_f64);
         let c0r2 = 0_f64;
@@ -3373,8 +3412,14 @@ mod shear3_noncoordinate_plane_tests {
         )
     }
 
-    #[rustfmt::skip]
     fn shear_matrix_xz() -> Shear3<f64> {
+        let shear_factor = shear_factor();
+
+        Shear3::from_shear_xz(shear_factor)
+    }
+
+    #[rustfmt::skip]
+    fn shear_matrix_xz_matrix() -> Matrix4x4<f64> {
         let shear_factor = shear_factor();
 
         Matrix4x4::new(
@@ -3403,7 +3448,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_translation_inv() {
+    fn test_shear_translation_inv() {
         let translation = translation();
         let expected = translation_inv();
         let result = translation.inverse();
@@ -3412,7 +3457,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_rotation_x_yz() {
+    fn test_shear_rotation_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz();
         let result = Rotation3::from_angle_x(rotation_angle_x_yz);
@@ -3421,7 +3466,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_rotation_x_yz_inv() {
+    fn test_shear_rotation_x_yz_inv() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
         let expected = rotation_x_yz_inv();
         let result = Rotation3::from_angle_x(-rotation_angle_x_yz);
@@ -3430,7 +3475,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_rotation_z_xy() {
+    fn test_shear_rotation_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy();
         let result = Rotation3::from_angle_z(rotation_angle_z_xy);
@@ -3439,7 +3484,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_rotation_z_xy_inv() {
+    fn test_shear_rotation_z_xy_inv() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy_inv();
         let result = Rotation3::from_angle_z(-rotation_angle_z_xy);
@@ -3448,42 +3493,86 @@ mod shear3_noncoordinate_plane_tests {
     }
     
     #[test]
-    fn test_from_affine_shear_rotation() {
-        let expected = rotation();
-        let rotation_x_yz = rotation_x_yz();
-        let rotation_z_xy = rotation_z_xy();
-        let result = rotation_x_yz * rotation_z_xy;
-
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
-    }
-
-    #[test]
-    fn test_from_affine_shear_rotation_inv() {
-        let expected = rotation_inv();
+    fn test_shear_rotation() {
+        let expected = rotation_matrix();
         let rotation = rotation();
-        let result = rotation.inverse();
+        let result = rotation.to_affine_matrix();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
-    fn test_from_affine_shear_origin_xz() {
+    fn test_shear_rotation_inv() {
+        let expected = rotation_inv_matrix();
+        let rotation_inv = rotation_inv();
+        let result = rotation_inv.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_rotation_x_yz_matrix() {
+        let rotation_angle_x_yz = rotation_angle_x_yz();
+        let expected = rotation_x_yz_matrix();
+        let rotation = Rotation3::from_angle_x(rotation_angle_x_yz);
+        let result = rotation.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_rotation_x_yz_inv_matrix() {
+        let rotation_angle_x_yz = rotation_angle_x_yz();
+        let expected = rotation_x_yz_inv_matrix();
+        let rotation = Rotation3::from_angle_x(-rotation_angle_x_yz);
+        let result = rotation.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_rotation_z_xy_matrix() {
+        let rotation_angle_z_xy = rotation_angle_z_xy();
+        let expected = rotation_z_xy_matrix();
+        let rotation = Rotation3::from_angle_z(rotation_angle_z_xy);
+        let result = rotation.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_rotation_z_xy_inv_matrix() {
+        let rotation_angle_z_xy = rotation_angle_z_xy();
+        let expected = rotation_z_xy_inv_matrix();
+        let rotation = Rotation3::from_angle_z(-rotation_angle_z_xy);
+        let result = rotation.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_xz_matrix() {
+        let shear = shear_matrix_xz();
+        let expected = shear_matrix_xz_matrix();
+        let result = shear.to_affine_matrix();
+
+        assert_relative_eq!(result, expected, epsilon = 1e-10);
+    }
+
+    #[test]
+    fn test_shear_origin_xz() {
         let translation = translation();
         let rotation = rotation();
         let origin = origin();
-        let origin_xz = Vector4::new(f64::sqrt(17_f64), 0_f64, 0_f64, 1_f64);
+        let origin_xz = Point3::new(f64::sqrt(17_f64), 0_f64, 0_f64);
         let expected = origin;
-        let result = {
-            let _origin = origin.to_vector().extend(1_f64);  
-            let _origin_xz = translation * rotation * origin_xz;
-            Point3::new(_origin_xz[0], _origin_xz[1], _origin_xz[2])
-        };
+        let result = translation * rotation * origin_xz;
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
     #[test]
-    fn test_from_affine_shear_direction_xz() {
+    fn test_shear_direction_xz() {
         let direction = direction();
         let rotation_inv = rotation_inv();
         let expected = Vector3::unit_x();
@@ -3496,7 +3585,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_normal_xz() {
+    fn test_shear_normal_xz() {
         let normal = normal();
         let rotation_inv = rotation_inv();
         let expected = Vector3::unit_z();
@@ -3509,68 +3598,60 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_coordinates_vertices() {
+    fn test_shear_coordinates_vertices() {
         let vertices = [
-            Vector4::new( 
+            Point3::new( 
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
         ];
         let translation = translation();
         let rotation = rotation();
         let vertices_xz = [
-            Vector4::new( 1_f64,  1_f64,  1_f64, 1_f64),
-            Vector4::new(-1_f64,  1_f64,  1_f64, 1_f64),
-            Vector4::new(-1_f64, -1_f64,  1_f64, 1_f64),
-            Vector4::new( 1_f64, -1_f64,  1_f64, 1_f64),
-            Vector4::new( 1_f64,  1_f64, -1_f64, 1_f64),
-            Vector4::new(-1_f64,  1_f64, -1_f64, 1_f64),
-            Vector4::new(-1_f64, -1_f64, -1_f64, 1_f64),
-            Vector4::new( 1_f64, -1_f64, -1_f64, 1_f64),
+            Point3::new( 1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64,  1_f64,  1_f64),
+            Point3::new(-1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64, -1_f64,  1_f64),
+            Point3::new( 1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64,  1_f64, -1_f64),
+            Point3::new(-1_f64, -1_f64, -1_f64),
+            Point3::new( 1_f64, -1_f64, -1_f64),
         ];
         let result = vertices_xz.map(|vertex_xz| translation * rotation * vertex_xz);
 
@@ -3585,110 +3666,94 @@ mod shear3_noncoordinate_plane_tests {
     }
     
     #[test]
-    fn test_from_affine_shear_vertices() {
+    fn test_shear_vertices() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
         let normal = normal();
         let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let vertices = [
-            Vector4::new( 
+            Point3::new( 
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
             ),
         ];
         let expected = [
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
-            Vector4::new(
+            Point3::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
             ),
         ];
         let result = vertices.map(|v| shear * v);
@@ -3704,7 +3769,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_matrix() {
+    fn test_shear_matrix() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
@@ -3744,7 +3809,7 @@ mod shear3_noncoordinate_plane_tests {
     }
 
     #[test]
-    fn test_from_affine_shear_matrix_alternative_path() {
+    fn test_shear_matrix_alternative_path() {
         let shear_factor = shear_factor();
         let origin = origin();
         let direction = direction();
@@ -3756,10 +3821,15 @@ mod shear3_noncoordinate_plane_tests {
         let shear_matrix_xz = shear_matrix_xz();
         let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let expected = shear.to_transform();
-        let result = (translation * rotation) * shear_matrix_xz * (rotation_inv * translation_inv);
+        let result = {
+            let isometry = (translation * rotation).to_transform();
+            let isometry_inv = (rotation_inv * translation_inv).to_transform();
+            let _shear_matrix_xz = shear_matrix_xz.to_transform();
+
+            isometry * _shear_matrix_xz * isometry_inv
+        };
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
 
-*/
