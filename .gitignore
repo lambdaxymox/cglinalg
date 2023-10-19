@@ -5,3 +5,4 @@ Cargo.lock
 *.iml
 *.proptest-regressions
 .DS_Store
+.vscode
