@@ -8,6 +8,8 @@ mod similarity;
 mod transform;
 mod translation;
 
+mod transform_ops;
+
 
 pub use isometry::*;
 pub use projection::*;
@@ -18,4 +20,6 @@ pub use shear::*;
 pub use similarity::*;
 pub use transform::*;
 pub use translation::*;
+
+pub use transform_ops::*;
 

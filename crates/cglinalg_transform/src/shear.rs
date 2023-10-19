@@ -3,7 +3,6 @@ use cglinalg_numeric::{
     SimdScalarFloat,
 };
 use cglinalg_core::{
-    Matrix,
     Matrix3x3,
     Matrix4x4,
     Vector,
@@ -1003,7 +1002,7 @@ where
 
 impl<S> Shear2<S> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalarFloat
 {
     /// Convert a shear transformation to an affine matrix.
     /// 
@@ -1104,6 +1103,66 @@ where
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
         shear.to_affine_matrix()
+    }
+}
+
+impl<S> ops::Mul<Shear2<S>> for Shear2<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform2<S>;
+
+    #[inline]
+    fn mul(self, other: Shear2<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<S> ops::Mul<&Shear2<S>> for Shear2<S>
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform2<S>;
+
+    #[inline]
+    fn mul(self, other: &Shear2<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<S> ops::Mul<Shear2<S>> for &Shear2<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform2<S>;
+
+    #[inline]
+    fn mul(self, other: Shear2<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Shear2<S>> for &'b Shear2<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform2<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Shear2<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
     }
 }
 
@@ -1854,7 +1913,7 @@ where
 
 impl<S> Shear3<S> 
 where 
-    S: SimdScalarFloat,
+    S: SimdScalarFloat
 {
     /// Convert a shear transformation to an affine matrix.
     /// 
@@ -1957,6 +2016,66 @@ where
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
         shear.to_affine_matrix()
+    }
+}
+
+impl<S> ops::Mul<Shear3<S>> for Shear3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform3<S>;
+
+    #[inline]
+    fn mul(self, other: Shear3<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<S> ops::Mul<&Shear3<S>> for Shear3<S>
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform3<S>;
+
+    #[inline]
+    fn mul(self, other: &Shear3<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<S> ops::Mul<Shear3<S>> for &Shear3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform3<S>;
+
+    #[inline]
+    fn mul(self, other: Shear3<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
+    }
+}
+
+impl<'a, 'b, S> ops::Mul<&'a Shear3<S>> for &'b Shear3<S> 
+where 
+    S: SimdScalarFloat
+{
+    type Output = Transform3<S>;
+
+    #[inline]
+    fn mul(self, other: &'a Shear3<S>) -> Self::Output {
+        let lhs = self.to_transform();
+        let rhs = other.to_transform();
+
+        lhs * rhs
     }
 }
 

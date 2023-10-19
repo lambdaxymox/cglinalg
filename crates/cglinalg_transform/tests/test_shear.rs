@@ -668,7 +668,7 @@ mod shear2_coordinate_plane_tests {
     }
 }
 
-/*
+
 /// Shearing along the plane `(1 / 2) * x + 1 - y == 0`
 /// with origin `[2, 2]`, direction `[2 / sqrt(5), 1 / sqrt(5)]`, and
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
@@ -785,19 +785,19 @@ mod shear2_noncoordinate_plane_tests {
         let translation = translation();
         let rotation = rotation();
         let vertices = [
-            Vector2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64) + 1_f64),
-            Vector2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64) + 1_f64),
-            Vector2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64) + 1_f64),
-            Vector2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64) + 1_f64),
+            Point2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64) + 1_f64),
+            Point2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64) + 1_f64),
+            Point2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64) + 1_f64),
+            Point2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64) + 1_f64),
         ];
         let rotated_vertices = [
-            Vector2::new( 1_f64,  1_f64),
-            Vector2::new(-1_f64,  1_f64),
-            Vector2::new(-1_f64, -1_f64),
-            Vector2::new( 1_f64, -1_f64),
+            Point2::new( 1_f64,  1_f64),
+            Point2::new(-1_f64,  1_f64),
+            Point2::new(-1_f64, -1_f64),
+            Point2::new( 1_f64, -1_f64),
         ];
         let expected = vertices;
-        let result = vertices.map(|v| translation * rotation * v);
+        let result = rotated_vertices.map(|v| translation * rotation * v);
 
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
@@ -815,7 +815,6 @@ mod shear2_noncoordinate_plane_tests {
    
         assert_relative_eq!(result_rotated_translated_origin[0], origin[0], epsilon = 1e-10);
         assert_relative_eq!(result_rotated_translated_origin[1], origin[1], epsilon = 1e-10);
-        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64,     epsilon = 1e-10);
     }
 
     #[test]
@@ -915,8 +914,14 @@ mod shear2_noncoordinate_plane_tests {
         let rotation = rotation();
         let rotation_inv = rotation_inv();
         let shear_matrix_xy = shear_matrix_xy();
-        let expected = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
-        let result = (translation * rotation) * shear_matrix_xy * (rotation_inv * translation_inv);
+        let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+        let expected = shear.to_transform();
+        let result = {
+            let isometry = (translation * rotation).to_transform();
+            let isometry_inv = (rotation_inv * translation_inv).to_transform();
+            let _shear_matrix_xy = shear_matrix_xy.to_transform();
+            isometry * _shear_matrix_xy * isometry_inv
+        };
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
@@ -947,7 +952,7 @@ mod shear2_noncoordinate_plane_tests {
         assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
     }
 }
-*/
+
 
 #[cfg(test)]
 mod shear3_tests {
@@ -3199,8 +3204,6 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 }
-
-
 /*
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
 /// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`, 
