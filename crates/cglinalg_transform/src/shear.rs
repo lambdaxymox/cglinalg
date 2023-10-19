@@ -530,6 +530,706 @@ where
     }
 }
 
+impl<S, const N: usize> Shear<S, N> 
+where 
+    S: SimdScalarSigned
+{
+    /// Calculate an inverse of a shear transformation.
+    /// 
+    /// The shearing transformation does not have a unique inverse. In particular, the
+    /// matrix for the shearing transformation represents more than one possible
+    /// inverse for a shearing transformation. Negating the shear factor,
+    /// negate the normal vector, negate the direction, or negating all three of them 
+    /// all yield the same underlying matrix representing the shearing transformation.
+    /// As a consequence, this function returns the simplest inverse: negating the shear
+    /// factor. The shearing transformation returns by this function uses the same direction
+    /// and normal vectors as the original shearing transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let origin = Point2::new(3_f64, 3_f64);
+    /// let direction = Unit::from_value(Vector2::new(
+    ///     f64::sqrt(9_f64 / 10_f64),
+    ///     f64::sqrt(1_f64 / 10_f64)
+    /// ));
+    /// let normal = Unit::from_value(Vector2::new(
+    ///     -f64::sqrt(1_f64 / 10_f64),
+    ///      f64::sqrt(9_f64 / 10_f64)
+    /// ));
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// let shear_inv = shear.inverse();
+    /// let point = Point2::new(1_f64, 2_f64);
+    /// 
+    /// assert_relative_eq!((shear * shear_inv) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear_inv * shear) * point, point, epsilon = 1e-10);
+    /// 
+    /// let other_shear_inv1 = Shear2::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
+    /// let other_shear_inv2 = Shear2::from_affine_shear(shear_factor, &origin, &direction, &(-normal)); 
+    /// let other_shear_inv3 = Shear2::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
+    /// 
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// 
+    /// // The inverse of the shearing transformation is not unique.
+    /// assert_ne!(other_shear_inv1, shear_inv);
+    /// assert_ne!(other_shear_inv2, shear_inv);
+    /// assert_ne!(other_shear_inv3, shear_inv);
+    /// ```
+    ///
+    /// # Example (Three Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let origin = Point3::new(0_f64, 0_f64, 2_f64);
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     f64::sqrt(1_f64 / 2_f64),
+    ///     f64::sqrt(1_f64 / 2_f64),
+    ///     0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// let shear_inv = shear.inverse();
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
+    /// 
+    /// assert_relative_eq!((shear * shear_inv) * point, point);
+    /// assert_relative_eq!((shear_inv * shear) * point, point);
+    /// 
+    /// let other_shear_inv1 = Shear3::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
+    /// let other_shear_inv2 = Shear3::from_affine_shear(shear_factor, &origin, &direction, &(-normal));
+    /// let other_shear_inv3 = Shear3::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
+    /// 
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// 
+    /// // The inverse of the shearing transformation is not unique.
+    /// assert_ne!(other_shear_inv1, shear_inv);
+    /// assert_ne!(other_shear_inv2, shear_inv);
+    /// assert_ne!(other_shear_inv3, shear_inv);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        Self {
+            shear_factor: -self.shear_factor,
+            origin: self.origin,
+            direction: self.direction,
+            normal: self.normal,
+        }
+    }
+
+    /// Apply the inverse of the shear transformation to a vector.
+    ///
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let direction = Unit::from_value(Vector2::unit_x());
+    /// let normal = Unit::from_value(Vector2::unit_y());
+    /// let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+    /// let vertices = [
+    ///     Vector2::new( 1_f64,  1_f64),
+    ///     Vector2::new(-1_f64,  1_f64),
+    ///     Vector2::new(-1_f64, -1_f64),
+    ///     Vector2::new( 1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Vector2::new( 1_f64 - shear_factor,  1_f64),
+    ///     Vector2::new(-1_f64 - shear_factor,  1_f64),
+    ///     Vector2::new(-1_f64 + shear_factor, -1_f64),
+    ///     Vector2::new( 1_f64 + shear_factor, -1_f64),
+    /// ];
+    /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+    ///
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// ```
+    ///
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Unit,
+    /// # }; 
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let direction = Unit::from_value(Vector3::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+    /// let vertices = [
+    ///     Vector3::new( 1_f64,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64,  1_f64,  1_f64),
+    ///     Vector3::new(-1_f64, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64, -1_f64,  1_f64),
+    ///     Vector3::new( 1_f64,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64,  1_f64, -1_f64),
+    ///     Vector3::new(-1_f64, -1_f64, -1_f64),
+    ///     Vector3::new( 1_f64, -1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Vector3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Vector3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Vector3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Vector3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Vector3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Vector3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Vector3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Vector3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),  
+    /// ];
+    /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
+    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
+    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        let origin = self.origin.to_vector();
+        let factor = self.shear_factor * (vector - origin).dot(&self.normal);
+
+        vector - self.direction * factor
+    }
+
+    /// Apply the inverse of the shear transformation to a point.
+    ///
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2, 
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let direction = Unit::from_value(Vector2::unit_x());
+    /// let normal = Unit::from_value(Vector2::unit_y());
+    /// let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+    /// let vertices = [
+    ///     Point2::new( 1_f64,  1_f64),
+    ///     Point2::new(-1_f64,  1_f64),
+    ///     Point2::new(-1_f64, -1_f64),
+    ///     Point2::new( 1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Point2::new( 1_f64 - shear_factor,  1_f64),
+    ///     Point2::new(-1_f64 - shear_factor,  1_f64),
+    ///     Point2::new(-1_f64 + shear_factor, -1_f64),
+    ///     Point2::new( 1_f64 + shear_factor, -1_f64),
+    /// ];
+    /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
+    ///
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # }; 
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let direction = Unit::from_value(Vector3::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+    /// let vertices = [
+    ///     Point3::new( 1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64, -1_f64, -1_f64),
+    ///     Point3::new( 1_f64, -1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Point3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Point3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Point3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64),
+    ///     Point3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Point3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Point3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
+    ///     Point3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),  
+    /// ];
+    /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
+    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
+    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        let factor = self.shear_factor * (point - self.origin).dot(&self.normal);
+
+        point - self.direction * factor
+    }
+}
+
+impl<S, const N: usize> Shear<S, N> 
+where 
+    S: SimdScalarFloat
+{
+    /// Construct a general shearing transformation in three dimensions with respect to 
+    /// a plane passing through the origin `[0, 0, 0]`.
+    /// 
+    /// # Parameters
+    /// 
+    /// The shearing transformation constructor has the following parameters
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    ///    plane gets sheared.
+    /// * `direction`: The direction along which the shearing happens.
+    /// * `normal`: The normal vector to the shearing plane.
+    ///
+    /// # Example (Two Dimensions)
+    /// 
+    /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the 
+    /// line `y == (1 / 2) * x`.
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 4_f64;
+    /// let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+    /// let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+    /// let shear = Shear2::from_shear(shear_factor, &direction, &normal);
+    /// 
+    /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x`.
+    /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x`.
+    /// let vertices = [
+    ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64)),
+    ///     Point2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64)),
+    ///     Point2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64)),
+    ///     Point2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64)),
+    /// ];
+    /// let expected = [
+    ///     Point2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+    ///     ),
+    ///     Point2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) - 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (-1_f64 + shear_factor) + 2_f64 / f64::sqrt(5_f64),
+    ///     ),
+    ///     Point2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (-1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+    ///     ),
+    ///     Point2::new(
+    ///         (2_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) + 1_f64 / f64::sqrt(5_f64),
+    ///         (1_f64 / f64::sqrt(5_f64)) * (1_f64 - shear_factor) - 2_f64 / f64::sqrt(5_f64),
+    ///     ),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// 
+    /// let vertices_in_line = [
+    ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
+    ///     Point2::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64))),
+    ///     Point2::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64))),
+    ///     Point2::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64))),
+    ///     Point2::new( 0_f64, 0_f64),
+    /// ];
+    /// let expected_in_line = vertices_in_line;
+    /// let result_in_line = vertices_in_line.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], epsilon = 1e-10);
+    /// ```
+    ///
+    /// # Example (Three Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Unit,
+    /// # };
+    /// #
+    /// let shear_factor = 8_f64;
+    /// let direction = Unit::from_value(Vector3::unit_x());
+    /// let normal = Unit::from_value(-Vector3::unit_y());
+    /// let shear = Shear3::from_shear(shear_factor, &direction, &normal);
+    /// 
+    /// let vertices = [
+    ///     Point3::new( 1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64, -1_f64, -1_f64),
+    ///     Point3::new( 1_f64, -1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_f64 - shear_factor,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64 - shear_factor,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64 + shear_factor, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64 + shear_factor, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64 - shear_factor,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64 - shear_factor,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64 + shear_factor, -1_f64, -1_f64),
+    ///     Point3::new( 1_f64 + shear_factor, -1_f64, -1_f64),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result, expected);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_f64, 0_f64,  1_f64),
+    ///     Point3::new(-1_f64, 0_f64,  1_f64),
+    ///     Point3::new(-1_f64, 0_f64, -1_f64),
+    ///     Point3::new( 1_f64, 0_f64, -1_f64),
+    ///     Point3::new( 0_f64, 0_f64,  0_f64),
+    /// ];
+    /// // Points in the shearing plane don't move.
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_eq!(result_in_plane, expected_in_plane);
+    /// ```
+    #[inline]
+    pub fn from_shear(shear_factor: S, direction: &Unit<Vector<S, N>>, normal: &Unit<Vector<S, N>>) -> Self {
+        Self {
+            shear_factor,
+            origin: Point::origin(),
+            direction: direction.into_inner(),
+            normal: normal.into_inner(),
+        }
+    }
+
+    /// Construct a general shearing transformation in three dimensions with respect to 
+    /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
+    /// 
+    /// # Parameters
+    /// 
+    /// The shearing transformation constructor has four parameters
+    /// * `origin`: The origin of the affine frame for the shearing transformation.
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    ///    plane gets sheared.
+    /// * `direction`: The direction along which the shearing happens in the shearing plane.
+    /// * `normal`: The normal vector to the shearing plane.
+    ///
+    /// # Examples (Two Dimensions)
+    /// 
+    /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// #
+    /// let shear_factor = 15_f64;
+    /// let origin = Point2::new(-2_f64, 0_f64);
+    /// let direction = Unit::from_value(Vector2::unit_x());
+    /// let normal = Unit::from_value(Vector2::unit_y());
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// let vertices = [
+    ///     Point2::new( 1_f64,  1_f64),
+    ///     Point2::new(-1_f64,  1_f64),
+    ///     Point2::new(-1_f64, -1_f64),
+    ///     Point2::new( 1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Point2::new( 1_f64 + shear_factor,  1_f64),
+    ///     Point2::new(-1_f64 + shear_factor,  1_f64),
+    ///     Point2::new(-1_f64 - shear_factor, -1_f64),
+    ///     Point2::new( 1_f64 - shear_factor, -1_f64),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// 
+    /// let vertices_in_line = [
+    ///     Point2::new( 1_f64, 0_f64),
+    ///     Point2::new(-1_f64, 0_f64),
+    ///     Point2::new( 0_f64, 0_f64),
+    /// ];
+    /// let expected_in_line = vertices_in_line;
+    /// let result_in_line = vertices_in_line.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
+    /// ```
+    /// 
+    /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
+    /// 
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 7_f64;
+    /// let origin = Point2::new(2_f64, 2_f64);
+    /// let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
+    /// let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
+    /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    ///
+    /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x + 1`.
+    /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x + 1`.
+    /// let vertices = [
+    ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  3_f64 / f64::sqrt(5_f64) + 1_f64),
+    ///     Point2::new(-3_f64 / f64::sqrt(5_f64),  1_f64 / f64::sqrt(5_f64) + 1_f64),
+    ///     Point2::new(-1_f64 / f64::sqrt(5_f64), -3_f64 / f64::sqrt(5_f64) + 1_f64),
+    ///     Point2::new( 3_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64) + 1_f64),
+    /// ];
+    /// let rotated_origin = Vector2::new(f64::sqrt(5_f64), 0_f64);
+    /// let expected = [
+    ///     Point2::new(
+    ///          (1_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
+    ///          (3_f64 / f64::sqrt(5_f64)) + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///     ),
+    ///     Point2::new(
+    ///         -(3_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
+    ///          (1_f64 / f64::sqrt(5_f64))  + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///     ),
+    ///     Point2::new(
+    ///         -(1_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
+    ///         -(3_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///     ),
+    ///     Point2::new(
+    ///          (3_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
+    ///         -(1_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///     ),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
+    ///     Point2::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
+    ///     Point2::new(-1_f64 / f64::sqrt(5_f64), -1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
+    ///     Point2::new( 3_f64 / f64::sqrt(5_f64),  3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
+    ///     Point2::new( 0_f64, 1_f64),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// # };
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
+    /// # use core::f64;
+    /// #
+    /// let shear_factor = 15_f64;
+    /// let origin = Point3::origin();
+    /// let direction = Unit::from_value(Vector3::new(
+    ///     1_f64 / f64::sqrt(2_f64),
+    ///     1_f64 / f64::sqrt(2_f64),
+    ///     0_f64
+    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
+    /// let vertices = [
+    ///     Point3::new( 1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64,  1_f64,  1_f64),
+    ///     Point3::new(-1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64, -1_f64,  1_f64),
+    ///     Point3::new( 1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64,  1_f64, -1_f64),
+    ///     Point3::new(-1_f64, -1_f64, -1_f64),
+    ///     Point3::new( 1_f64, -1_f64, -1_f64),
+    /// ];
+    /// let expected = [
+    ///     Point3::new( 1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64),
+    ///     Point3::new(-1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64),
+    ///     Point3::new(-1_f64 + shear_factor / f64::sqrt(2_f64), -1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64),
+    ///     Point3::new( 1_f64 + shear_factor / f64::sqrt(2_f64), -1_f64 + shear_factor / f64::sqrt(2_f64),  1_f64),
+    ///     Point3::new( 1_f64 - shear_factor / f64::sqrt(2_f64),  1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64),
+    ///     Point3::new(-1_f64 - shear_factor / f64::sqrt(2_f64),  1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64),
+    ///     Point3::new(-1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64),
+    ///     Point3::new( 1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64),
+    /// ];
+    /// let result = vertices.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
+    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
+    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// 
+    /// let vertices_in_plane = [
+    ///     Point3::new( 1_f64,  1_f64, 0_f64),
+    ///     Point3::new(-1_f64,  1_f64, 0_f64),
+    ///     Point3::new(-1_f64, -1_f64, 0_f64),
+    ///     Point3::new( 1_f64, -1_f64, 0_f64),
+    ///     Point3::new( 0_f64,  0_f64, 0_f64),
+    /// ];
+    /// let expected_in_plane = vertices_in_plane;
+    /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
+    /// 
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// ```
+    #[inline]
+    pub fn from_affine_shear(
+        shear_factor: S, 
+        origin: &Point<S, N>, 
+        direction: &Unit<Vector<S, N>>, 
+        normal: &Unit<Vector<S, N>>
+    ) -> Self 
+    {
+        Self {
+            shear_factor, 
+            origin: *origin, 
+            direction: direction.into_inner(), 
+            normal: normal.into_inner(),
+        }
+    }
+}
+
 impl<S, const N: usize> fmt::Display for Shear<S, N> 
 where 
     S: fmt::Display 
@@ -805,7 +1505,7 @@ where
         }
     }
 }
-
+/*
 impl<S> Shear2<S> 
 where 
     S: SimdScalarFloat
@@ -1057,7 +1757,8 @@ where
         }
     }
 }
-
+*/
+/*
 impl<S> Shear2<S> 
 where 
     S: SimdScalarSigned
@@ -1226,6 +1927,7 @@ where
         point - self.direction * factor
     }
 }
+*/
 
 impl<S> Shear2<S> 
 where 
@@ -1770,7 +2472,7 @@ where
         }
     }
 }
-
+/*
 impl<S> Shear3<S> 
 where 
     S: SimdScalarFloat
@@ -1950,7 +2652,8 @@ where
         }
     }
 }
-
+*/
+/*
 impl<S> Shear3<S> 
 where 
     S: SimdScalarSigned
@@ -2141,6 +2844,7 @@ where
         point - self.direction * factor
     }
 }
+*/
 
 impl<S> Shear3<S> 
 where 
