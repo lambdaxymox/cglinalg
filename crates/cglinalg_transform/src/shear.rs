@@ -536,14 +536,45 @@ where
 {
     /// Calculate an inverse of a shear transformation.
     /// 
-    /// The shearing transformation does not have a unique inverse. In particular, the
-    /// matrix for the shearing transformation represents more than one possible
-    /// inverse for a shearing transformation. Negating the shear factor,
-    /// negate the normal vector, negate the direction, or negating all three of them 
-    /// all yield the same underlying matrix representing the shearing transformation.
-    /// As a consequence, this function returns the simplest inverse: negating the shear
-    /// factor. The shearing transformation returns by this function uses the same direction
-    /// and normal vectors as the original shearing transformation.
+    /// The shearing transformation as represented by the [`Shear`] data type
+    /// does not have a unique inverse representation: the matrix for the 
+    /// shearing transformation encodes more than one possible inverse representation 
+    /// for a given shearing transformation. Negating the shear factor, negate the 
+    /// normal vector, negate the direction, or negating all three of them all yield 
+    /// the same underlying matrix representing the shearing transformation. As a 
+    /// consequence, this function returns the simplest inverse representation: negating 
+    /// the shear factor. The shearing transformation representation returned 
+    /// by this function uses the same direction and normal vectors as the original 
+    /// shearing transformation.
+    /// 
+    /// # Discussion
+    /// 
+    /// The general shearing transformation is defined geometrically by a shearing 
+    /// plane `S`, a point `Q` in `S` which defines the origin for the affine frame 
+    /// of the shearing transformation, a shearing direction `v` inside `S`, a normal 
+    /// vector `n` perpendicular to `S`, and a shearing factor `m`. The shearing 
+    /// transformation is defined geometrically by
+    /// ```text
+    /// H(p) := p + (m * dot(p - Q, n)) * v
+    /// ```
+    /// where `p` is a point in Euclidean space. The inverse of `H` is given by
+    /// ```text
+    /// Hinv(p) := p - (m * dot(p - Q, n)) * v
+    /// ```
+    /// To see this, we do a simple computation.
+    /// ```text
+    /// Hinv(H(p)) == H(p) - (m * dot(H(p) - Q, n)) * v
+    ///            == H(p) - (m * dot(p + m * dot(p - Q, n) * v - Q, n)) * v
+    ///            == H(p) - [m * dot(p - Q + m * dot(p - Q, n) * v, n)] * v
+    ///            == H(p) - [m * dot(p - Q, n) + (m * m) * dot(p - Q, n) * dot(v, n))] * v
+    ///            == H(p) - [m * dot(p - Q, n)] * v + [(m * m) * dot(p - Q) * dot(v, n)] * v
+    ///            == H(p) - [m * dot(p - Q, n)] * v
+    ///            == p + [m * dot(p - Q, n)] * v - [m * dot(p - Q, n)] * v
+    ///            == p
+    /// ```
+    /// and we see that `Hinv` is indeed the inverse of `H`. The sixth equality follows 
+    /// from the fact that the set {`v`, `n`, and `v x n`} together with `Q` define an 
+    /// affine coordinate frame, so that `dot(v, n) == 0`.
     /// 
     /// # Example (Two Dimensions)
     ///
@@ -653,6 +684,9 @@ where
     }
 
     /// Apply the inverse of the shear transformation to a vector.
+    /// 
+    /// For further discussion on the geometric character of the inverse of the 
+    /// shearing transformation, see [`Shear::inverse`].
     ///
     /// # Example (Two Dimensions)
     ///
@@ -751,6 +785,9 @@ where
     }
 
     /// Apply the inverse of the shear transformation to a point.
+    /// 
+    /// For further discussion on the geometric character of the inverse of the 
+    /// shearing transformation, see [`Shear::inverse`].
     ///
     /// # Example (Two Dimensions)
     ///
