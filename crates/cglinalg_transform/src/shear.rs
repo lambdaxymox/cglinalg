@@ -240,10 +240,12 @@ where
         point + self.direction * factor
     }
 
-    /// Construct the identity shear transformation.
+    /// Construct an identity shear transformation.
     ///
     /// The identity shear is a shear transformation that does not shear
-    /// any coordinates of a vector or a point.
+    /// any coordinates of a vector or a point. The identity shear returned
+    /// by this function is not unique. With a shearing factor of zero, any
+    /// combination of direction and normal can act as an identity.
     ///
     /// # Example (Two Dimensions)
     ///
@@ -481,11 +483,9 @@ impl<S> Shear2<S>
 where 
     S: SimdScalarSigned 
 {
-    /// Construct a shearing transformation along the **x-axis**, holding the 
-    /// **y-axis** constant.
-    ///
-    /// The parameter `shear_x_with_y` denotes the factor scaling the
-    /// contribution of the **y-axis** to shearing along the **x-axis**.
+    /// Construct a shearing transformation in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **x-axis**
+    /// as the shearing direction, and the **y-axis** as the normal vector.
     ///
     /// # Example
     /// 
@@ -535,11 +535,9 @@ where
         }
     }
 
-    /// Construct a shearing transformation along the **y-axis**, holding the 
-    /// **x-axis** constant.
-    ///
-    /// The parameter `shear_y_with_x` denotes the factor scaling the
-    /// contribution of the **x-axis** to shearing along the **y-axis**.
+    /// Construct a shearing transformation in two dimensions with respect to 
+    /// a line passing through the origin `[0, 0]`, using the **y-axis**
+    /// as the shearing direction, and the **x-axis** as the normal vector.
     ///
     /// # Example
     /// 
@@ -594,12 +592,8 @@ impl<S> Shear2<S>
 where 
     S: SimdScalarFloat
 {
-    /// Construct a general shearing matrix in two dimensions with respect to 
+    /// Construct a general shearing transformation in two dimensions with respect to 
     /// a line passing through the origin `[0, 0]`.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
-    /// is `[0, 0]` so there is no translation term to account for.
     /// 
     /// # Parameters
     /// 
@@ -691,7 +685,7 @@ where
         }
     }
 
-    /// Construct a general affine shearing matrix in two dimensions with respect to 
+    /// Construct a general shearing transformation in two dimensions with respect to 
     /// a line passing through the origin `origin`, not necessarily `[0, 0]`.
     /// 
     /// # Parameters
@@ -852,7 +846,14 @@ where
 {
     /// Compute an inverse of the shear transformation.
     ///
-    /// The shearing transformation does not have a unique inverse.
+    /// The shearing transformation does not have a unique inverse. In particular, the
+    /// matrix for the shearing transformation represents more than one possible
+    /// inverse for a shearing transformation. Negating the shear factor,
+    /// negate the normal vector, negate the direction, or negating all three of them 
+    /// all yield the same underlying matrix representing the shearing transformation.
+    /// As a consequence, this function returns the simplest inverse: negating the shear
+    /// factor. The shearing transformation returns by this function uses the same direction
+    /// and normal vectors as the original shearing transformation.
     /// 
     /// # Example
     ///
@@ -864,6 +865,9 @@ where
     /// #     Point2,
     /// #     Vector2,
     /// #     Unit,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -881,19 +885,24 @@ where
     /// let shear_inv = shear.inverse();
     /// let point = Point2::new(1_f64, 2_f64);
     /// 
-    /// assert_eq!((shear * shear_inv) * point, point);
-    /// assert_eq!((shear_inv * shear) * point, point);
+    /// assert_relative_eq!((shear * shear_inv) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear_inv * shear) * point, point, epsilon = 1e-10);
     /// 
-    /// let other_shear_inv1 = Shear2::from_affine_shear(shear_factor, &(-origin), &direction, &normal);
-    /// let other_shear_inv2 = Shear2::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
-    /// let other_shear_inv3 = Shear2::from_affine_shear(shear_factor, &origin, &direction, &(-normal)); 
+    /// let other_shear_inv1 = Shear2::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
+    /// let other_shear_inv2 = Shear2::from_affine_shear(shear_factor, &origin, &direction, &(-normal)); 
+    /// let other_shear_inv3 = Shear2::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
     /// 
-    /// assert_eq!((shear * other_shear_inv1) * point, point);
-    /// assert_eq!((other_shear_inv1 * shear) * point, point);
-    /// assert_eq!((shear * other_shear_inv2) * point, point);
-    /// assert_eq!((other_shear_inv2 * shear) * point, point);
-    /// assert_eq!((shear * other_shear_inv3) * point, point);
-    /// assert_eq!((other_shear_inv3 * shear) * point, point);
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// 
+    /// // The inverse of the shearing transformation is not unique.
+    /// assert_ne!(other_shear_inv1, shear_inv);
+    /// assert_ne!(other_shear_inv2, shear_inv);
+    /// assert_ne!(other_shear_inv3, shear_inv);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {
@@ -1171,7 +1180,7 @@ impl<S> Shear3<S>
 where 
     S: SimdScalarSigned 
 {
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
     ///
@@ -1233,7 +1242,7 @@ where
         }
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
     /// 
@@ -1295,16 +1304,9 @@ where
         }
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
-    /// is `[0, 0, 0]` so there is no translation term.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the shearing
-    /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
     ///
@@ -1364,7 +1366,7 @@ where
         }
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **z-axis** as the normal vector.
     ///
@@ -1426,7 +1428,7 @@ where
         }
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
     ///
@@ -1488,7 +1490,7 @@ where
         }
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
     /// 
@@ -1555,12 +1557,12 @@ impl<S> Shear3<S>
 where 
     S: SimdScalarFloat
 {
-    /// Construct a general shearing matrix in three dimensions with respect to 
+    /// Construct a general shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`.
     /// 
     /// # Parameters
     /// 
-    /// The shearing matrix constructor has the following parameters
+    /// The shearing transformation constructor has the following parameters
     /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
     ///    plane gets sheared.
     /// * `direction`: The direction along which the shearing happens.
@@ -1630,17 +1632,17 @@ where
         }
     }
 
-    /// Construct a general affine shearing matrix in three dimensions with respect to 
+    /// Construct a general shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
     /// 
     /// # Parameters
     /// 
-    /// The affine shearing matrix constructor has four parameters
+    /// The shearing transformation constructor has four parameters
     /// * `origin`: The origin of the affine frame for the shearing transformation.
     /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
-    ///    line gets sheared.
-    /// * `direction`: The direction along which the shearing happens in the shearing line.
-    /// * `normal`: The normal vector to the shearing line.
+    ///    plane gets sheared.
+    /// * `direction`: The direction along which the shearing happens in the shearing plane.
+    /// * `normal`: The normal vector to the shearing plane.
     ///
     /// # Example
     ///
@@ -1737,7 +1739,14 @@ where
 {
     /// Calculate an inverse of a shear transformation.
     /// 
-    /// The shearing transformation does not have a unique inverse.
+    /// The shearing transformation does not have a unique inverse. In particular, the
+    /// matrix for the shearing transformation represents more than one possible
+    /// inverse for a shearing transformation. Negating the shear factor,
+    /// negate the normal vector, negate the direction, or negating all three of them 
+    /// all yield the same underlying matrix representing the shearing transformation.
+    /// As a consequence, this function returns the simplest inverse: negating the shear
+    /// factor. The shearing transformation returns by this function uses the same direction
+    /// and normal vectors as the original shearing transformation.
     ///
     /// # Example
     ///
@@ -1750,6 +1759,9 @@ where
     /// #     Vector3,
     /// #     Unit,
     /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq,
+    /// # };
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -1759,28 +1771,29 @@ where
     ///     f64::sqrt(1_f64 / 2_f64),
     ///     0_f64
     /// ));
-    /// let normal = Unit::from_value(Vector3::new(
-    ///      f64::sqrt(1_f64 / 38_f64),
-    ///      f64::sqrt(1_f64 / 38_f64),
-    ///     -f64::sqrt(36_f64 / 38_f64)
-    /// ));
+    /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
     /// let shear_inv = shear.inverse();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// 
-    /// assert_eq!((shear * shear_inv) * point, point);
-    /// assert_eq!((shear_inv * shear) * point, point);
+    /// assert_relative_eq!((shear * shear_inv) * point, point);
+    /// assert_relative_eq!((shear_inv * shear) * point, point);
     /// 
-    /// let other_shear_inv1 = Shear3::from_affine_shear(shear_factor, &(-origin), &direction, &normal);
-    /// let other_shear_inv2 = Shear3::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
-    /// let other_shear_inv3 = Shear3::from_affine_shear(shear_factor, &origin, &direction, &(-normal)); 
+    /// let other_shear_inv1 = Shear3::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
+    /// let other_shear_inv2 = Shear3::from_affine_shear(shear_factor, &origin, &direction, &(-normal));
+    /// let other_shear_inv3 = Shear3::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
     /// 
-    /// assert_eq!((shear * other_shear_inv1) * point, point);
-    /// assert_eq!((other_shear_inv1 * shear) * point, point);
-    /// assert_eq!((shear * other_shear_inv2) * point, point);
-    /// assert_eq!((other_shear_inv2 * shear) * point, point);
-    /// assert_eq!((shear * other_shear_inv3) * point, point);
-    /// assert_eq!((other_shear_inv3 * shear) * point, point);
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// 
+    /// // The inverse of the shearing transformation is not unique.
+    /// assert_ne!(other_shear_inv1, shear_inv);
+    /// assert_ne!(other_shear_inv2, shear_inv);
+    /// assert_ne!(other_shear_inv3, shear_inv);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Self {

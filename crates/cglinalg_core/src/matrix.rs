@@ -5909,16 +5909,16 @@ where
     S: SimdScalarFloat
 {
     /// Construct a general affine shearing matrix in three dimensions with respect to 
-    /// a plane passing through the origin `origin`, not necessarily `[0, 0]`.
+    /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
     /// 
     /// # Parameters
     /// 
     /// The affine shearing matrix constructor has four parameters
     /// * `origin`: The origin of the affine frame for the shearing transformation.
     /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
-    ///    line gets sheared.
-    /// * `direction`: The direction along which the shearing happens in the shearing line.
-    /// * `normal`: The normal vector to the shearing line.
+    ///    plane gets sheared.
+    /// * `direction`: The direction along which the shearing happens in the shearing plane.
+    /// * `normal`: The normal vector to the shearing plane.
     /// 
     /// # Discussion
     /// 
