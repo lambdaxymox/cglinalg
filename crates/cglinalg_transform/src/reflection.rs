@@ -579,7 +579,7 @@ where
 {
     /// Convert a reflection to an affine matrix.
     /// 
-    /// # Example (Two Dimensions)
+    /// # Example
     /// 
     /// A reflection about the plane `y == 2 * x`.
     /// ```
@@ -608,37 +608,6 @@ where
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
-    /// # Example (Three Dimensions)
-    /// 
-    /// A reflection about the plane `x + y == -z`.
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// #     Vector3,
-    /// #     Point3,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Point3::origin();
-    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
-    /// let expected = Matrix4x4::new(
-    ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
-    ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
-    ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
-    ///      0_f64,          0_f64,          0_f64,         1_f64
-    /// );
-    /// let result = reflection.to_affine_matrix();
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
-    /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
         let normal = Unit::from_value_unchecked(self.normal);
@@ -648,7 +617,7 @@ where
 
     /// Convert a reflection to a generic transformation.
     /// 
-    /// # Example (Two Dimensions)
+    /// # Example
     /// 
     /// A reflection about the plane `y == 2 * x`.
     /// ```
@@ -677,38 +646,6 @@ where
     /// let result = reflection.to_transform();
     /// 
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
-    /// ```
-    /// 
-    /// # Example (Three Dimensions)
-    /// 
-    /// A reflection about the plane `x + y == -z`.
-    /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// #     Transform3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// #     Vector3,
-    /// #     Point3,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
-    /// #
-    /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
-    /// let bias = Point3::origin();
-    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
-    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
-    ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
-    ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
-    ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
-    ///      0_f64,          0_f64,          0_f64,         1_f64
-    /// ));
-    /// let result = reflection.to_transform();
-    /// 
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform2<S> {
