@@ -226,6 +226,7 @@ where
         self.normal
     }
 
+    /*
     /// Return the underlying matrix of the reflection transformation.
     /// 
     /// # Example (Two Dimensions)
@@ -296,6 +297,7 @@ where
     pub const fn matrix(&self) -> &Matrix<S, NPLUS1, NPLUS1> {
         &self.matrix
     }
+    */
 }
 
 impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
@@ -434,56 +436,82 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
-    /// Compute the inversse of a reflection.
+    /// Compute the inverse of a reflection.
     /// 
     /// The inverse of a reflection transformation is the reflection transformation
     /// itself. That is, given a reflection `r`
     /// ```text
     /// inverse(r) == r
     /// ```
+    /// Every reflection transformation satisfies
+    /// ```text
+    /// r * r == id
+    /// ```
+    /// where `id` is the identity transformation. In other words, given a 
+    /// point `p`
+    /// ```text
+    /// r * (r * p) == (r * r) * p == p
+    /// ```
+    /// and given a vector `v`
+    /// ```text
+    /// r * (r * v) == (r * r) * v == v
+    /// ```
     /// 
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2, 
-    /// # };
     /// # use cglinalg_transform::{
     /// #     Reflection2,
     /// # };
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
     /// #
-    /// let reflection = Reflection2::identity();
-    /// let vector = Vector2::new(1_f64, 2_f64);
+    /// let bias = Point2::new(-2_f64, 3_f64);
+    /// let normal = Unit::from_value(Vector2::unit_x());
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let point = Point2::new(1_f64, 2_f64);
     /// let reflection_inv = reflection.inverse();
-    /// let expected = vector;
-    /// let result = reflection_inv * (reflection * vector);
+    /// let expected = point;
+    /// let result1 = reflection_inv * (reflection * point);
+    /// let result2 = reflection * (reflection * point);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_eq!(result1, expected);
+    /// assert_eq!(result2, expected);
     /// ```
     /// 
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3, 
-    /// # };
     /// # use cglinalg_transform::{
     /// #     Reflection3,
     /// # };
+    /// # use cglinalg_core::{
+    /// #     Point3,
+    /// #     Vector3, 
+    /// #     Unit,
+    /// # };
     /// #
-    /// let reflection = Reflection3::identity();
-    /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
+    /// let bias = Point3::new(-2_f64, 3_f64, -4_f64);
+    /// let normal = Unit::from_value(Vector3::unit_z());
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let reflection_inv = reflection.inverse();
-    /// let expected = vector;
-    /// let result = reflection_inv * (reflection * vector);
+    /// let expected = point;
+    /// let result1 = reflection_inv * (reflection * point);
+    /// let result2 = reflection * (reflection * point);
     ///
-    /// assert_eq!(result, expected);
+    /// assert_eq!(result1, expected);
+    /// assert_eq!(result2, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Self {
+    pub const fn inverse(&self) -> Self {
         *self
     }
 
+    /*
     /// Compute the identity reflection. 
     ///
     /// The identity reflection is a reflection that does not move a point 
@@ -526,12 +554,16 @@ where
     /// ```
     #[inline]
     pub fn identity() -> Self {
+        let mut normal = Vector::zero();
+        normal[N - 1] = S::one();
+
         Self { 
             bias: Point::origin(),
-            normal: Vector::zero(),
+            normal,
             matrix: Matrix::identity(),
         }
     }
+    */
 
     /// Convert a reflection to an affine matrix.
     /// 
