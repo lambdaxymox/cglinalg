@@ -3109,9 +3109,15 @@ where
         let one = S::one();
         let two = one + one;
 
+        let c0r0 = one - two * normal[0] * normal[0];
+        let c0r1 = -two * normal[1] * normal[0];
+        let c1r0 = -two * normal[0] * normal[1];
+        let c1r1 = one - two * normal[1] * normal[1];
+
+
         Self::new(
-             one - two * normal.x * normal.x, -two * normal.x * normal.y,
-            -two * normal.x * normal.y,        one - two * normal.y * normal.y,
+            c0r0, c0r1, 
+            c1r0, c1r1
         )
     }
 
