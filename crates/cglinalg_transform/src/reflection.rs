@@ -2,10 +2,6 @@ use cglinalg_numeric::{
     SimdScalarFloat,
 };
 use cglinalg_core::{
-    Const,
-    ShapeConstraint,
-    DimAdd,
-    DimSub,
     Matrix3x3,
     Matrix4x4,
     Vector,
@@ -23,29 +19,23 @@ use core::ops;
 
 
 /// A reflection matrix in two dimensions.
-pub type Reflection2<S> = Reflection<S, 2, 3>;
+pub type Reflection2<S> = Reflection<S, 2>;
 
 /// A reflection matrix in three dimensions.
-pub type Reflection3<S> = Reflection<S, 3, 4>;
+pub type Reflection3<S> = Reflection<S, 3>;
 
 
 /// A reflection transformation about a mirror plane.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub struct Reflection<S, const N: usize, const NPLUS1: usize> 
-where
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
-{
+pub struct Reflection<S, const N: usize> {
     normal: Vector<S, N>,
     bias: Point<S, N>,
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> Reflection<S, N> 
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: SimdScalarFloat
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
@@ -220,12 +210,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> Reflection<S, N> 
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     /// Reflect a vector across the plane described by the reflection 
     /// transformation.
@@ -350,11 +337,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> Reflection<S, N> 
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: SimdScalarFloat
 {
     /// Compute the inverse of a reflection.
     /// 
@@ -432,22 +417,18 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> fmt::Display for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> fmt::Display for Reflection<S, N>
 where
-    S: fmt::Display,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: fmt::Display
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Reflection{} [normal = {}, bias = {}]", N, self.normal, self.bias)
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> approx::AbsDiffEq for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> approx::AbsDiffEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: SimdScalarFloat
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -463,11 +444,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> approx::RelativeEq for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> approx::RelativeEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -481,11 +460,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> approx::UlpsEq for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> approx::UlpsEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    S: SimdScalarFloat
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -499,12 +476,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Point<S, N>> for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Point<S, N>;
 
@@ -514,12 +488,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<&Point<S, N>> for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Point<S, N>;
 
@@ -529,12 +500,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Point<S, N>> for &Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Point<S, N>;
 
@@ -544,12 +512,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NPLUS1: usize> ops::Mul<&'a Point<S, N>> for &'b Reflection<S, N, NPLUS1> 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Point<S, N>;
 
@@ -559,12 +524,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Vector<S, N>;
 
@@ -574,12 +536,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<&Vector<S, N>> for Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Vector<S, N>;
 
@@ -589,12 +548,9 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N, NPLUS1> 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N> 
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Vector<S, N>;
 
@@ -604,12 +560,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NPLUS1: usize> ops::Mul<&'a Vector<S, N>> for &'b Reflection<S, N, NPLUS1> 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Reflection<S, N>
 where 
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     type Output = Vector<S, N>;
 

@@ -9,10 +9,6 @@ use cglinalg_numeric::{
     SimdScalarFloat,
 };
 use cglinalg_core::{
-    ShapeConstraint,
-    Const,
-    DimAdd,
-    DimSub,
     Point,
     Point2,
     Point3,
@@ -234,16 +230,13 @@ where
 /// ```text
 /// norm(r * v) == norm(v)
 /// ```
-fn prop_approx_reflection_preserves_norm<S, const N: usize, const NPLUS1: usize>(
-    r: Reflection<S, N, NPLUS1>,
+fn prop_approx_reflection_preserves_norm<S, const N: usize>(
+    r: Reflection<S, N>,
     v: Vector<S, N>,
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     let lhs = (r * v).norm();
     let rhs = v.norm();
@@ -260,16 +253,13 @@ where
 /// ```text
 /// R * (R * p) == p
 /// ```
-fn prop_approx_reflection_times_reflection_identity_pointwise_point<S, const N: usize, const NPLUS1: usize>(
-    r: Reflection<S, N, NPLUS1>,
+fn prop_approx_reflection_times_reflection_identity_pointwise_point<S, const N: usize>(
+    r: Reflection<S, N>,
     p: Point<S, N>,
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     let lhs = r * (r * p);
     let rhs = p;
@@ -286,16 +276,13 @@ where
 /// ```text
 /// R * (R * v) == v
 /// ```
-fn prop_approx_reflection_times_reflection_identity_pointwise_vector<S, const N: usize, const NPLUS1: usize>(
-    r: Reflection<S, N, NPLUS1>,
+fn prop_approx_reflection_times_reflection_identity_pointwise_vector<S, const N: usize>(
+    r: Reflection<S, N>,
     v: Vector<S, N>,
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    S: SimdScalarFloat
 {
     let lhs = r * (r * v);
     let rhs = v;
