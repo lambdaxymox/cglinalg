@@ -25,14 +25,14 @@ use core::fmt;
 use core::ops;
 
 
-/// A reflection matrix in two dimensions in homogeneous coordinates.
+/// A reflection matrix in two dimensions.
 pub type Reflection2<S> = Reflection<S, 2, 3>;
 
-/// A reflection matrix in three dimensions in homogeneous coordinates.
+/// A reflection matrix in three dimensions.
 pub type Reflection3<S> = Reflection<S, 3, 4>;
 
 
-/// A reflection transformation about a plane in three dimensions.
+/// A reflection transformation about a plane.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Reflection<S, const N: usize, const NPLUS1: usize> 
@@ -40,11 +40,8 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
 {
-    /// a known point on the plane of reflection.
     bias: Point<S, N>,
-    /// The normal vector to the plane.
     normal: Vector<S, N>,
-    /// The matrix representing the affine transformation.
     matrix: Matrix<S, NPLUS1, NPLUS1>,
 }
 
@@ -362,8 +359,18 @@ where
     /// ```
     #[inline]
     pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        let one = S::one();
+        let two = one + one;
+        let factor = vector.dot(&self.normal) * two;
+
+        vector - self.normal * factor
+    }
+    /*
+    #[inline]
+    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         (self.matrix * vector.extend(S::zero())).contract()
     }
+    */
 
     /// Reflect a point across the plane described by the reflection 
     /// transformation.
@@ -419,8 +426,19 @@ where
     /// ```
     #[inline]
     pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        let one = S::one();
+        let two = one + one;
+        let factor = (point - self.bias).dot(&self.normal) * two;
+
+        point - self.normal * factor
+    }
+
+    /*
+    #[inline]
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         Point::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
     }
+    */
 }
 
 impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
@@ -523,12 +541,10 @@ where
     pub fn identity() -> Self {
         Self { 
             bias: Point::origin(),
-            normal: Vector::zero(), 
+            normal: Vector::zero(),
             matrix: Matrix::identity(),
         }
     }
-
-
 
     /// Convert a reflection to an affine matrix.
     /// 

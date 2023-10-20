@@ -9,6 +9,7 @@ use crate::constraints::{
     Const,
     DimAdd,
     DimSub,
+    DimLt,
     CanExtend,
     CanContract,
     ShapeConstraint,
