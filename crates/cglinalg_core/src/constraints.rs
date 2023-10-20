@@ -159,6 +159,10 @@ macro_rules! impl_dim_lt {
     }
 }
 
+impl_dim_lt!(0, 1);
+impl_dim_lt!(0, 2);
+impl_dim_lt!(0, 3);
+impl_dim_lt!(0, 4);
 // impl_dim_lt!(1, 1);
 impl_dim_lt!(1, 2);
 impl_dim_lt!(1, 3);

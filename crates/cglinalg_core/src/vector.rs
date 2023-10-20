@@ -9,7 +9,6 @@ use crate::constraints::{
     Const,
     DimAdd,
     DimSub,
-    DimLt,
     CanExtend,
     CanContract,
     ShapeConstraint,
@@ -1874,7 +1873,7 @@ where
     /// ```
     #[inline]
     pub fn unit_x() -> Self {
-        Vector1::new(S::one())
+        Self::new(S::one())
     }
 }
 
