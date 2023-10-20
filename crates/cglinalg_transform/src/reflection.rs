@@ -335,12 +335,121 @@ where
 
         point - self.normal * factor
     }
-}
 
-impl<S, const N: usize> Reflection<S, N> 
-where 
-    S: SimdScalarFloat
-{
+    /// Reflect a vector across the plane described by the reflection 
+    /// transformation.
+    /// 
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector2,
+    /// #     Point2,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+    ///     -1_f64 / 2_f64, 
+    ///      1_f64
+    /// ));
+    /// let bias = Point2::new(0_f64, 1_f64);
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let vector = Vector2::new(1_f64, 1_f64);
+    /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
+    /// let result = reflection.inverse_apply_vector(&vector);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// #
+    /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let bias = Point3::origin();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Vector3::new(1_f64, 1_f64, -1_f64);
+    /// let result = reflection.inverse_apply_vector(&vector);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
+        self.apply_vector(vector)
+    }
+
+    /// Reflect a point across the plane described by the reflection 
+    /// transformation.
+    ///
+    /// # Example (Two Dimensions)
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Point2,
+    /// #     Vector2,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection2,
+    /// # };
+    /// # use approx::{
+    /// #     assert_relative_eq, 
+    /// # };
+    /// #
+    /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
+    ///     -1_f64 / 2_f64, 
+    ///      1_f64
+    /// ));
+    /// let bias = Point2::new(0_f64, 1_f64);
+    /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
+    /// let point = Point2::new(1_f64, 1_f64);
+    /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
+    /// let result = reflection.inverse_apply_point(&point);
+    ///
+    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// ```
+    /// 
+    /// # Example (Three Dimensions)
+    /// 
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Vector3,
+    /// #     Point3,
+    /// #     Unit,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Reflection3,
+    /// # };
+    /// #
+    /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
+    /// let bias = Point3::origin();
+    /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
+    /// let point = Point3::new(1_f64, 1_f64, 1_f64);
+    /// let expected = Point3::new(1_f64, 1_f64, -1_f64);
+    /// let result = reflection.inverse_apply_point(&point);
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
+        self.apply_point(point)
+    }
+
     /// Compute the inverse of a reflection.
     /// 
     /// The inverse of a reflection transformation is the reflection transformation
