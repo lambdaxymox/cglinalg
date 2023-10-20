@@ -365,12 +365,6 @@ where
 
         vector - self.normal * factor
     }
-    /*
-    #[inline]
-    pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
-        (self.matrix * vector.extend(S::zero())).contract()
-    }
-    */
 
     /// Reflect a point across the plane described by the reflection 
     /// transformation.
@@ -432,13 +426,6 @@ where
 
         point - self.normal * factor
     }
-
-    /*
-    #[inline]
-    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
-        Point::from_homogeneous(&(self.matrix * point.to_homogeneous())).unwrap()
-    }
-    */
 }
 
 impl<S, const N: usize, const NPLUS1: usize> Reflection<S, N, NPLUS1> 
