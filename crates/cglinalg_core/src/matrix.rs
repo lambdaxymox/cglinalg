@@ -4521,16 +4521,16 @@ where
         let one = S::one();
         let two = one + one;
 
-        let c0r0 = one - two * normal.x * normal.x;
-        let c0r1 = -two * normal.x * normal.y;
+        let c0r0 = one - two * normal[0] * normal[0];
+        let c0r1 = -two * normal[1] * normal[0];
         let c0r2 = zero;
 
-        let c1r0 = -two * normal.x * normal.y;
-        let c1r1 = one - two * normal.y * normal.y;
+        let c1r0 = -two * normal[0] * normal[1];
+        let c1r1 = one - two * normal[1] * normal[1];
         let c1r2 = zero;
 
-        let c2r0 = two * normal.x * (normal.x * bias.x + normal.y * bias.y);
-        let c2r1 = two * normal.y * (normal.x * bias.x + normal.y * bias.y);
+        let c2r0 = two * normal[0] * (normal[0] * bias[0] + normal[1] * bias[1]);
+        let c2r1 = two * normal[1] * (normal[0] * bias[0] + normal[1] * bias[1]);
         let c2r2 = one;
 
         Self::new(
@@ -4568,17 +4568,17 @@ where
         let one = S::one();
         let two = one + one;
 
-        let c0r0 =  one - two * normal.x * normal.x;
-        let c0r1 = -two * normal.x * normal.y;
-        let c0r2 = -two * normal.x * normal.z;
+        let c0r0 =  one - two * normal[0] * normal[0];
+        let c0r1 = -two * normal[1] * normal[0];
+        let c0r2 = -two * normal[2] * normal[0];
 
-        let c1r0 = -two * normal.x * normal.y;
-        let c1r1 =  one - two * normal.y * normal.y;
-        let c1r2 = -two * normal.y * normal.z;
+        let c1r0 = -two * normal[0] * normal[1];
+        let c1r1 =  one - two * normal[1] * normal[1];
+        let c1r2 = -two * normal[2] * normal[1];
 
-        let c2r0 = -two * normal.x * normal.z;
-        let c2r1 = -two * normal.y * normal.z;
-        let c2r2 =  one - two * normal.z * normal.z;
+        let c2r0 = -two * normal[0] * normal[2];
+        let c2r1 = -two * normal[1] * normal[2];
+        let c2r2 =  one - two * normal[2] * normal[2];
     
         Self::new(
             c0r0, c0r1, c0r2,
@@ -6212,24 +6212,24 @@ where
         let one = S::one();
         let two = one + one;
 
-        let c0r0 =  one - two * normal.x * normal.x;
-        let c0r1 = -two * normal.x * normal.y;
-        let c0r2 = -two * normal.x * normal.z;
+        let c0r0 =  one - two * normal[0] * normal[0];
+        let c0r1 = -two * normal[1] * normal[0];
+        let c0r2 = -two * normal[2] * normal[0];
         let c0r3 = zero;
 
-        let c1r0 = -two * normal.x * normal.y;
-        let c1r1 =  one - two * normal.y * normal.y;
-        let c1r2 = -two * normal.y * normal.z;
+        let c1r0 = -two * normal[0] * normal[1];
+        let c1r1 =  one - two * normal[1] * normal[1];
+        let c1r2 = -two * normal[2] * normal[1];
         let c1r3 =  zero;
 
-        let c2r0 = -two * normal.x * normal.z;
-        let c2r1 = -two * normal.y * normal.z;
-        let c2r2 =  one - two * normal.z * normal.z;
+        let c2r0 = -two * normal[0] * normal[2];
+        let c2r1 = -two * normal[1] * normal[2];
+        let c2r2 =  one - two * normal[2] * normal[2];
         let c2r3 =  zero;
 
-        let c3r0 = two * normal.x * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
-        let c3r1 = two * normal.y * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
-        let c3r2 = two * normal.z * (normal.x * bias.x + normal.y * bias.y + normal.z * bias.z);
+        let c3r0 = two * normal[0] * (normal[0] * bias[0] + normal[1] * bias[1] + normal[2] * bias[2]);
+        let c3r1 = two * normal[1] * (normal[0] * bias[0] + normal[1] * bias[1] + normal[2] * bias[2]);
+        let c3r2 = two * normal[2] * (normal[0] * bias[0] + normal[1] * bias[1] + normal[2] * bias[2]);
         let c3r3 = one;
 
         Self::new(
