@@ -252,7 +252,7 @@ where
     ///        == v - 2 * v_par
     ///        == v - (2 * dot(v, n)) * n
     /// ```
-    /// And reflection on points is defined by
+    /// and reflection on points is defined by
     /// ```text
     /// Ref(P) := Ref(Q + (P - Q))
     ///        := Q + Ref(P - Q)
@@ -371,7 +371,7 @@ where
     ///        == v - 2 * v_par
     ///        == v - (2 * dot(v, n)) * n
     /// ```
-    /// And reflection on points is defined by
+    /// and reflection on points is defined by
     /// ```text
     /// Ref(P) := Ref(Q + (P - Q))
     ///        := Q + Ref(P - Q)
