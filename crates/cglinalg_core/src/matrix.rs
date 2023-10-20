@@ -4862,17 +4862,17 @@ where
         let _axis = axis.as_ref();
 
         Self::new(
-            one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
-            one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
-            one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
+            one_minus_cos_angle * _axis[0] * _axis[0] + cos_angle,
+            one_minus_cos_angle * _axis[0] * _axis[1] + sin_angle * _axis[2],
+            one_minus_cos_angle * _axis[0] * _axis[2] - sin_angle * _axis[1],
 
-            one_minus_cos_angle * _axis.x * _axis.y - sin_angle * _axis.z,
-            one_minus_cos_angle * _axis.y * _axis.y + cos_angle,
-            one_minus_cos_angle * _axis.y * _axis.z + sin_angle * _axis.x,
+            one_minus_cos_angle * _axis[0] * _axis[1] - sin_angle * _axis[2],
+            one_minus_cos_angle * _axis[1] * _axis[1] + cos_angle,
+            one_minus_cos_angle * _axis[1] * _axis[2] + sin_angle * _axis[0],
 
-            one_minus_cos_angle * _axis.x * _axis.z + sin_angle * _axis.y,
-            one_minus_cos_angle * _axis.y * _axis.z - sin_angle * _axis.x,
-            one_minus_cos_angle * _axis.z * _axis.z + cos_angle,
+            one_minus_cos_angle * _axis[0] * _axis[2] + sin_angle * _axis[1],
+            one_minus_cos_angle * _axis[1] * _axis[2] - sin_angle * _axis[0],
+            one_minus_cos_angle * _axis[2] * _axis[2] + cos_angle,
         )
     }
 
@@ -4919,9 +4919,9 @@ where
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         Self::new(
-            x_axis.x, y_axis.x, z_axis.x,
-            x_axis.y, y_axis.y, z_axis.y,
-            x_axis.z, y_axis.z, z_axis.z,
+            x_axis[0], y_axis[0], z_axis[0],
+            x_axis[1], y_axis[1], z_axis[1],
+            x_axis[2], y_axis[2], z_axis[2],
         )
     }
 
@@ -4967,9 +4967,9 @@ where
         let y_axis = z_axis.cross(&x_axis).normalize();
 
         Self::new(
-            x_axis.x, y_axis.x, z_axis.x,
-            x_axis.y, y_axis.y, z_axis.y,
-            x_axis.z, y_axis.z, z_axis.z,
+            x_axis[0], y_axis[0], z_axis[0],
+            x_axis[1], y_axis[1], z_axis[1],
+            x_axis[2], y_axis[2], z_axis[2],
         )
     }
 
@@ -6463,19 +6463,19 @@ where
         let _axis = axis.as_ref();
 
         Self::new(
-            one_minus_cos_angle * _axis.x * _axis.x + cos_angle,
-            one_minus_cos_angle * _axis.x * _axis.y + sin_angle * _axis.z,
-            one_minus_cos_angle * _axis.x * _axis.z - sin_angle * _axis.y,
+            one_minus_cos_angle * _axis[0] * _axis[0] + cos_angle,
+            one_minus_cos_angle * _axis[0] * _axis[1] + sin_angle * _axis[2],
+            one_minus_cos_angle * _axis[0] * _axis[2] - sin_angle * _axis[1],
             S::zero(),
 
-            one_minus_cos_angle * _axis.x * _axis.y - sin_angle * _axis.z,
-            one_minus_cos_angle * _axis.y * _axis.y + cos_angle,
-            one_minus_cos_angle * _axis.y * _axis.z + sin_angle * _axis.x,
+            one_minus_cos_angle * _axis[0] * _axis[1] - sin_angle * _axis[2],
+            one_minus_cos_angle * _axis[1] * _axis[1] + cos_angle,
+            one_minus_cos_angle * _axis[1] * _axis[2] + sin_angle * _axis[0],
             S::zero(),
 
-            one_minus_cos_angle * _axis.x * _axis.z + sin_angle * _axis.y,
-            one_minus_cos_angle * _axis.y * _axis.z - sin_angle * _axis.x,
-            one_minus_cos_angle * _axis.z * _axis.z + cos_angle,
+            one_minus_cos_angle * _axis[0] * _axis[2] + sin_angle * _axis[1],
+            one_minus_cos_angle * _axis[1] * _axis[2] - sin_angle * _axis[0],
+            one_minus_cos_angle * _axis[2] * _axis[2] + cos_angle,
             S::zero(),
 
             S::zero(), 
@@ -6829,9 +6829,9 @@ where
         let neg_eye_z = -eye_vec.dot(&z_axis);
         
         Self::new(
-            x_axis.x,  y_axis.x,  z_axis.x,  zero,
-            x_axis.y,  y_axis.y,  z_axis.y,  zero,
-            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            x_axis[0], y_axis[0], z_axis[0], zero,
+            x_axis[1], y_axis[1], z_axis[1], zero,
+            x_axis[2], y_axis[2], z_axis[2], zero,
             neg_eye_x, neg_eye_y, neg_eye_z, one
         )
     }
@@ -6896,9 +6896,9 @@ where
         let neg_eye_z = -eye_vec.dot(&z_axis);
         
         Self::new(
-            x_axis.x,  y_axis.x,  z_axis.x,  zero,
-            x_axis.y,  y_axis.y,  z_axis.y,  zero,
-            x_axis.z,  y_axis.z,  z_axis.z,  zero,
+            x_axis[0], y_axis[0], z_axis[0], zero,
+            x_axis[1], y_axis[1], z_axis[1], zero,
+            x_axis[2], y_axis[2], z_axis[2], zero,
             neg_eye_x, neg_eye_y, neg_eye_z, one
         )
     }
@@ -7052,10 +7052,10 @@ where
         let eye_z = eye_vec.dot(&z_axis);
         
         Self::new(
-            x_axis.x,  x_axis.y,  x_axis.z, zero,
-            y_axis.x,  y_axis.y,  y_axis.z, zero,
-            z_axis.x,  z_axis.y,  z_axis.z, zero,
-            eye_x,     eye_y,     eye_z,    one
+            x_axis[0], x_axis[1], x_axis[2], zero,
+            y_axis[0], y_axis[1], y_axis[2], zero,
+            z_axis[0], z_axis[1], z_axis[2], zero,
+            eye_x,     eye_y,     eye_z,     one
         )
     }
 
@@ -7117,10 +7117,10 @@ where
         let eye_z = eye_vec.dot(&z_axis);
         
         Self::new(
-            x_axis.x,  x_axis.y,  x_axis.z, zero,
-            y_axis.x,  y_axis.y,  y_axis.z, zero,
-            z_axis.x,  z_axis.y,  z_axis.z, zero,
-            eye_x,     eye_y,     eye_z,    one,
+            x_axis[0], x_axis[1], x_axis[2], zero,
+            y_axis[0], y_axis[1], y_axis[2], zero,
+            z_axis[0], z_axis[1], z_axis[2], zero,
+            eye_x,     eye_y,     eye_z,     one,
         )
     }
 
