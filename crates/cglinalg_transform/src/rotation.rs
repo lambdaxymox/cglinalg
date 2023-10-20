@@ -1108,7 +1108,7 @@ where
         let unit_a = a.as_ref();
         let unit_b = b.as_ref();
         let cos_angle = unit_a.dot(unit_b);
-        let sin_angle = unit_a.x * unit_b.y - unit_a.y * unit_b.x;
+        let sin_angle = unit_a[0] * unit_b[1] - unit_a[1] * unit_b[0];
 
         Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
