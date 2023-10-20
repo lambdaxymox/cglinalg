@@ -4405,50 +4405,63 @@ where
     /// constructing a general two-dimensional reflection requires an affine 
     /// transformation instead of a linear one.
     ///
-    /// In particular, consider a line of the form
+    /// # Discussion
+    /// 
+    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
+    /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
+    /// of reflection. 
+    /// 
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    /// on `v_per` and `v_par` as follows
     /// ```text
-    /// L := { (x, y) | a * (x - x0) + b * (y - y0) == 0 } 
-    /// where (x0, x0) is a known point in L.
+    /// Ref(v_per) :=  v_per
+    /// Ref(v_par) := -v_par
     /// ```
-    /// A bare reflection matrix assumes that we can use the origin 
-    /// (x0 = 0, y0 = 0) as a known point, which makes the translation terms 
-    /// zero. This yields the matrix formula
+    /// by definition. This means that the reflection on vectors is defined by
     /// ```text
-    /// |  1 - 2 * nx * nx  -2 * nx * ny       0 |
-    /// | -2 * nx * ny       1 - 2 * ny * ny   0 |
-    /// |  0                 0                 1 |
+    /// Ref(v) := Ref(v_per + v_par)
+    ///        := Ref(v_per) + Ref(v_par)
+    ///        := Ref(v_per) - v_par
+    ///        == v_per - v_par
+    ///        == v - v_par - v_par
+    ///        == v - 2 * v_par
+    ///        == v - (2 * dot(v, n)) * n
     /// ```
-    /// In the case where the the line `L` does not cross the origin, we must 
-    /// first do a coordinate transformation to coordinates where the line passes 
-    /// through the origin: this is just a shift by the bias `(x0, y0)` from 
-    /// `(x, y)` to `(x - x0, y - y0)`. We achieve this transformation in 
-    /// homogeneous coordinates by the matrix
+    /// And reflection on points is defined by
     /// ```text
-    /// | 1  0  -x0 |
-    /// | 0  1  -y0 |
-    /// | 0  0   1  |
+    /// Ref(P) := Ref(Q + (P - Q))
+    ///        := Q + Ref(P - Q)
+    ///        == Q + [(P - Q) - 2 * dot(P - Q, n) * n]
+    ///        == P - 2 * dot(P - Q, n) * n
+    ///        == I * P - (2 * dot(P, n)) * n + (2 * dot(Q, n)) * n
+    ///        == [I - 2 * outer(n, n)] * P + (2 * dot(Q, n)) * n
     /// ```
-    /// This puts us in the shifted coordinate system where the line now passes 
-    /// through the origin. In this coordinate system, we can now apply the 
-    /// reflection matrix, which gives a homogeneous matrix equation 
+    /// and the corresponding affine matrix has the form
     /// ```text
-    /// | 1 0  -x0 |   |xr|    |  1 - 2 * nx * nx   -2 * nx * ny      0 |   | 1 0  -x0 |   |x|
-    /// | 0 1  -y0 | * |yr| == | -2 * nx * ny        1 - 2 * ny * ny  0 | * | 0 1  -y0 | * |y|
-    /// | 0 0   1  |   |1 |    |  0                  0                1 |   | 0 0   1  |   |1|
+    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
+    ///      | 0^T                   1                 |
     /// ```
-    /// Then to solve for the reflection components, we invert the translation 
-    /// matrix on the left hand side to get an equation of the form
+    /// geometrically. In the standard basis in two-dimensional Euclidean space, we
+    /// have
     /// ```text
-    /// |xr|    | 1 0  x0 |   |  1 - 2 * nx * nx   -2 * nx * ny      0 |   | 1 0  -x0 |   |x|
-    /// |yr| == | 0 1  y0 | * | -2 * nx * ny        1 - 2 * ny * ny  0 | * | 0 1  -y0 | * |y|
-    /// |1 |    | 0 0  1  |   |  0              0                    1 |   | 0 0   1  |   |1|
-    ///
-    ///         |  1 - 2 * nx * nx   -2 * nx * ny       2 * nx * (nx * n0 + ny * y0) |   |x|
-    ///      == | -2 * nx * ny        1 - 2 * ny * ny   2 * ny * (nx * x0 + ny * y0) | * |y|
-    ///         |  0                  0                 1                            |   |1|
+    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
+    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
+    ///      |  0                    0                   1                   |
     /// ```
-    /// Here the terms `xr` and `yr` are the coordinates of the reflected point 
-    /// across the line `L`.
+    /// and in three-dimensional Euclidean space we have
+    /// ```text
+    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
+    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
+    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
+    ///      |  0                    0                    0                    1                   |
+    /// ```
+    /// which correspond exactly the how the respective matrices are implemented.
     ///
     /// # Example (Line Through The Origin)
     ///
@@ -6138,55 +6151,63 @@ where
     /// general three-dimensional reflection transformation requires an affine 
     /// transformation instead of a linear one.
     ///
-    /// In particular, consider a plane of the form
+    /// # Discussion
+    /// 
+    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
+    /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
+    /// of reflection.
+    /// 
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    /// on `v_per` and `v_par` as follows
     /// ```text
-    /// P := { (x, y, z) | a * (x - x0) + b * (y - y0) + c * (z - z0) == 0 }
-    /// where (x0, y0, z0) is a known point in P.
+    /// Ref(v_per) :=  v_per
+    /// Ref(v_par) := -v_par
     /// ```
-    /// A bare reflection matrix assumes that the the **x-axis** intercept `x0` 
-    /// and the **y-axis** intercept `y0` are both zero, in which case the 
-    /// translation terms are zero. This yields the matrix formula
+    /// by definition. This means that the reflection on vectors is defined by
     /// ```text
-    /// |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |
-    /// | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 |
-    /// | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |
-    /// |  0                  0                  0                 1 |
+    /// Ref(v) := Ref(v_per + v_par)
+    ///        := Ref(v_per) + Ref(v_par)
+    ///        := Ref(v_per) - v_par
+    ///        == v_per - v_par
+    ///        == v - v_par - v_par
+    ///        == v - 2 * v_par
+    ///        == v - (2 * dot(v, n)) * n
     /// ```
-    /// In the case where the the plane `P` does not cross the origin, we must 
-    /// first do a coordinate transformation to coordinates where the line 
-    /// passes through the origin; just shift by the bias `(x0, y0, z0)` from 
-    /// `(x, y, z)` to `(x - x0, y - y0, z - z0)`. We achieve this transformation in 
-    /// homogeneous coordinates by the matrix
+    /// And reflection on points is defined by
     /// ```text
-    /// | 1  0  0  -x0 |
-    /// | 0  1  0  -y0 |
-    /// | 0  0  1  -z0 |
-    /// | 0  0  0   1  |
+    /// Ref(P) := Ref(Q + (P - Q))
+    ///        := Q + Ref(P - Q)
+    ///        == Q + [(P - Q) - 2 * dot(P - Q, n) * n]
+    ///        == P - 2 * dot(P - Q, n) * n
+    ///        == I * P - (2 * dot(P, n)) * n + (2 * dot(Q, n)) * n
+    ///        == [I - 2 * outer(n, n)] * P + (2 * dot(Q, n)) * n
     /// ```
-    /// This puts us in the shifted coordinate system where the line now passes 
-    /// through the origin. In this coordinate system, we can now apply the 
-    /// reflection matrix, which gives a homogeneous matrix equation 
+    /// and the corresponding affine matrix has the form
     /// ```text
-    /// | 1  0  0  -x0 |   |xr|    |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |   | 1  0  0  -x0 |   |x|
-    /// | 0  1  0  -y0 | * |yr| == | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 | * | 0  1  0  -y0 | * |y|
-    /// | 0  0  1  -z0 |   |zr|    | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |   | 0  0  1  -z0 |   |z|
-    /// | 0  0  0   1  |   |1 |    |  0                  0                  0                 1 |   | 0  0  0   1  |   |1| 
+    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
+    ///      | 0^T                   1                 |
     /// ```
-    /// Then to solve for the reflection components, we invert the translation 
-    /// matrix on the left hand side to get an equation of the form
+    /// geometrically. In the standard basis in two-dimensional Euclidean space, we
+    /// have
     /// ```text
-    /// |xr|    | 1  0  0  x0 |   |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * nz       0 |   | 1  0  0  -x0 |   |x|
-    /// |yr| == | 0  1  0  y0 | * | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       0 | * | 0  1  0  -y0 | * |y|
-    /// |zr|    | 0  0  1  z0 |   | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   0 |   | 0  0  1  -z0 |   |z|
-    /// |1 |    | 0  0  0  1  |   |  0                  0                  0                 1 |   | 0  0  0   1  |   |1| 
-    ///
-    ///         |  1 - 2 * nx * nx   -2 * nx * ny       -2 * nx * xz       2 * nx * (nx * n0 + ny * y0 + nz * z0) |   |x|
-    ///      == | -2 * nx * ny        1 - 2 * ny * ny   -2 * ny * nz       2 * ny * (nx * x0 + ny * y0 + nz * z0) | * |y|
-    ///         | -2 * nx * nz       -2 * ny * nz        1 - 2 * nz * nz   2 * nz * (nx * x0 + ny * y0 + nz * z0) |   |z|
-    ///         |  0                  0                  0                 1                                      |   |1|
+    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
+    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
+    ///      |  0                    0                   1                   |
     /// ```
-    /// Here the terms `xr`, `yr`, and `zr` are the coordinates of the 
-    /// reflected point across the plane `P`.
+    /// and in three-dimensional Euclidean space we have
+    /// ```text
+    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
+    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
+    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
+    ///      |  0                    0                    0                    1                   |
+    /// ```
+    /// which correspond exactly the how the respective matrices are implemented.
     ///
     /// # Example
     ///

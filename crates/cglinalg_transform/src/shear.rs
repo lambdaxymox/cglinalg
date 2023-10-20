@@ -22,14 +22,17 @@ use core::fmt;
 use core::ops;
 
 
-/// A shearing matrix in two dimensions.
+/// A shearing transformation in two dimensions.
 pub type Shear2<S> = Shear<S, 2>;
 
-/// A shearing matrix in three dimensions.
+/// A shearing transformation in three dimensions.
 pub type Shear3<S> = Shear<S, 3>;
 
 
-/// A shearing matrix.
+/// A shearing transformation.
+/// 
+/// This is the most general reflection type. The vast majority of applications 
+/// should use [`Shear2`] or [`Shear3`] instead of this type directly.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Shear<S, const N: usize> {
