@@ -9,7 +9,7 @@ use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
-use crate::constraints::{
+use crate::constraint::{
     Const,
     DimAdd,
     DimSub,

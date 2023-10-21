@@ -180,3 +180,123 @@ impl_dim_lt!(3, 4);
 // impl_dim_lt!(4, 3);
 // impl_dim_lt!(4, 4);
 
+
+#[cfg(test)]
+mod constraint_tests {
+    use super::*;
+
+    
+    fn dim_lt<const M: usize, const N: usize>() -> bool
+    where
+        ShapeConstraint: DimLt<Const<M>, Const<N>>
+    {
+        M < N
+    }
+
+    fn dim_eq<const M: usize, const N: usize>() -> bool
+    where
+        ShapeConstraint: DimEq<Const<M>, Const<N>>
+    {
+        M == N
+    }
+
+    fn dim_add<const M: usize, const N: usize, const MPLUSN: usize>() -> bool
+    where
+        ShapeConstraint: DimAdd<Const<M>, Const<N>, Output = Const<MPLUSN>>
+    {
+        M + N == MPLUSN
+    }
+
+    fn dim_sub<const M: usize, const N: usize, const MMINUSN: usize>() -> bool
+    where
+        ShapeConstraint: DimSub<Const<M>, Const<N>, Output = Const<MMINUSN>>
+    {
+        M - N == MMINUSN
+    }
+
+    fn dim_mul<const M: usize, const N: usize, const MN: usize>() -> bool
+    where
+        ShapeConstraint: DimMul<Const<M>, Const<N>, Output = Const<MN>>
+    {
+        M * N == MN
+    }
+
+
+    #[test]
+    fn test_dim_lt() {
+        assert!(dim_lt::<0, 1>());
+        assert!(dim_lt::<0, 2>());
+        assert!(dim_lt::<0, 3>());
+        assert!(dim_lt::<0, 4>());
+        assert!(dim_lt::<1, 2>());
+        assert!(dim_lt::<1, 3>());
+        assert!(dim_lt::<1, 4>());
+        assert!(dim_lt::<2, 3>());
+        assert!(dim_lt::<2, 4>());
+        assert!(dim_lt::<3, 4>());
+    }
+
+    #[test]
+    fn test_dim_eq() {
+        assert!(dim_eq::<0, 0>());
+        assert!(dim_eq::<1, 1>());
+        assert!(dim_eq::<2, 2>());
+        assert!(dim_eq::<3, 3>());
+        assert!(dim_eq::<4, 4>());
+    }
+
+    #[test]
+    fn test_dim_add() {
+        assert!(dim_add::<1, 1, 2>());
+        assert!(dim_add::<1, 2, 3>());
+        assert!(dim_add::<1, 3, 4>());
+        assert!(dim_add::<1, 4, 5>());
+        assert!(dim_add::<2, 1, 3>());
+        assert!(dim_add::<2, 2, 4>());
+        assert!(dim_add::<2, 3, 5>());
+        assert!(dim_add::<2, 4, 6>());
+        assert!(dim_add::<3, 1, 4>());
+        assert!(dim_add::<3, 2, 5>());
+        assert!(dim_add::<3, 3, 6>());
+        assert!(dim_add::<3, 4, 7>());
+        assert!(dim_add::<4, 1, 5>());
+        assert!(dim_add::<4, 2, 6>());
+        assert!(dim_add::<4, 3, 7>());
+        assert!(dim_add::<4, 4, 8>());
+    }
+
+    #[test]
+    fn test_dim_sub() {
+        assert!(dim_sub::<1, 1, 0>());
+        assert!(dim_sub::<2, 1, 1>());
+        assert!(dim_sub::<2, 2, 0>());
+        assert!(dim_sub::<3, 1, 2>());
+        assert!(dim_sub::<3, 2, 1>());
+        assert!(dim_sub::<3, 3, 0>());
+        assert!(dim_sub::<4, 1, 3>());
+        assert!(dim_sub::<4, 2, 2>());
+        assert!(dim_sub::<4, 3, 1>());
+        assert!(dim_sub::<4, 4, 0>());
+    }
+
+    #[test]
+    fn test_dim_mul() {
+        assert!(dim_mul::<1, 1, 1>());
+        assert!(dim_mul::<1, 2, 2>());
+        assert!(dim_mul::<1, 3, 3>());
+        assert!(dim_mul::<1, 4, 4>());
+        assert!(dim_mul::<2, 1, 2>());
+        assert!(dim_mul::<2, 2, 4>());
+        assert!(dim_mul::<2, 3, 6>());
+        assert!(dim_mul::<2, 4, 8>());
+        assert!(dim_mul::<3, 1, 3>());
+        assert!(dim_mul::<3, 2, 6>());
+        assert!(dim_mul::<3, 3, 9>());
+        assert!(dim_mul::<3, 4, 12>());
+        assert!(dim_mul::<4, 1, 4>());
+        assert!(dim_mul::<4, 2, 8>());
+        assert!(dim_mul::<4, 3, 12>());
+        assert!(dim_mul::<4, 4, 16>());
+    }
+}
+

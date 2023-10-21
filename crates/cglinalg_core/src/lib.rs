@@ -9,10 +9,10 @@ mod unit;
 mod vector;
 
 mod coordinates;
-mod constraints;
+mod constraint;
 
 
-pub use constraints::*;
+pub use constraint::*;
 pub use complex_ops::*;
 pub use euler::*;
 pub use normed::*;

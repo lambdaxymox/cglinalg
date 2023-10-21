@@ -5,7 +5,7 @@ use cglinalg_numeric::{
     SimdScalarOrd,
     SimdScalarFloat,
 };
-use crate::constraints::{
+use crate::constraint::{
     Const,
     DimAdd,
     DimSub,
