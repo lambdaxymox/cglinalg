@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg_transform"
-version = "0.18.0"
+version = "0.19.0"
 edition = "2021"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -48,15 +48,15 @@ default-features = false
 
 [dependencies.cglinalg_numeric]
 path = "../cglinalg_numeric"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_trigonometry]
 path = "../cglinalg_trigonometry"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_core]
 path = "../cglinalg_core"
-version = "0.18.0"
+version = "0.19.0"
 
 [dev-dependencies]
 proptest = "1.3.1"

@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg"
-version = "0.18.0"
+version = "0.19.0"
 edition = "2021"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -48,23 +48,23 @@ std = []
 
 [dependencies.cglinalg_numeric]
 path = "crates/cglinalg_numeric"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_trigonometry]
 path = "crates/cglinalg_trigonometry"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_complex]
 path = "crates/cglinalg_complex"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_core]
 path = "crates/cglinalg_core"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.cglinalg_transform]
 path = "crates/cglinalg_transform"
-version = "0.18.0"
+version = "0.19.0"
 
 [dependencies.approx]
 version = "0.5.1"
