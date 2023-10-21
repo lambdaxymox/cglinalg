@@ -60,7 +60,7 @@ where
         let distance = self * other.vector;
         let translation = Translation::from_vector(&distance);
 
-        Isometry::from_parts(&translation, &self)
+        Isometry::from_parts(&translation, self)
     }
 }
 
@@ -75,7 +75,7 @@ where
         let distance = self * other.vector;
         let translation = Translation::from_vector(&distance);
 
-        Isometry::from_parts(&translation, &self)
+        Isometry::from_parts(&translation, self)
     }
 }
 
@@ -99,7 +99,7 @@ where
 
     #[inline]
     fn mul(self, other: &Rotation<S, N>) -> Self::Output {
-        Isometry::from_parts(&self, &other)
+        Isometry::from_parts(&self, other)
     }
 }
 
@@ -111,7 +111,7 @@ where
 
     #[inline]
     fn mul(self, other: Rotation<S, N>) -> Self::Output {
-        Isometry::from_parts(&self, &other)
+        Isometry::from_parts(self, &other)
     }
 }
 
@@ -123,7 +123,7 @@ where
 
     #[inline]
     fn mul(self, other: &'b Rotation<S, N>) -> Self::Output {
-        Isometry::from_parts(&self, &other)
+        Isometry::from_parts(self, other)
     }
 }
 
@@ -133,6 +133,7 @@ where
 {
     type Output = Isometry<S, N>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
@@ -148,6 +149,7 @@ where
 {
     type Output = Isometry<S, N>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
@@ -163,6 +165,7 @@ where
 {
     type Output = Isometry<S, N>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
@@ -178,6 +181,7 @@ where
 {
     type Output = Isometry<S, N>;
 
+    #[allow(clippy::suspicious_arithmetic_impl)]
     #[inline]
     fn mul(self, other: &'b Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
