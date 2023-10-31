@@ -3180,7 +3180,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
         Self::new(

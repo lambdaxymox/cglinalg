@@ -971,7 +971,10 @@ where
     /// assert_relative_eq!(perspective.near(),         near,         epsilon = 1e-10);
     /// assert_relative_eq!(perspective.far(),          far,          epsilon = 1e-10);
     /// ```
-    pub fn new<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
+    pub fn new<A>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let spec_vfov = vfov.into();
 
         Self {

@@ -1283,7 +1283,9 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_translation<A: Into<Radians<S>>>(angle: A, distance: &Vector2<S>) -> Self
+    pub fn from_angle_translation<A>(angle: A, distance: &Vector2<S>) -> Self
+    where
+        A: Into<Radians<S>>,
     {
         Self {
             rotation: Rotation2::from_angle(angle),
@@ -1317,7 +1319,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let translation = Translation2::identity();
         let rotation = Rotation2::from_angle(angle);
         
@@ -1428,8 +1433,9 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_axis_angle_translation<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Self
+    pub fn from_axis_angle_translation<A>(axis: &Unit<Vector3<S>>, angle: A, distance: &Vector3<S>) -> Self
+    where
+        A: Into<Radians<S>>,
     {
         Self {
             rotation: Rotation3::from_axis_angle(axis, angle),
@@ -1464,7 +1470,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+    pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_axis_angle(axis, angle);
         
@@ -1493,7 +1502,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_x<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_x(angle);
         
@@ -1522,7 +1534,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_y<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_y(angle);
         
@@ -1551,7 +1566,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_z<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_z(angle);
         

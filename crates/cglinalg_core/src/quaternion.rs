@@ -1145,7 +1145,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+    pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let one = S::one();
         let one_half = one / (one + one);
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);

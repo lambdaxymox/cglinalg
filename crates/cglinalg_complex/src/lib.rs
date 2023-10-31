@@ -915,7 +915,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ``` 
     #[inline]
-    pub fn from_polar_decomposition<A: Into<Radians<S>>>(scale: S, angle: A) -> Self {
+    pub fn from_polar_decomposition<A>(scale: S, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let _angle: Radians<S> = angle.into();
         Self::new(scale * _angle.cos(), scale * _angle.sin())
     }
@@ -942,7 +945,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self::from_polar_decomposition(S::one(), angle)
     }
 
