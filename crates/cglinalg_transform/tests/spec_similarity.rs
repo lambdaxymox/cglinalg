@@ -42,18 +42,18 @@ use proptest::prelude::*;
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -67,18 +67,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -92,9 +92,12 @@ where
 
 fn strategy_angle_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Radians<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S: SimdScalarFloat>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarFloat,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -116,11 +119,11 @@ fn strategy_similarity2_from_range<S>(
     max_distance: S
 ) -> impl Strategy<Value = Similarity2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -154,11 +157,11 @@ fn strategy_similarity3_from_range<S>(
     max_distance: S
 ) -> impl Strategy<Value = Similarity3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -270,7 +273,7 @@ fn prop_approx_similarity_vector_scales_norm<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (m * v).norm();
     let rhs = m.scale().abs() * v.norm();
@@ -290,7 +293,7 @@ where
 fn prop_approx_similarity_similarity_inverse<S, const N: usize, const NN: usize>(m: Similarity<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let identity = Similarity::identity();
     let lhs = m * m.inverse();
@@ -318,7 +321,7 @@ fn prop_approx_similarity_similarity_inverse_pointwise_point<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * p);
     let rhs = p;
@@ -349,7 +352,7 @@ fn prop_approx_similarity_similarity_inverse_pointwise_vector<S, const N: usize>
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * v);
     let rhs = v;
@@ -374,7 +377,7 @@ where
 fn prop_approx_similarity2_composition_same_axis_equals_addition_of_angles<S>(
     angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat
@@ -402,7 +405,7 @@ fn prop_approx_similarity3_composition_same_axis_equals_addition_of_angles<S>(
     axis: Unit<Vector3<S>>,
     angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat

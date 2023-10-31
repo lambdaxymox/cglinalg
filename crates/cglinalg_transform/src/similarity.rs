@@ -58,7 +58,7 @@ pub struct Similarity<S, const N: usize> {
 
 impl<S, const N: usize> Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
@@ -589,7 +589,7 @@ where
 
 impl<S, const N: usize> Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Calculate the inverse of the similarity transformation.
     ///
@@ -1065,7 +1065,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     /// Convert a similarity transformation to an affine matrix.
     ///
@@ -1243,7 +1243,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Similarity<S, N> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
@@ -1259,7 +1259,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(isometry: Similarity<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -1272,7 +1272,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(isometry: &Similarity<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -1282,7 +1282,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Similarity<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1300,7 +1300,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1316,7 +1316,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1332,7 +1332,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1344,7 +1344,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1356,7 +1356,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1368,7 +1368,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1380,7 +1380,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1392,7 +1392,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1404,7 +1404,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1416,7 +1416,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Similarity<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1429,7 +1429,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1446,7 +1446,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1480,7 +1480,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1497,7 +1497,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1513,7 +1513,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Similarity<S, N>> for Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1529,7 +1529,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for &Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1545,7 +1545,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Similarity<S, N>> for &'b Similarity<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1561,7 +1561,7 @@ where
 
 impl<S> Similarity2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a two-dimensional similarity transformation from a rotation
     /// angle.
@@ -1592,7 +1592,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self {
             isometry: Isometry2::from_angle(angle),
             scale: S::one()
@@ -1602,7 +1605,7 @@ where
 
 impl<S> Similarity3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a similarity transformation from the axis and angle
     /// of a rotation.
@@ -1635,9 +1638,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(
-        axis: &Unit<Vector3<S>>, angle: A) -> Self {
-        
+    pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self {
             isometry: Isometry3::from_axis_angle(axis, angle),
             scale: S::one()

@@ -29,11 +29,11 @@ fn strategy_euler_angles_radians_from_range<S>(
     max_pitch: S
 ) -> impl Strategy<Value = EulerAngles<Radians<S>>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -69,7 +69,7 @@ fn strategy_euler_angles_radians_f64_any() -> impl Strategy<Value = EulerAngles<
 fn prop_approx_euler_matrix_inverse_equals_transpose<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_matrix();
     let lhs = matrix.inverse().unwrap();
@@ -90,7 +90,7 @@ where
 fn prop_approx_euler_affine_matrix_inverse_equals_transpose<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_affine_matrix();
     let lhs = matrix.inverse().unwrap();
@@ -111,7 +111,7 @@ where
 fn prop_approx_euler_matrix_determinant_equals_one<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_matrix();
     let lhs = matrix.determinant();
@@ -132,7 +132,7 @@ where
 fn prop_approx_euler_affine_matrix_determinant_equals_one<S, A>(euler_angles: EulerAngles<A>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_affine_matrix();
     let lhs = matrix.determinant();

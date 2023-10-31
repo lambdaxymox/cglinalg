@@ -79,18 +79,18 @@ impl<T> ops::Deref for Unit<T> {
     }
 }
 
-impl<T> fmt::Display for Unit<T> 
+impl<T> fmt::Display for Unit<T>
 where
-    T: fmt::Display
+    T: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         self.value.fmt(formatter)
     }
 }
 
-impl<T> Unit<T> 
-where 
-    T: Normed
+impl<T> Unit<T>
+where
+    T: Normed,
 {
     /// Construct a new unit value, normalizing the input value.
     #[inline]
@@ -204,7 +204,7 @@ where
 
 impl<T> approx::AbsDiffEq for Unit<T>
 where
-    T: approx::AbsDiffEq
+    T: approx::AbsDiffEq,
 {
     type Epsilon = <T as approx::AbsDiffEq>::Epsilon;
 
@@ -221,7 +221,7 @@ where
 
 impl<T> approx::RelativeEq for Unit<T>
 where 
-    T: approx::RelativeEq
+    T: approx::RelativeEq,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -236,7 +236,7 @@ where
 
 impl<T> approx::UlpsEq for Unit<T>
 where 
-    T: approx::UlpsEq
+    T: approx::UlpsEq,
 {
     #[inline]
     fn default_max_ulps() -> u32 {

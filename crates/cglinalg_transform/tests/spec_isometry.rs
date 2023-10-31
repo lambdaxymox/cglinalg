@@ -42,18 +42,18 @@ use proptest::prelude::*;
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -67,18 +67,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -92,9 +92,12 @@ where
 
 fn strategy_angle_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Radians<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S: SimdScalarFloat>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarFloat,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -109,11 +112,11 @@ where
 
 fn strategy_isometry2_from_range<S>(min_angle: S, max_angle: S, min_distance: S, max_distance: S) -> impl Strategy<Value = Isometry2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -139,11 +142,11 @@ where
 
 fn strategy_isometry3_from_range<S>(min_angle: S, max_angle: S, min_distance: S, max_distance: S) -> impl Strategy<Value = Isometry3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -236,7 +239,7 @@ fn prop_approx_isometry_vector_preserves_norm<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (m * v).norm();
     let rhs = v.norm();
@@ -255,7 +258,7 @@ where
 fn prop_approx_isometry_isometry_inverse<S, const N: usize, const NN: usize>(m: Isometry<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let identity = Isometry::identity();
     let lhs = m * m.inverse();
@@ -283,7 +286,7 @@ fn prop_approx_isometry_isometry_inverse_pointwise_point<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * p);
     let rhs = p;
@@ -313,7 +316,7 @@ fn prop_approx_isometry_isometry_inverse_pointwise_vector<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * v);
     let rhs = v;
@@ -341,7 +344,7 @@ fn prop_approx_isometry2_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let m1 = Isometry2::from_angle(angle1);
     let m2 = Isometry2::from_angle(angle2);
@@ -369,7 +372,7 @@ fn prop_approx_isometry3_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let m1 = Isometry3::from_axis_angle(&axis, angle1);
     let m2 = Isometry3::from_axis_angle(&axis, angle2);

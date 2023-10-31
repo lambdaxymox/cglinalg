@@ -16,7 +16,7 @@ use core::ops;
 
 impl<S> Normed for Complex<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -87,7 +87,7 @@ where
 
 impl<S> ops::Neg for Unit<Complex<S>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Complex<S>>;
 
@@ -99,7 +99,7 @@ where
 
 impl<S> ops::Neg for &Unit<Complex<S>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Complex<S>>;
 

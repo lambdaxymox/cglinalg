@@ -42,7 +42,7 @@ pub struct Reflection<S, const N: usize> {
 
 impl<S, const N: usize> Reflection<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a new reflection transformation from the vector normal to the 
     /// plane of reflection.
@@ -219,7 +219,7 @@ where
 
 impl<S, const N: usize> Reflection<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Reflect a vector across the plane described by the reflection 
     /// transformation.
@@ -651,7 +651,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Reflection<S, N>
 where
-    S: fmt::Display
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Reflection{} [normal = {}, bias = {}]", N, self.normal, self.bias)
@@ -660,7 +660,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -678,7 +678,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -694,7 +694,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -710,7 +710,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -722,7 +722,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -734,7 +734,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -746,7 +746,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -758,7 +758,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -782,7 +782,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -794,7 +794,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Reflection<S, N>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -807,7 +807,7 @@ where
 
 impl<S> Reflection2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Convert a reflection to an affine matrix.
     /// 
@@ -887,7 +887,7 @@ where
 
 impl<S> From<Reflection2<S>> for Matrix3x3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(transformation: Reflection2<S>) -> Matrix3x3<S> {
@@ -897,7 +897,7 @@ where
 
 impl<S> From<&Reflection2<S>> for Matrix3x3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(transformation: &Reflection2<S>) -> Matrix3x3<S> {
@@ -908,7 +908,7 @@ where
 
 impl<S> Reflection3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Convert a reflection to an affine matrix.
     /// 
@@ -990,7 +990,7 @@ where
 
 impl<S> From<Reflection3<S>> for Matrix4x4<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(transformation: Reflection3<S>) -> Matrix4x4<S> {
@@ -1000,7 +1000,7 @@ where
 
 impl<S> From<&Reflection3<S>> for Matrix4x4<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(transformation: &Reflection3<S>) -> Matrix4x4<S> {

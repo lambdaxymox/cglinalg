@@ -31,18 +31,18 @@ use proptest::prelude::*;
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -56,18 +56,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -109,7 +109,7 @@ fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, 
 
 fn strategy_scale_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Scale<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     strategy_vector_signed_from_abs_range(min_value, max_value).prop_map(|vector| { 
         Scale::from_nonuniform_scale(&vector)
@@ -139,7 +139,7 @@ fn strategy_scale_f64_any<const N: usize>() -> impl Strategy<Value = Scale<f64, 
 /// ```
 fn prop_scale_composition_commutative<S, const N: usize>(s1: Scale<S, N>, s2: Scale<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!(s1 * s2, s2 * s1);
 
@@ -158,7 +158,7 @@ fn prop_scale_composition_associative<S, const N: usize>(
     s3: Scale<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (s1 * s2) * s3;
     let rhs = s1 * (s2 * s3);
@@ -176,7 +176,7 @@ where
 /// ```
 fn prop_scale_scale_inverse_commutative<S, const N: usize>(s: Scale<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(s * s.inverse(), s.inverse() * s);
 
@@ -191,7 +191,7 @@ where
 /// ```
 fn prop_approx_scale_scale_inverse_identity<S, const N: usize>(s: Scale<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let identity = Scale::identity();
 
@@ -213,7 +213,7 @@ fn prop_scale_composition_commutative_pointwise_point<S, const N: usize>(
     p: Point<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (s1 * s2) * p;
     let rhs = (s2 * s1) * p;
@@ -235,7 +235,7 @@ fn prop_scale_composition_commutative_pointwise_vector<S, const N: usize>(
     v: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = s1 * (s2 * v);
     let rhs = s2 * (s1 * v);
@@ -258,7 +258,7 @@ fn prop_approx_scale_composition_commutative_pointwise_point<S, const N: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (s1 * s2) * p;
     let rhs = (s2 * s1) * p;
@@ -281,7 +281,7 @@ fn prop_approx_scale_composition_commutative_pointwise_vector<S, const N: usize>
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (s1 * s2) * v;
     let rhs = (s2 * s1) * v;
@@ -304,7 +304,7 @@ fn prop_approx_scale_scale_inverse_identity_pointwise_point<S, const N: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s * (s.inverse() * p);
     let rhs = s.inverse() * (s * p);
@@ -327,7 +327,7 @@ fn prop_approx_scale_scale_inverse_identity_pointwise_vector<S, const N: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s * (s.inverse() * v);
     let rhs = s.inverse() * (s * v);

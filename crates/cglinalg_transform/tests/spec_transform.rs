@@ -35,18 +35,18 @@ use proptest::prelude::*;
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -60,18 +60,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -103,7 +103,7 @@ where
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -128,7 +128,7 @@ where
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -186,7 +186,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
     ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
-    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>
+    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
 {
     let lhs = (t1 * t2) * t3;
     let rhs = t1 * (t2 * t3);

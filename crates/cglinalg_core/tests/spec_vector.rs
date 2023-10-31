@@ -25,9 +25,12 @@ use proptest::prelude::*;
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarSigned,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -41,18 +44,18 @@ where
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -65,8 +68,8 @@ where
 }
 
 fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
-where 
-    S: SimdScalarSigned + Arbitrary 
+where
+    S: SimdScalarSigned + Arbitrary,
 {
     any::<[S; N]>().prop_map(|array| {        
         let mut result = Vector::zero();
@@ -172,7 +175,7 @@ fn strategy_scalar4_i32_linf_norm() -> impl Strategy<Value = i32> {
 /// ```
 fn prop_vector_times_zero_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
     let zero_vector = Vector::zero();
@@ -190,7 +193,7 @@ where
 /// ```
 fn prop_vector_plus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_vector = Vector::zero();
 
@@ -207,7 +210,7 @@ where
 /// ```
 fn prop_zero_plus_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_vector = Vector::zero();
 
@@ -224,7 +227,7 @@ where
 /// ```
 fn prop_vector_times_one_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = S::one();
 
@@ -253,7 +256,7 @@ fn prop_vector1_plus_vector2_equals_refvector1_plus_refvector2<S, const N: usize
     v2: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {   
     prop_assert_eq!( v1 +  v2, &v1 +  v2);
     prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -274,7 +277,7 @@ where
 /// ```
 fn prop_vector_addition_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v1 + v2, v2 + v1);
 
@@ -293,7 +296,7 @@ fn prop_vector_addition_associative<S, const N: usize>(
     v3: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((v1 + v2) + v3, v1 + (v2 + v3));
 
@@ -309,7 +312,7 @@ where
 /// ```
 fn prop_vector_minus_zero_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_vector = Vector::zero();
 
@@ -326,7 +329,7 @@ where
 /// ```
 fn prop_vector_minus_vector_equals_zero<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_vector = Vector::zero();
 
@@ -355,7 +358,7 @@ fn prop_vector1_minus_vector2_equals_refvector1_minus_refvector2<S, const N: usi
     v2: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!( v1 +  v2, &v1 +  v2);
     prop_assert_eq!( v1 +  v2,  v1 + &v2);
@@ -376,7 +379,7 @@ where
 /// ```
 fn prop_one_times_vector_equals_vector<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = S::one();
 
@@ -400,7 +403,7 @@ fn prop_scalar_multiplication_compatibility<S, const N: usize>(
     v: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((v * a) * b, v * (a * b));
 
@@ -419,7 +422,7 @@ fn prop_scalar_vector_addition_right_distributive<S, const N: usize>(
     v2: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((v1 + v2) * a,  v1 * a + v2 * a);
 
@@ -438,7 +441,7 @@ fn prop_vector_scalar_addition_left_distributive<S, const N: usize>(
     v: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v * (a + b), v * a + v * b);
 
@@ -461,7 +464,7 @@ fn prop_scalar_vector_addition_left_distributive<S, const N: usize>(
     v2: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((v1 + v2) * a,  v1 * a + v2 * a);
 
@@ -480,7 +483,7 @@ where
 /// right of a vector.
 fn prop_vector_scalar_addition_right_distributive<S, const N: usize>(a: S, b: S, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v * (a + b), v * a + v * b);
 
@@ -495,7 +498,7 @@ where
 /// ```
 fn prop_vector_dot_product_commutative<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v1.dot(&v2), v2.dot(&v1));
 
@@ -514,7 +517,7 @@ fn prop_vector_dot_product_right_distributive<S, const N: usize>(
     v3: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = v1.dot(&(v2 + v3));
     let rhs = v1.dot(&v2) + v1.dot(&v3);
@@ -536,7 +539,7 @@ fn prop_vector_dot_product_left_distributive<S, const N: usize>(
     v3: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (v1 + v2).dot(&v3);
     let rhs = v1.dot(&v3) + v2.dot(&v3);
@@ -559,7 +562,7 @@ fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(
     v2: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (v1 * a).dot(&(v2 * b));
     let rhs = v1.dot(&v2) * (a * b);
@@ -583,7 +586,7 @@ fn prop_vector_dot_product_right_bilinear<S, const N: usize>(
     v3: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = v1.dot(&(v2 * a + v3 * b));
     let rhs = v1.dot(&v2) * a + v1.dot(&v3) * b;
@@ -607,7 +610,7 @@ fn prop_vector_dot_product_left_bilinear<S, const N: usize>(
     v3: Vector<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (v1 * a + v2 * b).dot(&v3);
     let rhs = v1.dot(&v3) * a + v2.dot(&v3) * b;
@@ -626,7 +629,7 @@ where
 /// ```
 fn prop_vector_cross_itself_is_zero<S>(v: Vector3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_vector = Vector3::zero();
 
@@ -644,7 +647,7 @@ where
 /// ```
 fn prop_vector_cross_product_multiplication_by_scalars<S>(c: S, v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((v1 * c).cross(&v2), v1.cross(&v2) * c);
     prop_assert_eq!(v1.cross(&(v2 * c)), v1.cross(&v2) * c);
@@ -660,7 +663,7 @@ where
 /// ```
 fn prop_vector_cross_product_distribute<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v1.cross(&(v2 + v3)), v1.cross(&v2) + v1.cross(&v3));
 
@@ -676,7 +679,7 @@ where
 /// ```
 fn prop_vector_cross_product_scalar_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v1.dot(&(v2.cross(&v3))), v1.cross(&v2).dot(&v3));
 
@@ -691,7 +694,7 @@ where
 /// ```
 fn prop_vector_cross_product_anticommutative<S>(v1: Vector3<S>, v2: Vector3<S>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!(v1.cross(&v2), -v2.cross(&v1));
 
@@ -707,7 +710,7 @@ where
 /// ```
 fn prop_vector_cross_product_satisfies_vector_triple_product<S>(v1: Vector3<S>, v2: Vector3<S>, v3: Vector3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = v1.cross(&v2.cross(&v3));
     let rhs = v2 * v1.dot(&v3) - v3 * v1.dot(&v2);
@@ -725,7 +728,7 @@ where
 /// ```
 fn prop_norm_squared_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
     
@@ -754,7 +757,7 @@ fn prop_approx_norm_squared_point_separating<S, const N: usize>(
     output_tolerance: S
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = input_tolerance));
     prop_assert!((v1 - v2).norm_squared() > output_tolerance);
@@ -770,7 +773,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_squared_norm_squared_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(v.magnitude_squared(), v.norm_squared());
 
@@ -792,7 +795,7 @@ where
 /// function.
 fn prop_norm_squared_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
 
@@ -814,7 +817,7 @@ where
 /// ```
 fn prop_norm_squared_homogeneous_squared<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (v * c).norm_squared();
     let rhs = v.norm_squared() * c.abs() * c.abs();
@@ -832,7 +835,7 @@ where
 /// ```
 fn prop_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
     
@@ -856,7 +859,7 @@ where
 /// function.
 fn prop_approx_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!((v1 - v2).norm() > tolerance);
@@ -872,7 +875,7 @@ where
 /// ```
 fn prop_l1_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let zero = S::zero();
     
@@ -896,7 +899,7 @@ where
 /// function.
 fn prop_approx_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!((v1 - v2).l1_norm() > tolerance);
@@ -919,7 +922,7 @@ where
 /// function.
 fn prop_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let zero = S::zero();
 
@@ -937,7 +940,7 @@ where
 /// ```
 fn prop_l1_norm_homogeneous<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (v * c).l1_norm();
     let rhs = v.l1_norm() * c.abs();
@@ -955,7 +958,7 @@ where
 /// ```
 fn prop_l1_norm_triangle_inequality<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (v1 + v2).l1_norm();
     let rhs = v1.l1_norm() + v2.l1_norm();
@@ -973,7 +976,7 @@ where
 /// ```
 fn prop_lp_norm_nonnegative<S, const N: usize>(v: Vector<S, N>, p: u32) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
     
@@ -997,7 +1000,7 @@ where
 /// function.
 fn prop_approx_lp_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!(
@@ -1017,7 +1020,7 @@ where
 /// ```
 fn prop_linf_norm_nonnegative<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
     
@@ -1040,7 +1043,7 @@ where
 /// For the sake of testability, we use the second form.
 fn prop_approx_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(v1, v2, epsilon = tolerance));
     prop_assert!((v1 - v2).linf_norm() > tolerance);
@@ -1062,7 +1065,7 @@ where
 /// For the sake of testability, we use the second form.
 fn prop_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -1080,7 +1083,7 @@ where
 /// ```
 fn prop_linf_norm_homogeneous<S, const N: usize>(v: Vector<S, N>, c: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (v * c).linf_norm();
     let rhs = v.linf_norm() * c.abs();
@@ -1098,7 +1101,7 @@ where
 /// ```
 fn prop_linf_norm_triangle_inequality<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (v1 + v2).linf_norm();
     let rhs = v1.linf_norm() + v2.linf_norm();
@@ -1116,7 +1119,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_norm_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(v.magnitude(), v.norm());
 
@@ -1131,7 +1134,7 @@ where
 /// where equality is exact.
 fn prop_l2_norm_norm_synonyms<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(v.l2_norm(), v.norm());
 

@@ -16,7 +16,7 @@ use crate::euler::{
 
 impl<S> Matrix3x3<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a rotation matrix from a set of Euler angles.
     /// 
@@ -68,7 +68,7 @@ where
     #[inline]
     pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self 
     where
-        A: Angle + Into<Radians<S>>
+        A: Angle + Into<Radians<S>>,
     {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
             euler_angles.x.into(),
@@ -82,7 +82,7 @@ where
 
 impl<S> Matrix4x4<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct an affine rotation matrix from a set of Euler angles.
     /// 
@@ -142,7 +142,7 @@ where
     #[inline]
     pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self
     where
-        A: Angle + Into<Radians<S>>
+        A: Angle + Into<Radians<S>>,
     {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
             euler_angles.x.into(),

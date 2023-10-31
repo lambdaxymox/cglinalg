@@ -27,10 +27,13 @@ use core::fmt;
 
 
 fn strategy_vector_any<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
-where 
-    S: SimdScalarSigned + Arbitrary
+where
+    S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarSigned,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -64,10 +67,16 @@ fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
 }
 
 
+/// The unit data type normalizes the input value `value`.
+/// 
+/// Given a value `value` of type [`T`] which has a notion of vector length
+/// ```text
+/// norm(into_inner(from_value(value))) == 1
+/// ```
 fn prop_from_value_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug
+    T: Normed<Output = S> + PartialEq + fmt::Debug,
 {
     let expected = value.normalize();
     let unit_value = Unit::from_value(value);
@@ -78,11 +87,16 @@ where
     Ok(())
 }
 
-
+/// The unit data type normalizes the input value `value`.
+/// 
+/// Given a value `value` of type [`T`] which has a notion of vector length
+/// ```text
+/// norm(into_inner(fst(from_value_with_norm(value)))) == 1
+/// ```
 fn prop_from_value_with_norm_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug
+    T: Normed<Output = S> + PartialEq + fmt::Debug,
 {
     let expected = value.normalize();
     let (unit_value, _) = Unit::from_value_with_norm(value);
@@ -93,11 +107,16 @@ where
     Ok(())
 }
 
-
+/// The unit data type normalizes an input value to a specified norm.
+/// 
+/// Given a value `value` of type [`T`] which has norm `norm`
+/// ```text
+/// norm(from_value_with_norm(value)) == norm
+/// ```
 fn prop_from_value_with_norm_correct_norm<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug
+    T: Normed<Output = S> + PartialEq + fmt::Debug,
 {
     let expected = value.norm();
     let (_, result) = Unit::from_value_with_norm(value);
@@ -107,11 +126,17 @@ where
     Ok(())
 }
 
-
+/// The unit data type when constructed unchecked does not change the 
+/// inner value.
+/// 
+/// Given a value `value` of type [`T`]
+/// ```text
+/// into_inner(from_value_unchecked(value)) == value
+/// ```
 fn prop_from_value_unchecked_into_inner<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug + Clone
+    T: Normed<Output = S> + PartialEq + fmt::Debug + Clone,
 {
     let expected = value.clone();
     let unit_value = Unit::from_value_unchecked(value);
@@ -122,11 +147,13 @@ where
     Ok(())
 }
 
-
+/// When the norm of a vector value is above a specified input threshold, 
+/// [`Unit::try_from_value_with_norm`] returns a normalized value. Otherwise, it 
+/// returns `None`.
 fn prop_try_from_value_with_norm_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug
+    T: Normed<Output = S> + PartialEq + fmt::Debug,
 {
     let threshold = cglinalg_numeric::cast(1e-8);
     let result = Unit::try_from_value_with_norm(value, threshold);
@@ -136,11 +163,13 @@ where
     Ok(())
 }
 
-
+/// When the norm of a vector value is above a specified input threshold, 
+/// [`Unit::try_from_value`] returns a normalized value. Otherwise, it 
+/// returns `None`.
 fn prop_try_from_value_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    T: Normed<Output = S> + PartialEq + fmt::Debug
+    T: Normed<Output = S> + PartialEq + fmt::Debug,
 {
     let threshold = cglinalg_numeric::cast(1e-8);
     let result = Unit::try_from_value(value, threshold);

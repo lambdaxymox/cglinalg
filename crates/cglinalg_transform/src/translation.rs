@@ -67,7 +67,7 @@ pub struct Translation<S, const N: usize> {
 
 impl<S, const N: usize> Translation<S, N> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Construct a translation operator from a vector of displacements.
     /// 
@@ -571,7 +571,7 @@ impl<S, const N: usize, const NPLUS1: usize> Translation<S, N>
 where
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     /// Convert a translation to an affine matrix.
     /// 
@@ -689,7 +689,7 @@ impl<S, const N: usize> AsRef<Vector<S, N>> for Translation<S, N> {
 
 impl<S, const N: usize> fmt::Display for Translation<S, N> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Translation{} {}", N, self.vector)
@@ -700,7 +700,7 @@ impl<S, const N: usize, const NPLUS1: usize> From<Translation<S, N>> for Matrix<
 where 
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn from(transform: Translation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -712,7 +712,7 @@ impl<S, const N: usize, const NPLUS1: usize> From<&Translation<S, N>> for Matrix
 where 
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn from(transform: &Translation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -722,7 +722,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -739,7 +739,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -754,7 +754,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Translation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -769,7 +769,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -781,7 +781,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -793,7 +793,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -805,7 +805,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -817,7 +817,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -829,7 +829,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -841,7 +841,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -853,7 +853,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -865,7 +865,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
 
@@ -878,7 +878,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
 
@@ -891,7 +891,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
 
@@ -904,7 +904,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Translation<S, N>> for &'b Translation<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
 
@@ -917,7 +917,7 @@ where
 
 impl<S> Translation2<S> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Construct a translation from the components of the translation.
     /// 
@@ -951,7 +951,7 @@ where
 
 impl<S> Translation3<S> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Construct a translation from the components of the translation.
     /// 

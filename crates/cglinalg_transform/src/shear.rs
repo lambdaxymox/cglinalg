@@ -44,7 +44,7 @@ pub struct Shear<S, const N: usize> {
 
 impl<S, const N: usize> Shear<S, N>
 where
-    S: Copy
+    S: Copy,
 {
     /// Get the shear factor of the shearing transformation.
     /// 
@@ -262,7 +262,7 @@ where
 
 impl<S, const N: usize> Shear<S, N> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Apply a shear transformation to a vector.
     ///
@@ -535,7 +535,7 @@ where
 
 impl<S, const N: usize> Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     /// Calculate an inverse of a shear transformation.
     /// 
@@ -892,7 +892,7 @@ where
 
 impl<S, const N: usize> Shear<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a general shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`.
@@ -1272,7 +1272,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Shear<S, N> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
@@ -1286,7 +1286,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1306,7 +1306,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Shear<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1324,7 +1324,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Shear<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1342,7 +1342,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -1354,7 +1354,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -1366,7 +1366,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -1378,7 +1378,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
 
@@ -1390,7 +1390,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -1402,7 +1402,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -1414,7 +1414,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -1426,7 +1426,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Shear<S, N> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -1439,7 +1439,7 @@ where
 
 impl<S> Shear2<S> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Construct a shearing transformation in two dimensions with respect to 
     /// a line passing through the origin `[0, 0]`, using the **x-axis**
@@ -1548,7 +1548,7 @@ where
 
 impl<S> Shear2<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Convert a shear transformation to an affine matrix.
     /// 
@@ -1634,7 +1634,7 @@ where
 
 impl<S> From<Shear2<S>> for Matrix3x3<S>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(shear: Shear2<S>) -> Matrix3x3<S> {
@@ -1644,7 +1644,7 @@ where
 
 impl<S> From<&Shear2<S>> for Matrix3x3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(shear: &Shear2<S>) -> Matrix3x3<S> {
@@ -1654,7 +1654,7 @@ where
 
 impl<S> ops::Mul<Shear2<S>> for Shear2<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform2<S>;
 
@@ -1669,7 +1669,7 @@ where
 
 impl<S> ops::Mul<&Shear2<S>> for Shear2<S>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform2<S>;
 
@@ -1684,7 +1684,7 @@ where
 
 impl<S> ops::Mul<Shear2<S>> for &Shear2<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform2<S>;
 
@@ -1699,7 +1699,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Shear2<S>> for &'b Shear2<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform2<S>;
 
@@ -1715,7 +1715,7 @@ where
 
 impl<S> Shear3<S> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     /// Construct a shearing transformation in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
@@ -2092,7 +2092,7 @@ where
 
 impl<S> Shear3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Convert a shear transformation to an affine matrix.
     /// 
@@ -2180,7 +2180,7 @@ where
 
 impl<S> From<Shear3<S>> for Matrix4x4<S>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(shear: Shear3<S>) -> Matrix4x4<S> {
@@ -2190,7 +2190,7 @@ where
 
 impl<S> From<&Shear3<S>> for Matrix4x4<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(shear: &Shear3<S>) -> Matrix4x4<S> {
@@ -2200,7 +2200,7 @@ where
 
 impl<S> ops::Mul<Shear3<S>> for Shear3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform3<S>;
 
@@ -2215,7 +2215,7 @@ where
 
 impl<S> ops::Mul<&Shear3<S>> for Shear3<S>
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform3<S>;
 
@@ -2230,7 +2230,7 @@ where
 
 impl<S> ops::Mul<Shear3<S>> for &Shear3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform3<S>;
 
@@ -2245,7 +2245,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Shear3<S>> for &'b Shear3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Transform3<S>;
 

@@ -20,7 +20,7 @@ use proptest::prelude::*;
 
 fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>> 
 where 
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     any::<S>().prop_map(|dimensionless| {
         let two_pi = S::two_pi();
@@ -32,7 +32,7 @@ where
 
 fn strategy_degrees_any<S>() -> impl Strategy<Value = Degrees<S>>
 where 
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     any::<S>().prop_map(|dimensionless| {
         let two_pi: S = cglinalg_numeric::cast(360_f64);
@@ -51,7 +51,7 @@ where
 fn prop_angle_additive_zero<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let zero = A::zero();
 
@@ -69,7 +69,7 @@ where
 fn prop_angle_additive_identity<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let zero = A::zero();
 
@@ -89,7 +89,7 @@ where
 fn prop_angle_multiplication_dimensionless_unit_element<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let one = S::one();
 
@@ -112,7 +112,7 @@ where
 fn prop_approx_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let sin_angle = angle.sin();
     let recovered_angle = A::asin(sin_angle);
@@ -137,7 +137,7 @@ where
 fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let cos_angle = angle.cos();
     let recovered_angle = A::acos(cos_angle);
@@ -164,7 +164,7 @@ where
 fn prop_approx_tangent_and_arctangent_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let tan_angle = angle.tan();
     let recovered_angle = A::atan(tan_angle);
@@ -191,7 +191,7 @@ where
 fn prop_approx_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let angle_plus_full_turn = angle + A::full_turn();
 
@@ -210,7 +210,7 @@ where
 fn prop_approx_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let one = S::one();
     let lhs = angle.cos() * angle.cos() + angle.sin() * angle.sin();
@@ -230,7 +230,7 @@ where
 fn prop_normalize_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let full_turn = A::full_turn();
     let zero = A::zero();
@@ -254,7 +254,7 @@ where
 fn prop_normalize_signed_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     let full_turn_over_2 = A::full_turn_div_2();
     let normalized_angle = angle.normalize_signed();

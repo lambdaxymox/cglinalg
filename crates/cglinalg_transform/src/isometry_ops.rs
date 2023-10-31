@@ -21,7 +21,7 @@ use core::ops;
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for Rotation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -36,7 +36,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Rotation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -51,7 +51,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Rotation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -66,7 +66,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'b Translation<S, N>> for &'a Rotation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -81,7 +81,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Rotation<S, N>> for Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -93,7 +93,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Rotation<S, N>> for Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -105,7 +105,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Rotation<S, N>> for &Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -117,7 +117,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'b Rotation<S, N>> for &'a Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -129,7 +129,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for Isometry<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -145,7 +145,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Isometry<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -161,7 +161,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Isometry<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -177,7 +177,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'b Translation<S, N>> for &'a Isometry<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -193,7 +193,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Isometry<S, N>> for Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -207,7 +207,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Isometry<S, N>> for Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -221,7 +221,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Isometry<S, N>> for &Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -235,7 +235,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'b Isometry<S, N>> for &'a Translation<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Isometry<S, N>;
 
@@ -250,7 +250,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for Isometry<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -265,7 +265,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Rotation<S, N>> for Isometry<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -280,7 +280,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for &Isometry<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -295,7 +295,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'b Rotation<S, N>> for &'a Isometry<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -310,7 +310,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Rotation<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -327,7 +327,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Rotation<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -344,7 +344,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Rotation<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -361,7 +361,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'b Isometry<S, N>> for &'a Rotation<S, N>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 

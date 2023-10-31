@@ -61,7 +61,7 @@ pub struct Rotation<S, const N: usize> {
 
 impl<S, const N: usize> Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Get a reference to the underlying matrix that represents the rotation.
     /// 
@@ -621,7 +621,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     /// Convert a rotation to a generic affine matrix.
     /// 
@@ -768,7 +768,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Rotation<S, N> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Rotation{} [{}]", N, self.matrix)
@@ -787,7 +787,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(rotation: Rotation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -800,7 +800,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(rotation: &Rotation<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -810,7 +810,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -827,7 +827,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -842,7 +842,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -857,7 +857,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -869,7 +869,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -881,7 +881,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -893,7 +893,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -905,7 +905,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -917,7 +917,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Rotation<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -929,7 +929,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -941,7 +941,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Rotation<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -954,7 +954,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for Rotation<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Rotation<S, N>;
 
@@ -969,7 +969,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Rotation<S, N>> for Rotation<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Rotation<S, N>;
 
@@ -984,7 +984,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for &Rotation<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Rotation<S, N>;
 
@@ -999,7 +999,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Rotation<S, N>> for &'b Rotation<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Rotation<S, N>;
 
@@ -1013,7 +1013,7 @@ where
 
 impl<S> Rotation2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Get the rotation angle of the rotation transformation.
     ///
@@ -1073,7 +1073,10 @@ where
     /// );
     /// ```
     #[inline]
-    pub fn from_angle<A: Into<Radians<S>>>(angle: A) -> Self {  
+    pub fn from_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self {
             matrix: Matrix2x2::from_angle(angle.into()),
         }
@@ -1151,7 +1154,7 @@ where
 
 impl<S> Rotation3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Get the rotation angle of the rotation transformation.
     ///
@@ -1358,7 +1361,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+    pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self {
             matrix: Matrix3x3::from_axis_angle(axis, angle.into()),
         }
@@ -1392,7 +1398,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_x<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
@@ -1424,7 +1433,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_y<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
     }
 
@@ -1456,7 +1468,10 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_z<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
@@ -2133,7 +2148,7 @@ where
 
 impl<S> From<Quaternion<S>> for Rotation3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> Rotation3<S> {
@@ -2143,7 +2158,7 @@ where
 
 impl<S> From<&Quaternion<S>> for Rotation3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> Rotation3<S> {
@@ -2153,7 +2168,7 @@ where
 
 impl<S> From<Rotation3<S>> for Quaternion<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(rotation: Rotation3<S>) -> Quaternion<S> {
@@ -2168,7 +2183,7 @@ where
 
 impl<S> From<&Rotation3<S>> for Quaternion<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(rotation: &Rotation3<S>) -> Quaternion<S> {
@@ -2184,7 +2199,7 @@ where
 impl<S, A> From<EulerAngles<A>> for Rotation3<S>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S> + Into<Radians<S>>
+    A: Angle<Dimensionless = S> + Into<Radians<S>>,
 {
     #[inline]
     fn from(euler_angles: EulerAngles<A>) -> Rotation3<S> {
@@ -2195,7 +2210,7 @@ where
 impl<S, A> From<&EulerAngles<A>> for Rotation3<S>
 where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S> + Into<Radians<S>>
+    A: Angle<Dimensionless = S> + Into<Radians<S>>,
 {
     #[inline]
     fn from(euler_angles: &EulerAngles<A>) -> Rotation3<S> {

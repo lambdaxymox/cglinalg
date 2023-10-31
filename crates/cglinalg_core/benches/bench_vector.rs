@@ -33,7 +33,7 @@ use criterion::{
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -42,8 +42,8 @@ where
 }
 
 fn gen_vector1<S>() -> Vector1<S> 
-where 
-    Standard: Distribution<S> 
+where
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -52,8 +52,8 @@ where
 }
 
 fn gen_vector2<S>() -> Vector2<S> 
-where 
-    Standard: Distribution<S> 
+where
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -62,8 +62,8 @@ where
 }
 
 fn gen_vector3<S>() -> Vector3<S> 
-where 
-    Standard: Distribution<S> 
+where
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -72,8 +72,8 @@ where
 }
 
 fn gen_vector4<S>() -> Vector4<S> 
-where 
-    Standard: Distribution<S> 
+where
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);

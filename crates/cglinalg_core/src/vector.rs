@@ -93,9 +93,9 @@ impl<S, const N: usize> Vector<S, N> {
     }
 }
 
-impl<S, const N: usize> Vector<S, N> 
-where 
-    S: SimdCast + Copy
+impl<S, const N: usize> Vector<S, N>
+where
+    S: SimdCast + Copy,
 {
     /// Cast a vector from one type of scalars to another type of scalars.
     ///
@@ -114,9 +114,9 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn try_cast<T>(&self) -> Option<Vector<T, N>> 
+    pub fn try_cast<T>(&self) -> Option<Vector<T, N>>
     where
-        T: SimdCast
+        T: SimdCast,
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -134,7 +134,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: Copy
+    S: Copy,
 {
     /// Construct a vector from a fill value.
     ///
@@ -179,9 +179,9 @@ where
     /// ```
     #[allow(unused_mut)]
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Vector<T, N> 
-    where 
-        F: FnMut(S) -> T
+    pub fn map<T, F>(&self, mut op: F) -> Vector<T, N>
+    where
+        F: FnMut(S) -> T,
     {
         Vector {
             data: self.data.map(op),
@@ -191,7 +191,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct the zero vector.
     ///
@@ -326,9 +326,9 @@ where
     }
 }
 
-impl<S, const N: usize> Vector<S, N> 
-where 
-    S: SimdScalarSigned
+impl<S, const N: usize> Vector<S, N>
+where
+    S: SimdScalarSigned,
 {
     /// Compute the negation of a vector mutably in place.
     ///
@@ -356,7 +356,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
@@ -433,7 +433,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     /// Calculate the norm of a vector with respect to the supplied [`Norm`] type.
     /// 
@@ -544,7 +544,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     /// Calculate the norm of a vector with respect to the **L-infinity** norm.
     /// 
@@ -589,7 +589,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
     /// 
@@ -734,9 +734,9 @@ impl L1Norm {
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm 
+impl<S, const N: usize> Norm<Vector<S, N>> for L1Norm
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = S;
 
@@ -762,8 +762,8 @@ impl L2Norm {
 }
 
 impl<S, const N: usize> Norm<Vector<S, N>> for L2Norm
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -788,9 +788,9 @@ impl LinfNorm {
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm 
+impl<S, const N: usize> Norm<Vector<S, N>> for LinfNorm
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     type Output = S;
 
@@ -819,9 +819,9 @@ impl LpNorm {
     }
 }
 
-impl<S, const N: usize> Norm<Vector<S, N>> for LpNorm 
+impl<S, const N: usize> Norm<Vector<S, N>> for LpNorm
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -839,7 +839,7 @@ where
 
 impl<S, const N: usize> Vector<S, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Returns `true` if the elements of a vector are all finite. 
     /// Otherwise, it returns `false`. 
@@ -1033,7 +1033,7 @@ where
     S: SimdScalar,
     ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
     /// Extend a vector into a vector one dimension higher using the supplied 
     /// last element `last_element`.
@@ -1095,7 +1095,7 @@ where
     S: SimdScalar,
     ShapeConstraint: CanContract<Const<N>, Const<NMINUS1>>,
     ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>,
-    ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>
+    ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>,
 {
     /// Contract a vector to a vector one dimension smaller the last component.
     ///
@@ -1193,7 +1193,7 @@ impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
 
 impl<S, const N: usize> Default for Vector<S, N>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     fn default() -> Self {
         Self::zero()
@@ -1202,7 +1202,7 @@ where
 
 impl<S, const N: usize> From<[S; N]> for Vector<S, N>
 where
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: [S; N]) -> Self {
@@ -1210,9 +1210,9 @@ where
     }
 }
 
-impl<S, const N: usize> From<&[S; N]> for Vector<S, N> 
+impl<S, const N: usize> From<&[S; N]> for Vector<S, N>
 where 
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: &[S; N]) -> Self {
@@ -1222,9 +1222,9 @@ where
     }
 }
 
-impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N> 
+impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N>
 where 
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: &'a [S; N]) -> &'a Vector<S, N> {
@@ -1263,9 +1263,9 @@ impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFull, [S]);
 
 
-impl<S, const N: usize> fmt::Display for Vector<S, N> 
-where 
-    S: fmt::Display 
+impl<S, const N: usize> fmt::Display for Vector<S, N>
+where
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Vector{} [", N).unwrap();
@@ -1277,9 +1277,9 @@ where
 }
 
 
-impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N> 
-where 
-    S: SimdScalarFloat
+impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1300,9 +1300,9 @@ where
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Vector<S, N> 
-where 
-    S: SimdScalarFloat
+impl<S, const N: usize> approx::RelativeEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1321,9 +1321,9 @@ where
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Vector<S, N> 
-where 
-    S: SimdScalarFloat
+impl<S, const N: usize> approx::UlpsEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1342,9 +1342,9 @@ where
     }
 }
 
-impl<S, const N: usize> Normed for Vector<S, N> 
-where 
-    S: SimdScalarFloat
+impl<S, const N: usize> Normed for Vector<S, N>
+where
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1491,9 +1491,9 @@ impl_scalar_vector_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i
 
 macro_rules! impl_vector_scalar_binary_ops {
     ($OpType:ident, $op:ident) => {
-        impl<S, const N: usize> ops::$OpType<S> for Vector<S, N> 
-        where 
-            S: SimdScalar 
+        impl<S, const N: usize> ops::$OpType<S> for Vector<S, N>
+        where
+            S: SimdScalar,
         {
             type Output = Vector<S, N>;
 
@@ -1509,9 +1509,9 @@ macro_rules! impl_vector_scalar_binary_ops {
             }
         }
 
-        impl<S, const N: usize> ops::$OpType<S> for &Vector<S, N> 
-        where 
-            S: SimdScalar 
+        impl<S, const N: usize> ops::$OpType<S> for &Vector<S, N>
+        where
+            S: SimdScalar,
         {
             type Output = Vector<S, N>;
 
@@ -1534,9 +1534,9 @@ impl_vector_scalar_binary_ops!(Div, div);
 impl_vector_scalar_binary_ops!(Rem, rem);
 
 
-impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1552,9 +1552,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Add<&Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Add<&Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1570,9 +1570,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Add<Vector<S, N>> for &Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Add<Vector<S, N>> for &Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1588,9 +1588,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Add<&'b Vector<S, N>> for &'a Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<'a, 'b, S, const N: usize> ops::Add<&'b Vector<S, N>> for &'a Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1606,9 +1606,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Sub<Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1624,9 +1624,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Sub<&Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1642,9 +1642,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::Sub<Vector<S, N>> for &Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1678,9 +1678,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar
+impl<S, const N: usize> ops::AddAssign<Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Vector<S, N>) {
@@ -1691,9 +1691,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar
+impl<S, const N: usize> ops::AddAssign<&Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: &Vector<S, N>) {
@@ -1704,9 +1704,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar
+impl<S, const N: usize> ops::SubAssign<Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Vector<S, N>) {
@@ -1717,9 +1717,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Vector<S, N> 
-where 
-    S: SimdScalar
+impl<S, const N: usize> ops::SubAssign<&Vector<S, N>> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: &Vector<S, N>) {
@@ -1730,9 +1730,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::MulAssign<S> for Vector<S, N> 
-where 
-    S: SimdScalar
+impl<S, const N: usize> ops::MulAssign<S> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -1743,9 +1743,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::DivAssign<S> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::DivAssign<S> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -1756,9 +1756,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::RemAssign<S> for Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<S, const N: usize> ops::RemAssign<S> for Vector<S, N>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
@@ -1769,9 +1769,9 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Neg for Vector<S, N> 
-where 
-    S: SimdScalarSigned
+impl<S, const N: usize> ops::Neg for Vector<S, N>
+where
+    S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
 
@@ -1788,8 +1788,8 @@ where
 }
 
 impl<S, const N: usize> ops::Neg for &Vector<S, N>
-where 
-    S: SimdScalarSigned
+where
+    S: SimdScalarSigned,
 {
     type Output =  Vector<S, N>;
 
@@ -1807,7 +1807,7 @@ where
 
 impl<S, const N: usize> ops::Neg for Unit<Vector<S, N>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Vector<S, N>>;
 
@@ -1819,7 +1819,7 @@ where
 
 impl<S, const N: usize> ops::Neg for &Unit<Vector<S, N>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Vector<S, N>>;
 
@@ -1853,9 +1853,9 @@ impl<S> Vector1<S> {
     }
 }
 
-impl<S> Vector1<S> 
-where 
-    S: SimdScalar
+impl<S> Vector1<S>
+where
+    S: SimdScalar,
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -1879,7 +1879,7 @@ where
 
 impl<S> Vector1<S>
 where
-    S: Copy
+    S: Copy,
 {
     /// Convert this vector into a scalar.
     /// 
@@ -1925,9 +1925,9 @@ impl<S> Vector2<S> {
     }
 }
 
-impl<S> Vector2<S> 
-where 
-    S: SimdScalar 
+impl<S> Vector2<S>
+where
+    S: SimdScalar,
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -1997,9 +1997,9 @@ impl<S> Vector3<S> {
     }
 }
 
-impl<S> Vector3<S> 
-where 
-    S: SimdScalar
+impl<S> Vector3<S>
+where
+    S: SimdScalar,
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -2188,9 +2188,9 @@ impl<S> Vector4<S> {
     }
 }
 
-impl<S> Vector4<S> 
-where 
-    S: SimdScalar
+impl<S> Vector4<S>
+where
+    S: SimdScalar,
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
@@ -2281,9 +2281,9 @@ where
     }
 }
 
-impl<S> From<S> for Vector1<S> 
-where 
-    S: Copy
+impl<S> From<S> for Vector1<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: S) -> Self {
@@ -2291,9 +2291,9 @@ where
     }
 }
 
-impl<S> From<(S,)> for Vector1<S> 
-where 
-    S: Copy
+impl<S> From<(S,)> for Vector1<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: (S,)) -> Self {
@@ -2301,9 +2301,9 @@ where
     }
 }
 
-impl<S> From<&(S,)> for Vector1<S> 
-where 
-    S: Copy
+impl<S> From<&(S,)> for Vector1<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &(S,)) -> Self  {
@@ -2311,9 +2311,9 @@ where
     }
 }
 
-impl<'a, S> From<&'a (S,)> for &'a Vector1<S> 
-where 
-    S: Copy
+impl<'a, S> From<&'a (S,)> for &'a Vector1<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &'a (S,)) -> &'a Vector1<S> {
@@ -2323,9 +2323,9 @@ where
     }
 }
 
-impl<S> From<(S, S)> for Vector2<S> 
-where 
-    S: Copy
+impl<S> From<(S, S)> for Vector2<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: (S, S)) -> Self {
@@ -2333,9 +2333,9 @@ where
     }
 }
 
-impl<S> From<&(S, S)> for Vector2<S> 
-where 
-    S: Copy
+impl<S> From<&(S, S)> for Vector2<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &(S, S)) -> Self {
@@ -2343,9 +2343,9 @@ where
     }
 }
 
-impl<'a, S> From<&'a (S, S)> for &'a Vector2<S> 
+impl<'a, S> From<&'a (S, S)> for &'a Vector2<S>
 where
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Vector2<S> {
@@ -2355,9 +2355,9 @@ where
     }
 }
 
-impl<S> From<(S, S, S)> for Vector3<S> 
-where 
-    S: Copy
+impl<S> From<(S, S, S)> for Vector3<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: (S, S, S)) -> Self {
@@ -2365,9 +2365,9 @@ where
     }
 }
 
-impl<S> From<&(S, S, S)> for Vector3<S> 
-where 
-    S: Copy
+impl<S> From<&(S, S, S)> for Vector3<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &(S, S, S)) -> Self {
@@ -2375,9 +2375,9 @@ where
     }
 }
 
-impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S> 
-where 
-    S: Copy
+impl<'a, S> From<&'a (S, S, S)> for &'a Vector3<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
@@ -2387,9 +2387,9 @@ where
     }
 }
 
-impl<S> From<Vector4<S>> for Vector3<S> 
-where 
-    S: Copy
+impl<S> From<Vector4<S>> for Vector3<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: Vector4<S>) -> Self {
@@ -2397,9 +2397,9 @@ where
     }
 }
 
-impl<S> From<&Vector4<S>> for Vector3<S> 
-where 
-    S: Copy
+impl<S> From<&Vector4<S>> for Vector3<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &Vector4<S>) -> Self {
@@ -2407,9 +2407,9 @@ where
     }
 }
 
-impl<S> From<(S, S, S, S)> for Vector4<S> 
-where 
-    S: Copy
+impl<S> From<(S, S, S, S)> for Vector4<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: (S, S, S, S)) -> Self {
@@ -2417,9 +2417,9 @@ where
     }
 }
 
-impl<S> From<&(S, S, S, S)> for Vector4<S> 
-where 
-    S: Copy
+impl<S> From<&(S, S, S, S)> for Vector4<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &(S, S, S, S)) -> Self {
@@ -2427,9 +2427,9 @@ where
     }
 }
 
-impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S> 
-where 
-    S: Copy
+impl<'a, S> From<&'a (S, S, S, S)> for &'a Vector4<S>
+where
+    S: Copy,
 {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {

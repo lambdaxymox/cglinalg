@@ -36,7 +36,7 @@ pub type Transform3<S> = Transform<S, 3, 4>;
 pub struct Transform<S, const N: usize, const NPLUS1: usize> 
 where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     matrix: Matrix<S, NPLUS1, NPLUS1>,
 }
@@ -45,7 +45,7 @@ impl<S, const N: usize, const NPLUS1: usize> Transform<S, N, NPLUS1>
 where 
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     /// Construct a new transformation from a given homogeneous matrix. The 
     /// function does not check that the input matrix is a valid homogeneous 
@@ -302,7 +302,7 @@ where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>> + CanContract<Const<NPLUS1>, Const<N>>
+    ShapeConstraint: CanExtend<Const<N>, Const<NPLUS1>> + CanContract<Const<NPLUS1>, Const<N>>,
 {
     /// Apply the transformation to a vector.
     ///
@@ -418,7 +418,7 @@ where
 impl<S, const N: usize, const NPLUS1: usize> AsRef<Matrix<S, NPLUS1, NPLUS1>> for Transform<S, N, NPLUS1> 
 where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn as_ref(&self) -> &Matrix<S, NPLUS1, NPLUS1> {
@@ -430,7 +430,7 @@ impl<S, const N: usize, const NPLUS1: usize> fmt::Display for Transform<S, N, NP
 where 
     S: fmt::Display,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Transform{} [{}]", N, self.matrix)
@@ -441,7 +441,7 @@ impl<S, const N: usize, const NPLUS1: usize> From<Transform<S, N, NPLUS1>> for M
 where 
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn from(transform: Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -453,7 +453,7 @@ impl<S, const N: usize, const NPLUS1: usize> From<&Transform<S, N, NPLUS1>> for 
 where 
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn from(transform: &Transform<S, N, NPLUS1>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -465,7 +465,7 @@ impl<S, const N: usize, const NPLUS1: usize> approx::AbsDiffEq for Transform<S, 
 where 
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -484,7 +484,7 @@ impl<S, const N: usize, const NPLUS1: usize> approx::RelativeEq for Transform<S,
 where 
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -501,7 +501,7 @@ impl<S, const N: usize, const NPLUS1: usize> approx::UlpsEq for Transform<S, N, 
 where 
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>
+    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -649,7 +649,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
     ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
-    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>
+    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
 {
     type Output = Transform<S, N, NPLUS1>;
 
@@ -668,7 +668,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
     ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
-    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>
+    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
 {
     type Output = Transform<S, N, NPLUS1>;
 
@@ -706,7 +706,7 @@ where
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: CanMultiply<Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>, Const<NPLUS1>>,
     ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
-    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>
+    ShapeConstraint: DimMul<Const<NPLUS1>, Const<NPLUS1>, Output = Const<NP1NP1>>,
 {
     type Output = Transform<S, N, NPLUS1>;
 
@@ -720,7 +720,7 @@ where
 
 impl<S> Transform2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Compute the inverse of the transformation if it exists.
     ///
@@ -817,7 +817,7 @@ where
 
 impl<S> Transform3<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Compute the inverse of the transformation if it exists.
     ///

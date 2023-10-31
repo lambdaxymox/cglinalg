@@ -205,9 +205,9 @@ impl<A> EulerAngles<A> {
 }
 
 impl<S, A> EulerAngles<A> 
-where 
+where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     /// Construct a zero element of the set of Euler angles.
     ///
@@ -542,8 +542,8 @@ where
 }
 
 impl<A> fmt::Display for EulerAngles<A> 
-where 
-    A: fmt::Display
+where
+    A: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
@@ -555,9 +555,9 @@ where
 }
 
 impl<S, A> From<EulerAngles<A>> for Matrix3x3<S> 
-where 
+where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
@@ -566,9 +566,9 @@ where
 }
 
 impl<S, A> From<&EulerAngles<A>> for Matrix3x3<S> 
-where 
+where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     #[inline]
     fn from(euler: &EulerAngles<A>) -> Matrix3x3<S> {
@@ -577,9 +577,9 @@ where
 }
 
 impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> 
-where 
+where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     #[inline]
     fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
@@ -588,9 +588,9 @@ where
 }
 
 impl<A, S> From<&EulerAngles<A>> for Matrix4x4<S> 
-where 
+where
     S: SimdScalarFloat,
-    A: Angle<Dimensionless = S>
+    A: Angle<Dimensionless = S>,
 {
     #[inline]
     fn from(euler: &EulerAngles<A>) -> Matrix4x4<S> {
@@ -599,8 +599,8 @@ where
 }
 
 impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> 
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(quaternion: Quaternion<S>) -> EulerAngles<Radians<S>> {
@@ -610,8 +610,8 @@ where
 }
 
 impl<S> From<&Quaternion<S>> for EulerAngles<Radians<S>> 
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(quaternion: &Quaternion<S>) -> EulerAngles<Radians<S>> {
@@ -622,7 +622,7 @@ where
 
 impl<A> approx::AbsDiffEq for EulerAngles<A> 
 where
-    A: Angle
+    A: Angle,
 {
     type Epsilon = A::Epsilon;
 
@@ -641,7 +641,7 @@ where
 
 impl<A> approx::RelativeEq for EulerAngles<A> 
 where
-    A: Angle
+    A: Angle,
 {
     #[inline]
     fn default_max_relative() -> A::Epsilon {
@@ -658,7 +658,7 @@ where
 
 impl<A> approx::UlpsEq for EulerAngles<A> 
 where
-    A: Angle
+    A: Angle,
 {
     #[inline]
     fn default_max_ulps() -> u32 {

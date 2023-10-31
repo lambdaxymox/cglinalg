@@ -33,7 +33,7 @@ use proptest::prelude::*;
 
 fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
@@ -44,7 +44,7 @@ where
 
     fn rescale_matrix<S, const R: usize, const C: usize>(value: Matrix<S, R, C>, min_value: S, max_value: S) -> Matrix<S, R, C> 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -58,18 +58,18 @@ where
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -107,7 +107,7 @@ fn prop_matrix_times_vector_left_distributive<S, const R: usize, const C: usize>
     v: Vector<S, C>
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (m1 + m2) * v;
     let rhs = m1 * v + m2 * v;
@@ -129,7 +129,7 @@ fn prop_matrix_times_vector_right_distributive<S, const R: usize, const C: usize
     v2: Vector<S, C>
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = m * (v1 + v2);
     let rhs = m * v1 + m * v2;
@@ -147,7 +147,7 @@ where
 /// ```
 fn prop_matrix_times_vector_dot_product<S, const C: usize>(m: Matrix<S, 1, C>, v: Vector<S, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let m_times_v = m * v;
     let m_tr = m.transpose();

@@ -32,18 +32,18 @@ use proptest::prelude::*;
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -57,18 +57,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -82,11 +82,11 @@ where
 
 fn strategy_shear2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -113,11 +113,11 @@ where
 
 fn strategy_shear3_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -163,11 +163,11 @@ where
 fn strategy_shear_axis_signed_from_abs_range<F, S, const N: usize>(constructor: F, min_value: S, max_value: S) -> impl Strategy<Value = Shear<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
-    F: Fn(S) -> Shear<S, N>
+    F: Fn(S) -> Shear<S, N>,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -195,7 +195,7 @@ fn strategy_shear3_f64_any() -> impl Strategy<Value = Shear3<f64>> {
 
 fn strategy_shear_i32_any<F, const N: usize>(constructor: F) -> impl Strategy<Value = Shear<i32, N>> 
 where
-    F: Fn(i32) -> Shear<i32, N>
+    F: Fn(i32) -> Shear<i32, N>,
 {
     let min_value = -100_000_i32;
     let max_value = 100_000_i32;
@@ -259,7 +259,7 @@ fn strategy_point_i32_any<const N: usize>() -> impl Strategy<Value = Point<i32, 
 /// ```
 fn prop_approx_shear2_trace<S>(s: Shear2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(3_f64);
@@ -278,7 +278,7 @@ where
 /// ```
 fn prop_approx_shear3_trace<S>(s: Shear3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(4_f64);
@@ -296,7 +296,7 @@ where
 /// ```
 fn prop_approx_shear2_determinant<S>(s: Shear2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
@@ -315,7 +315,7 @@ where
 /// ```
 fn prop_approx_shear3_determinant<S>(s: Shear3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
@@ -335,7 +335,7 @@ where
 /// ```
 fn prop_shear2_matrix_asymmetric<S>(s: Shear2<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let matrix = s.to_affine_matrix();
     
@@ -353,7 +353,7 @@ where
 /// ```
 fn prop_shear3_matrix_asymmetric<S>(s: Shear3<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let matrix = s.to_affine_matrix();
     
@@ -370,7 +370,7 @@ where
 /// ```
 fn prop_shear_apply_inverse_apply_identity_point<S, const N: usize>(s: Shear<S, N>, p: Point<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let sheared_point = s.apply_point(&p);
     let lhs = s.inverse_apply_point(&sheared_point);
@@ -389,7 +389,7 @@ where
 /// ```
 fn prop_shear_apply_inverse_apply_identity_vector<S, const N: usize>(s: Shear<S, N>, v: Vector<S, N>,) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let sheared_vector = s.apply_vector(&v);
     let lhs = s.inverse_apply_vector(&sheared_vector);

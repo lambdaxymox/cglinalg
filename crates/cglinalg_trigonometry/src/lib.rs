@@ -608,7 +608,7 @@ pub struct Radians<S>(pub S);
 
 impl<S> Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct a typed angle of zero radians.
     /// 
@@ -657,7 +657,7 @@ where
 
 impl<S> Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
@@ -688,7 +688,7 @@ pub struct Degrees<S>(pub S);
 
 impl<S> Degrees<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     /// Construct a typed angle of zero degrees.
     /// 
@@ -737,7 +737,7 @@ where
 
 impl<S> Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Returns `true` if the underlying floating point number of the typed
     /// angle is finite.
@@ -762,7 +762,7 @@ where
 
 impl<S> Default for Radians<S>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     fn default() -> Self {
         Self::zero()
@@ -771,7 +771,7 @@ where
 
 impl<S> Default for Degrees<S>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     fn default() -> Self {
         Self::zero()
@@ -780,7 +780,7 @@ where
 
 impl<S> From<Degrees<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(degrees: Degrees<S>) -> Self {
@@ -790,7 +790,7 @@ where
 
 impl<S> From<Radians<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(radians: Radians<S>) -> Self {
@@ -800,7 +800,7 @@ where
 
 impl<S> fmt::Display for Degrees<S> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "{} degrees", self.0)
@@ -809,7 +809,7 @@ where
 
 impl<S> fmt::Display for Radians<S> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "{} radians", self.0)
@@ -818,7 +818,7 @@ where
 
 impl<S> ops::Add<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -830,7 +830,7 @@ where
 
 impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -842,7 +842,7 @@ where
 
 impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -854,7 +854,7 @@ where
 
 impl<'a, 'b, S> ops::Add<&'b Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -866,7 +866,7 @@ where
 
 impl<S> ops::Sub<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -878,7 +878,7 @@ where
 
 impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -890,7 +890,7 @@ where
 
 impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -902,7 +902,7 @@ where
 
 impl<'a, 'b, S> ops::Sub<&'b Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -914,7 +914,7 @@ where
 
 impl<S> ops::Mul<S> for Degrees<S> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -926,7 +926,7 @@ where
 
 impl<'a, S> ops::Mul<S> for &'a Degrees<S> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Degrees<S>;
 
@@ -938,7 +938,7 @@ where
 
 impl<S> ops::Div<S> for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -950,7 +950,7 @@ where
 
 impl<'a, S> ops::Div<S> for &'a Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -962,7 +962,7 @@ where
 
 impl<S> ops::Div<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -974,7 +974,7 @@ where
 
 impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -986,7 +986,7 @@ where
 
 impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -998,7 +998,7 @@ where
 
 impl<'a, 'b, S> ops::Div<&'b Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1010,7 +1010,7 @@ where
 
 impl<S> ops::Rem<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -1022,7 +1022,7 @@ where
 
 impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -1034,7 +1034,7 @@ where
 
 impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -1046,7 +1046,7 @@ where
 
 impl<'a, 'b, S> ops::Rem<&'b Degrees<S>> for &'a Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
 
@@ -1058,7 +1058,7 @@ where
 
 impl<S> ops::Neg for Degrees<S> 
 where 
-    S: SimdScalarSigned 
+    S: SimdScalarSigned,
 {
     type Output = Degrees<S>;
 
@@ -1070,7 +1070,7 @@ where
 
 impl<'a, S> ops::Neg for &'a Degrees<S> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Degrees<S>;
 
@@ -1082,7 +1082,7 @@ where
 
 impl<S> ops::AddAssign<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Self) {
@@ -1092,7 +1092,7 @@ where
 
 impl<S> ops::SubAssign<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Self) {
@@ -1102,7 +1102,7 @@ where
 
 impl<S> ops::MulAssign<S> for Degrees<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -1112,7 +1112,7 @@ where
 
 impl<S> ops::DivAssign<S> for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -1122,7 +1122,7 @@ where
 
 impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn rem_assign(&mut self, other: Self) {
@@ -1132,7 +1132,7 @@ where
 
 impl<S> approx::AbsDiffEq for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1149,7 +1149,7 @@ where
 
 impl<S> approx::RelativeEq for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1164,7 +1164,7 @@ where
 
 impl<S> approx::UlpsEq for Degrees<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1179,7 +1179,7 @@ where
 
 impl<S> ops::Add<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1191,7 +1191,7 @@ where
 
 impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1203,7 +1203,7 @@ where
 
 impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1215,7 +1215,7 @@ where
 
 impl<'a, 'b, S> ops::Add<&'b Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1227,7 +1227,7 @@ where
 
 impl<S> ops::Sub<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1239,7 +1239,7 @@ where
 
 impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1251,7 +1251,7 @@ where
 
 impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1263,7 +1263,7 @@ where
 
 impl<'a, 'b, S> ops::Sub<&'b Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1275,7 +1275,7 @@ where
 
 impl<S> ops::Mul<S> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1287,7 +1287,7 @@ where
 
 impl<'a, S> ops::Mul<S> for &'a Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Radians<S>;
 
@@ -1299,7 +1299,7 @@ where
 
 impl<S> ops::Div<S> for Radians<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1311,7 +1311,7 @@ where
 
 impl<'a, S> ops::Div<S> for &'a Radians<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1323,7 +1323,7 @@ where
 
 impl<S> ops::Div<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1335,7 +1335,7 @@ where
 
 impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1347,7 +1347,7 @@ where
 
 impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1359,7 +1359,7 @@ where
 
 impl<'a, 'b, S> ops::Div<&'b Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1371,7 +1371,7 @@ where
 
 impl<S> ops::Rem<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1383,7 +1383,7 @@ where
 
 impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1395,7 +1395,7 @@ where
 
 impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1407,7 +1407,7 @@ where
 
 impl<'a, 'b, S> ops::Rem<&'b Radians<S>> for &'a Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Radians<S>;
 
@@ -1419,7 +1419,7 @@ where
 
 impl<S> ops::Neg for Radians<S> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Radians<S>;
 
@@ -1431,7 +1431,7 @@ where
 
 impl<'a, S> ops::Neg for &'a Radians<S> 
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     type Output = Radians<S>;
 
@@ -1443,7 +1443,7 @@ where
 
 impl<S> ops::AddAssign<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Radians<S>) {
@@ -1453,7 +1453,7 @@ where
 
 impl<S> ops::SubAssign<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Radians<S>) {
@@ -1463,7 +1463,7 @@ where
 
 impl<S> ops::MulAssign<S> for Radians<S> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -1473,7 +1473,7 @@ where
 
 impl<S> ops::DivAssign<S> for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -1483,7 +1483,7 @@ where
 
 impl<S> ops::RemAssign<Radians<S>> for Radians<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn rem_assign(&mut self, other: Self) {
@@ -1493,7 +1493,7 @@ where
 
 impl<S> approx::AbsDiffEq for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1510,7 +1510,7 @@ where
 
 impl<S> approx::RelativeEq for Radians<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1525,7 +1525,7 @@ where
 
 impl<S> approx::UlpsEq for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1540,7 +1540,7 @@ where
 
 impl<S> Angle for Radians<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Dimensionless = S;
 
@@ -1597,7 +1597,7 @@ where
 
 impl<S> Angle for Degrees<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Dimensionless = S;
 

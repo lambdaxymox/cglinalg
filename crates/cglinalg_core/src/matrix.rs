@@ -120,7 +120,7 @@ pub type Matrix4<S> = Matrix4x4<S>;
 fn dot_array_col<S, const R1: usize, const C1: usize, const R2: usize>(arr: &[[S; R1]; C1], col: &[S; R2], r: usize) -> S
 where
     S: SimdScalar,
-    ShapeConstraint: DimEq<Const<C1>, Const<R2>> + DimEq<Const<R2>, Const<C1>>
+    ShapeConstraint: DimEq<Const<C1>, Const<R2>> + DimEq<Const<R2>, Const<C1>>,
 {
     // PERFORMANCE: The const loop should get unrolled during optimization.
     let mut result = S::zero();
@@ -180,7 +180,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
 impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
-    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     /// Get a slice of the underlying elements of the data type.
     #[inline]
@@ -224,7 +224,7 @@ impl<S, const R: usize, const C: usize> AsMut<[Vector<S, R>; C]> for Matrix<S, R
 impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C> 
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
-    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn as_ref(&self) -> &[S; RC] {
@@ -237,7 +237,7 @@ where
 impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C> 
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
-    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; RC] {
@@ -286,7 +286,7 @@ impl<S, const R: usize, const C: usize> ops::IndexMut<(usize, usize)> for Matrix
 
 impl<S, const R: usize, const C: usize> From<[[S; R]; C]> for Matrix<S, R, C> 
 where 
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: [[S; R]; C]) -> Self {
@@ -296,7 +296,7 @@ where
 
 impl<'a, S, const R: usize, const C: usize> From<&'a [[S; R]; C]> for &'a Matrix<S, R, C>
 where
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C> {
@@ -308,7 +308,7 @@ where
 
 impl<'a, S, const R: usize, const C: usize> From<&'a [Vector<S, R>; C]> for &'a Matrix<S, R, C>
 where
-    S: Copy
+    S: Copy,
 {
     #[inline]
     fn from(data: &'a [Vector<S, R>; C]) -> &'a Matrix<S, R, C> {
@@ -322,11 +322,12 @@ impl<S, const R: usize, const C: usize, const RC: usize> From<[S; RC]> for Matri
 where
     S: Copy,
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
-    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn from(array: [S; RC]) -> Self {
         let data: &[[S; R]; C] = unsafe { core::mem::transmute::<&[S; RC], &[[S; R]; C]>(&array) };
+
         Self { data: *data }
     }
 }
@@ -335,7 +336,7 @@ impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [S; RC]> f
 where 
     S: Copy,
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
-    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>
+    ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn from(array: &'a [S; RC]) -> &'a Matrix<S, R, C> {
@@ -373,7 +374,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
-    S: Copy
+    S: Copy,
 {
     /// Construct a new matrix from a fill value.
     ///
@@ -496,7 +497,7 @@ where
     #[inline]
     pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C> 
     where 
-        F: FnMut(S) -> T
+        F: FnMut(S) -> T,
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -674,7 +675,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
 where 
-    S: SimdCast + Copy 
+    S: SimdCast + Copy,
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
     ///
@@ -695,7 +696,7 @@ where
     #[inline]
     pub fn try_cast<T>(&self) -> Option<Matrix<T, R, C>> 
     where
-        T: SimdCast
+        T: SimdCast,
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -715,7 +716,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Compute the transpose of a matrix.
     /// 
@@ -905,7 +906,7 @@ where
 
 impl<S, const R1: usize, const C1: usize> Matrix<S, R1, C1>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Compute the dot product of two matrices.
     /// 
@@ -936,7 +937,7 @@ where
     pub fn dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
     where
         ShapeConstraint: DimEq<Const<R1>, Const<R2>> + DimEq<Const<R2>, Const<R1>>,
-        ShapeConstraint: DimEq<Const<C1>, Const<C2>> + DimEq<Const<C2>, Const<C1>>
+        ShapeConstraint: DimEq<Const<C1>, Const<C2>> + DimEq<Const<C2>, Const<C1>>,
     {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = S::zero();
@@ -993,7 +994,7 @@ where
     where
         ShapeConstraint: CanTransposeMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
         ShapeConstraint: DimMul<Const<C1>, Const<C2>, Output = Const<C1C2>>,
-        ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>
+        ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>,
     {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Matrix::zero();
@@ -1053,7 +1054,7 @@ where
     pub fn tr_dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
     where
         ShapeConstraint: DimEq<Const<R1>, Const<C2>> + DimEq<Const<C2>, Const<R1>>,
-        ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>
+        ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>,
     {
         let mut result = S::zero();
         for c in 0..R1 {
@@ -1068,7 +1069,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     /// Mutably negate the elements of a matrix in place.
     ///
@@ -1108,7 +1109,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Linearly interpolate between two matrices.
     ///
@@ -1203,7 +1204,7 @@ where
 
 impl<S, const N: usize> Matrix<S, N, N>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Mutably transpose a square matrix in place.
     ///
@@ -1462,7 +1463,7 @@ where
 
 impl<S, const N: usize> Matrix<S, N, N>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Determine whether a square matrix is a diagonal matrix. 
     ///
@@ -1554,7 +1555,7 @@ where
 
 impl<S, const R: usize, const C: usize> Default for Matrix<S, R, C>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     fn default() -> Self {
         Self::zero()
@@ -1562,8 +1563,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> fmt::Display for Matrix<S, R, C>
-where 
-    S: fmt::Display 
+where
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix{}x{} [", R, C).unwrap();
@@ -1589,7 +1590,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     /// Calculate the norm of a matrix with respect to the supplied [`Norm`] type.
     /// 
@@ -1751,7 +1752,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     /// Compute the **L1** norm of a matrix.
     /// 
@@ -1823,7 +1824,7 @@ where
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Compute the **Frobenius** norm of a matrix.
     /// 
@@ -1931,7 +1932,7 @@ impl L1MatrixNorm {
 
 impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for L1MatrixNorm 
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     type Output = S;
 
@@ -1958,7 +1959,7 @@ impl FrobeniusNorm {
 
 impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for FrobeniusNorm 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
 
@@ -1985,7 +1986,7 @@ impl LinfMatrixNorm {
 
 impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for LinfMatrixNorm 
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     type Output = S;
 
@@ -2002,7 +2003,7 @@ where
 
 impl<S, const R: usize, const C: usize> Normed for Matrix<S, R, C>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = S;
     
@@ -2082,7 +2083,7 @@ where
 
 impl<S, const N: usize> Matrix<S, N, N>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct a uniform scaling matrix.
     ///
@@ -2303,7 +2304,7 @@ impl<S, const N: usize, const NMINUS1: usize> Matrix<S, N, N>
 where 
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>,
-    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>
+    ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>,
 {
     /// Construct an affine scaling matrix.
     ///
@@ -2622,7 +2623,7 @@ impl<S> Matrix1x1<S> {
 
 impl<S> Matrix1x1<S>
 where
-    S: Copy
+    S: Copy,
 {
     /// Convert this 1x1 matrix into a scalar.
     /// 
@@ -2644,8 +2645,8 @@ where
 }
 
 impl<S> Matrix1x1<S> 
-where 
-    S: SimdScalarSigned 
+where
+    S: SimdScalarSigned,
 {
     /// Compute the determinant of a matrix.
     /// 
@@ -2670,8 +2671,8 @@ where
 }
 
 impl<S> Matrix1x1<S> 
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     /// Compute the inverse of a square matrix, if the inverse exists. 
     ///
@@ -2768,8 +2769,8 @@ impl<S> Matrix2x2<S> {
 }
 
 impl<S> Matrix2x2<S> 
-where 
-    S: SimdScalar 
+where
+    S: SimdScalar,
 {
     /// Construct a shearing matrix in two dimensions with respect to 
     /// a line passing through the origin `[0, 0]`, using the **x-axis**
@@ -2885,8 +2886,8 @@ where
 }
 
 impl<S> Matrix2x2<S> 
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     /// Construct a general shearing matrix in two dimensions with respect to 
     /// a line passing through the origin `[0, 0]`.
@@ -3060,8 +3061,8 @@ where
 }
 
 impl<S> Matrix2x2<S> 
-where 
-    S: SimdScalarSigned 
+where
+    S: SimdScalarSigned,
 {
     /// Construct a two-dimensional reflection matrix for reflecting through a 
     /// line through the origin in the **xy-plane**.
@@ -3147,8 +3148,8 @@ where
 }
 
 impl<S> Matrix2x2<S> 
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     /// Construct a rotation matrix in two dimensions that rotates a vector
     /// in the **xy-plane** by an angle `angle`.
@@ -3414,9 +3415,9 @@ impl<S> Matrix3x3<S> {
     }
 }
 
-impl<S> Matrix3x3<S> 
-where 
-    S: SimdScalar
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalar,
 {
     /// Construct a shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
@@ -3841,7 +3842,7 @@ where
 
 impl<S> Matrix3x3<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a general shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`.
@@ -4018,7 +4019,7 @@ where
 
 impl<S> Matrix3x3<S>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct an affine shearing matrix in two dimensions with respect to 
     /// a line passing through the origin `[0, 0]`, using the **x-axis**
@@ -4133,9 +4134,9 @@ where
     }
 }
 
-impl<S> Matrix3x3<S> 
-where 
-    S: SimdScalarFloat
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalarFloat,
 {
     /// Construct a general affine shearing matrix in two dimensions with respect to 
     /// a line passing through the origin `origin`, not necessarily `[0, 0]`.
@@ -4389,9 +4390,9 @@ where
     }
 }
 
-impl<S> Matrix3x3<S> 
-where 
-    S: SimdScalarSigned
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalarSigned,
 {
     /// Construct a two-dimensional affine reflection matrix in the **xy-plane** 
     /// for a line with normal vector `normal` and bias vector `bias`. The bias 
@@ -4679,9 +4680,9 @@ where
     }
 }
 
-impl<S> Matrix3x3<S> 
-where 
-    S: SimdScalarFloat
+impl<S> Matrix3x3<S>
+where
+    S: SimdScalarFloat,
 {
     /// Construct an affine rotation matrix in two dimensions that rotates a 
     /// vector in the **xy-plane** by an angle `angle`.
@@ -4714,7 +4715,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_affine_angle<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let zero = S::zero();
         let one =  S::one();
@@ -4754,7 +4758,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_x<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
         Self::new(
@@ -4792,7 +4799,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_y<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
         Self::new(
@@ -4830,7 +4840,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_angle_z<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
         Self::new(
@@ -4870,7 +4883,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+    pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -5517,8 +5533,8 @@ impl<S> Matrix4x4<S> {
 }
 
 impl<S> Matrix4x4<S>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     /// Construct an affine shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
@@ -5926,7 +5942,7 @@ where
 
 impl<S> Matrix4x4<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a general affine shearing matrix in three dimensions with respect to 
     /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
@@ -6136,9 +6152,9 @@ where
     }
 }
 
-impl<S> Matrix4x4<S> 
-where 
-    S: SimdScalarSigned
+impl<S> Matrix4x4<S>
+where
+    S: SimdScalarSigned,
 {
     /// Construct a three-dimensional affine reflection matrix for a plane with
     /// normal vector `normal` and bias vector `bias`. The bias vector can be 
@@ -6319,9 +6335,9 @@ where
     }
 }
 
-impl<S> Matrix4x4<S> 
-where 
-    S: SimdScalarFloat
+impl<S> Matrix4x4<S>
+where
+    S: SimdScalarFloat,
 {
     /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
     /// **x-axis** by an angle `angle` radians/degrees.
@@ -6351,7 +6367,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_x<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_affine_angle_x<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -6393,7 +6412,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_y<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_affine_angle_y<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -6435,7 +6457,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_angle_z<A: Into<Radians<S>>>(angle: A) -> Self {
+    pub fn from_affine_angle_z<A>(angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
@@ -6479,7 +6504,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_affine_axis_angle<A: Into<Radians<S>>>(axis: &Unit<Vector3<S>>, angle: A) -> Self {
+    pub fn from_affine_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
         let one_minus_cos_angle = S::one() - cos_angle;
         let _axis = axis.as_ref();
@@ -6757,7 +6785,10 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A: Into<Radians<S>>>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self {
+    pub fn from_perspective_fov<A>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self
+    where
+        A: Into<Radians<S>>,
+    {
         let zero = S::zero();
         let one = S::one();
         let two = one + one;
@@ -7802,9 +7833,9 @@ impl_coords_deref!(Matrix4x2, View4x2);
 impl_coords_deref!(Matrix4x3, View4x3);
 
 
-impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7822,9 +7853,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Add<&Matrix<S, R, C>> for Matrix<S, R, C> 
-where 
-    S: SimdScalar 
+impl<S, const R: usize, const C: usize> ops::Add<&Matrix<S, R, C>> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7842,9 +7873,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for &Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for &Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7863,8 +7894,8 @@ where
 }
 
 impl<'a, 'b, S, const R: usize, const C: usize> ops::Add<&'b Matrix<S, R, C>> for &'a Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7883,8 +7914,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Sub<Matrix<S, R, C>> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7902,9 +7933,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Sub<&Matrix<S, R, C>> for Matrix<S, R, C> 
-where 
-    S: SimdScalar 
+impl<S, const R: usize, const C: usize> ops::Sub<&Matrix<S, R, C>> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7923,8 +7954,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Sub<Matrix<S, R, C>> for &Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7942,9 +7973,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Sub<&'b Matrix<S, R, C>> for &'a Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Sub<&'b Matrix<S, R, C>> for &'a Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7963,8 +7994,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Neg for Matrix<S, R, C>
-where 
-    S: SimdScalarSigned
+where
+    S: SimdScalarSigned,
 {
     type Output = Matrix<S, R, C>;
 
@@ -7983,8 +8014,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Neg for &Matrix<S, R, C>
-where 
-    S: SimdScalarSigned 
+where
+    S: SimdScalarSigned,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8002,9 +8033,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Mul<S> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Mul<S> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8022,9 +8053,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Mul<S> for &Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Mul<S> for &Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8042,9 +8073,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Div<S> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Div<S> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8063,8 +8094,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Div<S> for &Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8083,8 +8114,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::Rem<S> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8102,9 +8133,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Rem<S> for &Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Rem<S> for &Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Matrix<S, R, C>;
 
@@ -8198,9 +8229,9 @@ macro_rules! impl_scalar_matrix_mul_ops {
 impl_scalar_matrix_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
 
-impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, R>;
 
@@ -8216,9 +8247,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Mul<&Vector<S, C>> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Mul<&Vector<S, C>> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, R>;
 
@@ -8234,9 +8265,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for &Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for &Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, R>;
 
@@ -8252,9 +8283,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const R: usize, const C: usize> ops::Mul<&'b Vector<S, C>> for &'a Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<'a, 'b, S, const R: usize, const C: usize> ops::Mul<&'b Vector<S, C>> for &'a Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, R>;
 
@@ -8271,11 +8302,11 @@ where
 }
 
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for Matrix<S, R1, C1>
-where 
+where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
     ShapeConstraint: DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>,
-    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>
+    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>,
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -8298,11 +8329,11 @@ where
 }
 
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&Matrix<S, R2, C2>> for Matrix<S, R1, C1>
-where 
+where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
     ShapeConstraint: DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>,
-    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>
+    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>,
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -8325,11 +8356,11 @@ where
 }
 
 impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for &Matrix<S, R1, C1>
-where 
+where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
     ShapeConstraint: DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>,
-    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>
+    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>,
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -8352,11 +8383,11 @@ where
 }
 
 impl<'a, 'b, S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&'b Matrix<S, R2, C2>> for &'a Matrix<S, R1, C1>
-where 
+where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
     ShapeConstraint: DimMul<Const<R1>, Const<C2>, Output = Const<R1C2>>,
-    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>
+    ShapeConstraint: DimMul<Const<C2>, Const<R1>, Output = Const<R1C2>>,
 {
     type Output = Matrix<S, R1, C2>;
 
@@ -8380,8 +8411,8 @@ where
 
 
 impl<S, const R: usize, const C: usize> ops::AddAssign<Matrix<S, R, C>> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Matrix<S, R, C>) {
@@ -8395,8 +8426,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::AddAssign<&Matrix<S, R, C>> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: &Matrix<S, R, C>) {
@@ -8410,8 +8441,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::SubAssign<Matrix<S, R, C>> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Matrix<S, R, C>) {
@@ -8440,8 +8471,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::MulAssign<S> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
@@ -8454,9 +8485,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::DivAssign<S> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::DivAssign<S> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
@@ -8469,9 +8500,9 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::RemAssign<S> for Matrix<S, R, C> 
-where 
-    S: SimdScalar
+impl<S, const R: usize, const C: usize> ops::RemAssign<S> for Matrix<S, R, C>
+where
+    S: SimdScalar,
 {
     #[inline]
     fn rem_assign(&mut self, other: S) {
@@ -8485,8 +8516,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> approx::AbsDiffEq for Matrix<S, R, C>
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -8510,8 +8541,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> approx::RelativeEq for Matrix<S, R, C>
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -8533,8 +8564,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> approx::UlpsEq for Matrix<S, R, C>
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -8557,7 +8588,7 @@ where
 
 impl<S, const R: usize, const C: usize> ops::Neg for Unit<Matrix<S, R, C>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Matrix<S, R, C>>;
 
@@ -8569,7 +8600,7 @@ where
 
 impl<S, const R: usize, const C: usize> ops::Neg for &Unit<Matrix<S, R, C>>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Unit<Matrix<S, R, C>>;
 

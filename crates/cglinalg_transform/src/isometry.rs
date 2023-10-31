@@ -65,7 +65,7 @@ pub struct Isometry<S, const N: usize> {
 
 impl<S, const N: usize> Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a new isometry directly from a translation and a rotation.
     /// 
@@ -246,7 +246,7 @@ where
 
 impl<S, const N: usize> Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Get the rotation component of an isometry.
     /// 
@@ -809,7 +809,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     /// Convert an isometry to an affine matrix.
     ///
@@ -967,7 +967,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Isometry<S, N> 
 where 
-    S: fmt::Display
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
@@ -983,7 +983,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(isometry: Isometry<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -996,7 +996,7 @@ where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>
+    ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     #[inline]
     fn from(isometry: &Isometry<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -1006,7 +1006,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1032,7 +1032,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1058,7 +1058,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1084,7 +1084,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1096,7 +1096,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1108,7 +1108,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1120,7 +1120,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
 
@@ -1132,7 +1132,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1144,7 +1144,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1156,7 +1156,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1168,7 +1168,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Isometry<S, N> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -1181,7 +1181,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Isometry<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -1199,7 +1199,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Isometry<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -1217,7 +1217,7 @@ where
 impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Isometry<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -1235,7 +1235,7 @@ where
 impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Isometry<S, N> 
 where 
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Isometry<S, N>;
 
@@ -1253,7 +1253,7 @@ where
 
 impl<S> Isometry2<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a new isometry from a rotation angle and a displacement vector.
     ///
@@ -1396,7 +1396,7 @@ where
 
 impl<S> Isometry3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a new isometry from a rotation axis, rotation angle, and a 
     /// displacement vector.
@@ -1586,9 +1586,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between(
-        v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> 
-    {        
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {        
         if let (Some(unit_v1), Some(unit_v2)) = (
             Unit::try_from_value(*v1, S::default_epsilon()), 
             Unit::try_from_value(*v2, S::default_epsilon())
@@ -1626,9 +1624,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(
-        v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> 
-    {    
+    pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {    
         Rotation3::rotation_between_axis(v1, v2).map(|rotation| {
             let translation = Translation3::identity();
             Self::from_parts(&translation, &rotation)
@@ -1839,7 +1835,7 @@ where
     /// );
     /// ```
     #[inline]
-    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S>{
+    pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Isometry3<S> {
         let rotation = Rotation3::look_at_rh(eye, target, up);
         let vector = rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);

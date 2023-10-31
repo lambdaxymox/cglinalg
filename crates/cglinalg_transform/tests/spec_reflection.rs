@@ -31,11 +31,11 @@ use proptest::prelude::*;
 
 fn strategy_reflection2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Reflection2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -68,11 +68,11 @@ where
 
 fn strategy_reflection3_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Reflection3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -111,18 +111,18 @@ where
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -136,18 +136,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -196,7 +196,7 @@ fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, 
 /// ```
 fn prop_approx_reflection2_determinant_minus_one<S>(r: Reflection2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
@@ -214,7 +214,7 @@ where
 /// ```
 fn prop_approx_reflection3_determinant_minus_one<S>(r: Reflection3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
@@ -236,7 +236,7 @@ fn prop_approx_reflection_preserves_norm<S, const N: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (r * v).norm();
     let rhs = v.norm();
@@ -259,7 +259,7 @@ fn prop_approx_reflection_times_reflection_identity_pointwise_point<S, const N: 
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = r * (r * p);
     let rhs = p;
@@ -282,7 +282,7 @@ fn prop_approx_reflection_times_reflection_identity_pointwise_vector<S, const N:
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = r * (r * v);
     let rhs = v;

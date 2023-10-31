@@ -32,7 +32,7 @@ use core::ops;
 pub fn cast<From, To>(value: From) -> To 
 where
     From: SimdCast,
-    To: SimdCast
+    To: SimdCast,
 {
     num_traits::cast(value).unwrap()
 }
@@ -77,11 +77,15 @@ where
 /// from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
 pub trait SimdCast
 where
-    Self: num_traits::NumCast
+    Self: num_traits::NumCast,
 {
 }
 
-impl<T> SimdCast for T where T: num_traits::NumCast {}
+impl<T> SimdCast for T 
+where 
+    T: num_traits::NumCast,
+{
+}
 
 
 /// A data type with this trait has the properties of a 
@@ -107,7 +111,7 @@ where
 /// A trait representing numbers with subtraction and additive inverses.
 pub trait SimdScalarSigned 
 where
-    Self: SimdScalar + num_traits::Signed
+    Self: SimdScalar + num_traits::Signed,
 {
     /// Determine whether the sign of the number is positive.
     /// 
@@ -334,7 +338,7 @@ where
 
 pub trait SimdScalarOrd
 where
-    Self: SimdScalar + PartialOrd
+    Self: SimdScalar + PartialOrd,
 {
     /// Calculate the maximum value of two numbers.
     /// 
@@ -428,7 +432,7 @@ where
 /// that they can represent.
 pub trait SimdScalarBounded
 where
-    Self: SimdScalar + SimdScalarOrd
+    Self: SimdScalar + SimdScalarOrd,
 {
     /// Returns the smallest finite value of a number type.
     /// 

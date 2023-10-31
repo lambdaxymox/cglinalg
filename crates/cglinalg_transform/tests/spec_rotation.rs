@@ -39,11 +39,11 @@ use proptest::prelude::*;
 
 fn strategy_rotation2_from_range<S>(min_angle: S, max_angle: S) -> impl Strategy<Value = Rotation2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -57,11 +57,11 @@ where
 
 fn strategy_rotation3_from_range<S>(min_angle: S, max_angle: S) -> impl Strategy<Value = Rotation3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -83,9 +83,12 @@ where
 
 fn strategy_angle_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Radians<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S: SimdScalarFloat>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarFloat,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -100,18 +103,18 @@ where
 
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_vector<S, const N: usize>(value: Vector<S, N>, min_value: S, max_value: S) -> Vector<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -125,18 +128,18 @@ where
 
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_point<S, const N: usize>(value: Point<S, N>, min_value: S, max_value: S) -> Point<S, N>
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -199,7 +202,7 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
 /// ```
 fn prop_approx_rotation2_matrix_determinant_one<S>(r: Rotation2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert!(relative_eq!(r.matrix().determinant(), S::one(), epsilon = tolerance));
 
@@ -214,7 +217,7 @@ where
 /// ```
 fn prop_approx_rotation3_matrix_determinant_one<S>(r: Rotation3<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert!(relative_eq!(r.matrix().determinant(), S::one(), epsilon = tolerance));
 
@@ -234,7 +237,7 @@ fn prop_approx_rotation_vector_preserves_norm<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (r * v).norm();
     let rhs = v.norm();
@@ -253,7 +256,7 @@ where
 fn prop_approx_rotation_rotation_inverse<S, const N: usize, const NN: usize>(r: Rotation<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let identity = Rotation::identity();
     let lhs = r * r.inverse();
@@ -282,7 +285,7 @@ fn prop_approx_rotation_rotation_inverse_pointwise_point<S, const N: usize, cons
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let lhs = r * (r.inverse() * p);
     let rhs = p;
@@ -313,7 +316,7 @@ fn prop_approx_rotation_rotation_inverse_pointwise_vector<S, const N: usize, con
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let lhs = r * (r.inverse() * v);
     let rhs = v;
@@ -341,7 +344,7 @@ fn prop_approx_rotation2_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let r1 = Rotation2::from_angle(angle1);
     let r2 = Rotation2::from_angle(angle2);
@@ -369,7 +372,7 @@ fn prop_approx_rotation3_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let r1 = Rotation3::from_axis_angle(&axis, angle1);
     let r2 = Rotation3::from_axis_angle(&axis, angle2);
@@ -391,7 +394,7 @@ where
 /// ```
 fn prop_approx_rotation2_from_angle_angle<S>(angle: Radians<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let r = Rotation2::from_angle(angle);
     let lhs = (r.angle() - angle) / Radians(S::two_pi());

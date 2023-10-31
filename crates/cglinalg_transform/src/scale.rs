@@ -52,7 +52,7 @@ pub struct Scale<S, const N: usize> {
 
 impl<S, const N: usize> Scale<S, N> 
 where 
-    S: SimdScalar 
+    S: SimdScalar,
 {
     /// Construct a scale transformation from a nonuniform scale across coordinates.
     /// 
@@ -397,7 +397,7 @@ where
 
 impl<S, const N: usize> Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a scale transformation that scales each coordinate by the 
     /// reciprocal of the scaling factors of the scale operator `self`.
@@ -583,7 +583,7 @@ where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
     /// Convert a scale transformation to an affine matrix.
     /// 
@@ -696,7 +696,7 @@ where
 
 impl<S, const N: usize> fmt::Display for Scale<S, N> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Scale{} [{}]", N, self.vector)
@@ -708,7 +708,7 @@ where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
     #[inline]
     fn from(scale: Scale<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -721,7 +721,7 @@ where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>
+    ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
     #[inline]
     fn from(scale: &Scale<S, N>) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -731,7 +731,7 @@ where
 
 impl<S, const N: usize> approx::AbsDiffEq for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -748,7 +748,7 @@ where
 
 impl<S, const N: usize> approx::RelativeEq for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -763,7 +763,7 @@ where
 
 impl<S, const N: usize> approx::UlpsEq for Scale<S, N> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -778,7 +778,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Point<S, N>;
 
@@ -790,7 +790,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Point<S, N>;
 
@@ -802,7 +802,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Point<S, N>;
 
@@ -814,7 +814,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Point<S, N>;
 
@@ -826,7 +826,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -838,7 +838,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -850,7 +850,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -862,7 +862,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -874,7 +874,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Scale<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Scale<S, N>;
 
@@ -888,7 +888,7 @@ where
 
 impl<S, const N: usize> ops::Mul<&Scale<S, N>> for Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Scale<S, N>;
 
@@ -902,7 +902,7 @@ where
 
 impl<S, const N: usize> ops::Mul<Scale<S, N>> for &Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Scale<S, N>;
 
@@ -916,7 +916,7 @@ where
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Scale<S, N>> for &'b Scale<S, N> 
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     type Output = Scale<S, N>;
 
@@ -931,7 +931,7 @@ where
 
 impl<S> Scale2<S>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct a scale transformation from the components of the scale transformation.
     #[inline]
@@ -944,7 +944,7 @@ where
 
 impl<S> Scale3<S>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     /// Construct a scale transformation from the components of the scale transformation.
     #[inline]

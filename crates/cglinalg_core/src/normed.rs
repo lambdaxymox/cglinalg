@@ -46,9 +46,9 @@ use cglinalg_numeric::{
 /// assert_eq!(vector1.distance_squared(&vector2), 4_f64);
 /// assert_eq!(vector1.distance(&vector2), 2_f64);
 /// ```
-pub trait Normed 
-where 
-    Self: Sized
+pub trait Normed
+where
+    Self: Sized,
 {
     type Output: SimdScalarFloat;
 
@@ -540,9 +540,7 @@ where
 /// (3) forall v in V. forall c in S. norm.norm(v * c) == norm.norm(v) * abs(c)
 /// (4) forall v1, v2 in V. norm.norm(v1 + v2) <= norm.norm(v1) + norm.norm(v2)
 /// ```
-pub trait Norm<V>
-where
-{
+pub trait Norm<V> {
     type Output: SimdScalarSigned;
 
     /// Compute the norm of a normed vector type with respect to the norm `self`.

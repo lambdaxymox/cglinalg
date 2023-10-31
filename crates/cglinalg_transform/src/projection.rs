@@ -57,7 +57,7 @@ pub struct Perspective3<S> {
 
 impl<S> Perspective3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     /// Construct a new perspective projection transformation.
     ///
@@ -714,7 +714,7 @@ impl<S> AsRef<Matrix4x4<S>> for Perspective3<S> {
 
 impl<S> fmt::Display for Perspective3<S> 
 where 
-    S: fmt::Display 
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Perspective3 [{}]", self.matrix)
@@ -723,7 +723,7 @@ where
 
 impl<S> From<Perspective3<S>> for Matrix4x4<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(perspective: Perspective3<S>) -> Matrix4x4<S> {
@@ -733,7 +733,7 @@ where
 
 impl<S> approx::AbsDiffEq for Perspective3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -765,7 +765,7 @@ where
 
 impl<S> approx::UlpsEq for Perspective3<S> 
 where 
-    S: SimdScalarFloat   
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -780,7 +780,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -792,7 +792,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -804,7 +804,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -816,7 +816,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -828,7 +828,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -840,7 +840,7 @@ where
 
 impl<S> ops::Mul<&Vector3<S>> for Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -852,7 +852,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for &Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -864,7 +864,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Perspective3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -920,7 +920,7 @@ pub struct PerspectiveFov3<S> {
 
 impl<S> PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a new perspective projection transformation.
     /// 
@@ -1784,7 +1784,7 @@ impl<S> AsRef<Matrix4x4<S>> for PerspectiveFov3<S> {
 
 impl<S> fmt::Display for PerspectiveFov3<S> 
 where 
-    S: fmt::Display
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "PerspectiveFov3 [{}]", self.matrix)
@@ -1793,7 +1793,7 @@ where
 
 impl<S> From<PerspectiveFov3<S>> for Matrix4x4<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(perspective: PerspectiveFov3<S>) -> Matrix4x4<S> {
@@ -1803,7 +1803,7 @@ where
 
 impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -1820,7 +1820,7 @@ where
 
 impl<S> approx::RelativeEq for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat  
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -1835,7 +1835,7 @@ where
 
 impl<S> approx::UlpsEq for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -1850,7 +1850,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -1862,7 +1862,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -1874,7 +1874,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -1886,7 +1886,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -1898,7 +1898,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -1910,7 +1910,7 @@ where
 
 impl<S> ops::Mul<&Vector3<S>> for PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -1922,7 +1922,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for &PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -1934,7 +1934,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b PerspectiveFov3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -1984,7 +1984,7 @@ pub struct Orthographic3<S> {
 
 impl<S> Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     /// Construct a new orthographic projection.
     /// 
@@ -2563,7 +2563,7 @@ impl<S> AsRef<Matrix4x4<S>> for Orthographic3<S> {
 
 impl<S> fmt::Display for Orthographic3<S> 
 where 
-    S: fmt::Display
+    S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Orthographic3 [{}]", self.matrix)
@@ -2572,7 +2572,7 @@ where
 
 impl<S> From<Orthographic3<S>> for Matrix4x4<S>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn from(orthographic: Orthographic3<S>) -> Matrix4x4<S> {
@@ -2582,7 +2582,7 @@ where
 
 impl<S> approx::AbsDiffEq for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
@@ -2599,7 +2599,7 @@ where
 
 impl<S> approx::RelativeEq for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_relative() -> Self::Epsilon {
@@ -2614,7 +2614,7 @@ where
 
 impl<S> approx::UlpsEq for Orthographic3<S> 
 where 
-    S: SimdScalarFloat 
+    S: SimdScalarFloat,
 {
     #[inline]
     fn default_max_ulps() -> u32 {
@@ -2629,7 +2629,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -2641,7 +2641,7 @@ where
 
 impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -2653,7 +2653,7 @@ where
 
 impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -2665,7 +2665,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Point3<S>;
 
@@ -2677,7 +2677,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -2689,7 +2689,7 @@ where
 
 impl<S> ops::Mul<&Vector3<S>> for Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -2701,7 +2701,7 @@ where
 
 impl<S> ops::Mul<Vector3<S>> for &Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 
@@ -2713,7 +2713,7 @@ where
 
 impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Orthographic3<S> 
 where 
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
 

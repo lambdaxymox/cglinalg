@@ -43,9 +43,12 @@ use proptest::prelude::*;
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarSigned,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -59,18 +62,18 @@ where
 
 fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn rescale_matrix<S, const R: usize, const C: usize>(value: Matrix<S, R, C>, min_value: S, max_value: S) -> Matrix<S, R, C> 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         value.map(|element| rescale(element, min_value, max_value))
     }
@@ -129,7 +132,7 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 /// ```
 fn prop_matrix_additive_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_matrix = Matrix::zero();
 
@@ -147,7 +150,7 @@ where
 /// ```
 fn prop_matrix_plus_zero_equals_zero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_matrix = Matrix::zero();
 
@@ -167,7 +170,7 @@ fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(m1 + m2, m2 + m1);
 
@@ -186,7 +189,7 @@ fn prop_matrix_addition_associative<S, const R: usize, const C: usize>(
     m3: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((m1 + m2) + m3, m1 + (m2 + m3));
 
@@ -205,7 +208,7 @@ fn prop_matrix_subtraction<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!(m1 + (-m2), m1 - m2);
 
@@ -223,7 +226,7 @@ where
 /// side as well as left-hand side. 
 fn prop_zero_times_matrix_equals_zero_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -244,7 +247,7 @@ where
 /// side as well as left-hand side. 
 fn prop_one_times_matrix_equals_matrix<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = S::one();
 
@@ -267,7 +270,7 @@ fn prop_negative_one_times_matrix_equals_negative_matrix<S, const R: usize, cons
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let one = S::one();
     let minus_one = -one;
@@ -290,7 +293,7 @@ fn prop_scalar_matrix_multiplication_compatible_addition<S, const R: usize, cons
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((m1 + m2) * c, m1 * c + m2 * c);
 
@@ -310,7 +313,7 @@ fn prop_scalar_matrix_multiplication_compatible_subtraction<S, const R: usize, c
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((m1 - m2) * c, m1 * c - m2 * c);
 
@@ -334,7 +337,7 @@ fn prop_scalar_matrix_multiplication_commutative<S, const N: usize, const NN: us
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let c_matrix = Matrix::identity() * c;
 
@@ -355,7 +358,7 @@ fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usiz
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(m * (a * b), (m * a) * b);
 
@@ -373,7 +376,7 @@ fn prop_matrix_multiplication_identity<S, const N: usize, const NN: usize>(m: Ma
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let identity = Matrix::identity();
 
@@ -393,7 +396,7 @@ fn prop_zero_matrix_times_matrix_equals_zero_matrix<S, const N: usize, const NN:
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let zero_matrix = Matrix::zero();
 
@@ -418,7 +421,7 @@ fn prop_matrix_multiplication_associative<S, const N: usize, const NN: usize>(
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     prop_assert_eq!((m1 * m2) * m3, m1* (m2 * m3));
 
@@ -440,7 +443,7 @@ fn prop_matrix_multiplication_distributive<S, const N: usize, const NN: usize>(
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     prop_assert_eq!(m1 * (m2 + m3), m1 * m2 + m1 * m3);
 
@@ -461,7 +464,7 @@ fn prop_matrix_multiplication_compatible_with_scalar_multiplication<S, const N: 
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     prop_assert_eq!((m1 * m2) * c, m1 * (m2 * c));
 
@@ -481,7 +484,7 @@ fn prop_matrix_multiplication_compatible_with_scalar_multiplication1<S, const R:
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(m * (c1 * c2), (m * c1) * c2);
 
@@ -498,7 +501,7 @@ fn prop_matrix_transpose_transpose_equals_matrix<S, const R: usize, const C: usi
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(m.transpose().transpose(), m);
 
@@ -516,7 +519,7 @@ fn prop_transpose_linear<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((m1 + m2).transpose(), m1.transpose() + m2.transpose());
 
@@ -535,7 +538,7 @@ fn prop_transpose_scalar_multiplication<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((m * c).transpose(), m.transpose() * c);
 
@@ -557,7 +560,7 @@ fn prop_transpose_product<S, const N: usize, const NN: usize>(
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<N>, Const<N>, Const<N>, Const<N>>,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     prop_assert_eq!((m1 * m2).transpose(), m2.transpose() * m1.transpose());
 
@@ -577,7 +580,7 @@ fn prop_swap_rows_commutative<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -600,7 +603,7 @@ fn prop_swap_identical_rows_identity<S, const R: usize, const C: usize>(
     row: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap_rows(row, row);
@@ -623,7 +626,7 @@ fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap_rows(row1, row2);
@@ -646,7 +649,7 @@ fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(
     col2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -669,7 +672,7 @@ fn prop_swap_identical_columns_is_identity<S, const R: usize, const C: usize>(
     col: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap_columns(col, col);
@@ -692,7 +695,7 @@ fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(
     col2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap_columns(col1, col2);
@@ -717,7 +720,7 @@ fn prop_swap_elements_commutative<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     let mut m2 = m;
@@ -741,7 +744,7 @@ fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(
     row: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap((col, row), (col, row));
@@ -766,7 +769,7 @@ fn prop_swap_elements_twice_is_identity<S, const R: usize, const C: usize>(
     row2: usize
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let mut m1 = m;
     m1.swap((col1, row1), (col2, row2));
@@ -785,7 +788,7 @@ where
 /// ```
 fn prop_matrix_dot_product_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
 
@@ -807,7 +810,7 @@ where
 /// which is the relation the property uses for testability reasons.
 fn prop_matrix_dot_product_nonzero<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -830,7 +833,7 @@ fn prop_matrix_dot_product_left_bilinear<S, const R: usize, const C: usize>(
     m3: Matrix<S, R, C>
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (m1 + m2).dot(&m3);
     let rhs = m1.dot(&m3) + m2.dot(&m3);
@@ -852,7 +855,7 @@ fn prop_matrix_dot_product_right_bilinear<S, const R: usize, const C: usize>(
     m3: Matrix<S, R, C>
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = m1.dot(&(m2 + m3));
     let rhs = m1.dot(&m2) + m1.dot(&m3);
@@ -876,7 +879,7 @@ fn prop_matrix_dot_product_homogeneous<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>,
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (m1 * c1).dot(&(m2 * c2));
     let rhs = (m1.dot(&m2)) * (c1 * c2);
@@ -894,7 +897,7 @@ where
 /// ```
 fn prop_matrix_l1_norm_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -916,7 +919,7 @@ where
 /// For the sake of testability, we use the second form.
 fn prop_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -943,7 +946,7 @@ fn prop_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -961,7 +964,7 @@ where
 /// ```
 fn prop_matrix_l1_norm_homogeneous<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (m * c).l1_norm();
     let rhs = m.l1_norm() * c.abs();
@@ -982,7 +985,7 @@ fn prop_matrix_l1_norm_triangle_inequality<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (m1 + m2).l1_norm();
     let rhs = m1.l1_norm() + m2.l1_norm();
@@ -1008,7 +1011,7 @@ fn prop_approx_matrix_l1_norm_point_separating1<S, const R: usize, const C: usiz
     tolerance: S
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero_matrix = Matrix::zero();
 
@@ -1035,7 +1038,7 @@ fn prop_approx_matrix_l1_norm_point_separating2<S, const R: usize, const C: usiz
     tolerance: S
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
     prop_assert!((m1 - m2).l1_norm() > tolerance);
@@ -1051,7 +1054,7 @@ where
 /// ```
 fn prop_matrix_linf_norm_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -1073,7 +1076,7 @@ where
 /// For the sake of testability, we use the second form.
 fn prop_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -1100,7 +1103,7 @@ fn prop_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -1118,7 +1121,7 @@ where
 /// ```
 fn prop_matrix_linf_norm_homogeneous<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (m * c).linf_norm();
     let rhs = m.linf_norm() * c.abs();
@@ -1144,7 +1147,7 @@ fn prop_approx_matrix_linf_norm_point_separating1<S, const R: usize, const C: us
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero_matrix = Matrix::zero();
 
@@ -1171,7 +1174,7 @@ fn prop_approx_matrix_linf_norm_point_separating2<S, const R: usize, const C: us
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
     prop_assert!((m1 - m2).linf_norm() > tolerance);
@@ -1190,7 +1193,7 @@ fn prop_matrix_linf_norm_triangle_inequality<S, const R: usize, const C: usize>(
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (m1 + m2).linf_norm();
     let rhs = m1.linf_norm() + m2.linf_norm();
@@ -1208,7 +1211,7 @@ where
 /// ```
 fn prop_matrix_norm_squared_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -1230,7 +1233,7 @@ where
 /// For the sake of testability, we use the second form.
 fn prop_matrix_norm_squared_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -1257,7 +1260,7 @@ fn prop_matrix_norm_squared_point_separating2<S, const R: usize, const C: usize>
     m2: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
 
@@ -1275,7 +1278,7 @@ where
 /// ```
 fn prop_matrix_norm_squared_homogeneous_squared<S, const R: usize, const C: usize>(c: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned + SimdScalarOrd
+    S: SimdScalarSigned + SimdScalarOrd,
 {
     let lhs = (m * c).norm_squared();
     let rhs = m.norm_squared() * c.abs() * c.abs();
@@ -1295,7 +1298,7 @@ fn prop_matrix_magnitude_norm_synonyms<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(m.magnitude(), m.norm());
 
@@ -1313,7 +1316,7 @@ fn prop_matrix_magnitude_squared_norm_squared_synonyms<S, const R: usize, const 
     m: Matrix<S, R, C>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!(m.magnitude_squared(), m.norm_squared());
 
@@ -1328,7 +1331,7 @@ where
 /// ```
 fn prop_matrix_norm_nonnegative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
 
@@ -1353,7 +1356,7 @@ fn prop_approx_matrix_norm_point_separating1<S, const R: usize, const C: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
@@ -1381,7 +1384,7 @@ fn prop_approx_matrix_norm_point_separating2<S, const R: usize, const C: usize>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
     prop_assert!(relative_ne!(m1.norm(), m2.norm(), epsilon = tolerance));
@@ -1397,7 +1400,7 @@ where
 /// ```
 fn prop_matrix_trace_linear<S, const N: usize>(m1: Matrix<S, N, N>, m2: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (m1 + m2).trace();
     let rhs = m1.trace() + m2.trace();
@@ -1415,7 +1418,7 @@ where
 /// ```
 fn prop_matrix_trace_transpose<S, const N: usize>(m: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = m.transpose().trace();
     let rhs = m.trace();
@@ -1434,7 +1437,7 @@ where
 fn prop_matrix_trace_product<S, const N: usize, const NN: usize>(m1: Matrix<S, N, N,>, m2: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
     S: SimdScalar,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let lhs = (m1 * m2).trace();
     let rhs = (m2 * m1).trace();
@@ -1452,7 +1455,7 @@ where
 /// ```
 fn prop_matrix_trace_scalar_product<S, const N: usize>(c: S, m: Matrix<S, N, N>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = (m * c).trace();
     let rhs = m.trace() * c;
@@ -1475,7 +1478,7 @@ fn prop_approx_matrix_trace_linear<S, const N: usize>(
     max_relative: S
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (m1 + m2).trace();
     let rhs = m1.trace() + m2.trace();
@@ -1499,7 +1502,7 @@ fn prop_approx_matrix_trace_product<S, const N: usize, const NN: usize>(
 ) -> Result<(), TestCaseError> 
 where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     let lhs = (m1 * m2).trace();
     let rhs = (m2 * m1).trace();
@@ -1522,7 +1525,7 @@ fn prop_approx_matrix_trace_scalar_product<S, const N: usize>(
     max_relative: S,
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (m * c).trace();
     let rhs = m.trace() * c;
@@ -1540,7 +1543,7 @@ where
 /// ```
 fn prop_rows_vector_dot_product<S, const C: usize>(m1: Matrix<S, 1, C>, m2: Matrix<S, 1, C>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let lhs = m1.dot(&m2);
     let rhs1 = (m1 * m2.transpose())[0][0];
@@ -1561,7 +1564,7 @@ where
     S: SimdScalar,
     ShapeConstraint: CanTransposeMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
     ShapeConstraint: DimMul<Const<C1>, Const<C2>, Output = Const<C1C2>>,
-    ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>
+    ShapeConstraint: DimMul<Const<C2>, Const<C1>, Output = Const<C1C2>>,
 {
     let lhs = m1.tr_mul(&m2);
     let rhs = m1.transpose() * m2;
@@ -1578,7 +1581,7 @@ fn prop_tr_dot_equals_transpose_dot<S, const R1: usize, const C1: usize, const R
 where
     S: SimdScalar,
     ShapeConstraint: DimEq<Const<R1>, Const<C2>> + DimEq<Const<C2>, Const<R1>>,
-    ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>
+    ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>,
 {
     let lhs = m1.tr_dot(&m2);
     let rhs = m1.transpose().dot(&m2);

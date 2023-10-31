@@ -31,7 +31,7 @@ use criterion::{
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -41,7 +41,7 @@ where
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S> 
 where 
-    Standard: Distribution<S> 
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -54,7 +54,7 @@ where
 
 fn gen_matrix3x3<S>() -> Matrix3x3<S> 
 where 
-    Standard: Distribution<S> 
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -68,7 +68,7 @@ where
 
 fn gen_matrix4x4<S>() -> Matrix4x4<S> 
 where 
-    Standard: Distribution<S> 
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);

@@ -23,8 +23,8 @@ use proptest::prelude::*;
 
 
 fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
-where 
-    S: SimdScalarSigned + Arbitrary 
+where
+    S: SimdScalarSigned + Arbitrary,
 {
     any::<[S; N]>().prop_map(|array| {        
         let mut result = Vector::zero();
@@ -39,8 +39,8 @@ where
 }
 
 fn strategy_point_any<S, const N: usize>() -> impl Strategy<Value = Point<S, N>>
-where 
-    S: SimdScalarSigned + Arbitrary 
+where
+    S: SimdScalarSigned + Arbitrary,
 {
     any::<[S; N]>().prop_map(|array| {        
         let mut result = Point::origin();
@@ -56,7 +56,7 @@ where
 
 fn strategy_translation_any<S, const N: usize>() -> impl Strategy<Value = Translation<S, N>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     strategy_vector_any::<S, N>().prop_map(|vector| { 
         Translation::from_vector(&vector)
@@ -76,7 +76,7 @@ fn prop_translation_preserves_point_differences<S, const N: usize>(
     p2: Point<S, N>
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = t * (p1 - p2);
     let rhs = p1 - p2;
@@ -100,7 +100,7 @@ fn prop_translation_translation_inverse_is_original_point<S, const N: usize>(
     p: Point<S, N>
 ) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!((t * t.inverse()) * p, p);
     prop_assert_eq!((t.inverse() * t) * p, p);
@@ -117,7 +117,7 @@ where
 /// ```
 fn prop_translation_translation_inverse<S, const N: usize>(t: Translation<S, N>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = t * t.inverse();
     let rhs = t.inverse() * t;
@@ -142,7 +142,7 @@ fn prop_translation_composition_associative<S, const N: usize>(
     t3: Translation<S, N>,
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (t1 * t2) * t3;
     let rhs = t1 * (t2 * t3);

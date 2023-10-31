@@ -30,7 +30,7 @@ use criterion::{
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
@@ -39,8 +39,8 @@ where
 }
 
 fn gen_quaternion<S>() -> Quaternion<S> 
-where 
-    Standard: Distribution<S> 
+where
+    Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);

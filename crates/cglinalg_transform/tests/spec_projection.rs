@@ -38,7 +38,7 @@ struct PointLine<S> {
 
 impl<S> PointLine<S> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     const fn new(start: Point3<S>, end: Point3<S>) -> Self {
@@ -69,7 +69,7 @@ struct VectorLine<S> {
 
 impl<S> VectorLine<S> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     #[inline]
     const fn new(start: Vector3<S>, end: Vector3<S>) -> Self {
@@ -94,18 +94,18 @@ where
 
 fn strategy_perspectivefov3_from_range<S>(near: S, far: S) -> impl Strategy<Value = PerspectiveFov3<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn choose_aspect_ratio<S>(i: usize) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         let three: S = cglinalg_numeric::cast(3);
         let four: S = cglinalg_numeric::cast(4);
@@ -133,18 +133,18 @@ where
 
 fn strategy_perspectivefov3_line_point<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, PointLine<S>)>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn choose_aspect_ratio<S>(i: usize) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         let three: S = cglinalg_numeric::cast(3);
         let four: S = cglinalg_numeric::cast(4);
@@ -190,7 +190,7 @@ where
 
 fn strategy_perspectivefov3_line_vector<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, VectorLine<S>)>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
@@ -201,7 +201,7 @@ where
 
     fn choose_aspect_ratio<S>(i: usize) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         let three: S = cglinalg_numeric::cast(3);
         let four: S = cglinalg_numeric::cast(4);
@@ -247,18 +247,18 @@ where
 
 fn strategy_perspectivefov3_lines_eye_point<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, PointLine<S>)>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn choose_aspect_ratio<S>(i: usize) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         let three: S = cglinalg_numeric::cast(3);
         let four: S = cglinalg_numeric::cast(4);
@@ -298,18 +298,18 @@ where
 
 fn strategy_perspectivefov3_lines_eye_vector<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, VectorLine<S>)>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
     fn choose_aspect_ratio<S>(i: usize) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         let three: S = cglinalg_numeric::cast(3);
         let four: S = cglinalg_numeric::cast(4);
@@ -349,11 +349,11 @@ where
 
 fn strategy_point2_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Point2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -368,11 +368,11 @@ where
 
 fn strategy_vector2_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Vector2<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -401,11 +401,11 @@ fn strategy_vector2_any() -> impl Strategy<Value = Vector2<f64>> {
 
 fn strategy_interval<S>(min_value: S, max_value: S) -> impl Strategy<Value = S> 
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -428,7 +428,7 @@ fn prop_approx_perspective_projection_near_plane_point<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let p3 = p.extend(-m.near());
     let lhs = (m * p3).z;
@@ -453,7 +453,7 @@ fn prop_approx_perspective_projection_near_plane_vector<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let v3 = v.extend(-m.near());
     let lhs = (m * v3).z;
@@ -478,7 +478,7 @@ fn prop_approx_perspective_projection_far_plane_point<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let p3 = p.extend(-m.far());
     let lhs = (m * p3).z;
@@ -503,7 +503,7 @@ fn prop_approx_perspective_projection_far_plane_vector<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let v3 = v.extend(-m.far());
     let lhs = (m * v3).z;
@@ -528,7 +528,7 @@ fn prop_perspective_projection_preserves_z_depth_ordering_point<S>(
     t2: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(t1 >= S::zero() && t1 <= S::one());
     prop_assume!(t2 >= S::zero() && t2 <= S::one());
@@ -561,7 +561,7 @@ fn prop_perspective_projection_preserves_z_depth_ordering_vector<S>(
     t2: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(t1 >= S::zero() && t1 <= S::one());
     prop_assume!(t2 >= S::zero() && t2 <= S::one());
@@ -588,7 +588,7 @@ fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_point
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let start = l.start();
     let end = l.end();
@@ -610,7 +610,7 @@ fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_vecto
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let start = l.start();
     let end = l.end();
