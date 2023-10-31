@@ -1930,7 +1930,7 @@ where
     #[inline]
     pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self 
     where
-        A: Angle + Into<Radians<S>>
+        A: Angle + Into<Radians<S>>,
     {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
             euler_angles.x.into(),

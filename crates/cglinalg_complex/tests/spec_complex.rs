@@ -22,13 +22,13 @@ use proptest::prelude::*;
 
 fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>>
 where
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     use cglinalg_trigonometry::Radians;
 
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -43,11 +43,11 @@ where
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -62,11 +62,11 @@ where
 
 fn strategy_complex_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarSigned
+        S: SimdScalarSigned,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -133,9 +133,12 @@ fn strategy_complex_i32_modulus_squared() -> impl Strategy<Value = Complex<i32>>
 
 fn strategy_imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
 where 
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S: SimdScalarFloat>(value: S, min_value: S, max_value: S) -> S {
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarFloat,
+    {
         min_value + (value % (max_value - min_value))
     }
 
@@ -146,11 +149,11 @@ where
 
 fn strategy_real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
 where 
-    S: SimdScalarFloat + Arbitrary
+    S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
     where
-        S: SimdScalarFloat
+        S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
@@ -309,7 +312,7 @@ fn strategy_complex_f64_atanh() -> impl Strategy<Value = Complex<f64>> {
 /// ```
 fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where 
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
@@ -326,7 +329,7 @@ where
 /// ```
 fn prop_complex_times_zero_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
     let zero_complex = Complex::zero();
@@ -345,7 +348,7 @@ where
 /// ```
 fn prop_complex_plus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
@@ -363,7 +366,7 @@ where
 /// ```
 fn prop_zero_plus_complex_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
@@ -381,7 +384,7 @@ where
 /// ```
 fn prop_one_times_complex_equal_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = Complex::one();
 
@@ -399,7 +402,7 @@ where
 /// ```
 fn prop_complex_times_one_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = S::one();
 
@@ -425,7 +428,7 @@ where
 /// ```
 fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!( z1 +  z2, &z1 +  z2);
     prop_assert_eq!( z1 +  z2,  z1 + &z2);
@@ -446,7 +449,7 @@ where
 /// ```
 fn prop_complex_addition_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z1 + z2, z2 + z1);
 
@@ -462,7 +465,7 @@ where
 /// ```
 fn prop_complex_addition_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((z1 + z2) + z3, z1 + (z2 + z3));
 
@@ -477,7 +480,7 @@ where
 /// ```
 fn prop_complex_minus_zero_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
@@ -494,7 +497,7 @@ where
 /// ```
 fn prop_complex_minus_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
@@ -520,7 +523,7 @@ where
 /// ```
 fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!( z1 -  z2, &z1 -  z2);
     prop_assert_eq!( z1 -  z2,  z1 - &z2);
@@ -541,7 +544,7 @@ where
 /// ```
 fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {   
     let c_complex = Complex::from_real(c);
 
@@ -558,7 +561,7 @@ where
 /// ```
 fn prop_complex_multiplicative_unit<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let one = Complex::one();
 
@@ -578,7 +581,7 @@ where
 /// ```
 fn prop_approx_complex_multiplicative_inverse<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(z.is_finite());
     prop_assume!(z.is_invertible());
@@ -606,7 +609,7 @@ where
 /// ```
 fn prop_scalar_multiplication_compatibility1<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let a_complex = Complex::from_real(a);
     let b_complex = Complex::from_real(b);
@@ -630,7 +633,7 @@ where
 /// ```
 fn prop_scalar_multiplication_compatibility2<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z * (a * b), (z * a) * b);
 
@@ -645,7 +648,7 @@ where
 /// ```
 fn prop_complex_multiplication_associative<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z1 * (z2 * z3), (z1 * z2) * z3);
 
@@ -675,7 +678,7 @@ where
 /// ```
 fn prop_distribution_over_complex_addition<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let a_complex = Complex::from_real(a);
 
@@ -694,7 +697,7 @@ where
 /// ```
 fn prop_distribution_over_scalar_addition<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let a_complex = Complex::from_real(a);
     let b_complex = Complex::from_real(b);
@@ -714,7 +717,7 @@ where
 /// ```
 fn prop_distribution_over_complex_addition1<S>(a: S, z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((z1 + z2) * a, z1 * a + z2 * a);
 
@@ -730,7 +733,7 @@ where
 /// ```
 fn prop_distribution_over_scalar_addition1<S>(a: S, b: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z * (a + b), z * a + z * b);
 
@@ -745,7 +748,7 @@ where
 /// ```
 fn prop_complex_multiplication_right_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
 
@@ -760,7 +763,7 @@ where
 /// ```
 fn prop_complex_multiplication_left_distributive<S>(z1: Complex<S>, z2: Complex<S>, z3: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!((z1 + z2) * z3, z1 * z3 + z2 * z3);
 
@@ -775,7 +778,7 @@ where
 /// ```
 fn prop_complex_conjugate_conjugate_equals_complex<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!(z.conjugate().conjugate(), z);
 
@@ -790,7 +793,7 @@ where
 /// ```
 fn prop_complex_conjugation_linear<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!((z1 + z2).conjugate(), z1.conjugate() + z2.conjugate());
 
@@ -805,7 +808,7 @@ where
 /// ```
 fn prop_complex_conjugation_transposes_products<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     prop_assert_eq!((z1 * z2).conjugate(), z2.conjugate() * z1.conjugate());
 
@@ -820,7 +823,7 @@ where
 /// ```
 fn prop_modulus_squared_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
 
@@ -851,7 +854,7 @@ fn prop_approx_modulus_squared_point_separating<S>(
     output_tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(z1, z2, epsilon = input_tolerance));
     prop_assert!((z1 - z2).modulus_squared() > output_tolerance);
@@ -867,7 +870,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z.magnitude_squared(), z.modulus_squared());
 
@@ -881,7 +884,7 @@ where
 /// ```
 fn prop_norm_squared_modulus_squared_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z.norm_squared(), z.modulus_squared());
 
@@ -905,7 +908,7 @@ where
 /// norm function.
 fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     let zero = S::zero();
 
@@ -923,7 +926,7 @@ where
 /// ```
 fn prop_modulus_squared_homogeneous_squared<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (z * c).modulus_squared();
     let rhs = z.modulus_squared() * c.abs() * c.abs();
@@ -941,7 +944,7 @@ where
 /// ```
 fn prop_modulus_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
 
@@ -967,7 +970,7 @@ where
 /// norm function.
 fn prop_approx_modulus_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero = S::zero();
 
@@ -985,7 +988,7 @@ where
 /// where equality is exact.
 fn prop_magnitude_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.magnitude(), z.modulus());
 
@@ -1000,7 +1003,7 @@ where
 /// where equality is exact.
 fn prop_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.norm(), z.modulus());
 
@@ -1015,7 +1018,7 @@ where
 /// where equality is exact.
 fn prop_l2_norm_modulus_synonyms<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.l2_norm(), z.modulus());
 
@@ -1030,7 +1033,7 @@ where
 /// ```
 fn prop_l1_norm_nonnegative<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let zero = S::zero();
 
@@ -1047,7 +1050,7 @@ where
 /// ```
 fn prop_l1_norm_homogeneous<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (z * c).l1_norm();
     let rhs = z.l1_norm() * c.abs();
@@ -1065,7 +1068,7 @@ where
 /// ```
 fn prop_l1_norm_triangle_inequality<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {
     let lhs = (z1 + z2).l1_norm();
     let rhs = z1.l1_norm() + z2.l1_norm();
@@ -1092,7 +1095,7 @@ where
 /// norm function.
 fn prop_approx_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(relative_ne!(z1, z2, epsilon = tolerance));
     prop_assert!((z1 - z2).l1_norm() > tolerance);
@@ -1117,7 +1120,7 @@ where
 /// norm function.
 fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where 
-    S: SimdScalarSigned
+    S: SimdScalarSigned,
 {    
     let zero = S::zero();
 
@@ -1136,7 +1139,7 @@ where
 /// ```
 fn prop_approx_exp_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 + z2).exp();
     let rhs = z1.exp() * z2.exp();
@@ -1158,7 +1161,7 @@ where
 /// ```
 fn prop_exp_complex_nonzero<S>(z: Complex<S>) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let zero_complex = Complex::zero();
 
@@ -1175,7 +1178,7 @@ where
 /// ```
 fn prop_approx_exp_complex_exp_negative_complex<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let unit_re = Complex::unit_re();
     let exp_z = z.exp();
@@ -1238,7 +1241,7 @@ where
 /// that `k == 0`.
 fn prop_approx_ln_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(!z1.is_zero());
     prop_assume!(!z2.is_zero());
@@ -1265,7 +1268,7 @@ where
 /// ```
 fn prop_approx_complex_ln_real_part<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.ln().real();
     let rhs = z.modulus().ln();
@@ -1284,7 +1287,7 @@ where
 /// ```
 fn prop_approx_exp_ln_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.ln().exp();
     let rhs = z;
@@ -1306,7 +1309,7 @@ where
 /// the numbers of crossings of a branch cut.
 fn prop_approx_ln_exp_identity_up_to_phase<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let ln_exp_z = z.exp().ln();
     let lhs = (ln_exp_z - z) / (S::two_pi());
@@ -1335,7 +1338,7 @@ where
 /// that the principal argument is unique on the interval `[-pi, pi]`.
 fn prop_approx_arg_congruent<S>(z: Complex<S>, k: i32, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     use cglinalg_trigonometry::Radians;
 
@@ -1368,7 +1371,7 @@ fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(!z1.is_zero());
     prop_assume!(!z2.is_zero());
@@ -1401,7 +1404,7 @@ fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(
     tolerance: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assume!(!z1.is_zero());
     prop_assume!(!z2.is_zero());
@@ -1428,7 +1431,7 @@ where
 /// ```
 fn prop_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let arg_z = z.arg();
 
@@ -1447,7 +1450,7 @@ where
 /// ```
 fn prop_approx_square_root_complex_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let sqrt_z = z.sqrt();
     let lhs = sqrt_z * sqrt_z;
@@ -1475,7 +1478,7 @@ where
 /// as desired.
 fn prop_approx_square_root_negative_complex_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let sqrt_negative_z = (-z).sqrt();
     let sqrt_negative_z_squared = sqrt_negative_z * sqrt_negative_z;
@@ -1498,7 +1501,7 @@ where
 /// ```
 fn prop_approx_square_root_complex_conjugate_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let sqrt_conjugate_z = z.conjugate().sqrt();
     let lhs = sqrt_conjugate_z * sqrt_conjugate_z;
@@ -1518,7 +1521,7 @@ where
 /// ```
 fn prop_approx_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 * z2).sqrt().modulus();
     let rhs = z1.sqrt().modulus() * z2.sqrt().modulus();
@@ -1540,7 +1543,7 @@ where
 /// ```
 fn prop_square_root_arg_range<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let pi_over_2 = S::frac_pi_2();
     let arg_sqrt_z = z.sqrt().arg();
@@ -1558,7 +1561,7 @@ where
 /// ```
 fn prop_approx_cubed_root_complex_cubed<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let cbrt_z = z.cbrt();
     let lhs = cbrt_z.cubed();
@@ -1577,8 +1580,8 @@ where
 /// cos(z) == cos(re(z))
 /// ```
 fn prop_approx_cos_real_equals_cos_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     let re_z = z.real();
     let z_re = Complex::from_real(re_z);
@@ -1597,7 +1600,7 @@ where
 /// ```
 fn prop_approx_cos_negative_z_equals_cos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (-z).cos();
     let rhs = z.cos();
@@ -1616,7 +1619,7 @@ where
 /// ```
 fn prop_approx_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let im_z = z.imaginary(); 
     let lhs = Complex::cos(Complex::from_imaginary(im_z));
@@ -1636,7 +1639,7 @@ where
 /// ```
 fn prop_approx_sin_real_equals_sin_real<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let re_z = z.real();
     let z_re = Complex::from_real(re_z);
@@ -1655,7 +1658,7 @@ where
 /// ```
 fn prop_approx_sin_negative_z_equals_negative_sin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (-z).sin();
     let rhs = -(z.sin());
@@ -1674,7 +1677,7 @@ where
 /// ```
 fn prop_approx_sin_imaginary_equals_imaginary_sinh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let i = Complex::unit_im();
     let im_z = z.imaginary();
@@ -1693,7 +1696,7 @@ where
 /// ```
 fn prop_approx_tan_real_equals_real_tan<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let tan_z = z.tan();
     let lhs = tan_z.real();
@@ -1717,7 +1720,7 @@ where
 /// ```
 fn prop_approx_tan_negative_z_equals_negative_tan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (-z).tan();
     let rhs = -(z.tan());
@@ -1737,7 +1740,7 @@ where
 /// ```
 fn prop_approx_tan_imaginary_equals_imaginary_tanh<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let i = Complex::unit_im();
     let im_z = z.imaginary();
@@ -1759,7 +1762,7 @@ fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -1785,7 +1788,7 @@ fn prop_approx_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -1805,7 +1808,7 @@ where
 /// ```
 fn prop_approx_tan_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -1827,7 +1830,7 @@ where
 /// ```
 fn prop_approx_cos_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 + z2).cos();
     let rhs = z1.cos() * z2.cos() - z1.sin() * z2.sin();
@@ -1845,7 +1848,7 @@ where
 /// ```
 fn prop_approx_sin_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 + z2).sin();
     let rhs = z1.sin() * z2.cos() + z1.cos() * z2.sin();
@@ -1863,7 +1866,7 @@ where
 /// ```
 fn prop_approx_tan_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let lhs = (z1 + z2).tan() * (one - z1.tan() * z2.tan());
@@ -1882,7 +1885,7 @@ where
 /// ```
 fn prop_approx_tan_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let lhs = (z1 - z2).tan() * (one + z1.tan() * z2.tan());
@@ -1905,7 +1908,7 @@ where
 /// ```
 fn prop_approx_acos_conjugate_z_equals_conjugate_acos_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.conjugate().acos();
     let rhs = z.acos().conjugate();
@@ -1923,7 +1926,7 @@ where
 /// ```
 fn prop_approx_asin_conjugate_z_equals_conjugate_asin_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.conjugate().asin();
     let rhs = z.asin().conjugate();
@@ -1941,7 +1944,7 @@ where
 /// ```
 fn prop_approx_atan_conjugate_z_equals_conjugate_atan_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.conjugate().atan();
     let rhs = z.atan().conjugate();
@@ -1959,7 +1962,7 @@ where
 /// ```
 fn prop_approx_cos_acos_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.acos().cos();
     let rhs = z;
@@ -1977,7 +1980,7 @@ where
 /// ```
 fn prop_approx_sin_asin_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.asin().sin();
     let rhs = z;
@@ -1999,7 +2002,7 @@ where
 /// ```
 fn prop_approx_tan_atan_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.atan().tan();
     let rhs = z;
@@ -2017,7 +2020,7 @@ where
 /// ```
 fn prop_approx_cosh_conjugate_z_equals_conjugate_cosh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.conjugate().cosh(), z.cosh().conjugate());
 
@@ -2032,7 +2035,7 @@ where
 /// ```
 fn prop_approx_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert!(relative_eq!((-z).cosh(), z.cosh(), epsilon = tolerance));
 
@@ -2047,7 +2050,7 @@ where
 /// ```
 fn prop_approx_sinh_conjugate_z_equals_conjugate_sinh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.conjugate().sinh(), z.sinh().conjugate());
 
@@ -2062,7 +2065,7 @@ where
 /// ```
 fn prop_approx_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert!(relative_eq!((-z).sinh(), -z.sinh(), epsilon = tolerance));
 
@@ -2077,7 +2080,7 @@ where
 /// ```
 fn prop_approx_tanh_conjugate_z_equals_conjugate_tanh_z<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert_eq!(z.conjugate().tanh(), z.tanh().conjugate());
 
@@ -2092,7 +2095,7 @@ where
 /// ```
 fn prop_approx_tanh_negative_z_equals_negative_tanh_z<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     prop_assert!(relative_eq!((-z).tanh(), -z.tanh(), epsilon = tolerance));
 
@@ -2111,7 +2114,7 @@ fn prop_approx_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -2139,7 +2142,7 @@ fn prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
     max_relative: S
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -2163,7 +2166,7 @@ where
 /// ```
 fn prop_approx_tanh_two_times_angle<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let two = one + one;
@@ -2185,7 +2188,7 @@ where
 /// ```
 fn prop_approx_cosh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 + z2).cosh();
     let rhs = z1.cosh() * z2.cosh() + z1.sinh() * z2.sinh();
@@ -2203,7 +2206,7 @@ where
 /// ```
 fn prop_approx_sinh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = (z1 + z2).sinh();
     let rhs = z1.sinh() * z2.cosh() + z1.cosh() * z2.sinh();
@@ -2221,7 +2224,7 @@ where
 /// ```
 fn prop_approx_tanh_angle_sum<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let lhs = (z1 + z2).tanh() * (one + z1.tanh() * z2.tanh());
@@ -2240,7 +2243,7 @@ where
 /// ```
 fn prop_approx_tanh_angle_difference<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let one = Complex::one();
     let lhs = (z1 - z2).tanh() * (one - z1.tanh() * z2.tanh());
@@ -2265,7 +2268,7 @@ where
 /// ```
 fn prop_approx_cosh_acosh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.acosh().cosh();
     let rhs = z;
@@ -2284,7 +2287,7 @@ where
 /// ```
 fn prop_approx_sinh_asinh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.asinh().sinh();
     let rhs = z;
@@ -2303,7 +2306,7 @@ where
 /// ```
 fn prop_approx_tanh_atanh_equals_identity<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let lhs = z.atanh().tanh();
     let rhs = z;
