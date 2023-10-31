@@ -426,6 +426,7 @@ where
 /// &z1 +  z2 == &z1 + &z2
 ///  z1 + &z2 == &z1 + &z2
 /// ```
+#[rustfmt::skip]
 fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
@@ -521,6 +522,7 @@ where
 /// &z1 -  z2 == &z1 - &z2
 ///  z1 - &z2 == &z1 - &z2
 /// ```
+#[rustfmt::skip]
 fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
@@ -1144,11 +1146,7 @@ where
     let lhs = (z1 + z2).exp();
     let rhs = z1.exp() * z2.exp();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), 
-        "z1 = {}; z1 = {}; exp(z1 + z2) = {}; exp(z1) * exp(z2) = {}",
-        z1, z2, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -1251,11 +1249,7 @@ where
     let lhs = (ln_z1_times_z2 - ln_z1_plus_ln_z2) / S::two_pi();
     let rhs = Complex::new(lhs.real().round(), lhs.imaginary().round());
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance),
-        "z1 = {}; z2 = {}; ln(z1 * z2) = {}; ln(z1) + ln(z2) = {}; (ln(z1 * z2) - (ln(z1) + ln(z2))) / (2 * pi) = {}",
-        z1, z2, ln_z1_times_z2, ln_z1_plus_ln_z2, lhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1315,11 +1309,7 @@ where
     let lhs = (ln_exp_z - z) / (S::two_pi());
     let rhs = Complex::new(lhs.real().round(), lhs.imaginary().round());
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance),
-        "z = {}; ln_exp_z = {}; lhs = {}; rhs = {}",
-        z, ln_exp_z, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1381,11 +1371,7 @@ where
     let lhs = (arg_z1_times_z2 - arg_z1_plus_arg_z2) / S::two_pi();
     let rhs = lhs.round();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance),
-        "z1 = {}; z2 = {}; arg(z1 * z2) = {}; arg(z1) + arg(z2) = {}; lhs = {}, rhs = {}",
-        z1, z2, arg_z1_times_z2, arg_z1_plus_arg_z2, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1414,11 +1400,7 @@ where
     let lhs = (arg_z1_div_z2 - arg_z1_minus_arg_z2) / S::two_pi();
     let rhs = lhs.round();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance),
-        "z1 = {}; z2 = {}; arg(z1 / z2) = {}; arg(z1) - arg(z2) = {}, lhs = {}; rhs = {}",
-        z1, z2, arg_z1_div_z2, arg_z1_minus_arg_z2, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1507,7 +1489,7 @@ where
     let lhs = sqrt_conjugate_z * sqrt_conjugate_z;
     let rhs = z.conjugate();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), "lhs = {}; rhs = {}", lhs, rhs);
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -1525,11 +1507,8 @@ where
 {
     let lhs = (z1 * z2).sqrt().modulus();
     let rhs = z1.sqrt().modulus() * z2.sqrt().modulus();
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z1 = {}; z2 = {}; modulus(sqrt(z1 * z2)) = {}; modulus(sqrt(z1)) * modulus(sqrt(z2)) = {}",
-        z1, z2, lhs, rhs
-    );
+    
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -1702,11 +1681,7 @@ where
     let lhs = tan_z.real();
     let rhs = z.real().tan();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance),
-        "z = {}; tan(z) = {}; re(tan(z)) = {}; tan(re(z)) = {}",
-        z, tan_z, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
@@ -1891,11 +1866,7 @@ where
     let lhs = (z1 - z2).tan() * (one + z1.tan() * z2.tan());
     let rhs = z1.tan() - z2.tan();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z1 = {}; z2 = {}; tan(z1 - z2) * (1 - tan(z1) * tan(z2)) = {}; tan(z1) - tan(z2) = {}",
-        z1, z2, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -2121,11 +2092,7 @@ where
     let lhs = (two * z).cosh();
     let rhs = z.cosh().squared() + z.sinh().squared();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z = {}; cosh(2 * z) = {}; cosh(z) * cosh(z) + sinh(z) * sinh(z) = {}",
-        z, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -2149,11 +2116,7 @@ where
     let lhs = (two * z).sinh();
     let rhs = two * z.sinh() * z.cosh();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z = {}; sinh(2 * z) = {}; 2 * sinh(z) * cosh(z) = {}",
-        z, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -2249,11 +2212,7 @@ where
     let lhs = (z1 - z2).tanh() * (one - z1.tanh() * z2.tanh());
     let rhs = z1.tanh() - z2.tanh();
 
-    prop_assert!(
-        relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative),
-        "z1 = {}; z2 = {}; tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) = {}; tanh(z1) - tanh(z2) = {}",
-        z1, z2, lhs, rhs
-    );
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
@@ -2292,7 +2251,7 @@ where
     let lhs = z.asinh().sinh();
     let rhs = z;
     
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}; rhs = {}", lhs, rhs);
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }

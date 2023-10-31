@@ -906,6 +906,7 @@ mod trigonometry_tests {
     const _2_PI_I_0: Complex<f64> = Complex::new(2_f64 * f64::consts::PI, 0_f64);
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_cos() {
         assert_relative_eq!(Complex::cos(_0_I_0),         Complex::new(1_f64, 0_f64),                 epsilon = 1e-8);
@@ -989,6 +990,7 @@ mod trigonometry_tests {
         assert!(z_nan11.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_acos() {
         assert_relative_eq!(Complex::acos(_1_I_0),    Complex::new(0_f64, 0_f64),                                 epsilon = 1e-8);
@@ -1067,6 +1069,7 @@ mod trigonometry_tests {
         assert!(z_nan9.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_sin() {
         assert_relative_eq!(Complex::sin(_0_I_0),    Complex::new(0_f64, 0_f64),                  epsilon = 1e-8);
@@ -1144,6 +1147,7 @@ mod trigonometry_tests {
         assert!(z_nan11.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_asin() {
         assert_relative_eq!(Complex::asin(Complex::new(0_f64, 0_f64)), _0_I_0,                                       epsilon = 1e-8);
@@ -1206,6 +1210,7 @@ mod trigonometry_tests {
         assert!(z_nan6.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_tan() {
         assert_relative_eq!(Complex::tan(_0_I_0),    Complex::new(0_f64, 0_f64),                  epsilon = 1e-8);
@@ -1277,6 +1282,7 @@ mod trigonometry_tests {
         assert!(z_nan8.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_atan() {
         assert_relative_eq!(Complex::atan(_0_I_0),    Complex::new(0_f64, 0_f64),                   epsilon = 1e-8);
@@ -1384,6 +1390,7 @@ mod hyperbolic_trigonometry_tests {
     const _INF_I_INF: Complex<f64> = Complex::new(f64::INFINITY, f64::INFINITY);
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_cosh() {
         assert_relative_eq!(Complex::cosh(_0_I_0),    _1_I_0,                                     epsilon = 1e-8);
@@ -1466,6 +1473,7 @@ mod hyperbolic_trigonometry_tests {
         assert!(z_nan10.is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_acosh() {
         assert_relative_eq!(Complex::acosh(_0_I_0),    Complex::new(0_f64, f64::consts::FRAC_PI_2),                epsilon = 1e-8);
@@ -1544,6 +1552,7 @@ mod hyperbolic_trigonometry_tests {
         assert!(z_nan9.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_sinh() {
         assert_relative_eq!(Complex::sinh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
@@ -1620,6 +1629,7 @@ mod hyperbolic_trigonometry_tests {
         assert!(z_nan9.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_asinh() {
         assert_relative_eq!(Complex::asinh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
@@ -1684,6 +1694,7 @@ mod hyperbolic_trigonometry_tests {
         assert!(z_nan6.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_tanh() {
         assert_relative_eq!(Complex::tanh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
@@ -1781,6 +1792,7 @@ mod hyperbolic_trigonometry_tests {
         assert!(z_nan10.imaginary().is_nan());
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_complex_atanh() {
         assert_relative_eq!(Complex::atanh(_0_I_0),    _0_I_0,                                      epsilon = 1e-8);
