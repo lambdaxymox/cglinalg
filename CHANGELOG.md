@@ -38,24 +38,39 @@ and testing quality in `cglinalg_transform`.
   vectors.
 
 ## [0.15.2] - 2022-03-20
-* Refactor the internals of quaternions to keep all coordinates in a
+Introduction of complex numbers.
+
+### Added
+- Add complex number module.
+
+### Changed
+- Refactor the internals of quaternions to keep all coordinates in a
   `Vector4` type. This paves the way for future performance optimizations.
-* General documentation and code improvements.
-* Add complex number module.
+- General documentation and code improvements.
 
 ## [0.10.0] - 2020-10-01
-* Various breaking interface renames.
-* Include examples for how to use different functions in the documentation.
+
+### Added
+- Include examples for how to use different functions in the documentation.
+
+### Changed
+- Various breaking interface renames.
 
 ## [0.9.0] - 2020-09-29
-* Include Unit type for enforcing the requirement that certain vectors be
+
+### Added
+- Include Unit type for enforcing the requirement that certain vectors be
   unit vectors.
-* Include more constructors for various types.
-* Remove the glm module.
+- Include more constructors for various types.
+
+### Removed
+- Remove the glm module.
 
 ## [0.8.0] - 2020-09-26
-* Add affine transformations.
-* Add support for points.
-* Add perspective projection and orthographic projection as transformations 
+
+### Added
+- Add affine transformations.
+- Add support for Euclidean points.
+- Add perspective projection and orthographic projection as transformations 
   instead of just matrices.
-* Include existing library features in test suite except for affine transformations.
+- Include existing library features in test suite except for affine transformations.
