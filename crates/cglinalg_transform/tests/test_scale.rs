@@ -3,17 +3,13 @@ extern crate cglinalg_transform;
 
 #[cfg(test)]
 mod scale2_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Point2,
         Vector2,
     };
-    use cglinalg_transform::{
-        Scale2,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
-    
+    use cglinalg_transform::Scale2;
+
 
     #[test]
     fn test_scale_point() {
@@ -62,16 +58,12 @@ mod scale2_tests {
 
 #[cfg(test)]
 mod scale3_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Point3,
         Vector3,
     };
-    use cglinalg_transform::{
-        Scale3,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Scale3;
 
 
     #[test]
@@ -121,15 +113,9 @@ mod scale3_tests {
 
 #[cfg(test)]
 mod scale2_composition_tests {
-    use cglinalg_core::{
-        Vector2,
-    };
-    use cglinalg_transform::{
-        Scale2,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use approx::assert_relative_eq;
+    use cglinalg_core::Vector2;
+    use cglinalg_transform::Scale2;
 
 
     #[test]
@@ -148,15 +134,9 @@ mod scale2_composition_tests {
 
 #[cfg(test)]
 mod scale3_composition_tests {
-    use cglinalg_core::{
-        Vector3,
-    };
-    use cglinalg_transform::{
-        Scale3,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use approx::assert_relative_eq;
+    use cglinalg_core::Vector3;
+    use cglinalg_transform::Scale3;
 
 
     #[test]

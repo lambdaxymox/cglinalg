@@ -1,10 +1,8 @@
-extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
+extern crate cglinalg_trigonometry;
 
 
-use cglinalg_trigonometry::{
-    Degrees,
-};
+use approx::assert_relative_eq;
 use cglinalg_core::{
     Matrix4x4,
     Point3,
@@ -15,9 +13,7 @@ use cglinalg_transform::{
     Perspective3,
     PerspectiveFov3,
 };
-use approx::{
-    assert_relative_eq,
-};
+use cglinalg_trigonometry::Degrees;
 
 
 #[rustfmt::skip]

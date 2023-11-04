@@ -1,17 +1,13 @@
-extern crate cglinalg_numeric;
 extern crate cglinalg_core;
+extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-};
 use cglinalg_core::{
-    ShapeConstraint,
-    CanMultiply,
     CanContract,
     CanExtend,
+    CanMultiply,
     Const,
     DimAdd,
     DimMul,
@@ -20,10 +16,12 @@ use cglinalg_core::{
     Point,
     Point2,
     Point3,
+    ShapeConstraint,
     Vector,
     Vector2,
     Vector3,
 };
+use cglinalg_numeric::SimdScalarSigned;
 use cglinalg_transform::{
     Transform,
     Transform2,
@@ -37,7 +35,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -53,7 +51,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -62,7 +60,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -78,7 +76,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
@@ -101,7 +99,7 @@ fn strategy_transform2_signed_from_abs_range<S>(min_value: S, max_value: S) -> i
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -126,7 +124,7 @@ fn strategy_transform3_signed_from_abs_range<S>(min_value: S, max_value: S) -> i
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -144,7 +142,7 @@ where
         result[2][0] = rescale(matrix_array[2][0], min_value, max_value);
         result[2][1] = rescale(matrix_array[2][1], min_value, max_value);
         result[2][2] = rescale(matrix_array[2][2], min_value, max_value);
- 
+
         result[3][0] = rescale(translation_array[0], min_value, max_value);
         result[3][1] = rescale(translation_array[1], min_value, max_value);
         result[3][2] = rescale(translation_array[2], min_value, max_value);
@@ -156,29 +154,29 @@ where
 fn strategy_transform2_i32_any() -> impl Strategy<Value = Transform2<i32>> {
     let min_value = 1_i32;
     let max_value = 1_000_000_i32;
-    
+
     strategy_transform2_signed_from_abs_range(min_value, max_value)
 }
 
 fn strategy_transform3_i32_any() -> impl Strategy<Value = Transform3<i32>> {
     let min_value = 1_i32;
     let max_value = 1_000_000_i32;
-    
+
     strategy_transform3_signed_from_abs_range(min_value, max_value)
 }
 
 
 /// The composition of homogeneous transformations is associative over exact
 /// scalars.
-/// 
+///
 /// Given transformations `t1`, `t2`, and `t3`
 /// ```text
 /// (t1 * t2) * t3 == t1 * (t2 * t3)
 /// ```
 fn prop_transform_composition_associative<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
-    t2: Transform<S, N, NPLUS1>, 
-    t3: Transform<S, N, NPLUS1>
+    t2: Transform<S, N, NPLUS1>,
+    t3: Transform<S, N, NPLUS1>,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
@@ -197,7 +195,7 @@ where
 }
 
 /// The composition of transformations satisfies the following.
-/// 
+///
 /// Given transformations `t1` and `t2`, and a point `p`
 /// ```text
 /// (t1 * t2) * p == t1 * (t2 * p)
@@ -205,7 +203,7 @@ where
 fn prop_transform_composition_pointwise_point<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
     t2: Transform<S, N, NPLUS1>,
-    p: Point<S, N>
+    p: Point<S, N>,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
@@ -226,7 +224,7 @@ where
 }
 
 /// The composition of transformations satisfies the following.
-/// 
+///
 /// Given transformations `t1` and `t2`, and a vector `v`
 /// ```text
 /// (t1 * t2) * v == t1 * (t2 * v)
@@ -234,7 +232,7 @@ where
 fn prop_transform_composition_pointwise_vector<S, const N: usize, const NPLUS1: usize, const NP1NP1: usize>(
     t1: Transform<S, N, NPLUS1>,
     t2: Transform<S, N, NPLUS1>,
-    v: Vector<S, N>
+    v: Vector<S, N>,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
@@ -350,4 +348,3 @@ mod transform3_i32_composition_pointwise_props {
         }
     }
 }
-

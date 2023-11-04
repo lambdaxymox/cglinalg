@@ -611,7 +611,7 @@ where
     ///     1_f64, 0_f64, 0_f64, 0_f64,
     ///     0_f64, 1_f64, 0_f64, 0_f64,
     ///     0_f64, 0_f64, 1_f64, 0_f64,
-    ///     1_f64, 2_f64, 3_f64, 1_f64
+    ///     1_f64, 2_f64, 3_f64, 1_f64,
     /// );
     /// let result = translation.to_affine_matrix();
     /// 
@@ -645,15 +645,15 @@ where
     /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
     ///     1_f64, 0_f64, 0_f64,
     ///     0_f64, 1_f64, 0_f64,
-    ///     1_f64, 2_f64, 1_f64
+    ///     1_f64, 2_f64, 1_f64,
     /// ));
     /// let result = translation.to_transform();
     /// 
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Translation3,
@@ -668,10 +668,10 @@ where
     ///     1_f64, 0_f64, 0_f64, 0_f64,
     ///     0_f64, 1_f64, 0_f64, 0_f64,
     ///     0_f64, 0_f64, 1_f64, 0_f64,
-    ///     1_f64, 2_f64, 3_f64, 1_f64
+    ///     1_f64, 2_f64, 3_f64, 1_f64,
     /// ));
     /// let result = translation.to_transform();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -687,8 +687,8 @@ impl<S, const N: usize> AsRef<Vector<S, N>> for Translation<S, N> {
     }
 }
 
-impl<S, const N: usize> fmt::Display for Translation<S, N> 
-where 
+impl<S, const N: usize> fmt::Display for Translation<S, N>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -696,8 +696,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<Translation<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<Translation<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -708,8 +708,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<&Translation<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<&Translation<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarSigned,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -720,8 +720,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::AbsDiffEq for Translation<S, N> 
-where 
+impl<S, const N: usize> approx::AbsDiffEq for Translation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -737,8 +737,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Translation<S, N> 
-where 
+impl<S, const N: usize> approx::RelativeEq for Translation<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -752,8 +752,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Translation<S, N> 
-where 
+impl<S, const N: usize> approx::UlpsEq for Translation<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -767,8 +767,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
@@ -779,8 +779,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
@@ -791,8 +791,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
@@ -803,8 +803,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Translation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Vector<S, N>;
@@ -815,8 +815,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
@@ -827,8 +827,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Point<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
@@ -839,8 +839,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for &Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
@@ -851,8 +851,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Translation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Point<S, N>;
@@ -863,8 +863,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Translation<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Translation<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
@@ -876,8 +876,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Translation<S, N>> for Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
@@ -889,8 +889,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Translation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Translation<S, N>> for &Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
@@ -902,8 +902,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Translation<S, N>> for &'b Translation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Translation<S, N>> for &'b Translation<S, N>
+where
     S: SimdScalarSigned,
 {
     type Output = Translation<S, N>;
@@ -915,14 +915,14 @@ where
     }
 }
 
-impl<S> Translation2<S> 
-where 
+impl<S> Translation2<S>
+where
     S: SimdScalarSigned,
 {
     /// Construct a translation from the components of the translation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Translation2,
@@ -938,25 +938,25 @@ where
     ///     5_i32, 7_i32, 1_i32
     /// );
     /// let result = translation.to_affine_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
         Self {
-            vector: Vector2::new(x, y)
+            vector: Vector2::new(x, y),
         }
     }
 }
 
-impl<S> Translation3<S> 
-where 
+impl<S> Translation3<S>
+where
     S: SimdScalarSigned,
 {
     /// Construct a translation from the components of the translation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Translation3,
@@ -973,14 +973,13 @@ where
     ///     5_i32, 7_i32, 11_i32, 1_i32
     /// );
     /// let result = translation.to_affine_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
         Self {
-            vector: Vector3::new(x, y, z)
+            vector: Vector3::new(x, y, z),
         }
     }
 }
-

@@ -1,23 +1,17 @@
-extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
+extern crate cglinalg_trigonometry;
 
 
 #[cfg(test)]
 mod rotation2_tests {
-    use cglinalg_trigonometry::{
-        Degrees,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Point2,
-        Vector2,
         Unit,
+        Vector2,
     };
-    use cglinalg_transform::{
-        Rotation2,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Rotation2;
+    use cglinalg_trigonometry::Degrees;
 
 
     #[test]
@@ -166,7 +160,7 @@ mod rotation2_tests {
         let vector = Vector2::new(-1_f64, 1_f64);
         let expected = Vector2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.inverse_apply_vector(&vector);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -185,24 +179,20 @@ mod rotation2_tests {
 
 #[cfg(test)]
 mod rotation3_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Point3,
+        Unit,
+        Vector3,
+    };
+    use cglinalg_transform::Rotation3;
     use cglinalg_trigonometry::{
         Angle,
         Degrees,
         Radians,
     };
-    use cglinalg_core::{
-        Point3,
-        Vector3,
-        Unit,
-    };
-    use cglinalg_transform::{
-        Rotation3,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
 
-    
+
     #[test]
     fn test_from_angle_x_rotation_should_not_rotate_x_axis() {
         let rotation = Rotation3::from_angle_x(Degrees(70_f64));
@@ -754,18 +744,12 @@ mod rotation3_tests {
 
 #[cfg(test)]
 mod rotation3_euler_angle_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::EulerAngles;
+    use cglinalg_transform::Rotation3;
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        EulerAngles,
-    };
-    use cglinalg_transform::{
-        Rotation3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 

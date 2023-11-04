@@ -1,30 +1,30 @@
-extern crate cglinalg_numeric;
 extern crate cglinalg_core;
+extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-    SimdScalarFloat,
+use approx::{
+    relative_eq,
+    ulps_eq,
 };
 use cglinalg_core::{
     Point,
     Point2,
     Point3,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Unit,
+};
+use cglinalg_numeric::{
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 use cglinalg_transform::{
     Shear,
     Shear2,
     Shear3,
-};
-use approx::{
-    relative_eq,
-    ulps_eq,
 };
 
 use proptest::prelude::*;
@@ -34,7 +34,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -50,7 +50,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -59,7 +59,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -75,16 +75,17 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
 
+#[rustfmt::skip]
 fn strategy_shear2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Shear2<S>>
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -95,11 +96,11 @@ where
         let shear_factor = rescale(_shear_factor, min_value, max_value);
         let origin = Point2::new(
             rescale(_origin[0], min_value, max_value),
-            rescale(_origin[1], min_value, max_value)
+            rescale(_origin[1], min_value, max_value),
         );
         let direction = Unit::from_value(Vector2::new(
             rescale(_direction[0], min_value, max_value),
-            rescale(_direction[1], min_value, max_value)
+            rescale(_direction[1], min_value, max_value),
         ));
         let normal = Unit::from_value(Vector2::new(-direction[1], direction[0]));
 
@@ -115,7 +116,7 @@ fn strategy_shear3_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl 
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -127,20 +128,16 @@ where
         let origin = Point3::new(
             rescale(_origin[0], min_value, max_value),
             rescale(_origin[1], min_value, max_value),
-            rescale(_origin[2], min_value, max_value)
+            rescale(_origin[2], min_value, max_value),
         );
         let direction = Unit::from_value(Vector3::new(
             rescale(_direction[0], min_value, max_value),
             rescale(_direction[1], min_value, max_value),
-            rescale(_direction[2], min_value, max_value)
+            rescale(_direction[2], min_value, max_value),
         ));
         let normal = {
             let _new_normal = if ulps_eq!(direction[2], S::zero()) {
-                Unit::from_value(Vector3::new(
-                    S::zero(),
-                    S::zero(),  
-                    _normal[2].signum() * S::one()
-                ))
+                Unit::from_value(Vector3::new(S::zero(), S::zero(), _normal[2].signum() * S::one()))
             } else {
                 let _new_normal_0 = rescale(_normal[0], min_value, max_value);
                 let _new_normal_1 = rescale(_normal[1], min_value, max_value);
@@ -160,12 +157,16 @@ where
     })
 }
 
-fn strategy_shear_axis_signed_from_abs_range<F, S, const N: usize>(constructor: F, min_value: S, max_value: S) -> impl Strategy<Value = Shear<S, N>>
+fn strategy_shear_axis_signed_from_abs_range<F, S, const N: usize>(
+    constructor: F,
+    min_value: S,
+    max_value: S,
+) -> impl Strategy<Value = Shear<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
     F: Fn(S) -> Shear<S, N>,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -193,7 +194,7 @@ fn strategy_shear3_f64_any() -> impl Strategy<Value = Shear3<f64>> {
     strategy_shear3_signed_from_abs_range(min_value, max_value)
 }
 
-fn strategy_shear_i32_any<F, const N: usize>(constructor: F) -> impl Strategy<Value = Shear<i32, N>> 
+fn strategy_shear_i32_any<F, const N: usize>(constructor: F) -> impl Strategy<Value = Shear<i32, N>>
 where
     F: Fn(i32) -> Shear<i32, N>,
 {
@@ -252,7 +253,7 @@ fn strategy_point_i32_any<const N: usize>() -> impl Strategy<Value = Point<i32, 
 
 /// The trace of an affine shear matrix is always `N + 1` where `N` is the dimensionality
 /// of the shearing transformation.
-/// 
+///
 /// Given a shear matrix `s` in `N` dimensions.
 /// ```text
 /// trace(to_affine_matrix(s)) == N + 1
@@ -263,7 +264,7 @@ where
 {
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(3_f64);
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
@@ -271,7 +272,7 @@ where
 
 /// The trace of an affine shear matrix is always `N + 1` where `N` is the dimensionality
 /// of the shearing transformation.
-/// 
+///
 /// Given a shear matrix `s` in `N` dimensions.
 /// ```text
 /// trace(to_affine_matrix(s)) == N + 1
@@ -283,13 +284,13 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(4_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}", lhs);
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
 /// The determinant of a shearing transformation matrix is one.
-/// 
+///
 /// Given a shear matrix `s`
 /// ```text
 /// determinant(to_affine_matrix(s)) == 1
@@ -308,7 +309,7 @@ where
 
 /*
 /// The determinant of a shearing transformation matrix is one.
-/// 
+///
 /// Given a shear matrix `s`
 /// ```text
 /// determinant(to_affine_matrix(s)) == 1
@@ -327,8 +328,8 @@ where
 */
 
 /// The matrix of a shearing transformation is asymmetric.
-/// 
-/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix 
+///
+/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix
 /// of `s`. Then the matrix of `s` satisfies
 /// ```text
 /// exists i in 0..N. exists j in 0..N. m[i][j] != m[j][i].
@@ -338,15 +339,15 @@ where
     S: SimdScalarFloat,
 {
     let matrix = s.to_affine_matrix();
-    
+
     prop_assert!(!matrix.is_symmetric());
 
     Ok(())
 }
 
 /// The matrix of a shearing transformation is asymmetric.
-/// 
-/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix 
+///
+/// Given a shearing transformation `s`, of dimension `N`, let `m` be the matrix
 /// of `s`. Then the matrix of `s` satisfies
 /// ```text
 /// exists i in 0..N. exists j in 0..N. m[i][j] != m[j][i].
@@ -356,14 +357,14 @@ where
     S: SimdScalarFloat,
 {
     let matrix = s.to_affine_matrix();
-    
+
     prop_assert!(!matrix.is_symmetric());
 
     Ok(())
 }
 
 /// The shearing transformation satisfies the following property.
-/// 
+///
 /// Given a shearing transformation `s` and a point `p`
 /// ```text
 /// inverse_apply_point(apply_point(p)) == p
@@ -382,12 +383,12 @@ where
 }
 
 /// The shearing transformation satisfies the following property.
-/// 
+///
 /// Given a shearing transformation `s` and a point `v`
 /// ```text
 /// inverse_apply_vector(apply_vector(v)) == v
 /// ```
-fn prop_shear_apply_inverse_apply_identity_vector<S, const N: usize>(s: Shear<S, N>, v: Vector<S, N>,) -> Result<(), TestCaseError>
+fn prop_shear_apply_inverse_apply_identity_vector<S, const N: usize>(s: Shear<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
@@ -616,4 +617,3 @@ mod shear3_i32_apply_props {
         }
     }
 }
-

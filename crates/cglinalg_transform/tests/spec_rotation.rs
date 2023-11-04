@@ -1,38 +1,34 @@
-extern crate cglinalg_numeric;
-extern crate cglinalg_trigonometry;
-extern crate cglinalg_core;
-extern crate cglinalg_transform;
 extern crate approx;
+extern crate cglinalg_core;
+extern crate cglinalg_numeric;
+extern crate cglinalg_transform;
+extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Radians,
-};
+use approx::relative_eq;
 use cglinalg_core::{
-    ShapeConstraint,
     Const,
     DimMul,
     Point,
     Point2,
     Point3,
+    ShapeConstraint,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Unit,
+};
+use cglinalg_numeric::{
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 use cglinalg_transform::{
     Rotation,
     Rotation2,
     Rotation3,
 };
-use approx::{
-    relative_eq,
-};
+use cglinalg_trigonometry::Radians;
 
 use proptest::prelude::*;
 
@@ -41,7 +37,7 @@ fn strategy_rotation2_from_range<S>(min_angle: S, max_angle: S) -> impl Strategy
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -59,7 +55,7 @@ fn strategy_rotation3_from_range<S>(min_angle: S, max_angle: S) -> impl Strategy
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -105,7 +101,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -121,7 +117,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -130,7 +126,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -146,7 +142,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
@@ -195,7 +191,7 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
 
 
 /// Rotation matrices always have a determinant of one.
-/// 
+///
 /// Given a rotation matrix `R`
 /// ```text
 /// det(matrix(R)) == 1
@@ -210,7 +206,7 @@ where
 }
 
 /// Rotation matrices always have a determinant of one.
-/// 
+///
 /// Given a rotation matrix `R`
 /// ```text
 /// det(matrix(R)) == 1
@@ -225,16 +221,16 @@ where
 }
 
 /// Rotation matrices preserve vector norms.
-/// 
+///
 /// Given a rotation matrix `R` and a vector `v`
 /// ```text
 /// norm(R * v) == norm(v)
 /// ```
 fn prop_approx_rotation_vector_preserves_norm<S, const N: usize>(
-    r: Rotation<S, N>, 
-    v: Vector<S, N>, 
-    tolerance: S, 
-    max_relative: S
+    r: Rotation<S, N>,
+    v: Vector<S, N>,
+    tolerance: S,
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -248,7 +244,7 @@ where
 }
 
 /// All Rotations are invertible. Rotations always commute with their inverses.
-/// 
+///
 /// Given a rotation `R` and the identity rotation `1`
 /// ```text
 /// R * inverse(R) == inverse(R) * R == 1
@@ -269,19 +265,19 @@ where
     Ok(())
 }
 
-/// The product of a rotation with its inverse always acts as the identity 
+/// The product of a rotation with its inverse always acts as the identity
 /// pointwise.
-/// 
+///
 /// Given a rotation `R` and a point `p`
 /// ```text
 /// R * (inverse(R) * p) == p
 /// inverse(R) * (R * p) == p
 /// ```
 fn prop_approx_rotation_rotation_inverse_pointwise_point<S, const N: usize, const NN: usize>(
-    r: Rotation<S, N>, 
+    r: Rotation<S, N>,
     p: Point<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -289,9 +285,9 @@ where
 {
     let lhs = r * (r.inverse() * p);
     let rhs = p;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     let lhs = r.inverse() * (r * p);
     let rhs = p;
 
@@ -300,19 +296,19 @@ where
     Ok(())
 }
 
-/// The product of a rotation with its inverse always acts as the identity 
+/// The product of a rotation with its inverse always acts as the identity
 /// pointwise.
-/// 
+///
 /// Given a rotation `R` and a vector `v`
 /// ```text
 /// R * (inverse(R) * v) == v
 /// inverse(R) * (R * v) == v
 /// ```
 fn prop_approx_rotation_rotation_inverse_pointwise_vector<S, const N: usize, const NN: usize>(
-    r: Rotation<S, N>, 
+    r: Rotation<S, N>,
     v: Vector<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -320,9 +316,9 @@ where
 {
     let lhs = r * (r.inverse() * v);
     let rhs = v;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     let lhs = r.inverse() * (r * v);
     let rhs = v;
 
@@ -331,17 +327,17 @@ where
     Ok(())
 }
 
-/// In two dimensions, the composition of rotations is the same as 
+/// In two dimensions, the composition of rotations is the same as
 /// one rotation with the angles added up.
-/// 
+///
 /// Given a rotation `R` that rotates the **xy-plane**, and angles `angle1` and `angle2`
 /// ```text
 /// R(angle1) * R(angle2) == R(angle1 + angle2)
 /// ```
 fn prop_approx_rotation2_composition_same_axis_equals_addition_of_angles<S>(
-    angle1: Radians<S>, 
+    angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -357,10 +353,10 @@ where
     Ok(())
 }
 
-/// In three dimensions, the composition of rotations about the same axis is the 
+/// In three dimensions, the composition of rotations about the same axis is the
 /// same as one rotation about the same axis with the angles added up.
-/// 
-/// Given a rotation `R` that rotates the plane perpendicular to the unit vector `axis`, and 
+///
+/// Given a rotation `R` that rotates the plane perpendicular to the unit vector `axis`, and
 /// angles `angle1` and `angle2`
 /// ```text
 /// R(axis, angle1) * R(axis, angle2) == R(axis, angle1 + angle2)
@@ -369,7 +365,7 @@ fn prop_approx_rotation3_composition_same_axis_equals_addition_of_angles<S>(
     axis: Unit<Vector3<S>>,
     angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -385,9 +381,9 @@ where
     Ok(())
 }
 
-/// A rotation constructed from an angle returns the same angle modulo two pi 
+/// A rotation constructed from an angle returns the same angle modulo two pi
 /// radians.
-/// 
+///
 /// Given an angle `angle`, let `R` be the result of calling `from_angle`, then
 /// ```text
 /// angle(R) == angle (mod (2 * pi))
@@ -523,7 +519,7 @@ mod rotation3_composition_props {
         #[test]
         fn prop_approx_rotation_rotation_inverse_pointwise_point(
             r in super::strategy_rotation3_any(),
-            p in super::strategy_point_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let r: super::Rotation3<f64> = r;
             let p: super::Point3<f64> = p;
@@ -533,7 +529,7 @@ mod rotation3_composition_props {
         #[test]
         fn prop_approx_rotation_rotation_inverse_pointwise_vector(
             r in super::strategy_rotation3_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Rotation3<f64> = r;
             let v: super::Vector3<f64> = v;
@@ -553,4 +549,3 @@ mod rotation3_composition_props {
         }
     }
 }
-

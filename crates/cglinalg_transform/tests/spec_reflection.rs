@@ -1,29 +1,25 @@
-extern crate cglinalg_numeric;
-extern crate cglinalg_core;
-extern crate cglinalg_transform;
 extern crate approx;
+extern crate cglinalg_core;
+extern crate cglinalg_numeric;
+extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
+use approx::relative_eq;
 use cglinalg_core::{
     Point,
     Point2,
     Point3,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Unit,
 };
+use cglinalg_numeric::SimdScalarFloat;
 use cglinalg_transform::{
     Reflection,
     Reflection2,
     Reflection3,
-};
-use approx::{
-    relative_eq,
 };
 
 use proptest::prelude::*;
@@ -33,7 +29,7 @@ fn strategy_reflection2_signed_from_abs_range<S>(min_value: S, max_value: S) -> 
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -48,7 +44,7 @@ where
             let abs_normal_1 = _normal[1].abs();
             let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::machine_epsilon(), S::one());
             let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::machine_epsilon(), S::one());
-            
+
             Unit::from_value(Vector2::new(normal_0, normal_1))
         };
         let bias = {
@@ -70,7 +66,7 @@ fn strategy_reflection3_signed_from_abs_range<S>(min_value: S, max_value: S) -> 
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -88,7 +84,7 @@ where
             let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::machine_epsilon(), S::one());
             let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::machine_epsilon(), S::one());
             let normal_2 = sign_normal_2 * rescale(abs_normal_2, S::machine_epsilon(), S::one());
-            
+
             Unit::from_value(Vector3::new(normal_0, normal_1, normal_2))
         };
         let bias = {
@@ -113,7 +109,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -129,7 +125,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -138,7 +134,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -154,7 +150,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
@@ -189,7 +185,7 @@ fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, 
 
 
 /// The determinant of a reflection matrix is negative one.
-/// 
+///
 /// Given a reflection `R`
 /// ```text
 /// det(matrix(R)) == -1
@@ -207,7 +203,7 @@ where
 }
 
 /// The determinant of a reflection matrix is negative one.
-/// 
+///
 /// Given a reflection `R`
 /// ```text
 /// det(matrix(R)) == -1
@@ -225,16 +221,12 @@ where
 }
 
 /// Reflections preserve vector norms, i.e. every reflection is an isometry.
-/// 
+///
 /// Given a reflection `r` and a vector `v`
 /// ```text
 /// norm(r * v) == norm(v)
 /// ```
-fn prop_approx_reflection_preserves_norm<S, const N: usize>(
-    r: Reflection<S, N>,
-    v: Vector<S, N>,
-    tolerance: S
-) -> Result<(), TestCaseError>
+fn prop_approx_reflection_preserves_norm<S, const N: usize>(r: Reflection<S, N>, v: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -248,7 +240,7 @@ where
 
 /// Every reflection is its own inverse, i.e. reflecting a point twice with
 /// the same reflection matrix yields the original point.
-/// 
+///
 /// Given a reflection `R` and a point `p`
 /// ```text
 /// R * (R * p) == p
@@ -256,7 +248,7 @@ where
 fn prop_approx_reflection_times_reflection_identity_pointwise_point<S, const N: usize>(
     r: Reflection<S, N>,
     p: Point<S, N>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -271,7 +263,7 @@ where
 
 /// Every reflection is its own inverse, i.e. reflecting a vector twice with
 /// the same reflection matrix yields the original vector.
-/// 
+///
 /// Given a reflection `R` and a vector `v`
 /// ```text
 /// R * (R * v) == v
@@ -279,7 +271,7 @@ where
 fn prop_approx_reflection_times_reflection_identity_pointwise_vector<S, const N: usize>(
     r: Reflection<S, N>,
     v: Vector<S, N>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -306,7 +298,7 @@ mod reflection2_invariant_props {
         #[test]
         fn prop_approx_reflection_preserves_norm(
             r in super::strategy_reflection2_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Reflection2<f64> = r;
             let v: super::Vector2<f64> = v;
@@ -322,7 +314,7 @@ mod reflection2_composition_props {
         #[test]
         fn prop_approx_reflection_times_reflection_identity_pointwise_point(
             r in super::strategy_reflection2_f64_any(),
-            p in super::strategy_point_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let r: super::Reflection2<f64> = r;
             let p: super::Point2<f64> = p;
@@ -332,7 +324,7 @@ mod reflection2_composition_props {
         #[test]
         fn prop_approx_reflection_times_reflection_identity_pointwise_vector(
             r in super::strategy_reflection2_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Reflection2<f64> = r;
             let v: super::Vector2<f64> = v;
@@ -354,7 +346,7 @@ mod reflection3_invariant_props {
         #[test]
         fn prop_approx_reflection_preserves_norm(
             r in super::strategy_reflection3_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Reflection3<f64> = r;
             let v: super::Vector3<f64> = v;
@@ -370,7 +362,7 @@ mod reflection3_composition_props {
         #[test]
         fn prop_approx_reflection_times_reflection_identity_pointwise_point(
             r in super::strategy_reflection3_f64_any(),
-            p in super::strategy_point_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let r: super::Reflection3<f64> = r;
             let p: super::Point3<f64> = p;
@@ -380,7 +372,7 @@ mod reflection3_composition_props {
         #[test]
         fn prop_approx_reflection_times_reflection_identity_pointwise_vector(
             r in super::strategy_reflection3_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Reflection3<f64> = r;
             let v: super::Vector3<f64> = v;
@@ -388,4 +380,3 @@ mod reflection3_composition_props {
         }
     }
 }
-

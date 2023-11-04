@@ -3,17 +3,13 @@ extern crate cglinalg_transform;
 
 #[cfg(test)]
 mod reflection2_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Point2,
-        Vector2,
         Unit,
+        Vector2,
     };
-    use cglinalg_transform::{
-        Reflection2,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Reflection2;
 
 
     #[rustfmt::skip]
@@ -267,17 +263,13 @@ mod reflection2_tests {
 
 #[cfg(test)]
 mod reflection3_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Point3,
-        Vector3,
         Unit,
+        Vector3,
     };
-    use cglinalg_transform::{
-        Reflection3,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Reflection3;
 
 
     #[rustfmt::skip]

@@ -1,41 +1,37 @@
-extern crate cglinalg_numeric;
-extern crate cglinalg_core;
-extern crate cglinalg_transform;
 extern crate approx;
+extern crate cglinalg_core;
+extern crate cglinalg_numeric;
+extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Radians,
-};
+use approx::relative_eq;
 use cglinalg_core::{
-    ShapeConstraint,
     Const,
     DimMul,
     Point,
     Point2,
     Point3,
+    ShapeConstraint,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Unit,
+};
+use cglinalg_numeric::{
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 use cglinalg_transform::{
+    Rotation2,
+    Rotation3,
     Similarity,
     Similarity2,
     Similarity3,
-    Rotation2,
-    Rotation3,
     Translation2,
     Translation3,
 };
-use approx::{
-    relative_eq,
-};
+use cglinalg_trigonometry::Radians;
 
 use proptest::prelude::*;
 
@@ -44,7 +40,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -60,7 +56,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -69,7 +65,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -85,7 +81,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
@@ -111,17 +107,17 @@ where
 }
 
 fn strategy_similarity2_from_range<S>(
-    min_scale: S, 
-    max_scale: S, 
-    min_angle: S, 
-    max_angle: S, 
-    min_distance: S, 
-    max_distance: S
+    min_scale: S,
+    max_scale: S,
+    min_angle: S,
+    max_angle: S,
+    min_distance: S,
+    max_distance: S,
 ) -> impl Strategy<Value = Similarity2<S>>
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -133,14 +129,14 @@ where
         let translation = {
             let vector = Vector2::new(
                 rescale(_vector[0], min_distance, max_distance),
-                rescale(_vector[1], min_distance, max_distance)
+                rescale(_vector[1], min_distance, max_distance),
             );
-            
+
             Translation2::from_vector(&vector)
         };
         let rotation = {
             let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
-            
+
             Rotation2::from_angle(angle)
         };
 
@@ -151,15 +147,15 @@ where
 fn strategy_similarity3_from_range<S>(
     min_scale: S,
     max_scale: S,
-    min_angle: S, 
-    max_angle: S, 
-    min_distance: S, 
-    max_distance: S
+    min_angle: S,
+    max_angle: S,
+    min_distance: S,
+    max_distance: S,
 ) -> impl Strategy<Value = Similarity3<S>>
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -172,7 +168,7 @@ where
             let vector = Vector3::new(
                 rescale(_vector[0], min_distance, max_distance),
                 rescale(_vector[1], min_distance, max_distance),
-                rescale(_vector[2], min_distance, max_distance)
+                rescale(_vector[2], min_distance, max_distance),
             );
 
             Translation3::from_vector(&vector)
@@ -223,15 +219,8 @@ fn strategy_similarity2_f64_any() -> impl Strategy<Value = Similarity2<f64>> {
     let max_angle = 50_f64 * f64::two_pi();
     let min_distance = -1_000_000_f64;
     let max_distance = 1_000_000_f64;
-    
-    strategy_similarity2_from_range(
-        min_scale,
-        max_scale,
-        min_angle, 
-        max_angle, 
-        min_distance, 
-        max_distance
-    )
+
+    strategy_similarity2_from_range(min_scale, max_scale, min_angle, max_angle, min_distance, max_distance)
 }
 
 fn strategy_similarity3_f64_any() -> impl Strategy<Value = Similarity3<f64>> {
@@ -241,15 +230,8 @@ fn strategy_similarity3_f64_any() -> impl Strategy<Value = Similarity3<f64>> {
     let max_angle = 50_f64 * f64::two_pi();
     let min_distance = -1_000_000_f64;
     let max_distance = 1_000_000_f64;
-    
-    strategy_similarity3_from_range(
-        min_scale,
-        max_scale,
-        min_angle, 
-        max_angle, 
-        min_distance, 
-        max_distance
-    )
+
+    strategy_similarity3_from_range(min_scale, max_scale, min_angle, max_angle, min_distance, max_distance)
 }
 
 fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
@@ -261,8 +243,8 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
 
 
 /// Similarity transformations scale vector norms.
-/// 
-/// Given an similarity `M` and a vector `v`
+///
+/// Given a similarity `M` and a vector `v`
 /// ```text
 /// norm(M * v) == abs(scale(M)) * norm(v)
 /// ```
@@ -270,7 +252,7 @@ fn prop_approx_similarity_vector_scales_norm<S, const N: usize>(
     m: Similarity<S, N>,
     v: Vector<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -283,14 +265,17 @@ where
     Ok(())
 }
 
-/// All similarity transformations are invertible. Similarity transformations 
+/// All similarity transformations are invertible. Similarity transformations
 /// commute with their inverses.
-/// 
-/// Given an similarity `M`
+///
+/// Given a similarity `M`
 /// ```text
 /// M * inverse(M) == inverse(M) * M == 1
 /// ```
-fn prop_approx_similarity_similarity_inverse<S, const N: usize, const NN: usize>(m: Similarity<S, N>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_similarity_similarity_inverse<S, const N: usize, const NN: usize>(
+    m: Similarity<S, N>,
+    tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
@@ -306,10 +291,10 @@ where
     Ok(())
 }
 
-/// The product of a similarity transformation with its inverse always acts as 
+/// The product of a similarity transformation with its inverse always acts as
 /// the identity pointwise.
-/// 
-/// Given an similarity `M` and a point `p`
+///
+/// Given a similarity `M` and a point `p`
 /// ```text
 /// M * (inverse(M) * p) == p
 /// inverse(M) * (M * p) == p
@@ -318,16 +303,16 @@ fn prop_approx_similarity_similarity_inverse_pointwise_point<S, const N: usize>(
     m: Similarity<S, N>,
     p: Point<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * p);
     let rhs = p;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     /*
     let lhs = m.inverse() * (m * p);
     let rhs = p;
@@ -337,10 +322,10 @@ where
     Ok(())
 }
 
-/// The product of an similarity transformation with its inverse always acts as 
+/// The product of a similarity transformation with its inverse always acts as
 /// the identity pointwise.
-/// 
-/// Given an similarity `M` and a vector `v`
+///
+/// Given a similarity `M` and a vector `v`
 /// ```text
 /// M * (inverse(M) * v) == v
 /// inverse(M) * (M * v) == v
@@ -349,16 +334,16 @@ fn prop_approx_similarity_similarity_inverse_pointwise_vector<S, const N: usize>
     m: Similarity<S, N>,
     v: Vector<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * v);
     let rhs = v;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     let lhs = m.inverse() * (m * v);
     let rhs = v;
 
@@ -367,10 +352,10 @@ where
     Ok(())
 }
 
-/// In two dimensions, the composition of rotations is the same as 
+/// In two dimensions, the composition of rotations is the same as
 /// one rotation with the angles added up.
-/// 
-/// Given an similarity `M` that rotates the **xy-plane**, and angles `angle1` and `angle2`
+///
+/// Given a similarity `M` that rotates the **xy-plane**, and angles `angle1` and `angle2`
 /// ```text
 /// M(angle1) * M(angle2) == M(angle1 + angle2)
 /// ```
@@ -380,7 +365,7 @@ fn prop_approx_similarity2_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S,
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let m1 = Similarity2::from_angle(angle1);
     let m2 = Similarity2::from_angle(angle2);
@@ -393,10 +378,10 @@ where
     Ok(())
 }
 
-/// In three dimensions, the composition of rotations about the same axis is the 
+/// In three dimensions, the composition of rotations about the same axis is the
 /// same as one rotation about the same axis with the angles added up.
-/// 
-/// Given an similarity `M` that rotates the plane perpendicular to the unit vector `axis`, and 
+///
+/// Given a similarity `M` that rotates the plane perpendicular to the unit vector `axis`, and
 /// angles `angle1` and `angle2`
 /// ```text
 /// M(axis, angle1) * M(axis, angle2) == M(axis, angle1 + angle2)
@@ -408,7 +393,7 @@ fn prop_approx_similarity3_composition_same_axis_equals_addition_of_angles<S>(
     tolerance: S,
 ) -> Result<(), TestCaseError>
 where
-    S: SimdScalarFloat
+    S: SimdScalarFloat,
 {
     let m1 = Similarity3::from_axis_angle(&axis, angle1);
     let m2 = Similarity3::from_axis_angle(&axis, angle2);
@@ -532,4 +517,3 @@ mod similarity3_f64_composition_props {
         }
     }
 }
-

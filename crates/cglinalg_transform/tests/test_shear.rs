@@ -3,14 +3,12 @@ extern crate cglinalg_transform;
 
 #[cfg(test)]
 mod shear2_tests {
-    use cglinalg_transform::{
-        Shear2,
-    };
     use cglinalg_core::{
         Point2,
-        Vector2,
         Unit,
+        Vector2,
     };
+    use cglinalg_transform::Shear2;
 
 
     #[rustfmt::skip]
@@ -275,14 +273,12 @@ mod shear2_tests {
 
 #[cfg(test)]
 mod shear2_inverse_tests {
-    use cglinalg_transform::{
-        Shear2,
-    };
     use cglinalg_core::{
         Point2,
-        Vector2,
         Unit,
+        Vector2,
     };
+    use cglinalg_transform::Shear2;
 
 
     #[rustfmt::skip]
@@ -552,15 +548,13 @@ mod shear2_inverse_tests {
 
 #[cfg(test)]
 mod shear2_coordinate_plane_tests {
-    use cglinalg_transform::{
-        Shear2,
-    };
     use cglinalg_core::{
         Matrix3x3,
-        Vector2,
-        Unit,
         Point2,
+        Unit,
+        Vector2,
     };
+    use cglinalg_transform::Shear2;
 
 
     #[rustfmt::skip]
@@ -694,23 +688,21 @@ mod shear2_coordinate_plane_tests {
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
 mod shear2_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Unit,
+        Vector2,
+    };
     use cglinalg_transform::{
-        Shear2,
         Rotation2,
+        Shear2,
         Translation2,
     };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector2,
-        Matrix3x3,
-        Unit,
-        Point2,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -984,17 +976,13 @@ mod shear2_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod shear3_tests {
-    use cglinalg_transform::{
-        Shear3,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
-        Vector3,
         Point3,
         Unit,
+        Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Shear3;
 
 
     #[rustfmt::skip]
@@ -1813,17 +1801,13 @@ mod shear3_tests {
 
 #[cfg(test)]
 mod shear3_inverse_tests {
-    use cglinalg_transform::{
-        Shear3,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
-        Vector3,
         Point3,
         Unit,
+        Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Shear3;
 
 
     #[rustfmt::skip]
@@ -2652,14 +2636,13 @@ mod shear3_inverse_tests {
 
 #[cfg(test)]
 mod shear3_coordinate_plane_tests {
-    use cglinalg_transform::{
-        Shear3,
-    };
     use cglinalg_core::{
         Point3,
-        Vector3,
         Unit,
+        Vector3,
     };
+    use cglinalg_transform::Shear3;
+
 
     #[rustfmt::skip]
     #[test]
@@ -3312,27 +3295,25 @@ mod shear3_coordinate_plane_tests {
 
 
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
-/// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`, 
+/// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`,
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
 #[cfg(test)]
 mod shear3_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix4x4,
+        Point3,
+        Unit,
+        Vector3,
+    };
     use cglinalg_transform::{
-        Shear3,
         Rotation3,
+        Shear3,
         Translation3,
     };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector3,
-        Matrix4x4,
-        Unit,
-        Point3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -3707,7 +3688,7 @@ mod shear3_noncoordinate_plane_tests {
     fn test_from_affine_shear_coordinates_vertices() {
         let vertices = [
             Point3::new( 
-                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
+                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
                  f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
@@ -3781,7 +3762,7 @@ mod shear3_noncoordinate_plane_tests {
         let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let vertices = [
             Point3::new( 
-                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
+                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
                  f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
@@ -3944,18 +3925,15 @@ mod shear3_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod shear3_trace_determinant_tests {
-    use cglinalg_transform::{
-        Shear3,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
-        Vector3,
         Unit,
+        Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_transform::Shear3;
+
 
     fn shear_factor() -> f64 {
         -372203_f64

@@ -4,23 +4,23 @@ extern crate cglinalg_trigonometry;
 
 #[cfg(test)]
 mod similarity2_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Vector2,
+    };
+    use cglinalg_transform::{
+        Isometry2,
+        Rotation2,
+        Similarity2,
+        Translation2,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Degrees,
         Radians,
     };
-    use cglinalg_core::{
-        Vector2,
-        Point2,
-        Matrix3x3,
-    };
-    use cglinalg_transform::{
-        Similarity2,
-        Isometry2,
-        Rotation2,
-        Translation2,
-    };
-    use approx::assert_relative_eq;
     use core::f64;
 
 
@@ -209,24 +209,24 @@ mod similarity2_tests {
 
 #[cfg(test)]
 mod similarity3_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix4x4,
+        Normed,
+        Point3,
+        Unit,
+        Vector3,
+    };
+    use cglinalg_transform::{
+        Isometry3,
+        Rotation3,
+        Similarity3,
+        Translation3,
+    };
     use cglinalg_trigonometry::{
         Degrees,
         Radians,
     };
-    use cglinalg_core::{
-        Vector3,
-        Point3,
-        Normed,
-        Matrix4x4,
-        Unit,
-    };
-    use cglinalg_transform::{
-        Similarity3,
-        Isometry3,
-        Rotation3,
-        Translation3,
-    };
-    use approx::assert_relative_eq;
     use core::f64;
 
 

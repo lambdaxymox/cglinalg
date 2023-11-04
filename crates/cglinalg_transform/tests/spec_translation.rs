@@ -1,18 +1,16 @@
-extern crate cglinalg_numeric;
 extern crate cglinalg_core;
+extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-};
 use cglinalg_core::{
     Point,
     Point2,
     Point3,
     Vector,
 };
+use cglinalg_numeric::SimdScalarSigned;
 use cglinalg_transform::{
     Translation,
     Translation2,
@@ -26,7 +24,7 @@ fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    any::<[S; N]>().prop_map(|array| {        
+    any::<[S; N]>().prop_map(|array| {
         let mut result = Vector::zero();
         for i in 0..N {
             let sign_value = array[i].signum();
@@ -42,7 +40,7 @@ fn strategy_point_any<S, const N: usize>() -> impl Strategy<Value = Point<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    any::<[S; N]>().prop_map(|array| {        
+    any::<[S; N]>().prop_map(|array| {
         let mut result = Point::origin();
         for i in 0..N {
             let sign_value = array[i].signum();
@@ -58,14 +56,12 @@ fn strategy_translation_any<S, const N: usize>() -> impl Strategy<Value = Transl
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    strategy_vector_any::<S, N>().prop_map(|vector| { 
-        Translation::from_vector(&vector)
-    })
+    strategy_vector_any::<S, N>().prop_map(|vector| Translation::from_vector(&vector))
 }
 
 
 /// Translations preserve the differences between points.
-/// 
+///
 /// Given a translation `T`, and points `p1` and `p2`
 /// ```text
 /// T(p1 - p2) == p1 - p2
@@ -73,7 +69,7 @@ where
 fn prop_translation_preserves_point_differences<S, const N: usize>(
     t: Translation<S, N>,
     p1: Point<S, N>,
-    p2: Point<S, N>
+    p2: Point<S, N>,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
@@ -86,9 +82,9 @@ where
     Ok(())
 }
 
-/// Every translation has an inverse such that when applied to a point, the 
+/// Every translation has an inverse such that when applied to a point, the
 /// original point remains.
-/// 
+///
 /// Given a translation `T` and a point `p`
 /// ```text
 /// (T * inverse(T)) * p == p
@@ -96,9 +92,9 @@ where
 /// ```
 /// This property is meant to test the interaction of translations with points.
 fn prop_translation_translation_inverse_is_original_point<S, const N: usize>(
-    t: Translation<S, N>, 
-    p: Point<S, N>
-) -> Result<(), TestCaseError> 
+    t: Translation<S, N>,
+    p: Point<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
@@ -108,9 +104,9 @@ where
     Ok(())
 }
 
-/// Every translation has a unique inverse, and a translation commutes 
+/// Every translation has a unique inverse, and a translation commutes
 /// with its inverse.
-/// 
+///
 /// Given a translation `T`
 /// ```text
 /// T * inverse(T) == inverse(T) * T == Identity
@@ -131,14 +127,14 @@ where
 }
 
 /// Translation composition is associative.
-/// 
+///
 /// Given translations `T1`, `T2`, and `T3`
 /// ```text
 /// (T1 * T2) * T3 == T1 * (T2 * T3)
 /// ```
 fn prop_translation_composition_associative<S, const N: usize>(
-    t1: Translation<S, N>, 
-    t2: Translation<S, N>, 
+    t1: Translation<S, N>,
+    t2: Translation<S, N>,
     t3: Translation<S, N>,
 ) -> Result<(), TestCaseError>
 where
@@ -161,7 +157,7 @@ mod translation2_i32_point_props {
         fn prop_translation_preserves_point_differences(
             t in super::strategy_translation_any(),
             p1 in super::strategy_point_any(),
-            p2 in super::strategy_point_any() 
+            p2 in super::strategy_point_any()
         ) {
             let t: super::Translation2<i32> = t;
             let p1: super::Point2<i32> = p1;
@@ -171,7 +167,7 @@ mod translation2_i32_point_props {
 
         #[test]
         fn prop_translation_translation_inverse_is_original_point(
-            t in super::strategy_translation_any(), 
+            t in super::strategy_translation_any(),
             p in super::strategy_point_any()
         ) {
             let t: super::Translation2<i32> = t;
@@ -193,8 +189,8 @@ mod translation2_i32_composition_props {
 
         #[test]
         fn prop_translation_composition_associative(
-            t1 in super::strategy_translation_any(), 
-            t2 in super::strategy_translation_any(), 
+            t1 in super::strategy_translation_any(),
+            t2 in super::strategy_translation_any(),
             t3 in super::strategy_translation_any()
         ) {
             let t1: super::Translation2<i32> = t1;
@@ -213,7 +209,7 @@ mod translation3_i32_point_props {
         fn prop_translation_preserves_point_differences(
             t in super::strategy_translation_any(),
             p1 in super::strategy_point_any(),
-            p2 in super::strategy_point_any() 
+            p2 in super::strategy_point_any()
         ) {
             let t: super::Translation3<i32> = t;
             let p1: super::Point3<i32> = p1;
@@ -223,7 +219,7 @@ mod translation3_i32_point_props {
 
         #[test]
         fn prop_translation_translation_inverse_is_original_point(
-            t in super::strategy_translation_any(), 
+            t in super::strategy_translation_any(),
             p in super::strategy_point_any()
         ) {
             let t: super::Translation3<i32> = t;
@@ -245,8 +241,8 @@ mod translation3_i32_composition_props {
 
         #[test]
         fn prop_translation_composition_associative(
-            t1 in super::strategy_translation_any(), 
-            t2 in super::strategy_translation_any(), 
+            t1 in super::strategy_translation_any(),
+            t2 in super::strategy_translation_any(),
             t3 in super::strategy_translation_any()
         ) {
             let t1: super::Translation3<i32> = t1;
@@ -256,4 +252,3 @@ mod translation3_i32_composition_props {
         }
     }
 }
-

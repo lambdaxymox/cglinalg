@@ -1,28 +1,26 @@
-extern crate cglinalg_numeric;
-extern crate cglinalg_core;
-extern crate cglinalg_transform;
 extern crate approx;
+extern crate cglinalg_core;
+extern crate cglinalg_numeric;
+extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Radians,
-};
+use approx::relative_eq;
 use cglinalg_core::{
-    ShapeConstraint,
     Const,
     DimMul,
     Point,
     Point2,
     Point3,
+    ShapeConstraint,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Unit,
+};
+use cglinalg_numeric::{
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 use cglinalg_transform::{
     Isometry,
@@ -33,9 +31,7 @@ use cglinalg_transform::{
     Translation2,
     Translation3,
 };
-use approx::{
-    relative_eq,
-};
+use cglinalg_trigonometry::Radians;
 
 use proptest::prelude::*;
 
@@ -44,7 +40,7 @@ fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_va
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -60,7 +56,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let vector = Vector::from(array);
-        
+
         rescale_vector(vector, min_value, max_value)
     })
 }
@@ -69,7 +65,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -85,7 +81,7 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
@@ -114,7 +110,7 @@ fn strategy_isometry2_from_range<S>(min_angle: S, max_angle: S, min_distance: S,
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -125,14 +121,14 @@ where
         let translation = {
             let vector = Vector2::new(
                 rescale(_vector[0], min_distance, max_distance),
-                rescale(_vector[1], min_distance, max_distance)
+                rescale(_vector[1], min_distance, max_distance),
             );
-            
+
             Translation2::from_vector(&vector)
         };
         let rotation = {
             let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
-            
+
             Rotation2::from_angle(angle)
         };
 
@@ -144,7 +140,7 @@ fn strategy_isometry3_from_range<S>(min_angle: S, max_angle: S, min_distance: S,
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -156,7 +152,7 @@ where
             let vector = Vector3::new(
                 rescale(_vector[0], min_distance, max_distance),
                 rescale(_vector[1], min_distance, max_distance),
-                rescale(_vector[2], min_distance, max_distance)
+                rescale(_vector[2], min_distance, max_distance),
             );
 
             Translation3::from_vector(&vector)
@@ -205,7 +201,7 @@ fn strategy_isometry2_f64_any() -> impl Strategy<Value = Isometry2<f64>> {
     let max_angle = 50_f64 * f64::two_pi();
     let min_distance = -1_000_000_f64;
     let max_distance = 1_000_000_f64;
-    
+
     strategy_isometry2_from_range(min_angle, max_angle, min_distance, max_distance)
 }
 
@@ -214,7 +210,7 @@ fn strategy_isometry3_f64_any() -> impl Strategy<Value = Isometry3<f64>> {
     let max_angle = 50_f64 * f64::two_pi();
     let min_distance = -1_000_000_f64;
     let max_distance = 1_000_000_f64;
-    
+
     strategy_isometry3_from_range(min_angle, max_angle, min_distance, max_distance)
 }
 
@@ -227,7 +223,7 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
 
 
 /// Isometries preserve vector norms.
-/// 
+///
 /// Given an isometry `M` and a vector `v`
 /// ```text
 /// norm(M * v) == norm(v)
@@ -236,7 +232,7 @@ fn prop_approx_isometry_vector_preserves_norm<S, const N: usize>(
     m: Isometry<S, N>,
     v: Vector<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -250,7 +246,7 @@ where
 }
 
 /// All isometries are invertible. Isometries commute with their inverses.
-/// 
+///
 /// Given an isometry `M`
 /// ```text
 /// M * inverse(M) == inverse(M) * M == 1
@@ -271,9 +267,9 @@ where
     Ok(())
 }
 
-/// The product of an isometry with its inverse always acts as the identity 
+/// The product of an isometry with its inverse always acts as the identity
 /// pointwise.
-/// 
+///
 /// Given an isometry `M` and a point `p`
 /// ```text
 /// M * (inverse(M) * p) == p
@@ -283,16 +279,16 @@ fn prop_approx_isometry_isometry_inverse_pointwise_point<S, const N: usize>(
     m: Isometry<S, N>,
     p: Point<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * p);
     let rhs = p;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     let lhs = m.inverse() * (m * p);
     let rhs = p;
 
@@ -301,9 +297,9 @@ where
     Ok(())
 }
 
-/// The product of an isometry with its inverse always acts as the identity 
+/// The product of an isometry with its inverse always acts as the identity
 /// pointwise.
-/// 
+///
 /// Given an isometry `M` and a vector `v`
 /// ```text
 /// M * (inverse(M) * v) == v
@@ -313,16 +309,16 @@ fn prop_approx_isometry_isometry_inverse_pointwise_vector<S, const N: usize>(
     m: Isometry<S, N>,
     v: Vector<S, N>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let lhs = m * (m.inverse() * v);
     let rhs = v;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
-    
+
     let lhs = m.inverse() * (m * v);
     let rhs = v;
 
@@ -331,9 +327,9 @@ where
     Ok(())
 }
 
-/// In two dimensions, the composition of rotations is the same as 
+/// In two dimensions, the composition of rotations is the same as
 /// one rotation with the angles added up.
-/// 
+///
 /// Given an isometry `M` that rotates the **xy-plane**, and angles `angle1` and `angle2`
 /// ```text
 /// M(angle1) * M(angle2) == M(angle1 + angle2)
@@ -341,7 +337,7 @@ where
 fn prop_approx_isometry2_composition_same_axis_equals_addition_of_angles<S>(
     angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -357,10 +353,10 @@ where
     Ok(())
 }
 
-/// In three dimensions, the composition of rotations about the same axis is the 
+/// In three dimensions, the composition of rotations about the same axis is the
 /// same as one rotation about the same axis with the angles added up.
-/// 
-/// Given an isometry `M` that rotates the plane perpendicular to the unit vector `axis`, and 
+///
+/// Given an isometry `M` that rotates the plane perpendicular to the unit vector `axis`, and
 /// angles `angle1` and `angle2`
 /// ```text
 /// M(axis, angle1) * M(axis, angle2) == M(axis, angle1 + angle2)
@@ -369,7 +365,7 @@ fn prop_approx_isometry3_composition_same_axis_equals_addition_of_angles<S>(
     axis: Unit<Vector3<S>>,
     angle1: Radians<S>,
     angle2: Radians<S>,
-    tolerance: S
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -412,7 +408,7 @@ mod isometry2_f64_composition_props {
         #[test]
         fn prop_approx_isometry_isometry_inverse_pointwise_point(
             m in super::strategy_isometry2_f64_any(),
-            p in super::strategy_point_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let m: super::Isometry2<f64> = m;
             let p: super::Point2<f64> = p;
@@ -422,7 +418,7 @@ mod isometry2_f64_composition_props {
         #[test]
         fn prop_approx_isometry_isometry_inverse_pointwise_vector(
             m in super::strategy_isometry2_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Isometry2<f64> = m;
             let v: super::Vector2<f64> = v;
@@ -467,7 +463,7 @@ mod isometry3_f64_composition_props {
         #[test]
         fn prop_approx_isometry_isometry_inverse_pointwise_point(
             m in super::strategy_isometry3_f64_any(),
-            p in super::strategy_point_f64_any()
+            p in super::strategy_point_f64_any(),
         ) {
             let m: super::Isometry3<f64> = m;
             let p: super::Point3<f64> = p;
@@ -477,7 +473,7 @@ mod isometry3_f64_composition_props {
         #[test]
         fn prop_approx_isometry_isometry_inverse_pointwise_vector(
             m in super::strategy_isometry3_f64_any(),
-            v in super::strategy_vector_f64_any()
+            v in super::strategy_vector_f64_any(),
         ) {
             let r: super::Isometry3<f64> = m;
             let v: super::Vector3<f64> = v;
@@ -496,4 +492,3 @@ mod isometry3_f64_composition_props {
         }
     }
 }
-

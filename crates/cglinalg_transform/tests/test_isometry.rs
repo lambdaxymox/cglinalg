@@ -1,13 +1,10 @@
-extern crate cglinalg_trigonometry;
 extern crate cglinalg_transform;
+extern crate cglinalg_trigonometry;
 
 
 #[cfg(test)]
 mod isometry2_tests {
-    use cglinalg_trigonometry::{
-        Angle,
-        Degrees,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Point2,
@@ -19,8 +16,9 @@ mod isometry2_tests {
         Rotation2,
         Translation2,
     };
-    use approx::{
-        assert_relative_eq,
+    use cglinalg_trigonometry::{
+        Angle,
+        Degrees,
     };
 
 
@@ -65,7 +63,7 @@ mod isometry2_tests {
         let distance = Vector2::new(4_f64, 5_f64);
         let translation = Translation2::from_vector(&distance);
         let isometry = Isometry2::from_translation(&translation);
-        
+
         assert_eq!(isometry.translation(), &translation);
     }
 
@@ -190,10 +188,7 @@ mod isometry2_tests {
 
 #[cfg(test)]
 mod isometry3_tests {
-    use cglinalg_trigonometry::{
-        Angle,
-        Degrees,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -205,8 +200,9 @@ mod isometry3_tests {
         Rotation3,
         Translation3,
     };
-    use approx::{
-        assert_relative_eq,
+    use cglinalg_trigonometry::{
+        Angle,
+        Degrees,
     };
 
 
