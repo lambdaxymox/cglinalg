@@ -33,7 +33,7 @@ fn test_perspective_projection_matrix() {
         1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
         0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
         0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
-        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     );
     let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
 
@@ -53,7 +53,7 @@ fn test_perspective_projection_transformation() {
         1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
         0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
         0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
-        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+        0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     );
     let perspective = Perspective3::new(left, right, bottom, top, near, far);
     let result = perspective.matrix();
@@ -61,6 +61,7 @@ fn test_perspective_projection_transformation() {
     assert_eq!(result, &expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_rectangular_parameters() {
     let left = -4_f64;
@@ -92,10 +93,10 @@ fn test_perspective_projection_fov_matrix() {
     let c2r2 = -100.1_f64 / 99.9_f64;
     let c3r2 = -2_f64 * (100_f64 * (1_f64 / 10_f64)) / (100_f64 - (1_f64 / 10_f64));
     let expected = Matrix4x4::new(
-        c0r0, 0_f64,  0_f64,       0_f64, 
-        0_f64,        c1r1, 0_f64, 0_f64, 
-        0_f64,        0_f64,       c2r2, -1_f64, 
-        0_f64,        0_f64,       c3r2, 0_f64
+        c0r0,  0_f64, 0_f64,  0_f64,
+        0_f64, c1r1,  0_f64,  0_f64,
+        0_f64, 0_f64, c2r2,  -1_f64,
+        0_f64, 0_f64, c3r2,   0_f64,
     );
     let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
 
@@ -115,10 +116,10 @@ fn test_perspective_projection_fov_transformation() {
     let c2r2 = -100.1_f64 / 99.9_f64;
     let c3r2 = -2_f64 * (100_f64 * (1_f64 / 10_f64)) / (100_f64 - (1_f64 / 10_f64));
     let expected = Matrix4x4::new(
-        c0r0, 0_f64,  0_f64,       0_f64, 
-        0_f64,        c1r1, 0_f64, 0_f64, 
-        0_f64,        0_f64,       c2r2, -1_f64, 
-        0_f64,        0_f64,       c3r2, 0_f64
+        c0r0,  0_f64, 0_f64,  0_f64,
+        0_f64, c1r1,  0_f64,  0_f64,
+        0_f64, 0_f64, c2r2,  -1_f64,
+        0_f64, 0_f64, c3r2,   0_f64,
     );
     let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let result = perspective.matrix();
@@ -126,6 +127,7 @@ fn test_perspective_projection_fov_transformation() {
     assert_relative_eq!(result, &expected, epsilon = 1e-10);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_rectangular_parameters() {
     let vfov = Degrees(72_f64);
@@ -146,6 +148,7 @@ fn test_perspective_projection_fov_rectangular_parameters() {
     assert_relative_eq!(perspective.far(),    far,             epsilon = 1e-10);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_perspective_projection_fov_fov_parameters() {
     let vfov = Degrees(72_f64);
@@ -236,7 +239,7 @@ fn test_orthographic_projection_matrix() {
         1_f64 / 4_f64, 0_f64,          0_f64,            0_f64,
         0_f64,         1_f64 / 2_f64,  0_f64,            0_f64,
         0_f64,         0_f64,         -2_f64 / 99_f64,   0_f64,
-        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64
+        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64,
     );
     let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
 
@@ -256,7 +259,7 @@ fn test_orthographic_projection_transformation() {
         1_f64 / 4_f64, 0_f64,          0_f64,            0_f64,
         0_f64,         1_f64 / 2_f64,  0_f64,            0_f64,
         0_f64,         0_f64,         -2_f64 / 99_f64,   0_f64,
-        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64
+        0_f64,         0_f64,         -101_f64 / 99_f64, 1_f64,
     );
     let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     let result = orthographic.matrix();
@@ -264,6 +267,7 @@ fn test_orthographic_projection_transformation() {
     assert_eq!(result, &expected);
 }
 
+#[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_rectangular_parameters() {
     let left = -4_f64;
@@ -313,4 +317,3 @@ fn test_orthographic_projection_unproject_vector() {
 
     assert_relative_eq!(result, expected, epsilon = 1e-10);
 }
-

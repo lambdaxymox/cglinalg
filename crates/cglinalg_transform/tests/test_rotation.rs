@@ -141,9 +141,9 @@ mod rotation2_tests {
         let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
         let expected = Vector2::new(-1_f64, 1_f64);
-        let vector =  Vector2::new(f64::sqrt(2_f64), 0_f64);
+        let vector = Vector2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.apply_vector(&vector);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -163,8 +163,8 @@ mod rotation2_tests {
     fn test_rotation_inverse_rotate_vector() {
         let angle = Degrees(135_f64);
         let rotation = Rotation2::from_angle(angle);
-        let  vector = Vector2::new(-1_f64, 1_f64);
-        let expected =  Vector2::new(f64::sqrt(2_f64), 0_f64);
+        let vector = Vector2::new(-1_f64, 1_f64);
+        let expected = Vector2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.inverse_apply_vector(&vector);
         
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -177,7 +177,7 @@ mod rotation2_tests {
         let point = Point2::new(-1_f64, 1_f64);
         let expected = Point2::new(f64::sqrt(2_f64), 0_f64);
         let result = rotation.inverse_apply_point(&point);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
@@ -419,177 +419,177 @@ mod rotation3_tests {
         let point = Point3::new(0_f64, 0_f64, 1_f64);
         let expected = Point3::new(0_f64, 1_f64, 0_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_x_inverse_rotate_vector1() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let vector = Vector3::unit_z();
         let expected = Vector3::unit_y();
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_x_inverse_rotate_point2() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let point = Point3::new(0_f64, -1_f64, 1_f64);
         let expected = Point3::new(0_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_x_inverse_rotate_vector2() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let vector = Vector3::new(1_f64, -1_f64, 1_f64);
         let expected = Vector3::new(1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_x_inverse_rotate_point3() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let point = Point3::new(3_f64, -1_f64, 1_f64);
         let expected = Point3::new(3_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_x_inverse_rotate_vector3() {
         let rotation = Rotation3::from_angle_x(Degrees(90_f64));
         let vector = Vector3::new(3_f64, -1_f64, 1_f64);
         let expected = Vector3::new(3_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_point1() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let point = Point3::new(1_f64, 0_f64, 0_f64);
         let expected = Point3::new(0_f64, 0_f64, 1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_vector1() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let vector = Vector3::unit_x();
         let expected = Vector3::unit_z();
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_point2() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let point = Point3::new(1_f64, 0_f64, 1_f64);
         let expected = Point3::new(-1_f64, 0_f64, 1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_vector2() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let vector = Vector3::new(1_f64, 0_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 0_f64, 1_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_point3() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let point = Point3::new(1_f64, 1_f64, 1_f64);
         let expected = Point3::new(-1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_y_inverse_rotate_vector3() {
         let rotation = Rotation3::from_angle_y(Degrees(90_f64));
         let vector = Vector3::new(1_f64, 1_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 1_f64, 1_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_point1() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let point = Point3::new(0_f64, 1_f64, 0_f64);
         let expected = Point3::new(1_f64, 0_f64, 0_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_vector1() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let vector = Vector3::unit_y();
         let expected = Vector3::unit_x();
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_point2() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let point = Point3::new(-1_f64, 1_f64, 0_f64);
         let expected = Point3::new(1_f64, 1_f64, 0_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_vector2() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let vector = Vector3::new(-1_f64, 1_f64, 0_f64);
         let expected = Vector3::new(1_f64, 1_f64, 0_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_point3() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let point = Point3::new(-1_f64, 1_f64, -1_f64);
         let expected = Point3::new(1_f64, 1_f64, -1_f64);
         let result = rotation.inverse_apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_angle_z_inverse_rotate_vector3() {
         let rotation = Rotation3::from_angle_z(Degrees(90_f64));
         let vector = Vector3::new(-1_f64, 1_f64, -1_f64);
         let expected = Vector3::new(1_f64, 1_f64, -1_f64);
         let result = rotation.inverse_apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -599,7 +599,7 @@ mod rotation3_tests {
         let angle = Degrees(60_f64);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
         let point = Point3::new(-1_f64, -1_f64, 0_f64);
-        let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
+        let expected = Point3::new(-2_f64 / 6_f64, -8_f64 / 6_f64, 2_f64 / 6_f64);
         let result = rotation.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -611,7 +611,7 @@ mod rotation3_tests {
         let angle = Degrees(60_f64);
         let rotation = Rotation3::from_axis_angle(&axis, angle);
         let point = Point3::new(-1_f64, -1_f64, 0_f64);
-        let expected = Point3::new(-2_f64 / 6_f64,  -8_f64 / 6_f64, 2_f64 / 6_f64);
+        let expected = Point3::new(-2_f64 / 6_f64, -8_f64 / 6_f64, 2_f64 / 6_f64);
         let result = rotation.apply_point(&point);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -721,7 +721,7 @@ mod rotation3_tests {
         let rotation = Rotation3::look_at_rh(&eye, &target, &up);
         let result = rotation.apply_vector(&direction);
         let expected = -Vector3::unit_z();
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 

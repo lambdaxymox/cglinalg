@@ -73,7 +73,7 @@ mod point1_tests {
 
     #[test]
     fn test_scalar_multiplication() {
-        let c = 33.249539_f64; 
+        let c = 33.249539_f64;
         let p = Point1::from(27.6189_f64);
         let expected = Point1::from(p.x * c);
         let result = p * c;
@@ -83,7 +83,7 @@ mod point1_tests {
 
     #[test]
     fn test_scalar_division() {
-        let c = 33.249539_f64; 
+        let c = 33.249539_f64;
         let p = Point1::from(27.6189_f64);
         let expected = Point1::from(p.x / c);
         let result = p / c;
@@ -256,7 +256,7 @@ mod point2_tests {
     #[test]
     fn test_scalar_multiplication() {
         let c = 7.04217_f64;
-        let p = Point2::new(70_f64,  49_f64);
+        let p = Point2::new(70_f64, 49_f64);
         let expected = Point2::new(p.x * c, p.y * c);
         let result = p * c;
 
@@ -429,7 +429,7 @@ mod point3_tests {
 
     #[test]
     fn test_subtraction_point_vector() {
-        let p = Point3::new(70_f64,  49_f64,  95_f64);
+        let p = Point3::new(70_f64, 49_f64, 95_f64);
         let v = Vector3::new(89.9138_f64, 36.84_f64, 427.46894_f64);
         let expected = Point3::new(p.x - v.x, p.y - v.y, p.z - v.z);
         let result = p - v;
@@ -450,18 +450,17 @@ mod point3_tests {
     #[test]
     fn test_scalar_multiplication() {
         let c = 7.04217_f64;
-        let p = Point3::new(70_f64,  49_f64,  95_f64);
-        let expected = Point3::new(p.x * c, p.y * c, p.z *c);
+        let p = Point3::new(70_f64, 49_f64, 95_f64);
+        let expected = Point3::new(p.x * c, p.y * c, p.z * c);
         let result = p * c;
 
         assert_eq!(result, expected);
-
     }
 
     #[test]
     fn test_scalar_division() {
         let c = 802.3435169_f64;
-        let p = Point3::new(80_f64,  23.43_f64, 43.569_f64);
+        let p = Point3::new(80_f64, 23.43_f64, 43.569_f64);
         let expected = Point3::new(p.x / c, p.y / c, p.z / c);
         let result = p / c;
 
@@ -550,4 +549,3 @@ mod point3_tests {
         assert!(result.is_none());
     }
 }
-

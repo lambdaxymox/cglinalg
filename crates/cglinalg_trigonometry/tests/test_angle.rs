@@ -4,12 +4,13 @@ extern crate cglinalg_trigonometry;
 #[cfg(test)]
 mod conversion_tests {
     use cglinalg_trigonometry::{
-        Radians,
         Degrees,
+        Radians,
     };
     use core::f64;
 
 
+    #[rustfmt::skip]
     #[test]
     fn convert_radians_to_degrees() {
         let pi = f64::consts::PI;
@@ -25,6 +26,7 @@ mod conversion_tests {
         assert_eq!(Degrees::from(Radians(2_f64 * pi)),         Degrees(360_f64));
     }
 
+    #[rustfmt::skip]
     #[test]
     fn convert_degrees_to_radians() {
         let pi = f64::consts::PI;
@@ -43,17 +45,15 @@ mod conversion_tests {
 
 #[cfg(test)]
 mod degrees_arithmetic_tests {
-    use cglinalg_trigonometry::{
-        Degrees,
-    };
+    use cglinalg_trigonometry::Degrees;
 
 
     #[test]
     fn test_addition() {
-        let angle1 = Degrees(30_f64); 
+        let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = Degrees(75_f64);
-        
+
         let result = angle1 + angle2;
         assert_eq!(result, expected);
 
@@ -72,7 +72,7 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = -Degrees(15_f64);
-        
+
         let result = angle1 - angle2;
         assert_eq!(result, expected);
 
@@ -91,7 +91,7 @@ mod degrees_arithmetic_tests {
         let angle = Degrees(30_f64);
         let c = 45_f64;
         let expected = Degrees(30_f64 * 45_f64);
-        
+
         let result = angle * c;
         assert_eq!(result, expected);
 
@@ -104,7 +104,7 @@ mod degrees_arithmetic_tests {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(45_f64);
         let expected = 30_f64 / 45_f64;
-        
+
         let result = angle1 / angle2;
         assert_eq!(result, expected);
 
@@ -122,7 +122,7 @@ mod degrees_arithmetic_tests {
     fn test_negation() {
         let angle = Degrees(30_f64);
         let expected = Degrees(-30_f64);
-        
+
         let result = -angle;
         assert_eq!(result, expected);
 
@@ -138,7 +138,7 @@ mod degrees_arithmetic_tests {
     /// That is,
     /// ```text
     /// For each angle < modulus, angle = angle (mod modulus).
-    /// ``` 
+    /// ```
     #[test]
     fn test_remainder_less_than_modulus() {
         let angle = Degrees(45_f64);
@@ -162,7 +162,7 @@ mod degrees_arithmetic_tests {
     /// smaller then the modulus. That is, angles satisfy
     /// ```text
     /// For each angle > modulus, angle (mod modulus) < modulus.
-    /// ``` 
+    /// ```
     #[test]
     fn test_remainder_greater_than_modulus() {
         let angle = Degrees(405_f64);
@@ -185,12 +185,8 @@ mod degrees_arithmetic_tests {
 
 #[cfg(test)]
 mod radians_arithmetic_tests {
-    use cglinalg_trigonometry::{
-        Radians,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use approx::assert_relative_eq;
+    use cglinalg_trigonometry::Radians;
     use core::f64;
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
@@ -198,7 +194,7 @@ mod radians_arithmetic_tests {
 
     #[test]
     fn test_addition() {
-        let angle1 = PI / 6_f64; 
+        let angle1 = PI / 6_f64;
         let angle2 = PI / 4_f64;
         let expected = PI * 10_f64 / 24_f64;
 
@@ -270,7 +266,7 @@ mod radians_arithmetic_tests {
     fn test_negation() {
         let angle = PI / 6_f64;
         let expected = -PI / 6_f64;
-        
+
         let result = -angle;
         assert_relative_eq!(result, expected, epsilon = 1e-10);
 
@@ -281,11 +277,11 @@ mod radians_arithmetic_tests {
     /// The remainder of an angle by a modulus smaller than the modulus should be
     /// the same as the original angle.
     ///
-    /// That is, given an angle `angle` smaller than modulus `modulus`, `angle` 
+    /// That is, given an angle `angle` smaller than modulus `modulus`, `angle`
     /// is congruent to itself modulo `modulus`
     /// ```text
     /// angle = angle (mod modulus).
-    /// ``` 
+    /// ```
     #[test]
     fn test_remainder_less_than_modulus() {
         let angle = PI / 4_f64;
@@ -309,7 +305,7 @@ mod radians_arithmetic_tests {
     /// smaller then the modulus. That is, angles satisfy
     /// ```text
     /// For each angle > modulus, angle (mod modulus) < modulus.
-    /// ``` 
+    /// ```
     #[test]
     fn test_remainder_greater_than_modulus() {
         let angle = PI * 2_f64 + PI / 4_f64;
@@ -332,12 +328,10 @@ mod radians_arithmetic_tests {
 
 #[cfg(test)]
 mod radian_angle_tests {
+    use approx::assert_relative_eq;
     use cglinalg_trigonometry::{
+        Angle,
         Radians,
-        Angle
-    };
-    use approx::{
-        assert_relative_eq,
     };
     use core::f64;
 
@@ -346,7 +340,7 @@ mod radian_angle_tests {
     fn test_full_turn() {
         let expected = Radians(2_f64 * f64::consts::PI);
         let result = Radians::full_turn();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -419,7 +413,7 @@ mod radian_angle_tests {
     fn test_full_turn_div_2() {
         let expected = Radians(2_f64 * f64::consts::PI / 2_f64);
         let result = Radians::full_turn_div_2();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -427,7 +421,7 @@ mod radian_angle_tests {
     fn test_full_turn_div_4() {
         let expected = Radians(2_f64 * f64::consts::PI / 4_f64);
         let result = Radians::full_turn_div_4();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -435,7 +429,7 @@ mod radian_angle_tests {
     fn test_full_turn_div_6() {
         let expected = Radians(2_f64 * f64::consts::PI / 6_f64);
         let result = Radians::full_turn_div_6();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -443,7 +437,7 @@ mod radian_angle_tests {
     fn test_full_turn_div_8() {
         let expected = Radians(2_f64 * f64::consts::PI / 8_f64);
         let result = Radians::full_turn_div_8();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -471,7 +465,7 @@ mod radian_angle_tests {
         let expected = Radians(5_f64 * f64::consts::PI / 4_f64);
         let result = angle.opposite();
 
-        assert_eq!(result, expected);    
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -522,12 +516,10 @@ mod radian_angle_tests {
 
 #[cfg(test)]
 mod degree_angle_tests {
+    use approx::assert_relative_eq;
     use cglinalg_trigonometry::{
-        Degrees,
         Angle,
-    };
-    use approx::{
-        assert_relative_eq,
+        Degrees,
     };
     use core::f64;
 
@@ -536,7 +528,7 @@ mod degree_angle_tests {
     fn test_full_turn() {
         let expected = Degrees(360_f64);
         let result = Degrees::full_turn();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -609,7 +601,7 @@ mod degree_angle_tests {
     fn test_full_turn_div_2() {
         let expected = Degrees(180_f64);
         let result = Degrees::full_turn_div_2();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -617,7 +609,7 @@ mod degree_angle_tests {
     fn test_full_turn_div_4() {
         let expected = Degrees(90_f64);
         let result = Degrees::full_turn_div_4();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -625,7 +617,7 @@ mod degree_angle_tests {
     fn test_full_turn_div_6() {
         let expected = Degrees(60_f64);
         let result = Degrees::full_turn_div_6();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -633,7 +625,7 @@ mod degree_angle_tests {
     fn test_full_turn_div_8() {
         let expected = Degrees(45_f64);
         let result = Degrees::full_turn_div_8();
-        
+
         assert_eq!(result, expected);
     }
 
@@ -661,7 +653,7 @@ mod degree_angle_tests {
         let expected = Degrees(225_f64);
         let result = angle.opposite();
 
-        assert_eq!(result, expected);    
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -709,4 +701,3 @@ mod degree_angle_tests {
         assert_eq!(result, expected);
     }
 }
-

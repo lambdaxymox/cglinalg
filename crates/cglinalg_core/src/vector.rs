@@ -1,28 +1,26 @@
-use cglinalg_numeric::{
-    SimdCast,
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarOrd,
-    SimdScalarFloat,
-};
 use crate::constraint::{
+    CanContract,
+    CanExtend,
     Const,
     DimAdd,
     DimSub,
-    CanExtend,
-    CanContract,
     ShapeConstraint,
 };
 use crate::normed::{
-    Normed,
     Norm,
+    Normed,
 };
-use crate::unit::{
-    Unit,
-};
+use crate::unit::Unit;
 use crate::{
     impl_coords,
     impl_coords_deref,
+};
+use cglinalg_numeric::{
+    SimdCast,
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarOrd,
+    SimdScalarSigned,
 };
 
 use core::fmt;
@@ -57,8 +55,8 @@ impl<S, const N: usize> Vector<S, N> {
     }
 
     /// Tests whether the number of elements in the vector is zero.
-    /// 
-    /// Returns `true` when the vector is zero-dimensional. Returns `false` 
+    ///
+    /// Returns `true` when the vector is zero-dimensional. Returns `false`
     /// otherwise.
     pub const fn is_empty(&self) -> bool {
         self.len() == 0
@@ -66,8 +64,8 @@ impl<S, const N: usize> Vector<S, N> {
 
     /// The shape of the underlying array storing the vector components.
     ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
+    /// The shape is the equivalent number of columns and rows of the
+    /// array as though it represents a matrix. The order of the descriptions
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
@@ -156,12 +154,10 @@ where
     /// ```
     #[inline]
     pub const fn from_fill(value: S) -> Self {
-        Self { 
-            data: [value; N],
-        }
+        Self { data: [value; N] }
     }
 
-    /// Map an operation on that acts on the components of a vector, returning 
+    /// Map an operation on that acts on the components of a vector, returning
     /// a vector whose components are of the new scalar type.
     ///
     /// # Example
@@ -183,9 +179,7 @@ where
     where
         F: FnMut(S) -> T,
     {
-        Vector {
-            data: self.data.map(op),
-        }
+        Vector { data: self.data.map(op) }
     }
 }
 
@@ -196,31 +190,29 @@ where
     /// Construct the zero vector.
     ///
     /// The zero vector is the vector in which all of its elements are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// # };
     /// #
     /// let vector: Vector3<i32> = Vector3::zero();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0);
     /// assert_eq!(vector[1], 0);
     /// assert_eq!(vector[2], 0);
     /// ```
     #[inline]
     pub fn zero() -> Self {
-        Self {
-            data: [S::zero(); N],
-        }
+        Self { data: [S::zero(); N] }
     }
 
     /// Determine whether a vector is the zero vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
@@ -228,7 +220,7 @@ where
     /// #
     /// let zero: Vector4<i32> = Vector4::zero();
     /// let non_zero = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
-    /// 
+    ///
     /// assert!(zero.is_zero());
     /// assert!(!non_zero.is_zero());
     /// ```
@@ -249,12 +241,12 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
-    /// 
+    ///
     /// assert_eq!(vector1.dot(&vector2), 32_f64);
     /// ```
     #[inline]
@@ -269,15 +261,15 @@ where
     }
 
     /// Compute the product of two vectors component-wise.
-    /// 
-    /// Given `N`-dimensional vectors `v1` and `v2`, the component product of `v1` and `v2` is a 
+    ///
+    /// Given `N`-dimensional vectors `v1` and `v2`, the component product of `v1` and `v2` is a
     /// `N`-dimensional vector `v3` such that
     /// ```text
     /// for all i in 0..N. v3[i] := v1[i] * v2[i]
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -287,7 +279,7 @@ where
     /// let v2 = Vector3::new(5_f64, 8_f64, 3_f64);
     /// let expected = Vector3::new(0_f64, 8_f64, 12_f64);
     /// let result = v1.component_mul(&v2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -297,14 +289,14 @@ where
         for i in 0..N {
             result[i] = self.data[i] * other.data[i];
         }
- 
+
         result
     }
 
     /// Compute the product of two vectors component-wise mutably in place.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -314,7 +306,7 @@ where
     /// let other = Vector3::new(5_f64, 8_f64, 3_f64);
     /// let expected = Vector3::new(0_f64, 8_f64, 12_f64);
     /// result.component_mul_assign(&other);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -336,7 +328,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -359,9 +351,9 @@ where
     S: SimdScalar,
 {
     /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -374,7 +366,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.norm_squared();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -382,11 +374,11 @@ where
         self.dot(self)
     }
 
-    /// Calculate the squared metric distance between two vectors with respect 
+    /// Calculate the squared metric distance between two vectors with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -396,7 +388,7 @@ where
     /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
     /// let expected = 61_f64;
     /// let result = vector1.metric_distance_squared(&vector2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -405,11 +397,11 @@ where
     }
 
     /// Calculate the squared norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Vector::norm_squared`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -422,7 +414,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.magnitude_squared();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -436,9 +428,9 @@ where
     S: SimdScalarSigned,
 {
     /// Calculate the norm of a vector with respect to the supplied [`Norm`] type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -456,7 +448,7 @@ where
     /// let l2_norm = L2Norm::new();
     /// let linf_norm = LinfNorm::new();
     /// let lp_norm = LpNorm::new(5_u32);
-    /// 
+    ///
     /// assert_eq!(vector.apply_norm(&l1_norm), 6_f64);
     /// assert_eq!(vector.apply_norm(&l2_norm), f64::sqrt(14_f64));
     /// assert_eq!(vector.apply_norm(&linf_norm), 3_f64);
@@ -467,11 +459,11 @@ where
         norm.norm(self)
     }
 
-    /// Calculate the metric distance between two vectors with respect to the 
+    /// Calculate the metric distance between two vectors with respect to the
     /// supplied [`Norm`] type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -490,7 +482,7 @@ where
     /// let l2_norm = L2Norm::new();
     /// let linf_norm = LinfNorm::new();
     /// let lp_norm = LpNorm::new(5_u32);
-    /// 
+    ///
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &l1_norm), 13_f64);
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &l2_norm), f64::sqrt(61_f64));
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &linf_norm), 6_f64);
@@ -502,9 +494,9 @@ where
     }
 
     /// Calculate the norm of a vector with respect to the **L1** norm.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// An example computing the **L1** norm of a vector of [`f64`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -514,10 +506,10 @@ where
     /// let vector = Vector3::new(-2_f64, 7_f64, 8_f64);
     /// let expected = 17_f64;
     /// let result = vector.l1_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -527,7 +519,7 @@ where
     /// let vector = Vector3::new(-2_i32, 7_i32, 8_i32);
     /// let expected = 17_i32;
     /// let result = vector.l1_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -547,9 +539,9 @@ where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     /// Calculate the norm of a vector with respect to the **L-infinity** norm.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// An example of computing the **L-infinity** norm of a vector of [`f64`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -559,10 +551,10 @@ where
     /// let vector = Vector4::new(1_f64, 100_f64, 3_f64, 4_f64);
     /// let expected = 100_f64;
     /// let result = vector.linf_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// An example of computing the **L-infinity** norm of a vector of [`i32`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -572,7 +564,7 @@ where
     /// let vector = Vector4::new(1_i32, 100_i32, 3_i32, 4_i32);
     /// let expected = 100_i32;
     /// let result = vector.linf_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -592,9 +584,9 @@ where
     S: SimdScalarFloat,
 {
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -607,7 +599,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.norm();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -615,11 +607,11 @@ where
         self.norm_squared().sqrt()
     }
 
-    /// Calculate the metric distance between two vectors with respect 
+    /// Calculate the metric distance between two vectors with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -629,7 +621,7 @@ where
     /// let vector2 = Vector3::new(1_f64, 8_f64, -2_f64);
     /// let expected = f64::sqrt(80_f64);
     /// let result = vector1.metric_distance(&vector2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -638,11 +630,11 @@ where
     }
 
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Vector::norm`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -655,7 +647,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.magnitude();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -664,11 +656,11 @@ where
     }
 
     /// Calculate the norm of a vector with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Vector::norm`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -681,7 +673,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.l2_norm();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -691,9 +683,9 @@ where
 
     /// Calculate the norm of a vector with respect to the **Lp** norm, where
     /// `p` is an integer.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
@@ -706,7 +698,7 @@ where
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64 / f64::powf(3_f64, 3_f64 / 10_f64);
     /// let result = vector.lp_norm(5);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -716,7 +708,7 @@ where
         for i in 0..N {
             result += self.data[i].abs().powi(p as i32);
         }
-        
+
         result.powf(cglinalg_numeric::cast((p as f64).recip()))
     }
 }
@@ -813,9 +805,7 @@ pub struct LpNorm {
 impl LpNorm {
     #[inline]
     pub const fn new(p: u32) -> Self {
-        Self { 
-            p,
-        }
+        Self { p }
     }
 }
 
@@ -841,11 +831,11 @@ impl<S, const N: usize> Vector<S, N>
 where
     S: SimdScalarFloat,
 {
-    /// Returns `true` if the elements of a vector are all finite. 
-    /// Otherwise, it returns `false`. 
+    /// Returns `true` if the elements of a vector are all finite.
+    /// Otherwise, it returns `false`.
     ///
-    /// A vector is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
+    /// A vector is finite when all of its elements are finite. This is useful
+    /// for vector and matrix types working with fixed precision floating point
     /// values.
     ///
     /// # Example (Finite Vector)
@@ -857,11 +847,11 @@ where
     /// #
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
-    /// assert!(v.is_finite()); 
+    /// assert!(v.is_finite());
     /// ```
     ///
     /// # Example (Not A Finite Vector)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
@@ -869,7 +859,7 @@ where
     /// #
     /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
     ///
-    /// assert!(!w.is_finite()); 
+    /// assert!(!w.is_finite());
     /// ```
     #[inline]
     pub fn is_finite(&self) -> bool {
@@ -911,10 +901,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// #     Normed,
     /// # };
-    /// # 
+    /// #
     /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
     /// let unit_x = Vector3::unit_x();
     /// let unit_y = Vector3::unit_y();
@@ -933,23 +923,23 @@ where
     }
 
     /// Reflect a vector about a normal vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let normal = Vector2::new(-1_f64 / 2_f64, 1_f64);
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
     /// let result = vector.reflect(&normal);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result.norm(), expected.norm(), epsilon = 1e-10);
     /// ```
@@ -962,15 +952,15 @@ where
     }
 
     /// Compute the component-wise minimum of two vectors.
-    /// 
+    ///
     /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
     /// such that
     /// ```text
     /// for all i in 0..N. v3[i] := min(v1[i], v2[i])
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -980,7 +970,7 @@ where
     /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
     /// let expected = Vector3::new(-1_f64, 2_f64, 0_f64);
     /// let result = v1.component_min(&v2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -995,15 +985,15 @@ where
     }
 
     /// Compute the component-wise maximum of two vectors.
-    /// 
+    ///
     /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
     /// such that
     /// ```text
     /// for all i in 0..N. v3[i] := max(v1[i], v2[i])
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -1013,7 +1003,7 @@ where
     /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
     /// let expected = Vector3::new(1_f64, 5_f64, 3_f64);
     /// let result = v1.component_max(&v2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1035,7 +1025,7 @@ where
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
-    /// Extend a vector into a vector one dimension higher using the supplied 
+    /// Extend a vector into a vector one dimension higher using the supplied
     /// last element `last_element`.
     ///
     /// # Example
@@ -1043,7 +1033,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let v = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -1054,7 +1044,7 @@ where
     /// ```
     #[inline]
     pub fn extend(&self, last_element: S) -> Vector<S, NPLUS1> {
-        // SAFETY: The output vector has length `N + 1` with `last_element` in the 
+        // SAFETY: The output vector has length `N + 1` with `last_element` in the
         // component `N` of the output vector.
         let mut result = Vector::default();
         for i in 0..N {
@@ -1075,7 +1065,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let vector = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -1104,7 +1094,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1134,7 +1124,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_i32, 2_i32, 0_i32);
@@ -1176,18 +1166,14 @@ impl<S, const N: usize> AsMut<[S; N]> for Vector<S, N> {
 impl<S, const N: usize> AsRef<[[S; N]; 1]> for Vector<S, N> {
     #[inline]
     fn as_ref(&self) -> &[[S; N]; 1] {
-        unsafe {
-            &*(self as *const Vector<S, N> as *const [[S; N]; 1])
-        }
+        unsafe { &*(self as *const Vector<S, N> as *const [[S; N]; 1]) }
     }
 }
 
 impl<S, const N: usize> AsMut<[[S; N]; 1]> for Vector<S, N> {
     #[inline]
     fn as_mut(&mut self) -> &mut [[S; N]; 1] {
-        unsafe {
-            &mut *(self as *mut Vector<S, N> as *mut [[S; N]; 1])
-        }
+        unsafe { &mut *(self as *mut Vector<S, N> as *mut [[S; N]; 1]) }
     }
 }
 
@@ -1211,26 +1197,22 @@ where
 }
 
 impl<S, const N: usize> From<&[S; N]> for Vector<S, N>
-where 
+where
     S: Copy,
 {
     #[inline]
     fn from(data: &[S; N]) -> Self {
-        Self {
-            data: *data
-        }
+        Self { data: *data }
     }
 }
 
 impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Vector<S, N>
-where 
+where
     S: Copy,
 {
     #[inline]
     fn from(data: &'a [S; N]) -> &'a Vector<S, N> {
-        unsafe { 
-            &*(data as *const [S; N] as *const Vector<S, N>)    
-        }
+        unsafe { &*(data as *const [S; N] as *const Vector<S, N>) }
     }
 }
 
@@ -1253,7 +1235,7 @@ macro_rules! impl_vector_index_ops {
                 &mut v[index]
             }
         }
-    }
+    };
 }
 
 impl_vector_index_ops!(usize, S);
@@ -1377,7 +1359,7 @@ where
     fn unscale_mut(&mut self, scale: Self::Output) {
         *self = self.unscale(scale);
     }
-    
+
     #[inline]
     fn normalize(&self) -> Self {
         self * (Self::Output::one() / self.norm())
@@ -1526,7 +1508,7 @@ macro_rules! impl_vector_scalar_binary_ops {
                 result
             }
         }
-    }
+    };
 }
 
 impl_vector_scalar_binary_ops!(Mul, mul);
@@ -1660,9 +1642,9 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Sub<&'b Vector<S, N>> for &'a Vector<S, N> 
-where 
-    S: SimdScalar 
+impl<'a, 'b, S, const N: usize> ops::Sub<&'b Vector<S, N>> for &'a Vector<S, N>
+where
+    S: SimdScalar,
 {
     type Output = Vector<S, N>;
 
@@ -1791,7 +1773,7 @@ impl<S, const N: usize> ops::Neg for &Vector<S, N>
 where
     S: SimdScalarSigned,
 {
-    type Output =  Vector<S, N>;
+    type Output = Vector<S, N>;
 
     #[inline]
     fn neg(self) -> Self::Output {
@@ -1832,9 +1814,9 @@ where
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector1,
@@ -1842,14 +1824,12 @@ impl<S> Vector1<S> {
     /// #
     /// let x = 1_i32;
     /// let vector = Vector1::new(x);
-    /// 
+    ///
     /// assert_eq!(vector[0], x);
     /// ```
     #[inline]
     pub const fn new(x: S) -> Self {
-        Self { 
-            data: [x], 
-        }
+        Self { data: [x] }
     }
 }
 
@@ -1859,16 +1839,16 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector1,
     /// # };
     /// #
     /// let vector: Vector1<i32> = Vector1::unit_x();
-    /// 
+    ///
     /// assert_eq!(vector[0], 1_i32);
     /// ```
     #[inline]
@@ -1882,16 +1862,16 @@ where
     S: Copy,
 {
     /// Convert this vector into a scalar.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector1,
     /// # };
     /// #
     /// let vector = Vector1::new(1_i32);
-    /// 
+    ///
     /// assert_eq!(vector.to_scalar(), 1_i32);
     /// ```
     #[inline]
@@ -1902,9 +1882,9 @@ where
 
 impl<S> Vector2<S> {
     /// Construct a new vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
@@ -1913,15 +1893,13 @@ impl<S> Vector2<S> {
     /// let x = 1_i32;
     /// let y = 2_i32;
     /// let vector = Vector2::new(x, y);
-    /// 
+    ///
     /// assert_eq!(vector[0], x);
     /// assert_eq!(vector[1], y);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
-        Self { 
-            data: [x, y],
-        }
+        Self { data: [x, y] }
     }
 }
 
@@ -1931,16 +1909,16 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
     /// # };
     /// #
     /// let vector: Vector2<i32> = Vector2::unit_x();
-    /// 
+    ///
     /// assert_eq!(vector[0], 1_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// ```
@@ -1951,16 +1929,16 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector2,
     /// # };
     /// #
     /// let vector: Vector2<i32> = Vector2::unit_y();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 1_i32);
     /// ```
@@ -1972,9 +1950,9 @@ where
 
 impl<S> Vector3<S> {
     /// Construct a new vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -1984,16 +1962,14 @@ impl<S> Vector3<S> {
     /// let y = 2_i32;
     /// let z = 3_i32;
     /// let vector = Vector3::new(x, y, z);
-    /// 
+    ///
     /// assert_eq!(vector[0], x);
     /// assert_eq!(vector[1], y);
     /// assert_eq!(vector[2], z);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
-        Self { 
-            data: [x, y, z],
-        }
+        Self { data: [x, y, z] }
     }
 }
 
@@ -2003,16 +1979,16 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// # };
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_x();
-    /// 
+    ///
     /// assert_eq!(vector[0], 1_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// assert_eq!(vector[2], 0_i32);
@@ -2024,16 +2000,16 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// # };
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_y();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 1_i32);
     /// assert_eq!(vector[2], 0_i32);
@@ -2042,19 +2018,19 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one(), S::zero())
     }
-    
+
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// # };
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_z();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// assert_eq!(vector[2], 1_i32);
@@ -2064,14 +2040,14 @@ where
         Self::new(S::zero(), S::zero(), S::one())
     }
 
-    /// Compute the cross product of two three-dimensional vectors. 
+    /// Compute the cross product of two three-dimensional vectors.
     ///
-    /// For the vector dimensions used in computer graphics 
-    /// (up to four dimensions), the cross product is well-defined only in 
-    /// three dimensions. The cross product is a form of vector 
-    /// multiplication that computes a vector normal to the plane swept out by 
-    /// the two vectors. The norm of this vector is the area of the 
-    /// parallelogram swept out by the two vectors. 
+    /// For the vector dimensions used in computer graphics
+    /// (up to four dimensions), the cross product is well-defined only in
+    /// three dimensions. The cross product is a form of vector
+    /// multiplication that computes a vector normal to the plane swept out by
+    /// the two vectors. The norm of this vector is the area of the
+    /// parallelogram swept out by the two vectors.
     ///
     /// # Example
     ///
@@ -2099,13 +2075,13 @@ where
         let x = self.data[1] * other.data[2] - self.data[2] * other.data[1];
         let y = self.data[2] * other.data[0] - self.data[0] * other.data[2];
         let z = self.data[0] * other.data[1] - self.data[1] * other.data[0];
-    
+
         Vector3::new(x, y, z)
     }
 
     /// Compute the scalar triple product of three three-dimensional vectors.
-    /// 
-    /// The scalar triple product of three vectors `u`, `v`, and `w` is the 
+    ///
+    /// The scalar triple product of three vectors `u`, `v`, and `w` is the
     /// signed volume of the parallelepiped formed by the three vectors. In
     /// symbols, the triple product is given by
     /// ```text
@@ -2130,9 +2106,9 @@ where
     /// ```text
     /// triple(u, v, w) = -triple(u, w, v) = -triple(v, u, w) = -triple(w, v, u)
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -2143,9 +2119,9 @@ where
     /// let w = Vector3::new(52_f64, 85_f64, 108_f64);
     /// let expected = 276_f64;
     /// let result = u.triple(&v, &w);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// assert_eq!(u.triple(&v, &w), v.triple(&w, &u));
     /// assert_eq!(u.triple(&v, &w), w.triple(&u, &v));
     /// assert_eq!(u.triple(&v, &w), -u.triple(&w, &v));
@@ -2161,9 +2137,9 @@ where
 
 impl<S> Vector4<S> {
     /// Construct a new vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
@@ -2174,7 +2150,7 @@ impl<S> Vector4<S> {
     /// let z = 3_i32;
     /// let w = 4_i32;
     /// let vector = Vector4::new(x, y, z, w);
-    /// 
+    ///
     /// assert_eq!(vector[0], x);
     /// assert_eq!(vector[1], y);
     /// assert_eq!(vector[2], z);
@@ -2182,9 +2158,7 @@ impl<S> Vector4<S> {
     /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S, w: S) -> Self {
-        Self { 
-            data: [x, y, z, w],
-        }
+        Self { data: [x, y, z, w] }
     }
 }
 
@@ -2194,16 +2168,16 @@ where
 {
     /// Returns the **x-axis** unit vector, a unit vector with the **x-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
     /// # };
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_x();
-    /// 
+    ///
     /// assert_eq!(vector[0], 1_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// assert_eq!(vector[2], 0_i32);
@@ -2216,16 +2190,16 @@ where
 
     /// Returns the **y-axis** unit vector, a unit vector with the **y-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
     /// # };
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_y();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 1_i32);
     /// assert_eq!(vector[2], 0_i32);
@@ -2235,19 +2209,19 @@ where
     pub fn unit_y() -> Self {
         Self::new(S::zero(), S::one(), S::zero(), S::zero())
     }
-    
+
     /// Returns the **z-axis** unit vector, a unit vector with the **z-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
     /// # };
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_z();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// assert_eq!(vector[2], 1_i32);
@@ -2260,16 +2234,16 @@ where
 
     /// Returns the **w-axis** unit vector, a unit vector with the **w-component**
     /// component as a `1` and the rest of the components are zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector4,
     /// # };
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_w();
-    /// 
+    ///
     /// assert_eq!(vector[0], 0_i32);
     /// assert_eq!(vector[1], 0_i32);
     /// assert_eq!(vector[2], 0_i32);
@@ -2306,7 +2280,7 @@ where
     S: Copy,
 {
     #[inline]
-    fn from(v: &(S,)) -> Self  {
+    fn from(v: &(S,)) -> Self {
         Self::new(v.0)
     }
 }
@@ -2317,9 +2291,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S,)) -> &'a Vector1<S> {
-        unsafe { 
-            &*(v as *const (S,) as *const Vector1<S>)
-        }
+        unsafe { &*(v as *const (S,) as *const Vector1<S>) }
     }
 }
 
@@ -2349,9 +2321,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Vector2<S> {
-        unsafe {
-            &*(v as *const (S, S) as *const Vector2<S>)
-        }
+        unsafe { &*(v as *const (S, S) as *const Vector2<S>) }
     }
 }
 
@@ -2381,9 +2351,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Vector3<S> {
-        unsafe { 
-            &*(v as *const (S, S, S) as *const Vector3<S>)
-        }
+        unsafe { &*(v as *const (S, S, S) as *const Vector3<S>) }
     }
 }
 
@@ -2433,9 +2401,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Vector4<S> {
-        unsafe { 
-            &*(v as *const (S, S, S, S) as *const Vector4<S>)
-        }
+        unsafe { &*(v as *const (S, S, S, S) as *const Vector4<S>) }
     }
 }
 
@@ -2457,21 +2423,17 @@ macro_rules! impl_as_ref_ops {
         impl<S> AsRef<$RefType> for $VecType {
             #[inline]
             fn as_ref(&self) -> &$RefType {
-                unsafe {
-                    &*(self as *const $VecType as *const $RefType)
-                }
+                unsafe { &*(self as *const $VecType as *const $RefType) }
             }
         }
 
         impl<S> AsMut<$RefType> for $VecType {
             #[inline]
             fn as_mut(&mut self) -> &mut $RefType {
-                unsafe {
-                    &mut *(self as *mut $VecType as *mut $RefType)
-                }
+                unsafe { &mut *(self as *mut $VecType as *mut $RefType) }
             }
         }
-    }
+    };
 }
 
 impl_as_ref_ops!(Vector1<S>, S);
@@ -2890,4 +2852,3 @@ impl_swizzle!(wwwx() => Vector4 => Vector4 { 3, 3, 3, 0 });
 impl_swizzle!(wwwy() => Vector4 => Vector4 { 3, 3, 3, 1 });
 impl_swizzle!(wwwz() => Vector4 => Vector4 { 3, 3, 3, 2 });
 impl_swizzle!(wwww() => Vector4 => Vector4 { 3, 3, 3, 3 });
-

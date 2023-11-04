@@ -1,12 +1,11 @@
-extern crate cglinalg_numeric;
 extern crate cglinalg_core;
+extern crate cglinalg_numeric;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
+use approx::{
+    relative_eq,
+    relative_ne,
 };
 use cglinalg_core::{
     Point,
@@ -14,13 +13,14 @@ use cglinalg_core::{
     Point2,
     Point3,
     Vector,
-    Vector1, 
-    Vector2, 
-    Vector3, 
+    Vector1,
+    Vector2,
+    Vector3,
 };
-use approx::{
-    relative_eq,
-    relative_ne,
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 
 use proptest::prelude::*;
@@ -30,7 +30,7 @@ fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_val
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -46,14 +46,14 @@ where
 
     any::<[S; N]>().prop_map(move |array| {
         let point = Point::from(array);
-        
+
         rescale_point(point, min_value, max_value)
     })
 }
 
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
-    S: SimdScalarSigned + Arbitrary
+    S: SimdScalarSigned + Arbitrary,
 {
     fn rescale<S: SimdScalarSigned>(value: S, min_value: S, max_value: S) -> S {
         min_value + (value % (max_value - min_value))
@@ -62,7 +62,7 @@ where
     any::<S>().prop_map(move |value| {
         let sign_value = value.signum();
         let abs_value = value.abs();
-        
+
         sign_value * rescale(abs_value, min_value, max_value)
     })
 }
@@ -71,7 +71,7 @@ fn strategy_point_any<S, const N: usize>() -> impl Strategy<Value = Point<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    any::<[S; N]>().prop_map(|array| {        
+    any::<[S; N]>().prop_map(|array| {
         let mut result = Point::origin();
         for i in 0..N {
             let sign_value = array[i].signum();
@@ -87,7 +87,7 @@ fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    any::<[S; N]>().prop_map(|array| {        
+    any::<[S; N]>().prop_map(|array| {
         let mut result = Vector::zero();
         for i in 0..N {
             let sign_value = array[i].signum();
@@ -141,9 +141,9 @@ where
     Ok(())
 }
 
-/// Multiplication of two scalars and a point should be compatible with 
-/// multiplication of all scalars. In other words, scalar multiplication 
-/// of two scalar with a point should act associatively, just like the 
+/// Multiplication of two scalars and a point should be compatible with
+/// multiplication of all scalars. In other words, scalar multiplication
+/// of two scalar with a point should act associatively, just like the
 /// multiplication of three scalars.
 ///
 /// Given scalars `a` and `b`, and a point `p`, we have
@@ -179,11 +179,11 @@ where
     Ok(())
 }
 
-/// Given a point `p` and a vector `v`, we should be able to use `p` and 
-/// `v` interchangeably with their references `&p` and `&v` in 
+/// Given a point `p` and a vector `v`, we should be able to use `p` and
+/// `v` interchangeably with their references `&p` and `&v` in
 /// arithmetic expressions involving points and vectors.
 ///
-/// Given a point `p` and a vector `v`, and their references `&p` and 
+/// Given a point `p` and a vector `v`, and their references `&p` and
 /// `&v`, they should satisfy
 /// ```text
 ///  p +  v == &p +  v
@@ -194,13 +194,11 @@ where
 /// &p +  v == &p + &v
 ///  p + &v == &p + &v
 /// ```
-fn prop_point_plus_vector_equals_refpoint_plus_refvector<S, const N: usize>(
-    p: Point<S, N>, 
-    v: Vector<S, N>
-) -> Result<(), TestCaseError>
+#[rustfmt::skip]
+fn prop_point_plus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
+{
     prop_assert_eq!( p +  v, &p +  v);
     prop_assert_eq!( p +  v,  p + &v);
     prop_assert_eq!( p +  v, &p + &v);
@@ -213,17 +211,13 @@ where
 }
 
 
-/// Point and vector addition should be compatible. 
-/// 
+/// Point and vector addition should be compatible.
+///
 /// Given a point `p` and vectors `v1` and `v2`, we have
 /// ```text
 /// (p + v1) + v2 == p + (v1 + v2)
 /// ```
-fn prop_point_vector_addition_compatible<S, const N: usize>(
-    p: Point<S, N>, 
-    v1: Vector<S, N>, 
-    v2: Vector<S, N>
-) -> Result<(), TestCaseError>
+fn prop_point_vector_addition_compatible<S, const N: usize>(p: Point<S, N>, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -235,17 +229,17 @@ where
     Ok(())
 }
 
-/// Point and vector addition should be compatible. 
-/// 
+/// Point and vector addition should be compatible.
+///
 /// Given a point `p` and vectors `v1` and `v2`, we have
 /// ```text
 /// (p + v1) + v2 == p + (v1 + v2)
 /// ```
 fn prop_approx_point_vector_addition_compatible<S, const N: usize>(
-    p: Point<S, N>, 
-    v1: Vector<S, N>, 
-    v2: Vector<S, N>, 
-    tolerance: S
+    p: Point<S, N>,
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -292,11 +286,11 @@ where
     Ok(())
 }
 
-/// Given a point `p` and a vector `v`, we should be able to use `p` and 
-/// `v` interchangeably with their references `&p` and `&v` in 
+/// Given a point `p` and a vector `v`, we should be able to use `p` and
+/// `v` interchangeably with their references `&p` and `&v` in
 /// arithmetic expressions involving points and vectors.
 ///
-/// Given a point `p` and a vector `v`, and their references `&p` and 
+/// Given a point `p` and a vector `v`, and their references `&p` and
 /// `&v`, they should satisfy
 /// ```text
 ///  p -  v == &p -  v
@@ -307,10 +301,11 @@ where
 /// &p -  v == &p - &v
 ///  p - &v == &p - &v
 /// ```
+#[rustfmt::skip]
 fn prop_point_minus_vector_equals_refpoint_plus_refvector<S, const N: usize>(p: Point<S, N>, v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
+{
     prop_assert_eq!( p -  v, &p -  v);
     prop_assert_eq!( p -  v,  p - &v);
     prop_assert_eq!( p -  v, &p - &v);
@@ -333,18 +328,18 @@ where
     S: SimdScalar,
 {
     let zero = S::zero();
-    
+
     prop_assert!(p.norm_squared() >= zero);
 
     Ok(())
 }
 
-/// The squared **L2** norm function is point separating. In particular, if the 
+/// The squared **L2** norm function is point separating. In particular, if the
 /// squared distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) == 0 => p1 == p2 
+/// norm_squared(p1 - p2) == 0 => p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
@@ -353,10 +348,10 @@ where
 /// For the sake of testability, we use the second form to test the norm
 /// function.
 fn prop_approx_norm_squared_point_separating<S, const N: usize>(
-    p1: Point<S, N>, 
-    p2: Point<S, N>, 
-    input_tolerance: S, 
-    output_tolerance: S
+    p1: Point<S, N>,
+    p2: Point<S, N>,
+    input_tolerance: S,
+    output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -367,12 +362,12 @@ where
     Ok(())
 }
 
-/// The squared **L2** norm function is point separating. In particular, if the 
+/// The squared **L2** norm function is point separating. In particular, if the
 /// squared distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) == 0 => p1 == p2 
+/// norm_squared(p1 - p2) == 0 => p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
@@ -383,7 +378,7 @@ where
 fn prop_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
+{
     let zero = S::zero();
 
     prop_assume!(p1 != p2);
@@ -393,7 +388,7 @@ where
 }
 
 /// The squared **L2** norm function is squared homogeneous.
-/// 
+///
 /// Given a point `p` and a scalar `c`, the **L2** norm satisfies
 /// ```text
 /// norm(p * c) == norm(p) * abs(c)
@@ -414,7 +409,7 @@ where
     Ok(())
 }
 
-/// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`] 
+/// The [`Point::magnitude_squared`] function and the [`Point::norm_squared`]
 /// function are synonyms. In particular, given a point `p`
 /// ```text
 /// magnitude_squared(p) == norm_squared(p)
@@ -440,18 +435,18 @@ where
     S: SimdScalarFloat,
 {
     let zero = S::zero();
-    
+
     prop_assert!(p.norm() >= zero);
 
     Ok(())
 }
 
-/// The **L2** norm function is point separating. In particular, if the 
+/// The **L2** norm function is point separating. In particular, if the
 /// distance between two points `p1` and `p2` is zero, then `p1 == p2`.
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm(p1 - p2) == 0 => p1 == p2 
+/// norm(p1 - p2) == 0 => p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their distance is nonzero
 /// ```text
@@ -459,15 +454,10 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_approx_norm_point_separating<S, const N: usize>(
-    p1: Point<S, N>, 
-    p2: Point<S, N>, 
-    input_tolerance: S, 
-    output_tolerance: S
-) -> Result<(), TestCaseError> 
+fn prop_approx_norm_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-{   
+{
     let zero = S::zero();
 
     prop_assume!(relative_ne!(p1, p2, epsilon = input_tolerance));
@@ -476,7 +466,7 @@ where
     Ok(())
 }
 
-/// The [`Point::magnitude`] function and the [`Point::norm`] function 
+/// The [`Point::magnitude`] function and the [`Point::norm`] function
 /// are synonyms. In particular, given a point `p`
 /// ```text
 /// magnitude(p) == norm(p)
@@ -509,26 +499,26 @@ where
 
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), p in super::$PointGen()) {
-                let a: $ScalarType = a;
-                let b: $ScalarType = b;
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_scalar_multiplication_compatibility(a, b, p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_scalar_multiplication_compatibility(a in super::$ScalarGen(), b in super::$ScalarGen(), p in super::$PointGen()) {
+                    let a: $ScalarType = a;
+                    let b: $ScalarType = b;
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_scalar_multiplication_compatibility(a, b, p)?
+                }
 
-            #[test]
-            fn prop_one_times_point_equals_point(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_one_times_point_equals_point(p)?
+                #[test]
+                fn prop_one_times_point_equals_point(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_one_times_point_equals_point(p)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point_any, strategy_scalar_i32_any);
@@ -538,18 +528,18 @@ exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point_any, strategy
 
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_one_times_point_equals_point(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_one_times_point_equals_point(p)?
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_one_times_point_equals_point(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_one_times_point_equals_point(p)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point_any);
@@ -559,52 +549,52 @@ approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point_any);
 
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $PointType:ident, $VectorType:ident, $ScalarType:ty, $PointGen:ident, $VectorGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_point_plus_zero_equals_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_plus_zero_equals_vector(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_point_plus_zero_equals_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_plus_zero_equals_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_plus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v: super::$VectorType<$ScalarType> = v;
-                super::prop_point_plus_vector_equals_refpoint_plus_refvector(p, v)?
-            }
+                #[test]
+                fn prop_point_plus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_point_plus_vector_equals_refpoint_plus_refvector(p, v)?
+                }
 
-            #[test]
-            fn prop_point_vector_addition_compatible(p in super::$PointGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v1: super::$VectorType<$ScalarType> = v1;
-                let v2: super::$VectorType<$ScalarType> = v2;
-                super::prop_point_vector_addition_compatible(p, v1, v2)?
-            }
+                #[test]
+                fn prop_point_vector_addition_compatible(p in super::$PointGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v1: super::$VectorType<$ScalarType> = v1;
+                    let v2: super::$VectorType<$ScalarType> = v2;
+                    super::prop_point_vector_addition_compatible(p, v1, v2)?
+                }
 
-            #[test]
-            fn prop_point_minus_zero_equals_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_minus_zero_equals_vector(p)?
-            }
+                #[test]
+                fn prop_point_minus_zero_equals_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_minus_zero_equals_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_minus_point_equals_zero_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_minus_point_equals_zero_vector(p)?
-            }
+                #[test]
+                fn prop_point_minus_point_equals_zero_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_minus_point_equals_zero_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_minus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v: super::$VectorType<$ScalarType> = v;
-                super::prop_point_minus_vector_equals_refpoint_plus_refvector(p, v)?
+                #[test]
+                fn prop_point_minus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_point_minus_vector_equals_refpoint_plus_refvector(p, v)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 exact_arithmetic_props!(point1_i64_arithmetic_props, Point1, Vector1, i64, strategy_point_any, strategy_vector_any);
@@ -614,160 +604,175 @@ exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strat
 
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $PointType:ident, $VectorType:ident, $ScalarType:ty, $PointGen:ident, $VectorGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_point_plus_zero_equals_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_plus_zero_equals_vector(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_point_plus_zero_equals_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_plus_zero_equals_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_plus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v: super::$VectorType<$ScalarType> = v;
-                super::prop_point_plus_vector_equals_refpoint_plus_refvector(p, v)?
-            }
+                #[test]
+                fn prop_point_plus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_point_plus_vector_equals_refpoint_plus_refvector(p, v)?
+                }
 
-            #[test]
-            fn prop_approx_point_vector_addition_compatible(p in super::$PointGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v1: super::$VectorType<$ScalarType> = v1;
-                let v2: super::$VectorType<$ScalarType> = v2;
-                super::prop_approx_point_vector_addition_compatible(p, v1, v2, $tolerance)?
-            }
+                #[test]
+                fn prop_approx_point_vector_addition_compatible(p in super::$PointGen(), v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v1: super::$VectorType<$ScalarType> = v1;
+                    let v2: super::$VectorType<$ScalarType> = v2;
+                    super::prop_approx_point_vector_addition_compatible(p, v1, v2, $tolerance)?
+                }
 
-            #[test]
-            fn prop_point_minus_zero_equals_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_minus_zero_equals_vector(p)?
-            }
+                #[test]
+                fn prop_point_minus_zero_equals_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_minus_zero_equals_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_minus_point_equals_zero_vector(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_point_minus_point_equals_zero_vector(p)?
-            }
+                #[test]
+                fn prop_point_minus_point_equals_zero_vector(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_point_minus_point_equals_zero_vector(p)?
+                }
 
-            #[test]
-            fn prop_point_minus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                let v: super::$VectorType<$ScalarType> = v;
-                super::prop_point_minus_vector_equals_refpoint_plus_refvector(p, v)?
+                #[test]
+                fn prop_point_minus_vector_equals_refpoint_plus_refvector(p in super::$PointGen(), v in super::$VectorGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_point_minus_vector_equals_refpoint_plus_refvector(p, v)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
-approx_arithmetic_props!(
-    point1_f64_arithmetic_props, 
-    Point1, 
-    Vector1, 
-    f64, 
-    strategy_point_any, 
-    strategy_vector_any, 
-    1e-7
-);
-approx_arithmetic_props!(
-    point2_f64_arithmetic_props, 
-    Point2, 
-    Vector2, 
-    f64, 
-    strategy_point_any, 
-    strategy_vector_any, 
-    1e-7
-);
-approx_arithmetic_props!(
-    point3_f64_arithmetic_props, 
-    Point3, 
-    Vector3, 
-    f64, 
-    strategy_point_any, 
-    strategy_vector_any, 
-    1e-7
-);
+approx_arithmetic_props!(point1_f64_arithmetic_props, Point1, Vector1, f64, strategy_point_any, strategy_vector_any, 1e-7);
+approx_arithmetic_props!(point2_f64_arithmetic_props, Point2, Vector2, f64, strategy_point_any, strategy_vector_any, 1e-7);
+approx_arithmetic_props!(point3_f64_arithmetic_props, Point3, Vector3, f64, strategy_point_any, strategy_vector_any, 1e-7);
 
 
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $ScalarGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_squared_nonnegative(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_norm_squared_nonnegative(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_norm_squared_nonnegative(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_norm_squared_nonnegative(p)?
+                }
 
-            #[test]
-            fn prop_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                let p1: super::$PointType<$ScalarType> = p1;
-                let p2: super::$PointType<$ScalarType> = p2;
-                super::prop_norm_squared_point_separating(p1, p2)?
-            }
+                #[test]
+                fn prop_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
+                    let p1: super::$PointType<$ScalarType> = p1;
+                    let p2: super::$PointType<$ScalarType> = p2;
+                    super::prop_norm_squared_point_separating(p1, p2)?
+                }
 
-            #[test]
-            fn prop_norm_squared_homogeneous_squared(v in super::$PointGen(), c in super::$ScalarGen()) {
-                let v: super::$PointType<$ScalarType> = v;
-                let c: $ScalarType = c;
-                super::prop_norm_squared_homogeneous_squared(v, c)?
+                #[test]
+                fn prop_norm_squared_homogeneous_squared(v in super::$PointGen(), c in super::$ScalarGen()) {
+                    let v: super::$PointType<$ScalarType> = v;
+                    let c: $ScalarType = c;
+                    super::prop_norm_squared_homogeneous_squared(v, c)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
-exact_norm_squared_props!(point1_i32_norm_squared_props, Point1, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
-exact_norm_squared_props!(point2_i32_norm_squared_props, Point2, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
-exact_norm_squared_props!(point3_i32_norm_squared_props, Point3, i32, strategy_point_i32_max_safe_square_root, strategy_scalar_i32_any);
+exact_norm_squared_props!(
+    point1_i32_norm_squared_props,
+    Point1,
+    i32,
+    strategy_point_i32_max_safe_square_root,
+    strategy_scalar_i32_any
+);
+exact_norm_squared_props!(
+    point2_i32_norm_squared_props,
+    Point2,
+    i32,
+    strategy_point_i32_max_safe_square_root,
+    strategy_scalar_i32_any
+);
+exact_norm_squared_props!(
+    point3_i32_norm_squared_props,
+    Point3,
+    i32,
+    strategy_point_i32_max_safe_square_root,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_squared_nonnegative(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_norm_squared_nonnegative(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_norm_squared_nonnegative(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_norm_squared_nonnegative(p)?
+                }
 
-            #[test]
-            fn prop_approx_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                let p1: super::$PointType<$ScalarType> = p1;
-                let p2: super::$PointType<$ScalarType> = p2;
-                super::prop_approx_norm_squared_point_separating(p1, p2, $input_tolerance, $output_tolerance)?
+                #[test]
+                fn prop_approx_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
+                    let p1: super::$PointType<$ScalarType> = p1;
+                    let p2: super::$PointType<$ScalarType> = p2;
+                    super::prop_approx_norm_squared_point_separating(p1, p2, $input_tolerance, $output_tolerance)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
-approx_norm_squared_props!(point1_f64_norm_squared_props, Point1, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
-approx_norm_squared_props!(point2_f64_norm_squared_props, Point2, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
-approx_norm_squared_props!(point3_f64_norm_squared_props, Point3, f64, strategy_point_f64_max_safe_square_root, 1e-10, 1e-20);
+approx_norm_squared_props!(
+    point1_f64_norm_squared_props,
+    Point1,
+    f64,
+    strategy_point_f64_max_safe_square_root,
+    1e-10,
+    1e-20
+);
+approx_norm_squared_props!(
+    point2_f64_norm_squared_props,
+    Point2,
+    f64,
+    strategy_point_f64_max_safe_square_root,
+    1e-10,
+    1e-20
+);
+approx_norm_squared_props!(
+    point3_f64_norm_squared_props,
+    Point3,
+    f64,
+    strategy_point_f64_max_safe_square_root,
+    1e-10,
+    1e-20
+);
 
 
 macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$PointGen()) {
-                let v: super::$PointType<$ScalarType> = v;
-                super::prop_magnitude_squared_norm_squared_synonyms(v)?
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_magnitude_squared_norm_squared_synonyms(v in super::$PointGen()) {
+                    let v: super::$PointType<$ScalarType> = v;
+                    super::prop_magnitude_squared_norm_squared_synonyms(v)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 approx_norm_squared_synonym_props!(point1_f64_norm_squared_synonym_props, Point1, f64, strategy_point_any);
@@ -777,18 +782,18 @@ approx_norm_squared_synonym_props!(point3_f64_norm_squared_synonym_props, Point3
 
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_squared_norm_squared_synonyms(v in super::$PointGen()) {
-                let v: super::$PointType<$ScalarType> = v;
-                super::prop_magnitude_squared_norm_squared_synonyms(v)?
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_magnitude_squared_norm_squared_synonyms(v in super::$PointGen()) {
+                    let v: super::$PointType<$ScalarType> = v;
+                    super::prop_magnitude_squared_norm_squared_synonyms(v)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 exact_norm_squared_synonym_props!(point1_i32_norm_squared_synonym_props, Point1, i32, strategy_point_any);
@@ -798,25 +803,25 @@ exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3,
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $tolerance:expr) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_norm_nonnegative(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_norm_nonnegative(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_norm_nonnegative(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_norm_nonnegative(p)?
+                }
 
-            #[test]
-            fn prop_approx_norm_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                let p1: super::$PointType<$ScalarType> = p1;
-                let p2: super::$PointType<$ScalarType> = p2;
-                super::prop_approx_norm_point_separating(p1, p2, $tolerance, $tolerance)?
+                #[test]
+                fn prop_approx_norm_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
+                    let p1: super::$PointType<$ScalarType> = p1;
+                    let p2: super::$PointType<$ScalarType> = p2;
+                    super::prop_approx_norm_point_separating(p1, p2, $tolerance, $tolerance)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 approx_norm_props!(point1_f64_norm_props, Point1, f64, strategy_point_any, 1e-8);
@@ -826,27 +831,26 @@ approx_norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, 1e-8)
 
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_magnitude_norm_synonyms(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_magnitude_norm_synonyms(p)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_magnitude_norm_synonyms(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_magnitude_norm_synonyms(p)?
+                }
 
-            #[test]
-            fn prop_l2_norm_norm_synonyms(p in super::$PointGen()) {
-                let p: super::$PointType<$ScalarType> = p;
-                super::prop_l2_norm_norm_synonyms(p)?
+                #[test]
+                fn prop_l2_norm_norm_synonyms(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_l2_norm_norm_synonyms(p)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 norm_synonym_props!(point1_f64_norm_synonym_props, Point1, f64, strategy_point_any);
 norm_synonym_props!(point2_f64_norm_synonym_props, Point2, f64, strategy_point_any);
 norm_synonym_props!(point3_f64_norm_synonym_props, Point3, f64, strategy_point_any);
-

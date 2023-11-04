@@ -1,29 +1,27 @@
-extern crate cglinalg_numeric;
 extern crate cglinalg_complex;
 extern crate cglinalg_core;
+extern crate cglinalg_numeric;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_complex::{
-    Complex,
-};
+use cglinalg_complex::Complex;
 use cglinalg_core::{
-    Quaternion,
-    Vector1, 
-    Vector2, 
-    Vector3, 
-    Vector4,
-    Vector,
-    Unit,
     Normed,
+    Quaternion,
+    Unit,
+    Vector,
+    Vector1,
+    Vector2,
+    Vector3,
+    Vector4,
+};
+use cglinalg_numeric::{
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 
-use proptest::prelude::*;
 use core::fmt;
+use proptest::prelude::*;
 
 
 fn strategy_vector_any<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
@@ -68,12 +66,12 @@ fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
 
 
 /// The unit data type normalizes the input value `value`.
-/// 
+///
 /// Given a value `value` of type [`T`] which has a notion of vector length
 /// ```text
 /// norm(into_inner(from_value(value))) == 1
 /// ```
-fn prop_from_value_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_from_value_normalized<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug,
@@ -88,12 +86,12 @@ where
 }
 
 /// The unit data type normalizes the input value `value`.
-/// 
+///
 /// Given a value `value` of type [`T`] which has a notion of vector length
 /// ```text
 /// norm(into_inner(fst(from_value_with_norm(value)))) == 1
 /// ```
-fn prop_from_value_with_norm_normalized<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_from_value_with_norm_normalized<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug,
@@ -108,12 +106,12 @@ where
 }
 
 /// The unit data type normalizes an input value to a specified norm.
-/// 
+///
 /// Given a value `value` of type [`T`] which has norm `norm`
 /// ```text
 /// norm(from_value_with_norm(value)) == norm
 /// ```
-fn prop_from_value_with_norm_correct_norm<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_from_value_with_norm_correct_norm<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug,
@@ -126,14 +124,14 @@ where
     Ok(())
 }
 
-/// The unit data type when constructed unchecked does not change the 
+/// The unit data type when constructed unchecked does not change the
 /// inner value.
-/// 
+///
 /// Given a value `value` of type [`T`]
 /// ```text
 /// into_inner(from_value_unchecked(value)) == value
 /// ```
-fn prop_from_value_unchecked_into_inner<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_from_value_unchecked_into_inner<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug + Clone,
@@ -147,10 +145,10 @@ where
     Ok(())
 }
 
-/// When the norm of a vector value is above a specified input threshold, 
-/// [`Unit::try_from_value_with_norm`] returns a normalized value. Otherwise, it 
+/// When the norm of a vector value is above a specified input threshold,
+/// [`Unit::try_from_value_with_norm`] returns a normalized value. Otherwise, it
 /// returns `None`.
-fn prop_try_from_value_with_norm_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_try_from_value_with_norm_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug,
@@ -163,10 +161,10 @@ where
     Ok(())
 }
 
-/// When the norm of a vector value is above a specified input threshold, 
-/// [`Unit::try_from_value`] returns a normalized value. Otherwise, it 
+/// When the norm of a vector value is above a specified input threshold,
+/// [`Unit::try_from_value`] returns a normalized value. Otherwise, it
 /// returns `None`.
-fn prop_try_from_value_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError> 
+fn prop_try_from_value_above_threshold_is_some<S, T>(value: T) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     T: Normed<Output = S> + PartialEq + fmt::Debug,
@@ -182,48 +180,48 @@ where
 
 macro_rules! unit_props {
     ($TestModuleName:ident, $UnitType:ident, $ScalarType:ty, $Generator:ident) => {
-    #[cfg(test)]
-    mod $TestModuleName {
-        use proptest::prelude::*;
-        proptest! {
-            #[test]
-            fn prop_from_value_normalized(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_from_value_normalized(value)?
-            }
+        #[cfg(test)]
+        mod $TestModuleName {
+            use proptest::prelude::*;
+            proptest! {
+                #[test]
+                fn prop_from_value_normalized(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_from_value_normalized(value)?
+                }
 
-            #[test]
-            fn prop_from_value_with_norm_normalized(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_from_value_with_norm_normalized(value)?
-            }
+                #[test]
+                fn prop_from_value_with_norm_normalized(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_from_value_with_norm_normalized(value)?
+                }
 
-            #[test]
-            fn prop_from_value_with_norm_correct_norm(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_from_value_with_norm_correct_norm(value)?
-            }
+                #[test]
+                fn prop_from_value_with_norm_correct_norm(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_from_value_with_norm_correct_norm(value)?
+                }
 
-            #[test]
-            fn prop_from_value_unchecked_into_inner(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_from_value_unchecked_into_inner(value)?
-            }
+                #[test]
+                fn prop_from_value_unchecked_into_inner(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_from_value_unchecked_into_inner(value)?
+                }
 
-            #[test]
-            fn prop_try_from_value_with_norm_above_threshold_is_some(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_try_from_value_with_norm_above_threshold_is_some(value)?
-            }
+                #[test]
+                fn prop_try_from_value_with_norm_above_threshold_is_some(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_try_from_value_with_norm_above_threshold_is_some(value)?
+                }
 
-            #[test]
-            fn prop_try_from_value_above_threshold_is_some(value in super::$Generator()) {
-                let value: super::$UnitType<$ScalarType> = value;
-                super::prop_try_from_value_above_threshold_is_some(value)?
+                #[test]
+                fn prop_try_from_value_above_threshold_is_some(value in super::$Generator()) {
+                    let value: super::$UnitType<$ScalarType> = value;
+                    super::prop_try_from_value_above_threshold_is_some(value)?
+                }
             }
         }
-    }
-    }
+    };
 }
 
 unit_props!(unit_vector1_f64_props, Vector1, f64, strategy_vector_f64_any);
@@ -234,4 +232,3 @@ unit_props!(unit_vector4_f64_props, Vector4, f64, strategy_vector_f64_any);
 unit_props!(unit_quaternion_f64_props, Quaternion, f64, strategy_quaternion_f64_any);
 
 unit_props!(unit_complex_f64_props, Complex, f64, strategy_complex_f64_any);
-

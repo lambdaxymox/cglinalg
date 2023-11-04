@@ -6,6 +6,15 @@ Change log dates follow the ISO 8601 standard (YEAR-MONTH-DAY).
 
 ## [Unreleased]
 
+## [0.19.1] - 2023-11-04
+Some small project level improvements.
+
+### Added
+- Add `rustfmt` linting settings.
+
+### Changed
+- Move the the changelog to the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
+
 ## [0.19.0] - 2023-10-23
 Major API and library redesign. Massive improvements in documentation quality
 and testing quality in `cglinalg_transform`.

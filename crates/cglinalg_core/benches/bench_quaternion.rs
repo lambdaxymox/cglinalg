@@ -10,22 +10,20 @@ use cglinalg_core::{
 };
 use core::ops::{
     Add,
-    Sub,
-    Mul,
     Div,
-};
-use rand::{
-    Rng, 
-    prelude::Distribution,
-    distributions::Standard,
-};
-use rand_isaac::{
-    IsaacRng,
+    Mul,
+    Sub,
 };
 use criterion::{
     criterion_group,
     criterion_main,
 };
+use rand::{
+    distributions::Standard,
+    prelude::Distribution,
+    Rng,
+};
+use rand_isaac::IsaacRng;
 
 
 fn gen_scalar<S>() -> S
@@ -38,13 +36,13 @@ where
     rng.gen()
 }
 
-fn gen_quaternion<S>() -> Quaternion<S> 
+fn gen_quaternion<S>() -> Quaternion<S>
 where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Quaternion::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
 }
 
@@ -87,40 +85,51 @@ macro_rules! bench_unop(
 );
 
 bench_binop!(
-    quaternion_add_quaternion_f32, 
-    f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, add
+    quaternion_add_quaternion_f32,
+    f32,
+    Quaternion<f32>,
+    Quaternion<f32>,
+    gen_quaternion,
+    gen_quaternion,
+    add
 );
 bench_binop!(
-    quaternion_sub_quaternion_f32, 
-    f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, sub
+    quaternion_sub_quaternion_f32,
+    f32,
+    Quaternion<f32>,
+    Quaternion<f32>,
+    gen_quaternion,
+    gen_quaternion,
+    sub
 );
 bench_binop!(
     quaternion_mul_quaternion_f32,
-    f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, mul
+    f32,
+    Quaternion<f32>,
+    Quaternion<f32>,
+    gen_quaternion,
+    gen_quaternion,
+    mul
 );
-bench_binop!(
-    scalar_mul_quaternion_f32,
-    f32, f32,             Quaternion<f32>, gen_scalar,     gen_quaternion, mul
-);
-bench_binop!(
-    quaternion_mul_scalar_f32,
-    f32, Quaternion<f32>, f32,             gen_quaternion, gen_scalar,     mul
-);
-bench_binop!(
-    quaternion_div_scalar_f32,
-    f32, Quaternion<f32>, f32,             gen_quaternion, gen_scalar,     div
-);
+bench_binop!(scalar_mul_quaternion_f32, f32, f32, Quaternion<f32>, gen_scalar, gen_quaternion, mul);
+bench_binop!(quaternion_mul_scalar_f32, f32, Quaternion<f32>, f32, gen_quaternion, gen_scalar, mul);
+bench_binop!(quaternion_div_scalar_f32, f32, Quaternion<f32>, f32, gen_quaternion, gen_scalar, div);
 
 bench_binop_ref!(
-    quaternion_dot_quaternion_f32, 
-    f32, Quaternion<f32>, Quaternion<f32>, gen_quaternion, gen_quaternion, dot
+    quaternion_dot_quaternion_f32,
+    f32,
+    Quaternion<f32>,
+    Quaternion<f32>,
+    gen_quaternion,
+    gen_quaternion,
+    dot
 );
 
 bench_unop!(quaternion_conjugate_f32, f32, Quaternion<f32>, gen_quaternion, conjugate);
-bench_unop!(quaternion_norm_f32,      f32, Quaternion<f32>, gen_quaternion, norm);
+bench_unop!(quaternion_norm_f32, f32, Quaternion<f32>, gen_quaternion, norm);
 bench_unop!(quaternion_normalize_f32, f32, Quaternion<f32>, gen_quaternion, normalize);
-bench_unop!(quaternion_inverse_f32,   f32, Quaternion<f32>, gen_quaternion, inverse);
-bench_unop!(quaternion_sqrt_f32,      f32, Quaternion<f32>, gen_quaternion, sqrt);
+bench_unop!(quaternion_inverse_f32, f32, Quaternion<f32>, gen_quaternion, inverse);
+bench_unop!(quaternion_sqrt_f32, f32, Quaternion<f32>, gen_quaternion, sqrt);
 
 
 criterion_group!(
@@ -139,4 +148,3 @@ criterion_group!(
     quaternion_sqrt_f32,
 );
 criterion_main!(quaternion_benches);
-

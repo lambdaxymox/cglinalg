@@ -2,14 +2,14 @@ use core::fmt;
 use core::ops;
 
 
-/// Cast a value from one primitive numeric type to another primitive numeric 
+/// Cast a value from one primitive numeric type to another primitive numeric
 /// type without checking that the result failed.
-/// 
-/// The main purpose of this function is to convert numeric constants inside 
+///
+/// The main purpose of this function is to convert numeric constants inside
 /// numeric algorithms between numeric data types in generic code.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// # use cglinalg_numeric::{
 /// #     
@@ -20,16 +20,16 @@ use core::ops;
 /// let value_i16 = i16::MAX;
 /// let expected_i32 = 32767_i32;
 /// let result_i32: i32 = cglinalg_numeric::cast(value_i16);
-/// 
+///
 /// assert_eq!(result_i32, expected_i32);
-/// 
+///
 /// let expected_f32 = 32767_f32;
 /// let result_f32: f32 = cglinalg_numeric::cast(value_i16);
-/// 
+///
 /// assert_eq!(result_f32, expected_f32);
 /// ```
 #[inline]
-pub fn cast<From, To>(value: From) -> To 
+pub fn cast<From, To>(value: From) -> To
 where
     From: SimdCast,
     To: SimdCast,
@@ -38,9 +38,9 @@ where
 }
 
 /// Safely cast a value from one numeric type to another numeric type.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// # use cglinalg_numeric::{
 /// #     
@@ -52,18 +52,18 @@ where
 /// let value_i16 = i16::MAX;
 /// let expected_i32 = Some(32767_i32);
 /// let result_i32: Option<i32> = cglinalg_numeric::try_cast(value_i16);
-/// 
+///
 /// assert_eq!(result_i32, expected_i32);
-/// 
+///
 /// let expected_f32 = Some(32767_f32);
 /// let result_f32: Option<f32> = cglinalg_numeric::try_cast(value_i16);
-/// 
+///
 /// assert_eq!(result_f32, expected_f32);
-/// 
+///
 /// assert!(cglinalg_numeric::try_cast::<f32, i32>(f32::MAX).is_none());
 /// ```
 #[inline]
-pub fn try_cast<From, To>(value: From) -> Option<To> 
+pub fn try_cast<From, To>(value: From) -> Option<To>
 where
     From: SimdCast,
     To: SimdCast,
@@ -72,7 +72,7 @@ where
 }
 
 /// A data type with this trait can be cast to between numeric types.
-/// 
+///
 /// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of [`cglinalg`]
 /// from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
 pub trait SimdCast
@@ -81,17 +81,13 @@ where
 {
 }
 
-impl<T> SimdCast for T 
-where 
-    T: num_traits::NumCast,
-{
-}
+impl<T> SimdCast for T where T: num_traits::NumCast {}
 
 
-/// A data type with this trait has the properties of a 
-/// set of scalar numbers underlying vector and matrix 
+/// A data type with this trait has the properties of a
+/// set of scalar numbers underlying vector and matrix
 /// data types.
-pub trait SimdScalar 
+pub trait SimdScalar
 where
     Self: Copy,
     Self: Clone,
@@ -99,7 +95,7 @@ where
     Self: fmt::Display,
     Self: num_traits::Num,
     Self: SimdCast,
-    Self: PartialOrd, 
+    Self: PartialOrd,
     Self: ops::AddAssign,
     Self: ops::SubAssign,
     Self: ops::MulAssign,
@@ -109,14 +105,14 @@ where
 }
 
 /// A trait representing numbers with subtraction and additive inverses.
-pub trait SimdScalarSigned 
+pub trait SimdScalarSigned
 where
     Self: SimdScalar + num_traits::Signed,
 {
     /// Determine whether the sign of the number is positive.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `is_sign_positive` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -128,13 +124,13 @@ where
     /// let neg_nan = -f64::NAN;
     /// let value = 7_f64;
     /// let neg_value = -7_f64;
-    /// 
+    ///
     /// assert!(value.is_sign_positive());
     /// assert!(!neg_value.is_sign_positive());
     /// assert!(nan.is_sign_positive());
     /// assert!(!neg_nan.is_sign_positive());
     /// ```
-    /// 
+    ///
     /// Examples of using `is_sign_positive` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -144,16 +140,16 @@ where
     /// #
     /// let value = 7_i32;
     /// let neg_value = -7_i32;
-    /// 
+    ///
     /// assert!(value.is_sign_positive());
     /// assert!(!neg_value.is_sign_positive());
     /// ```
     fn is_sign_positive(self) -> bool;
 
     /// Determine whether the sign of the number is negative.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `is_sign_negative` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -165,13 +161,13 @@ where
     /// let neg_nan = -f64::NAN;
     /// let value = 7_f64;
     /// let neg_value = -7_f64;
-    /// 
+    ///
     /// assert!(!value.is_sign_negative());
     /// assert!(neg_value.is_sign_negative());
     /// assert!(!nan.is_sign_negative());
     /// assert!(neg_nan.is_sign_negative());
     /// ```
-    /// 
+    ///
     /// Examples of using `is_sign_negative` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -181,21 +177,21 @@ where
     /// #
     /// let value = 7_i32;
     /// let neg_value = -7_i32;
-    /// 
+    ///
     /// assert!(!value.is_sign_negative());
     /// assert!(neg_value.is_sign_negative());
     /// ```
     fn is_sign_negative(self) -> bool;
 
     /// Copy the sign of `sign` to `self`.
-    /// 
+    ///
     /// The `copysign` function is defined as follows. Given a number `x` and a number `sign`
     /// ```text
     /// copysign(x) == signum(sign) * abs(x)
     /// ```
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `copysign` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -205,16 +201,16 @@ where
     /// #
     /// let value = 3.5_f64;
     /// let sign = 0.5;
-    /// 
+    ///
     /// assert_eq!(value.copysign(sign),      value);
     /// assert_eq!(value.copysign(-sign),    -value);
     /// assert_eq!((-value).copysign(sign),   value);
     /// assert_eq!((-value).copysign(-sign), -value);
-    /// 
+    ///
     /// assert!(f64::NAN.copysign(1_f64).is_nan());
     /// assert!(f64::NAN.copysign(-1_f64).is_nan());
     /// ```
-    /// 
+    ///
     /// Examples of using `copysign` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -224,7 +220,7 @@ where
     /// #
     /// let value = 3_i32;
     /// let sign = 7_i32;
-    /// 
+    ///
     /// assert_eq!(value.copysign(sign),      value);
     /// assert_eq!(value.copysign(-sign),    -value);
     /// assert_eq!((-value).copysign(sign),   value);
@@ -233,8 +229,8 @@ where
     fn copysign(self, sign: Self) -> Self;
 
     /// Calculate the signum of the number.
-    /// 
-    /// The signum of a number is the number of the same type that represents its sign, 
+    ///
+    /// The signum of a number is the number of the same type that represents its sign,
     /// such that given a number `x`
     /// ```text
     /// signum(x) * abs(x) == x
@@ -243,14 +239,14 @@ where
     /// ```text
     /// signum(x) := if x > 0 { 1 } else if x < 0 { -1 } else { 0 }
     /// ```
-    /// For floating point number types, the number `0` is also 
-    /// signed: `signum(+0.0) == +1.0` and `signum(-0.0) == -1.0`. Moreover, the 
-    /// value `NaN` evaluates to `NaN`. Indeed, the direct definition for `signum` does 
+    /// For floating point number types, the number `0` is also
+    /// signed: `signum(+0.0) == +1.0` and `signum(-0.0) == -1.0`. Moreover, the
+    /// value `NaN` evaluates to `NaN`. Indeed, the direct definition for `signum` does
     /// not have a value for `NaN` in floating point types. For nonzero, non-`NaN`
     /// floating point numbers, `signum` satisfies either relation.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `signum` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -259,19 +255,19 @@ where
     /// # use core::f64;
     /// #
     /// let value = 6.9_f64;
-    /// 
+    ///
     /// assert_eq!(value.signum(), 1_f64);
     /// assert_eq!((-value).signum(), -1_f64);
-    /// 
+    ///
     /// assert_eq!(0_f64.signum(), 1_f64);
     /// assert_eq!((-0_f64).signum(), -1_f64);
-    /// 
+    ///
     /// assert!(f64::NAN.signum().is_nan());
-    /// 
+    ///
     /// assert_eq!(f64::INFINITY.signum(), 1_f64);
     /// assert_eq!(f64::NEG_INFINITY.signum(), -1_f64);
     /// ```
-    /// 
+    ///
     /// Examples of using `signum` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -280,17 +276,17 @@ where
     /// # use core::i32;
     /// #
     /// let value = 6_i32;
-    /// 
+    ///
     /// assert_eq!(value.signum(), 1_i32);
     /// assert_eq!((-value).signum(), -1_i32);
-    /// 
+    ///
     /// assert_eq!(0_i32.signum(), 0_i32);
     /// assert_eq!((-0_i32).signum(), 0_i32);
     /// ```
     fn signum(self) -> Self;
 
     /// Calculate the absolute value of the number.
-    /// 
+    ///
     /// The absolute value of a number `x` is the number of the same type that satisfies
     /// ```text
     /// abs(x) == signum(x) * x
@@ -301,9 +297,9 @@ where
     /// ```
     /// whereas for floating point types, the first relation accounts for the case where
     /// `x` is `NaN`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `abs` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -313,13 +309,13 @@ where
     /// #
     /// let value1 = 6.9_f64;
     /// let value2 = -6.9_f64;
-    /// 
+    ///
     /// assert_eq!(value1.abs(), value1);
     /// assert_eq!(value2.abs(), value1);
-    /// 
+    ///
     /// assert!(f64::NAN.abs().is_nan());
     /// ```
-    /// 
+    ///
     /// Examples of using `abs` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -329,7 +325,7 @@ where
     /// #
     /// let value1 = 6_i32;
     /// let value2 = -6_i32;
-    /// 
+    ///
     /// assert_eq!(value1.abs(), value1);
     /// assert_eq!(value2.abs(), value1);
     /// ```
@@ -341,9 +337,9 @@ where
     Self: SimdScalar + PartialOrd,
 {
     /// Calculate the maximum value of two numbers.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `max` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -354,7 +350,7 @@ where
     /// assert_eq!(SimdScalarOrd::max(1_f64, 2_f64), 2_f64);
     /// assert_eq!(SimdScalarOrd::max(-1_f64, -2_f64), -1_f64);
     /// ```
-    /// 
+    ///
     /// Examples of using `max` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -368,9 +364,9 @@ where
     fn max(self, other: Self) -> Self;
 
     /// Calculate the minimum value of two numbers.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `min` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -381,7 +377,7 @@ where
     /// assert_eq!(SimdScalarOrd::min(1_f64, 2_f64), 1_f64);
     /// assert_eq!(SimdScalarOrd::min(-1_f64, -2_f64), -2_f64);
     /// ```
-    /// 
+    ///
     /// Examples of using `min` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -395,12 +391,12 @@ where
     fn min(self, other: Self) -> Self;
 
     /// Clamp the scalar to the range `[min_value, max_value]`.
-    /// 
+    ///
     /// This functions returns `min_value` if `self` < `min_value`, and it returns
     /// `max_value` if `self` > `max_value`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Examples of using `clamp` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -413,7 +409,7 @@ where
     /// assert_eq!(SimdScalarOrd::clamp(2_f64, -2_f64, 1_f64), 1_f64);
     /// assert!(SimdScalarOrd::clamp(f64::NAN, -2_f64, 1_f64).is_nan());
     /// ```
-    /// 
+    ///
     /// Examples of using `clamp` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -435,21 +431,21 @@ where
     Self: SimdScalar + SimdScalarOrd,
 {
     /// Returns the smallest finite value of a number type.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// An example of using `min_value` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarBounded,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let min_value_f64 = f64::min_value();
-    /// 
+    ///
     /// assert_eq!(min_value_f64, f64::MIN);
     /// ```
-    /// 
+    ///
     /// An example of using `min_value` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -458,27 +454,27 @@ where
     /// # use core::i32;
     /// #
     /// let min_value_i32 = i32::min_value();
-    /// 
+    ///
     /// assert_eq!(min_value_i32, i32::MIN);
     /// ```
     fn min_value() -> Self;
 
     /// Returns the largest finite value of a number type.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// An example of using `max_value` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarBounded,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let max_value_f64 = f64::max_value();
-    /// 
+    ///
     /// assert_eq!(max_value_f64, f64::MAX);
     /// ```
-    /// 
+    ///
     /// An example of using `max_value` with integers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -487,7 +483,7 @@ where
     /// # use core::i32;
     /// #
     /// let max_value_i32 = i32::max_value();
-    /// 
+    ///
     /// assert_eq!(max_value_i32, i32::MAX);
     /// ```
     fn max_value() -> Self;
@@ -496,16 +492,18 @@ where
 /// A trait representing numbers that have the properties of finite precision
 /// floating point arithmetic.
 pub trait SimdScalarFloat:
-      SimdScalarSigned + SimdScalarOrd + SimdScalarBounded
+    SimdScalarSigned
+    + SimdScalarOrd
+    + SimdScalarBounded
     + approx::AbsDiffEq<Epsilon = Self>
     + approx::RelativeEq<Epsilon = Self>
     + approx::UlpsEq<Epsilon = Self>
-    + ops::Neg<Output = Self> 
-{    
+    + ops::Neg<Output = Self>
+{
     /// Return the largest integer less than or equal to `self`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -519,9 +517,9 @@ pub trait SimdScalarFloat:
     fn floor(self) -> Self;
 
     /// Return the smallest integer greater than or equal to `self`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -535,9 +533,9 @@ pub trait SimdScalarFloat:
     fn ceil(self) -> Self;
 
     /// Return the nearest integer to `self`, rounding half-way cases away from `0.0`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -552,17 +550,17 @@ pub trait SimdScalarFloat:
     /// ```
     fn round(self) -> Self;
 
-    /// Return the integer part of `self`, where non-integer numbers are always 
+    /// Return the integer part of `self`, where non-integer numbers are always
     /// truncated towards zero.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// assert_eq!(SimdScalarFloat::trunc(3.7_f64), 3_f64);
     /// assert_eq!(SimdScalarFloat::trunc(3_f64), 3_f64);
     /// assert_eq!(SimdScalarFloat::trunc(-3.7_f64), -3_f64);
@@ -570,9 +568,9 @@ pub trait SimdScalarFloat:
     fn trunc(self) -> Self;
 
     /// Return the fractional part of `self`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -581,26 +579,26 @@ pub trait SimdScalarFloat:
     /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// assert_relative_eq!(SimdScalarFloat::fract(3.6_f64), 0.6_f64, epsilon = 1e-10);
     /// assert_relative_eq!(SimdScalarFloat::fract(-3.6_f64), -0.6_f64, epsilon = 1e-10);
     /// ```
     fn fract(self) -> Self;
-    
+
     /// Compute the fused multiply-add of `self` with `a` and `b`.
-    /// 
-    /// Given a floating point number `self`, and floating point numbers `a` and 
+    ///
+    /// Given a floating point number `self`, and floating point numbers `a` and
     /// `b`, the fused multiply-add operation is given by
     /// ```text
-    /// mul_add(self, a, b) := (self * a) + b 
+    /// mul_add(self, a, b) := (self * a) + b
     /// ```
-    /// where the entire operation is done with only one rounding error, yielding 
+    /// where the entire operation is done with only one rounding error, yielding
     /// a more accurate result than doing one multiply and one add separately. A
-    /// fused multiply-add operation can also be more performant than an unfused one 
+    /// fused multiply-add operation can also be more performant than an unfused one
     /// on hardware architectures with a dedicated `fma` instruction.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -613,16 +611,16 @@ pub trait SimdScalarFloat:
     /// let m = 10_f64;
     /// let a = 4_f64;
     /// let b = 60_f64;
-    /// 
+    ///
     /// assert_relative_eq!(m.mul_add(a, b), m * a + b, epsilon = 1e-10);
     /// ```
     fn mul_add(self, a: Self, b: Self) -> Self;
 
-    /// Compute the length of the hypotenuse of a right triangle with legs of 
+    /// Compute the length of the hypotenuse of a right triangle with legs of
     /// length `self` and `other`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -633,15 +631,15 @@ pub trait SimdScalarFloat:
     /// let y = 4_f64;
     /// let expected = 5_f64;
     /// let result = x.hypot(y);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     fn hypot(self, other: Self) -> Self;
 
     /// Compute the reciprocal (inverse) of a number.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -649,15 +647,15 @@ pub trait SimdScalarFloat:
     /// # use core::f64;
     /// #
     /// let x = 2_f64;
-    /// 
+    ///
     /// assert_eq!(x.recip(), 1_f64 / x);
     /// ```
     fn recip(self) -> Self;
-    
+
     /// Compute the four quadrant arctangent of two arguments.
-    /// 
-    /// The return value is the arc tangent of the quotient of the two input values. 
-    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
+    ///
+    /// The return value is the arc tangent of the quotient of the two input values.
+    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent
     /// satisfies
     /// ```text
     /// tan2(theta) := y / x
@@ -674,9 +672,9 @@ pub trait SimdScalarFloat:
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -691,16 +689,16 @@ pub trait SimdScalarFloat:
     /// let y1 = -3_f64;
     /// let x2 = -3_f64;
     /// let y2 = 3_f64;
-    /// 
+    ///
     /// assert_relative_eq!(SimdScalarFloat::atan2(y1, x1), -pi / 4_f64, epsilon = 1e-10);
     /// assert_relative_eq!(SimdScalarFloat::atan2(y2, x2), 3_f64 * pi / 4_f64, epsilon = 1e-10);
     /// ```
     fn atan2(self, other: Self) -> Self;
 
     /// Simultaneously compute the sine and cosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -713,16 +711,16 @@ pub trait SimdScalarFloat:
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = (f64::frac_1_sqrt_2(), f64::frac_1_sqrt_2());
     /// let result = SimdScalarFloat::sin_cos(pi_over_4);
-    /// 
+    ///
     /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
     /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
     /// ```
     fn sin_cos(self) -> (Self, Self);
 
     /// Compute the sine of the number `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -735,15 +733,15 @@ pub trait SimdScalarFloat:
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = f64::frac_1_sqrt_2();
     /// let result = SimdScalarFloat::sin(pi_over_4);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn sin(self) -> Self;
 
     /// Compute the cosine of the number `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -756,15 +754,15 @@ pub trait SimdScalarFloat:
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = f64::frac_1_sqrt_2();
     /// let result = SimdScalarFloat::cos(pi_over_4);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn cos(self) -> Self;
 
     /// Compute the tangent of the number `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -777,15 +775,15 @@ pub trait SimdScalarFloat:
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = 1_f64;
     /// let result = SimdScalarFloat::tan(pi_over_4);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn tan(self) -> Self;
 
     /// Compute the arcsine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -795,15 +793,15 @@ pub trait SimdScalarFloat:
     /// let sin_pi_over_2 = 1_f64;
     /// let expected = f64::frac_pi_2();
     /// let result = SimdScalarFloat::asin(sin_pi_over_2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     fn asin(self) -> Self;
-    
+
     /// Compute the arccosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -813,15 +811,15 @@ pub trait SimdScalarFloat:
     /// let cos_pi_over_4 = f64::frac_1_sqrt_2();
     /// let expected = f64::frac_pi_4();
     /// let result = SimdScalarFloat::acos(cos_pi_over_4);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     fn acos(self) -> Self;
 
     /// Compute the arctangent of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -831,21 +829,21 @@ pub trait SimdScalarFloat:
     /// let tan_pi_over_4 = 1_f64;
     /// let expected = f64::frac_pi_4();
     /// let result = SimdScalarFloat::atan(tan_pi_over_4);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     fn atan(self) -> Self;
-    
+
     /// Compute the hyperbolic sine of `self`.
-    /// 
+    ///
     /// Given a floating point number `x`, the hyperbolic sine of `x` is given
     /// by
     /// ```text
     /// sinh(x) := (1 / 2) * (exp(x) - exp(-x))
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -859,21 +857,21 @@ pub trait SimdScalarFloat:
     /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
     /// let expected = 1_f64 / 2_f64;
     /// let result = SimdScalarFloat::sinh(SimdScalarFloat::ln(phi));
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn sinh(self) -> Self;
 
     /// Compute the hyperbolic cosine of `self`.
-    /// 
+    ///
     /// Given a floating point number `x`, the hyperbolic cosine of `x` is given
     /// by
     /// ```text
     /// cosh(x) := (1 / 2) * (exp(x) + exp(-x))
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -887,21 +885,21 @@ pub trait SimdScalarFloat:
     /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
     /// let expected = (1_f64 / 2_f64) * f64::sqrt(5_f64);
     /// let result = SimdScalarFloat::cosh(SimdScalarFloat::ln(phi));
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn cosh(self) -> Self;
 
     /// Compute the hyperbolic tangent of `self`
-    /// 
-    /// Given a floating point number `x`, the hyperbolic tangent of `x` is given 
+    ///
+    /// Given a floating point number `x`, the hyperbolic tangent of `x` is given
     /// by
     /// ```text
     /// tanh(x) := (exp(x) - exp(-x)) / (exp(x) + exp(-x))
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -915,15 +913,15 @@ pub trait SimdScalarFloat:
     /// let phi = (1_f64 + f64::sqrt(5_f64)) / 2_f64;
     /// let expected = (1_f64 / 5_f64) * f64::sqrt(5_f64);
     /// let result = SimdScalarFloat::tanh(SimdScalarFloat::ln(phi));
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn tanh(self) -> Self;
 
     /// Compute the inverse hyperbolic sine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -936,15 +934,15 @@ pub trait SimdScalarFloat:
     /// let x = 1_f64;
     /// let expected = 1_f64;
     /// let result = x.sinh().asinh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn asinh(self) -> Self;
 
     /// Compute the inverse hyperbolic cosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -957,15 +955,15 @@ pub trait SimdScalarFloat:
     /// let x = 1_f64;
     /// let expected = 1_f64;
     /// let result = x.cosh().acosh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn acosh(self) -> Self;
 
     /// Compute the inverse hyperbolic tangent of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -978,15 +976,15 @@ pub trait SimdScalarFloat:
     /// let e = f64::e();
     /// let expected = e;
     /// let result = e.tanh().atanh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn atanh(self) -> Self;
-    
+
     /// Simultaneously compute the hyperbolic sine and hyperbolic cosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1002,18 +1000,18 @@ pub trait SimdScalarFloat:
     /// let cosh_ln_phi = (1_f64 / 2_f64) * f64::sqrt(5_f64);
     /// let expected = (sinh_ln_phi, cosh_ln_phi);
     /// let result = SimdScalarFloat::sinh_cosh(SimdScalarFloat::ln(phi));
-    /// 
+    ///
     /// assert_eq!(result.0, expected.0);
     /// assert_eq!(result.1, expected.1);
     /// ```
     fn sinh_cosh(self) -> (Self, Self) {
         (SimdScalarFloat::sinh(self), SimdScalarFloat::cosh(self))
     }
-    
+
     /// Compute the logarithm of a number `self` with respect to a base `base`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1027,13 +1025,13 @@ pub trait SimdScalarFloat:
     /// let base = 3_f64;
     /// let expected = 3_f64;
     /// let result = value.log(base);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn log(self, base: Self) -> Self;
 
     /// Compute the logarithm of a number `self` with respect to a base of 2.
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1046,13 +1044,13 @@ pub trait SimdScalarFloat:
     /// let value = 32_f64;
     /// let expected = 5_f64;
     /// let result = value.log2();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn log2(self) -> Self;
 
     /// Compute the logarithm of a number `self` with respect to a base of 10.
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #      SimdScalarFloat,
@@ -1065,15 +1063,15 @@ pub trait SimdScalarFloat:
     /// let value = 100_f64;
     /// let expected = 2_f64;
     /// let result = value.log10();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn log10(self) -> Self;
 
     /// Compute the natural logarithm of the number `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #      SimdScalarFloat,
@@ -1086,16 +1084,16 @@ pub trait SimdScalarFloat:
     /// let value = SimdScalarFloat::exp(1_f64);
     /// let expected = 1_f64;
     /// let result = value.ln();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn ln(self) -> Self;
 
     /// Compute the value `ln(1 + self)` more accurately than if the operations
     /// we performed separately.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #      SimdScalarFloat,
@@ -1108,17 +1106,17 @@ pub trait SimdScalarFloat:
     /// let value = f64::e() - 1_f64;
     /// let expected = 1_f64;
     /// let result = value.ln_1p();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn ln_1p(self) -> Self;
-    
+
     /// Calculate the square root of the number `self`.
-    /// 
+    ///
     /// Returns `NaN` if `self` is a negative number other than `0.0`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1135,31 +1133,31 @@ pub trait SimdScalarFloat:
     fn sqrt(self) -> Self;
 
     /// Calculate the cube root of the number `self`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
     /// # };
     /// #
     /// let value = 8_f64;
-    /// 
+    ///
     /// assert_eq!(value.cbrt(), 2_f64);
     /// assert_eq!((-value).cbrt(), -2_f64);
     /// ```
     fn cbrt(self) -> Self;
-    
+
     /// Compute the exponential of the number `self`.
-    /// 
+    ///
     /// The exponential function is defined as follows. Given a floating point
     /// number `x`
     /// ```text
     /// exp(x) = e^x
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1172,20 +1170,20 @@ pub trait SimdScalarFloat:
     /// let expected = 1_f64;
     /// let e = SimdScalarFloat::exp(1_f64);
     /// let result = SimdScalarFloat::ln(e);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn exp(self) -> Self;
 
     /// Compute the exponential of the number `self` with respect to base 2.
-    /// 
+    ///
     /// Given a floating point number `x`
     /// ```text
     /// exp2(x) := 2^x
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1198,16 +1196,16 @@ pub trait SimdScalarFloat:
     /// let value = 2_f64;
     /// let expected = 4_f64;
     /// let result = SimdScalarFloat::exp2(value);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn exp2(self) -> Self;
 
-    /// Compute the value `exp(self) - 1` in a way that remains accurate even 
+    /// Compute the value `exp(self) - 1` in a way that remains accurate even
     /// when `self` is close to zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1220,15 +1218,15 @@ pub trait SimdScalarFloat:
     /// let value = 7_f64;
     /// let expected = 6_f64;
     /// let result = SimdScalarFloat::exp_m1(SimdScalarFloat::ln(value));
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn exp_m1(self) -> Self;
 
     /// Compute the power of `self` with respect to an integer power `n`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1241,15 +1239,15 @@ pub trait SimdScalarFloat:
     /// let x = 2_f64;
     /// let expected = x * x;
     /// let result = x.powi(2_i32);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn powi(self, n: i32) -> Self;
 
     /// Compute the power of `self` with respect to a floating point power `n`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1262,15 +1260,15 @@ pub trait SimdScalarFloat:
     /// let x = 2_f64;
     /// let expected = x * x;
     /// let result = x.powf(2_f64);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn powf(self, n: Self) -> Self;
-        
+
     /// Return `true` if `self` is neither infinite, nor `NaN`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1290,11 +1288,11 @@ pub trait SimdScalarFloat:
     /// ```
     fn is_finite(self) -> bool;
 
-    /// Return `true` if `self` is either positive infinity, or negative 
+    /// Return `true` if `self` is either positive infinity, or negative
     /// infinity, and `false` otherwise.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1315,9 +1313,9 @@ pub trait SimdScalarFloat:
     fn is_infinite(self) -> bool;
 
     /// Return `true` if `self` is `NaN`, and `false` otherwise.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1337,11 +1335,11 @@ pub trait SimdScalarFloat:
     /// ```
     fn is_nan(self) -> bool;
 
-    /// Returns `true` if the floating point number is neither zero, 
+    /// Returns `true` if the floating point number is neither zero,
     /// infinite, subnormal, or `NaN`. The function returns `false` otherwise.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1354,23 +1352,23 @@ pub trait SimdScalarFloat:
     /// let zero = 0_f64;
     /// let nan = f64::NAN;
     /// let infinity = f64::INFINITY;
-    /// 
+    ///
     /// assert!(min_positive_value.is_normal());
     /// assert!(max_value.is_normal());
-    /// 
+    ///
     /// assert!(!zero.is_normal());
     /// assert!(!nan.is_normal());
     /// assert!(!infinity.is_normal());
-    /// 
+    ///
     /// assert!(!less_than_min_value.is_normal());
     /// ```
     fn is_normal(self) -> bool;
 
-    /// Returns `true` if the floating point number is subnormal, and `false` 
+    /// Returns `true` if the floating point number is subnormal, and `false`
     /// otherwise.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1384,14 +1382,14 @@ pub trait SimdScalarFloat:
     /// let infinity = f64::INFINITY;
     /// let neg_infinity = f64::NEG_INFINITY;
     /// let less_than_min_value = 1e-308;
-    /// 
+    ///
     /// assert!(!min_positive_value.is_subnormal());
     /// assert!(!max_value.is_subnormal());
     /// assert!(!zero.is_subnormal());
     /// assert!(!nan.is_subnormal());
     /// assert!(!infinity.is_subnormal());
     /// assert!(!neg_infinity.is_subnormal());
-    /// 
+    ///
     /// assert!(less_than_min_value > zero);
     /// assert!(less_than_min_value < min_positive_value);
     /// assert!(less_than_min_value.is_subnormal());
@@ -1399,9 +1397,9 @@ pub trait SimdScalarFloat:
     fn is_subnormal(self) -> bool;
 
     /// Returns the smallest positive value that this type can represent.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// An example of using `min_positive` with floating point numbers.
     /// ```
     /// # use cglinalg_numeric::{
@@ -1410,7 +1408,7 @@ pub trait SimdScalarFloat:
     /// # use core::f64;
     /// #
     /// let min_positive = f64::min_positive_value();
-    /// 
+    ///
     /// assert_eq!(min_positive, f64::MIN_POSITIVE);
     /// ```
     fn min_positive_value() -> Self;
@@ -1467,22 +1465,22 @@ pub trait SimdScalarFloat:
     fn frac_1_sqrt_2() -> Self;
 
     /// Returns the `NaN` value for a floating point data type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
     /// # };
     /// #
     /// let nan = f64::nan();
-    /// 
+    ///
     /// assert!(nan.is_nan());
-    /// 
+    ///
     /// let infinity = f64::INFINITY;
     /// let neg_infinity = f64::NEG_INFINITY;
     /// let e = f64::e();
-    /// 
+    ///
     /// assert!(!infinity.is_nan());
     /// assert!(!neg_infinity.is_nan());
     /// assert!(!e.is_nan());
@@ -1490,9 +1488,9 @@ pub trait SimdScalarFloat:
     fn nan() -> Self;
 
     /// Returns the positive infinite value for a floating point data type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarBounded,
@@ -1510,9 +1508,9 @@ pub trait SimdScalarFloat:
     fn infinity() -> Self;
 
     /// Returns the negative infinite value for a floating point data type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarBounded,
@@ -1522,7 +1520,7 @@ pub trait SimdScalarFloat:
     /// #
     /// let neg_infinity = f64::neg_infinity();
     /// let min_value = f64::min_value();
-    /// 
+    ///
     /// assert!(neg_infinity.is_infinite());
     /// assert!(!neg_infinity.is_finite());
     /// assert!(neg_infinity < min_value);
@@ -1530,9 +1528,9 @@ pub trait SimdScalarFloat:
     fn neg_infinity() -> Self;
 
     /// Returns a representation of `-0.0`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1542,7 +1540,7 @@ pub trait SimdScalarFloat:
     /// let neg_infinity = f64::neg_infinity();
     /// let zero = 0_f64;
     /// let neg_zero = f64::neg_zero();
-    /// 
+    ///
     /// assert_eq!(zero, neg_zero);
     /// assert_eq!(7_f64 / neg_infinity, zero);
     /// assert_eq!(neg_zero * 10_f64, zero);
@@ -1550,12 +1548,12 @@ pub trait SimdScalarFloat:
     fn neg_zero() -> Self;
 
     /// Returns the machine epsilon for a floating point data type.
-    /// 
-    /// The machine epsilon (or machine precision) is an upper bound on the 
+    ///
+    /// The machine epsilon (or machine precision) is an upper bound on the
     /// relative approximation error due to rounding in floating point arithmetic.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::{
     /// #     SimdScalarFloat,
@@ -1567,21 +1565,20 @@ pub trait SimdScalarFloat:
     fn machine_epsilon() -> Self;
 }
 
-impl<T> SimdScalar for T 
-where 
+impl<T> SimdScalar for T where
     T: Copy
-     + Clone 
-     + fmt::Debug 
-     + fmt::Display
-     + num_traits::Num 
-     + num_traits::NumCast
-     + PartialOrd 
-     + ops::AddAssign 
-     + ops::SubAssign 
-     + ops::MulAssign 
-     + ops::DivAssign 
-     + ops::RemAssign 
-{ 
+        + Clone
+        + fmt::Debug
+        + fmt::Display
+        + num_traits::Num
+        + num_traits::NumCast
+        + PartialOrd
+        + ops::AddAssign
+        + ops::SubAssign
+        + ops::MulAssign
+        + ops::DivAssign
+        + ops::RemAssign
+{
 }
 
 macro_rules! impl_simd_scalar_signed_ord_integer {
@@ -1646,7 +1643,7 @@ macro_rules! impl_simd_scalar_signed_ord_float {
             fn is_sign_positive(self) -> bool {
                 num_traits::Float::is_sign_positive(self)
             }
-            
+
             #[inline]
             fn is_sign_negative(self) -> bool {
                 num_traits::Float::is_sign_negative(self)
@@ -1709,14 +1706,14 @@ macro_rules! impl_simd_scalar_bounded {
                 $max_value
             }
         }
-    }
+    };
 }
 
-impl_simd_scalar_bounded!(i8,    i8::MIN,    i8::MAX);
-impl_simd_scalar_bounded!(i16,   i16::MIN,   i16::MAX);
-impl_simd_scalar_bounded!(i32,   i32::MIN,   i32::MAX);
-impl_simd_scalar_bounded!(i64,   i64::MIN,   i64::MAX);
-impl_simd_scalar_bounded!(i128,  i128::MIN,  i128::MAX);
+impl_simd_scalar_bounded!(i8, i8::MIN, i8::MAX);
+impl_simd_scalar_bounded!(i16, i16::MIN, i16::MAX);
+impl_simd_scalar_bounded!(i32, i32::MIN, i32::MAX);
+impl_simd_scalar_bounded!(i64, i64::MIN, i64::MAX);
+impl_simd_scalar_bounded!(i128, i128::MIN, i128::MAX);
 impl_simd_scalar_bounded!(isize, isize::MIN, isize::MAX);
 
 impl_simd_scalar_bounded!(f32, f32::MIN, f32::MAX);
@@ -1750,7 +1747,7 @@ macro_rules! impl_simd_scalar_float {
             fn fract(self) -> Self {
                 num_traits::Float::fract(self)
             }
-    
+
             #[inline]
             fn mul_add(self, a: Self, b: Self) -> Self {
                 num_traits::Float::mul_add(self, a, b)
@@ -1765,7 +1762,7 @@ macro_rules! impl_simd_scalar_float {
             fn recip(self) -> Self {
                 num_traits::Float::recip(self)
             }
-    
+
             #[inline]
             fn atan2(self, other: Self) -> Self {
                 num_traits::Float::atan2(self, other)
@@ -1805,7 +1802,7 @@ macro_rules! impl_simd_scalar_float {
             fn atan(self) -> Self {
                 num_traits::Float::atan(self)
             }
-    
+
             #[inline]
             fn sinh(self) -> Self {
                 num_traits::Float::sinh(self)
@@ -1835,7 +1832,7 @@ macro_rules! impl_simd_scalar_float {
             fn atanh(self) -> Self {
                 num_traits::Float::atanh(self)
             }
-    
+
             #[inline]
             fn log(self, base: Self) -> Self {
                 num_traits::Float::log(self, base)
@@ -1860,7 +1857,7 @@ macro_rules! impl_simd_scalar_float {
             fn ln_1p(self) -> Self {
                 num_traits::Float::ln_1p(self)
             }
-        
+
             #[inline]
             fn sqrt(self) -> Self {
                 num_traits::Float::sqrt(self)
@@ -1870,7 +1867,7 @@ macro_rules! impl_simd_scalar_float {
             fn cbrt(self) -> Self {
                 num_traits::Float::cbrt(self)
             }
-    
+
             #[inline]
             fn exp(self) -> Self {
                 num_traits::Float::exp(self)
@@ -1895,7 +1892,7 @@ macro_rules! impl_simd_scalar_float {
             fn powf(self, n: Self) -> Self {
                 num_traits::Float::powf(self, n)
             }
-        
+
             #[inline]
             fn is_finite(self) -> bool {
                 num_traits::Float::is_finite(self)
@@ -2040,4 +2037,3 @@ macro_rules! impl_simd_scalar_float {
 }
 
 impl_simd_scalar_float!(f32, f64);
-

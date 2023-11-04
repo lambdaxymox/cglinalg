@@ -3,23 +3,19 @@ extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalarFloat,  
-};
+use approx::relative_eq;
+use cglinalg_numeric::SimdScalarFloat;
 use cglinalg_trigonometry::{
+    Angle,
     Degrees,
     Radians,
-    Angle,
-};
-use approx::{
-    relative_eq,
 };
 
 use proptest::prelude::*;
 
 
-fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>> 
-where 
+fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>>
+where
     S: SimdScalarFloat + Arbitrary,
 {
     any::<S>().prop_map(|dimensionless| {
@@ -31,7 +27,7 @@ where
 }
 
 fn strategy_degrees_any<S>() -> impl Strategy<Value = Degrees<S>>
-where 
+where
     S: SimdScalarFloat + Arbitrary,
 {
     any::<S>().prop_map(|dimensionless| {
@@ -48,7 +44,7 @@ where
 /// ```text
 /// angle + 0 == angle
 /// ```
-fn prop_angle_additive_zero<S, A>(angle: A) -> Result<(), TestCaseError> 
+fn prop_angle_additive_zero<S, A>(angle: A) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -66,7 +62,7 @@ where
 /// ```text
 /// angle - angle == angle + (-angle) = (-angle) + angle == 0
 /// ```
-fn prop_angle_additive_identity<S, A>(angle: A) -> Result<(), TestCaseError> 
+fn prop_angle_additive_identity<S, A>(angle: A) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -86,7 +82,7 @@ where
 /// ```text
 /// angle * 1 == angle
 /// ```
-fn prop_angle_multiplication_dimensionless_unit_element<S, A>(angle: A) -> Result<(), TestCaseError> 
+fn prop_angle_multiplication_dimensionless_unit_element<S, A>(angle: A) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -100,16 +96,16 @@ where
 
 /// The sine and arc sine functions should be inverses to each other.
 ///
-/// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an 
+/// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an
 /// angle recovered from a call to the sine and then the arc sine. Then they
-/// should have matching sines. 
+/// should have matching sines.
 ///
 /// Given a typed angle `angle`
 /// ```text
 /// recovered_angle := asin(sin(angle))
 /// sin(recovered_angle) == sin(angle)
 /// ```
-fn prop_approx_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_sine_and_arcsine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -125,16 +121,16 @@ where
 
 /// The cosine and arc cosine functions should be inverses to each other.
 ///
-/// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an 
+/// Let `angle` be an angle and `recovered_angle = acos(cos(angle))` be an
 /// angle recovered from a call to the cosine and then the arc cosine. Then they
-/// should have matching cosines. 
+/// should have matching cosines.
 ///
 /// Given a typed angle `angle`
 /// ```text
 /// recovered_angle := acos(cos(angle))
 /// cos(recoved_angle) == cos(angle)
 /// ```
-fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -153,7 +149,7 @@ where
 /// Let `angle` be an angle and `recovered_angle = atan(tan(angle))` be an
 /// angle recovered from a call to tangent and then arc tangent. The recovered
 /// angle `recovered_angle` is congruent to `angle`, `angle + pi` or `angle - pi`
-/// modulo `2 * pi`. There are the three angles in the interval `[0, 2pi)` that 
+/// modulo `2 * pi`. There are the three angles in the interval `[0, 2pi)` that
 /// have the same tangent.
 ///
 /// Given a typed angle `angle`
@@ -161,7 +157,7 @@ where
 /// recovered_angle := atan(tan(angle))
 /// tan(recovered_angle) == tan(angle)
 /// ```
-fn prop_approx_tangent_and_arctangent_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_tangent_and_arctangent_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -173,13 +169,16 @@ where
     prop_assert!(
         relative_eq!(tan_recovered_angle, tan_angle, epsilon = tolerance),
         "angle = {}\nrecovered_angle = {}\ntan_angle = {}\ntan_recovered_angle = {}",
-        angle, recovered_angle, tan_angle, tan_recovered_angle
+        angle,
+        recovered_angle,
+        tan_angle,
+        tan_recovered_angle
     );
 
     Ok(())
 }
 
-/// A typed angle and its congruent typed angles modulo `full_turn` should 
+/// A typed angle and its congruent typed angles modulo `full_turn` should
 /// give the same trigonometric outputs.
 ///
 /// Given a typed angle `angle` and an integer `k`
@@ -188,7 +187,7 @@ where
 /// cos(angle) == cos(angle + k * full_turn())
 /// tan(angle) == tan(angle + k * full_turn())
 /// ```
-fn prop_approx_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_congruent_angles<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -207,7 +206,7 @@ where
 /// ```text
 /// sin(angle)^2 + cos(angle)^2 == 1
 /// ```
-fn prop_approx_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_pythagorean_identity<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -222,12 +221,12 @@ where
 }
 
 /// A normalized angle correctly falls into the range `[0, full_turn)`.
-/// 
+///
 /// Given an angle `angle`, the normalized angle satisfies
 /// ```text
 /// 0 =< normalize(angle) < full_turn
 /// ```
-fn prop_normalize_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
+fn prop_normalize_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -239,19 +238,20 @@ where
     prop_assert!(
         (normalized_angle >= zero) && (normalized_angle <= full_turn),
         "angle = {:?}; normalized_angle = {:?}",
-        angle, normalized_angle
+        angle,
+        normalized_angle
     );
 
     Ok(())
 }
 
 /// A signed normalized angle correctly falls into the range `[-full_turn / 2, full_turn / 2)`.
-/// 
+///
 /// Given an angle `angle`, the signed normalized angle satisfies
 /// ```text
 /// -full_turn / 2 =< normalize_signed(angle) <= full_turn / 2
 /// ```
-fn prop_normalize_signed_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError> 
+fn prop_normalize_signed_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -262,7 +262,8 @@ where
     prop_assert!(
         (normalized_angle >= -full_turn_over_2) && (normalized_angle < full_turn_over_2),
         "angle = {:?}; normalized_angle = {:?}",
-        angle, normalized_angle
+        angle,
+        normalized_angle
     );
 
     Ok(())
@@ -425,4 +426,3 @@ mod degrees_f64_normalize_props {
         }
     }
 }
-

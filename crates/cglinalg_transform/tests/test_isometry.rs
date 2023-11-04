@@ -115,7 +115,7 @@ mod isometry2_tests {
         let expected = Matrix3x3::new(
              cos_angle,  sin_angle,  0_f64,
             -sin_angle,  cos_angle,  0_f64,
-             distance.x, distance.y, 1_f64
+             distance.x, distance.y, 1_f64,
         );
         let result = isometry.to_affine_matrix();
 
@@ -221,10 +221,10 @@ mod isometry3_tests {
         let point = Point3::new(4_f64, 5_f64, 6_f64);
         let expected = Point3::new(-4_f64, 6_f64, 9_f64);
         let result = isometry.apply_point(&point);
-    
+
         assert_eq!(result, expected);
     }
-    
+
     #[test]
     fn test_isometry_apply_vector() {
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -236,7 +236,7 @@ mod isometry3_tests {
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
         let result = isometry.apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -248,19 +248,19 @@ mod isometry3_tests {
         let vector = Vector3::unit_x();
         let expected = Vector3::unit_y();
         let result = isometry.apply_vector(&vector);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[test]
     fn test_from_translation() {
         let distance = Vector3::new(4_f64, 5_f64, 6_f64);
         let translation = Translation3::from_vector(&distance);
         let isometry = Isometry3::from_translation(&translation);
-        
+
         assert_eq!(isometry.translation(), &translation);
     }
-    
+
     #[test]
     fn test_from_angle_translation() {
         let axis = Unit::from_value(Vector3::unit_z());
@@ -270,10 +270,10 @@ mod isometry3_tests {
         let translation = Translation3::from_vector(&distance);
         let expected = Isometry3::from_parts(&translation, &rotation);
         let result = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
-    
+
         assert_eq!(result, expected);
     }
-    
+
     #[test]
     fn test_rotation_between_axis() {
         let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
@@ -281,7 +281,7 @@ mod isometry3_tests {
         let isometry = Isometry3::rotation_between_axis(&unit_x, &unit_y).unwrap();
         let expected = unit_y.into_inner();
         let result = isometry.apply_vector(&unit_x.into_inner());
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -293,10 +293,10 @@ mod isometry3_tests {
         let point = Point3::new(203_f64, 0_f64, 0_f64);
         let expected = Point3::new(0_f64, 203_f64, 0_f64);
         let result = isometry.apply_point(&point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_to_affine_matrix() {
@@ -310,10 +310,10 @@ mod isometry3_tests {
              cos_angle,  sin_angle,  0_f64,      0_f64,
             -sin_angle,  cos_angle,  0_f64,      0_f64,
              0_f64,      0_f64,      1_f64,      0_f64,
-             distance.x, distance.y, distance.z, 1_f64
+             distance.x, distance.y, distance.z, 1_f64,
         );
         let result = isometry.to_affine_matrix();
-    
+
         assert_eq!(result, expected);
     }
 
@@ -327,14 +327,15 @@ mod isometry3_tests {
         let point = Point3::new(34_f64, 139_f64, 91_f64);
         let expected = point;
         let result = isometry_inv * (isometry * point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
-    
+
         let result = isometry * (isometry_inv * point);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_inverse_apply_point() {
         let axis = Unit::from_value(Vector3::unit_z());
@@ -342,16 +343,16 @@ mod isometry3_tests {
         let cos_neg_angle = (-angle).cos();
         let sin_neg_angle = (-angle).sin();
         let distance = Vector3::new(-567_f64, 23_f64, 201_f64);
-        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);        
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
         let point = Point3::new(1_f64, 2_f64, 3_f64);
         let diff: Point3<f64> = point - distance;
         let expected = Point3::new(
             cos_neg_angle * diff.x - sin_neg_angle * diff.y,
             sin_neg_angle * diff.x + cos_neg_angle * diff.y,
-            diff.z
+            diff.z,
         );
         let result = isometry.inverse_apply_point(&point);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -363,15 +364,15 @@ mod isometry3_tests {
         let cos_neg_angle = (-angle).cos();
         let sin_neg_angle = (-angle).sin();
         let distance = Vector3::new(-567_f64, 23_f64, 201_f64);
-        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);        
+        let isometry = Isometry3::from_axis_angle_translation(&axis, angle, &distance);
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);
         let expected = Vector3::new(
             cos_neg_angle * vector.x - sin_neg_angle * vector.y,
             sin_neg_angle * vector.x + cos_neg_angle * vector.y,
-            vector.z
+            vector.z,
         );
         let result = isometry.inverse_apply_vector(&vector);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -381,7 +382,7 @@ mod isometry3_tests {
         let rotation = Rotation3::from_angle_x(angle);
         let expected = Isometry3::from_rotation(&rotation);
         let result = Isometry3::from_angle_x(angle);
-        
+
         assert_eq!(result, expected);
     }
 
@@ -415,4 +416,3 @@ mod isometry3_tests {
         assert_eq!(result, expected);
     }
 }
-

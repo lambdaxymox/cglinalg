@@ -1,15 +1,13 @@
-extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
 
 
 #[cfg(test)]
 mod matrix2x2_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
-        Vector2,
         Matrix2x2,
-    };
-    use approx::{
-        assert_relative_eq,
+        Vector2,
     };
 
 
@@ -17,8 +15,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -31,8 +29,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -46,8 +44,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[2][0], matrix[2][0]);
@@ -58,8 +56,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[0][2], matrix[0][2]);
@@ -70,8 +68,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[2][2], matrix[2][2]);
@@ -82,8 +80,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -94,8 +92,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -106,8 +104,8 @@ mod matrix2x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -116,7 +114,7 @@ mod matrix2x2_tests {
     #[test]
     fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
         let identity_matrix: Matrix2x2<f32> = Matrix2x2::identity();
-        
+
         assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
@@ -131,16 +129,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         // let expected = Matrix2x2::new(
-        //     185091.72_f32, 10939.63_f32, 
-        //     26935.295_f32, 1623.9266_f32
+        //     185091.72_f32, 10939.63_f32,
+        //     26935.295_f32, 1623.9266_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
         let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
@@ -153,16 +151,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         // let expected = Matrix2x2::new(
-        //     185091.72_f32, 10939.63_f32, 
-        //     26935.295_f32, 1623.9266_f32
+        //     185091.72_f32, 10939.63_f32,
+        //     26935.295_f32, 1623.9266_f32,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix2x2::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix2x2::zero();
@@ -175,16 +173,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         // let expected = Matrix2x2::new(
-        //     185091.72_f32, 10939.63_f32, 
-        //     26935.295_f32, 1623.9266_f32
+        //     185091.72_f32, 10939.63_f32,
+        //     26935.295_f32, 1623.9266_f32,
         // );
         let zero_times_a_matrix = Matrix2x2::zero() * a_matrix;
         let zero_times_b_matrix = Matrix2x2::zero() * b_matrix;
@@ -197,16 +195,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         // let expected = Matrix2x2::new(
-        //     185091.72_f32, 10939.63_f32, 
-        //     26935.295_f32, 1623.9266_f32
+        //     185091.72_f32, 10939.63_f32,
+        //     26935.295_f32, 1623.9266_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
         let identity_times_a_matrix = Matrix2x2::identity() * a_matrix;
@@ -221,20 +219,20 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         // let expected = Matrix2x2::new(
-        //     185091.72_f32, 10939.63_f32, 
-        //     26935.295_f32, 1623.9266_f32
+        //     185091.72_f32, 10939.63_f32,
+        //     26935.295_f32, 1623.9266_f32,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -243,16 +241,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix2x2::new(
-            80_f32,      23.43_f32,     
-            426.1_f32,   23.5724_f32
+            80_f32,      23.43_f32,
+            426.1_f32,   23.5724_f32,
         );
         let b_matrix = Matrix2x2::new(
-            36.84_f32,   427.46894_f32, 
-            7.04217_f32, 61.891390_f32
+            36.84_f32,   427.46894_f32,
+            7.04217_f32, 61.891390_f32,
         );
         let expected = Matrix2x2::new(
-            185091.72_f32, 10939.63_f32, 
-            26935.295_f32, 1623.9266_f32
+            185091.72_f32, 10939.63_f32,
+            26935.295_f32, 1623.9266_f32,
         );
         let result = a_matrix * b_matrix;
 
@@ -263,16 +261,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         // let expected = Matrix2x2::new(
-        //     3943.4304_f32, 0_f32, 
-        //     0_f32,         356.89127_f32
+        //     3943.4304_f32, 0_f32,
+        //     0_f32,         356.89127_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
         let b_matrix_times_identity = b_matrix * Matrix2x2::identity();
@@ -285,16 +283,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         // let expected = Matrix2x2::new(
-        //     3943.4304_f32, 0_f32, 
-        //     0_f32,         356.89127_f32
+        //     3943.4304_f32, 0_f32,
+        //     0_f32,         356.89127_f32,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix2x2::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix2x2::zero();
@@ -307,16 +305,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         // let expected = Matrix2x2::new(
-        //     3943.4304_f32, 0_f32, 
-        //     0_f32,         356.89127_f32
+        //     3943.4304_f32, 0_f32,
+        //     0_f32,         356.89127_f32,
         // );
         let zero_times_a_matrix = Matrix2x2::zero() * a_matrix;
         let zero_times_b_matrix = Matrix2x2::zero() * b_matrix;
@@ -329,16 +327,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         // let expected = Matrix2x2::new(
-        //     3943.4304_f32, 0_f32, 
-        //     0_f32,         356.89127_f32
+        //     3943.4304_f32, 0_f32,
+        //     0_f32,         356.89127_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix2x2::identity();
         let identity_times_a_matrix = Matrix2x2::identity() * a_matrix;
@@ -349,23 +347,24 @@ mod matrix2x2_tests {
         assert_eq!(b_matrix_times_identity, identity_times_b_matrix);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         // let expected = Matrix2x2::new(
-        //     3943.4304_f32, 0_f32, 
-        //     0_f32,         356.89127_f32
+        //     3943.4304_f32, 0_f32,
+        //     0_f32,         356.89127_f32,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -374,16 +373,16 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let a_matrix = Matrix2x2::new(
-            68.32_f32, 0_f32, 
-            0_f32,     37.397_f32
+            68.32_f32, 0_f32,
+            0_f32,     37.397_f32,
         );
         let b_matrix = Matrix2x2::new(
-            57.72_f32, 0_f32, 
-            0_f32,     9.5433127_f32
+            57.72_f32, 0_f32,
+            0_f32,     9.5433127_f32,
         );
         let expected = Matrix2x2::new(
-            3943.4304_f32, 0_f32, 
-            0_f32,         356.89127_f32
+            3943.4304_f32, 0_f32,
+            0_f32,         356.89127_f32,
         );
         let result = a_matrix * b_matrix;
 
@@ -394,7 +393,7 @@ mod matrix2x2_tests {
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix2x2::<f32>::identity();
         let identity_transpose = identity.transpose();
-            
+
         assert_eq!(identity, identity_transpose);
     }
 
@@ -405,8 +404,8 @@ mod matrix2x2_tests {
         let c1 = Vector2::new(3_i32, 4_i32);
         let columns = [c0, c1];
         let expected = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
         let result = Matrix2x2::from_columns(&columns);
 
@@ -421,7 +420,7 @@ mod matrix2x2_tests {
         let rows = [r0, r1];
         let expected = Matrix2x2::new(
             1_i32, 3_i32,
-            2_i32, 4_i32
+            2_i32, 4_i32,
         );
         let result = Matrix2x2::from_rows(&rows);
 
@@ -434,8 +433,8 @@ mod matrix2x2_tests {
         let c = 802.3435169_f64;
         let identity = Matrix2x2::identity();
         let expected = Matrix2x2::new(
-            c,     0_f64, 
-            0_f64, c
+            c,     0_f64,
+            0_f64, c,
         );
 
         assert_eq!(identity * c, expected);
@@ -447,8 +446,8 @@ mod matrix2x2_tests {
         let c = 802.3435169_f64;
         let identity = Matrix2x2::identity();
         let expected = Matrix2x2::new(
-            1_f64 / c, 0_f64, 
-            0_f64,     1_f64 / c
+            1_f64 / c, 0_f64,
+            0_f64,     1_f64 / c,
         );
 
         assert_eq!(identity / c, expected);
@@ -459,8 +458,8 @@ mod matrix2x2_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix = Matrix2x2::zero();
         let matrix = Matrix2x2::new(
-            36.84_f64, 427.46_f64, 
-            7.47_f64,  61.89_f64
+            36.84_f64, 427.46_f64,
+            7.47_f64,  61.89_f64,
         );
 
         assert_eq!(matrix + zero_matrix, matrix);
@@ -471,8 +470,8 @@ mod matrix2x2_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix = Matrix2x2::zero();
         let matrix = Matrix2x2::new(
-            36.84_f64, 427.46_f64, 
-            7.47_f64,  61.89_f64
+            36.84_f64, 427.46_f64,
+            7.47_f64,  61.89_f64,
         );
 
         assert_eq!(zero_matrix + matrix, matrix);
@@ -482,10 +481,10 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_with_zero_determinant() {
         let matrix = Matrix2x2::new(
-            1_f64, 2_f64, 
-            4_f64, 8_f64
+            1_f64, 2_f64,
+            4_f64, 8_f64,
         );
-        
+
         assert_eq!(matrix.determinant(), 0_f64);
     }
 
@@ -494,7 +493,7 @@ mod matrix2x2_tests {
     fn test_lower_triangular_matrix_determinant() {
         let matrix = Matrix2x2::new(
             2_f64,  0_f64,
-            5_f64,  3_f64
+            5_f64,  3_f64,
         );
 
         assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
@@ -505,7 +504,7 @@ mod matrix2x2_tests {
     fn test_upper_triangular_matrix_determinant() {
         let matrix = Matrix2x2::new(
             2_f64,  5_f64,
-            0_f64,  3_f64
+            0_f64,  3_f64,
         );
 
         assert_eq!(matrix.determinant(), 2_f64 * 3_f64);
@@ -515,12 +514,12 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_inverse() {
         let matrix = Matrix2x2::new(
-            5_f64, 1_f64, 
-            1_f64, 5_f64
+            5_f64, 1_f64,
+            1_f64, 5_f64,
         );
         let expected = (1_f64 / 24_f64) * Matrix2x2::new(
              5_f64, -1_f64,
-            -1_f64,  5_f64
+            -1_f64,  5_f64,
         );
         let result = matrix.inverse().unwrap();
 
@@ -555,10 +554,10 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix2x2::new(
-            1_f32, 2_f32, 
-            3_f32, 4_f32
+            1_f32, 2_f32,
+            3_f32, 4_f32,
         );
-        
+
         assert!(matrix.is_invertible());
     }
 
@@ -566,10 +565,10 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         let matrix = Matrix2x2::new(
-            1_f32, 2_f32, 
-            4_f32, 8_f32
+            1_f32, 2_f32,
+            4_f32, 8_f32,
         );
-        
+
         assert!(!matrix.is_invertible());
     }
 
@@ -577,10 +576,10 @@ mod matrix2x2_tests {
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix2x2::new(
-            1_f32, 2_f32, 
-            4_f32, 8_f32
+            1_f32, 2_f32,
+            4_f32, 8_f32,
         );
-        
+
         assert!(matrix.inverse().is_none());
     }
 
@@ -588,8 +587,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix2x2::new(
-            36.84_f64, 427.46_f64, 
-            7.47_f64,  61.89_f64
+            36.84_f64, 427.46_f64,
+            7.47_f64,  61.89_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix2x2::identity();
@@ -601,8 +600,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix2x2::new(
-            36.84_f64, 427.46_f64, 
-            7.47_f64,  61.89_f64
+            36.84_f64, 427.46_f64,
+            7.47_f64,  61.89_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix2x2::identity();
@@ -615,7 +614,7 @@ mod matrix2x2_tests {
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix2x2::new(
             80_f64,    426.1_f64,
-            23.43_f64, 23.5724_f64
+            23.43_f64, 23.5724_f64,
         );
         let constant: f64 = 4_f64;
         let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
@@ -628,8 +627,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix2x2::new(
-            80_f64,    426.1_f64, 
-            23.43_f64, 23.5724_f64
+            80_f64,    426.1_f64,
+            23.43_f64, 23.5724_f64,
         );
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
@@ -641,8 +640,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix2x2::new(
-            80_f64,    426.1_f64, 
-            23.43_f64, 23.5724_f64
+            80_f64,    426.1_f64,
+            23.43_f64, 23.5724_f64,
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
@@ -654,8 +653,8 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -668,15 +667,15 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_swap_columns() {
         let mut result = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
         result.swap_columns(0, 1);
         let expected = Matrix2x2::new(
-            3_i32, 4_i32, 
-            1_i32, 2_i32
+            3_i32, 4_i32,
+            1_i32, 2_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -684,15 +683,15 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_swap_rows() {
         let mut result = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
         result.swap_rows(0, 1);
         let expected = Matrix2x2::new(
-            2_i32, 1_i32, 
-            4_i32, 3_i32
+            2_i32, 1_i32,
+            4_i32, 3_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -700,13 +699,13 @@ mod matrix2x2_tests {
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix2x2::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
         );
         result.swap((0, 0), (1, 1));
         let expected = Matrix2x2::new(
-            4_i32, 2_i32, 
-            3_i32, 1_i32
+            4_i32, 2_i32,
+            3_i32, 1_i32,
         );
 
         assert_eq!(result, expected);
@@ -719,7 +718,7 @@ mod matrix2x2_tests {
         let unit_y = Vector2::unit_y();
         let expected = unit_x * 3_i32 + unit_y * 3_i32;
         let result = matrix * Vector2::new(1_i32, 1_i32);
-        
+
         assert_eq!(result, expected);
     }
 
@@ -738,17 +737,15 @@ mod matrix2x2_tests {
 
 #[cfg(test)]
 mod matrix2x2_rotation_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix2x2,
+        Unit,
+        Vector2,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector2,
-        Matrix2x2,
-        Unit,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -800,13 +797,11 @@ mod matrix2x2_rotation_tests {
 
 #[cfg(test)]
 mod matrix2x2_reflection_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
-        Vector2,
         Matrix2x2,
         Unit,
-    };
-    use approx::{
-        assert_relative_eq,
+        Vector2,
     };
 
 
@@ -819,8 +814,8 @@ mod matrix2x2_reflection_tests {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(Vector2::unit_y());
         let expected = Matrix2x2::new(
-            1_f64,  0_f64, 
-            0_f64, -1_f64
+            1_f64,  0_f64,
+            0_f64, -1_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
 
@@ -836,8 +831,8 @@ mod matrix2x2_reflection_tests {
         // The y-axis is the normal vector to the plane of the x-axis.
         let normal = Unit::from_value(-Vector2::unit_y());
         let expected = Matrix2x2::new(
-            1_f64,  0_f64, 
-            0_f64, -1_f64
+            1_f64,  0_f64,
+            0_f64, -1_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
 
@@ -853,11 +848,11 @@ mod matrix2x2_reflection_tests {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix2x2::new(
-            -1_f64, 0_f64, 
-             0_f64, 1_f64
+            -1_f64, 0_f64,
+             0_f64, 1_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -870,11 +865,11 @@ mod matrix2x2_reflection_tests {
         // The y-axis is the normal vector to the plane of the y-axis.
         let normal = Unit::from_value(-Vector2::unit_x());
         let expected = Matrix2x2::new(
-            -1_f64, 0_f64, 
-             0_f64, 1_f64
+            -1_f64, 0_f64,
+             0_f64, 1_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -888,11 +883,11 @@ mod matrix2x2_reflection_tests {
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(
-            0_f64, 1_f64, 
-            1_f64, 0_f64
+            0_f64, 1_f64,
+            1_f64, 0_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -906,11 +901,11 @@ mod matrix2x2_reflection_tests {
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix2x2::new(
-            0_f64, 1_f64, 
-            1_f64, 0_f64
+            0_f64, 1_f64,
+            1_f64, 0_f64,
         );
         let result = Matrix2x2::from_reflection(&normal);
-            
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
@@ -919,12 +914,13 @@ mod matrix2x2_reflection_tests {
 #[cfg(test)]
 mod matrix2x2_shear_tests {
     use cglinalg_core::{
-        Vector2,
         Matrix2x2,
         Unit,
+        Vector2,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
         let shear_factor = 5_i32;
@@ -946,6 +942,7 @@ mod matrix2x2_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane() {
         let shear_factor = 5_i32;
@@ -961,6 +958,7 @@ mod matrix2x2_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx() {
         let shear_factor = 5_i32;
@@ -982,13 +980,14 @@ mod matrix2x2_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane() {
         let shear_factor = 5_i32;
         let matrix = Matrix2x2::from_shear_yx(shear_factor);
         let vertices = [
             Vector2::new(0_i32,  1_i32),
-            Vector2::new(0_i32 , 0_i32),
+            Vector2::new(0_i32,  0_i32),
             Vector2::new(0_i32, -1_i32),
         ];
         let expected = vertices;
@@ -1024,17 +1023,15 @@ mod matrix2x2_shear_tests {
 /// Shearing about the line `y == (1 / 2) * x`.
 #[cfg(test)]
 mod matrix2x2_shear_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix2x2,
+        Unit,
+        Vector2,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector2,
-        Matrix2x2,
-        Unit,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -1054,34 +1051,37 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         Unit::from_value(Vector2::new(-1_f64, 2_f64))
     }
 
+    #[rustfmt::skip]
     fn rotation() -> Matrix2x2<f64> {
         Matrix2x2::new(
-            2_f64 / f64::sqrt(5_f64), 1_f64 / f64::sqrt(5_f64),
-           -1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64)
-       )
+             2_f64 / f64::sqrt(5_f64),
+             1_f64 / f64::sqrt(5_f64),
+            -1_f64 / f64::sqrt(5_f64),
+             2_f64 / f64::sqrt(5_f64),
+        )
     }
 
+    #[rustfmt::skip]
     fn rotation_inv() -> Matrix2x2<f64> {
         Matrix2x2::new(
-            2_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64),
-            1_f64 / f64::sqrt(5_f64),  2_f64 / f64::sqrt(5_f64)
+             2_f64 / f64::sqrt(5_f64),
+            -1_f64 / f64::sqrt(5_f64),
+             1_f64 / f64::sqrt(5_f64),
+             2_f64 / f64::sqrt(5_f64),
         )
     }
 
     fn shear_matrix_xy() -> Matrix2x2<f64> {
         let shear_factor = shear_factor();
 
-        Matrix2x2::new(
-            1_f64,        0_f64,
-            shear_factor, 1_f64
-        )
+        Matrix2x2::new(1_f64, 0_f64, shear_factor, 1_f64)
     }
 
 
     #[test]
     fn test_from_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
-        
+
         assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
         assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
     }
@@ -1105,6 +1105,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_vertices_xy() {
         let vertices = [
@@ -1149,6 +1150,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_vertices() {
         let shear_factor = shear_factor();
@@ -1194,11 +1196,11 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let direction = direction();
         let normal = normal();
         let expected = Matrix2x2::new(
-            1_f64 - (2_f64 / 5_f64) * shear_factor,  -(1_f64 / 5_f64) * shear_factor,
-            (4_f64 / 5_f64) * shear_factor,           1_f64 + (2_f64 / 5_f64) * shear_factor
+            1_f64 - (2_f64 / 5_f64) * shear_factor, -(1_f64 / 5_f64) * shear_factor,
+            (4_f64 / 5_f64) * shear_factor,          1_f64 + (2_f64 / 5_f64) * shear_factor,
         );
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -1216,6 +1218,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_shearing_plane() {
         let shear_factor = shear_factor();
@@ -1243,13 +1246,11 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod matrix3x3_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Matrix3x3,
         Vector2,
         Vector3,
-        Matrix3x3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -1257,9 +1258,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -1277,9 +1278,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -1300,7 +1301,7 @@ mod matrix3x3_tests {
         let matrix = Matrix3x3::new(
             1_i32, 2_i32, 3_i32, 
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[3][0], matrix[3][0]);
@@ -1311,9 +1312,9 @@ mod matrix3x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[0][3], matrix[0][3]);
@@ -1324,9 +1325,9 @@ mod matrix3x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[3][3], matrix[3][3]);
@@ -1337,9 +1338,9 @@ mod matrix3x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -1350,9 +1351,9 @@ mod matrix3x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -1363,9 +1364,9 @@ mod matrix3x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 6_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -1374,7 +1375,7 @@ mod matrix3x3_tests {
     #[test]
     fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
         let identity_matrix: Matrix3x3<f32> = Matrix3x3::identity();
-        
+
         assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
@@ -1389,19 +1390,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
-            81.439_f32, 12.19_f32,   43.36_f32
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
+            81.439_f32, 12.19_f32,   43.36_f32,
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
         let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
@@ -1414,19 +1415,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
             81.439_f32, 12.19_f32,   43.36_f32
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix3x3::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix3x3::zero();
@@ -1439,19 +1440,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
-            81.439_f32, 12.19_f32,   43.36_f32
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
+            81.439_f32, 12.19_f32,   43.36_f32,
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         // );
         let zero_times_a_matrix = Matrix3x3::zero() * a_matrix;
         let zero_times_b_matrix = Matrix3x3::zero() * b_matrix;
@@ -1464,19 +1465,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
-            81.439_f32, 12.19_f32,   43.36_f32
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
+            81.439_f32, 12.19_f32,   43.36_f32,
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
         let identity_times_a_matrix = Matrix3x3::identity() * a_matrix;
@@ -1491,23 +1492,23 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
-            81.439_f32, 12.19_f32,   43.36_f32
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
+            81.439_f32, 12.19_f32,   43.36_f32,
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+        //     3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+        //     43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+        //     16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -1516,19 +1517,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix3x3::new(
-            80_f32,     426.1_f32,   43.393_f32, 
-            23.43_f32,  23.5724_f32, 1.27_f32, 
-            81.439_f32, 12.19_f32,   43.36_f32
+            80_f32,     426.1_f32,   43.393_f32,
+            23.43_f32,  23.5724_f32, 1.27_f32,
+            81.439_f32, 12.19_f32,   43.36_f32,
         );
         let b_matrix = Matrix3x3::new(
-            36.84_f32,     7.04217_f32,  5.74_f32, 
-            427.46894_f32, 61.89139_f32, 96.27_f32, 
-            152.66_f32,    86.333_f32,   26.71_f32
+            36.84_f32,     7.04217_f32,  5.74_f32,
+            427.46894_f32, 61.89139_f32, 96.27_f32,
+            152.66_f32,    86.333_f32,   26.71_f32,
         );
         let expected = Matrix3x3::new(
-            3579.6579_f32,  15933.496_f32,   1856.4281_f32, 
-            43487.7660_f32, 184776.9752_f32, 22802.0289_f32, 
-            16410.8178_f32, 67409.1000_f32,  7892.1646_f32
+            3579.6579_f32,  15933.496_f32,   1856.4281_f32,
+            43487.7660_f32, 184776.9752_f32, 22802.0289_f32,
+            16410.8178_f32, 67409.1000_f32,  7892.1646_f32,
         );
         let result = a_matrix * b_matrix;
 
@@ -1539,19 +1540,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3943.4304_f32, 0_f32,         0_f32, 
-        //     0_f32,         356.89127_f32, 0_f32, 
-        //     0_f32,         0_f32,         528.96067_f32
+        //     3943.4304_f32, 0_f32,         0_f32,
+        //     0_f32,         356.89127_f32, 0_f32,
+        //     0_f32,         0_f32,         528.96067_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
         let b_matrix_times_identity = b_matrix * Matrix3x3::identity();
@@ -1564,19 +1565,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3943.4304_f32, 0_f32,         0_f32, 
-        //     0_f32,         356.89127_f32, 0_f32, 
-        //     0_f32,         0_f32,         528.96067_f32
+        //     3943.4304_f32, 0_f32,         0_f32,
+        //     0_f32,         356.89127_f32, 0_f32,
+        //     0_f32,         0_f32,         528.96067_f32,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix3x3::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix3x3::zero();
@@ -1589,19 +1590,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3943.4304_f32, 0_f32,         0_f32, 
-        //     0_f32,         356.89127_f32, 0_f32, 
-        //     0_f32,         0_f32,         528.96067_f32
+        //     3943.4304_f32, 0_f32,         0_f32,
+        //     0_f32,         356.89127_f32, 0_f32,
+        //     0_f32,         0_f32,         528.96067_f32,
         // );
         let zero_times_a_matrix = Matrix3x3::zero() * a_matrix;
         let zero_times_b_matrix = Matrix3x3::zero() * b_matrix;
@@ -1614,19 +1615,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3943.4304_f32, 0_f32,         0_f32, 
-        //     0_f32,         356.89127_f32, 0_f32, 
-        //     0_f32,         0_f32,         528.96067_f32
+        //     3943.4304_f32, 0_f32,         0_f32,
+        //     0_f32,         356.89127_f32, 0_f32,
+        //     0_f32,         0_f32,         528.96067_f32,
         // );
         let a_matrix_times_identity = a_matrix * Matrix3x3::identity();
         let identity_times_a_matrix = Matrix3x3::identity() * a_matrix;
@@ -1641,23 +1642,23 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         // let expected = Matrix3x3::new(
-        //     3943.4304_f32, 0_f32,         0_f32, 
-        //     0_f32,         356.89127_f32, 0_f32, 
-        //     0_f32,         0_f32,         528.96067_f32
+        //     3943.4304_f32, 0_f32,         0_f32,
+        //     0_f32,         356.89127_f32, 0_f32,
+        //     0_f32,         0_f32,         528.96067_f32,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -1666,19 +1667,19 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let a_matrix = Matrix3x3::new(
-            68.32_f32, 0_f32,      0_f32, 
-            0_f32,     37.397_f32, 0_f32, 
-            0_f32,     0_f32,      43.393_f32
+            68.32_f32, 0_f32,      0_f32,
+            0_f32,     37.397_f32, 0_f32,
+            0_f32,     0_f32,      43.393_f32,
         );
         let b_matrix = Matrix3x3::new(
-            57.72_f32, 0_f32,         0_f32, 
-            0_f32,     9.5433127_f32, 0_f32, 
-            0_f32,     0_f32,         12.19_f32
+            57.72_f32, 0_f32,         0_f32,
+            0_f32,     9.5433127_f32, 0_f32,
+            0_f32,     0_f32,         12.19_f32,
         );
         let expected = Matrix3x3::new(
-            3943.4304_f32, 0_f32,         0_f32, 
-            0_f32,         356.89127_f32, 0_f32, 
-            0_f32,         0_f32,         528.96067_f32
+            3943.4304_f32, 0_f32,         0_f32,
+            0_f32,         356.89127_f32, 0_f32,
+            0_f32,         0_f32,         528.96067_f32,
         );
         let result = a_matrix * b_matrix;
 
@@ -1689,7 +1690,7 @@ mod matrix3x3_tests {
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix3x3::<f32>::identity();
         let identity_transpose = identity.transpose();
-            
+
         assert_eq!(identity, identity_transpose);
     }
 
@@ -1701,9 +1702,9 @@ mod matrix3x3_tests {
         let c2 = Vector3::new(7_i32, 8_i32, 9_i32);
         let columns = [c0, c1, c2];
         let expected = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         let result = Matrix3x3::from_columns(&columns);
 
@@ -1733,9 +1734,9 @@ mod matrix3x3_tests {
         let c = 802.3435169_f64;
         let identity = Matrix3x3::identity();
         let expected = Matrix3x3::new(
-            c,     0_f64, 0_f64, 
-            0_f64, c,     0_f64, 
-            0_f64, 0_f64, c
+            c,     0_f64, 0_f64,
+            0_f64, c,     0_f64,
+            0_f64, 0_f64, c,
         );
 
         assert_eq!(identity * c, expected);
@@ -1747,9 +1748,9 @@ mod matrix3x3_tests {
         let c = 802.3435169;
         let identity = Matrix3x3::identity();
         let expected = Matrix3x3::new(
-            1_f64 / c, 0_f64,     0_f64, 
-            0_f64,     1_f64 / c, 0_f64, 
-            0_f64,     0_f64,     1_f64 / c
+            1_f64 / c, 0_f64,     0_f64,
+            0_f64,     1_f64 / c, 0_f64,
+            0_f64,     0_f64,     1_f64 / c,
         );
 
         assert_eq!(identity / c, expected);
@@ -1760,9 +1761,9 @@ mod matrix3x3_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix = Matrix3x3::zero();
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
 
         assert_eq!(matrix + zero_matrix, matrix);
@@ -1773,9 +1774,9 @@ mod matrix3x3_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix = Matrix3x3::zero();
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
 
         assert_eq!(zero_matrix + matrix, matrix);
@@ -1785,11 +1786,11 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_with_zero_determinant() {
         let matrix = Matrix3x3::new(
-            1_f32, 2_f32, 3_f32, 
-            4_f32, 5_f32, 6_f32, 
-            4_f32, 5_f32, 6_f32
+            1_f32, 2_f32, 3_f32,
+            4_f32, 5_f32, 6_f32,
+            4_f32, 5_f32, 6_f32,
         );
-        
+
         assert_eq!(matrix.determinant(), 0_f32);
     }
 
@@ -1799,7 +1800,7 @@ mod matrix3x3_tests {
         let matrix = Matrix3x3::new(
             1_f64,  0_f64,  0_f64,
             5_f64,  2_f64,  0_f64,
-            5_f64,  5_f64,  3_f64
+            5_f64,  5_f64,  3_f64,
         );
 
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
@@ -1811,7 +1812,7 @@ mod matrix3x3_tests {
         let matrix = Matrix3x3::new(
             1_f64,  5_f64,  5_f64,
             0_f64,  2_f64,  5_f64,
-            0_f64,  0_f64,  3_f64
+            0_f64,  0_f64,  3_f64,
         );
 
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64);
@@ -1823,11 +1824,11 @@ mod matrix3x3_tests {
         let matrix = Matrix3x3::new(
             5_f64, 1_f64, 1_f64,
             1_f64, 5_f64, 1_f64,
-            1_f64, 1_f64, 5_f64
+            1_f64, 1_f64, 5_f64,
         );
         let expected = (1_f64 / 28_f64) * Matrix3x3::new(
-             6_f64, -1_f64, -1_f64, 
-            -1_f64,  6_f64, -1_f64, 
+             6_f64, -1_f64, -1_f64,
+            -1_f64,  6_f64, -1_f64,
             -1_f64, -1_f64,  6_f64,
         );
         let result = matrix.inverse().unwrap();
@@ -1861,11 +1862,11 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_with_nonzero_determinant_is_invertible() {
         let matrix = Matrix3x3::new(
-            1_f32, 2_f32, 3_f32, 
-            0_f32, 4_f32, 5_f32, 
-            0_f32, 0_f32, 6_f32
+            1_f32, 2_f32, 3_f32,
+            0_f32, 4_f32, 5_f32,
+            0_f32, 0_f32, 6_f32,
         );
-        
+
         assert!(matrix.is_invertible());
     }
 
@@ -1873,11 +1874,11 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         let matrix = Matrix3x3::new(
-            1_f32, 2_f32, 3_f32, 
-            4_f32, 5_f32, 6_f32, 
-            4_f32, 5_f32, 6_f32
+            1_f32, 2_f32, 3_f32,
+            4_f32, 5_f32, 6_f32,
+            4_f32, 5_f32, 6_f32,
         );
-        
+
         assert!(!matrix.is_invertible());
     }
 
@@ -1885,11 +1886,11 @@ mod matrix3x3_tests {
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix3x3::new(
-            1_f32, 2_f32, 3_f32, 
-            4_f32, 5_f32, 6_f32, 
-            4_f32, 5_f32, 6_f32
+            1_f32, 2_f32, 3_f32,
+            4_f32, 5_f32, 6_f32,
+            4_f32, 5_f32, 6_f32,
         );
-        
+
         assert!(matrix.inverse().is_none());
     }
 
@@ -1897,9 +1898,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix3x3::identity();
@@ -1911,9 +1912,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
         let constant = 4_f64;
         let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
@@ -1926,9 +1927,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
@@ -1940,9 +1941,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix3x3::identity();
@@ -1954,9 +1955,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix3x3::new(
-            80_f64,     426.1_f64,   43.393_f64, 
-            23.43_f64,  23.5724_f64, 1.27_f64, 
-            81.439_f64, 12.19_f64,   43.36_f64
+            80_f64,     426.1_f64,   43.393_f64,
+            23.43_f64,  23.5724_f64, 1.27_f64,
+            81.439_f64, 12.19_f64,   43.36_f64,
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
@@ -1968,9 +1969,9 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -1988,17 +1989,17 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_swap_columns() {
         let mut result = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         result.swap_columns(0, 1);
         let expected = Matrix3x3::new(
-            4_i32, 5_i32, 6_i32, 
-            1_i32, 2_i32, 3_i32, 
-            7_i32, 8_i32, 9_i32
+            4_i32, 5_i32, 6_i32,
+            1_i32, 2_i32, 3_i32,
+            7_i32, 8_i32, 9_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -2006,17 +2007,17 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_swap_rows() {
         let mut result = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         result.swap_rows(0, 1);
         let expected = Matrix3x3::new(
-            2_i32, 1_i32, 3_i32, 
-            5_i32, 4_i32, 6_i32, 
-            8_i32, 7_i32, 9_i32
+            2_i32, 1_i32, 3_i32,
+            5_i32, 4_i32, 6_i32,
+            8_i32, 7_i32, 9_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -2024,15 +2025,15 @@ mod matrix3x3_tests {
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         result.swap((0, 0), (2, 1));
         let expected = Matrix3x3::new(
-            8_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 1_i32, 9_i32
+            8_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
+            7_i32, 1_i32, 9_i32,
         );
 
         assert_eq!(result, expected);
@@ -2046,7 +2047,7 @@ mod matrix3x3_tests {
         let unit_z = Vector3::unit_z();
         let expected = unit_x * 3 + unit_y * 3_i32 + unit_z * 3_i32;
         let result = matrix * Vector3::new(1_i32, 1_i32, 1_i32);
-        
+
         assert_eq!(result, expected);
     }
 
@@ -2091,8 +2092,8 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// An affine translation should only displace points and not vectors. We
+    /// distinguish points by using a `1` in the last coordinate, and vectors
     /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_point() {
@@ -2105,8 +2106,8 @@ mod matrix3x3_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// An affine translation should only displace points and not vectors. We
+    /// distinguish points by using a `1` in the last coordinate, and vectors
     /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_vector() {
@@ -2123,20 +2124,18 @@ mod matrix3x3_tests {
 
 #[cfg(test)]
 mod matrix3x3_rotation_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix3x3,
+        Normed,
+        Point3,
+        Unit,
+        Vector2,
+        Vector3,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector2,
-        Vector3,
-        Normed,
-        Matrix3x3,
-        Unit,
-        Point3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -2179,9 +2178,7 @@ mod matrix3x3_rotation_tests {
     #[test]
     fn test_from_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = Unit::from_value(
-            (1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64)
-        );
+        let axis = Unit::from_value((1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64));
         let vector = Vector3::new(1_f64, 1_f64, -1_f64);
         let matrix = Matrix3x3::from_axis_angle(&axis, angle);
         let expected = Vector3::new(1_f64, 1_f64, 1_f64);
@@ -2264,9 +2261,9 @@ mod matrix3x3_rotation_tests {
         let unit_x: Vector3<f64> = Vector3::unit_x();
         let unit_y: Vector3<f64> = Vector3::unit_y();
         let expected = Matrix3x3::new(
-             0_f64, 1_f64, 0_f64, 
+             0_f64, 1_f64, 0_f64,
             -1_f64, 0_f64, 0_f64,
-             0_f64, 0_f64, 1_f64
+             0_f64, 0_f64, 1_f64,
         );
         let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
 
@@ -2277,15 +2274,13 @@ mod matrix3x3_rotation_tests {
 
 #[cfg(test)]
 mod matrix3x3_reflection_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Unit,
         Vector2,
         Vector3,
-        Matrix3x3,
-        Unit,
-        Point2,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -2299,9 +2294,9 @@ mod matrix3x3_reflection_tests {
         let bias = Point2::origin();
         let normal = Unit::from_value(Vector2::unit_y());
         let expected = Matrix3x3::new(
-            1_f64,  0_f64, 0_f64, 
-            0_f64, -1_f64, 0_f64, 
-            0_f64,  0_f64, 1_f64
+            1_f64,  0_f64, 0_f64,
+            0_f64, -1_f64, 0_f64,
+            0_f64,  0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
@@ -2318,9 +2313,9 @@ mod matrix3x3_reflection_tests {
         let bias = Point2::origin();
         let normal = Unit::from_value(-Vector2::unit_y());
         let expected = Matrix3x3::new(
-            1_f64,  0_f64, 0_f64, 
-            0_f64, -1_f64, 0_f64, 
-            0_f64,  0_f64, 1_f64
+            1_f64,  0_f64, 0_f64,
+            0_f64, -1_f64, 0_f64,
+            0_f64,  0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
@@ -2337,12 +2332,12 @@ mod matrix3x3_reflection_tests {
         let bias = Point2::origin();
         let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix3x3::new(
-            -1_f64, 0_f64, 0_f64, 
-             0_f64, 1_f64, 0_f64, 
-             0_f64, 0_f64, 1_f64
+            -1_f64, 0_f64, 0_f64,
+             0_f64, 1_f64, 0_f64,
+             0_f64, 0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -2356,12 +2351,12 @@ mod matrix3x3_reflection_tests {
         let bias = Point2::origin();
         let normal = Unit::from_value(-Vector2::unit_x());
         let expected = Matrix3x3::new(
-            -1_f64, 0_f64, 0_f64, 
-             0_f64, 1_f64, 0_f64, 
-             0_f64, 0_f64, 1_f64
+            -1_f64, 0_f64, 0_f64,
+             0_f64, 1_f64, 0_f64,
+             0_f64, 0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -2377,12 +2372,12 @@ mod matrix3x3_reflection_tests {
             Vector2::new(f64::sqrt(2_f64)/ 2_f64, -f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix3x3::new(
-            0_f64, 1_f64, 0_f64, 
-            1_f64, 0_f64, 0_f64, 
-            0_f64, 0_f64, 1_f64
+            0_f64, 1_f64, 0_f64,
+            1_f64, 0_f64, 0_f64,
+            0_f64, 0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -2398,12 +2393,12 @@ mod matrix3x3_reflection_tests {
             Vector2::new(-f64::sqrt(2_f64)/ 2_f64, f64::sqrt(2_f64) / 2_f64)
         );
         let expected = Matrix3x3::new(
-            0_f64, 1_f64, 0_f64, 
-            1_f64, 0_f64, 0_f64, 
-            0_f64, 0_f64, 1_f64
+            0_f64, 1_f64, 0_f64,
+            1_f64, 0_f64, 0_f64,
+            0_f64, 0_f64, 1_f64,
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
-            
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -2413,9 +2408,7 @@ mod matrix3x3_reflection_tests {
     fn test_from_affine_reflection_from_line_that_does_not_cross_origin1() {
         // We can always choose the y-intercept as the known point.
         let bias = Point2::new(0_f64, 2_f64);
-        let normal = Unit::from_value(
-            Vector2::new(-1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64))
-        );
+        let normal = Unit::from_value(Vector2::new(-1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64)));
         let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
         let vector = Vector3::new(1_f64, 0_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
@@ -2430,15 +2423,13 @@ mod matrix3x3_reflection_tests {
     fn test_from_affine_reflection_from_line_that_does_not_cross_origin2() {
         // We can always choose the y-intercept as the known point.
         let bias = Point2::new(0_f64, 2_f64);
-        let normal = Unit::from_value(
-            Vector2::new(1_f64 / f64::sqrt(5_f64), -2_f64 / f64::sqrt(5_f64))
-        );
+        let normal = Unit::from_value(Vector2::new(1_f64 / f64::sqrt(5_f64), -2_f64 / f64::sqrt(5_f64)));
         let matrix = Matrix3x3::from_affine_reflection(&normal, &bias);
         let vector = Vector3::new(1_f64, 0_f64, 1_f64);
         let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
         let result = matrix * vector;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);        
+        assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
     #[rustfmt::skip]
@@ -2446,9 +2437,9 @@ mod matrix3x3_reflection_tests {
     fn test_from_reflection_xy_plane() {
         let normal = Unit::from_value(Vector3::unit_z());
         let expected = Matrix3x3::new(
-            1_f64, 0_f64,  0_f64, 
-            0_f64, 1_f64,  0_f64,  
-            0_f64, 0_f64, -1_f64
+            1_f64, 0_f64,  0_f64,
+            0_f64, 1_f64,  0_f64,
+            0_f64, 0_f64, -1_f64,
         );
         let result = Matrix3x3::from_reflection(&normal);
 
@@ -2460,9 +2451,9 @@ mod matrix3x3_reflection_tests {
     fn test_from_reflection_zx_plane() {
         let normal = Unit::from_value(-Vector3::unit_y());
         let expected = Matrix3x3::new(
-            1_f64,  0_f64, 0_f64, 
-            0_f64, -1_f64, 0_f64,  
-            0_f64,  0_f64, 1_f64
+            1_f64,  0_f64, 0_f64,
+            0_f64, -1_f64, 0_f64,
+            0_f64,  0_f64, 1_f64,
         );
         let result = Matrix3x3::from_reflection(&normal);
 
@@ -2474,9 +2465,9 @@ mod matrix3x3_reflection_tests {
     fn test_from_reflection_yz_plane() {
         let normal = Unit::from_value(Vector3::unit_x());
         let expected = Matrix3x3::new(
-            -1_f64,  0_f64, 0_f64, 
-             0_f64, 1_f64,  0_f64,  
-             0_f64,  0_f64, 1_f64
+            -1_f64,  0_f64, 0_f64,
+             0_f64, 1_f64,  0_f64,
+             0_f64,  0_f64, 1_f64,
         );
         let result = Matrix3x3::from_reflection(&normal);
 
@@ -2488,12 +2479,13 @@ mod matrix3x3_reflection_tests {
 #[cfg(test)]
 mod matrix3x3_shear_tests {
     use cglinalg_core::{
-        Vector3,
         Matrix3x3,
         Unit,
+        Vector3,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
         let shear_factor = 5_i32;
@@ -2523,6 +2515,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane() {
         let shear_factor = 5_i32;
@@ -2540,6 +2533,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz() {
         let shear_factor = 5_i32;
@@ -2569,16 +2563,17 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_shearing_plane() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_shear_xz(shear_factor);
         let vertices = [
-            Vector3::new( 1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32,  1_i32,  0_i32),
-            Vector3::new(-1_i32, -1_i32,  0_i32),
-            Vector3::new( 1_i32, -1_i32,  0_i32),
-            Vector3::new( 0_i32,  0_i32,  0_i32),
+            Vector3::new( 1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32,  1_i32, 0_i32),
+            Vector3::new(-1_i32, -1_i32, 0_i32),
+            Vector3::new( 1_i32, -1_i32, 0_i32),
+            Vector3::new( 0_i32,  0_i32, 0_i32),
         ];
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
@@ -2586,6 +2581,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx() {
         let shear_factor = 5_i32;
@@ -2615,6 +2611,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane() {
         let shear_factor = 5_i32;
@@ -2632,6 +2629,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz() {
         let shear_factor = 5_i32;
@@ -2661,6 +2659,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_shearing_plane() {
         let shear_factor = 5_i32;
@@ -2678,6 +2677,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx() {
         let shear_factor = 5_i32;
@@ -2707,6 +2707,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_shearing_plane() {
         let shear_factor = 5_i32;
@@ -2724,6 +2725,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy() {
         let shear_factor = 5_i32;
@@ -2753,6 +2755,7 @@ mod matrix3x3_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_shearing_plane() {
         let shear_factor = 5_i32;
@@ -2766,7 +2769,7 @@ mod matrix3x3_shear_tests {
         ];
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
-        
+
         assert_eq!(result, expected);
     }
 
@@ -2843,17 +2846,15 @@ mod matrix3x3_shear_tests {
 /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
 #[cfg(test)]
 mod matrix3x3_shear_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix3x3,
+        Unit,
+        Vector3,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector3,
-        Matrix3x3,
-        Unit,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -2863,13 +2864,13 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
 
     fn rotation_angle_z_xy() -> Radians<f64> {
         let tan_rotation_angle_z_xy = 1_f64;
-        
+
         Radians::atan2(tan_rotation_angle_z_xy, 1_f64)
     }
 
     fn rotation_angle_y_zx() -> Radians<f64> {
         let tan_rotation_y_zx = -f64::sqrt(2_f64 / 3_f64);
-        
+
         Radians::atan2(tan_rotation_y_zx, 1_f64)
     }
 
@@ -2878,7 +2879,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Unit::from_value(Vector3::new(
             f64::sqrt(3_f64 / 10_f64),
             f64::sqrt(3_f64 / 10_f64),
-            f64::sqrt(4_f64 / 10_f64)
+            f64::sqrt(4_f64 / 10_f64),
         ))
     }
 
@@ -2887,7 +2888,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Unit::from_value(Vector3::new(
             -f64::sqrt(2_f64 / 10_f64),
             -f64::sqrt(2_f64 / 10_f64),
-             f64::sqrt(6_f64 / 10_f64)
+             f64::sqrt(6_f64 / 10_f64),
         ))
     }
 
@@ -2896,7 +2897,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64,
            -1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64), 0_f64,
-            0_f64,                          0_f64,                         1_f64
+            0_f64,                    0_f64,                    1_f64,
         )
     }
 
@@ -2905,7 +2906,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,
             1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64), 0_f64,
-            0_f64,                           0_f64,                         1_f64
+            0_f64,                     0_f64,                    1_f64,
         )
     }
 
@@ -2913,8 +2914,8 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     fn rotation_y_zx() -> Matrix3x3<f64> {
         Matrix3x3::new(
              f64::sqrt(3_f64 / 5_f64), 0_f64, f64::sqrt(2_f64 / 5_f64),
-             0_f64,                          1_f64, 0_f64,
-            -f64::sqrt(2_f64 / 5_f64), 0_f64, f64::sqrt(3_f64 / 5_f64)
+             0_f64,                    1_f64, 0_f64,
+            -f64::sqrt(2_f64 / 5_f64), 0_f64, f64::sqrt(3_f64 / 5_f64),
         )
     }
 
@@ -2922,8 +2923,8 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     fn rotation_y_zx_inv() -> Matrix3x3<f64> {
         Matrix3x3::new(
             f64::sqrt(3_f64 / 5_f64), 0_f64, -f64::sqrt(2_f64 / 5_f64),
-            0_f64,                          1_f64,                 0_f64,
-            f64::sqrt(2_f64 / 5_f64), 0_f64,  f64::sqrt(3_f64 / 5_f64)
+            0_f64,                    1_f64,  0_f64,
+            f64::sqrt(2_f64 / 5_f64), 0_f64,  f64::sqrt(3_f64 / 5_f64),
         )
     }
 
@@ -2932,7 +2933,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
              f64::sqrt(3_f64 / 10_f64), f64::sqrt(3_f64 / 10_f64), f64::sqrt(2_f64 / 5_f64),
             -1_f64 / f64::sqrt(2_f64),  1_f64 / f64::sqrt(2_f64),  0_f64,
-            -1_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64),  f64::sqrt(3_f64 / 5_f64)
+            -1_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64),  f64::sqrt(3_f64 / 5_f64),
 
         )
     }
@@ -2942,7 +2943,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             f64::sqrt(3_f64 / 10_f64), -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(5_f64),
             f64::sqrt(3_f64/ 10_f64),   1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(5_f64),
-            f64::sqrt(2_f64 / 5_f64),   0_f64,                          f64::sqrt(3_f64 / 5_f64)
+            f64::sqrt(2_f64 / 5_f64),   0_f64,                     f64::sqrt(3_f64 / 5_f64),
         )
     }
 
@@ -2953,7 +2954,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             1_f64,        0_f64, 0_f64,
             0_f64,        1_f64, 0_f64,
-            shear_factor, 0_f64, 1_f64
+            shear_factor, 0_f64, 1_f64,
         )
     }
 
@@ -2972,7 +2973,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let tan_rotation_y_zx = -f64::sqrt(2_f64 / 3_f64);
         let rotation_angle_y_zx = Radians::atan2(tan_rotation_y_zx, 1_f64);
 
-        assert_relative_eq!(rotation_angle_y_zx.cos(),  f64::sqrt(3_f64 / 5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_y_zx.cos(), f64::sqrt(3_f64 / 5_f64), epsilon = 1e-10);
         assert_relative_eq!(rotation_angle_y_zx.sin(), -f64::sqrt(2_f64 / 5_f64), epsilon = 1e-10);
     }
 
@@ -3062,42 +3063,42 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64)
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64)
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
         ];
         let rotated_vertices = [
@@ -3134,84 +3135,84 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64)
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64)
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64)
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64)
             ),
         ];
         let expected = [
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
+                 f64::sqrt(3_f64 / 5_f64)  - f64::sqrt(2_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64) + f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(2_f64 / 5_f64) + f64::sqrt(3_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
+                f64::sqrt(2_f64 / 5_f64)  + f64::sqrt(3_f64 / 5_f64) + f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                -f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
+                -f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64) - f64::sqrt(3_f64 / 10_f64) * shear_factor,
-                f64::sqrt(2_f64 / 5_f64) - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
+                f64::sqrt(2_f64 / 5_f64)  - f64::sqrt(3_f64 / 5_f64) - f64::sqrt(2_f64 / 5_f64) * shear_factor
             ),
         ];
         let result = vertices.map(|v| matrix * v);
@@ -3248,7 +3249,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             Matrix3x3::new(
                 c0r0, c0r1, c0r2,
                 c1r0, c1r1, c1r2,
-                c2r0, c2r1, c2r2
+                c2r0, c2r1, c2r2,
             )
         };
         let result = Matrix3x3::from_shear(shear_factor, &direction, &normal);
@@ -3281,42 +3282,42 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+                f64::sqrt(2_f64 / 5_f64)  - 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+                -f64::sqrt(2_f64 / 5_f64)  - 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) - 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) - 2_f64 / f64::sqrt(15_f64)
+                f64::sqrt(2_f64 / 5_f64)  - 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+                f64::sqrt(2_f64 / 5_f64)  + 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+                -f64::sqrt(2_f64 / 5_f64)  + 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 -f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 -f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                -f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+                -f64::sqrt(2_f64 / 5_f64)  + 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 f64::sqrt(3_f64 / 10_f64) + 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
                 f64::sqrt(3_f64 / 10_f64) - 1_f64 / f64::sqrt(2_f64) + 1_f64 / f64::sqrt(5_f64),
-                f64::sqrt(2_f64 / 5_f64) + 2_f64 / f64::sqrt(15_f64)
+                f64::sqrt(2_f64 / 5_f64)  + 2_f64 / f64::sqrt(15_f64)
             ),
             Vector3::new(
                 0_f64, 
@@ -3343,14 +3344,15 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
 #[cfg(test)]
 mod matrix3x3_affine_shear_tests {
     use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Unit,
         Vector2,
         Vector3,
-        Matrix3x3,
-        Unit,
-        Point2,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy1() {
         let shear_factor = 5_i32;
@@ -3379,21 +3381,22 @@ mod matrix3x3_affine_shear_tests {
         let expected = Matrix3x3::new(
             1_i32,        0_i32, 0_i32,
             shear_factor, 1_i32, 0_i32,
-            0_i32,        0_i32, 1_i32
+            0_i32,        0_i32, 1_i32,
         );
         let result = Matrix3x3::from_affine_shear_xy(shear_factor);
-        
+
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 5_i32;
         let matrix = Matrix3x3::from_affine_shear_xy(shear_factor);
         let vertices = [
-            Vector3::new( 1_i32,  0_i32, 1_i32),
-            Vector3::new(-1_i32,  0_i32, 1_i32),
-            Vector3::new( 0_i32,  0_i32, 1_i32),
+            Vector3::new( 1_i32, 0_i32, 1_i32),
+            Vector3::new(-1_i32, 0_i32, 1_i32),
+            Vector3::new( 0_i32, 0_i32, 1_i32),
         ];
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
@@ -3412,6 +3415,7 @@ mod matrix3x3_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx1() {
         let shear_factor = 3_i32;
@@ -3443,10 +3447,11 @@ mod matrix3x3_affine_shear_tests {
             0_i32, 0_i32,        1_i32
         );
         let result = Matrix3x3::from_affine_shear_yx(shear_factor);
-        
+
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 3_i32;
@@ -3502,14 +3507,15 @@ mod matrix3x3_affine_shear_tests {
 #[cfg(test)]
 mod matrix3x3_affine_shear_coordinate_plane_tests {
     use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Unit,
         Vector2,
         Vector3,
-        Matrix3x3,
-        Unit,
-        Point2,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
         let shear_factor = 7_f64;
@@ -3551,6 +3557,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 7_f64;
@@ -3569,6 +3576,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx() {
         let shear_factor = 7_f64;
@@ -3601,8 +3609,8 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         let direction = Unit::from_value(Vector2::unit_y());
         let normal = Unit::from_value(Vector2::unit_x());
         let expected = Matrix3x3::new(
-            1_f64,  shear_factor,              0_f64,
-            0_f64,  1_f64,                     0_f64,
+            1_f64,  shear_factor,             0_f64,
+            0_f64,  1_f64,                    0_f64,
             0_f64, -origin[0] * shear_factor, 1_f64
         );
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -3610,6 +3618,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 7_f64;
@@ -3635,19 +3644,17 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
 mod matrix3x3_affine_shear_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix3x3,
+        Point2,
+        Unit,
+        Vector2,
+        Vector3,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector2,
-        Vector3,
-        Matrix3x3,
-        Unit,
-        Point2,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -3684,7 +3691,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             2_f64 / f64::sqrt(5_f64), 1_f64 / f64::sqrt(5_f64), 0_f64,
            -1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64), 0_f64,
-            0_f64,                          0_f64,                         1_f64
+            0_f64,                          0_f64,                         1_f64,
         )
     }
 
@@ -3693,7 +3700,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         Matrix3x3::new(
             2_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64), 0_f64,
             1_f64 / f64::sqrt(5_f64),  2_f64 / f64::sqrt(5_f64), 0_f64,
-            0_f64,                           0_f64,                         1_f64
+            0_f64,                           0_f64,                         1_f64,
         )
     }
 
@@ -3726,6 +3733,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn tests_from_affine_shear_coordinates() {
         let translation = translation();
@@ -3758,10 +3766,10 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let rotation = rotation();
         let rotated_origin = Vector3::new(f64::sqrt(5_f64), 0_f64, 1_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
-   
+
         assert_relative_eq!(result_rotated_translated_origin[0], origin[0], epsilon = 1e-10);
         assert_relative_eq!(result_rotated_translated_origin[1], origin[1], epsilon = 1e-10);
-        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64,     epsilon = 1e-10);
+        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64, epsilon = 1e-10);
     }
 
     #[test]
@@ -3829,7 +3837,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
             ),
         ];
         let result = vertices.map(|v| matrix * v);
-    
+
         assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
         assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
         assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
@@ -3846,7 +3854,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = Matrix3x3::new(
              1_f64 - (2_f64 / 5_f64) * shear_factor, -(1_f64 / 5_f64) * shear_factor,         0_f64,
              (4_f64 / 5_f64) * shear_factor,          1_f64 + (2_f64 / 5_f64) * shear_factor, 0_f64,
-            -(4_f64 / 5_f64) * shear_factor,         -(2_f64 / 5_f64) * shear_factor,         1_f64
+            -(4_f64 / 5_f64) * shear_factor,         -(2_f64 / 5_f64) * shear_factor,         1_f64,
         );
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
@@ -3900,13 +3908,11 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod matrix4x4_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Matrix4x4,
         Vector3,
         Vector4,
-        Matrix4x4,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -3917,7 +3923,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -3945,7 +3951,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -3974,7 +3980,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[4][0], matrix[4][0]);
@@ -3988,7 +3994,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[0][4], matrix[0][4]);
@@ -4002,7 +4008,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[4][4], matrix[4][4]);
@@ -4016,7 +4022,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -4030,7 +4036,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -4044,7 +4050,7 @@ mod matrix4x4_tests {
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -4053,7 +4059,7 @@ mod matrix4x4_tests {
     #[test]
     fn test_identity_matrix_times_identity_matrix_equals_identity_matrix() {
         let identity_matrix: Matrix4x4<f32> = Matrix4x4::identity();
-        
+
         assert_eq!(identity_matrix * identity_matrix, identity_matrix);
     }
 
@@ -4068,22 +4074,22 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-            70_f64,    49_f64,     95_f64,    89.91_f64
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
+            70_f64,    49_f64,     95_f64,    89.91_f64,
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         // let expected = Matrix4x4::new(
         //     195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
         //     33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         // );
         let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
         let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
@@ -4096,22 +4102,22 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-            70_f64,    49_f64,     95_f64,    89.91_f64
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
+            70_f64,    49_f64,     95_f64,    89.91_f64,
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         // let expected = Matrix4x4::new(
         //     195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
         //     33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix4x4::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix4x4::zero();
@@ -4124,22 +4130,22 @@ mod matrix4x4_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-            70_f64,    49_f64,     95_f64,    89.91_f64
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
+            70_f64,    49_f64,     95_f64,    89.91_f64,
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         // let expected = Matrix4x4::new(
         //     195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
         //     33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         // );
         let zero_times_a_matrix = Matrix4x4::zero() * a_matrix;
         let zero_times_b_matrix = Matrix4x4::zero() * b_matrix;
@@ -4152,22 +4158,22 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_times_identity_equals_identity_times_matrix1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
             70_f64,    49_f64,     95_f64,    89.91_f64
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         // let expected = Matrix4x4::new(
         //     195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
         //     33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         // );
         let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
         let identity_times_a_matrix = Matrix4x4::identity() * a_matrix;
@@ -4182,26 +4188,26 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_transpose_transpose_equals_matrix1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-            70_f64,    49_f64,     95_f64,    89.91_f64
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
+            70_f64,    49_f64,     95_f64,    89.91_f64,
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         // let expected = Matrix4x4::new(
         //     195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
         //     33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
         //     410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+        //     141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -4210,22 +4216,22 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let a_matrix = Matrix4x4::new(
-            80_f64,    23.43_f64,  43.56_f64, 6.74_f64, 
+            80_f64,    23.43_f64,  43.56_f64, 6.74_f64,
             426.1_f64, 23.57_f64,  27.61_f64, 13.90_f64,
-            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64, 
-            70_f64,    49_f64,     95_f64,    89.91_f64
+            4.22_f64,  258.08_f64, 31.70_f64, 42.17_f64,
+            70_f64,    49_f64,     95_f64,    89.91_f64,
         );
         let b_matrix = Matrix4x4::new(
-            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64, 
-            7.04_f64,  61.89_f64,  56.31_f64,  89_f64, 
-            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,  
-            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64
+            36.84_f64, 427.46_f64, 882.19_f64, 89.50_f64,
+            7.04_f64,  61.89_f64,  56.31_f64,  89_f64,
+            72_f64,    936.5_f64,  413.80_f64, 50.31_f64,
+            37.69_f64, 311.8_f64,  60.81_f64,  73.83_f64,
         );
         let expected = Matrix4x4::new(
             195075.7478_f64, 242999.4886_f64, 49874.8440_f64, 51438.8929_f64,
             33402.1572_f64,  20517.1793_f64,  12255.4723_f64, 11284.3033_f64,
             410070.5860_f64, 133018.9590_f64, 46889.9950_f64, 35475.9481_f64,
-            141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64
+            141297.8982_f64, 27543.7175_f64,  19192.1014_f64, 13790.4636_f64,
         );
         let result = a_matrix * b_matrix;
 
@@ -4239,19 +4245,19 @@ mod matrix4x4_tests {
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,     887.710_f64
+            0_f64,     0_f64,      0_f64,     887.710_f64,
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,       269.1134_f64
+            0_f64,     0_f64,      0_f64,       269.1134_f64,
         );
         // let expected = Matrix4x4::new(
         //     3943.4304_f64, 0_f64,           0_f64,           0_f64,
         //     0_f64,         356.8907901_f64, 0_f64,           0_f64,
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
-        //     0_f64,         0_f64,           0_f64,           238894.656314_f64
+        //     0_f64,         0_f64,           0_f64,           238894.656314_f64,
         // );
         let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
         let b_matrix_times_identity = b_matrix * Matrix4x4::identity();
@@ -4267,19 +4273,19 @@ mod matrix4x4_tests {
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,     887.710_f64
+            0_f64,     0_f64,      0_f64,     887.710_f64,
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,       269.1134_f64
+            0_f64,     0_f64,      0_f64,       269.1134_f64,
         );
         // let expected = Matrix4x4::new(
         //     3943.4304_f64, 0_f64,           0_f64,           0_f64,
         //     0_f64,         356.8907901_f64, 0_f64,           0_f64,
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
-        //     0_f64,         0_f64,           0_f64,           238894.656314_f64
+        //     0_f64,         0_f64,           0_f64,           238894.656314_f64,
         // );
         let a_matrix_times_zero_matrix = a_matrix * Matrix4x4::zero();
         let b_matrix_times_zero_matrix = b_matrix * Matrix4x4::zero();
@@ -4295,19 +4301,19 @@ mod matrix4x4_tests {
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,     887.710_f64
+            0_f64,     0_f64,      0_f64,     887.710_f64,
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,       269.1134_f64
+            0_f64,     0_f64,      0_f64,       269.1134_f64,
         );
         // let expected = Matrix4x4::new(
         //     3943.4304_f64, 0_f64,           0_f64,           0_f64,
         //     0_f64,         356.8907901_f64, 0_f64,           0_f64,
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
-        //     0_f64,         0_f64,           0_f64,           238894.656314_f64
+        //     0_f64,         0_f64,           0_f64,           238894.656314_f64,
         // );
         let zero_times_a_matrix = Matrix4x4::zero() * a_matrix;
         let zero_times_b_matrix = Matrix4x4::zero() * b_matrix;
@@ -4323,19 +4329,19 @@ mod matrix4x4_tests {
             68.32_f64, 0_f64,      0_f64,     0_f64,
             0_f64,     37.397_f64, 0_f64,     0_f64,
             0_f64,     0_f64,      9.483_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,     887.710_f64
+            0_f64,     0_f64,      0_f64,     887.710_f64,
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
-            0_f64,     0_f64,      0_f64,       269.1134_f64
+            0_f64,     0_f64,      0_f64,       269.1134_f64,
         );
         // let expected = Matrix4x4::new(
         //     3943.4304_f64, 0_f64,           0_f64,           0_f64,
         //     0_f64,         356.8907901_f64, 0_f64,           0_f64,
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
-        //     0_f64,         0_f64,           0_f64,           238894.656314_f64
+        //     0_f64,         0_f64,           0_f64,           238894.656314_f64,
         // );
         let a_matrix_times_identity = a_matrix * Matrix4x4::identity();
         let identity_times_a_matrix = Matrix4x4::identity() * a_matrix;
@@ -4356,8 +4362,8 @@ mod matrix4x4_tests {
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
             0_f64,     0_f64,      0_f64,       269.1134_f64
         );
@@ -4365,11 +4371,11 @@ mod matrix4x4_tests {
         //     3943.4304_f64, 0_f64,           0_f64,           0_f64,
         //     0_f64,         356.8907901_f64, 0_f64,           0_f64,
         //     0_f64,         0_f64,           822.4719696_f64, 0_f64,
-        //     0_f64,         0_f64,           0_f64,           238894.656314_f64
+        //     0_f64,         0_f64,           0_f64,           238894.656314_f64,
         // );
         let a_matrix_transpose_transpose = a_matrix.transpose().transpose();
         let b_matrix_transpose_transpose = b_matrix.transpose().transpose();
-            
+
         assert_eq!(a_matrix_transpose_transpose, a_matrix);
         assert_eq!(b_matrix_transpose_transpose, b_matrix);
     }
@@ -4384,8 +4390,8 @@ mod matrix4x4_tests {
             0_f64,     0_f64,      0_f64,     887.710_f64
         );
         let b_matrix = Matrix4x4::new(
-            57.72_f64, 0_f64,      0_f64,       0_f64, 
-            0_f64,     9.5433_f64, 0_f64,       0_f64, 
+            57.72_f64, 0_f64,      0_f64,       0_f64,
+            0_f64,     9.5433_f64, 0_f64,       0_f64,
             0_f64,     0_f64,      86.7312_f64, 0_f64,
             0_f64,     0_f64,      0_f64,       269.1134_f64
         );
@@ -4393,7 +4399,7 @@ mod matrix4x4_tests {
             3943.4304_f64, 0_f64,           0_f64,           0_f64,
             0_f64,         356.8907901_f64, 0_f64,           0_f64,
             0_f64,         0_f64,           822.4719696_f64, 0_f64,
-            0_f64,         0_f64,           0_f64,           238894.656314_f64
+            0_f64,         0_f64,           0_f64,           238894.656314_f64,
         );
         let result = a_matrix * b_matrix;
 
@@ -4404,7 +4410,7 @@ mod matrix4x4_tests {
     fn test_identity_transpose_equals_identity() {
         let identity = Matrix4x4::<f32>::identity();
         let identity_transpose = identity.transpose();
-            
+
         assert_eq!(identity, identity_transpose);
     }
 
@@ -4417,10 +4423,10 @@ mod matrix4x4_tests {
         let c3 = Vector4::new(13_i32, 14_i32, 15_i32, 16_i32);
         let columns = [c0, c1, c2, c3];
         let expected = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
-            5_i32,  6_i32,  7_i32,  8_i32, 
-            9_i32,  10_i32, 11_i32, 12_i32, 
-            13_i32, 14_i32, 15_i32, 16_i32
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
         let result = Matrix4x4::from_columns(&columns);
 
@@ -4439,7 +4445,7 @@ mod matrix4x4_tests {
             1_i32, 5_i32, 9_i32,  13_i32,
             2_i32, 6_i32, 10_i32, 14_i32,
             3_i32, 7_i32, 11_i32, 15_i32,
-            4_i32, 8_i32, 12_i32, 16_i32
+            4_i32, 8_i32, 12_i32, 16_i32,
         );
         let result = Matrix4x4::from_rows(&rows);
 
@@ -4463,10 +4469,10 @@ mod matrix4x4_tests {
         let c = 802.3435169_f64;
         let identity = Matrix4x4::identity();
         let expected = Matrix4x4::new(
-            c,     0_f64, 0_f64, 0_f64, 
-            0_f64, c,     0_f64, 0_f64, 
-            0_f64, 0_f64, c,     0_f64, 
-            0_f64, 0_f64, 0_f64, c
+            c,     0_f64, 0_f64, 0_f64,
+            0_f64, c,     0_f64, 0_f64,
+            0_f64, 0_f64, c,     0_f64,
+            0_f64, 0_f64, 0_f64, c,
         );
 
         assert_eq!(identity * c, expected);
@@ -4478,10 +4484,10 @@ mod matrix4x4_tests {
         let c = 802.3435169_f64;
         let identity = Matrix4x4::identity();
         let expected = Matrix4x4::new(
-            1_f64 / c, 0_f64,     0_f64,     0_f64, 
-            0_f64,     1_f64 / c, 0_f64,     0_f64, 
-            0_f64,     0_f64,     1_f64 / c, 0_f64, 
-            0_f64,     0_f64,     0_f64,     1_f64 / c
+            1_f64 / c, 0_f64,     0_f64,     0_f64,
+            0_f64,     1_f64 / c, 0_f64,     0_f64,
+            0_f64,     0_f64,     1_f64 / c, 0_f64,
+            0_f64,     0_f64,     0_f64,     1_f64 / c,
         );
 
         assert_eq!(identity / c, expected);
@@ -4492,10 +4498,10 @@ mod matrix4x4_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix = Matrix4x4::zero();
         let matrix = Matrix4x4::new(
-            36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64, 
-            7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64, 
-            72_f64,      936.5_f64,     413.80_f64,    50.311160_f64,  
-            37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64
+            36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64,
+            7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64,
+            72_f64,      936.5_f64,     413.80_f64,    50.311160_f64,
+            37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64,
         );
 
         assert_eq!(matrix + zero_matrix, matrix);
@@ -4506,10 +4512,10 @@ mod matrix4x4_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix = Matrix4x4::zero();
         let matrix = Matrix4x4::new(
-            36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64, 
-            7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64, 
-            72_f64,      936.5_f64,     413.80_f64,    50.311160_f64,  
-            37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64
+            36.84_f64,   427.46894_f64, 8827.1983_f64, 89.5049494_f64,
+            7.04217_f64, 61.891390_f64, 56.31_f64,     89_f64,
+            72_f64,      936.5_f64,     413.80_f64,    50.311160_f64,
+            37.6985_f64, 311.8_f64,     60.81_f64,     73.8393_f64,
         );
 
         assert_eq!(zero_matrix + matrix, matrix);
@@ -4520,12 +4526,12 @@ mod matrix4x4_tests {
     fn test_matrix_with_zero_determinant() {
         // This matrix should have a zero determinant since it has two repeating columns.
         let matrix = Matrix4x4::new(
-            1_f64,  2_f64,  3_f64,  4_f64, 
+            1_f64,  2_f64,  3_f64,  4_f64,
             5_f64,  6_f64,  7_f64,  8_f64,
-            5_f64,  6_f64,  7_f64,  8_f64, 
-            9_f64,  10_f64, 11_f64, 12_f64
+            5_f64,  6_f64,  7_f64,  8_f64,
+            9_f64,  10_f64, 11_f64, 12_f64,
         );
-        
+
         assert_eq!(matrix.determinant(), 0_f64);
     }
 
@@ -4533,10 +4539,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_lower_triangular_matrix_determinant() {
         let matrix = Matrix4x4::new(
-            1_f64,  0_f64,  0_f64,  0_f64, 
+            1_f64,  0_f64,  0_f64,  0_f64,
             5_f64,  2_f64,  0_f64,  0_f64,
-            5_f64,  5_f64,  3_f64,  0_f64, 
-            5_f64,  5_f64,  5_f64,  4_f64
+            5_f64,  5_f64,  3_f64,  0_f64,
+            5_f64,  5_f64,  5_f64,  4_f64,
         );
 
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
@@ -4546,10 +4552,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_upper_triangular_matrix_determinant() {
         let matrix = Matrix4x4::new(
-            1_f64,  5_f64,  5_f64,  5_f64, 
+            1_f64,  5_f64,  5_f64,  5_f64,
             0_f64,  2_f64,  5_f64,  5_f64,
-            0_f64,  0_f64,  3_f64,  5_f64, 
-            0_f64,  0_f64,  0_f64,  4_f64
+            0_f64,  0_f64,  3_f64,  5_f64,
+            0_f64,  0_f64,  0_f64,  4_f64,
         );
 
         assert_eq!(matrix.determinant(), 1_f64 * 2_f64 * 3_f64 * 4_f64);
@@ -4562,13 +4568,13 @@ mod matrix4x4_tests {
             7_f64, -1_f64, -1_f64, -1_f64,
            -1_f64,  7_f64, -1_f64, -1_f64,
            -1_f64, -1_f64,  7_f64, -1_f64,
-           -1_f64, -1_f64, -1_f64,  7_f64
+           -1_f64, -1_f64, -1_f64,  7_f64,
        );
        let expected = Matrix4x4::new(
            (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
            (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64,
            (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64, (1_f64 / 32_f64) * -1_f64,
-           (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64
+           (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) * -1_f64, (1_f64 / 32_f64) *  7_f64,
        );
 
        assert_eq!(result, expected);
@@ -4578,16 +4584,16 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_inverse() {
         let matrix = Matrix4x4::new(
-            5_f64, 1_f64, 1_f64, 1_f64, 
+            5_f64, 1_f64, 1_f64, 1_f64,
             1_f64, 5_f64, 1_f64, 1_f64,
             1_f64, 1_f64, 5_f64, 1_f64,
-            1_f64, 1_f64, 1_f64, 5_f64, 
+            1_f64, 1_f64, 1_f64, 5_f64,
         );
         let expected = (1_f64 / 32_f64) * Matrix4x4::new(
              7_f64, -1_f64, -1_f64, -1_f64,
             -1_f64,  7_f64, -1_f64, -1_f64,
             -1_f64, -1_f64,  7_f64, -1_f64,
-            -1_f64, -1_f64, -1_f64,  7_f64
+            -1_f64, -1_f64, -1_f64,  7_f64,
         );
         let result = matrix.inverse().unwrap();
 
@@ -4623,9 +4629,9 @@ mod matrix4x4_tests {
             1_f64,  2_f64,  3_f64,   4_f64,
             5_f64,  60_f64, 7_f64,   8_f64,
             9_f64,  10_f64, 11_f64,  12_f64,
-            13_f64, 14_f64, 150_f64, 16_f64
+            13_f64, 14_f64, 150_f64, 16_f64,
         );
-        
+
         assert!(matrix.is_invertible());
     }
 
@@ -4634,12 +4640,12 @@ mod matrix4x4_tests {
     fn test_matrix_with_zero_determinant_is_not_invertible() {
         // This matrix should not be invertible since it has two identical columns.
         let matrix = Matrix4x4::new(
-            1_f64,  2_f64,   3_f64,  4_f64, 
+            1_f64,  2_f64,   3_f64,  4_f64,
             5_f64,  6_f64,   7_f64,  8_f64,
-            5_f64,  6_f64,   7_f64,  8_f64, 
-            9_f64,  10_f64,  11_f64, 12_f64
+            5_f64,  6_f64,   7_f64,  8_f64,
+            9_f64,  10_f64,  11_f64, 12_f64,
         );
-        
+
         assert!(!matrix.is_invertible());
     }
 
@@ -4647,12 +4653,12 @@ mod matrix4x4_tests {
     #[test]
     fn test_noninvertible_matrix_returns_none() {
         let matrix = Matrix4x4::new(
-            1_f64,  2_f64,  3_f64,  4_f64, 
+            1_f64,  2_f64,  3_f64,  4_f64,
             5_f64,  6_f64,  7_f64,  8_f64,
-            5_f64,  6_f64,  7_f64,  8_f64, 
-            9_f64,  10_f64, 11_f64, 12_f64
+            5_f64,  6_f64,  7_f64,  8_f64,
+            9_f64,  10_f64, 11_f64, 12_f64,
         );
-        
+
         assert!(matrix.inverse().is_none());
     }
 
@@ -4660,17 +4666,17 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_inversion2() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let result = matrix.inverse().unwrap();
         let expected = Matrix4x4::new(
              0.01146093272878252_f64,  -0.06212100841992658_f64, -0.02771783718075694_f64,    0.07986947998777854_f64,
             -0.00148039611514755_f64,   0.004464130960444646_f64, 0.003417891441120325_f64,  -0.005915083057511776_f64,
              0.001453087396607042_f64, -0.0009538600348427_f64,  -0.0005129477357421059_f64, -0.0002621470728476185_f64,
-            -0.0007967195911958656_f64, 0.01365031989418242_f64,  0.0001408581712825875_f64, -0.002040325515611523_f64
+            -0.0007967195911958656_f64, 0.01365031989418242_f64,  0.0001408581712825875_f64, -0.002040325515611523_f64,
         );
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
@@ -4680,10 +4686,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_times_inverse_is_identity() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix4x4::identity();
@@ -4695,10 +4701,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_constant_times_matrix_inverse_equals_constant_inverse_times_matrix_inverse() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let constant: f64 = 4_f64;
         let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
@@ -4711,10 +4717,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_transpose_inverse_equals_matrix_inverse_transpose() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
@@ -4726,14 +4732,14 @@ mod matrix4x4_tests {
     #[test]
     fn test_inverse_times_matrix_is_identity() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix4x4::identity();
-        
+
         assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);
     }
 
@@ -4741,10 +4747,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_inverse_inverse_equals_matrix() {
         let matrix = Matrix4x4::new(
-            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64, 
-            7.042_f64,  61.891_f64,  56.31_f64,   89_f64, 
-            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,  
-            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64
+            36.84_f64,  427.468_f64, 882.198_f64, 89.504_f64,
+            7.042_f64,  61.891_f64,  56.31_f64,   89_f64,
+            72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
+            37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
@@ -4756,10 +4762,10 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_elements_should_be_column_major_order() {
         let matrix = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
-            5_i32,  6_i32,  7_i32,  8_i32, 
-            9_i32,  10_i32, 11_i32, 12_i32, 
-            13_i32, 14_i32, 15_i32, 16_i32
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -4784,19 +4790,19 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_swap_columns() {
         let mut result = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,   4_i32, 
-            5_i32,  6_i32,  7_i32,   8_i32, 
+            1_i32,  2_i32,  3_i32,   4_i32,
+            5_i32,  6_i32,  7_i32,   8_i32,
             9_i32,  10_i32, 11_i32,  12_i32,
-            13_i32, 14_i32, 15_i32,  16_i32
+            13_i32, 14_i32, 15_i32,  16_i32,
         );
         result.swap_columns(3, 1);
         let expected = Matrix4x4::new(
             1_i32,  2_i32,  3_i32,  4_i32,
             13_i32, 14_i32, 15_i32, 16_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            5_i32,  6_i32,  7_i32,  8_i32 
+            5_i32,  6_i32,  7_i32,  8_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -4804,19 +4810,19 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_swap_rows() {
         let mut result = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
-            5_i32,  6_i32,  7_i32,  8_i32, 
-            9_i32,  10_i32, 11_i32, 12_i32, 
-            13_i32, 14_i32, 15_i32, 16_i32
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
         result.swap_rows(3, 1);
         let expected = Matrix4x4::new(
             1_i32,  4_i32,  3_i32,  2_i32,
             5_i32,  8_i32,  7_i32,  6_i32,
             9_i32,  12_i32, 11_i32, 10_i32,
-            13_i32, 16_i32, 15_i32, 14_i32
+            13_i32, 16_i32, 15_i32, 14_i32,
         );
-        
+
         assert_eq!(result, expected);
     }
 
@@ -4824,17 +4830,17 @@ mod matrix4x4_tests {
     #[test]
     fn test_matrix_swap_elements() {
         let mut result = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
-            5_i32,  6_i32,  7_i32,  8_i32, 
-            9_i32,  10_i32, 11_i32, 12_i32, 
-            13_i32, 14_i32, 15_i32, 16_i32
+            1_i32,  2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,  8_i32,
+            9_i32,  10_i32, 11_i32, 12_i32,
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
         result.swap((2, 0), (1, 3));
         let expected = Matrix4x4::new(
             1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  9_i32,
             8_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
 
         assert_eq!(result, expected);
@@ -4862,8 +4868,8 @@ mod matrix4x4_tests {
         assert_eq!(matrix * unit_w, unit_w);
     }
 
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// An affine translation should only displace points and not vectors. We
+    /// distinguish points by using a `1` in the last coordinate, and vectors
     /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_point() {
@@ -4876,8 +4882,8 @@ mod matrix4x4_tests {
         assert_eq!(result, expected);
     }
 
-    /// An affine translation should only displace points and not vectors. We 
-    /// distinguish points by using a `1` in the last coordinate, and vectors 
+    /// An affine translation should only displace points and not vectors. We
+    /// distinguish points by using a `1` in the last coordinate, and vectors
     /// by using a `0` in the last coordinate.
     #[test]
     fn test_from_affine_translation_vector() {
@@ -4894,15 +4900,9 @@ mod matrix4x4_tests {
 
 #[cfg(test)]
 mod matrix4x4_projection_tests {
-    use cglinalg_trigonometry::{
-        Degrees,
-    };
-    use cglinalg_core::{
-        Matrix4x4,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use approx::assert_relative_eq;
+    use cglinalg_core::Matrix4x4;
+    use cglinalg_trigonometry::Degrees;
 
 
     #[rustfmt::skip]
@@ -4918,10 +4918,10 @@ mod matrix4x4_projection_tests {
             1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
             0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
             0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
-            0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
+            0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64,
         );
         let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
-    
+
         assert_eq!(result, expected);
     }
 
@@ -4933,13 +4933,13 @@ mod matrix4x4_projection_tests {
         let near = 0.1_f32;
         let far = 100_f32;
         let expected = Matrix4x4::new(
-            1.0322863_f32, 0_f32,          0_f32,         0_f32, 
-            0_f32,         1.3763818_f32,  0_f32,         0_f32, 
-            0_f32,         0_f32,         -1.002002_f32, -1_f32, 
-            0_f32,         0_f32,         -0.2002002_f32, 0_f32
+            1.0322863_f32, 0_f32,          0_f32,         0_f32,
+            0_f32,         1.3763818_f32,  0_f32,         0_f32,
+            0_f32,         0_f32,         -1.002002_f32, -1_f32,
+            0_f32,         0_f32,         -0.2002002_f32, 0_f32,
         );
         let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -4956,10 +4956,10 @@ mod matrix4x4_projection_tests {
             1_f64 / 4_f64, 0_f64,          0_f64,             0_f64,
             0_f64,         2_f64 / 5_f64,  0_f64,             0_f64,
             0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
-            0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+            0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
         );
         let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
-    
+
         assert_eq!(result, expected);
     }
 }
@@ -4967,20 +4967,18 @@ mod matrix4x4_projection_tests {
 
 #[cfg(test)]
 mod matrix4x4_rotation_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix4x4,
+        Normed,
+        Point3,
+        Unit,
+        Vector3,
+        Vector4,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector3,
-        Vector4,
-        Normed,
-        Matrix4x4,
-        Unit,
-        Point3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -5059,9 +5057,7 @@ mod matrix4x4_rotation_tests {
     #[test]
     fn test_from_affine_axis_angle() {
         let angle: Radians<f64> = Radians::full_turn_div_2();
-        let axis = Unit::from_value(
-            (1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64)
-        );
+        let axis = Unit::from_value((1_f64 / f64::sqrt(2_f64)) * Vector3::new(1_f64, 1_f64, 0_f64));
         let vector = Vector4::new(1_f64, 1_f64, -1_f64, 0_f64);
         let matrix = Matrix4x4::from_affine_axis_angle(&axis, angle);
         let expected = Vector4::new(1_f64, 1_f64, 1_f64, 0_f64);
@@ -5156,7 +5152,7 @@ mod matrix4x4_rotation_tests {
         let look_to = Matrix4x4::look_to_lh(&eye, &direction, &up);
         let expected = unit_z;
         let result = look_to * direction.normalize().to_homogeneous();
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
@@ -5169,7 +5165,7 @@ mod matrix4x4_rotation_tests {
         let look_to = Matrix4x4::look_to_lh(&eye, &direction, &up);
         let expected = minus_unit_z;
         let result = look_to * (-direction).normalize().to_homogeneous();
-    
+
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 }
@@ -5178,11 +5174,11 @@ mod matrix4x4_rotation_tests {
 #[cfg(test)]
 mod matrix4x4_reflection_tests {
     use cglinalg_core::{
+        Matrix4x4,
+        Point3,
+        Unit,
         Vector3,
         Vector4,
-        Matrix4x4,
-        Unit,
-        Point3,
     };
 
 
@@ -5195,7 +5191,7 @@ mod matrix4x4_reflection_tests {
             1_f64, 0_f64,  0_f64, 0_f64,
             0_f64, 1_f64,  0_f64, 0_f64,
             0_f64, 0_f64, -1_f64, 0_f64,
-            0_f64, 0_f64,  0_f64, 1_f64
+            0_f64, 0_f64,  0_f64, 1_f64,
         );
         let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
@@ -5211,7 +5207,7 @@ mod matrix4x4_reflection_tests {
             1_f64,  0_f64, 0_f64, 0_f64,
             0_f64, -1_f64, 0_f64, 0_f64,
             0_f64,  0_f64, 1_f64, 0_f64,
-            0_f64,  0_f64, 0_f64, 1_f64
+            0_f64,  0_f64, 0_f64, 1_f64,
         );
         let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
@@ -5227,7 +5223,7 @@ mod matrix4x4_reflection_tests {
             -1_f64,  0_f64, 0_f64,  0_f64,
              0_f64,  1_f64, 0_f64,  0_f64,
              0_f64,  0_f64, 1_f64,  0_f64,
-             0_f64,  0_f64, 0_f64,  1_f64
+             0_f64,  0_f64, 0_f64,  1_f64,
         );
         let result = Matrix4x4::from_affine_reflection(&normal, &bias);
 
@@ -5241,7 +5237,7 @@ mod matrix4x4_reflection_tests {
         let normal = Unit::from_value(Vector3::new(0_f64, 0_f64, 1_f64));
         let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(1_f64, 1_f64, 0.5_f64, 1_f64);
-        let expected = Vector4::new(1_f64,1_f64,1.5_f64, 1_f64);
+        let expected = Vector4::new(1_f64, 1_f64, 1.5_f64, 1_f64);
         let result = matrix * vector;
 
         assert_eq!(result, expected);
@@ -5254,7 +5250,7 @@ mod matrix4x4_reflection_tests {
         let normal = Unit::from_value(Vector3::new(1_f64, 0_f64, 0_f64));
         let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(-2_f64, 1_f64, 1_f64, 1_f64);
-        let expected = Vector4::new(0_f64,1_f64,1_f64, 1_f64);
+        let expected = Vector4::new(0_f64, 1_f64, 1_f64, 1_f64);
         let result = matrix * vector;
 
         assert_eq!(result, expected);
@@ -5267,7 +5263,7 @@ mod matrix4x4_reflection_tests {
         let normal = Unit::from_value(Vector3::new(0_f64, 1_f64, 0_f64));
         let matrix = Matrix4x4::from_affine_reflection(&normal, &bias);
         let vector = Vector4::new(0_f64, 0_f64, 0_f64, 1_f64);
-        let expected = Vector4::new(0_f64,2_f64, 0_f64, 1_f64);
+        let expected = Vector4::new(0_f64, 2_f64, 0_f64, 1_f64);
         let result = matrix * vector;
 
         assert_eq!(result, expected);
@@ -5279,13 +5275,14 @@ mod matrix4x4_reflection_tests {
 mod matrix4x4_affine_shear_tests {
     use cglinalg_core::{
         Matrix4x4,
-        Vector4,
         Point3,
-        Vector3,
         Unit,
+        Vector3,
+        Vector4,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
         let shear_factor = 11_i32;
@@ -5315,6 +5312,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 11_i32;
@@ -5343,6 +5341,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz() {
         let shear_factor = 11_i32;
@@ -5372,16 +5371,17 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_shearing_plane() {
         let shear_factor = 11_i32;
         let matrix = Matrix4x4::from_affine_shear_xz(shear_factor);
         let vertices = [
-            Vector4::new( 1_i32,  1_i32,  0_i32, 1_i32),
-            Vector4::new(-1_i32,  1_i32,  0_i32, 1_i32),
-            Vector4::new(-1_i32, -1_i32,  0_i32, 1_i32),
-            Vector4::new( 1_i32, -1_i32,  0_i32, 1_i32),
-            Vector4::new( 0_i32,  0_i32,  0_i32, 1_i32),
+            Vector4::new( 1_i32,  1_i32, 0_i32, 1_i32),
+            Vector4::new(-1_i32,  1_i32, 0_i32, 1_i32),
+            Vector4::new(-1_i32, -1_i32, 0_i32, 1_i32),
+            Vector4::new( 1_i32, -1_i32, 0_i32, 1_i32),
+            Vector4::new( 0_i32,  0_i32, 0_i32, 1_i32),
         ];
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
@@ -5400,6 +5400,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx() {
         let shear_factor = 11_i32;
@@ -5429,6 +5430,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 11_i32;
@@ -5457,6 +5459,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz() {
         let shear_factor = 11_i32;
@@ -5486,6 +5489,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_shearing_plane() {
         let shear_factor = 11_i32;
@@ -5514,6 +5518,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx() {
         let shear_factor = 11_i32;
@@ -5543,6 +5548,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_shearing_plane() {
         let shear_factor = 11_i32;
@@ -5571,6 +5577,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy() {
         let shear_factor = 11_i32;
@@ -5600,6 +5607,7 @@ mod matrix4x4_affine_shear_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_shearing_plane() {
         let shear_factor = 11_i32;
@@ -5706,13 +5714,14 @@ mod matrix4x4_affine_shear_tests {
 mod matrix4x4_affine_shear_coordinate_plane_tests {
     use cglinalg_core::{
         Matrix4x4,
-        Vector4,
         Point3,
-        Vector3,
         Unit,
+        Vector3,
+        Vector4,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
         let shear_factor = 11_f64;
@@ -5745,6 +5754,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 11_f64;
@@ -5779,6 +5789,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz() {
         let shear_factor = 11_f64;
@@ -5811,6 +5822,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_shearing_plane() {
         let shear_factor = 11_f64;
@@ -5819,11 +5831,11 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         let normal = Unit::from_value(Vector3::unit_z());
         let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let vertices = [
-            Vector4::new( 1_f64,  1_f64,  0_f64, 1_f64),
-            Vector4::new(-1_f64,  1_f64,  0_f64, 1_f64),
-            Vector4::new(-1_f64, -1_f64,  0_f64, 1_f64),
-            Vector4::new( 1_f64, -1_f64,  0_f64, 1_f64),
-            Vector4::new( 0_f64,  0_f64,  0_f64, 1_f64),
+            Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
+            Vector4::new(-1_f64,  1_f64, 0_f64, 1_f64),
+            Vector4::new(-1_f64, -1_f64, 0_f64, 1_f64),
+            Vector4::new( 1_f64, -1_f64, 0_f64, 1_f64),
+            Vector4::new( 0_f64,  0_f64, 0_f64, 1_f64),
         ];
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
@@ -5845,6 +5857,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx() {
         let shear_factor = 11_f64;
@@ -5877,6 +5890,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 11_f64;
@@ -5911,6 +5925,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz() {
         let shear_factor = 11_f64;
@@ -5943,6 +5958,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_shearing_plane() {
         let shear_factor = 11_f64;
@@ -5977,6 +5993,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx() {
         let shear_factor = 11_f64;
@@ -6009,6 +6026,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_shearing_plane() {
         let shear_factor = 11_f64;
@@ -6043,6 +6061,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy() {
         let shear_factor = 11_f64;
@@ -6075,6 +6094,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_shearing_plane() {
         let shear_factor = 11_f64;
@@ -6112,23 +6132,21 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
 
 
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
-/// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`, 
+/// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`,
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
 #[cfg(test)]
 mod matrix4x4_affine_shear_noncoordinate_plane_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Matrix4x4,
+        Point3,
+        Unit,
+        Vector3,
+        Vector4,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
-    };
-    use cglinalg_core::{
-        Vector3,
-        Vector4,
-        Matrix4x4,
-        Unit,
-        Point3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -6145,7 +6163,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Unit::from_value(Vector3::new(
             2_f64 / f64::sqrt(17_f64), 
             3_f64 / f64::sqrt(17_f64),
-            2_f64 / f64::sqrt(17_f64)
+            2_f64 / f64::sqrt(17_f64),
         ))
     }
 
@@ -6154,7 +6172,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Unit::from_value(Vector3::new(
             0_f64, 
            -2_f64 / f64::sqrt(13_f64),
-            3_f64 / f64::sqrt(13_f64)
+            3_f64 / f64::sqrt(13_f64),
        ))
     }
 
@@ -6177,20 +6195,20 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     #[rustfmt::skip]
     fn rotation_x_yz() -> Matrix4x4<f64> {
         Matrix4x4::new(
-            1_f64,  0_f64,                           0_f64,                          0_f64,
+            1_f64,  0_f64,                     0_f64,                     0_f64,
             0_f64,  f64::sqrt(9_f64 / 13_f64), f64::sqrt(4_f64 / 13_f64), 0_f64,
             0_f64, -f64::sqrt(4_f64 / 13_f64), f64::sqrt(9_f64 / 13_f64), 0_f64,
-            0_f64,  0_f64,                           0_f64,                          1_f64
+            0_f64,  0_f64,                     0_f64,                     1_f64,
         )
     }
 
     #[rustfmt::skip]
     fn rotation_x_yz_inv() -> Matrix4x4<f64> {
         Matrix4x4::new(
-            1_f64, 0_f64,                            0_f64,                          0_f64,
+            1_f64, 0_f64,                      0_f64,                     0_f64,
             0_f64, f64::sqrt(9_f64 / 13_f64), -f64::sqrt(4_f64 / 13_f64), 0_f64,
             0_f64, f64::sqrt(4_f64 / 13_f64),  f64::sqrt(9_f64 / 13_f64), 0_f64,
-            0_f64, 0_f64,                            0_f64,                          1_f64
+            0_f64, 0_f64,                      0_f64,                     1_f64,
         )
     }
 
@@ -6199,8 +6217,8 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
            -f64::sqrt(13_f64 / 17_f64), f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
-            0_f64,                            0_f64,                           1_f64, 0_f64,
-            0_f64,                            0_f64,                           0_f64, 1_f64
+            0_f64,                      0_f64,                      1_f64, 0_f64,
+            0_f64,                      0_f64,                      0_f64, 1_f64,
        )
     }
 
@@ -6209,10 +6227,11 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  -f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
             f64::sqrt(13_f64 / 17_f64),  f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
-            0_f64,                             0_f64,                           1_f64, 0_f64,
-            0_f64,                             0_f64,                           0_f64, 1_f64
+            0_f64,                       0_f64,                      1_f64, 0_f64,
+            0_f64,                       0_f64,                      0_f64, 1_f64,
         )
     }
+
 
     #[rustfmt::skip]
     fn rotation() -> Matrix4x4<f64> {
@@ -6240,7 +6259,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
@@ -6270,7 +6289,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
@@ -6282,7 +6301,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             1_f64,        0_f64, 0_f64, 0_f64,
             0_f64,        1_f64, 0_f64, 0_f64,
             shear_factor, 0_f64, 1_f64, 0_f64,
-            0_f64,        0_f64, 0_f64, 1_f64
+            0_f64,        0_f64, 0_f64, 1_f64,
         )
     }
 
@@ -6290,16 +6309,16 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     #[test]
     fn test_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
-        
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64),  epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64),  epsilon = 1e-10);
+
+        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
     }
 
     #[test]
     fn test_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
-        
-        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64),  epsilon = 1e-10);
+
+        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64), epsilon = 1e-10);
         assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), epsilon = 1e-10);
     }
 
@@ -6347,7 +6366,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
-    
+
     #[test]
     fn test_from_affine_shear_rotation() {
         let expected = rotation();
@@ -6375,7 +6394,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let origin_xz = Vector4::new(f64::sqrt(17_f64), 0_f64, 0_f64, 1_f64);
         let expected = origin;
         let result = {
-            let _origin = origin.to_vector().extend(1_f64);  
+            let _origin = origin.to_vector().extend(1_f64);
             let _origin_xz = translation * rotation * origin_xz;
             Point3::new(_origin_xz[0], _origin_xz[1], _origin_xz[2])
         };
@@ -6409,56 +6428,57 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_coordinates_vertices() {
         let vertices = [
-            Vector4::new( 
-                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+            Vector4::new(
+                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
+                -f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
         ];
         let translation = translation();
@@ -6484,7 +6504,8 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result[6], vertices[6], epsilon = 1e-10);
         assert_relative_eq!(result[7], vertices[7], epsilon = 1e-10);
     }
-    
+
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_vertices() {
         let shear_factor = shear_factor();
@@ -6493,103 +6514,103 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let normal = normal();
         let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let vertices = [
-            Vector4::new( 
-                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+            Vector4::new(
+                -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
+                -f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                 f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
-                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64)  + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
+                -f64::sqrt(9_f64 / 13_f64)  + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
+                 1_f64,
             ),
         ];
         let expected = [
             Vector4::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64)  + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64)  + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64)  + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64)  + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64)  - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64)  - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64)  - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64)  - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64)  + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64)  + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64)  + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64)  + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
+                 1_f64,
             ),
             Vector4::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                1_f64
+                 1_f64,
             ),
             Vector4::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
-                 1_f64
+                 1_f64,
             ),
         ];
         let result = vertices.map(|v| matrix * v);
@@ -6604,6 +6625,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_matrix() {
         let shear_factor = shear_factor();
@@ -6635,11 +6657,11 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
                 c0r0, c0r1, c0r2, c0r3,
                 c1r0, c1r1, c1r2, c1r3,
                 c2r0, c2r1, c2r2, c2r3,
-                c3r0, c3r1, c3r2, c3r3
+                c3r0, c3r1, c3r2, c3r3,
             )
         };
         let result = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -6678,33 +6700,33 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod matrix4x4_trace_determinant_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
-        Vector3,
         Unit,
-    };
-    use approx::{
-        assert_relative_eq,
+        Vector3,
     };
 
     fn shear_factor() -> f64 {
         -372203_f64
     }
 
+    #[rustfmt::skip]
     fn direction() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
+            f64::sqrt(1_f64 / 3_f64), 
+            f64::sqrt(1_f64 / 3_f64), 
             f64::sqrt(1_f64 / 3_f64),
-            f64::sqrt(1_f64 / 3_f64),
-            f64::sqrt(1_f64 / 3_f64)
         ))
     }
 
+    #[rustfmt::skip]
     fn normal() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
              f64::sqrt(1_f64 / 6_f64),
              f64::sqrt(1_f64 / 6_f64),
-            -f64::sqrt(4_f64 / 6_f64)
+            -f64::sqrt(4_f64 / 6_f64),
         ))
     }
 
@@ -6717,6 +6739,7 @@ mod matrix4x4_trace_determinant_tests {
         Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal)
     }
 
+    #[rustfmt::skip]
     fn expected_matrix() -> Matrix4x4<f64> {
         let shear_factor = shear_factor();
 
@@ -6744,7 +6767,7 @@ mod matrix4x4_trace_determinant_tests {
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
@@ -6809,10 +6832,10 @@ mod matrix4x4_trace_determinant_tests {
 #[cfg(test)]
 mod matrix1x2_tests {
     use cglinalg_core::{
-        Vector1,
-        Vector2,
         Matrix1x2,
         Matrix2x2,
+        Vector1,
+        Vector2,
     };
 
 
@@ -6998,10 +7021,10 @@ mod matrix1x2_tests {
 #[cfg(test)]
 mod matrix1x3_tests {
     use cglinalg_core::{
-        Vector1,
-        Vector3,
         Matrix1x3,
         Matrix3x3,
+        Vector1,
+        Vector3,
     };
 
 
@@ -7190,10 +7213,10 @@ mod matrix1x3_tests {
 #[cfg(test)]
 mod matrix1x4_tests {
     use cglinalg_core::{
-        Vector1,
-        Vector4,
         Matrix1x4,
         Matrix4x4,
+        Vector1,
+        Vector4,
     };
 
 
@@ -7383,16 +7406,15 @@ mod matrix1x4_tests {
 }
 
 
-
 #[cfg(test)]
 mod matrix2x3_tests {
     use cglinalg_core::{
-        Vector3,
-        Vector2,
         Matrix2x2,
         Matrix2x3,
         Matrix3x2,
         Matrix3x3,
+        Vector2,
+        Vector3,
     };
 
 
@@ -7400,9 +7422,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -7417,9 +7439,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -7435,9 +7457,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[3][0], matrix[3][0]);
@@ -7448,9 +7470,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][2], matrix[0][2]);
@@ -7461,9 +7483,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[3][2], matrix[3][2]);
@@ -7474,9 +7496,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -7487,9 +7509,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -7500,9 +7522,9 @@ mod matrix2x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -7512,9 +7534,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix2x3::new(
-            2_i32, 3_i32, 
+            2_i32, 3_i32,
             4_i32, 5_i32,
-            6_i32, 7_i32
+            6_i32, 7_i32,
         );
         let identity = Matrix3x3::identity();
 
@@ -7525,9 +7547,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix2x3::new(
-            33_i32,  54_i32, 
+            33_i32,  54_i32,
             19_i32,  5_i32,
-            793_i32, 23_i32
+            793_i32, 23_i32,
         );
         let zero_matrix3x3 = Matrix3x3::zero();
         let zero_matrix2x3 = Matrix2x3::zero();
@@ -7539,9 +7561,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix2x3::new(
-            33_i32,  54_i32, 
+            33_i32,  54_i32,
             19_i32,  5_i32,
-            234_i32, 98_i32
+            234_i32, 98_i32,
         );
         let zero = 0_i32;
         let zero_matrix2x3 = Matrix2x3::zero();
@@ -7553,22 +7575,22 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let matrix2x3 = Matrix2x3::new(
-            2_i32, 3_i32, 
-            4_i32, 5_i32, 
-            6_i32, 7_i32
+            2_i32, 3_i32,
+            4_i32, 5_i32,
+            6_i32, 7_i32,
         );
         let matrix3x3 = Matrix3x3::new(
-            1_i32, 2_i32, 3_i32, 
+            1_i32, 2_i32, 3_i32,
             4_i32, 5_i32, 8_i32,
-            7_i32, 8_i32, 9_i32
+            7_i32, 8_i32, 9_i32,
         );
         let expected = Matrix2x3::new(
-            28_i32,  34_i32, 
-            76_i32,  93_i32, 
-            100_i32, 124_i32    
+            28_i32,  34_i32,
+            76_i32,  93_i32,
+            100_i32, 124_i32,
         );
         let result = matrix2x3 * matrix3x3;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -7576,20 +7598,20 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix2x3 = Matrix2x3::new(
-            2_i32, 3_i32, 
-            4_i32, 5_i32, 
-            6_i32, 7_i32
+            2_i32, 3_i32,
+            4_i32, 5_i32,
+            6_i32, 7_i32,
         );
         let matrix3x2 = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 8_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 8_i32,
         );
         let expected = Matrix2x2::new(
-            28_i32,  34_i32, 
-            76_i32,  93_i32
+            28_i32,  34_i32,
+            76_i32,  93_i32,
         );
         let result = matrix2x3 * matrix3x2;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -7597,9 +7619,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_multiplication3() {
         let matrix2x3 = Matrix2x3::new(
-            4_i32, 5_i32, 
-            6_i32, 7_i32, 
-            8_i32, 9_i32
+            4_i32, 5_i32,
+            6_i32, 7_i32,
+            8_i32, 9_i32,
         );
         let vector = Vector3::new(9_i32, 6_i32, -12_i32);
         let expected = Vector2::new(-24_i32, -21_i32);
@@ -7612,15 +7634,15 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix2x3 = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 7_i32
+            5_i32, 7_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix2x3::new(
             13_i32, 26_i32,
             39_i32, 52_i32,
-            65_i32, 91_i32
+            65_i32, 91_i32,
         );
         let result = matrix2x3 * scalar;
 
@@ -7631,15 +7653,15 @@ mod matrix2x3_tests {
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix2x3 = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 7_i32
+            5_i32, 7_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix2x3::new(
             13_i32, 26_i32,
             39_i32, 52_i32,
-            65_i32, 91_i32
+            65_i32, 91_i32,
         );
         let result = scalar * matrix2x3;
 
@@ -7651,9 +7673,9 @@ mod matrix2x3_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix2x3 = Matrix2x3::zero();
         let matrix = Matrix2x3::new(
-            3684_i32, 42746_i32, 
-            345_i32,  546_i32,  
-            76_i32,   167_i32
+            3684_i32, 42746_i32,
+            345_i32,  546_i32,
+            76_i32,   167_i32,
         );
 
         assert_eq!(matrix + zero_matrix2x3, matrix);
@@ -7664,9 +7686,9 @@ mod matrix2x3_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix2x3 = Matrix2x3::zero();
         let matrix = Matrix2x3::new(
-            3684_i32, 42746_i32, 
-            345_i32,  546_i32,  
-            76_i32,   167_i32
+            3684_i32, 42746_i32,
+            345_i32,  546_i32,
+            76_i32,   167_i32,
         );
 
         assert_eq!(zero_matrix2x3 + matrix, matrix);
@@ -7676,19 +7698,19 @@ mod matrix2x3_tests {
     #[test]
     fn test_addition() {
         let matrix1 = Matrix2x3::new(
-            23_i32,  76_i32, 
+            23_i32,  76_i32,
             89_i32,  34_i32,
-            324_i32, 75_i32
+            324_i32, 75_i32,
         );
         let matrix2 = Matrix2x3::new(
-            1_i32,  5_i32, 
+            1_i32,  5_i32,
             9_i32,  13_i32,
-            17_i32, 21_i32
+            17_i32, 21_i32,
         );
         let expected = Matrix2x3::new(
-            24_i32,  81_i32, 
+            24_i32,  81_i32,
             98_i32,  47_i32,
-            341_i32, 96_i32
+            341_i32, 96_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -7699,20 +7721,19 @@ mod matrix2x3_tests {
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix2x3::new(
-            3_i32, 6_i32, 
-            9_i32, 12_i32,
-            15_i32, 18_i32
-            
+            3_i32,  6_i32,
+            9_i32,  12_i32,
+            15_i32, 18_i32,
         );
         let matrix2 = Matrix2x3::new(
-            1_i32,   15_i32, 
+            1_i32,   15_i32,
             29_i32,  6_i32,
             234_i32, 93_i32,
         );
         let expected = Matrix2x3::new(
-             2_i32,  -9_i32, 
-            -20_i32,  6_i32,
-            -219_i32, -75_i32
+             2_i32,   -9_i32,
+            -20_i32,   6_i32,
+            -219_i32, -75_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -7723,9 +7744,9 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix2x3::new(
-            3_i32,  6_i32, 
+            3_i32,  6_i32,
             9_i32,  12_i32,
-            15_i32, 18_i32
+            15_i32, 18_i32,
         );
         let zero_matrix2x3 = Matrix2x3::zero();
 
@@ -7736,13 +7757,13 @@ mod matrix2x3_tests {
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
         let expected = Matrix3x2::new(
             1_i32, 3_i32, 5_i32,
-            2_i32, 4_i32, 6_i32
+            2_i32, 4_i32, 6_i32,
         );
         let result = matrix.transpose();
 
@@ -7759,7 +7780,7 @@ mod matrix2x3_tests {
         let expected = Matrix2x3::new(
             1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
         let result = Matrix2x3::from_columns(&columns);
 
@@ -7775,7 +7796,7 @@ mod matrix2x3_tests {
         let expected = Matrix2x3::new(
             1_i32, 4_i32,
             2_i32, 5_i32,
-            3_i32, 6_i32
+            3_i32, 6_i32,
         );
         let result = Matrix2x3::from_rows(&rows);
 
@@ -7787,12 +7808,12 @@ mod matrix2x3_tests {
 #[cfg(test)]
 mod matrix3x2_tests {
     use cglinalg_core::{
-        Vector3,
-        Vector2,
         Matrix2x2,
         Matrix2x3,
         Matrix3x2,
         Matrix3x3,
+        Vector2,
+        Vector3,
     };
 
 
@@ -7800,8 +7821,8 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -7816,8 +7837,8 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -7833,8 +7854,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[2][0], matrix[2][0]);
@@ -7845,8 +7866,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][3], matrix[0][3]);
@@ -7857,8 +7878,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[2][3], matrix[2][3]);
@@ -7869,8 +7890,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -7881,8 +7902,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -7893,8 +7914,8 @@ mod matrix3x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 6_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 6_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -7904,8 +7925,8 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix3x2::new(
-            2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32
+            2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32,
         );
         let identity = Matrix2x2::identity();
 
@@ -7917,7 +7938,7 @@ mod matrix3x2_tests {
     fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix3x2::new(
             33_i32, 54_i32,  19_i32,
-            5_i32,  793_i32, 23_i32
+            5_i32,  793_i32, 23_i32,
         );
         let zero_matrix2x2 = Matrix2x2::zero();
         let zero_matrix3x2 = Matrix3x2::zero();
@@ -7930,7 +7951,7 @@ mod matrix3x2_tests {
     fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix3x2::new(
             33_i32, 54_i32,  19_i32,
-            5_i32,  234_i32, 98_i32
+            5_i32,  234_i32, 98_i32,
         );
         let zero = 0_i32;
         let zero_matrix3x2 = Matrix3x2::zero();
@@ -7942,19 +7963,19 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let matrix3x2 = Matrix3x2::new(
-            2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32
+            2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32,
         );
         let matrix2x2 = Matrix2x2::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             4_i32, 5_i32,
         );
         let expected = Matrix3x2::new(
-            12_i32, 15_i32, 18_i32,  
-            33_i32, 42_i32, 51_i32    
+            12_i32, 15_i32, 18_i32,
+            33_i32, 42_i32, 51_i32,
         );
         let result = matrix3x2 * matrix2x2;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -7962,21 +7983,21 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix3x2 = Matrix3x2::new(
-            2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32
+            2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32,
         );
         let matrix2x3 = Matrix2x3::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 8_i32,
         );
         let expected = Matrix3x3::new(
             12_i32, 15_i32, 18_i32,
             26_i32, 33_i32, 40_i32,
-            50_i32, 63_i32, 76_i32
+            50_i32, 63_i32, 76_i32,
         );
         let result = matrix3x2 * matrix2x3;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -7984,8 +8005,8 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_multiplication3() {
         let matrix3x2 = Matrix3x2::new(
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         let vector = Vector2::new(9_i32, -6_i32);
         let expected = Vector3::new(-6_i32, -3_i32, 0_i32);
@@ -7998,13 +8019,13 @@ mod matrix3x2_tests {
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix3x2 = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 7_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 7_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix3x2::new(
-            13_i32, 26_i32, 39_i32, 
-            52_i32, 65_i32, 91_i32
+            13_i32, 26_i32, 39_i32,
+            52_i32, 65_i32, 91_i32,
         );
         let result = matrix3x2 * scalar;
 
@@ -8015,13 +8036,13 @@ mod matrix3x2_tests {
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix3x2 = Matrix3x2::new(
-            1_i32, 2_i32, 3_i32, 
-            4_i32, 5_i32, 7_i32
+            1_i32, 2_i32, 3_i32,
+            4_i32, 5_i32, 7_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix3x2::new(
-            13_i32, 26_i32, 39_i32, 
-            52_i32, 65_i32, 91_i32
+            13_i32, 26_i32, 39_i32,
+            52_i32, 65_i32, 91_i32,
         );
         let result = scalar * matrix3x2;
 
@@ -8033,8 +8054,8 @@ mod matrix3x2_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix3x2 = Matrix3x2::zero();
         let matrix = Matrix3x2::new(
-            3684_i32, 42746_i32, 345_i32, 
-            546_i32,  76_i32,    167_i32
+            3684_i32, 42746_i32, 345_i32,
+            546_i32,  76_i32,    167_i32,
         );
 
         assert_eq!(matrix + zero_matrix3x2, matrix);
@@ -8045,8 +8066,8 @@ mod matrix3x2_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix3x2 = Matrix3x2::zero();
         let matrix = Matrix3x2::new(
-            3684_i32, 42746_i32, 345_i32, 
-            546_i32,  76_i32,    167_i32
+            3684_i32, 42746_i32, 345_i32,
+            546_i32,  76_i32,    167_i32,
         );
 
         assert_eq!(zero_matrix3x2 + matrix, matrix);
@@ -8056,16 +8077,16 @@ mod matrix3x2_tests {
     #[test]
     fn test_addition() {
         let matrix1 = Matrix3x2::new(
-            23_i32, 76_i32,  89_i32,  
-            34_i32, 324_i32, 75_i32
+            23_i32, 76_i32,  89_i32,
+            34_i32, 324_i32, 75_i32,
         );
         let matrix2 = Matrix3x2::new(
-            1_i32,  5_i32,  9_i32,  
-            13_i32, 17_i32, 21_i32
+            1_i32,  5_i32,  9_i32,
+            13_i32, 17_i32, 21_i32,
         );
         let expected = Matrix3x2::new(
             24_i32, 81_i32, 98_i32,
-            47_i32, 341_i32, 96_i32
+            47_i32, 341_i32, 96_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -8076,16 +8097,16 @@ mod matrix3x2_tests {
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix3x2::new(
-            3_i32,  6_i32,  9_i32, 
-            12_i32, 15_i32, 18_i32
+            3_i32,  6_i32,  9_i32,
+            12_i32, 15_i32, 18_i32,
         );
         let matrix2 = Matrix3x2::new(
-            1_i32, 15_i32,  29_i32,  
+            1_i32, 15_i32,  29_i32,
             6_i32, 234_i32, 93_i32,
         );
         let expected = Matrix3x2::new(
-             2_i32, -9_i32,   -20_i32, 
-             6_i32, -219_i32, -75_i32
+             2_i32, -9_i32,   -20_i32,
+             6_i32, -219_i32, -75_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -8097,7 +8118,7 @@ mod matrix3x2_tests {
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix3x2::new(
             3_i32,  6_i32,  9_i32,
-            12_i32, 15_i32, 18_i32
+            12_i32, 15_i32, 18_i32,
         );
         let zero_matrix3x2 = Matrix3x2::zero();
 
@@ -8109,12 +8130,12 @@ mod matrix3x2_tests {
     fn test_matrix_transpose() {
         let matrix = Matrix3x2::new(
             1_i32, 3_i32, 5_i32,
-            2_i32, 4_i32, 6_i32
+            2_i32, 4_i32, 6_i32,
         );
         let expected = Matrix2x3::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
-            5_i32, 6_i32
+            5_i32, 6_i32,
         );
         let result = matrix.transpose();
 
@@ -8129,7 +8150,7 @@ mod matrix3x2_tests {
         let columns = [c0, c1];
         let expected = Matrix3x2::new(
             1_i32, 2_i32, 3_i32,
-            4_i32, 5_i32, 6_i32
+            4_i32, 5_i32, 6_i32,
         );
         let result = Matrix3x2::from_columns(&columns);
 
@@ -8145,7 +8166,7 @@ mod matrix3x2_tests {
         let rows = [r0, r1, r2];
         let expected = Matrix3x2::new(
             1_i32, 3_i32, 5_i32,
-            2_i32, 4_i32, 6_i32
+            2_i32, 4_i32, 6_i32,
         );
         let result = Matrix3x2::from_rows(&rows);
 
@@ -8157,12 +8178,12 @@ mod matrix3x2_tests {
 #[cfg(test)]
 mod matrix2x4_tests {
     use cglinalg_core::{
-        Vector4,
-        Vector2,
+        Matrix2x2,
         Matrix2x4,
         Matrix4x2,
         Matrix4x4,
-        Matrix2x2,
+        Vector2,
+        Vector4,
     };
 
 
@@ -8170,10 +8191,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 6_i32,
-            7_i32, 8_i32
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -8190,10 +8211,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 6_i32,
-            7_i32, 8_i32
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -8211,10 +8232,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
+            1_i32, 2_i32,
+            3_i32, 4_i32,
             5_i32, 6_i32,
-            7_i32, 8_i32
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[4][0], matrix[4][0]);
@@ -8225,10 +8246,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 6_i32, 
-            7_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 6_i32,
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][2], matrix[0][2]);
@@ -8239,10 +8260,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 6_i32, 
-            7_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 6_i32,
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[4][2], matrix[4][2]);
@@ -8253,10 +8274,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 6_i32, 
-            7_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 6_i32,
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -8267,10 +8288,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 6_i32, 
-            7_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 6_i32,
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -8281,10 +8302,10 @@ mod matrix2x4_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
-            5_i32, 6_i32, 
-            7_i32, 8_i32
+            1_i32, 2_i32,
+            3_i32, 4_i32,
+            5_i32, 6_i32,
+            7_i32, 8_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -8294,10 +8315,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix2x4::new(
-            2_i32, 3_i32, 
+            2_i32, 3_i32,
             4_i32, 5_i32,
             6_i32, 7_i32,
-            8_i32, 9_i32
+            8_i32, 9_i32,
         );
         let identity = Matrix4x4::identity();
 
@@ -8308,10 +8329,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix2x4::new(
-            33_i32,  54_i32, 
+            33_i32,  54_i32,
             19_i32,  5_i32,
             793_i32, 23_i32,
-            49_i32,  11_i32
+            49_i32,  11_i32,
         );
         let zero_matrix4x4 = Matrix4x4::zero();
         let zero_matrix2x4 = Matrix2x4::zero();
@@ -8323,10 +8344,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_zero_matrix_times_matrix_equals_zero() {
         let matrix = Matrix2x4::new(
-            33_i32,  54_i32, 
+            33_i32,  54_i32,
             19_i32,  5_i32,
             793_i32, 23_i32,
-            49_i32,  11_i32
+            49_i32,  11_i32,
         );
         let zero_matrix2x2 = Matrix2x2::zero();
         let zero_matrix2x4 = Matrix2x4::zero();
@@ -8338,10 +8359,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix2x4::new(
-            33_i32,  54_i32, 
+            33_i32,  54_i32,
             19_i32,  5_i32,
             234_i32, 98_i32,
-            64_i32,  28_i32
+            64_i32,  28_i32,
         );
         let zero = 0_i32;
         let zero_matrix2x4 = Matrix2x4::zero();
@@ -8353,25 +8374,25 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let matrix2x4 = Matrix2x4::new(
-            2_i32, 3_i32, 
-            4_i32, 5_i32, 
+            2_i32, 3_i32,
+            4_i32, 5_i32,
             6_i32, 7_i32,
-            8_i32, 9_i32
+            8_i32, 9_i32,
         );
         let matrix4x4 = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
         let expected = Matrix2x4::new(
             60_i32,  70_i32,
             140_i32, 166_i32,
             220_i32, 262_i32,
-            300_i32, 358_i32
+            300_i32, 358_i32,
         );
         let result = matrix2x4 * matrix4x4;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -8379,10 +8400,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix2x4 = Matrix2x4::new(
-            4_i32,  5_i32, 
-            6_i32,  7_i32, 
-            8_i32,  9_i32, 
-            10_i32, 11_i32
+            4_i32,  5_i32,
+            6_i32,  7_i32,
+            8_i32,  9_i32,
+            10_i32, 11_i32,
         );
         let vector = Vector4::new(9_i32, 6_i32, -12_i32, -24_i32);
         let expected = Vector2::new(-264_i32, -285_i32);
@@ -8396,8 +8417,8 @@ mod matrix2x4_tests {
     fn test_matrix_multiplication3() {
         let matrix2x4 = Matrix2x4::new(
             2_i32, 3_i32,
-            4_i32, 5_i32, 
-            6_i32, 7_i32, 
+            4_i32, 5_i32,
+            6_i32, 7_i32,
             8_i32, 9_i32,
         );
         let vector = Vector4::new(9_i32, -6_i32, 12_i32, 4_i32);
@@ -8411,17 +8432,17 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix2x4 = Matrix2x4::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 7_i32,
-            8_i32, 9_i32
+            8_i32, 9_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix2x4::new(
             13_i32,  26_i32,
             39_i32,  52_i32,
             65_i32,  91_i32,
-            104_i32, 117_i32
+            104_i32, 117_i32,
         );
         let result = matrix2x4 * scalar;
 
@@ -8432,17 +8453,17 @@ mod matrix2x4_tests {
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix2x4 = Matrix2x4::new(
-            1_i32, 2_i32, 
+            1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 7_i32,
-            8_i32, 9_i32
+            8_i32, 9_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix2x4::new(
             13_i32,  26_i32,
             39_i32,  52_i32,
             65_i32,  91_i32,
-            104_i32, 117_i32
+            104_i32, 117_i32,
         );
         let result = scalar * matrix2x4;
 
@@ -8454,10 +8475,10 @@ mod matrix2x4_tests {
     fn test_matrix_plus_zero_equals_matrix() {
         let zero_matrix2x4 = Matrix2x4::zero();
         let matrix = Matrix2x4::new(
-            3684_i32, 42746_i32, 
-            345_i32,  546_i32,  
+            3684_i32, 42746_i32,
+            345_i32,  546_i32,
             76_i32,   167_i32,
-            415_i32,  251_i32
+            415_i32,  251_i32,
         );
 
         assert_eq!(matrix + zero_matrix2x4, matrix);
@@ -8468,10 +8489,10 @@ mod matrix2x4_tests {
     fn test_zero_plus_matrix_equals_matrix() {
         let zero_matrix2x4 = Matrix2x4::zero();
         let matrix = Matrix2x4::new(
-            3684_i32, 42746_i32, 
-            345_i32,  546_i32,  
+            3684_i32, 42746_i32,
+            345_i32,  546_i32,
             76_i32,   167_i32,
-            415_i32,  251_i32
+            415_i32,  251_i32,
         );
 
         assert_eq!(zero_matrix2x4 + matrix, matrix);
@@ -8481,22 +8502,22 @@ mod matrix2x4_tests {
     #[test]
     fn test_addition() {
         let matrix1 = Matrix2x4::new(
-            23_i32,  76_i32, 
+            23_i32,  76_i32,
             89_i32,  34_i32,
             324_i32, 75_i32,
-            614_i32, 15_i32
+            614_i32, 15_i32,
         );
         let matrix2 = Matrix2x4::new(
-            1_i32,  5_i32, 
+            1_i32,  5_i32,
             9_i32,  13_i32,
             17_i32, 21_i32,
-            87_i32, 41_i32
+            87_i32, 41_i32,
         );
         let expected = Matrix2x4::new(
-            24_i32,  81_i32, 
+            24_i32,  81_i32,
             98_i32,  47_i32,
             341_i32, 96_i32,
-            701_i32, 56_i32
+            701_i32, 56_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -8507,22 +8528,22 @@ mod matrix2x4_tests {
     #[test]
     fn test_subtraction() {
         let matrix1 = Matrix2x4::new(
-            3_i32,  6_i32, 
+            3_i32,  6_i32,
             9_i32,  12_i32,
             15_i32, 18_i32,
-            21_i32, 24_i32
+            21_i32, 24_i32,
         );
         let matrix2 = Matrix2x4::new(
-            1_i32,   15_i32, 
+            1_i32,   15_i32,
             29_i32,  6_i32,
             234_i32, 93_i32,
-            93_i32,  7_i32
+            93_i32,  7_i32,
         );
         let expected = Matrix2x4::new(
-             2_i32,   -9_i32, 
+             2_i32,   -9_i32,
             -20_i32,   6_i32,
             -219_i32, -75_i32,
-            -72_i32,   17_i32
+            -72_i32,   17_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -8533,10 +8554,10 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix2x4::new(
-            3_i32,  6_i32, 
+            3_i32,  6_i32,
             9_i32,  12_i32,
             15_i32, 18_i32,
-            21_i32, 24_i32
+            21_i32, 24_i32,
         );
         let zero_matrix2x4 = Matrix2x4::zero();
 
@@ -8547,14 +8568,14 @@ mod matrix2x4_tests {
     #[test]
     fn test_matrix_transpose() {
         let matrix = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
+            1_i32, 2_i32,
+            3_i32, 4_i32,
             5_i32, 6_i32,
-            7_i32, 8_i32
+            7_i32, 8_i32,
         );
         let expected = Matrix4x2::new(
-            1_i32, 3_i32, 5_i32, 7_i32, 
-            2_i32, 4_i32, 6_i32, 8_i32
+            1_i32, 3_i32, 5_i32, 7_i32,
+            2_i32, 4_i32, 6_i32, 8_i32,
         );
         let result = matrix.transpose();
 
@@ -8573,7 +8594,7 @@ mod matrix2x4_tests {
             1_i32, 2_i32,
             3_i32, 4_i32,
             5_i32, 6_i32,
-            7_i32, 8_i32
+            7_i32, 8_i32,
         );
         let result = Matrix2x4::from_columns(&columns);
 
@@ -8590,7 +8611,7 @@ mod matrix2x4_tests {
             1_i32, 5_i32,
             2_i32, 6_i32,
             3_i32, 7_i32,
-            4_i32, 8_i32
+            4_i32, 8_i32,
         );
         let result = Matrix2x4::from_rows(&rows);
 
@@ -8602,12 +8623,12 @@ mod matrix2x4_tests {
 #[cfg(test)]
 mod matrix4x2_tests {
     use cglinalg_core::{
-        Vector4,
-        Vector2,
         Matrix2x2,
         Matrix2x4,
         Matrix4x2,
         Matrix4x4,
+        Vector2,
+        Vector4,
     };
 
 
@@ -8615,8 +8636,8 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -8633,8 +8654,8 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -8652,8 +8673,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][4], matrix[0][4]);
@@ -8664,8 +8685,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[2][0], matrix[2][0]);
@@ -8676,8 +8697,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[2][4], matrix[2][4]);
@@ -8688,8 +8709,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -8700,8 +8721,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -8712,8 +8733,8 @@ mod matrix4x2_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            1_i32, 2_i32, 3_i32, 4_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -8723,8 +8744,8 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix4x2::new(
-            2_i32, 3_i32, 4_i32, 5_i32, 
-            6_i32, 7_i32, 8_i32, 9_i32
+            2_i32, 3_i32, 4_i32, 5_i32,
+            6_i32, 7_i32, 8_i32, 9_i32,
         );
         let identity = Matrix2x2::identity();
 
@@ -8736,7 +8757,7 @@ mod matrix4x2_tests {
     fn test_matrix_times_zero_equals_zero() {
         let matrix = Matrix4x2::new(
             33_i32, 54_i32,  19_i32, 345_i32,
-            5_i32,  793_i32, 23_i32, 324_i32
+            5_i32,  793_i32, 23_i32, 324_i32,
         );
         let zero_matrix2x2 = Matrix2x2::zero();
         let zero_matrix3x2 = Matrix4x2::zero();
@@ -8749,7 +8770,7 @@ mod matrix4x2_tests {
     fn test_zero_times_matrix_equals_zero() {
         let matrix = Matrix4x2::new(
             33_i32, 54_i32,  19_i32, 29_i32,
-            5_i32,  234_i32, 98_i32, 7_i32
+            5_i32,  234_i32, 98_i32, 7_i32,
         );
         let zero = 0_i32;
         let zero_matrix3x2 = Matrix4x2::zero();
@@ -8762,18 +8783,18 @@ mod matrix4x2_tests {
     fn test_matrix_multiplication1() {
         let matrix4x2 = Matrix4x2::new(
             2_i32, 3_i32, 4_i32, 5_i32,
-            5_i32, 6_i32, 7_i32, 8_i32
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
         let matrix2x2 = Matrix2x2::new(
-            1_i32, 2_i32, 
-            4_i32, 5_i32
+            1_i32, 2_i32,
+            4_i32, 5_i32,
         );
         let expected = Matrix4x2::new(
             12_i32, 15_i32, 18_i32, 21_i32,
-            33_i32, 42_i32, 51_i32, 60_i32
+            33_i32, 42_i32, 51_i32, 60_i32,
         );
         let result = matrix4x2 * matrix2x2;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -8781,23 +8802,23 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix4x2 = Matrix4x2::new(
-            2_i32, 3_i32, 4_i32, 5_i32, 
-            5_i32, 6_i32, 7_i32, 8_i32
+            2_i32, 3_i32, 4_i32, 5_i32,
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
         let matrix2x4 = Matrix2x4::new(
-            1_i32, 2_i32, 
-            3_i32, 4_i32, 
+            1_i32, 2_i32,
+            3_i32, 4_i32,
             5_i32, 8_i32,
-            7_i32, 10_i32
+            7_i32, 10_i32,
         );
         let expected = Matrix4x4::new(
             12_i32, 15_i32, 18_i32, 21_i32,
             26_i32, 33_i32, 40_i32, 47_i32,
             50_i32, 63_i32, 76_i32, 89_i32,
-            64_i32, 81_i32, 98_i32, 115_i32
+            64_i32, 81_i32, 98_i32, 115_i32,
         );
         let result = matrix4x2 * matrix2x4;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -8805,8 +8826,8 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_multiplication3() {
         let matrix4x2 = Matrix4x2::new(
-            4_i32, 5_i32, 6_i32,  7_i32, 
-            8_i32, 9_i32, 10_i32, 11_i32
+            4_i32, 5_i32, 6_i32,  7_i32,
+            8_i32, 9_i32, 10_i32, 11_i32,
         );
         let vector = Vector2::new(9_i32, -6_i32);
         let expected = Vector4::new(-12_i32, -9_i32, -6_i32, -3_i32);
@@ -8819,13 +8840,13 @@ mod matrix4x2_tests {
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix4x2 = Matrix4x2::new(
-            1_i32, 2_i32, 3_i32, 4_i32, 
+            1_i32, 2_i32, 3_i32, 4_i32,
             4_i32, 5_i32, 7_i32, 8_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix4x2::new(
             13_i32, 26_i32, 39_i32, 52_i32,
-            52_i32, 65_i32, 91_i32, 104_i32
+            52_i32, 65_i32, 91_i32, 104_i32,
         );
         let result = matrix4x2 * scalar;
 
@@ -8837,12 +8858,12 @@ mod matrix4x2_tests {
     fn test_scalar_matrix_multiplication() {
         let matrix4x2 = Matrix4x2::new(
             1_i32, 2_i32, 3_i32, 4_i32,
-            4_i32, 5_i32, 7_i32, 8_i32
+            4_i32, 5_i32, 7_i32, 8_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix4x2::new(
             13_i32, 26_i32, 39_i32, 52_i32,
-            52_i32, 65_i32, 91_i32, 104_i32
+            52_i32, 65_i32, 91_i32, 104_i32,
         );
         let result = scalar * matrix4x2;
 
@@ -8855,7 +8876,7 @@ mod matrix4x2_tests {
         let zero_matrix4x2 = Matrix4x2::zero();
         let matrix = Matrix4x2::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
-            546_i32,  76_i32,    167_i32, 915_i32
+            546_i32,  76_i32,    167_i32, 915_i32,
         );
 
         assert_eq!(matrix + zero_matrix4x2, matrix);
@@ -8867,7 +8888,7 @@ mod matrix4x2_tests {
         let zero_matrix4x2 = Matrix4x2::zero();
         let matrix = Matrix4x2::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
-            546_i32,  76_i32,    167_i32, 915_i32
+            546_i32,  76_i32,    167_i32, 915_i32,
         );
 
         assert_eq!(zero_matrix4x2 + matrix, matrix);
@@ -8878,15 +8899,15 @@ mod matrix4x2_tests {
     fn test_addition() {
         let matrix1 = Matrix4x2::new(
             23_i32, 76_i32,  89_i32, 11_i32,
-            34_i32, 324_i32, 75_i32, 62_i32
+            34_i32, 324_i32, 75_i32, 62_i32,
         );
         let matrix2 = Matrix4x2::new(
             1_i32,  5_i32,  9_i32,  82_i32,
-            13_i32, 17_i32, 21_i32, 6_i32
+            13_i32, 17_i32, 21_i32, 6_i32,
         );
         let expected = Matrix4x2::new(
             24_i32, 81_i32, 98_i32,  93_i32,
-            47_i32, 341_i32, 96_i32, 68_i32
+            47_i32, 341_i32, 96_i32, 68_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -8898,15 +8919,15 @@ mod matrix4x2_tests {
     fn test_subtraction() {
         let matrix1 = Matrix4x2::new(
             3_i32,  6_i32,  9_i32,  65_i32,
-            12_i32, 15_i32, 18_i32, 333_i32
+            12_i32, 15_i32, 18_i32, 333_i32,
         );
         let matrix2 = Matrix4x2::new(
             1_i32, 15_i32,  29_i32, 27_i32,
-            6_i32, 234_i32, 93_i32, 38_i32
+            6_i32, 234_i32, 93_i32, 38_i32,
         );
         let expected = Matrix4x2::new(
             2_i32, -9_i32,   -20_i32, 38_i32,
-            6_i32, -219_i32, -75_i32, 295_i32
+            6_i32, -219_i32, -75_i32, 295_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -8918,7 +8939,7 @@ mod matrix4x2_tests {
     fn test_matrix_minus_matrix_is_zero() {
         let matrix = Matrix4x2::new(
             3_i32,  6_i32,  9_i32,  12_i32,
-            12_i32, 15_i32, 18_i32, 21_i32
+            12_i32, 15_i32, 18_i32, 21_i32,
         );
         let zero_matrix3x2 = Matrix4x2::zero();
 
@@ -8930,13 +8951,13 @@ mod matrix4x2_tests {
     fn test_transpose() {
         let matrix = Matrix4x2::new(
             1_i32, 2_i32, 3_i32, 4_i32,
-            5_i32, 6_i32, 7_i32, 8_i32
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
         let expected = Matrix2x4::new(
             1_i32, 5_i32,
             2_i32, 6_i32,
             3_i32, 7_i32,
-            4_i32, 8_i32
+            4_i32, 8_i32,
         );
         let result = matrix.transpose();
 
@@ -8951,7 +8972,7 @@ mod matrix4x2_tests {
         let columns = [c0, c1];
         let expected = Matrix4x2::new(
             1_i32, 2_i32, 3_i32, 4_i32,
-            5_i32, 6_i32, 7_i32, 8_i32
+            5_i32, 6_i32, 7_i32, 8_i32,
         );
         let result = Matrix4x2::from_columns(&columns);
 
@@ -8968,7 +8989,7 @@ mod matrix4x2_tests {
         let rows = [r0, r1, r2, r3];
         let expected = Matrix4x2::new(
             1_i32, 3_i32, 5_i32, 7_i32,
-            2_i32, 4_i32, 6_i32, 8_i32
+            2_i32, 4_i32, 6_i32, 8_i32,
         );
         let result = Matrix4x2::from_rows(&rows);
 
@@ -8980,12 +9001,12 @@ mod matrix4x2_tests {
 #[cfg(test)]
 mod matrix3x4_tests {
     use cglinalg_core::{
-        Vector4,
-        Vector3,
+        Matrix3x3,
         Matrix3x4,
         Matrix4x3,
         Matrix4x4,
-        Matrix3x3,
+        Vector3,
+        Vector4,
     };
 
 
@@ -8996,7 +9017,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -9020,7 +9041,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -9045,7 +9066,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[4][0], matrix[4][0]);
@@ -9059,7 +9080,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[0][3], matrix[0][3]);
@@ -9073,7 +9094,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[4][3], matrix[4][3]);
@@ -9087,7 +9108,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -9101,7 +9122,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -9115,7 +9136,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -9128,7 +9149,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
         let identity = Matrix4x4::identity();
 
@@ -9142,7 +9163,7 @@ mod matrix3x4_tests {
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
             793_i32, 23_i32, 8_i32,
-            49_i32,  11_i32, 27_i32
+            49_i32,  11_i32, 27_i32,
         );
         let zero_matrix4x4 = Matrix4x4::zero();
         let zero_matrix3x4 = Matrix3x4::zero();
@@ -9157,7 +9178,7 @@ mod matrix3x4_tests {
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
             793_i32, 23_i32, 8_i32,
-            49_i32,  11_i32, 27_i32
+            49_i32,  11_i32, 27_i32,
         );
         let zero_matrix3x3: Matrix3x3<i32> = Matrix3x3::zero();
         let zero_matrix3x4: Matrix3x4<i32> = Matrix3x4::zero();
@@ -9172,7 +9193,7 @@ mod matrix3x4_tests {
             33_i32,  54_i32, 234_i32,
             19_i32,  5_i32,  308_i32,
             793_i32, 23_i32, 8_i32,
-            49_i32,  11_i32, 27_i32
+            49_i32,  11_i32, 27_i32,
         );
         let zero = 0_i32;
         let zero_matrix3x4 = Matrix3x4::zero();
@@ -9184,25 +9205,25 @@ mod matrix3x4_tests {
     #[test]
     fn test_matrix_multiplication1() {
         let matrix3x4 = Matrix3x4::new(
-            2_i32,  3_i32,  4_i32, 
+            2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,
             8_i32,  9_i32,  10_i32,
-            11_i32, 12_i32, 13_i32
+            11_i32, 12_i32, 13_i32,
         );
         let matrix4x4 = Matrix4x4::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
             9_i32,  10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32, 16_i32
+            13_i32, 14_i32, 15_i32, 16_i32,
         );
         let expected = Matrix3x4::new(
             80_i32,  90_i32,  100_i32,
             184_i32, 210_i32, 236_i32,
             288_i32, 330_i32, 372_i32,
-            392_i32, 450_i32, 508_i32
+            392_i32, 450_i32, 508_i32,
         );
         let result = matrix3x4 * matrix4x4;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -9210,10 +9231,10 @@ mod matrix3x4_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix3x4 = Matrix3x4::new(
-            4_i32,  5_i32,  6_i32, 
-            7_i32,  8_i32,  9_i32, 
+            4_i32,  5_i32,  6_i32,
+            7_i32,  8_i32,  9_i32,
             10_i32, 11_i32, 12_i32,
-            13_i32, 14_i32, 15_i32
+            13_i32, 14_i32, 15_i32,
         );
         let vector = Vector4::new(9_i32, 6_i32, -12_i32, -24_i32);
         let expected = Vector3::new(-354_i32, -375_i32, -396_i32);
@@ -9226,20 +9247,20 @@ mod matrix3x4_tests {
     #[test]
     fn test_matrix_multiplication3() {
         let matrix3x4 = Matrix3x4::new(
-            2_i32,  3_i32,  4_i32, 
-            5_i32,  6_i32,  7_i32, 
+            2_i32,  3_i32,  4_i32,
+            5_i32,  6_i32,  7_i32,
             8_i32,  9_i32,  10_i32,
-            11_i32, 12_i32, 13_i32
+            11_i32, 12_i32, 13_i32,
         );
         let matrix4x3 = Matrix4x3::new(
-            9_i32, -6_i32,  12_i32, 4_i32,
-            35_i32,	96_i32,	27_i32, 4_i32,
-            87_i32,	8_i32,  80_i32, 70_i32
+            9_i32,  -6_i32,  12_i32, 4_i32,
+            35_i32,  96_i32, 27_i32, 4_i32,
+            87_i32,  8_i32,  80_i32, 70_i32,
         );
         let expected = Matrix3x3::new(
             128_i32,  147_i32,  166_i32,
             810_i32,  972_i32,  1134_i32,
-            1624_i32, 1869_i32, 2114_i32
+            1624_i32, 1869_i32, 2114_i32,
         );
         let result = matrix3x4 * matrix4x3;
 
@@ -9253,14 +9274,14 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix3x4::new(
-            13_i32,  26_i32,  39_i32, 
+            13_i32,  26_i32,  39_i32,
             52_i32,  65_i32,  78_i32,
             91_i32,  104_i32, 117_i32,
-            130_i32, 143_i32, 156_i32 
+            130_i32, 143_i32, 156_i32,
         );
         let result = matrix3x4 * scalar;
 
@@ -9274,14 +9295,14 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix3x4::new(
-            13_i32,  26_i32,  39_i32, 
+            13_i32,  26_i32,  39_i32,
             52_i32,  65_i32,  78_i32,
             91_i32,  104_i32, 117_i32,
-            130_i32, 143_i32, 156_i32 
+            130_i32, 143_i32, 156_i32,
         );
         let result = scalar * matrix3x4;
 
@@ -9296,7 +9317,7 @@ mod matrix3x4_tests {
             3684_i32, 42746_i32, 2389_i32,
             345_i32,  546_i32,   234_i32,
             76_i32,   167_i32,   890_i32,
-            415_i32,  251_i32,   2340_i32
+            415_i32,  251_i32,   2340_i32,
         );
 
         assert_eq!(matrix + zero_matrix3x4, matrix);
@@ -9310,7 +9331,7 @@ mod matrix3x4_tests {
             3684_i32, 42746_i32, 2389_i32,
             345_i32,  546_i32,   234_i32,
             76_i32,   167_i32,   890_i32,
-            415_i32,  251_i32,   2340_i32
+            415_i32,  251_i32,   2340_i32,
         );
 
         assert_eq!(zero_matrix3x4 + matrix, matrix);
@@ -9323,19 +9344,19 @@ mod matrix3x4_tests {
             23_i32,  76_i32,  45_i32,
             89_i32,  34_i32, -21_i32,
             324_i32, 75_i32, -204_i32,
-            614_i32, 15_i32,  98_i32
+            614_i32, 15_i32,  98_i32,
         );
         let matrix2 = Matrix3x4::new(
             1_i32,  5_i32,  23_i32,
             9_i32,  13_i32, 80_i32,
             17_i32, 21_i32, 3_i32,
-            87_i32, 41_i32, 34_i32
+            87_i32, 41_i32, 34_i32,
         );
         let expected = Matrix3x4::new(
             24_i32,  81_i32,  68_i32,
             98_i32,  47_i32,  59_i32,
             341_i32, 96_i32, -201_i32,
-            701_i32, 56_i32,  132_i32
+            701_i32, 56_i32,  132_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -9349,19 +9370,19 @@ mod matrix3x4_tests {
             3_i32,  6_i32,  9_i32,
             9_i32,  12_i32, 12_i32,
             15_i32, 18_i32, 15_i32,
-            21_i32, 24_i32, 18_i32
+            21_i32, 24_i32, 18_i32,
         );
         let matrix2 = Matrix3x4::new(
             1_i32,   15_i32, 10_i32,
             29_i32,  6_i32,  71_i32,
             234_i32, 93_i32, 67_i32,
-            93_i32,  7_i32,  91_i32
+            93_i32,  7_i32,  91_i32,
         );
         let expected = Matrix3x4::new(
              2_i32,   -9_i32,  -1_i32,
             -20_i32,   6_i32,  -59_i32,
             -219_i32, -75_i32, -52_i32,
-            -72_i32,   17_i32, -73_i32
+            -72_i32,   17_i32, -73_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -9375,7 +9396,7 @@ mod matrix3x4_tests {
             3_i32,  6_i32,  9_i32,
             9_i32,  12_i32, 15_i32,
             15_i32, 18_i32, 21_i32,
-            21_i32, 24_i32, 27_i32
+            21_i32, 24_i32, 27_i32,
         );
         let zero_matrix3x4 = Matrix3x4::zero();
 
@@ -9389,12 +9410,12 @@ mod matrix3x4_tests {
             1_i32, 2_i32, 3_i32,
             3_i32, 4_i32, 6_i32,
             5_i32, 6_i32, 9_i32,
-            7_i32, 8_i32, 12_i32
+            7_i32, 8_i32, 12_i32,
         );
         let expected = Matrix4x3::new(
-            1_i32, 3_i32, 5_i32, 7_i32, 
+            1_i32, 3_i32, 5_i32, 7_i32,
             2_i32, 4_i32, 6_i32, 8_i32,
-            3_i32, 6_i32, 9_i32, 12_i32
+            3_i32, 6_i32, 9_i32, 12_i32,
         );
         let result = matrix.transpose();
 
@@ -9413,7 +9434,7 @@ mod matrix3x4_tests {
             1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
             7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32
+            10_i32, 11_i32, 12_i32,
         );
         let result = Matrix3x4::from_columns(&columns);
 
@@ -9431,7 +9452,7 @@ mod matrix3x4_tests {
             1_i32, 5_i32, 9_i32,
             2_i32, 6_i32, 10_i32,
             3_i32, 7_i32, 11_i32,
-            4_i32, 8_i32, 12_i32
+            4_i32, 8_i32, 12_i32,
         );
         let result = Matrix3x4::from_rows(&rows);
 
@@ -9443,12 +9464,12 @@ mod matrix3x4_tests {
 #[cfg(test)]
 mod matrix4x3_tests {
     use cglinalg_core::{
-        Vector4,
-        Vector3,
         Matrix3x3,
         Matrix3x4,
         Matrix4x3,
         Matrix4x4,
+        Vector3,
+        Vector4,
     };
 
 
@@ -9456,9 +9477,9 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix4x3::new(
-            1_i32, 2_i32,  3_i32,  4_i32, 
+            1_i32, 2_i32,  3_i32,  4_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix[0][0], 1_i32);
@@ -9479,9 +9500,9 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_components2() {
         let matrix = Matrix4x3::new(
-            1_i32, 2_i32,  3_i32,  4_i32, 
+            1_i32, 2_i32,  3_i32,  4_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
 
         assert_eq!(matrix.c0r0, matrix[0][0]);
@@ -9503,9 +9524,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds1() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[0][4], matrix[0][4]);
@@ -9516,9 +9537,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds2() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[3][0], matrix[3][0]);
@@ -9529,9 +9550,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds3() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[3][4], matrix[3][4]);
@@ -9542,9 +9563,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds4() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[0][usize::MAX], matrix[0][usize::MAX]);
@@ -9555,9 +9576,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds5() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[usize::MAX][0], matrix[usize::MAX][0]);
@@ -9568,9 +9589,9 @@ mod matrix4x3_tests {
     #[should_panic]
     fn test_matrix_components_out_of_bounds6() {
         let matrix = Matrix4x3::new(
-            1_i32,  2_i32,  3_i32,  4_i32, 
+            1_i32,  2_i32,  3_i32,  4_i32,
             5_i32,  6_i32,  7_i32,  8_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
 
         assert_eq!(matrix[usize::MAX][usize::MAX], matrix[usize::MAX][usize::MAX]);
@@ -9580,9 +9601,9 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_times_identity_equals_matrix() {
         let matrix = Matrix4x3::new(
-            2_i32,  3_i32,  4_i32,  5_i32, 
+            2_i32,  3_i32,  4_i32,  5_i32,
             6_i32,  7_i32,  8_i32,  9_i32,
-            10_i32, 11_i32, 12_i32, 13_i32
+            10_i32, 11_i32, 12_i32, 13_i32,
         );
         let identity = Matrix3x3::identity();
 
@@ -9595,7 +9616,7 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             33_i32, 54_i32,  19_i32, 345_i32,
             5_i32,  793_i32, 23_i32, 324_i32,
-            23_i32, 98_i32,  84_i32, 89_i32
+            23_i32, 98_i32,  84_i32, 89_i32,
         );
         let zero_matrix3x3 = Matrix3x3::zero();
         let zero_matrix4x3 = Matrix4x3::zero();
@@ -9609,7 +9630,7 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             33_i32, 54_i32,  19_i32, 29_i32,
             5_i32,  234_i32, 98_i32, 7_i32,
-            23_i32, 98_i32,  84_i32, 89_i32
+            23_i32, 98_i32,  84_i32, 89_i32,
         );
         let zero = 0_i32;
         let zero_matrix4x3 = Matrix4x3::zero();
@@ -9623,20 +9644,20 @@ mod matrix4x3_tests {
         let matrix4x3 = Matrix4x3::new(
             2_i32, 3_i32,  4_i32,  5_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
         let matrix3x3 = Matrix3x3::new(
             1_i32, 2_i32, 3_i32,
-            4_i32, 5_i32, 6_i32, 
-            7_i32, 8_i32, 9_i32
+            4_i32, 5_i32, 6_i32,
+            7_i32, 8_i32, 9_i32,
         );
         let expected = Matrix4x3::new(
             39_i32,  45_i32,  51_i32,  57_i32,
             87_i32,  102_i32, 117_i32, 132_i32,
-            135_i32, 159_i32, 183_i32, 207_i32
+            135_i32, 159_i32, 183_i32, 207_i32,
         );
         let result = matrix4x3 * matrix3x3;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -9644,24 +9665,24 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_multiplication2() {
         let matrix4x3 = Matrix4x3::new(
-            2_i32, 3_i32, 4_i32,  5_i32, 
+            2_i32, 3_i32, 4_i32,  5_i32,
             5_i32, 6_i32, 7_i32,  8_i32,
-            8_i32, 9_i32, 10_i32, 11_i32
+            8_i32, 9_i32, 10_i32, 11_i32,
         );
         let matrix3x4 = Matrix3x4::new(
-            1_i32,  2_i32,  3_i32, 
+            1_i32,  2_i32,  3_i32,
             4_i32,  5_i32,  6_i32,
-            7_i32,  8_i32,  9_i32, 
-            10_i32, 11_i32, 12_i32
+            7_i32,  8_i32,  9_i32,
+            10_i32, 11_i32, 12_i32,
         );
         let expected = Matrix4x4::new(
             36_i32,  42_i32,  48_i32,  54_i32,
             81_i32,  96_i32,  111_i32, 126_i32,
             126_i32, 150_i32, 174_i32, 198_i32,
-            171_i32, 204_i32, 237_i32, 270_i32
+            171_i32, 204_i32, 237_i32, 270_i32,
         );
         let result = matrix4x3 * matrix3x4;
-        
+
         assert_eq!(result, expected);
     }
 
@@ -9669,9 +9690,9 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_multiplication3() {
         let matrix4x3 = Matrix4x3::new(
-            4_i32,  5_i32,  6_i32,  7_i32, 
+            4_i32,  5_i32,  6_i32,  7_i32,
             8_i32,  9_i32,  10_i32, 11_i32,
-            12_i32, 13_i32, 14_i32, 15_i32
+            12_i32, 13_i32, 14_i32, 15_i32,
         );
         let vector = Vector3::new(9_i32, -6_i32, 34_i32);
         let expected = Vector4::new(396_i32, 433_i32, 470_i32, 507_i32);
@@ -9684,15 +9705,15 @@ mod matrix4x3_tests {
     #[test]
     fn test_matrix_scalar_multiplication() {
         let matrix4x3 = Matrix4x3::new(
-            1_i32, 2_i32,  3_i32,  4_i32, 
+            1_i32, 2_i32,  3_i32,  4_i32,
             4_i32, 5_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix4x3::new(
             13_i32,  26_i32,  39_i32,  52_i32,
             52_i32,  65_i32,  91_i32,  104_i32,
-            117_i32, 130_i32, 143_i32, 156_i32
+            117_i32, 130_i32, 143_i32, 156_i32,
         );
         let result = matrix4x3 * scalar;
 
@@ -9703,15 +9724,15 @@ mod matrix4x3_tests {
     #[test]
     fn test_scalar_matrix_multiplication() {
         let matrix4x3 = Matrix4x3::new(
-            1_i32, 2_i32,  3_i32,  4_i32, 
+            1_i32, 2_i32,  3_i32,  4_i32,
             4_i32, 5_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
         let scalar = 13_i32;
         let expected = Matrix4x3::new(
             13_i32,  26_i32,  39_i32,  52_i32,
             52_i32,  65_i32,  91_i32,  104_i32,
-            117_i32, 130_i32, 143_i32, 156_i32
+            117_i32, 130_i32, 143_i32, 156_i32,
         );
         let result = scalar * matrix4x3;
 
@@ -9725,7 +9746,7 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32,
-            320_i32,  2430_i32,  894_i32, 324_i32
+            320_i32,  2430_i32,  894_i32, 324_i32,
         );
 
         assert_eq!(matrix + zero_matrix4x3, matrix);
@@ -9738,7 +9759,7 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             3684_i32, 42746_i32, 345_i32, 456_i32,
             546_i32,  76_i32,    167_i32, 915_i32,
-            320_i32,  2430_i32,  894_i32, 324_i32
+            320_i32,  2430_i32,  894_i32, 324_i32,
         );
 
         assert_eq!(zero_matrix4x3 + matrix, matrix);
@@ -9750,17 +9771,17 @@ mod matrix4x3_tests {
         let matrix1 = Matrix4x3::new(
             23_i32, 76_i32,  89_i32, 11_i32,
             34_i32, 324_i32, 75_i32, 62_i32,
-            88_i32, 61_i32,  45_i32, 16_i32
+            88_i32, 61_i32,  45_i32, 16_i32,
         );
         let matrix2 = Matrix4x3::new(
             1_i32,  5_i32,  9_i32,  82_i32,
             13_i32, 17_i32, 21_i32, 6_i32,
-            29_i32, 91_i32, 64_i32, 43_i32 
+            29_i32, 91_i32, 64_i32, 43_i32,
         );
         let expected = Matrix4x3::new(
             24_i32,  81_i32,  98_i32,  93_i32,
             47_i32,  341_i32, 96_i32,  68_i32,
-            117_i32, 152_i32, 109_i32, 59_i32
+            117_i32, 152_i32, 109_i32, 59_i32,
         );
         let result = matrix1 + matrix2;
 
@@ -9773,17 +9794,17 @@ mod matrix4x3_tests {
         let matrix1 = Matrix4x3::new(
             3_i32,  6_i32,  9_i32,  65_i32,
             12_i32, 15_i32, 18_i32, 333_i32,
-            28_i32, 71_i32, 4_i32,  92_i32
+            28_i32, 71_i32, 4_i32,  92_i32,
         );
         let matrix2 = Matrix4x3::new(
             1_i32, 15_i32,  29_i32, 27_i32,
             6_i32, 234_i32, 93_i32, 38_i32,
-            74_i32, 97_i32, 10_i32, 100_i32
+            74_i32, 97_i32, 10_i32, 100_i32,
         );
         let expected = Matrix4x3::new(
              2_i32,  -9_i32,   -20_i32,  38_i32,
              6_i32,  -219_i32, -75_i32,  295_i32,
-            -46_i32, -26_i32,  -6_i32,  -8_i32
+            -46_i32, -26_i32,  -6_i32,  -8_i32,
         );
         let result = matrix1 - matrix2;
 
@@ -9796,7 +9817,7 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             3_i32,  6_i32,  9_i32,  12_i32,
             12_i32, 15_i32, 18_i32, 21_i32,
-            34_i32, 17_i32, 8_i32,  84_i32
+            34_i32, 17_i32, 8_i32,  84_i32,
         );
         let zero_matrix4x3 = Matrix4x3::zero();
 
@@ -9809,13 +9830,13 @@ mod matrix4x3_tests {
         let matrix = Matrix4x3::new(
             1_i32, 2_i32,  3_i32,  4_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
         let expected = Matrix3x4::new(
             1_i32, 5_i32, 9_i32,
             2_i32, 6_i32, 10_i32,
             3_i32, 7_i32, 11_i32,
-            4_i32, 8_i32, 12_i32
+            4_i32, 8_i32, 12_i32,
         );
         let result = matrix.transpose();
 
@@ -9832,7 +9853,7 @@ mod matrix4x3_tests {
         let expected = Matrix4x3::new(
             1_i32, 2_i32,  3_i32,  4_i32,
             5_i32, 6_i32,  7_i32,  8_i32,
-            9_i32, 10_i32, 11_i32, 12_i32
+            9_i32, 10_i32, 11_i32, 12_i32,
         );
         let result = Matrix4x3::from_columns(&columns);
 
@@ -9850,11 +9871,10 @@ mod matrix4x3_tests {
         let expected = Matrix4x3::new(
             1_i32, 4_i32, 7_i32, 10_i32,
             2_i32, 5_i32, 8_i32, 11_i32,
-            3_i32, 6_i32, 9_i32, 12_i32
+            3_i32, 6_i32, 9_i32, 12_i32,
         );
         let result = Matrix4x3::from_rows(&rows);
 
         assert_eq!(result, expected);
     }
 }
-

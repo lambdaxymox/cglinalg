@@ -1,19 +1,15 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use crate::normed::{
-    Normed,
-};
+use crate::normed::Normed;
+use cglinalg_numeric::SimdScalarFloat;
 
 use core::fmt;
 use core::ops;
 
 
-/// A type that represents unit normalized values. 
+/// A type that represents unit normalized values.
 ///
-/// This type enforces the requirement that values have a unit norm. This 
-/// is useful when one needs to know the direction a vector is pointing for 
-/// operations like constructing rotations. The unit type statically enforces the 
+/// This type enforces the requirement that values have a unit norm. This
+/// is useful when one needs to know the direction a vector is pointing for
+/// operations like constructing rotations. The unit type statically enforces the
 /// requirement that an input argument be normalized. This reduces the chance of
 /// errors from passing an unnormalized vector or a zero vector into a calculation
 /// involving unit vectors.
@@ -25,9 +21,9 @@ pub struct Unit<T> {
 
 impl<T> Unit<T> {
     /// Unwraps the underlying value.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Unit,
@@ -40,12 +36,12 @@ impl<T> Unit<T> {
     /// #
     /// let vector = Vector3::new(3_f64, 5_f64, 7_f64);
     /// let expected = Vector3::new(
-    ///     3_f64 / f64::sqrt(83_f64), 
-    ///     5_f64 / f64::sqrt(83_f64), 
+    ///     3_f64 / f64::sqrt(83_f64),
+    ///     5_f64 / f64::sqrt(83_f64),
     ///     7_f64 / f64::sqrt(83_f64),
     /// );
     /// let result = Unit::from_value(vector).into_inner();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -73,9 +69,7 @@ impl<T> ops::Deref for Unit<T> {
 
     #[inline]
     fn deref(&self) -> &T {
-        unsafe { 
-            &*(self as *const Unit<T> as *const T) 
-        }
+        unsafe { &*(self as *const Unit<T> as *const T) }
     }
 }
 
@@ -112,7 +106,7 @@ where
     /// let vector: Vector3<f64> = Vector3::new(0_f64, 2_f64, 0_f64);
     /// let (wrapped, norm) = Unit::from_value_with_norm(vector);
     /// let unit_vector: &Vector3<f64> = &wrapped;
-    /// 
+    ///
     /// assert_eq!(norm, 2_f64);
     /// assert_eq!(unit_vector.norm_squared(), 1_f64, "unit_vector = {}", unit_vector);
     /// assert_eq!(unit_vector.norm(), 1_f64, "unit_vector = {}", unit_vector);
@@ -121,22 +115,20 @@ where
     pub fn from_value_with_norm(value: T) -> (Self, T::Output) {
         let norm = value.norm();
         let normalized_value = value.normalize();
-        let unit = Unit {
-            value: normalized_value,
-        };
-        
+        let unit = Unit { value: normalized_value };
+
         (unit, norm)
     }
 
-    /// Construct a new normalized unit value and return its original norm, 
-    /// provided that its norm is larger than `threshold`. 
+    /// Construct a new normalized unit value and return its original norm,
+    /// provided that its norm is larger than `threshold`.
     ///
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
     ///
     /// # Example
     ///
-    /// Here is an example where the function returns `None` because the vector 
+    /// Here is an example where the function returns `None` because the vector
     /// norm is too small.
     /// ```
     /// # use cglinalg_core::{
@@ -148,22 +140,20 @@ where
     /// let vector: Vector3<f64> = Vector3::new(0_f64, 1e-20_f64, 0_f64);
     /// let threshold = 1e-10_f64;
     /// let result = Unit::try_from_value_with_norm(vector, threshold);
-    /// 
+    ///
     /// assert!(result.is_none());
     /// ```
     #[inline]
     pub fn try_from_value_with_norm(value: T, threshold: T::Output) -> Option<(Self, T::Output)>
-    where 
-        T::Output: SimdScalarFloat, 
+    where
+        T::Output: SimdScalarFloat,
     {
         let norm_squared = value.norm_squared();
 
         if norm_squared > threshold * threshold {
             let norm = norm_squared.sqrt();
             let normalized_value = value.normalize();
-            let unit = Unit {
-                value: normalized_value,
-            };
+            let unit = Unit { value: normalized_value };
 
             Some((unit, norm))
         } else {
@@ -171,8 +161,8 @@ where
         }
     }
 
-    /// Construct a new normalized unit value, provided that its norm is 
-    /// larger than `threshold`. 
+    /// Construct a new normalized unit value, provided that its norm is
+    /// larger than `threshold`.
     ///
     /// The argument `threshold` argument exists to check for vectors that may be
     /// very close to zero length.
@@ -220,7 +210,7 @@ where
 }
 
 impl<T> approx::RelativeEq for Unit<T>
-where 
+where
     T: approx::RelativeEq,
 {
     #[inline]
@@ -235,7 +225,7 @@ where
 }
 
 impl<T> approx::UlpsEq for Unit<T>
-where 
+where
     T: approx::UlpsEq,
 {
     #[inline]
@@ -248,4 +238,3 @@ where
         T::ulps_eq(&self.value, &other.value, epsilon, max_ulps)
     }
 }
-

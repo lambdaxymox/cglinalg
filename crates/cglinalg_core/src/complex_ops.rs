@@ -1,15 +1,7 @@
-use cglinalg_complex::{
-    Complex,
-};
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use crate::normed::{
-    Normed,
-};
-use crate::unit::{
-    Unit,
-};
+use crate::normed::Normed;
+use crate::unit::Unit;
+use cglinalg_complex::Complex;
+use cglinalg_numeric::SimdScalarFloat;
 
 use core::ops;
 
@@ -23,7 +15,7 @@ where
     fn norm_squared(&self) -> Self::Output {
         self.modulus_squared()
     }
-    
+
     fn norm(&self) -> Self::Output {
         self.modulus()
     }
@@ -66,7 +58,7 @@ where
             Some(self.normalize())
         }
     }
-        
+
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
         let norm = self.modulus();
         if norm <= threshold {
@@ -108,4 +100,3 @@ where
         Unit::from_value_unchecked(-self.into_inner())
     }
 }
-

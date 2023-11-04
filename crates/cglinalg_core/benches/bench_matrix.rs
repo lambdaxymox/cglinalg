@@ -11,22 +11,20 @@ use cglinalg_core::{
 };
 use core::ops::{
     Add,
-    Sub,
-    Mul,
     Div,
-};
-use rand::{
-    Rng, 
-    prelude::Distribution,
-    distributions::Standard,
-};
-use rand_isaac::{
-    IsaacRng,
+    Mul,
+    Sub,
 };
 use criterion::{
     criterion_group,
     criterion_main,
 };
+use rand::{
+    distributions::Standard,
+    prelude::Distribution,
+    Rng,
+};
+use rand_isaac::IsaacRng;
 
 
 fn gen_scalar<S>() -> S
@@ -39,45 +37,60 @@ where
     rng.gen()
 }
 
-fn gen_matrix2x2<S>() -> Matrix2x2<S> 
-where 
+fn gen_matrix2x2<S>() -> Matrix2x2<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
-    Matrix2x2::new(
-        rng.gen(), rng.gen(),
-        rng.gen(), rng.gen()
-    )
+
+    Matrix2x2::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
 }
 
-fn gen_matrix3x3<S>() -> Matrix3x3<S> 
-where 
+fn gen_matrix3x3<S>() -> Matrix3x3<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Matrix3x3::new(
-        rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen()
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
     )
 }
 
-fn gen_matrix4x4<S>() -> Matrix4x4<S> 
-where 
+fn gen_matrix4x4<S>() -> Matrix4x4<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Matrix4x4::new(
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen()
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
     )
 }
 
@@ -106,25 +119,73 @@ macro_rules! bench_unop(
     }
 );
 
-bench_binop!(matrix2x2_add_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, add);
-bench_binop!(matrix3x3_add_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, add);
-bench_binop!(matrix4x4_add_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, add);
+bench_binop!(
+    matrix2x2_add_matrix2x2_f32,
+    f32,
+    Matrix2x2<f32>,
+    Matrix2x2<f32>,
+    gen_matrix2x2,
+    gen_matrix2x2,
+    add
+);
+bench_binop!(
+    matrix3x3_add_matrix3x3_f32,
+    f32,
+    Matrix3x3<f32>,
+    Matrix3x3<f32>,
+    gen_matrix3x3,
+    gen_matrix3x3,
+    add
+);
+bench_binop!(
+    matrix4x4_add_matrix4x4_f32,
+    f32,
+    Matrix4x4<f32>,
+    Matrix4x4<f32>,
+    gen_matrix4x4,
+    gen_matrix4x4,
+    add
+);
 
-bench_binop!(matrix2x2_sub_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_matrix2x2, sub);
-bench_binop!(matrix3x3_sub_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_matrix3x3, sub);
-bench_binop!(matrix4x4_sub_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_matrix4x4, sub);
+bench_binop!(
+    matrix2x2_sub_matrix2x2_f32,
+    f32,
+    Matrix2x2<f32>,
+    Matrix2x2<f32>,
+    gen_matrix2x2,
+    gen_matrix2x2,
+    sub
+);
+bench_binop!(
+    matrix3x3_sub_matrix3x3_f32,
+    f32,
+    Matrix3x3<f32>,
+    Matrix3x3<f32>,
+    gen_matrix3x3,
+    gen_matrix3x3,
+    sub
+);
+bench_binop!(
+    matrix4x4_sub_matrix4x4_f32,
+    f32,
+    Matrix4x4<f32>,
+    Matrix4x4<f32>,
+    gen_matrix4x4,
+    gen_matrix4x4,
+    sub
+);
 
-bench_binop!(scalar_mul_matrix2x2_f32, f32, f32,            Matrix2x2<f32>, gen_scalar,  gen_matrix2x2, mul);
-bench_binop!(scalar_mul_matrix3x3_f32, f32, f32,            Matrix3x3<f32>, gen_scalar,  gen_matrix3x3, mul);
-bench_binop!(scalar_mul_matrix4x4_f32, f32, f32,            Matrix4x4<f32>, gen_scalar,  gen_matrix4x4, mul);
+bench_binop!(scalar_mul_matrix2x2_f32, f32, f32, Matrix2x2<f32>, gen_scalar, gen_matrix2x2, mul);
+bench_binop!(scalar_mul_matrix3x3_f32, f32, f32, Matrix3x3<f32>, gen_scalar, gen_matrix3x3, mul);
+bench_binop!(scalar_mul_matrix4x4_f32, f32, f32, Matrix4x4<f32>, gen_scalar, gen_matrix4x4, mul);
 
-bench_binop!(matrix2x2_mul_scalar_f32, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  mul);
-bench_binop!(matrix3x3_mul_scalar_f32, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  mul);
-bench_binop!(matrix4x4_mul_scalar_f32, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  mul);
+bench_binop!(matrix2x2_mul_scalar_f32, f32, Matrix2x2<f32>, f32, gen_matrix2x2, gen_scalar, mul);
+bench_binop!(matrix3x3_mul_scalar_f32, f32, Matrix3x3<f32>, f32, gen_matrix3x3, gen_scalar, mul);
+bench_binop!(matrix4x4_mul_scalar_f32, f32, Matrix4x4<f32>, f32, gen_matrix4x4, gen_scalar, mul);
 
-bench_binop!(matrix2x2_div_scalar_f32, f32, Matrix2x2<f32>, f32,          gen_matrix2x2, gen_scalar,  div);
-bench_binop!(matrix3x3_div_scalar_f32, f32, Matrix3x3<f32>, f32,          gen_matrix3x3, gen_scalar,  div);
-bench_binop!(matrix4x4_div_scalar_f32, f32, Matrix4x4<f32>, f32,          gen_matrix4x4, gen_scalar,  div);
+bench_binop!(matrix2x2_div_scalar_f32, f32, Matrix2x2<f32>, f32, gen_matrix2x2, gen_scalar, div);
+bench_binop!(matrix3x3_div_scalar_f32, f32, Matrix3x3<f32>, f32, gen_matrix3x3, gen_scalar, div);
+bench_binop!(matrix4x4_div_scalar_f32, f32, Matrix4x4<f32>, f32, gen_matrix4x4, gen_scalar, div);
 
 bench_unop!(matrix2x2_transpose_f32, f32, Matrix2x2<f32>, gen_matrix2x2, transpose);
 bench_unop!(matrix3x3_transpose_f32, f32, Matrix3x3<f32>, gen_matrix3x3, transpose);
@@ -160,4 +221,3 @@ criterion_group!(
     matrix4x4_inverse_f32,
 );
 criterion_main!(matrix_benchmarks);
-

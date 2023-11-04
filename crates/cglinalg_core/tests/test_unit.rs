@@ -1,23 +1,21 @@
 extern crate cglinalg_core;
 
 
+use approx::assert_relative_eq;
 use cglinalg_core::{
+    Quaternion,
     Unit,
     Vector1,
     Vector2,
     Vector3,
     Vector4,
-    Quaternion,
-};
-use approx::{
-    assert_relative_eq,
 };
 
 
 #[test]
 fn test_unit_vector1_unit_x() {
     let unit_x: Vector2<f64> = Vector2::unit_x();
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x);
 
     assert_eq!(norm_unit_x, 1_f64);
     assert_eq!(unit_unit_x.as_ref(), &unit_x);
@@ -26,8 +24,8 @@ fn test_unit_vector1_unit_x() {
 #[test]
 fn test_unit_vector2_unit_x() {
     let unit_x: Vector2<f64> = Vector2::unit_x();
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
-    
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x);
+
     assert_eq!(norm_unit_x, 1_f64);
     assert_eq!(unit_unit_x.as_ref(), &unit_x);
 }
@@ -36,7 +34,7 @@ fn test_unit_vector2_unit_x() {
 fn test_unit_vector2_unit_y() {
     let unit_y: Vector2<f64> = Vector2::unit_y();
     let (unit_unit_y, norm_unit_y) = Unit::from_value_with_norm(unit_y);
-    
+
     assert_eq!(norm_unit_y, 1_f64);
     assert_eq!(unit_unit_y.as_ref(), &unit_y);
 }
@@ -44,8 +42,8 @@ fn test_unit_vector2_unit_y() {
 #[test]
 fn test_unit_vector3_unit_x() {
     let unit_x: Vector3<f64> = Vector3::unit_x();
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
-    
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x);
+
     assert_eq!(norm_unit_x, 1_f64);
     assert_eq!(unit_unit_x.as_ref(), &unit_x);
 }
@@ -63,7 +61,7 @@ fn test_unit_vector3_unit_y() {
 fn test_unit_vector3_unit_z() {
     let unit_z: Vector3<f64> = Vector3::unit_z();
     let (unit_unit_z, norm_unit_z) = Unit::from_value_with_norm(unit_z);
-    
+
     assert_eq!(norm_unit_z, 1_f64);
     assert_eq!(unit_unit_z.as_ref(), &unit_z);
 }
@@ -71,10 +69,10 @@ fn test_unit_vector3_unit_z() {
 #[test]
 fn test_unit_vector4_unit_x() {
     let unit_x: Vector4<f64> = Vector4::unit_x();
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
-    
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x);
+
     assert_eq!(norm_unit_x, 1_f64);
-    assert_eq!(unit_unit_x.as_ref(), &unit_x);    
+    assert_eq!(unit_unit_x.as_ref(), &unit_x);
 }
 
 #[test]
@@ -246,10 +244,10 @@ fn test_unit_quaternion_unit_s() {
 #[test]
 fn test_unit_quaternion_unit_x() {
     let unit_x: Vector4<f64> = Vector4::unit_x();
-    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x); 
-    
+    let (unit_unit_x, norm_unit_x) = Unit::from_value_with_norm(unit_x);
+
     assert_eq!(norm_unit_x, 1_f64);
-    assert_eq!(unit_unit_x.as_ref(), &unit_x);    
+    assert_eq!(unit_unit_x.as_ref(), &unit_x);
 }
 
 #[test]

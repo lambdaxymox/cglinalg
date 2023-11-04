@@ -1016,7 +1016,7 @@ mod vector3_tests {
         let vector = Vector3::new(1_i32, 2_i32, 3_i32);
         let expected = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
         let result = vector.extend(4_i32);
-        
+
         assert_eq!(result, expected);
     }
 
@@ -1087,7 +1087,7 @@ mod vector4_tests {
 
     #[test]
     #[should_panic]
-    fn  test_vector_components_out_of_bounds1() {
+    fn test_vector_components_out_of_bounds1() {
         let vector = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
 
         assert_eq!(vector[4], vector[4]);
@@ -1095,183 +1095,279 @@ mod vector4_tests {
 
     #[test]
     #[should_panic]
-    fn  test_vector_components_out_of_bounds2() {
+    fn test_vector_components_out_of_bounds2() {
         let vector = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
 
         assert_eq!(vector[usize::MAX], vector[usize::MAX]);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition1() {
         // let c = 802.3435169_f32;
-        let vector1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let vector1 = Vector4::from((80_f32, 23.43_f32, 43.569_f32, 69.9093_f32));
         let vector2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
-        let expected = Vector4::from((vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z, vector1.w + vector2.w));
+        let expected = Vector4::from((
+            vector1.x + vector2.x,
+            vector1.y + vector2.y,
+            vector1.z + vector2.z,
+            vector1.w + vector2.w,
+        ));
         let result = vector1 + vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction1() {
         // let c = 802.3435169_f32;
-        let vector1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let vector1 = Vector4::from((80_f32, 23.43_f32, 43.569_f32, 69.9093_f32));
         let vector2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
-        let expected = Vector4::from((vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z, vector1.w - vector2.w));
+        let expected = Vector4::from((
+            vector1.x - vector2.x,
+            vector1.y - vector2.y,
+            vector1.z - vector2.z,
+            vector1.w - vector2.w,
+        ));
         let result = vector1 - vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_multiplication1() {
         let c = 802.3435169_f32;
-        let vector1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let vector1 = Vector4::from((80_f32, 23.43_f32, 43.569_f32, 69.9093_f32));
         // let vector2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
-        let expected = Vector4::from((c * vector1.x, c * vector1.y, c * vector1.z, c * vector1.w));
+        let expected = Vector4::from((
+            c * vector1.x,
+            c * vector1.y,
+            c * vector1.z,
+            c * vector1.w,
+        ));
         let result = vector1 * c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_division1() {
         let c = 802.3435169_f32;
-        let vector1 = Vector4::from((80_f32,  23.43_f32, 43.569_f32, 69.9093_f32));
+        let vector1 = Vector4::from((80_f32, 23.43_f32, 43.569_f32, 69.9093_f32));
         // let vector2 = Vector4::from((6.741_f32, 426.1_f32, 23.5724_f32, 85567.75976_f32));
-        let expected = Vector4::from((vector1.x / c, vector1.y / c, vector1.z / c, vector1.w / c));
+        let expected = Vector4::from((
+            vector1.x / c,
+            vector1.y / c,
+            vector1.z / c,
+            vector1.w / c,
+        ));
         let result = vector1 / c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition2() {
         // let c = 33.249539_f32;
         let vector1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
         let vector2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
-        let expected = Vector4::from((vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z, vector1.w + vector2.w));
+        let expected = Vector4::from((
+            vector1.x + vector2.x,
+            vector1.y + vector2.y,
+            vector1.z + vector2.z,
+            vector1.w + vector2.w,
+        ));
         let result = vector1 + vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction2() {
         // let c = 33.249539_f32;
         let vector1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
         let vector2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
-        let expected = Vector4::from((vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z, vector1.w - vector2.w));
+        let expected = Vector4::from((
+            vector1.x - vector2.x,
+            vector1.y - vector2.y,
+            vector1.z - vector2.z,
+            vector1.w - vector2.w,
+        ));
         let result = vector1 - vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_multiplication2() {
         let c = 33.249539_f32;
         let vector1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
         // let vector2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
-        let expected = Vector4::from((c * vector1.x, c * vector1.y, c * vector1.z, c * vector1.w));
+        let expected = Vector4::from((
+            c * vector1.x,
+            c * vector1.y,
+            c * vector1.z,
+            c * vector1.w,
+        ));
         let result = vector1 * c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_division2() {
         let c = 33.249539_f32;
         let vector1 = Vector4::from((27.6189_f32, 13.90_f32, 4.2219_f32, 91.11955_f32));
         // let vector2 = Vector4::from((258.083_f32, 31.70_f32, 42.17_f32, 8438.2376_f32));
-        let expected = Vector4::from((vector1.x / c, vector1.y / c, vector1.z / c, vector1.w / c));
+        let expected = Vector4::from((
+            vector1.x / c,
+            vector1.y / c,
+            vector1.z / c,
+            vector1.w / c,
+        ));
         let result = vector1 / c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition3() {
         // let c = 7.04217_f32;
         let vector1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
         let vector2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
-        let expected = Vector4::from((vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z, vector1.w + vector2.w));
+        let expected = Vector4::from((
+            vector1.x + vector2.x,
+            vector1.y + vector2.y,
+            vector1.z + vector2.z,
+            vector1.w + vector2.w,
+        ));
         let result = vector1 + vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction3() {
         // let c = 7.04217_f32;
         let vector1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
         let vector2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
-        let expected = Vector4::from((vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z, vector1.w - vector2.w));
+        let expected = Vector4::from((
+            vector1.x - vector2.x,
+            vector1.y - vector2.y,
+            vector1.z - vector2.z,
+            vector1.w - vector2.w,
+        ));
         let result = vector1 - vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_multiplication3() {
         let c = 7.04217_f32;
         let vector1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
         // let vector2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
-        let expected = Vector4::from((c * vector1.x, c * vector1.y, c * vector1.z, c * vector1.w));
+        let expected = Vector4::from((
+            c * vector1.x,
+            c * vector1.y,
+            c * vector1.z,
+            c * vector1.w,
+        ));
         let result = vector1 * c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_division3() {
         let c = 7.04217_f32;
         let vector1 = Vector4::from((70_f32, 49_f32, 95_f32, 508.5602759_f32));
         // let vector2 = Vector4::from((89.9138_f32, 36.84_f32, 427.46894_f32, 0.5796180917_f32));
-        let expected = Vector4::from((vector1.x / c, vector1.y / c, vector1.z / c, vector1.w / c));
+        let expected = Vector4::from((
+            vector1.x / c,
+            vector1.y / c,
+            vector1.z / c,
+            vector1.w / c,
+        ));
         let result = vector1 / c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_addition4() {
         // let c = 61.891390_f32;
         let vector1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
         let vector2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
-        let expected = Vector4::from((vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z, vector1.w + vector2.w));
+        let expected = Vector4::from((
+            vector1.x + vector2.x,
+            vector1.y + vector2.y,
+            vector1.z + vector2.z,
+            vector1.w + vector2.w,
+        ));
         let result = vector1 + vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_subtraction4() {
         // let c = 61.891390_f32;
         let vector1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
         let vector2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
-        let expected = Vector4::from((vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z, vector1.w - vector2.w));
+        let expected = Vector4::from((
+            vector1.x - vector2.x,
+            vector1.y - vector2.y,
+            vector1.z - vector2.z,
+            vector1.w - vector2.w,
+        ));
         let result = vector1 - vector2;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_multiplication4() {
         let c = 61.891390_f32;
         let vector1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
         // let vector2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
-        let expected = Vector4::from((c * vector1.x, c * vector1.y, c * vector1.z, c * vector1.w));
+        let expected = Vector4::from((
+            c * vector1.x,
+            c * vector1.y,
+            c * vector1.z,
+            c * vector1.w,
+        ));
         let result = vector1 * c;
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_scalar_division4() {
         let c = 61.891390_f32;
         let vector1 = Vector4::from((8827.1983_f32, 89.5049494_f32, 56.31_f32, 0.2888633714_f32));
         // let vector2 = Vector4::from((89_f32, 72_f32, 936.5_f32, 0.2888633714_f32));
-        let expected = Vector4::from((vector1.x / c, vector1.y / c, vector1.z / c, vector1.w / c));
+        let expected = Vector4::from((
+            vector1.x / c,
+            vector1.y / c,
+            vector1.z / c,
+            vector1.w / c,
+        ));
         let result = vector1 / c;
 
         assert_eq!(result, expected);
@@ -1333,7 +1429,7 @@ mod vector4_tests {
     #[test]
     fn test_vector_indices_matches_components() {
         let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
-        
+
         assert_eq!(vector.x, vector[0]);
         assert_eq!(vector.y, vector[1]);
         assert_eq!(vector.z, vector[2]);
@@ -1376,6 +1472,7 @@ mod vector4_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_norm_unit_vectors() {
         let unit_x: Vector4<f64> = Vector4::unit_x();
@@ -1384,13 +1481,13 @@ mod vector4_tests {
         let unit_w: Vector4<f64> = Vector4::unit_w();
 
         assert_eq!(unit_x.norm_squared(), 1_f64);
-        assert_eq!(unit_x.norm(), 1_f64);
+        assert_eq!(unit_x.norm(),         1_f64);
         assert_eq!(unit_y.norm_squared(), 1_f64);
-        assert_eq!(unit_y.norm(), 1_f64);
+        assert_eq!(unit_y.norm(),         1_f64);
         assert_eq!(unit_z.norm_squared(), 1_f64);
-        assert_eq!(unit_z.norm(), 1_f64);
+        assert_eq!(unit_z.norm(),         1_f64);
         assert_eq!(unit_w.norm_squared(), 1_f64);
-        assert_eq!(unit_w.norm(), 1_f64);
+        assert_eq!(unit_w.norm(),         1_f64);
     }
 
     #[test]
@@ -1419,4 +1516,3 @@ mod vector4_tests {
         assert!(result.is_none());
     }
 }
-

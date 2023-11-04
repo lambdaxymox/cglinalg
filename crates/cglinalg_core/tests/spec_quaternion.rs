@@ -1,22 +1,22 @@
+extern crate cglinalg_core;
 extern crate cglinalg_numeric;
 extern crate cglinalg_trigonometry;
-extern crate cglinalg_core;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
+use approx::{
+    abs_diff_ne,
+    relative_eq,
+    relative_ne,
 };
 use cglinalg_core::{
     Quaternion,
     Vector3,
 };
-use approx::{
-    relative_eq,
-    relative_ne,
-    abs_diff_ne,
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 
 use proptest::prelude::*;
@@ -26,10 +26,10 @@ fn strategy_quaternion_polar_from_range<S>(min_scale: S, max_scale: S, min_angle
 where
     S: SimdScalarFloat + Arbitrary,
 {
-    use cglinalg_trigonometry::Radians;
     use cglinalg_core::Unit;
+    use cglinalg_trigonometry::Radians;
 
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -56,7 +56,7 @@ fn strategy_quaternion_signed_from_abs_range<S>(min_value: S, max_value: S) -> i
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -76,7 +76,7 @@ where
         let qx = sign_qx * rescale(abs_qx, min_value, max_value);
         let qy = sign_qy * rescale(abs_qy, min_value, max_value);
         let qz = sign_qz * rescale(abs_qz, min_value, max_value);
-        
+
         Quaternion::new(qs, qx, qy, qz)
     })
 }
@@ -85,7 +85,7 @@ fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl 
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -95,7 +95,7 @@ where
     any::<S>().prop_map(move |value| {
         let sign_value = value.signum();
         let abs_value = value.abs();
-        
+
         sign_value * rescale(abs_value, min_value, max_value)
     })
 }
@@ -140,13 +140,13 @@ fn strategy_quaternion_f64_norm_squared() -> impl Strategy<Value = Quaternion<f6
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
-fn strategy_quaternion_f64_pure_unit<S>() -> impl Strategy<Value = Quaternion<S>> 
+fn strategy_quaternion_f64_pure_unit<S>() -> impl Strategy<Value = Quaternion<S>>
 where
     S: SimdScalarFloat + Arbitrary,
 {
     use cglinalg_core::Normed;
 
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -235,7 +235,7 @@ where
     Ok(())
 }
 
-        
+
 /// A scalar `0` times a quaternion should be zero.
 ///
 /// Given a quaternion `q`, it satisfies
@@ -254,7 +254,7 @@ where
     Ok(())
 }
 
-/// A zero quaternion should act as the additive unit element of a set 
+/// A zero quaternion should act as the additive unit element of a set
 /// of quaternions.
 ///
 /// Given a quaternion `q`
@@ -272,7 +272,7 @@ where
     Ok(())
 }
 
-/// A zero quaternion should act as the additive unit element of a set 
+/// A zero quaternion should act as the additive unit element of a set
 /// of quaternions.
 ///
 /// Given a quaternion `q`
@@ -291,7 +291,7 @@ where
 }
 
 
-/// Multiplying a quaternion by a scalar `1` should give the original 
+/// Multiplying a quaternion by a scalar `1` should give the original
 /// quaternion.
 ///
 /// Given a quaternion `q`
@@ -310,7 +310,7 @@ where
 }
 
 
-/// Multiplying a quaternion by a scalar `1` should give the original 
+/// Multiplying a quaternion by a scalar `1` should give the original
 /// quaternion.
 ///
 /// Given a quaternion `q`
@@ -328,11 +328,11 @@ where
     Ok(())
 }
 
-/// Given quaternions `q1` and `q2`, we should be able to use `q1` 
-/// and `q2` interchangeably with their references `&q1` and `&q2` in 
+/// Given quaternions `q1` and `q2`, we should be able to use `q1`
+/// and `q2` interchangeably with their references `&q1` and `&q2` in
 /// arithmetic expressions involving quaternions.
 ///
-/// Given quaternions `q1` and `q2`, and their references `&q1` 
+/// Given quaternions `q1` and `q2`, and their references `&q1`
 /// and `&q2`, they should satisfy
 /// ```text
 ///  q1 +  q2 == &q1 +  q2
@@ -343,10 +343,8 @@ where
 /// &q1 +  q2 == &q1 + &q2
 ///  q1 + &q2 == &q1 + &q2
 /// ```
-fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>
-) -> Result<(), TestCaseError>
+#[rustfmt::skip]
+fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -362,7 +360,7 @@ where
 }
 
 /// Quaternion addition should be commutative.
-/// 
+///
 /// Given quaternions `q1` and `q2`, we have
 /// ```text
 /// q1 + q2 == q2 + q1
@@ -376,18 +374,14 @@ where
     Ok(())
 }
 
-/// Given three quaternions of integer scalars, quaternion addition 
+/// Given three quaternions of integer scalars, quaternion addition
 /// should be associative.
 ///
 /// Given quaternions `q1`, `q2`, and `q3`, we have
 /// ```text
 /// (q1 + q2) + q3 == q1 + (q2 + q3)
 /// ```
-fn prop_quaternion_addition_associative<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_addition_associative<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -432,11 +426,11 @@ where
     Ok(())
 }
 
-/// Given quaternions `q1` and `q2`, we should be able to use `q1` and 
-/// `q2` interchangeably with their references `&q1` and `&q2` in 
+/// Given quaternions `q1` and `q2`, we should be able to use `q1` and
+/// `q2` interchangeably with their references `&q1` and `&q2` in
 /// arithmetic expressions involving quaternions.
 ///
-/// Given quaternions `q1` and `q2`, and their references `&q1` and 
+/// Given quaternions `q1` and `q2`, and their references `&q1` and
 /// `&q2`, they should satisfy
 /// ```text
 ///  q1 -  q2 == &q1 -  q2
@@ -447,13 +441,11 @@ where
 /// &q1 -  q2 == &q1 - &q2
 ///  q1 - &q2 == &q1 - &q2
 /// ```
-fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>
-) -> Result<(), TestCaseError>
+#[rustfmt::skip]
+fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{    
+{
     prop_assert_eq!( q1 -  q2, &q1 -  q2);
     prop_assert_eq!( q1 -  q2,  q1 - &q2);
     prop_assert_eq!( q1 -  q2, &q1 - &q2);
@@ -501,7 +493,7 @@ where
     Ok(())
 }
 
-/// Every nonzero quaternion over floating point scalars has an 
+/// Every nonzero quaternion over floating point scalars has an
 /// approximate multiplicative inverse.
 ///
 /// Given a quaternion `q` and its inverse `q_inv`, we have
@@ -524,12 +516,12 @@ where
     Ok(())
 }
 
-/// Exact multiplication of two scalars and a quaternion should be 
-/// compatible with multiplication of all scalars. 
+/// Exact multiplication of two scalars and a quaternion should be
+/// compatible with multiplication of all scalars.
 ///
-/// In other words, scalar multiplication of two scalars with a 
-/// quaternion should act associatively just like the multiplication 
-/// of three scalars. 
+/// In other words, scalar multiplication of two scalars with a
+/// quaternion should act associatively just like the multiplication
+/// of three scalars.
 ///
 /// Given scalars `a` and `b`, and a quaternion `q`, we have
 /// ```text
@@ -553,11 +545,7 @@ where
 /// ```text
 /// (q1 * q2) * q3 == q1 * (q2 * q3)
 /// ```
-fn prop_quaternion_multiplication_associative<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_multiplication_associative<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -572,15 +560,11 @@ where
 /// ```text
 /// (q1 + q2) * a == q1 * a + q2 * a
 /// ```
-fn prop_distribution_over_quaternion_addition<S>(
-    a: S, 
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_distribution_over_quaternion_addition<S>(a: S, q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
-    prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+{
+    prop_assert_eq!((q1 + q2) * a, q1 * a + q2 * a);
 
     Ok(())
 }
@@ -594,13 +578,13 @@ where
 fn prop_distribution_over_scalar_addition<S>(a: S, b: S, q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
+{
     prop_assert_eq!(q * (a + b), q * a + q * b);
 
     Ok(())
 }
 
-/// Multiplication of two quaternions by a scalar on the right 
+/// Multiplication of two quaternions by a scalar on the right
 /// should distribute.
 ///
 /// Given quaternions `q1` and `q2`, and a scalar `a`
@@ -610,8 +594,8 @@ where
 fn prop_distribution_over_quaternion_addition1<S>(a: S, q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{       
-    prop_assert_eq!((q1 + q2) * a,  q1 * a + q2 * a);
+{
+    prop_assert_eq!((q1 + q2) * a, q1 * a + q2 * a);
 
     Ok(())
 }
@@ -622,11 +606,7 @@ where
 /// ```text
 /// (q1 + q2) * q3 == q1 * q3 + q2 * q3
 /// ```
-fn prop_quaternion_multiplication_right_distributive<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_multiplication_right_distributive<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -641,11 +621,7 @@ where
 /// ```text
 /// q1 * (q2 + q3) == q1 * q2 + q1 * q3
 /// ```
-fn prop_quaternion_multiplication_left_distributive<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_multiplication_left_distributive<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -675,11 +651,7 @@ where
 /// ```text
 /// dot(q1, q2 + q3) == dot(q1, q2) + dot(q1, q3)
 /// ```
-fn prop_quaternion_dot_product_right_distributive<S>(
-    q1: Quaternion<S>,
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_right_distributive<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -688,18 +660,14 @@ where
     Ok(())
 }
 
-/// The dot product of quaternions over integer scalars is left 
+/// The dot product of quaternions over integer scalars is left
 /// distributive.
 ///
 /// Given quaternions `q1`, `q2`, and `q3`
 /// ```text
 /// dot(q1 + q2,  q3) == dot(q1, q3) + dot(q2, q3)
 /// ```
-fn prop_quaternion_dot_product_left_distributive<S>(
-    q1: Quaternion<S>,
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_left_distributive<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -708,19 +676,14 @@ where
     Ok(())
 }
 
-/// The dot product of quaternions over integer scalars is commutative with 
+/// The dot product of quaternions over integer scalars is commutative with
 /// scalars.
 ///
 /// Given quaternions `q1` and `q2`, and scalars `a` and `b`
 /// ```text
 /// dot(q1 * a, q2 * b) == dot(q1, q2) * (a * b)
 /// ```
-fn prop_quaternion_dot_product_times_scalars_commutative<S>(
-    a: S, 
-    b: S,
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_times_scalars_commutative<S>(a: S, b: S, q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -739,12 +702,7 @@ where
 /// ```text
 /// dot(q1, q2 * a + q3 * b) == dot(q1, q2) * a + dot(q1, q3) * b
 /// ```
-fn prop_quaternion_dot_product_right_bilinear<S>(
-    a: S, b: S,
-    q1: Quaternion<S>,
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_right_bilinear<S>(a: S, b: S, q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -763,13 +721,7 @@ where
 /// ```text
 /// dot(q1 * a + q2 * b, q3) == dot(q1, q3) * a + dot(q2, q3) * b
 /// ```
-fn prop_quaternion_dot_product_left_bilinear<S>(
-    a: S, 
-    b: S,
-    q1: Quaternion<S>,
-    q2: Quaternion<S>, 
-    q3: Quaternion<S>
-) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_left_bilinear<S>(a: S, b: S, q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -826,7 +778,7 @@ where
     Ok(())
 }
 
-/// The squared modulus of a quaternion is nonnegative. 
+/// The squared modulus of a quaternion is nonnegative.
 ///
 /// Given a quaternion `q`
 /// ```text
@@ -843,25 +795,25 @@ where
     Ok(())
 }
 
-/// The squared modulus function is point separating. In particular, if 
-/// the squared distance between two quaternions `q1` and `q2` is 
+/// The squared modulus function is point separating. In particular, if
+/// the squared distance between two quaternions `q1` and `q2` is
 /// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus_squared(q1 - q2) == 0 => q1 == q2 
+/// modulus_squared(q1 - q2) == 0 => q1 == q2
 /// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
+/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is
 /// nonzero
 /// ```text
 /// q1 != q2 => modulus_squared(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_modulus_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
-{   
+{
     let zero = S::zero();
 
     prop_assume!(q1 != q2);
@@ -871,7 +823,7 @@ where
 }
 
 /// The squared modulus function is homogeneous.
-/// 
+///
 /// Given a quaternion `q` and a scalar `c`
 /// ```text
 /// modulus_squared(q * c) == modulus_squared(q) * abs(c) * abs(c)
@@ -888,27 +840,22 @@ where
     Ok(())
 }
 
-/// The squared modulus function is point separating. In particular, if 
-/// the squared distance between two quaternions `q1` and `q2` is 
+/// The squared modulus function is point separating. In particular, if
+/// the squared distance between two quaternions `q1` and `q2` is
 /// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus_squared(q1 - q2) == 0 => q1 == q2 
+/// modulus_squared(q1 - q2) == 0 => q1 == q2
 /// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is 
+/// Equivalently, if `q1` is not equal to `q2`, then their squared distance is
 /// nonzero
 /// ```text
 /// q1 != q2 => modulus_squared(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
-fn prop_approx_modulus_squared_point_separating<S>(
-    q1: Quaternion<S>, 
-    q2: Quaternion<S>,
-    input_tolerance: S,
-    output_tolerance: S
-) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -933,7 +880,7 @@ where
     Ok(())
 }
 
-/// The [`Quaternion::magnitude_squared`] function and the [`Quaternion::modulus_squared`] 
+/// The [`Quaternion::magnitude_squared`] function and the [`Quaternion::modulus_squared`]
 /// function are synonyms. In particular, given a quaternion `q`
 /// ```text
 /// magnitude_squared(q) == modulus_squared(q)
@@ -948,7 +895,7 @@ where
     Ok(())
 }
 
-/// The modulus of a quaternion is nonnegative. 
+/// The modulus of a quaternion is nonnegative.
 ///
 /// Given a quaternion `q`
 /// ```text
@@ -965,20 +912,20 @@ where
     Ok(())
 }
 
-/// The norm function is point separating. In particular, if 
-/// the distance between two quaternions `q1` and `q2` is 
+/// The norm function is point separating. In particular, if
+/// the distance between two quaternions `q1` and `q2` is
 /// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus(q1 - q2) == 0 => q1 == q2 
+/// modulus(q1 - q2) == 0 => q1 == q2
 /// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their distance is 
+/// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
 /// q1 != q2 => modulus(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_approx_modulus_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -990,7 +937,7 @@ where
     Ok(())
 }
 
-/// The **L1** norm of a quaternion is nonnegative. 
+/// The **L1** norm of a quaternion is nonnegative.
 ///
 /// Given a quaternion `q`
 /// ```text
@@ -1007,20 +954,20 @@ where
     Ok(())
 }
 
-/// The **L1** norm function is point separating. In particular, if 
-/// the distance between two quaternions `q1` and `q2` is 
+/// The **L1** norm function is point separating. In particular, if
+/// the distance between two quaternions `q1` and `q2` is
 /// zero, then `q1 = q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// l1_norm(q1 - q2) = 0 => q1 = q2 
+/// l1_norm(q1 - q2) = 0 => q1 = q2
 /// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their distance is 
+/// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
 /// q1 != q2 => l1_norm(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
 where
@@ -1035,7 +982,7 @@ where
 }
 
 /// The quaternion **L1** norm is homogeneous.
-/// 
+///
 /// Given a quaternion `q` and a constant scalar `c`
 /// ```text
 /// l1_norm(q * c) == l1_norm(q) * abs(c)
@@ -1053,7 +1000,7 @@ where
 }
 
 /// The quaternion **L1** norm satisfies the triangle inequality.
-/// 
+///
 /// Given quaternions `q1` and `q2`
 /// ```text
 /// l1_norm(q1 + q1) <= l1_norm(q1) + l1_norm(q2)
@@ -1070,20 +1017,20 @@ where
     Ok(())
 }
 
-/// The **L1** norm function is point separating. In particular, if 
-/// the distance between two quaternions `q1` and `q2` is 
+/// The **L1** norm function is point separating. In particular, if
+/// the distance between two quaternions `q1` and `q2` is
 /// zero, then `q1 == q2`.
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// l1_norm(q1 - q2) == 0 => q1 == q2 
+/// l1_norm(q1 - q2) == 0 => q1 == q2
 /// ```
-/// Equivalently, if `q1` is not equal to `q2`, then their distance is 
+/// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
 /// q1 != q2 => l1_norm(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1141,13 +1088,13 @@ where
 }
 
 /// The quaternion exponential satisfies the following relationship.
-/// 
+///
 /// Given a quaternion `q`, let `s := scalar(q)` be the scalar part of `q`, and
 /// let `v := vector(q)` be the vector part of `q`. Then
 /// ```text
 /// exp(q) == exp(s + v) == exp(s) * exp(v)
 /// ```
-fn prop_approx_exp_scalar_vector_sum<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_exp_scalar_vector_sum<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1162,12 +1109,12 @@ where
 }
 
 /// The exponential of a quaternion is non-zero.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// exp(q) != 0
 /// ```
-fn prop_exp_quaternion_nonzero<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_exp_quaternion_nonzero<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1179,12 +1126,12 @@ where
 }
 
 /// The quaternion exponential satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// exp(q) * exp(-q) == exp(-q) * exp(q) == 1
 /// ```
-fn prop_approx_exp_quaternion_exp_negative_quaternion<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_exp_quaternion_exp_negative_quaternion<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1200,7 +1147,7 @@ where
 
 /// The scalar part of the principal value of a quaternion satisfies the following
 /// relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// scalar(ln(q)) == ln(norm(q))
@@ -1217,9 +1164,9 @@ where
     Ok(())
 }
 
-/// The principal argument of the principal value of the logarithm of a 
+/// The principal argument of the principal value of the logarithm of a
 /// quaternion lies in the range `[0, pi]`.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// 0 <= arg(ln(q)) <= pi
@@ -1236,9 +1183,9 @@ where
     Ok(())
 }
 
-/// The quaternion exponential and principal value of the quaternion logarithm 
+/// The quaternion exponential and principal value of the quaternion logarithm
 /// satisfy the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// exp(ln(q)) == q
@@ -1250,23 +1197,23 @@ where
     let lhs = q.ln().exp();
     let rhs = q;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative), "lhs = {}; rhs = {}", lhs, rhs);
+    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
 }
 
 /// The principal argument of two quaternions that differ only by a phase factor
 /// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
-/// 
-/// Given quaternions `q1` and `q2` such that `q1 := r * exp(v * angle)` and 
-/// `q2 := r * exp(v * (angle + 2 * pi * k))` where `r` is a floating point number 
+///
+/// Given quaternions `q1` and `q2` such that `q1 := r * exp(v * angle)` and
+/// `q2 := r * exp(v * (angle + 2 * pi * k))` where `r` is a floating point number
 /// and `k` is an integer
 /// ```text
 /// arg(q1) == arg(q2)
 /// ```
 /// Moreover, this indicates that the `arg` function correctly implements the fact
 /// that the principal argument is unique on the interval `[0, pi]`.
-fn prop_approx_arg_congruent<S>(q: Quaternion<S>, k: i32, tolerance: S) -> Result<(), TestCaseError> 
+fn prop_approx_arg_congruent<S>(q: Quaternion<S>, k: i32, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1277,7 +1224,7 @@ where
     let _k = cglinalg_numeric::cast(k);
     let arg_new_q = arg_q + S::two_pi() * _k;
     let angle_new_q = {
-        // NOTE: The principal argument of the quaternion is half of the angle 
+        // NOTE: The principal argument of the quaternion is half of the angle
         // of rotation, not the full angle of rotation.
         let two = S::one() + S::one();
         Radians(two * arg_new_q)
@@ -1293,12 +1240,12 @@ where
 }
 
 /// The principal argument of a quaternion is in the closed interval `[0, pi]`.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// 0 =< arg(q) <= pi
 /// ```
-fn prop_approx_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_approx_arg_range<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1312,7 +1259,7 @@ where
 
 /// The square of the positive square root of a quaternion is the original
 /// quaternion.
-/// 
+///
 /// Given a quaternion `q` such that `vector(q) != 0`
 /// ```text
 /// sqrt(q) * sqrt(q) == q
@@ -1322,10 +1269,10 @@ fn prop_approx_square_root_quaternion_squared<S>(q: Quaternion<S>, tolerance: S,
 where
     S: SimdScalarFloat,
 {
-    // Ensure that the vector part is sufficiently far from zero for the square 
+    // Ensure that the vector part is sufficiently far from zero for the square
     // root to be well-defined for `q`.
     prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_numeric::cast(1e-6)));
-    
+
     let sqrt_q = q.sqrt();
     let lhs = sqrt_q * sqrt_q;
     let rhs = q;
@@ -1335,9 +1282,9 @@ where
     Ok(())
 }
 
-/// The square of the square root of the conjugate of a quaternion is the 
+/// The square of the square root of the conjugate of a quaternion is the
 /// conjugate of the quaternion.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// sqrt(conjugate(q)) * sqrt(conjugate(q)) == conjugate(q)
@@ -1346,7 +1293,7 @@ fn prop_approx_square_root_quaternion_conjugate_squared<S>(q: Quaternion<S>, tol
 where
     S: SimdScalarFloat,
 {
-    // Ensure that the vector part is sufficiently far from zero for the square 
+    // Ensure that the vector part is sufficiently far from zero for the square
     // root to be well-defined for `q`.
     prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), epsilon = cglinalg_numeric::cast(1e-6)));
 
@@ -1360,9 +1307,9 @@ where
     Ok(())
 }
 
-/// The norm of the square root of the product of two quaternions is the product 
+/// The norm of the square root of the product of two quaternions is the product
 /// of the norms of the square roots of the two quaternions separately.
-/// 
+///
 /// Given quaternions `q1` and `q2`
 /// ```text
 /// norm(sqrt(q1 * q2)) == norm(sqrt(q2)) * norm(sqrt(q2))
@@ -1370,7 +1317,7 @@ where
 fn prop_approx_square_root_product_norm<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
-{   
+{
     let lhs = (q1 * q2).sqrt().norm();
     let rhs = q1.sqrt().norm() * q2.sqrt().norm();
 
@@ -1380,7 +1327,7 @@ where
 }
 
 /// The principal argument of the square root of a quaternion is in the range `[0, pi / 2]`.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// 0 =< arg(sqrt(q)) <= pi / 2
@@ -1398,8 +1345,8 @@ where
 }
 
 /// A pure unit quaternion always squared to `-1`.
-/// 
-/// A pure unit quaternion is a quaternion with scalar part `0`, whose vector part 
+///
+/// A pure unit quaternion is a quaternion with scalar part `0`, whose vector part
 /// is a unit vector. Pure unit quaternions satisfy the following relationship.
 /// ```text
 /// forall q in H. norm(q) == 1 and scalar(q) == 0 ==> squared(q) == -1
@@ -1410,10 +1357,10 @@ where
 /// ```
 /// whose solutions are the square roots of a quaternion `q` whose square is `-1`.
 /// In particular, the solution set is a unit two-sphere centered at the origin
-/// in the pure vector subspace of the space of quaternions. This solution set 
+/// in the pure vector subspace of the space of quaternions. This solution set
 /// includes the poles of the imaginary part of the complex plane `i` and `-i`.
-/// 
-/// In other words, pure unit quaternions are the quaternionic counterpart of 
+///
+/// In other words, pure unit quaternions are the quaternionic counterpart of
 /// imaginary numbers.
 fn prop_approx_quaternion_squared_plus_one_equals_zero_pure_unit<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1428,7 +1375,7 @@ where
 }
 
 /// The quaternionic cosine and quaternionic sine satisfu the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaterion `1`
 /// ```text
 /// cos(q) * cos(q) + sin(q) + sin(q) == 1
@@ -1446,12 +1393,12 @@ where
 }
 
 /// The quaternionic cosine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// cos(2 * q) == 2 * cos(q) * cos(q) - 1
 /// ```
-fn prop_approx_cos_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_cos_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1466,12 +1413,12 @@ where
 }
 
 /// The quaternionic sine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// sin(2 * q) == 2 * sin(q) * cos(q)
 /// ```
-fn prop_approx_sin_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_sin_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1485,7 +1432,7 @@ where
 }
 
 /// The quaternionic tangent satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// tan(2 * q) * (1 - tan(q) * tan(q)) == 2 * tan(q)
@@ -1507,12 +1454,12 @@ where
 }
 
 /// The quaternionic cosine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// cos(-q) == cos(q)
 /// ```
-fn prop_cos_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_cos_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1525,12 +1472,12 @@ where
 }
 
 /// The quaternionic sine satisfies the following the relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// sin(-q) == -sin(q)
 /// ```
-fn prop_sin_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_sin_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1543,7 +1490,7 @@ where
 }
 
 /// The quaternionic tangent satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// tan(-q) = -tan(q)
@@ -1562,7 +1509,7 @@ where
 
 /// The quaternionic hyperbolic cosine and the quaternionic hyperbolic sine
 /// satisfy the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// cosh(q) * cosh(q) - sinh(q) * sinh(q) == 1
@@ -1580,12 +1527,12 @@ where
 }
 
 /// The quaternionic hyperbolic cosine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// cosh(2 * q) == 2 * sinh(q) * sinh(q) + 1
 /// ```
-fn prop_approx_cosh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_cosh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1600,12 +1547,12 @@ where
 }
 
 /// The quaternionic hyperbolic sine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// sinh(2 * q) == 2 * sinh(q) * cosh(q)
 /// ```
-fn prop_approx_sinh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_sinh_double_angle<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1619,7 +1566,7 @@ where
 }
 
 /// The quaterionic hyperbolic tangent satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// tanh(2 * q) * (1 + tanh(q) * tanh(q)) == 2 * tanh(q)
@@ -1641,30 +1588,30 @@ where
 }
 
 /// The quaternionic hyperbolic cosine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// cosh(-q) == cosh(q)
 /// ```
-fn prop_cosh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_cosh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let lhs = (-q).cosh();
     let rhs = q.cosh();
-    
+
     prop_assert_eq!(lhs, rhs);
 
     Ok(())
 }
 
 /// The quaternionic hyperbolic sine satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// sinh(-q) == -sinh(q)
 /// ```
-fn prop_sinh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError> 
+fn prop_sinh_negative_quaternion<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1677,7 +1624,7 @@ where
 }
 
 /// The quaternionic hyperbolic tangent satisfies the following relation.
-/// 
+///
 /// Given a quaternion `q`
 /// ```text
 /// tanh(-q) == -tanh(q)
@@ -1704,7 +1651,7 @@ mod quaternion_f64_arithmetic_props {
             let q: super::Quaternion<f64> = q;
             super::prop_zero_times_quaternion_equals_zero(q)?
         }
-        
+
         #[test]
         fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_f64_any()) {
             let q: super::Quaternion<f64> = q;
@@ -1747,7 +1694,7 @@ mod quaternion_i32_arithmetic_props {
             let q: super::Quaternion<i32> = q;
             super::prop_zero_times_quaternion_equals_zero(q)?
         }
-        
+
         #[test]
         fn prop_quaternion_times_zero_equals_zero(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;
@@ -1799,7 +1746,7 @@ mod complex_f64_add_props {
 
         #[test]
         fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
-            q1 in super::strategy_quaternion_f64_any(), 
+            q1 in super::strategy_quaternion_f64_any(),
             q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
@@ -1809,7 +1756,7 @@ mod complex_f64_add_props {
 
         #[test]
         fn prop_quaternion_addition_commutative(
-            q1 in super::strategy_quaternion_f64_any(), 
+            q1 in super::strategy_quaternion_f64_any(),
             q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
@@ -1838,7 +1785,7 @@ mod quaternion_i32_add_props {
 
         #[test]
         fn prop_quaternion1_plus_quaternion2_equals_refquaternion1_plus_refquaternion2(
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -1848,7 +1795,7 @@ mod quaternion_i32_add_props {
 
         #[test]
         fn prop_quaternion_addition_commutative(
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -1858,8 +1805,8 @@ mod quaternion_i32_add_props {
 
         #[test]
         fn prop_quaternion_addition_associative(
-            q1 in super::strategy_quaternion_i32_any(), 
-            q2 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -1889,7 +1836,7 @@ mod quaternion_f64_sub_props {
 
         #[test]
         fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
-            q1 in super::strategy_quaternion_f64_any(), 
+            q1 in super::strategy_quaternion_f64_any(),
             q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
@@ -1918,7 +1865,7 @@ mod quaternion_i32_sub_props {
 
         #[test]
         fn prop_quaternion1_minus_quaternion2_equals_refquaternion1_minus_refquaternion2(
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -1935,7 +1882,7 @@ mod quaternion_f64_mul_props {
     proptest! {
         #[test]
         fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
-            c in super::strategy_scalar_f64_any(), 
+            c in super::strategy_scalar_f64_any(),
             q in super::strategy_quaternion_f64_any()
         ) {
             let c: f64 = c;
@@ -1964,7 +1911,7 @@ mod quaternion_i32_mul_props {
     proptest! {
         #[test]
         fn prop_scalar_times_quaternion_equals_quaternion_times_scalar(
-            c in super::strategy_scalar_i32_any(), 
+            c in super::strategy_scalar_i32_any(),
             q in super::strategy_quaternion_i32_any()
         ) {
             let c: i32 = c;
@@ -1974,8 +1921,8 @@ mod quaternion_i32_mul_props {
 
         #[test]
         fn prop_scalar_multiplication_compatibility(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(),
             q in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -1986,8 +1933,8 @@ mod quaternion_i32_mul_props {
 
         #[test]
         fn prop_quaternion_multiplication_associative(
-            q1 in super::strategy_quaternion_i32_any(), 
-            q2 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2011,8 +1958,8 @@ mod quaternion_i32_distributive_props {
     proptest! {
         #[test]
         fn prop_distribution_over_quaternion_addition(
-            a in super::strategy_scalar_i32_any(), 
-            q1 in super::strategy_quaternion_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2023,8 +1970,8 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_distribution_over_scalar_addition(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(),
             q in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2035,8 +1982,8 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_distribution_over_quaternion_addition1(
-            a in super::strategy_scalar_i32_any(), 
-            q1 in super::strategy_quaternion_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2047,8 +1994,8 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_quaternion_multiplication_right_distributive(
-            q1 in super::strategy_quaternion_i32_any(), 
-            q2 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2059,8 +2006,8 @@ mod quaternion_i32_distributive_props {
 
         #[test]
         fn prop_quaternion_multiplication_left_distributive(
-            q1 in super::strategy_quaternion_i32_any(), 
-            q2 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2078,7 +2025,7 @@ mod quaternion_i32_dot_product_props {
     proptest! {
         #[test]
         fn prop_quaternion_dot_product_commutative(
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2089,7 +2036,7 @@ mod quaternion_i32_dot_product_props {
         #[test]
         fn prop_quaternion_dot_product_right_distributive(
             q1 in super::strategy_quaternion_i32_any(),
-            q2 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2101,7 +2048,7 @@ mod quaternion_i32_dot_product_props {
         #[test]
         fn prop_quaternion_dot_product_left_distributive(
             q1 in super::strategy_quaternion_i32_any(),
-            q2 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2112,9 +2059,9 @@ mod quaternion_i32_dot_product_props {
 
         #[test]
         fn prop_quaternion_dot_product_times_scalars_commutative(
-            a in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
             b in super::strategy_scalar_i32_any(),
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2126,10 +2073,10 @@ mod quaternion_i32_dot_product_props {
 
         #[test]
         fn prop_quaternion_dot_product_right_bilinear(
-            a in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
             b in super::strategy_scalar_i32_any(),
             q1 in super::strategy_quaternion_i32_any(),
-            q2 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2142,10 +2089,10 @@ mod quaternion_i32_dot_product_props {
 
         #[test]
         fn prop_quaternion_dot_product_left_bilinear(
-            a in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
             b in super::strategy_scalar_i32_any(),
             q1 in super::strategy_quaternion_i32_any(),
-            q2 in super::strategy_quaternion_i32_any(), 
+            q2 in super::strategy_quaternion_i32_any(),
             q3 in super::strategy_quaternion_i32_any()
         ) {
             let a: i32 = a;
@@ -2178,7 +2125,7 @@ mod quaternion_f64_conjugation_props {
 
         #[test]
         fn prop_quaternion_conjugation_transposes_products(
-            q1 in super::strategy_quaternion_f64_any(), 
+            q1 in super::strategy_quaternion_f64_any(),
             q2 in super::strategy_quaternion_f64_any()
         ) {
             let q1: super::Quaternion<f64> = q1;
@@ -2208,7 +2155,7 @@ mod quaternion_i32_conjugation_props {
 
         #[test]
         fn prop_quaternion_conjugation_transposes_products(
-            q1 in super::strategy_quaternion_i32_any(), 
+            q1 in super::strategy_quaternion_i32_any(),
             q2 in super::strategy_quaternion_i32_any()
         ) {
             let q1: super::Quaternion<i32> = q1;
@@ -2231,7 +2178,7 @@ mod quaternion_f64_modulus_squared_props {
 
         #[test]
         fn prop_approx_modulus_squared_point_separating(
-            q1 in super::strategy_quaternion_f64_norm_squared(), 
+            q1 in super::strategy_quaternion_f64_norm_squared(),
             q2 in super::strategy_quaternion_f64_norm_squared()
         ) {
             let q1: super::Quaternion<f64> = q1;
@@ -2302,7 +2249,7 @@ mod quaternion_i32_modulus_squared_synonym_props {
             let q: super::Quaternion<i32> = q;
             super::prop_norm_squared_modulus_squared(q)?
         }
-        
+
         #[test]
         fn prop_magnitude_squared_modulus_squared(q in super::strategy_quaternion_i32_any()) {
             let q: super::Quaternion<i32> = q;

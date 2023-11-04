@@ -1,32 +1,28 @@
-use cglinalg_numeric::{
-    SimdCast,
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
 use crate::constraint::{
+    CanContract,
+    CanExtend,
     Const,
     DimAdd,
     DimSub,
-    CanExtend,
-    CanContract,
     ShapeConstraint,
 };
-use crate::normed::{
-    Normed,
-};
+use crate::normed::Normed;
+use crate::unit::Unit;
 use crate::vector::{
     Vector,
     Vector1,
     Vector2,
     Vector3,
 };
-use crate::unit::{
-    Unit,
-};
 use crate::{
     impl_coords,
     impl_coords_deref,
+};
+use cglinalg_numeric::{
+    SimdCast,
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 
 use core::fmt;
@@ -58,8 +54,8 @@ impl<S, const N: usize> Point<S, N> {
     }
 
     /// Tests whether the number of elements in the point is zero.
-    /// 
-    /// Returns `true` when the point is zero-dimensional. Returns `false` 
+    ///
+    /// Returns `true` when the point is zero-dimensional. Returns `false`
     /// otherwise.
     pub const fn is_empty(&self) -> bool {
         self.len() == 0
@@ -67,8 +63,8 @@ impl<S, const N: usize> Point<S, N> {
 
     /// The shape of the underlying array storing the point components.
     ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
+    /// The shape is the equivalent number of columns and rows of the
+    /// array as though it represents a matrix. The order of the descriptions
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
@@ -114,9 +110,9 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn try_cast<T>(&self) -> Option<Point<T, N>> 
+    pub fn try_cast<T>(&self) -> Option<Point<T, N>>
     where
-        T: SimdCast
+        T: SimdCast,
     {
         self.coords.try_cast::<T>().map(|coords| Point { coords })
     }
@@ -127,12 +123,12 @@ where
     S: Copy,
 {
     /// Construct a new point from a fill value.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// #
     /// let fill_value = 3_i32;
@@ -148,7 +144,7 @@ where
         }
     }
 
-    /// Map an operation on that acts on the coordinates of a point, returning 
+    /// Map an operation on that acts on the coordinates of a point, returning
     /// a point whose coordinates are of the new scalar type.
     ///
     /// # Example
@@ -165,13 +161,11 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn map<T, F>(&self, op: F) -> Point<T, N> 
-    where 
-        F: FnMut(S) -> T
+    pub fn map<T, F>(&self, op: F) -> Point<T, N>
+    where
+        F: FnMut(S) -> T,
     {
-        Point {
-            coords: self.coords.map(op),
-        }
+        Point { coords: self.coords.map(op) }
     }
 }
 
@@ -180,13 +174,13 @@ where
     S: SimdScalar,
 {
     /// The preferred origin of the Euclidean vector space.
-    /// 
-    /// In theory, an Euclidean space does not have a clearly defined origin. In 
+    ///
+    /// In theory, an Euclidean space does not have a clearly defined origin. In
     /// practice, it is useful to have a reference point in which to express the others
     /// as translations of it. By default, we define the origin as `[0, 0, 0]`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -198,18 +192,16 @@ where
     /// let expected = Vector3::new(1_f64, 2_f64, 3_f64);
     /// // We can express `point` as a vector representing a translation from the origin.
     /// let result = point - origin;
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn origin() -> Self {
-        Self {
-            coords: Vector::zero(),
-        }
+        Self { coords: Vector::zero() }
     }
 
-    /// Convert a vector to a point. 
-    /// 
+    /// Convert a vector to a point.
+    ///
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
@@ -229,13 +221,11 @@ where
     /// ```
     #[inline]
     pub const fn from_vector(vector: &Vector<S, N>) -> Self {
-        Self {
-            coords: *vector,
-        }
+        Self { coords: *vector }
     }
 
     /// Convert a point to a vector.
-    /// 
+    ///
     /// Points are locations in Euclidean space, whereas vectors
     /// are displacements relative to the origin in Euclidean space.
     ///
@@ -264,12 +254,12 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// #
     /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
     /// let point2 = Point3::new(4_f64, 5_f64, 6_f64);
-    /// 
+    ///
     /// assert_eq!(point1.dot(&point2), 32_f64);
     /// ```
     #[inline]
@@ -278,9 +268,9 @@ where
     }
 
     /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -289,7 +279,7 @@ where
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = 14_f64;
     /// let result = point.norm_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -297,11 +287,11 @@ where
         self.coords.norm_squared()
     }
 
-    /// Calculate the squared metric distance between two [`Point`]s with respect 
+    /// Calculate the squared metric distance between two [`Point`]s with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -311,7 +301,7 @@ where
     /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = 3_f64;
     /// let result = point1.metric_distance_squared(&point2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -320,11 +310,11 @@ where
     }
 
     /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Point::norm_squared`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -333,7 +323,7 @@ where
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = 14_f64;
     /// let result = point.magnitude_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -347,9 +337,9 @@ where
     S: SimdScalarFloat,
 {
     /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -358,7 +348,7 @@ where
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
     /// let result = point.norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -366,11 +356,11 @@ where
         self.coords.norm()
     }
 
-    /// Calculate the metric distance between two [`Point`]s with respect 
+    /// Calculate the metric distance between two [`Point`]s with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -380,7 +370,7 @@ where
     /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = f64::sqrt(3_f64);
     /// let result = point1.metric_distance(&point2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -389,11 +379,11 @@ where
     }
 
     /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Point::norm`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -402,7 +392,7 @@ where
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
     /// let result = point.norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -411,11 +401,11 @@ where
     }
 
     /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
-    /// 
+    ///
     /// This is a synonym for [`Point::norm`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -424,7 +414,7 @@ where
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
     /// let result = point.norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -459,7 +449,7 @@ where
     /// ```
     #[inline]
     pub fn extend(&self, last_element: S) -> Point<S, NPLUS1> {
-        // SAFETY: The output point has length `N + 1` with `last_element` in the 
+        // SAFETY: The output point has length `N + 1` with `last_element` in the
         // component `N` of the output vector.
         let mut result = Point::default();
         for i in 0..N {
@@ -507,13 +497,13 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Point1,
-    /// #     Point2, 
+    /// #     Point2,
     /// # };
     /// #
     /// let point = Point2::new(1_i32, 2_i32);
     /// let expected = Point1::new(1_i32);
     /// let result = point.contract();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -538,10 +528,10 @@ where
     /// Convert a homogeneous vector into a point.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point2, 
+    /// #     Point2,
     /// #     Vector3,
     /// # };
     /// #
@@ -564,7 +554,7 @@ where
             for i in 0..N {
                 result[i] = vector[i] / vector[N];
             }
-            
+
             Some(result)
         } else {
             None
@@ -609,38 +599,32 @@ impl<S, const N: usize> AsMut<[S; N]> for Point<S, N> {
 }
 
 impl<S, const N: usize> From<[S; N]> for Point<S, N>
-where 
-    S: Copy
+where
+    S: Copy,
 {
     #[inline]
     fn from(data: [S; N]) -> Self {
-        Self { 
-            coords: data.into(),
-        }
+        Self { coords: data.into() }
     }
 }
 
 impl<S, const N: usize> From<&[S; N]> for Point<S, N>
-where 
+where
     S: Copy,
 {
     #[inline]
     fn from(data: &[S; N]) -> Self {
-        Self {
-            coords: data.into(),
-        }
+        Self { coords: data.into() }
     }
 }
 
 impl<'a, S, const N: usize> From<&'a [S; N]> for &'a Point<S, N>
-where 
+where
     S: Copy,
 {
     #[inline]
     fn from(data: &'a [S; N]) -> &'a Point<S, N> {
-        unsafe { 
-            &*(data as *const [S; N] as *const Point<S, N>)
-        }
+        unsafe { &*(data as *const [S; N] as *const Point<S, N>) }
     }
 }
 
@@ -663,7 +647,7 @@ macro_rules! impl_point_index_ops {
                 &mut v[index]
             }
         }
-    }
+    };
 }
 
 impl_point_index_ops!(usize, S);
@@ -680,9 +664,7 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords + other,
-        }
+        Self::Output { coords: self.coords + other }
     }
 }
 
@@ -694,9 +676,7 @@ where
 
     #[inline]
     fn add(self, other: &Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords + other,
-        }
+        Self::Output { coords: self.coords + other }
     }
 }
 
@@ -708,9 +688,7 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords + other,
-        }
+        Self::Output { coords: self.coords + other }
     }
 }
 
@@ -722,9 +700,7 @@ where
 
     #[inline]
     fn add(self, other: &'b Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords + other,
-        }
+        Self::Output { coords: self.coords + other }
     }
 }
 
@@ -736,9 +712,7 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords - other,
-        }
+        Self::Output { coords: self.coords - other }
     }
 }
 
@@ -750,9 +724,7 @@ where
 
     #[inline]
     fn sub(self, other: &Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords - other,
-        }
+        Self::Output { coords: self.coords - other }
     }
 }
 
@@ -764,9 +736,7 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords - other,
-        }
+        Self::Output { coords: self.coords - other }
     }
 }
 
@@ -778,9 +748,7 @@ where
 
     #[inline]
     fn sub(self, other: &'b Vector<S, N>) -> Self::Output {
-        Self::Output {
-            coords: self.coords - other,
-        }
+        Self::Output { coords: self.coords - other }
     }
 }
 
@@ -840,9 +808,7 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
-        Self::Output { 
-            coords: self.coords * other,
-        }
+        Self::Output { coords: self.coords * other }
     }
 }
 
@@ -854,9 +820,7 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
-        Self::Output {
-            coords: self.coords * other,
-        }
+        Self::Output { coords: self.coords * other }
     }
 }
 
@@ -868,9 +832,7 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
-        Self::Output { 
-            coords: self.coords / other,
-        }
+        Self::Output { coords: self.coords / other }
     }
 }
 
@@ -882,9 +844,7 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
-        Self::Output {
-            coords: self.coords / other,
-        }
+        Self::Output { coords: self.coords / other }
     }
 }
 
@@ -896,9 +856,7 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Self::Output { 
-            coords: self.coords % other,
-        }
+        Self::Output { coords: self.coords % other }
     }
 }
 
@@ -910,9 +868,7 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Self::Output {
-            coords: self.coords % other,
-        }
+        Self::Output { coords: self.coords % other }
     }
 }
 
@@ -1126,7 +1082,7 @@ where
     fn unscale_mut(&mut self, norm: Self::Output) {
         self.coords.unscale_mut(norm);
     }
-    
+
     #[inline]
     fn normalize(&self) -> Self {
         let normalized_coords = self.coords.normalize();
@@ -1192,9 +1148,9 @@ where
 
 impl<S> Point1<S> {
     /// Construct a new point in Euclidean space.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point1,
@@ -1202,22 +1158,20 @@ impl<S> Point1<S> {
     /// #
     /// let x = 1_i32;
     /// let point = Point1::new(x);
-    /// 
+    ///
     /// assert_eq!(point[0], x);
     /// ```
     #[inline]
     pub const fn new(x: S) -> Self {
-        Self { 
-            coords: Vector1::new(x), 
-        }
+        Self { coords: Vector1::new(x) }
     }
 }
 
 impl<S> Point2<S> {
     /// Construct a new point in Euclidean space.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -1226,15 +1180,13 @@ impl<S> Point2<S> {
     /// let x = 1_i32;
     /// let y = 2_i32;
     /// let point = Point2::new(x, y);
-    /// 
+    ///
     /// assert_eq!(point[0], x);
     /// assert_eq!(point[1], y);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
-        Self { 
-            coords: Vector2::new(x, y) 
-        }
+        Self { coords: Vector2::new(x, y) }
     }
 }
 
@@ -1242,7 +1194,7 @@ impl<S> Point3<S> {
     /// Construct a new point in Euclidean space.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -1252,16 +1204,14 @@ impl<S> Point3<S> {
     /// let y = 2_i32;
     /// let z = 3_i32;
     /// let point = Point3::new(x, y, z);
-    /// 
+    ///
     /// assert_eq!(point[0], x);
     /// assert_eq!(point[1], y);
     /// assert_eq!(point[2], z);
     /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
-        Self { 
-            coords: Vector3::new(x, y, z),
-        }
+        Self { coords: Vector3::new(x, y, z) }
     }
 }
 
@@ -1301,9 +1251,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S,)) -> &'a Point1<S> {
-        unsafe {
-            &*(v as *const (S,) as *const Point1<S>)
-        }
+        unsafe { &*(v as *const (S,) as *const Point1<S>) }
     }
 }
 
@@ -1333,9 +1281,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S)) -> &'a Point2<S> {
-        unsafe { 
-            &*(v as *const (S, S) as *const Point2<S>)
-        }
+        unsafe { &*(v as *const (S, S) as *const Point2<S>) }
     }
 }
 
@@ -1365,9 +1311,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S, S)) -> &'a Point3<S> {
-        unsafe { 
-            &*(v as *const (S, S, S) as *const Point3<S>)
-        }
+        unsafe { &*(v as *const (S, S, S) as *const Point3<S>) }
     }
 }
 
@@ -1396,7 +1340,7 @@ macro_rules! impl_as_ref_ops {
                 self.coords.as_mut()
             }
         }
-    }
+    };
 }
 
 impl_as_ref_ops!(Point1<S>, S);
@@ -1470,4 +1414,3 @@ impl_swizzle!(zyz() => Point3 => Point3 { 2, 1, 2 });
 impl_swizzle!(zzx() => Point3 => Point3 { 2, 2, 0 });
 impl_swizzle!(zzy() => Point3 => Point3 { 2, 2, 1 });
 impl_swizzle!(zzz() => Point3 => Point3 { 2, 2, 2 });
-

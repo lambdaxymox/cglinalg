@@ -1,12 +1,10 @@
-extern crate cglinalg_trigonometry;
 extern crate cglinalg_core;
+extern crate cglinalg_trigonometry;
 
 
 #[cfg(test)]
 mod storage_tests {
-    use cglinalg_core::{
-        Quaternion, 
-    };
+    use cglinalg_core::Quaternion;
 
 
     #[test]
@@ -47,8 +45,8 @@ mod storage_tests {
 #[cfg(test)]
 mod lerp_tests {
     use cglinalg_core::{
+        Normed,
         Quaternion,
-        Normed
     };
 
 
@@ -67,7 +65,7 @@ mod lerp_tests {
     fn test_nlerp_should_interpolate_to_endoints_normalized() {
         let q1 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
         let q2 = Quaternion::new(2_f64, 2_f64, 2_f64, 2_f64);
-        
+
         let result = q1.nlerp(&q2, 0_f64);
         let expected = q1.normalize();
 
@@ -83,13 +81,13 @@ mod lerp_tests {
     fn test_lerp_should_interpolate_to_endoints() {
         let q1 = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
         let q2 = Quaternion::new(2_f64, 2_f64, 2_f64, 2_f64);
-        
+
         let result = q1.lerp(&q2, 0_f64);
 
         assert_eq!(result, q1);
 
         let result = q1.lerp(&q2, 1_f64);
-        
+
         assert_eq!(result, q2);
     }
 }
@@ -103,6 +101,7 @@ mod arithmetic_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_unit_axis_quaternions() {
         let i = Quaternion::unit_x();
@@ -110,11 +109,20 @@ mod arithmetic_tests {
         let k = Quaternion::unit_z();
 
         let result_i = 4_f64 * i;
-        let expected_i = Quaternion::from_parts(0_f64, Vector3::new(4_f64, 0_f64, 0_f64));
+        let expected_i = Quaternion::from_parts(
+            0_f64,
+            Vector3::new(4_f64, 0_f64, 0_f64),
+        );
         let result_j = 4_f64 * j;
-        let expected_j = Quaternion::from_parts(0_f64, Vector3::new(0_f64, 4_f64, 0_f64));
+        let expected_j = Quaternion::from_parts(
+            0_f64,
+            Vector3::new(0_f64, 4_f64, 0_f64),
+        );
         let result_k = 4_f64 * k;
-        let expected_k = Quaternion::from_parts(0_f64, Vector3::new(0_f64, 0_f64, 4_f64));
+        let expected_k = Quaternion::from_parts(
+            0_f64,
+            Vector3::new(0_f64, 0_f64, 4_f64),
+        );
 
         assert_eq!(result_i, expected_i);
         assert_eq!(result_j, expected_j);
@@ -181,8 +189,8 @@ mod arithmetic_tests {
 #[cfg(test)]
 mod modulus_tests {
     use cglinalg_core::{
-        Quaternion,
         Normed,
+        Quaternion,
         Vector3,
     };
 
@@ -192,7 +200,7 @@ mod modulus_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-    
+
         assert_eq!(i.norm(), 1_f64);
         assert_eq!(j.norm(), 1_f64);
         assert_eq!(k.norm(), 1_f64);
@@ -219,123 +227,126 @@ mod modulus_tests {
 
 #[cfg(test)]
 mod slerp_tests {
-    use cglinalg_trigonometry::{
-        Angle,
-        Degrees,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
     };
-    use approx::{
-        assert_relative_eq,
+    use cglinalg_trigonometry::{
+        Angle,
+        Degrees,
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_upper_right_quadrant() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(60_f64);
         let unit_z = Vector3::unit_z();
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q2 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
         let angle_expected = Degrees(45_f64);
         let expected = Quaternion::from_parts(
-            Angle::cos(angle_expected / 2_f64), 
-            Angle::sin(angle_expected / 2_f64) * unit_z
+            Angle::cos(angle_expected / 2_f64),
+            Angle::sin(angle_expected / 2_f64) * unit_z,
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_upper_right_quadrant1() {
         let angle1 = Degrees(20_f64);
         let angle2 = Degrees(70_f64);
         let unit_z = Vector3::unit_z();
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q2 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
         let angle_expected = Degrees(30_f64);
         let expected = Quaternion::from_parts(
-            Angle::cos(angle_expected / 2_f64), 
-            Angle::sin(angle_expected / 2_f64) * unit_z
+            Angle::cos(angle_expected / 2_f64),
+            Angle::sin(angle_expected / 2_f64) * unit_z,
         );
         let result = q1.slerp(&q2, 0.2_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_upper_half_plane() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(150_f64);
         let unit_z = Vector3::unit_z();
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q2 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
         let angle_expected = Degrees(90_f64);
         let expected = Quaternion::from_parts(
-            Angle::cos(angle_expected / 2_f64), 
-            Angle::sin(angle_expected / 2_f64) * unit_z
+            Angle::cos(angle_expected / 2_f64),
+            Angle::sin(angle_expected / 2_f64) * unit_z,
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_negative_dot_product() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q2 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
         let angle_expected = Degrees(315_f64);
         let expected = Quaternion::from_parts(
-            Angle::cos(angle_expected / 2_f64), 
-            Angle::sin(angle_expected / 2_f64) * unit_z
+            Angle::cos(angle_expected / 2_f64),
+            Angle::sin(angle_expected / 2_f64) * unit_z,
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
         assert_relative_eq!(result, expected, epsilon = 1e-8);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_endpoints0() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
         let q0 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
 
         // The slerp function can produce either the starting quaternion
@@ -347,18 +358,19 @@ mod slerp_tests {
         assert!(result == expected1 || result == expected2);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_slerp_endpoints1() {
         let angle1 = Degrees(30_f64);
         let angle2 = Degrees(240_f64);
         let unit_z = Vector3::unit_z();
         let q0 = Quaternion::from_parts(
-            Angle::cos(angle1 / 2_f64), 
-            Angle::sin(angle1 / 2_f64) * unit_z
+            Angle::cos(angle1 / 2_f64),
+            Angle::sin(angle1 / 2_f64) * unit_z,
         );
         let q1 = Quaternion::from_parts(
-            Angle::cos(angle2 / 2_f64), 
-            Angle::sin(angle2 / 2_f64) * unit_z
+            Angle::cos(angle2 / 2_f64),
+            Angle::sin(angle2 / 2_f64) * unit_z,
         );
 
         let expected = q1;
@@ -370,21 +382,17 @@ mod slerp_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use cglinalg_trigonometry::{
-        Radians,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Unit,
         Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_trigonometry::Radians;
 
     use core::f64;
 
-    
+
     #[test]
     fn test_quaternion_arg() {
         let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
@@ -468,7 +476,7 @@ mod arg_tests {
         let principal_arg_q = q.arg();
 
         assert_relative_eq!(principal_arg_q, f64::consts::FRAC_PI_8, epsilon = 1e-10);
-        
+
         for k in 0..100 {
             let _k = k as f64;
             let arg_plus_2k_pi = principal_arg_q + 2_f64 * f64::consts::PI * _k;
@@ -484,12 +492,10 @@ mod arg_tests {
 
 #[cfg(test)]
 mod exp_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -521,7 +527,7 @@ mod exp_tests {
         let pi_over_two = f64::consts::PI / 2_f64;
         let result = (unit_x * pi_over_two).exp();
         let expected = unit_x;
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -531,7 +537,7 @@ mod exp_tests {
         let pi_over_two = f64::consts::PI / 2_f64;
         let result = (unit_y * pi_over_two).exp();
         let expected = unit_y;
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -541,7 +547,7 @@ mod exp_tests {
         let pi_over_two = f64::consts::PI / 2_f64;
         let result = (unit_z * pi_over_two).exp();
         let expected = unit_z;
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -562,7 +568,7 @@ mod exp_tests {
         let pi = f64::consts::PI;
         let result = (unit_x * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -573,7 +579,7 @@ mod exp_tests {
         let pi = f64::consts::PI;
         let result = (unit_y * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -584,7 +590,7 @@ mod exp_tests {
         let pi = f64::consts::PI;
         let result = (unit_z * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
-     
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -609,12 +615,10 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
-        Vector3,
         Quaternion,
-    };
-    use approx::{
-        assert_relative_eq,
+        Vector3,
     };
 
 
@@ -690,17 +694,13 @@ mod logarithm_tests {
 
 #[cfg(test)]
 mod exp_ln_tests {
-    use cglinalg_trigonometry::{
-        Radians,
-    };
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Unit,
         Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
+    use cglinalg_trigonometry::Radians;
 
     use core::f64;
 
@@ -787,12 +787,8 @@ mod exp_ln_tests {
 
 #[cfg(test)]
 mod power_tests {
-    use cglinalg_core::{
-        Quaternion,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
+    use approx::assert_relative_eq;
+    use cglinalg_core::Quaternion;
     use core::f64;
 
 
@@ -849,29 +845,24 @@ mod power_tests {
 
 #[cfg(test)]
 mod rotation_tests {
+    use approx::assert_relative_eq;
+    use cglinalg_core::{
+        Quaternion,
+        Unit,
+        Vector3,
+    };
     use cglinalg_trigonometry::{
         Angle,
         Radians,
     };
-    use cglinalg_core::{
-        Unit,
-        Vector3,
-        Quaternion,
-    };
-    use approx::{
-        assert_relative_eq,
-    };
 
-    
+
     #[test]
     fn test_rotation_between_unit_vectors() {
         let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
         let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-        let expected = Quaternion::from_axis_angle(
-            &unit_z, 
-            Radians::full_turn_div_4()
-        );
+        let expected = Quaternion::from_axis_angle(&unit_z, Radians::full_turn_div_4());
         let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -879,17 +870,10 @@ mod rotation_tests {
 
     #[test]
     fn test_rotation_between_same_unit_vectors() {
-        let unit_v1: Unit<Vector3<f64>> = Unit::from_value(
-            Vector3::new(1_f64, 1_f64, 0_f64)
-        );
-        let unit_v2: Unit<Vector3<f64>> = Unit::from_value(
-            Vector3::new(1_f64, 1_f64, 0_f64)
-        );
+        let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1_f64, 1_f64, 0_f64));
+        let unit_v2: Unit<Vector3<f64>> = Unit::from_value(Vector3::new(1_f64, 1_f64, 0_f64));
         let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
-        let expected = Quaternion::from_axis_angle(
-            &unit_z, 
-            Radians(0_f64)
-        );
+        let expected = Quaternion::from_axis_angle(&unit_z, Radians(0_f64));
         let result = Quaternion::rotation_between_axis(&unit_v1, &unit_v2).unwrap();
 
         assert_eq!(result, expected);
@@ -900,10 +884,7 @@ mod rotation_tests {
         let unit_x: Vector3<f64> = Vector3::unit_x();
         let unit_y: Vector3<f64> = Vector3::unit_y();
         let unit_z: Vector3<f64> = Vector3::unit_z();
-        let expected = Quaternion::from_axis_angle(
-            &Unit::from_value(unit_z), 
-            Radians::full_turn_div_4()
-        );
+        let expected = Quaternion::from_axis_angle(&Unit::from_value(unit_z), Radians::full_turn_div_4());
         let result = Quaternion::rotation_between(&unit_x, &unit_y).unwrap();
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
@@ -914,10 +895,7 @@ mod rotation_tests {
         let v1 = Vector3::new(1_f64, 1_f64, 0_f64) * 3_f64;
         let v2 = Vector3::new(1_f64, 1_f64, 0_f64) * 3_f64;
         let unit_z = Vector3::unit_z();
-        let expected = Quaternion::from_axis_angle(
-            &Unit::from_value(unit_z), 
-            Radians(0_f64)
-        );
+        let expected = Quaternion::from_axis_angle(&Unit::from_value(unit_z), Radians(0_f64));
         let result = Quaternion::rotation_between(&v1, &v2).unwrap();
 
         assert_eq!(result, expected);
@@ -926,9 +904,7 @@ mod rotation_tests {
 
 #[cfg(test)]
 mod inverse_tests {
-    use cglinalg_core::{
-        Quaternion,
-    };
+    use cglinalg_core::Quaternion;
 
 
     #[test]
@@ -967,12 +943,10 @@ mod inverse_tests {
 
 #[cfg(test)]
 mod division_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
@@ -982,8 +956,8 @@ mod division_tests {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
         let expected = Quaternion::new(
-             104_f64 / 364_f64, 
-            -2_f64 / 364_f64, 6_f64 / 364_f64, 8_f64 / 364_f64
+             104_f64 / 364_f64,
+            -2_f64 / 364_f64, 6_f64 / 364_f64, 8_f64 / 364_f64,
         );
         let result = q.div_left(&p);
      
@@ -1000,8 +974,9 @@ mod division_tests {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
         let expected = Quaternion::new(
-            104_f64 / 364_f64, 
-            8_f64 / 364_f64, 2_f64 / 364_f64, 6_f64 / 364_f64);
+            104_f64 / 364_f64,
+            8_f64 / 364_f64, 2_f64 / 364_f64, 6_f64 / 364_f64,
+        );
         let result = q.div_right(&p);
      
         assert!(result.is_some());
@@ -1019,7 +994,7 @@ mod division_tests {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::new(
             1_f64 / scalar_part,
-            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part
+            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part,
         );
         let result = q.div_left(&scalar).unwrap();
 
@@ -1034,7 +1009,7 @@ mod division_tests {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::new(
             1_f64 / scalar_part,
-            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part
+            2_f64 / scalar_part, 3_f64 / scalar_part, 4_f64 / scalar_part,
         );
         let result = q.div_right(&scalar).unwrap();
 
@@ -1047,8 +1022,8 @@ mod division_tests {
         let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::new(
-            31_f64 / 38_f64, 
-            -13_f64 / 38_f64, -3_f64 / 38_f64, 1_f64 / 38_f64
+            31_f64 / 38_f64,
+            -13_f64 / 38_f64, -3_f64 / 38_f64, 1_f64 / 38_f64,
         );
         let result = q.div_left(&v).unwrap();
 
@@ -1061,8 +1036,8 @@ mod division_tests {
         let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::new(
-            31_f64 / 38_f64, 
-            9_f64 / 38_f64, -7_f64 / 38_f64, -7_f64 / 38_f64
+            31_f64 / 38_f64,
+            9_f64 / 38_f64, -7_f64 / 38_f64, -7_f64 / 38_f64,
         );
         let result = q.div_right(&v).unwrap();
 
@@ -1072,15 +1047,13 @@ mod division_tests {
 
 #[cfg(test)]
 mod square_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
     };
-    use approx::{
-        assert_relative_eq,
-    };
 
-    
+
     #[test]
     fn test_square_pure_quaternion() {
         let modulus = f64::sqrt(14_f64);
@@ -1096,10 +1069,10 @@ mod square_tests {
     fn test_square_real_quaternion() {
         let q = Quaternion::from_real(-1_f64);
         let unit_scalar: Quaternion<f64> = Quaternion::unit_s();
-        let unit_x: Quaternion<f64>  = Quaternion::unit_x();
+        let unit_x: Quaternion<f64> = Quaternion::unit_x();
         let unit_y: Quaternion<f64> = Quaternion::unit_y();
         let unit_z: Quaternion<f64> = Quaternion::unit_z();
-     
+
         assert_eq!(unit_x * unit_x, q);
         assert_eq!(unit_y * unit_y, q);
         assert_eq!(unit_z * unit_z, q);
@@ -1109,8 +1082,8 @@ mod square_tests {
     #[test]
     fn test_square_unit_x() {
         let i: Quaternion<f64> = Quaternion::unit_x();
-        let minus_one= Quaternion::from_real(-1_f64);
-        
+        let minus_one = Quaternion::from_real(-1_f64);
+
         assert_eq!(i.squared(), minus_one);
         assert_eq!((-i).squared(), minus_one);
     }
@@ -1163,19 +1136,17 @@ mod square_tests {
 
 #[cfg(test)]
 mod square_root_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
 
     #[test]
     fn test_square_root_zero() {
         let zero: Quaternion<f64> = Quaternion::zero();
-        
+
         assert_eq!(zero.sqrt(), zero);
     }
 
@@ -1279,12 +1250,10 @@ mod square_root_tests {
 
 #[cfg(test)]
 mod trigonometry_cos_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -1840,12 +1809,10 @@ mod trigonometry_cos_tests {
 
 #[cfg(test)]
 mod trigonometry_acos_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -2018,12 +1985,10 @@ mod trigonometry_acos_tests {
 
 #[cfg(test)]
 mod trigonometry_sin_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -2579,12 +2544,10 @@ mod trigonometry_sin_tests {
 
 #[cfg(test)]
 mod trigonometry_asin_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -3027,12 +2990,10 @@ mod trigonometry_asin_tests {
 
 #[cfg(test)]
 mod trigonometry_tan_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -3110,7 +3071,7 @@ mod trigonometry_tan_tests {
                 let scale = numerator / denominator;
                 Vector3::new(1_f64, 1_f64, 1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tan();
@@ -3138,7 +3099,7 @@ mod trigonometry_tan_tests {
                 let scale = numerator / denominator;
                 Vector3::new(-1_f64, -1_f64, -1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tan();
@@ -3156,7 +3117,7 @@ mod trigonometry_tan_tests {
         };
         let expected = {
             let scalar = TAN_1;
-            let vector = Vector3::new(0_f64, 0_f64, 0_f64);  
+            let vector = Vector3::new(0_f64, 0_f64, 0_f64);
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tan();
@@ -3599,12 +3560,10 @@ mod trigonometry_tan_tests {
 
 #[cfg(test)]
 mod trigonometry_atan_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -3644,7 +3603,7 @@ mod trigonometry_atan_tests {
                 let scale = numerator / denominator;
                 Vector3::new(1_f64, 1_f64, 1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         // expected := 1 + 1i + 1j + 1k
@@ -3672,7 +3631,7 @@ mod trigonometry_atan_tests {
                 let scale = numerator / denominator;
                 Vector3::new(-1_f64, -1_f64, -1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         // expected := 1 - 1i - 1j - 1k
@@ -4121,12 +4080,10 @@ mod trigonometry_atan_tests {
 
 #[cfg(test)]
 mod trigonometry_cosh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -4619,12 +4576,10 @@ mod trigonometry_cosh_tests {
 
 #[cfg(test)]
 mod trigonometry_acosh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -5129,12 +5084,10 @@ mod trigonometry_acosh_tests {
 
 #[cfg(test)]
 mod trigonometry_sinh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -5627,12 +5580,10 @@ mod trigonometry_sinh_tests {
 
 #[cfg(test)]
 mod trigonometry_asinh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -6075,12 +6026,10 @@ mod trigonometry_asinh_tests {
 
 #[cfg(test)]
 mod trigonometry_tanh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -6158,7 +6107,7 @@ mod trigonometry_tanh_tests {
                 let scale = numerator / denominator;
                 Vector3::new(1_f64, 1_f64, 1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tanh();
@@ -6186,7 +6135,7 @@ mod trigonometry_tanh_tests {
                 let scale = numerator / denominator;
                 Vector3::new(-1_f64, -1_f64, -1_f64) * scale
             };
-            
+
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tanh();
@@ -6204,7 +6153,7 @@ mod trigonometry_tanh_tests {
         };
         let expected = {
             let scalar = TANH_1;
-            let vector = Vector3::new(0_f64, 0_f64, 0_f64);  
+            let vector = Vector3::new(0_f64, 0_f64, 0_f64);
             Quaternion::from_parts(scalar, vector)
         };
         let result = quaternion.tanh();
@@ -6648,12 +6597,10 @@ mod trigonometry_tanh_tests {
 
 #[cfg(test)]
 mod trigonometry_atanh_tests {
+    use approx::assert_relative_eq;
     use cglinalg_core::{
+        Quaternion,
         Vector3,
-        Quaternion,  
-    };
-    use approx::{
-        assert_relative_eq,
     };
 
     use core::f64;
@@ -6701,7 +6648,7 @@ mod trigonometry_atanh_tests {
     fn test_quaternion_atanh4() {
         let quaternion = {
             let scalar = TANH_1;
-            let vector = Vector3::new(0_f64, 0_f64, 0_f64);  
+            let vector = Vector3::new(0_f64, 0_f64, 0_f64);
             Quaternion::from_parts(scalar, vector)
         };
         // expected := 1 + 0i + 0j + 0k
@@ -7147,4 +7094,3 @@ mod trigonometry_atanh_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-13);
     }
 }
-

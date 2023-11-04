@@ -1,29 +1,23 @@
-use cglinalg_numeric::{
-    SimdCast,
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
-use crate::normed::{
-    Normed,
-};
 use crate::matrix::{
-    Matrix3x3, 
+    Matrix3x3,
     Matrix4x4,
 };
+use crate::normed::Normed;
+use crate::point::Point3;
+use crate::unit::Unit;
 use crate::vector::{
     Vector3,
     Vector4,
 };
-use crate::point::{
-    Point3,
+use cglinalg_numeric::{
+    SimdCast,
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
-use crate::unit::{
-    Unit,
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
@@ -31,13 +25,13 @@ use core::ops;
 
 
 /// A stack-allocated quaternion.
-/// 
-/// A quaternion is a generalization of vectors in three dimensions that 
+///
+/// A quaternion is a generalization of vectors in three dimensions that
 /// enables one to perform rotations about an arbitrary axis. They are a
-/// three-dimensional analogue of complex numbers. One major difference 
-/// between complex numbers and quaternions is that the quaternion product is 
+/// three-dimensional analogue of complex numbers. One major difference
+/// between complex numbers and quaternions is that the quaternion product is
 /// noncommutative, whereas the complex product is commutative.
-/// 
+///
 /// Analogous to the complex numbers, quaternions can be written in polar form.
 /// polar form reveals the fact that it encodes rotations. A quaternion `q` can
 /// be written in polar form as
@@ -72,8 +66,8 @@ impl<S> Quaternion<S> {
     }
 
     /// Tests whether the number of elements in the quaternion is zero.
-    /// 
-    /// This function always returns `false`, since a quaternion has four scalar 
+    ///
+    /// This function always returns `false`, since a quaternion has four scalar
     /// elements.
     pub const fn is_empty(&self) -> bool {
         self.coords.is_empty()
@@ -81,8 +75,8 @@ impl<S> Quaternion<S> {
 
     /// The shape of the underlying array storing the quaternion components.
     ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
+    /// The shape is the equivalent number of columns and rows of the
+    /// array as though it represents a matrix. The order of the descriptions
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
@@ -128,7 +122,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn try_cast<T>(&self) -> Option<Quaternion<T>> 
+    pub fn try_cast<T>(&self) -> Option<Quaternion<T>>
     where
         T: SimdCast,
     {
@@ -141,9 +135,9 @@ where
     S: Copy,
 {
     /// Construct a new quaternion from its scalar and vector parts.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -153,7 +147,7 @@ where
     /// let scalar = 1_f64;
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let quaternion = Quaternion::from_parts(scalar, vector);
-    /// 
+    ///
     /// assert_eq!(quaternion.s,   1_f64);
     /// assert_eq!(quaternion.v.x, 2_f64);
     /// assert_eq!(quaternion.v.y, 3_f64);
@@ -165,13 +159,13 @@ where
     }
 
     /// Construct a new quaternion from a [`Vector4`].
-    /// 
+    ///
     /// The `vector[0]` component of the vector corresponds to the scalar component
-    /// of the quaternion. The `(vector[1], vector[2], vector[3])` components 
+    /// of the quaternion. The `(vector[1], vector[2], vector[3])` components
     /// correspond to the vector component.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -183,16 +177,16 @@ where
     /// let expected_scalar = 1_f32;
     /// let expected_vector = Vector3::new(2_f32, 3_f32, 4_f32);
     /// let quaternion = Quaternion::from_vector(vector);
-    /// 
+    ///
     /// assert_eq!(quaternion.scalar(), expected_scalar);
     /// assert_eq!(quaternion.vector(), expected_vector);
     /// ```
     #[inline]
     pub const fn from_vector(vector: Vector4<S>) -> Self {
-        Self { coords: vector, }
+        Self { coords: vector }
     }
 
-    /// Construct a new quaternion from a fill value. 
+    /// Construct a new quaternion from a fill value.
     ///
     /// Every component of the resulting vector will have the same value
     /// supplied by the `value` argument.
@@ -201,12 +195,12 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let result = Quaternion::from_fill(1_f64);
     /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -214,7 +208,7 @@ where
         Self::new(value, value, value, value)
     }
 
-    /// Map an operation on that acts on the components of a quaternion, returning 
+    /// Map an operation on that acts on the components of a quaternion, returning
     /// a quaternion whose coordinates are of the new scalar type.
     ///
     /// # Example
@@ -235,15 +229,13 @@ where
     where
         F: FnMut(S) -> T,
     {
-        Quaternion { 
-            coords: self.coords.map(op)
-        }
+        Quaternion { coords: self.coords.map(op) }
     }
 
     /// Get the scalar part of a quaternion.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -253,7 +245,7 @@ where
     /// let scalar = 1_i32;
     /// let vector = Vector3::new(2_i32, 3_i32, 4_i32);
     /// let quaternion = Quaternion::from_parts(scalar, vector);
-    /// 
+    ///
     /// assert_eq!(quaternion.scalar(), scalar);
     /// ```
     #[inline]
@@ -264,7 +256,7 @@ where
     /// Get the vector part of a quaternion.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -274,7 +266,7 @@ where
     /// let scalar = 1_i32;
     /// let vector = Vector3::new(2_i32, 3_i32, 4_i32);
     /// let quaternion = Quaternion::from_parts(scalar, vector);
-    /// 
+    ///
     /// assert_eq!(quaternion.vector(), vector);
     /// ```
     #[inline]
@@ -287,7 +279,7 @@ impl<S> Quaternion<S>
 where
     S: SimdScalar,
 {
-    /// Returns the unit real quaternion. 
+    /// Returns the unit real quaternion.
     ///
     /// A real quaternion is a quaternion with zero vector part.
     ///
@@ -295,7 +287,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let unit_s: Quaternion<f64> = Quaternion::unit_s();
@@ -316,7 +308,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let unit_x: Quaternion<f64> = Quaternion::unit_x();
@@ -337,7 +329,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
@@ -358,7 +350,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
@@ -373,7 +365,7 @@ where
 
     /// Construct a zero quaternion.
     ///
-    /// A zero quaternion is a quaternion `zero` such that given another 
+    /// A zero quaternion is a quaternion `zero` such that given another
     /// quaternion `q`
     /// ```text
     /// q + zero == zero + q = q
@@ -396,11 +388,11 @@ where
     pub fn zero() -> Self {
         Self::new(S::zero(), S::zero(), S::zero(), S::zero())
     }
-    
+
     /// Determine whether is a quaternion is the zero quaternion.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -410,20 +402,20 @@ where
     /// let zero_quat: Quaternion<i32> = Quaternion::zero();
     /// let real_quat = Quaternion::from_real(1);
     /// let pure_quat = Quaternion::from_pure(Vector3::new(2, 3, 4));
-    /// 
+    ///
     /// assert!(zero_quat.is_zero());
     /// assert!(!real_quat.is_zero());
     /// assert!(!pure_quat.is_zero());
-    /// 
+    ///
     /// let quat = real_quat + pure_quat;
-    /// 
+    ///
     /// assert!(!quat.is_zero());
     /// ```
     #[inline]
     pub fn is_zero(&self) -> bool {
         self.coords.is_zero()
     }
-    
+
     /// Construct the multiplicative identity quaternion.
     ///
     /// # Example
@@ -447,7 +439,7 @@ where
     /// Construct the multiplicative identity quaternion.
     ///
     /// This is a synonym for [`Quaternion::identity`].
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -465,14 +457,14 @@ where
     pub fn one() -> Self {
         Self::identity()
     }
-    
+
     /// Determine whether a quaternion is equal to the identity quaternion.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let identity: Quaternion<f64> = Quaternion::identity();
@@ -495,9 +487,9 @@ where
     /// Check whether a quaternion is a pure quaternion.
     ///
     /// A pure quaternion is a quaternion with zero scalar part.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -505,9 +497,9 @@ where
     /// # };
     /// #
     /// let pure = Quaternion::from_parts(0_f64, Vector3::unit_z());
-    /// 
+    ///
     /// assert!(pure.is_pure());
-    /// 
+    ///
     /// let not_pure = Quaternion::from_parts(1_f64, Vector3::unit_z());
     ///
     /// assert!(!not_pure.is_pure());
@@ -526,13 +518,13 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
-    /// # 
+    /// #
     /// let real = Quaternion::from_parts(1_f64, Vector3::zero());
-    /// 
+    ///
     /// assert!(real.is_real());
-    /// 
+    ///
     /// let not_real = Quaternion::from_parts(1_f64, Vector3::new(2_f64, 3_f64, 4_f64));
     ///
     /// assert!(!not_real.is_real());
@@ -581,21 +573,21 @@ where
     pub fn from_pure(vector: Vector3<S>) -> Self {
         Self::from_parts(S::zero(), vector)
     }
-    
+
     /// Compute the dot product of two quaternions.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion1 = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let quaternion2 = Quaternion::new(5_i32, 6_i32, 7_i32, 8_i32);
     /// let expected = 70_i32;
     /// let result = quaternion1.dot(&quaternion2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -604,10 +596,10 @@ where
     }
 
     /// Calculate the squared modulus of a quaternion.
-    /// 
-    /// The modulus of a quaternion is the **L2** norm of the quaternion when 
-    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is 
-    /// ```text 
+    ///
+    /// The modulus of a quaternion is the **L2** norm of the quaternion when
+    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is
+    /// ```text
     /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
     /// ```
     /// where `scalar(q)` is the scalar part of `q`, and `vector(q)` is the vector
@@ -615,9 +607,9 @@ where
     /// ```text
     /// modulus_squared(q) := scalar(q) * scalar(q) + dot(vector(q), vector(q))
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -635,7 +627,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.norm_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -643,10 +635,10 @@ where
         self.coords.norm_squared()
     }
 
-    /// Calculate the squared norm of a quaternion with respect to the **L2** norm. 
-    /// 
+    /// Calculate the squared norm of a quaternion with respect to the **L2** norm.
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -664,7 +656,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.norm_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -673,11 +665,11 @@ where
     }
 
     /// Calculate the squared norm of a quaternion with respect to the **L2** norm.
-    /// 
+    ///
     /// This is a synonym for [`Quaternion::modulus_squared`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -695,7 +687,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.magnitude_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -705,9 +697,9 @@ where
 
     /// Calculate the squared metric distance between two quaternions with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -730,7 +722,7 @@ where
     /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
     /// let expected = f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64);
     /// let result = quaternion1.metric_distance_squared(&quaternion2);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -739,9 +731,9 @@ where
     }
 }
 
-impl<S> Quaternion<S> 
-where 
-    S: SimdScalarSigned 
+impl<S> Quaternion<S>
+where
+    S: SimdScalarSigned,
 {
     /// Compute the conjugate of a quaternion.
     ///
@@ -795,9 +787,9 @@ where
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let mut quaternion = Quaternion::from_parts(scalar, vector);
     /// let expected = Quaternion::from_parts(scalar, -vector);
-    /// 
+    ///
     /// assert_ne!(quaternion, expected);
-    /// 
+    ///
     /// quaternion.conjugate_mut();
     ///
     /// assert_eq!(quaternion, expected);
@@ -810,15 +802,15 @@ where
     }
 
     /// Compute the square of a quaternion.
-    /// 
+    ///
     /// Given a quaternion `q`, the square of `q` is the product of
     /// `q` with itself. In particular, given a quaternion `q`
     /// ```text
     /// squared(q) := q * q
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -827,7 +819,7 @@ where
     /// let quaternion = Quaternion::new(24, 7, 23, 9);
     /// let expected = Quaternion::new(-83, 336, 1104, 432);
     /// let result = quaternion.squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     pub fn squared(&self) -> Self {
@@ -835,9 +827,9 @@ where
     }
 
     /// Divide a quaternion by scalar value two.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -846,14 +838,14 @@ where
     /// let quaternion = Quaternion::new(2_f64, 4_f64, 6_f64, 8_f64);
     /// let expected = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let result = quaternion.half();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn half(&self) -> Self {
         let one = S::one();
         let one_half = one / (one + one);
-        
+
         self * one_half
     }
 }
@@ -863,9 +855,9 @@ where
     S: SimdScalarSigned,
 {
     /// Calculate the norm of a quaternion qith respect to the **L1** norm.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// An example computing the **L1** norm of a quaternion of [`f64`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -875,10 +867,10 @@ where
     /// let quaternion = Quaternion::new(1_f64, 2_f64, -3_f64, 4_f64);
     /// let expected = 10_f64;
     /// let result = quaternion.l1_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -888,7 +880,7 @@ where
     /// let quaternion = Quaternion::new(1_i32, 2_i32, -3_i32, 4_i32);
     /// let expected = 10_i32;
     /// let result = quaternion.l1_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -902,17 +894,17 @@ where
     S: SimdScalarFloat,
 {
     /// Calculate the modulus of a quaternion.
-    /// 
-    /// The modulus of a quaternion is the **L2** norm of the quaternion when 
-    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is 
-    /// ```text 
+    ///
+    /// The modulus of a quaternion is the **L2** norm of the quaternion when
+    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is
+    /// ```text
     /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
     /// ```
     /// where `scalar(q)` is the scalar part of `q`, and `vector(q)` is the vector
     /// part of `q`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -930,7 +922,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -938,12 +930,12 @@ where
         self.coords.norm()
     }
 
-    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
+    /// Calculate the norm of a quaternion with respect to the **L2** norm.
     ///
     /// This is a synonym for [`Quaternion::modulus`].
     ///  
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -961,7 +953,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -971,9 +963,9 @@ where
 
     /// Calculate the metric distance between two quaternions with respect
     /// to the metric induced by the **L2** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -996,7 +988,7 @@ where
     /// let quaternion2 = Quaternion::from_axis_angle(&axis, angle2);
     /// let expected = f64::sqrt(f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64));
     /// let result = quaternion1.metric_distance(&quaternion2);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1004,12 +996,12 @@ where
         self.coords.metric_distance(&other.coords)
     }
 
-    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
-    /// 
+    /// Calculate the norm of a quaternion with respect to the **L2** norm.
+    ///
     /// This is a synonym for [`Quaternion::modulus`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -1026,7 +1018,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.magnitude();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1034,12 +1026,12 @@ where
         self.norm()
     }
 
-    /// Calculate the norm of a quaternion with respect to the **L2** norm. 
-    /// 
+    /// Calculate the norm of a quaternion with respect to the **L2** norm.
+    ///
     /// This is a synonym for [`Quaternion::modulus`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -1056,7 +1048,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = 1_f64;
     /// let result = quaternion.l2_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1069,7 +1061,7 @@ impl<S> Quaternion<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a quaternion corresponding to rotating about an axis `axis` 
+    /// Construct a quaternion corresponding to rotating about an axis `axis`
     /// by an angle `angle` in radians from its unit polar decomposition.
     ///
     /// # Example
@@ -1097,27 +1089,27 @@ where
     /// let expected = Quaternion::new(cos_pi_over_12, 0_f64, 0_f64, sin_pi_over_12);
     ///
     /// assert_relative_eq!(expected.norm_squared(), 1_f64, epsilon = 1e-10);
-    /// 
+    ///
     /// let result = Quaternion::from_axis_angle(&axis, pi_over_6);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
-    /// A quaternion constructed from an axis and an angle will have the 
+    /// A quaternion constructed from an axis and an angle will have the
     /// cosine and sine of half of the angle in its components because a
-    /// quaternion used for rotation will be used as a quaternion rotor. In 
-    /// order to do a full rotation of a vector by the full angle `angle`, the 
-    /// quaternion generated by `from_axis_angle` must be used as a quaternion 
+    /// quaternion used for rotation will be used as a quaternion rotor. In
+    /// order to do a full rotation of a vector by the full angle `angle`, the
+    /// quaternion generated by `from_axis_angle` must be used as a quaternion
     /// rotor.
     ///
-    /// Let `p` be a three-dimensional vector we wish to rotate, 
-    /// represented as a pure quaternion, and `q` be the quaternion that 
-    /// rotates the vector `p` by an angle `angle`. Then the vector rotated 
+    /// Let `p` be a three-dimensional vector we wish to rotate,
+    /// represented as a pure quaternion, and `q` be the quaternion that
+    /// rotates the vector `p` by an angle `angle`. Then the vector rotated
     /// by the quaternion by an angle `angle` about the axis `axis` is given by
     /// ```text
     /// q * p * q^-1
     /// ```
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -1131,7 +1123,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1153,13 +1145,13 @@ where
         let one_half = one / (one + one);
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into() * one_half);
         let _axis = axis.into_inner();
-    
+
         Self::from_parts(cos_angle, _axis * sin_angle)
     }
 
     /// Construct a quaternion from an equivalent 3x3 matrix.
     ///
-    /// A quaternion can be constructed by starting from the Euler-Rodrigues 
+    /// A quaternion can be constructed by starting from the Euler-Rodrigues
     /// formula and working backwards to extract the components of the quaternion
     /// from the components of the matrix.
     ///
@@ -1196,7 +1188,7 @@ where
             let qx = (matrix[1][2] - matrix[2][1]) * s;
             let qy = (matrix[2][0] - matrix[0][2]) * s;
             let qz = (matrix[0][1] - matrix[1][0]) * s;
-            
+
             Self::new(qs, qx, qy, qz)
         } else if (matrix[0][0] > matrix[1][1]) && (matrix[0][0] > matrix[2][2]) {
             let s = ((matrix[0][0] - matrix[1][1] - matrix[2][2]) + S::one()).sqrt();
@@ -1205,7 +1197,7 @@ where
             let qy = (matrix[1][0] + matrix[0][1]) * s;
             let qz = (matrix[0][2] + matrix[2][0]) * s;
             let qs = (matrix[1][2] - matrix[2][1]) * s;
-            
+
             Self::new(qs, qx, qy, qz)
         } else if matrix[1][1] > matrix[2][2] {
             let s = ((matrix[1][1] - matrix[0][0] - matrix[2][2]) + S::one()).sqrt();
@@ -1214,7 +1206,7 @@ where
             let qz = (matrix[2][1] + matrix[1][2]) * s;
             let qx = (matrix[1][0] + matrix[0][1]) * s;
             let qs = (matrix[2][0] - matrix[0][2]) * s;
-            
+
             Self::new(qs, qx, qy, qz)
         } else {
             let s = ((matrix[2][2] - matrix[0][0] - matrix[1][1]) + S::one()).sqrt();
@@ -1223,14 +1215,14 @@ where
             let qx = (matrix[0][2] + matrix[2][0]) * s;
             let qy = (matrix[2][1] + matrix[1][2]) * s;
             let qs = (matrix[0][1] - matrix[1][0]) * s;
-            
+
             Self::new(qs, qx, qy, qz)
         }
     }
 
     /// Convert a quaternion to its equivalent 3x3 rotation matrix.
     ///
-    /// The following example shows the result of converting an arbitrary 
+    /// The following example shows the result of converting an arbitrary
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1238,11 +1230,11 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Matrix3x3,  
+    /// #     Matrix3x3,
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1253,11 +1245,11 @@ where
     ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
     /// );
     /// let result = quaternion.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
-    /// The following example shows the result of converting an unit 
+    /// The following example shows the result of converting an unit
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1265,17 +1257,17 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Matrix3x3,  
+    /// #     Matrix3x3,
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.norm_squared(), 1_f64);
-    /// 
+    ///
     /// let scale = 2_f64;
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
@@ -1283,7 +1275,7 @@ where
     ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
     /// );
     /// let result = quaternion.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
@@ -1308,18 +1300,18 @@ where
         let c2r0 = s * qx * qz + s * qs * qy;
         let c2r1 = s * qy * qz - s * qs * qx;
         let c2r2 = one - s * qx * qx - s * qy * qy;
-    
+
         Matrix3x3::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
         )
     }
 
-    /// Convert a quaternion to its equivalent 3x3 rotation matrix using 
+    /// Convert a quaternion to its equivalent 3x3 rotation matrix using
     /// preallocated storage.
     ///
-    /// The following example shows the result of converting an arbitrary 
+    /// The following example shows the result of converting an arbitrary
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1346,10 +1338,10 @@ where
     /// assert!(result.is_zero());
     ///
     /// quaternion.to_matrix_mut(&mut result);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// The following example shows the result of converting an unit 
+    /// The following example shows the result of converting an unit
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1367,7 +1359,7 @@ where
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.norm_squared(), 1_f64);
-    /// 
+    ///
     /// let scale = 2_f64;
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
@@ -1379,7 +1371,7 @@ where
     /// assert!(result.is_zero());
     ///
     /// quaternion.to_matrix_mut(&mut result);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -1391,15 +1383,15 @@ where
         let one = S::one();
         let two = one + one;
         let s = two / self.norm_squared();
-    
+
         matrix.c0r0 = one - s * qy * qy - s * qz * qz;
         matrix.c0r1 = s * qx * qy + s * qs * qz;
         matrix.c0r2 = s * qx * qz - s * qs * qy;
-    
+
         matrix.c1r0 = s * qx * qy - s * qs * qz;
         matrix.c1r1 = one - s * qx * qx - s * qz * qz;
         matrix.c1r2 = s * qy * qz + s * qs * qx;
-    
+
         matrix.c2r0 = s * qx * qz + s * qs * qy;
         matrix.c2r1 = s * qy * qz - s * qs * qx;
         matrix.c2r2 = one - s * qx * qx - s * qy * qy;
@@ -1407,7 +1399,7 @@ where
 
     /// Convert a quaternion to its equivalent 4x4 affine rotation matrix.
     ///
-    /// The following example shows the result of converting an arbitrary 
+    /// The following example shows the result of converting an arbitrary
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1415,11 +1407,11 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Matrix4x4,  
+    /// #     Matrix4x4,
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1431,11 +1423,11 @@ where
     ///     0_f64,                  0_f64,                  0_f64,                  1_f64
     /// );
     /// let result = quaternion.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
-    /// The following example shows the result of converting an unit 
+    /// The following example shows the result of converting an unit
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1443,17 +1435,17 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Matrix4x4,  
+    /// #     Matrix4x4,
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.norm_squared(), 1_f64);
-    /// 
+    ///
     /// let scale = 2_f64;
     /// let expected = Matrix4x4::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
@@ -1462,7 +1454,7 @@ where
     ///     0_f64,                           0_f64,                           0_f64,                           1_f64
     /// );
     /// let result = quaternion.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
@@ -1491,24 +1483,24 @@ where
         let c2r1 = s * qy * qz - s * qs * qx;
         let c2r2 = one - s * qx * qx - s * qy * qy;
         let c2r3 = zero;
-        
+
         let c3r0 = zero;
         let c3r1 = zero;
         let c3r2 = zero;
         let c3r3 = one;
-    
+
         Matrix4x4::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
     /// Convert a quaternion to its equivalent 4x4 affine rotation matrix using
     /// preallocated storage.
     ///
-    /// The following example shows the result of converting an arbitrary 
+    /// The following example shows the result of converting an arbitrary
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1536,11 +1528,11 @@ where
     /// assert!(result.is_zero());
     ///
     /// quaternion.to_affine_matrix_mut(&mut result);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     ///
-    /// The following example shows the result of converting an unit 
+    /// The following example shows the result of converting an unit
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1558,7 +1550,7 @@ where
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
     ///
     /// assert_eq!(quaternion.norm_squared(), 1_f64);
-    /// 
+    ///
     /// let scale = 2_f64;
     /// let expected = Matrix4x4::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
@@ -1571,7 +1563,7 @@ where
     /// assert!(result.is_zero());
     ///
     /// quaternion.to_affine_matrix_mut(&mut result);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -1608,8 +1600,8 @@ where
 
     /// Compute the inverse of a quaternion.
     ///
-    /// If the quaternion `self` has zero norm, it does not have an 
-    /// inverse. In this case the function return `None`. Otherwise it returns 
+    /// If the quaternion `self` has zero norm, it does not have an
+    /// inverse. In this case the function return `None`. Otherwise it returns
     /// the inverse of `self`.
     ///
     /// # Example
@@ -1620,14 +1612,14 @@ where
     /// # };
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
-    /// 
+    ///
     /// assert!(zero_quat.is_zero());
     /// assert!(zero_quat.inverse().is_none());
     ///
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 0_f64, 0_f64);
     /// let expected = Some(Quaternion::new(1_f64 / 2_f64, -1_f64 / 2_f64, 0_f64, 0_f64));
     /// let result = quaternion.inverse();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1647,8 +1639,8 @@ where
 
     /// Determine whether a quaternion is invertible.
     ///
-    /// If the quaternion `self` has zero norm, it does not have an 
-    /// inverse. In this case the function return `None`. Otherwise it returns 
+    /// If the quaternion `self` has zero norm, it does not have an
+    /// inverse. In this case the function return `None`. Otherwise it returns
     /// the inverse of `self`.
     ///
     /// # Example
@@ -1659,12 +1651,12 @@ where
     /// # };
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
-    /// 
+    ///
     /// assert!(zero_quat.is_zero());
     /// assert!(!zero_quat.is_invertible());
     ///
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 0_f64, 0_f64);
-    /// 
+    ///
     /// assert!(quaternion.is_invertible());
     /// ```
     #[inline]
@@ -1680,21 +1672,21 @@ where
     /// Compute the principal (value of the) argument of a quaternion.
     ///
     /// Every quaternion can be written in polar form. Let `q` be a quaternion
-    /// and let `q := s + v` where `s` is the scalar part of `q` and `v` is 
+    /// and let `q := s + v` where `s` is the scalar part of `q` and `v` is
     /// the vector part of `q`. The polar form of q can be written as
     /// ```text
     /// q := |q| * (cos(theta) + (v / |v|) * sin(theta))
     /// ```
-    /// The argument of `q` is the set of angles `theta` that satisfy the 
-    /// relation above which we denote `arg(q)`. The principal argument of `q` 
-    /// is the angle `theta` satisfying the polar decomposition of `q` above 
-    /// such that `theta` lies in the closed interval `[0, pi]`. For each 
+    /// The argument of `q` is the set of angles `theta` that satisfy the
+    /// relation above which we denote `arg(q)`. The principal argument of `q`
+    /// is the angle `theta` satisfying the polar decomposition of `q` above
+    /// such that `theta` lies in the closed interval `[0, pi]`. For each
     /// element `theta` in `arg(q)`, there is an integer `n` such that
     /// ```text
     /// theta == Arg(q) + 2 * pi * n
     /// ```
     /// In the case of `theta == Arg(q)`, we have `n == 0`. Using the principal
-    /// argument of the quaternion `q`, we can write `q` in polar form as 
+    /// argument of the quaternion `q`, we can write `q` in polar form as
     /// ```text
     /// q := |q| * exp(vector(q) * Arg(q))
     /// ```
@@ -1717,7 +1709,7 @@ where
     ///
     /// assert!(zero_quat.is_zero());
     /// assert_eq!(zero_quat.arg(), pi_over_two);
-    /// 
+    ///
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
     /// let pi_over_three = f64::consts::FRAC_PI_3;
     /// let expected = pi_over_three;
@@ -1740,8 +1732,8 @@ where
     }
 
     /// Calculate the natural exponential of a quaternion.
-    /// 
-    /// The natural exponential of a quaternion `q := s + v` where s is the 
+    ///
+    /// The natural exponential of a quaternion `q := s + v` where s is the
     /// scalar part of `q` and `v` is the vector part of `q` is defined by
     /// ```text
     /// exp(q) := exp(s) * (cos(|v|) + sgn(v) * sin(|v|))
@@ -1767,14 +1759,14 @@ where
     /// assert_eq!(result, expected);
     /// ```
     ///
-    /// A computation involving the unit **x-axis** pure quaternion. 
+    /// A computation involving the unit **x-axis** pure quaternion.
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1783,18 +1775,18 @@ where
     /// let pi = f64::consts::PI;
     /// let result = (unit_x * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
-    /// A computation involving the unit **y-axis** pure quaternion. 
+    /// A computation involving the unit **y-axis** pure quaternion.
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1803,18 +1795,18 @@ where
     /// let pi = f64::consts::PI;
     /// let result = (unit_y * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
-    /// A computation involving the unit **z-axis** pure quaternion. 
+    /// A computation involving the unit **z-axis** pure quaternion.
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1823,7 +1815,7 @@ where
     /// let pi = f64::consts::PI;
     /// let result = (unit_z * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
@@ -1834,7 +1826,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1860,35 +1852,35 @@ where
             let exp_s = self.scalar().exp();
             let q_scalar = exp_s * S::cos(norm_v);
             let q_vector = self.vector() * (exp_s * S::sin(norm_v) / norm_v);
-            
+
             Self::from_parts(q_scalar, q_vector)
         }
     }
 
     /// Calculate the principal value of the natural logarithm of a quaternion.
     ///
-    /// Like the natural logarithm of a complex number, the natural 
-    /// logarithm of a quaternion has multiple possible values. We define the 
+    /// Like the natural logarithm of a complex number, the natural
+    /// logarithm of a quaternion has multiple possible values. We define the
     /// principal value of the quaternion natural logarithm for a quaternion
     /// `q` by
     /// ```text
     /// Ln(q) := ln(|q|) + sgn(vector(q)) * Arg(q)
     /// ```
-    /// when `|vector(q)| != 0` and 
+    /// when `|vector(q)| != 0` and
     /// ```text
     /// Ln(q) := ln(|scalar(q)|)
     /// ```
-    /// when `|vector(q)| == 0`. Here `Arg(q)` is the principal argument of 
-    /// `q`, `|q|` is the norm of `q`, `vector(q)` is the vector part of 
-    /// `q`, `sgn(.)` is the signum function, and `ln(.)` denotes the natural 
-    /// logarithm of a scalar. Returning the principal value allows us to define 
+    /// when `|vector(q)| == 0`. Here `Arg(q)` is the principal argument of
+    /// `q`, `|q|` is the norm of `q`, `vector(q)` is the vector part of
+    /// `q`, `sgn(.)` is the signum function, and `ln(.)` denotes the natural
+    /// logarithm of a scalar. Returning the principal value allows us to define
     /// a unique natural logarithm for each quaternion `q`.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The principal value of the natural logarithm of `q` is well-defined when 
+    ///
+    /// The principal value of the natural logarithm of `q` is well-defined when
     /// `|vector(q)| == 0` due to the continuity of the function when |v| = 0.
-    /// That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that 
+    /// That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that
     /// `Ln(q) -> ln(|scalar(q)|)` as `|v| -> 0`.
     ///
     /// # Example
@@ -1899,7 +1891,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1907,20 +1899,20 @@ where
     /// let pi = f64::consts::PI;
     /// let quaternion = Quaternion::from_parts(1_f64, unit_z);
     /// let expected = Quaternion::new(f64::ln(f64::sqrt(2_f64)), 0_f64, 0_f64, pi / 4_f64);
-    /// let result = quaternion.ln(); 
+    /// let result = quaternion.ln();
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1942,12 +1934,12 @@ where
     fn ln_eps(&self, epsilon: S) -> Self {
         let norm_v_squared = self.vector().norm_squared();
         if norm_v_squared <= epsilon * epsilon {
-            // The principal value of the natural logarithm of `q` is well-defined when 
+            // The principal value of the natural logarithm of `q` is well-defined when
             // `|vector(q)| == 0` due to the continuity of the function when |v| = 0.
-            // That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that 
+            // That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that
             // `Ln(q) -> ln(|scalar(q)|)` as `|v| -> 0`.
             let norm = self.scalar().abs();
-            
+
             Self::from_parts(norm.ln(), Vector3::zero())
         } else {
             let norm = self.norm();
@@ -1959,7 +1951,7 @@ where
         }
     }
 
-    /// Calculate the power of a quaternion where the exponent is a floating 
+    /// Calculate the power of a quaternion where the exponent is a floating
     /// point number.
     ///
     /// # Example
@@ -1967,10 +1959,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let scalar = 1_f64;
@@ -1988,31 +1980,31 @@ where
     }
 
     /// Calculate the prinicipal value of the square root of a quaternion.
-    /// 
-    /// If the input quaternion is a negative real quaternion, the function 
+    ///
+    /// If the input quaternion is a negative real quaternion, the function
     /// returns a pure quaternion with zero real-part
     /// ```text
     /// sqrt(-|s|) == sqrt(|s|) * i
     /// ```
-    /// When `scalar(q) < 0` and `|vector(q)| == 0`, the square root does not have a 
-    /// unique value, so we return a canonically chosen value on the **x-axis** of 
-    /// the vector part, so that it is analagous to the square root of a complex 
+    /// When `scalar(q) < 0` and `|vector(q)| == 0`, the square root does not have a
+    /// unique value, so we return a canonically chosen value on the **x-axis** of
+    /// the vector part, so that it is analagous to the square root of a complex
     /// number with negative real part and zero imaginary part.
-    /// 
-    /// The principal value of the square root of a quaternion is defined as 
-    /// follows. Let `q := s + v` where `s` is the scalar part of `q` and `v` is the 
-    /// vector part of `q`. The principal value for the square root of `q` is 
+    ///
+    /// The principal value of the square root of a quaternion is defined as
+    /// follows. Let `q := s + v` where `s` is the scalar part of `q` and `v` is the
+    /// vector part of `q`. The principal value for the square root of `q` is
     /// given by
     /// ```text
     /// sqrt(q) := sqrt(|q|) * ( cos(|Arg(q) / 2|) + sgn(v) * sin(|Arg(q) / 2|) )
     /// ```
     /// where `|q|` is the norm of `q`, and `Arg(q)` is the principal argument of `q`.
-    /// 
+    ///
     /// # Derivation Of The Square Root Formula
-    /// 
-    /// The formula for the principal value for the square root of a quaterion is derived 
-    /// as follows. Given a quaternion `q`, the square root of `q` is a quaternion `p` 
-    /// such that `p * p == q`. The formula for `sqrt(q)` is given by the following 
+    ///
+    /// The formula for the principal value for the square root of a quaterion is derived
+    /// as follows. Given a quaternion `q`, the square root of `q` is a quaternion `p`
+    /// such that `p * p == q`. The formula for `sqrt(q)` is given by the following
     /// formula.
     /// ```text
     /// sqrt(q) := exp(Ln(q) / 2)
@@ -2030,16 +2022,16 @@ where
     ///                                     2            |v|               2
     /// ```
     /// where `|q|` is the norm of `q`, `t` is the principal argument of `q`, and `n`
-    /// is the nth angle satisfying the above equation. There are two solutions: `n == 0` 
-    /// and `n == 1`. The `n == 0` case corresponds to the principal value `p` returned 
-    /// by the function, and the `n == 1` case corresponds to the solution `-p`, which 
-    /// differs only by a sign. Indeed, let 
+    /// is the nth angle satisfying the above equation. There are two solutions: `n == 0`
+    /// and `n == 1`. The `n == 0` case corresponds to the principal value `p` returned
+    /// by the function, and the `n == 1` case corresponds to the solution `-p`, which
+    /// differs only by a sign. Indeed, let
     /// ```text
     ///                               t      v         t
     /// p0 := p == sqrt(|q|) * ( cos(---) + --- * sin(---) )
     ///                               2     |v|        2
     /// ```
-    /// which is the `n == 0` solution. Let 
+    /// which is the `n == 0` solution. Let
     /// ```text
     ///                          t + 2 * pi      v         t + 2 * pi
     /// p1 := sqrt(|q|) * ( cos(------------) + --- * sin(------------) )
@@ -2059,14 +2051,14 @@ where
     ///                           t      v         t
     ///    == -sqrt(|q|) * ( cos(---) + --- * sin(---) )
     ///                           2     |v|        2
-    /// 
+    ///
     ///    == -p
     /// ```
-    /// Thus the quaternion square root is indeed a proper square root with two 
-    /// solutions given by `p` and `-p`. We illustrate this with an example. 
-    /// 
+    /// Thus the quaternion square root is indeed a proper square root with two
+    /// solutions given by `p` and `-p`. We illustrate this with an example.
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Normed,
@@ -2094,18 +2086,18 @@ where
     /// # assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// #
     /// let sqrt_q = q.sqrt();
-    /// 
+    ///
     /// assert_relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10);
-    /// 
+    ///
     /// let minus_sqrt_q = -sqrt_q;
-    /// 
+    ///
     /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10);
     /// ```
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The noncommutativity of quaternion multiplication has some counterintuitive 
-    /// properties. Some quaternions can have more solutions than the degree of the 
+    ///
+    /// The noncommutativity of quaternion multiplication has some counterintuitive
+    /// properties. Some quaternions can have more solutions than the degree of the
     /// corresponding polynomial equation. For example, consider the quaternion `q := -1`.
     /// The square roots of `q` are those quaternions `p` such that
     /// ```text
@@ -2115,7 +2107,7 @@ where
     /// ```text
     /// p == b * i + c * j + d * k
     /// ```
-    /// To see this, let `p := a + b * i + c * j + d * k`, this yields solutions 
+    /// To see this, let `p := a + b * i + c * j + d * k`, this yields solutions
     /// of the form
     /// ```text
     /// a * a - b * b  - c * c - d * d == -1
@@ -2123,18 +2115,18 @@ where
     /// 2 * a * c == 0
     /// 2 * a * d == 0
     /// ```
-    /// To satisfy this system of equations, either `a == 0`, or `b == c == d == 0`. 
-    /// If `a != 0` and `b == c == d == 0`, we have `a * a == -1` which is absurd, 
-    /// since `a` is a real number. This yields `a == 0` and 
+    /// To satisfy this system of equations, either `a == 0`, or `b == c == d == 0`.
+    /// If `a != 0` and `b == c == d == 0`, we have `a * a == -1` which is absurd,
+    /// since `a` is a real number. This yields `a == 0` and
     /// `b * b + c * c + d * d != 1`. Therefore, a quaternion that squares to `-1`
     /// has as solutions pure unit quaternions. These solutions form a two-sphere
-    /// centered at zero in the pure quaternion subspace[1]. 
-    /// 
+    /// centered at zero in the pure quaternion subspace[1].
+    ///
     /// In conclusion, not only can a quaternion have multiple square roots,
     /// it can have infintitely many square roots.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2145,14 +2137,14 @@ where
     /// let unit_x: Quaternion<f64>  = Quaternion::unit_x();
     /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
     /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
-    /// 
+    ///
     /// assert_eq!(unit_x * unit_x, q);
     /// assert_eq!(unit_y * unit_y, q);
     /// assert_eq!(unit_z * unit_z, q);
     /// assert_ne!(unit_scalar * unit_scalar, q);
     /// ```
-    /// [1] _Joao Pedro Morais, Svetlin Georgiev, Wolfgang Sproessig. 2014. 
-    ///     Real Quaternionic Calculus Handbook. Birkhaueser. 
+    /// [1] _Joao Pedro Morais, Svetlin Georgiev, Wolfgang Sproessig. 2014.
+    ///     Real Quaternionic Calculus Handbook. Birkhaueser.
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
@@ -2173,14 +2165,14 @@ where
             let sqrt_norm_self = S::sqrt(norm_self);
             // We have a non-zero real quaternion.
             if self.scalar() > S::zero() {
-                // If the scalar part of a real quaternion is positive, it 
+                // If the scalar part of a real quaternion is positive, it
                 // acts like a scalar.
                 Self::from_real(sqrt_norm_self)
             } else {
-                // If the scalar part of a real quaternion is negative, it has 
+                // If the scalar part of a real quaternion is negative, it has
                 // infinitely many pure quaternion solutions that form a two-sphere
                 // centered at the origin in the vector subspace of the space of
-                // quaternions, so we choose a canonical one on the imaginary axis 
+                // quaternions, so we choose a canonical one on the imaginary axis
                 // in the complex plane.
                 Self::from_pure(Vector3::new(sqrt_norm_self, S::zero(), S::zero()))
             }
@@ -2195,19 +2187,19 @@ where
     }
 
     /// Compute the left quotient of two quaternions.
-    /// 
+    ///
     /// Given quaternions `q := self` and `p := left`, the left quotient of
     /// `q` by `p` is given by
     /// ```text
     /// div_left(q, p) := p_inv * q
     /// ```
-    /// where `p_inv` denotes the inverse of `p`. We have two definitions of 
+    /// where `p_inv` denotes the inverse of `p`. We have two definitions of
     /// quaternion division because in general quaternion multiplication is not
     /// commutative, i.e. in general `p_inv * q != q * p_inv`, so having exactly
     /// one notion of the quotient of two quaternions does not make sense.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2220,11 +2212,11 @@ where
     /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
     /// let expected = Quaternion::new(104_f64, -2_f64, 6_f64, 8_f64) / 364_f64;
     /// let result = q.div_left(&p);
-    /// 
+    ///
     /// assert!(result.is_some());
-    /// 
+    ///
     /// let result = result.unwrap();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -2233,19 +2225,19 @@ where
     }
 
     /// Compute the right quotient of two quaternions.
-    /// 
+    ///
     /// Given quaternions `q := self` and `p := right`, the right quotient of
     /// `q` by `p` is given by
     /// ```text
     /// div_right(q, p) := q * p_inv
     /// ```
-    /// where `p_inv` denotes the inverse of `p`. We have two definitions of 
+    /// where `p_inv` denotes the inverse of `p`. We have two definitions of
     /// quaternion division because in general quaternion multiplication is not
-    /// commutative, i.e. in general `p_inv * q != q * p_inv`, so having exactly 
+    /// commutative, i.e. in general `p_inv * q != q * p_inv`, so having exactly
     /// one notion of the quotient of two quaternions does not make sense.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2258,11 +2250,11 @@ where
     /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
     /// let expected = Quaternion::new(104_f64, 8_f64, 2_f64, 6_f64) / 364_f64;
     /// let result = q.div_right(&p);
-    /// 
+    ///
     /// assert!(result.is_some());
-    /// 
+    ///
     /// let result = result.unwrap();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -2271,13 +2263,13 @@ where
     }
 
     /// Calculate the inner product of two quaternions.
-    /// 
+    ///
     /// Note that `inner` is distinct from `dot`; the inner product produces a
     /// scalar quaternion, whereas the dot product produces a scalar.
-    /// 
-    /// 
+    ///
+    ///
     /// # Example (Generic Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2287,12 +2279,12 @@ where
     /// let p = Quaternion::new(1_f64, 5_f64, 12_f64, 14_f64);
     /// let expected = Quaternion::new(-232_f64, 22_f64, 54_f64, 67_f64);
     /// let result = q.inner(&p);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Pure Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2302,12 +2294,12 @@ where
     /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
     /// let expected = Quaternion::new(-63_f64, 0_f64, 0_f64, 0_f64);
     /// let result = q.inner(&p);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Real Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2317,7 +2309,7 @@ where
     /// let p = Quaternion::from_real(10_f64);
     /// let expected = Quaternion::from_real(30_f64);
     /// let result = q.inner(&p);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2329,9 +2321,9 @@ where
     }
 
     /// Calculate the outer product of two quaternions.
-    /// 
+    ///
     /// # Example (Generic Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2342,9 +2334,9 @@ where
     /// let expected = Quaternion::new(0_f64, -48_f64, 27_f64, 19_f64);
     /// let result = q.outer(&p);
     /// ```
-    /// 
+    ///
     /// # Example (Pure Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2354,12 +2346,12 @@ where
     /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
     /// let expected = Quaternion::new(0_f64, 32_f64, -20_f64, -1_f64);
     /// let result = q.outer(&p);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Real Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -2369,7 +2361,7 @@ where
     /// let p = Quaternion::from_real(10_f64);
     /// let expected: Quaternion<f64> = Quaternion::zero();
     /// let result = q.outer(&p);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2381,7 +2373,7 @@ where
     }
 
 
-    /// Construct a quaternion that rotates the shortest angular distance 
+    /// Construct a quaternion that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// # Example
@@ -2404,26 +2396,23 @@ where
     /// let v2: Vector3<f64> = Vector3::unit_y() * 3_f64;
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let expected = Quaternion::from_axis_angle(
-    ///    &unit_z, 
+    ///    &unit_z,
     ///    Radians::full_turn_div_4()
     /// );
     /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
-        if let (Some(unit_v1), Some(unit_v2)) = (
-            Unit::try_from_value(*v1, S::zero()),
-            Unit::try_from_value(*v2, S::zero()),
-        ) {
+        if let (Some(unit_v1), Some(unit_v2)) = (Unit::try_from_value(*v1, S::zero()), Unit::try_from_value(*v2, S::zero())) {
             Self::rotation_between_axis(&unit_v1, &unit_v2)
         } else {
             Some(Self::identity())
         }
     }
 
-    /// Construct a quaternion that rotates the shortest angular distance 
+    /// Construct a quaternion that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -2446,11 +2435,11 @@ where
     /// let unit_y: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_y());
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let expected = Quaternion::from_axis_angle(
-    ///    &unit_z, 
+    ///    &unit_z,
     ///    Radians::full_turn_div_4()
     /// );
     /// let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -2463,11 +2452,11 @@ where
             let cos_theta = v1.dot(v2);
 
             if cos_theta <= -S::one() {
-                // The cosines may fall outside the interval [-1, 1] because of floating 
+                // The cosines may fall outside the interval [-1, 1] because of floating
                 // point inaccuracies.
                 None
             } else if cos_theta >= S::one() {
-                // The cosines may fall outside the interval [-1, 1] because of floating 
+                // The cosines may fall outside the interval [-1, 1] because of floating
                 // point inaccuracies.
                 Some(Self::identity())
             } else {
@@ -2488,14 +2477,14 @@ where
 
 
     /// Construct a quaternion corresponding to a rotation of an observer  
-    /// standing at the origin facing the direction `direction` to an observer 
+    /// standing at the origin facing the direction `direction` to an observer
     /// standing at the origin facing the **positive z-axis**. The resulting
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
     /// This rotation maps the direction `direction` to the **positive z-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2516,7 +2505,7 @@ where
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = - unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * direction, unit_z, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * (-direction), minus_unit_z, epsilon = 1e-10);
@@ -2526,10 +2515,10 @@ where
         Self::from(&Matrix3x3::look_to_lh(direction, up))
     }
 
-    /// Construct a quaternion that transforms the coordinate system of 
-    /// an observer located at the origin facing the direction `direction` 
-    /// into a coordinate system of an observer located at the origin facing 
-    /// the **negative z-axis**. The resulting coordinate transformation is a 
+    /// Construct a quaternion that transforms the coordinate system of
+    /// an observer located at the origin facing the direction `direction`
+    /// into a coordinate system of an observer located at the origin facing
+    /// the **negative z-axis**. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the direction `direction` to the **negative z-axis**.
@@ -2561,7 +2550,7 @@ where
     ///     let qx = one_over_two_s * (f64::sqrt(3_f64) + 1_f64) / f64::sqrt(6_f64);
     ///     let qy = (1_f64 / 2_f64) * s;
     ///     let qz = one_over_two_s * 1_f64 / f64::sqrt(3_f64);
-    ///     Quaternion::new(qs, qx, qy, qz) 
+    ///     Quaternion::new(qs, qx, qy, qz)
     /// };
     /// let result = Quaternion::look_to_rh(&direction, &up);
     /// let rotation = Matrix3x3::from(result);
@@ -2577,14 +2566,14 @@ where
         Self::from(&Matrix3x3::look_to_rh(direction, up))
     }
 
-    /// Construct a quaternion corresponding to a **left-handed** viewing 
-    /// transformation without translation. 
+    /// Construct a quaternion corresponding to a **left-handed** viewing
+    /// transformation without translation.
     ///
-    /// This transformation maps the viewing direction `target - eye` to the 
+    /// This transformation maps the viewing direction `target - eye` to the
     /// **positive z-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2605,15 +2594,15 @@ where
     /// let direction = target - eye;
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(
-    ///     (rotation * direction).normalize(), 
-    ///     unit_z, 
+    ///     (rotation * direction).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     (rotation * (-direction)).normalize(), 
-    ///     minus_unit_z, 
+    ///     (rotation * (-direction)).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -2622,14 +2611,14 @@ where
         Self::from(&Matrix3x3::look_at_lh(eye, target, up))
     }
 
-    /// Construct a quaternion corresponding to a **right-handed** viewing 
-    /// transformation without translation. 
+    /// Construct a quaternion corresponding to a **right-handed** viewing
+    /// transformation without translation.
     ///
-    /// This transformation maps the viewing direction `target - eye` to the 
+    /// This transformation maps the viewing direction `target - eye` to the
     /// **negative z-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2650,15 +2639,15 @@ where
     /// let direction = target - eye;
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(
-    ///     (rotation * direction).normalize(), 
-    ///     minus_unit_z, 
+    ///     (rotation * direction).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     (rotation * (-direction)).normalize(), 
-    ///     unit_z, 
+    ///     (rotation * (-direction)).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -2667,16 +2656,16 @@ where
         Self::from(&Matrix3x3::look_at_rh(eye, target, up))
     }
 
-    /// Construct a quaternion corresponding to a rotation of an observer 
-    /// standing at the origin facing the **positive z-axis** to an observer 
+    /// Construct a quaternion corresponding to a rotation of an observer
+    /// standing at the origin facing the **positive z-axis** to an observer
     /// standing at the origin facing the direction `direction`. The resulting
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
     /// This rotation maps the **positive z-axis** to the direction `direction`.
     /// This function is the inverse of [`look_to_lh`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2697,7 +2686,7 @@ where
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * minus_unit_z, -direction, epsilon = 1e-10);
@@ -2709,13 +2698,13 @@ where
 
     /// Construct a quaternion that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
-    /// coordinate system of an observer located at the origin facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// coordinate system of an observer located at the origin facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `direction`.
     /// This function is the inverse of [`look_to_rh`].
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -2742,13 +2731,13 @@ where
     ///     let qx = one_over_two_s * (f64::sqrt(3_f64) + 1_f64) / f64::sqrt(6_f64);
     ///     let qy = (1_f64 / 2_f64) * s;
     ///     let qz = one_over_two_s * 1_f64 / f64::sqrt(3_f64);
-    ///     Quaternion::new(qs, qx, qy, qz) 
+    ///     Quaternion::new(qs, qx, qy, qz)
     /// };
     /// let result = Quaternion::look_to_rh_inv(&direction, &up);
     /// let rotation = Matrix3x3::from(result);
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * unit_z, -direction, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * minus_unit_z, direction, epsilon = 1e-10);
@@ -2758,8 +2747,8 @@ where
         Self::from(&Matrix3x3::look_to_rh_inv(direction, up))
     }
 
-    /// Construct a quaternion corresponding to a rotation of an observer 
-    /// standing at the origin facing the **positive z-axis** to an observer 
+    /// Construct a quaternion corresponding to a rotation of an observer
+    /// standing at the origin facing the **positive z-axis** to an observer
     /// standing at the origin facing the direction `target - eye`. The resulting
     /// coordinate transformation is a **left-handed** coordinate transformation.
     ///
@@ -2797,7 +2786,7 @@ where
     /// let rotation = Matrix3x3::from(result);
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
     /// ```
@@ -2808,8 +2797,8 @@ where
 
     /// Construct a quaternion that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
-    /// coordinate system of an observer located at the origin facing the 
-    /// direction `target - eye`. The resulting coordinate transformation is a 
+    /// coordinate system of an observer located at the origin facing the
+    /// direction `target - eye`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `target - eye`.
@@ -2904,7 +2893,7 @@ where
     ///
     /// In the case where the angle between quaternions is 180 degrees, the
     /// slerp function is not well defined because we can rotate about any axis
-    /// normal to the plane swept out by the quaternions to get from one to the 
+    /// normal to the plane swept out by the quaternions to get from one to the
     /// other. The vector normal to the quaternions is not unique in this case.
     ///
     /// # Example
@@ -2926,16 +2915,16 @@ where
     /// let angle2 = Degrees(150_f64);
     /// let unit_z = Vector3::unit_z();
     /// let q1 = Quaternion::from_parts(
-    ///    Angle::cos(angle1 / 2_f64), 
+    ///    Angle::cos(angle1 / 2_f64),
     ///    Angle::sin(angle1 / 2_f64) * unit_z
     /// );
     /// let q2 = Quaternion::from_parts(
-    ///    Angle::cos(angle2 / 2_f64), 
+    ///    Angle::cos(angle2 / 2_f64),
     ///    Angle::sin(angle2 / 2_f64) * unit_z
     /// );
     /// let angle_expected = Degrees(90_f64);
     /// let expected = Quaternion::from_parts(
-    ///    Angle::cos(angle_expected / 2_f64), 
+    ///    Angle::cos(angle_expected / 2_f64),
     ///    Angle::sin(angle_expected / 2_f64) * unit_z
     /// );
     /// let result = q1.slerp(&q2, 0.5);
@@ -2951,16 +2940,16 @@ where
     fn slerp_eps(&self, other: &Self, amount: S, lerp_threshold: S) -> Self {
         let zero = S::zero();
         let one = S::one();
-        // There are two possible routes along a great circle arc between two 
-        // quaternions on the two-sphere. By definition the slerp function 
-        // computes the shortest path between two points on a sphere, hence we 
-        // must determine which of two directions around the great circle arc 
-        // swept out by the slerp function is the shortest one. 
+        // There are two possible routes along a great circle arc between two
+        // quaternions on the two-sphere. By definition the slerp function
+        // computes the shortest path between two points on a sphere, hence we
+        // must determine which of two directions around the great circle arc
+        // swept out by the slerp function is the shortest one.
         let (result, cos_half_theta) = if self.dot(other) < zero {
-            // If the dot product is negative, the shortest path between two 
-            // points on the great circle arc swept out by the quaternions runs 
-            // in the opposite direction from the positive case, so we must 
-            // negate one of the quaternions to take the short way around 
+            // If the dot product is negative, the shortest path between two
+            // points on the great circle arc swept out by the quaternions runs
+            // in the opposite direction from the positive case, so we must
+            // negate one of the quaternions to take the short way around
             // instead of the long way around.
             let _result = -self;
             (_result, (_result).dot(other))
@@ -2971,43 +2960,43 @@ where
 
         // We have two opportunities for performance optimizations:
         //
-        // If `result == other`, there is no curve to interpolate; the angle 
-        // between `result` and  `other` is zero. In this case we can return 
+        // If `result == other`, there is no curve to interpolate; the angle
+        // between `result` and  `other` is zero. In this case we can return
         // `result`.
         if SimdScalarSigned::abs(cos_half_theta) >= one {
             return result;
         }
 
         // If `result == -other` then the angle between them is 180 degrees.
-        // In this case the slerp function is not well defined because we can 
+        // In this case the slerp function is not well defined because we can
         // rotate around any axis normal to the plane swept out by `result` and
         // `other`.
         //
-        // For very small angles, `sin_half_theta` is approximately equal to the 
-        // angle `half_theta`. That is, `sin(theta / 2) / (theta / 2) -> 1` as 
-        // `theta -> 0`. Therefore, we can use the sine of the angle between two 
-        // quaternions to determine when to approximate spherical linear 
-        // interpolation with normalized linear interpolation. Using the sine of 
+        // For very small angles, `sin_half_theta` is approximately equal to the
+        // angle `half_theta`. That is, `sin(theta / 2) / (theta / 2) -> 1` as
+        // `theta -> 0`. Therefore, we can use the sine of the angle between two
+        // quaternions to determine when to approximate spherical linear
+        // interpolation with normalized linear interpolation. Using the sine of
         // the angle is also cheaper to calculate since we can derive it from the
-        // cosine we already calculated instead of calculating the angle from 
+        // cosine we already calculated instead of calculating the angle from
         // an inverse trigonometric function.
         let sin_half_theta = S::sqrt(one - cos_half_theta * cos_half_theta);
         if SimdScalarSigned::abs(sin_half_theta) < lerp_threshold {
             return result.nlerp(other, amount);
         }
-        
+
         let half_theta = S::acos(cos_half_theta);
         let a = S::sin((one - amount) * half_theta) / sin_half_theta;
         let b = S::sin(amount * half_theta) / sin_half_theta;
-        
+
         let q_scalar = result.scalar() * a + other.scalar() * b;
         let q_vector = result.vector() * a + other.vector() * b;
 
         Self::from_parts(q_scalar, q_vector)
     }
 
-    /// Returns `true` if the elements of a quaternion are all finite. 
-    /// Otherwise, it returns `false`. 
+    /// Returns `true` if the elements of a quaternion are all finite.
+    /// Otherwise, it returns `false`.
     ///
     /// A quaternion is finite when all of its elements are finite.
     ///
@@ -3020,11 +3009,11 @@ where
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
-    /// assert!(quaternion.is_finite()); 
+    /// assert!(quaternion.is_finite());
     /// ```
     ///
     /// # Example (Not A Finite Quaternion)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3046,10 +3035,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion, 
+    /// #     Quaternion,
     /// #     Normed,
     /// # };
-    /// # 
+    /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let unit_x = Quaternion::unit_x();
     /// let unit_y = Quaternion::unit_y();
@@ -3072,22 +3061,22 @@ where
 
     /// Compute the rejection of the quaternion `self` from the quaternion
     /// `other`.
-    /// 
+    ///
     /// Given quaternions `q` and `p`, the projection of `q` onto `p` is the
     /// component of the quaternion `q` that is parallel to the quaternion `p`.
     /// We can decompose the quaternion `q` as follows
     /// ```text
     /// q := q_parallel + q_perpendicular
     /// ```
-    /// The component `q_parallel` is the component of `q` parallel to `p`, or 
-    /// projected onto `p`. The component `q_perpendicular` is the component 
+    /// The component `q_parallel` is the component of `q` parallel to `p`, or
+    /// projected onto `p`. The component `q_perpendicular` is the component
     /// perpendicular to `p`, or  rejected by `p`. This leads to the decomposition
     /// ```text
     /// q == q.project(p) + q.reject(p)
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3101,7 +3090,7 @@ where
     /// let p = Quaternion::new(0_f64, 1_f64, 2_f64, 3_f64);
     /// let q_proj = q.project(&p);
     /// let q_rej = q.reject(&p);
-    /// 
+    ///
     /// assert_relative_eq!(q_proj + q_rej, q, epsilon = 1e-10);
     /// assert_relative_ne!(q_proj.dot(&p), 0_f64);
     /// assert_relative_eq!(q_rej.dot(&p), 0_f64, epsilon = 1e-10);
@@ -3116,17 +3105,17 @@ where
     /// Every quaternion `q` can be decomposed into a polar form. A
     /// quaternion `q`, can be written in polar form as
     /// ```text
-    /// q := s + v := |q| * exp((-theta / 2) * vhat) 
+    /// q := s + v := |q| * exp((-theta / 2) * vhat)
     ///            := |q| * (cos(theta / 2) + vhat * sin(theta / 2))
     /// ```
     /// where `s` is the scalar part, `v` is the vector part, |q| is the length
-    /// of the quaternion, `vhat` denotes the normalized part of the vector 
-    /// part, and `theta` is the angle of rotation about the axis `vhat` 
+    /// of the quaternion, `vhat` denotes the normalized part of the vector
+    /// part, and `theta` is the angle of rotation about the axis `vhat`
     /// encoded by the quaternion.
     ///
-    /// The output of the function is a triple containing the norm of 
+    /// The output of the function is a triple containing the norm of
     /// the quaternion, followed by the angle of rotation, followed optionally
-    /// by the axis of rotation, if there is one. There may not be one in the 
+    /// by the axis of rotation, if there is one. There may not be one in the
     /// case where the quaternion is a real quaternion.
     ///
     /// # Example
@@ -3141,7 +3130,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -3158,8 +3147,8 @@ where
     /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-8);
     /// assert!(result.2.is_some());
     /// assert_relative_eq!(
-    ///     result.2.unwrap().as_ref(), 
-    ///     expected.2.unwrap().as_ref(), 
+    ///     result.2.unwrap().as_ref(),
+    ///     expected.2.unwrap().as_ref(),
     ///     epsilon = 1e-8
     /// );
     /// ```
@@ -3170,10 +3159,7 @@ where
             if let Some(axis) = Unit::try_from_value(self.vector(), S::zero()) {
                 let cos_angle_over_two = unit_q.scalar().abs();
                 let sin_angle_over_two = unit_q.vector().norm();
-                let angle_over_two = Radians::atan2(
-                    sin_angle_over_two, 
-                    cos_angle_over_two
-                );
+                let angle_over_two = Radians::atan2(sin_angle_over_two, cos_angle_over_two);
 
                 (norm_q, angle_over_two, Some(axis))
             } else {
@@ -3193,7 +3179,7 @@ where
     ///   == |q| * cos(angle / 2) + |q| * sin(angle / 2) * axis
     ///   == s + v
     /// ```
-    /// where `s := |q| * cos(angle / 2)` is the scalar part of `q`, and 
+    /// where `s := |q| * cos(angle / 2)` is the scalar part of `q`, and
     /// `v := |q| * sin(angle / 2) * axis` is the vector part of `q`.
     ///
     /// # Example
@@ -3231,9 +3217,9 @@ where
     }
 
     /// Compute the quaternionic cosine of `self`.
-    /// 
-    /// The quaternionic cosine is defined as follows. Given a quaternion 
-    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    ///
+    /// The quaternionic cosine is defined as follows. Given a quaternion
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`
     /// ```text                               
     /// cos(q) := cos(s) * cosh(|v|) - sin(s) * sinh(|v|) * (v / |v|)
@@ -3242,12 +3228,12 @@ where
     /// ```text
     /// cos(q) := cos(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions because 
-    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `cos(q)` goes to 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions because
+    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `cos(q)` goes to
     /// zero as `|v| -> 0`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3261,16 +3247,16 @@ where
     /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
     /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, -3_f64 / 4_f64);
     /// let result = quaternion.cos();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn cos(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
-            // The quaternionic cosine is continuous at |v| = 0. In particular, 
-            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
-            // `|v| -> 0` and thus the quaternionic cosine is well-defined 
+            // The quaternionic cosine is continuous at |v| = 0. In particular,
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as
+            // `|v| -> 0` and thus the quaternionic cosine is well-defined
             // for real quaternions.
             let scalar = self.scalar().cos() * norm_vec_self.cosh();
 
@@ -3284,9 +3270,9 @@ where
     }
 
     /// Compute the quaternionic arccosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3308,7 +3294,7 @@ where
     ///     -f64::sqrt(2_f64) / 4_f64
     /// );
     /// let result = quaternion.acos();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -3321,9 +3307,9 @@ where
     }
 
     /// Compute the quaternionic sine of `self`.
-    /// 
-    /// The quaternionic sine is defined as follows. Given a quaternion 
-    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    ///
+    /// The quaternionic sine is defined as follows. Given a quaternion
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`
     /// ```text                               
     /// sin(q) := sin(s) * cosh(|v|) + cos(s) * sinh(|v|) * (v / |v|)
@@ -3332,12 +3318,12 @@ where
     /// ```text
     /// sin(q) := sin(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions because 
-    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `sin(q)` goes to 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions because
+    /// `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `sin(q)` goes to
     /// zero as `|v| -> 0`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3351,16 +3337,16 @@ where
     /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
     /// let expected = Quaternion::from_real(5_f64 / 4_f64);
     /// let result = quaternion.sin();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sin(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
-            // The quaternionic sine is continuous at |v| = 0. In particular, 
-            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
-            // `|v| -> 0` and thus the quaternionic sine is well-defined 
+            // The quaternionic sine is continuous at |v| = 0. In particular,
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as
+            // `|v| -> 0` and thus the quaternionic sine is well-defined
             // for real quaternions.
             let scalar = self.scalar().sin() * norm_vec_self.cosh();
 
@@ -3374,9 +3360,9 @@ where
     }
 
     /// Compute the quaternionic arcsine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3398,7 +3384,7 @@ where
     ///     f64::sqrt(2_f64) / 4_f64
     /// );
     /// let result = quaternion.asin();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -3411,9 +3397,9 @@ where
     }
 
     /// Compute the quaternionic tangent of `self`.
-    /// 
-    /// The quaternionic tangent is defined as follows. Given a quaternion 
-    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
+    ///
+    /// The quaternionic tangent is defined as follows. Given a quaternion
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`, and `q != (n * (1 / 2)) * pi` where `n` is an integer, then
     /// ```text
     /// tan(q) := sin(q) / cos(q)
@@ -3431,15 +3417,15 @@ where
     /// ```text
     /// tan(q) := tan(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions 
-    /// because `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `tan(q)` 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions
+    /// because `sinh(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `tan(q)`
     /// goes to zero as `|v| -> 0`.
-    /// 
-    /// The function is not well-defined when `q == (n + (1 / 2)) * pi` where `n` is an 
+    ///
+    /// The function is not well-defined when `q == (n + (1 / 2)) * pi` where `n` is an
     /// integer.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3453,16 +3439,16 @@ where
     /// let quaternion = Quaternion::new(pi_over_two, 0_f64, 0_f64, f64::ln(2_f64));
     /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, 5_f64 / 3_f64);
     /// let result = quaternion.tan();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn tan(&self) -> Self {
         let norm_v = self.vector().norm();
         if norm_v.is_zero() {
-            // The quaternionic tangent is continuous at |v| = 0. In particular, 
-            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as 
-            // `|v| -> 0` and thus the quaternionic tangent is well-defined 
+            // The quaternionic tangent is continuous at |v| = 0. In particular,
+            // `sinh(|v|) / |v| -> 1` as `|v| -> 0` so that `vector(q) -> 0` as
+            // `|v| -> 0` and thus the quaternionic tangent is well-defined
             // for real quaternions.
             return Self::from_real(self.scalar().tan());
         }
@@ -3480,9 +3466,9 @@ where
     }
 
     /// Compute the quaternionic arctangent of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3504,7 +3490,7 @@ where
     ///     f64::sqrt(5_f64) / 3_f64
     /// );
     /// let result = quaternion.atan();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -3513,14 +3499,14 @@ where
         let numerator = signum_vec_self + self;
         let denominator = signum_vec_self - self;
         let q = numerator.div_right(&denominator).unwrap();
-        
+
         signum_vec_self.half() * q.ln()
     }
 
     /// Compute the quaternionic hyperbolic cosine of `self`.
-    /// 
-    /// The quaternionic hyperbolic cosine is defined as follows. Given a 
-    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is 
+    ///
+    /// The quaternionic hyperbolic cosine is defined as follows. Given a
+    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is
     /// the vector part of `q`
     /// ```text                               
     /// cosh(q) := cosh(s) * cos(|v|) + sinh(s) * sin(|v|) * (v / |v|)
@@ -3529,12 +3515,12 @@ where
     /// ```text
     /// cosh(q) := cosh(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions 
-    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions
+    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of
     /// `cosh(q)` goes to zero as `|v| -> 0`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3550,16 +3536,16 @@ where
     /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let expected = Quaternion::new(0_f64, f64::sqrt(5_f64) / 2_f64, 0_f64, 0_f64);
     /// let result = quaternion.cosh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn cosh(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
-            // The quaternionic hyperbolic cosine is continuous at |v| = 0. In 
-            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
-            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // The quaternionic hyperbolic cosine is continuous at |v| = 0. In
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic
             // cosine is well-defined for real quaternions.
             let scalar = self.scalar().cosh() * norm_vec_self.cos();
 
@@ -3573,9 +3559,9 @@ where
     }
 
     /// Compute the quaternionic hyperbolic arccosine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3591,20 +3577,20 @@ where
     /// let quaternion = Quaternion::new(0_f64, f64::sqrt(5_f64) / 2_f64, 0_f64, 0_f64);
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let result = quaternion.acosh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn acosh(&self) -> Self {
         let identity = Self::identity();
-        
+
         (self + (self + identity).sqrt() * (self - identity).sqrt()).ln()
     }
 
     /// Compute the quaternionic hyperbolic sine of `self`.
-    /// 
-    /// The quaternionic hyperbolic sine is defined as follows. Given a 
-    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is 
+    ///
+    /// The quaternionic hyperbolic sine is defined as follows. Given a
+    /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is
     /// the vector part of `q`
     /// ```text                               
     /// sinh(q) := sinh(s) * cos(|v|) + cosh(s) * sin(|v|) * (v / |v|)
@@ -3613,12 +3599,12 @@ where
     /// ```text
     /// sinh(q) := sinh(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions 
-    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions
+    /// because `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of
     /// `sinh(q)` goes to zero as `|v| -> 0`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3634,16 +3620,16 @@ where
     /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let expected = Quaternion::new(0_f64, 3_f64 / 2_f64, 0_f64, 0_f64);
     /// let result = quaternion.sinh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn sinh(&self) -> Self {
         let norm_vec_self = self.vector().norm();
         if norm_vec_self.is_zero() {
-            // The quaternionic hyperbolic sine is continuous at |v| = 0. In 
-            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
-            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // The quaternionic hyperbolic sine is continuous at |v| = 0. In
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic
             // sine is well-defined for real quaternions.
             let scalar = self.scalar().sinh() * norm_vec_self.cos();
 
@@ -3657,9 +3643,9 @@ where
     }
 
     /// Compute the quaternionic hyperbolic arcsine of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3675,21 +3661,21 @@ where
     /// let quaternion = Quaternion::new(0_f64, 3_f64 / 2_f64, 0_f64, 0_f64);
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let result = quaternion.asinh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn asinh(&self) -> Self {
         let identity = Self::identity();
-        
+
         (self + (self.squared() + identity).sqrt()).ln()
     }
 
     /// Compute the quaternionic hyperbolic tangent of `self`.
-    /// 
-    /// The quaternionic hyperbolic tangent is defined as follows. Given a quaternion 
-    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector 
-    /// part of `q`, and `q != ((n + (1 / 2)) * pi) * (v / |v|)` where `n` is an 
+    ///
+    /// The quaternionic hyperbolic tangent is defined as follows. Given a quaternion
+    /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
+    /// part of `q`, and `q != ((n + (1 / 2)) * pi) * (v / |v|)` where `n` is an
     /// integer, then
     /// ```text
     /// tan(q) := sinh(q) / cosh(q)
@@ -3707,15 +3693,15 @@ where
     /// ```text
     /// tanh(q) := tanh(s)
     /// ```
-    /// when `norm(v) == 0`. This function is well-defined for real quaternions because 
-    /// `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `tanh(q)` goes 
+    /// when `norm(v) == 0`. This function is well-defined for real quaternions because
+    /// `sin(|v|) / |v| -> 1` as `|v| -> 0`, so that the vector part of `tanh(q)` goes
     /// to zero as `|v| -> 0`.
-    /// 
+    ///
     /// The function is not well-defined when `q == ((n + (1 / 2)) * pi) * (v / |v|)`, where
     /// `n` is an integer.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3731,16 +3717,16 @@ where
     /// let quaternion = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let expected = Quaternion::from_real(3_f64 / f64::sqrt(5_f64));
     /// let result = quaternion.tanh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn tanh(&self) -> Self {
         let norm_v = self.vector().norm();
         if norm_v.is_zero() {
-            // The quaternionic hyperbolic tangent is continuous at |v| = 0. In 
-            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that 
-            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic 
+            // The quaternionic hyperbolic tangent is continuous at |v| = 0. In
+            // particular, `sin(|v|) / |v| -> 1` as `|v| -> 0` so that
+            // `vector(q) -> 0` as `|v| -> 0` and thus the quaternionic hyperbolic
             // tangent is well-defined for real quaternions.
             return Self::from_real(self.scalar().tanh());
         }
@@ -3758,9 +3744,9 @@ where
     }
 
     /// Compute the quaternionic hyperbolic arctangent of `self`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
@@ -3776,7 +3762,7 @@ where
     /// let quaternion = Quaternion::from_real(3_f64 / f64::sqrt(5_f64));
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), 0_f64, 0_f64, 0_f64);
     /// let result = quaternion.atanh();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -3950,21 +3936,17 @@ where
 
     #[inline]
     fn deref(&self) -> &Self::Target {
-        unsafe { 
-            &*(self.as_ptr() as *const ViewSV<S>) 
-        }
+        unsafe { &*(self.as_ptr() as *const ViewSV<S>) }
     }
 }
 
 impl<S> ops::DerefMut for Quaternion<S>
 where
     S: Copy,
-{ 
+{
     #[inline]
     fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe { 
-            &mut *(self.as_mut_ptr() as *mut ViewSV<S>) 
-        }
+        unsafe { &mut *(self.as_mut_ptr() as *mut ViewSV<S>) }
     }
 }
 
@@ -4023,9 +4005,7 @@ where
 {
     #[inline]
     fn from(v: &'a [S; 4]) -> &'a Quaternion<S> {
-        unsafe { 
-            &*(v as *const [S; 4] as *const Quaternion<S>)
-        }
+        unsafe { &*(v as *const [S; 4] as *const Quaternion<S>) }
     }
 }
 
@@ -4035,9 +4015,7 @@ where
 {
     #[inline]
     fn from(v: &'a (S, S, S, S)) -> &'a Quaternion<S> {
-        unsafe { 
-            &*(v as *const (S, S, S, S) as *const Quaternion<S>)
-        }
+        unsafe { &*(v as *const (S, S, S, S) as *const Quaternion<S>) }
     }
 }
 
@@ -4126,11 +4104,7 @@ where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(
-            formatter, 
-            "{} + [{}, {}, {}]", 
-            self.coords[0], self.coords[1], self.coords[2], self.coords[3]
-        )
+        writeln!(formatter, "{} + [{}, {}, {}]", self.coords[0], self.coords[1], self.coords[2], self.coords[3])
     }
 }
 
@@ -4166,9 +4140,7 @@ where
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() + other.scalar(), self.vector() + other.vector()
-        )
+        Quaternion::from_parts(self.scalar() + other.scalar(), self.vector() + other.vector())
     }
 }
 
@@ -4180,9 +4152,7 @@ where
 
     #[inline]
     fn add(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() + other.scalar(), self.vector() + other.vector()
-        )
+        Quaternion::from_parts(self.scalar() + other.scalar(), self.vector() + other.vector())
     }
 }
 
@@ -4194,9 +4164,7 @@ where
 
     #[inline]
     fn add(self, other: &Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() + other.scalar(), self.vector() + other.vector()
-        )
+        Quaternion::from_parts(self.scalar() + other.scalar(), self.vector() + other.vector())
     }
 }
 
@@ -4208,9 +4176,7 @@ where
 
     #[inline]
     fn add(self, other: &'b Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() + other.scalar(), self.vector() + other.vector()
-        )
+        Quaternion::from_parts(self.scalar() + other.scalar(), self.vector() + other.vector())
     }
 }
 
@@ -4222,9 +4188,7 @@ where
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() - other.scalar(), self.vector() - other.vector()
-        )
+        Quaternion::from_parts(self.scalar() - other.scalar(), self.vector() - other.vector())
     }
 }
 
@@ -4236,9 +4200,7 @@ where
 
     #[inline]
     fn sub(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() - other.scalar(), self.vector() - other.vector()
-        )
+        Quaternion::from_parts(self.scalar() - other.scalar(), self.vector() - other.vector())
     }
 }
 
@@ -4250,9 +4212,7 @@ where
 
     #[inline]
     fn sub(self, other: &Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() - other.scalar(), self.vector() - other.vector()
-        )
+        Quaternion::from_parts(self.scalar() - other.scalar(), self.vector() - other.vector())
     }
 }
 
@@ -4264,9 +4224,7 @@ where
 
     #[inline]
     fn sub(self, other: &'b Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() - other.scalar(), self.vector() - other.vector()
-        )
+        Quaternion::from_parts(self.scalar() - other.scalar(), self.vector() - other.vector())
     }
 }
 
@@ -4276,7 +4234,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() * other, self.vector() * other)
@@ -4289,7 +4246,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() * other, self.vector() * other)
@@ -4302,7 +4258,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() * *other, self.vector() * *other)
@@ -4315,7 +4270,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'b S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() * *other, self.vector() * *other)
@@ -4331,10 +4285,10 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
-            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
-        )
+        let scalar = self.scalar() * other.scalar() - self.vector().dot(&other.vector());
+        let vector = other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector());
+
+        Quaternion::from_parts(scalar, vector)
     }
 }
 
@@ -4347,10 +4301,10 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
-            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
-        )
+        let scalar = self.scalar() * other.scalar() - self.vector().dot(&other.vector());
+        let vector = other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector());
+
+        Quaternion::from_parts(scalar, vector)
     }
 }
 
@@ -4363,10 +4317,10 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
-            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
-        )
+        let scalar = self.scalar() * other.scalar() - self.vector().dot(&other.vector());
+        let vector = other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector());
+
+        Quaternion::from_parts(scalar, vector)
     }
 }
 
@@ -4379,10 +4333,10 @@ where
     #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'b Quaternion<S>) -> Self::Output {
-        Quaternion::from_parts(
-            self.scalar() * other.scalar() - self.vector().dot(&other.vector()),
-            other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector())
-        )
+        let scalar = self.scalar() * other.scalar() - self.vector().dot(&other.vector());
+        let vector = other.vector() * self.scalar() + self.vector() * other.scalar() + self.vector().cross(&other.vector());
+
+        Quaternion::from_parts(scalar, vector)
     }
 }
 
@@ -4435,7 +4389,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() / other, self.vector() / other)
@@ -4448,7 +4401,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn div(self, other: S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() / other, self.vector() / other)
@@ -4461,7 +4413,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn div(self, other: &S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() / *other, self.vector() / *other)
@@ -4474,7 +4425,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn div(self, other: &'b S) -> Quaternion<S> {
         Quaternion::from_parts(self.scalar() / *other, self.vector() / *other)
@@ -4487,7 +4437,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
         Quaternion::from_parts(self.scalar() % other, self.vector() % other)
@@ -4500,7 +4449,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: S) -> Self::Output {
         Quaternion::from_parts(self.scalar() % other, self.vector() % other)
@@ -4513,7 +4461,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: &S) -> Self::Output {
         Quaternion::from_parts(self.scalar() % *other, self.vector() % *other)
@@ -4526,7 +4473,6 @@ where
 {
     type Output = Quaternion<S>;
 
-    #[rustfmt::skip]
     #[inline]
     fn rem(self, other: &'b S) -> Self::Output {
         Quaternion::from_parts(self.scalar() % *other, self.vector() % *other)
@@ -4614,10 +4560,11 @@ where
         S::default_epsilon()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.scalar(), &other.scalar(), epsilon) &&
-        Vector3::abs_diff_eq(&self.vector(), &other.vector(), epsilon)
+        S::abs_diff_eq(&self.scalar(), &other.scalar(), epsilon)
+            && Vector3::abs_diff_eq(&self.vector(), &other.vector(), epsilon)
     }
 }
 
@@ -4630,10 +4577,11 @@ where
         S::default_max_relative()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        S::relative_eq(&self.scalar(), &other.scalar(), epsilon, max_relative) &&
-        Vector3::relative_eq(&self.vector(), &other.vector(), epsilon, max_relative)
+        S::relative_eq(&self.scalar(), &other.scalar(), epsilon, max_relative)
+            && Vector3::relative_eq(&self.vector(), &other.vector(), epsilon, max_relative)
     }
 }
 
@@ -4646,10 +4594,11 @@ where
         S::default_max_ulps()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps) &&
-        Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
+        S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps)
+            && Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
     }
 }
 
@@ -4754,4 +4703,3 @@ where
         Unit::from_value_unchecked(-self.into_inner())
     }
 }
-

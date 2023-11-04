@@ -13,6 +13,7 @@ mod shear2_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_point() {
         let shear_factor = 5_i32;
@@ -34,6 +35,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_vector() {
         let shear_factor = 5_i32;
@@ -55,6 +57,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -70,6 +73,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -85,6 +89,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_point() {
         let shear_factor = 5_i32;
@@ -106,6 +111,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_vector() {
         let shear_factor = 5_i32;
@@ -127,6 +133,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -142,6 +149,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -179,6 +187,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_point() {
         let shear = Shear2::identity();
@@ -199,6 +208,7 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_vector() {
         let shear = Shear2::identity();
@@ -243,16 +253,17 @@ mod shear2_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_trace() {
         let shear_factor = 10_f64;
         let direction = Unit::from_value(Vector2::new(
             -f64::sqrt(9_f64 / 13_f64), 
-            -f64::sqrt(4_f64 / 13_f64)
+            -f64::sqrt(4_f64 / 13_f64),
         ));
         let normal = Unit::from_value(Vector2::new(
              f64::sqrt(4_f64 / 13_f64),
-            -f64::sqrt(9_f64 / 13_f64)
+            -f64::sqrt(9_f64 / 13_f64),
         ));
         let shear = Shear2::from_shear(shear_factor, &direction, &normal);
         let expected = 3_f64;
@@ -274,6 +285,7 @@ mod shear2_inverse_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_point() {
         let shear_factor = 5_i32;
@@ -295,6 +307,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_vector() {
         let shear_factor = 5_i32;
@@ -316,6 +329,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -331,6 +345,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -346,6 +361,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_point() {
         let shear_factor = 5_i32;
@@ -367,6 +383,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_vector() {
         let shear_factor = 5_i32;
@@ -388,6 +405,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -403,6 +421,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -442,6 +461,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_inverse_point() {
         let shear = Shear2::identity();
@@ -462,6 +482,7 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_inverse_vector() {
         let shear = Shear2::identity();
@@ -508,11 +529,12 @@ mod shear2_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_inverse_trace() {
         let shear_factor = 10_f64;
         let direction = Unit::from_value(Vector2::new(
-            -f64::sqrt(9_f64 / 13_f64), 
+            -f64::sqrt(9_f64 / 13_f64),
             -f64::sqrt(4_f64 / 13_f64)
         ));
         let normal = Unit::from_value(Vector2::new(
@@ -541,6 +563,7 @@ mod shear2_coordinate_plane_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
         let shear_factor = 7_f64;
@@ -576,13 +599,14 @@ mod shear2_coordinate_plane_tests {
         let expected = Matrix3x3::new(
             1_f64,        0_f64, 0_f64,
             shear_factor, 1_f64, 0_f64,
-            0_f64,        0_f64, 1_f64
+            0_f64,        0_f64, 1_f64,
         );
         let result = shear.to_affine_matrix();
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane() {
         let shear_factor = 7_f64;
@@ -601,6 +625,7 @@ mod shear2_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx() {
         let shear_factor = 7_f64;
@@ -636,13 +661,14 @@ mod shear2_coordinate_plane_tests {
         let expected = Matrix3x3::new(
             1_f64,  shear_factor,             0_f64,
             0_f64,  1_f64,                    0_f64,
-            0_f64, -origin[0] * shear_factor, 1_f64
+            0_f64, -origin[0] * shear_factor, 1_f64,
         );
         let result = shear.to_affine_matrix();
 
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane() {
         let shear_factor = 7_f64;
@@ -733,7 +759,7 @@ mod shear2_noncoordinate_plane_tests {
         Matrix3x3::new(
             2_f64 / f64::sqrt(5_f64), 1_f64 / f64::sqrt(5_f64), 0_f64,
            -1_f64 / f64::sqrt(5_f64), 2_f64 / f64::sqrt(5_f64), 0_f64,
-            0_f64,                    0_f64,                    1_f64
+            0_f64,                    0_f64,                    1_f64,
         )
     }
 
@@ -742,7 +768,7 @@ mod shear2_noncoordinate_plane_tests {
         Matrix3x3::new(
             2_f64 / f64::sqrt(5_f64), -1_f64 / f64::sqrt(5_f64), 0_f64,
             1_f64 / f64::sqrt(5_f64),  2_f64 / f64::sqrt(5_f64), 0_f64,
-            0_f64,                     0_f64,                    1_f64
+            0_f64,                     0_f64,                    1_f64,
         )
     }
 
@@ -781,6 +807,7 @@ mod shear2_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn tests_from_affine_shear_coordinates() {
         let translation = translation();
@@ -813,7 +840,7 @@ mod shear2_noncoordinate_plane_tests {
         let rotation = rotation();
         let rotated_origin = Point2::new(f64::sqrt(5_f64), 0_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
-   
+
         assert_relative_eq!(result_rotated_translated_origin[0], origin[0], epsilon = 1e-10);
         assert_relative_eq!(result_rotated_translated_origin[1], origin[1], epsilon = 1e-10);
     }
@@ -863,19 +890,19 @@ mod shear2_noncoordinate_plane_tests {
         let expected = [
             Vector2::new(
                  (1_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-                 (3_f64 / f64::sqrt(5_f64)) + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+                 (3_f64 / f64::sqrt(5_f64)) + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
             ),
             Vector2::new(
                 -(3_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-                 (1_f64 / f64::sqrt(5_f64))  + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+                 (1_f64 / f64::sqrt(5_f64))  + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
             ),
             Vector2::new(
                 -(1_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-                -(3_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+                -(3_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
             ),
             Vector2::new(
                  (3_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-                -(1_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+                -(1_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
             ),
         ];
         let result = vertices.map(|v| shear.apply_vector(&v));
@@ -970,6 +997,7 @@ mod shear3_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_point() {
         let shear_factor = 5_i32;
@@ -999,6 +1027,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_vector() {
         let shear_factor = 5_i32;
@@ -1028,6 +1057,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1045,6 +1075,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1062,6 +1093,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_point() {
         let shear_factor = 5_i32;
@@ -1091,6 +1123,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_vector() {
         let shear_factor = 5_i32;
@@ -1119,6 +1152,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1136,6 +1170,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1153,6 +1188,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_point() {
         let shear_factor = 5_i32;
@@ -1182,6 +1218,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_vector() {
         let shear_factor = 5_i32;
@@ -1211,6 +1248,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1228,6 +1266,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1245,6 +1284,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_point() {
         let shear_factor = 5_i32;
@@ -1274,6 +1314,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_vector() {
         let shear_factor = 5_i32;
@@ -1303,6 +1344,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1320,6 +1362,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1337,6 +1380,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_point() {
         let shear_factor = 5_i32;
@@ -1366,6 +1410,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_vector() {
         let shear_factor = 5_i32;
@@ -1395,6 +1440,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1412,6 +1458,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1429,6 +1476,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_point() {
         let shear_factor = 5_i32;
@@ -1458,6 +1506,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_vector() {
         let shear_factor = 5_i32;
@@ -1487,6 +1536,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1504,6 +1554,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1587,6 +1638,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_point() {
         let shear = Shear3::identity();
@@ -1625,6 +1677,7 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_vector() {
         let shear = Shear3::identity();
@@ -1735,18 +1788,19 @@ mod shear3_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_trace() {
         let shear_factor = 10_f64;
         let direction = Unit::from_value(Vector3::new(
-            -f64::sqrt(4_f64 / 10_f64), 
+            -f64::sqrt(4_f64 / 10_f64),
             -f64::sqrt(1_f64 / 10_f64),
-             f64::sqrt(5_f64 / 10_f64)
+             f64::sqrt(5_f64 / 10_f64),
         ));
         let normal = Unit::from_value(Vector3::new(
             f64::sqrt(4_f64 / 10_f64),
             f64::sqrt(1_f64 / 10_f64),
-            f64::sqrt(5_f64 / 10_f64)
+            f64::sqrt(5_f64 / 10_f64),
         ));
         let shear = Shear3::from_shear(shear_factor, &direction, &normal);
         let expected = 4_f64;
@@ -1772,6 +1826,7 @@ mod shear3_inverse_tests {
     };
 
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_point() {
         let shear_factor = 5_i32;
@@ -1801,6 +1856,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_vector() {
         let shear_factor = 5_i32;
@@ -1830,6 +1886,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1847,6 +1904,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1864,6 +1922,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_inverse_point() {
         let shear_factor = 5_i32;
@@ -1893,6 +1952,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_inverse_vector() {
         let shear_factor = 5_i32;
@@ -1921,6 +1981,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -1938,6 +1999,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_xz_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -1955,6 +2017,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_point() {
         let shear_factor = 5_i32;
@@ -1984,6 +2047,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_vector() {
         let shear_factor = 5_i32;
@@ -2013,6 +2077,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -2030,6 +2095,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yx_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -2047,6 +2113,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_inverse_point() {
         let shear_factor = 5_i32;
@@ -2076,6 +2143,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_inverse_vector() {
         let shear_factor = 5_i32;
@@ -2105,6 +2173,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -2122,6 +2191,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_yz_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -2139,6 +2209,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_inverse_point() {
         let shear_factor = 5_i32;
@@ -2168,6 +2239,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_inverse_vector() {
         let shear_factor = 5_i32;
@@ -2197,6 +2269,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -2214,6 +2287,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zx_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -2231,6 +2305,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_inverse_point() {
         let shear_factor = 5_i32;
@@ -2260,6 +2335,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_inverse_vector() {
         let shear_factor = 5_i32;
@@ -2289,6 +2365,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_inverse_shearing_plane_point() {
         let shear_factor = 5_i32;
@@ -2306,6 +2383,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_zy_inverse_shearing_plane_vector() {
         let shear_factor = 5_i32;
@@ -2395,6 +2473,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_inverse_point() {
         let shear = Shear3::identity();
@@ -2433,6 +2512,7 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_identity_shear_inverse_vector() {
         let shear = Shear3::identity();
@@ -2546,18 +2626,19 @@ mod shear3_inverse_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_shear_inverse_trace() {
         let shear_factor = 10_f64;
         let direction = Unit::from_value(Vector3::new(
-            -f64::sqrt(4_f64 / 10_f64), 
+            -f64::sqrt(4_f64 / 10_f64),
             -f64::sqrt(1_f64 / 10_f64),
-             f64::sqrt(5_f64 / 10_f64)
+             f64::sqrt(5_f64 / 10_f64),
         ));
         let normal = Unit::from_value(Vector3::new(
             f64::sqrt(4_f64 / 10_f64),
             f64::sqrt(1_f64 / 10_f64),
-            f64::sqrt(5_f64 / 10_f64)
+            f64::sqrt(5_f64 / 10_f64),
         ));
         let shear = Shear3::from_shear(shear_factor, &direction, &normal);
         let shear_inv = shear.inverse();
@@ -2580,7 +2661,7 @@ mod shear3_coordinate_plane_tests {
         Unit,
     };
 
-
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_point() {
         let shear_factor = 11_f64;
@@ -2613,6 +2694,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_vector() {
         let shear_factor = 11_f64;
@@ -2645,6 +2727,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -2665,6 +2748,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -2685,6 +2769,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_point() {
         let shear_factor = 11_f64;
@@ -2717,6 +2802,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_vector() {
         let shear_factor = 11_f64;
@@ -2749,6 +2835,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -2769,6 +2856,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xz_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -2789,6 +2877,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_point() {
         let shear_factor = 11_f64;
@@ -2821,6 +2910,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_vector() {
         let shear_factor = 11_f64;
@@ -2853,6 +2943,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -2873,6 +2964,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yx_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -2893,6 +2985,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_point() {
         let shear_factor = 11_f64;
@@ -2925,6 +3018,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_vector() {
         let shear_factor = 11_f64;
@@ -2957,6 +3051,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -2977,6 +3072,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_yz_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -2997,6 +3093,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_point() {
         let shear_factor = 11_f64;
@@ -3029,6 +3126,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_vector() {
         let shear_factor = 11_f64;
@@ -3061,6 +3159,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -3081,6 +3180,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zx_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -3101,6 +3201,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_point() {
         let shear_factor = 11_f64;
@@ -3133,6 +3234,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_vector() {
         let shear_factor = 11_f64;
@@ -3165,6 +3267,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_shearing_plane_point() {
         let shear_factor = 11_f64;
@@ -3185,6 +3288,7 @@ mod shear3_coordinate_plane_tests {
         assert_eq!(result, expected);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_zy_shearing_plane_vector() {
         let shear_factor = 11_f64;
@@ -3243,18 +3347,18 @@ mod shear3_noncoordinate_plane_tests {
     #[rustfmt::skip]
     fn direction() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
-            2_f64 / f64::sqrt(17_f64), 
+            2_f64 / f64::sqrt(17_f64),
             3_f64 / f64::sqrt(17_f64),
-            2_f64 / f64::sqrt(17_f64)
+            2_f64 / f64::sqrt(17_f64),
         ))
     }
 
     #[rustfmt::skip]
     fn normal() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
-            0_f64, 
+            0_f64,
            -2_f64 / f64::sqrt(13_f64),
-            3_f64 / f64::sqrt(13_f64)
+            3_f64 / f64::sqrt(13_f64),
        ))
     }
 
@@ -3301,34 +3405,34 @@ mod shear3_noncoordinate_plane_tests {
     fn rotation() -> Rotation3<f64> {
         let rotation_x_yz = rotation_x_yz();
         let rotation_z_xy = rotation_z_xy();
-        
+
         rotation_x_yz * rotation_z_xy
     }
 
     fn rotation_inv() -> Rotation3<f64> {
         let rotation_x_yz_inv = rotation_x_yz_inv();
         let rotation_z_xy_inv = rotation_z_xy_inv();
-        
+
         rotation_z_xy_inv * rotation_x_yz_inv
     }
 
     #[rustfmt::skip]
     fn rotation_x_yz_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
-            1_f64,  0_f64,                           0_f64,                          0_f64,
+            1_f64,  0_f64,                     0_f64,                     0_f64,
             0_f64,  f64::sqrt(9_f64 / 13_f64), f64::sqrt(4_f64 / 13_f64), 0_f64,
             0_f64, -f64::sqrt(4_f64 / 13_f64), f64::sqrt(9_f64 / 13_f64), 0_f64,
-            0_f64,  0_f64,                           0_f64,                          1_f64
+            0_f64,  0_f64,                     0_f64,                     1_f64,
         )
     }
 
     #[rustfmt::skip]
     fn rotation_x_yz_inv_matrix() -> Matrix4x4<f64> {
         Matrix4x4::new(
-            1_f64, 0_f64,                            0_f64,                          0_f64,
+            1_f64, 0_f64,                      0_f64,                     0_f64,
             0_f64, f64::sqrt(9_f64 / 13_f64), -f64::sqrt(4_f64 / 13_f64), 0_f64,
             0_f64, f64::sqrt(4_f64 / 13_f64),  f64::sqrt(9_f64 / 13_f64), 0_f64,
-            0_f64, 0_f64,                            0_f64,                          1_f64
+            0_f64, 0_f64,                      0_f64,                     1_f64,
         )
     }
 
@@ -3337,8 +3441,8 @@ mod shear3_noncoordinate_plane_tests {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
            -f64::sqrt(13_f64 / 17_f64), f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
-            0_f64,                            0_f64,                           1_f64, 0_f64,
-            0_f64,                            0_f64,                           0_f64, 1_f64
+            0_f64,                      0_f64,                      1_f64, 0_f64,
+            0_f64,                      0_f64,                      0_f64, 1_f64,
         )
     }
 
@@ -3347,8 +3451,8 @@ mod shear3_noncoordinate_plane_tests {
         Matrix4x4::new(
             f64::sqrt(4_f64 / 17_f64),  -f64::sqrt(13_f64 / 17_f64), 0_f64, 0_f64,
             f64::sqrt(13_f64 / 17_f64),  f64::sqrt(4_f64 / 17_f64),  0_f64, 0_f64,
-            0_f64,                             0_f64,                           1_f64, 0_f64,
-            0_f64,                             0_f64,                           0_f64, 1_f64
+            0_f64,                       0_f64,                      1_f64, 0_f64,
+            0_f64,                       0_f64,                      0_f64, 1_f64,
         )
     }
 
@@ -3426,7 +3530,7 @@ mod shear3_noncoordinate_plane_tests {
             1_f64,        0_f64, 0_f64, 0_f64,
             0_f64,        1_f64, 0_f64, 0_f64,
             shear_factor, 0_f64, 1_f64, 0_f64,
-            0_f64,        0_f64, 0_f64, 1_f64
+            0_f64,        0_f64, 0_f64, 1_f64,
         )
     }
 
@@ -3434,15 +3538,16 @@ mod shear3_noncoordinate_plane_tests {
     #[test]
     fn test_from_affine_shear_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
-        
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64),  epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64),  epsilon = 1e-10);
+
+        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
-        
+
         assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64),  epsilon = 1e-10);
         assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), epsilon = 1e-10);
     }
@@ -3491,7 +3596,7 @@ mod shear3_noncoordinate_plane_tests {
 
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
-    
+
     #[test]
     fn test_from_affine_shear_rotation() {
         let expected = rotation_matrix();
@@ -3597,48 +3702,49 @@ mod shear3_noncoordinate_plane_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_coordinates_vertices() {
         let vertices = [
             Point3::new( 
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
         ];
         let translation = translation();
@@ -3664,7 +3770,8 @@ mod shear3_noncoordinate_plane_tests {
         assert_relative_eq!(result[6], vertices[6], epsilon = 1e-10);
         assert_relative_eq!(result[7], vertices[7], epsilon = 1e-10);
     }
-    
+
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_vertices() {
         let shear_factor = shear_factor();
@@ -3676,84 +3783,84 @@ mod shear3_noncoordinate_plane_tests {
             Point3::new( 
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64), 
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                 -f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
             Point3::new(
                  f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64),
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64),
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64,
             ),
         ];
         let expected = [
             Point3::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
+                 f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) + f64::sqrt(4_f64 / 17_f64) * shear_factor,
                 -f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) + f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor
+                 f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 + f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                  f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) - f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) + 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) + 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                 -f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) - f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
+                -f64::sqrt(9_f64 / 13_f64) - f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
             Point3::new(
                  f64::sqrt(4_f64 / 17_f64) + f64::sqrt(13_f64 / 17_f64) - f64::sqrt(4_f64 / 17_f64) * shear_factor,
                  f64::sqrt(4_f64 / 13_f64) + f64::sqrt(9_f64 / 17_f64) - 6_f64 / f64::sqrt(221_f64) - f64::sqrt(9_f64 / 17_f64) * shear_factor,
-                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor
+                -f64::sqrt(9_f64 / 13_f64) + f64::sqrt(4_f64 / 17_f64) - 4_f64 / f64::sqrt(221_f64) + 1_f64 - f64::sqrt(4_f64 / 17_f64) * shear_factor,
             ),
         ];
         let result = vertices.map(|v| shear * v);
@@ -3768,6 +3875,7 @@ mod shear3_noncoordinate_plane_tests {
         assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
     }
 
+    #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_matrix() {
         let shear_factor = shear_factor();
@@ -3804,7 +3912,7 @@ mod shear3_noncoordinate_plane_tests {
             )
         };
         let result = shear.to_affine_matrix();
-        
+
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 
@@ -3853,19 +3961,21 @@ mod shear3_trace_determinant_tests {
         -372203_f64
     }
 
+    #[rustfmt::skip]
     fn direction() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
             f64::sqrt(1_f64 / 3_f64),
             f64::sqrt(1_f64 / 3_f64),
-            f64::sqrt(1_f64 / 3_f64)
+            f64::sqrt(1_f64 / 3_f64),
         ))
     }
 
+    #[rustfmt::skip]
     fn normal() -> Unit<Vector3<f64>> {
         Unit::from_value(Vector3::new(
              f64::sqrt(1_f64 / 6_f64),
              f64::sqrt(1_f64 / 6_f64),
-            -f64::sqrt(4_f64 / 6_f64)
+            -f64::sqrt(4_f64 / 6_f64),
         ))
     }
 
@@ -3878,6 +3988,7 @@ mod shear3_trace_determinant_tests {
         Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal)
     }
 
+    #[rustfmt::skip]
     fn expected_matrix() -> Matrix4x4<f64> {
         let shear_factor = shear_factor();
 
@@ -3968,4 +4079,3 @@ mod shear3_trace_determinant_tests {
         assert_relative_eq!(result, expected, epsilon = 1e-10);
     }
 }
-

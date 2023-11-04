@@ -36,39 +36,19 @@ impl Dim for ShapeConstraint {}
 
 pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<C1, R2> + DimEq<R2, C1> {}
 
-impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanMultiply<R1, C1, R2, C2> for ShapeConstraint 
-where
-    ShapeConstraint: DimEq<C1, R2> + DimEq<R2, C1>
-{
-
-}
+impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanMultiply<R1, C1, R2, C2> for ShapeConstraint where ShapeConstraint: DimEq<C1, R2> + DimEq<R2, C1> {}
 
 pub trait CanTransposeMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<R1, R2> + DimEq<R2, R1> {}
 
-impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanTransposeMultiply<R1, C1, R2, C2> for ShapeConstraint 
-where
-    ShapeConstraint: DimEq<R1, R2> + DimEq<R2, R1>
-{
-
-}
+impl<R1: Dim, C1: Dim, R2: Dim, C2: Dim> CanTransposeMultiply<R1, C1, R2, C2> for ShapeConstraint where ShapeConstraint: DimEq<R1, R2> + DimEq<R2, R1> {}
 
 pub trait CanExtend<N1: Dim, N2: Dim>: DimAdd<N1, Const<1>, Output = N2> {}
 
-impl<N1: Dim, N2: Dim> CanExtend<N1, N2> for ShapeConstraint
-where
-    ShapeConstraint: DimAdd<N1, Const<1>, Output = N2>
-{
-
-}
+impl<N1: Dim, N2: Dim> CanExtend<N1, N2> for ShapeConstraint where ShapeConstraint: DimAdd<N1, Const<1>, Output = N2> {}
 
 pub trait CanContract<N1: Dim, N2: Dim>: DimSub<N1, Const<1>, Output = N2> {}
 
-impl<N1: Dim, N2: Dim> CanContract<N1, N2> for ShapeConstraint
-where
-    ShapeConstraint: DimSub<N1, Const<1>, Output = N2>
-{
-
-}
+impl<N1: Dim, N2: Dim> CanContract<N1, N2> for ShapeConstraint where ShapeConstraint: DimSub<N1, Const<1>, Output = N2> {}
 
 
 macro_rules! impl_dim_add {
@@ -153,10 +133,8 @@ pub trait DimLt<D1: Dim, D2: Dim>: Dim {}
 
 macro_rules! impl_dim_lt {
     ($D1:expr, $D2:expr) => {
-        impl DimLt<Const<$D1>, Const<$D2>> for ShapeConstraint {
-            
-        }
-    }
+        impl DimLt<Const<$D1>, Const<$D2>> for ShapeConstraint {}
+    };
 }
 
 impl_dim_lt!(0, 1);
@@ -185,38 +163,38 @@ impl_dim_lt!(3, 4);
 mod constraint_tests {
     use super::*;
 
-    
+
     fn dim_lt<const M: usize, const N: usize>() -> bool
     where
-        ShapeConstraint: DimLt<Const<M>, Const<N>>
+        ShapeConstraint: DimLt<Const<M>, Const<N>>,
     {
         M < N
     }
 
     fn dim_eq<const M: usize, const N: usize>() -> bool
     where
-        ShapeConstraint: DimEq<Const<M>, Const<N>>
+        ShapeConstraint: DimEq<Const<M>, Const<N>>,
     {
         M == N
     }
 
     fn dim_add<const M: usize, const N: usize, const MPLUSN: usize>() -> bool
     where
-        ShapeConstraint: DimAdd<Const<M>, Const<N>, Output = Const<MPLUSN>>
+        ShapeConstraint: DimAdd<Const<M>, Const<N>, Output = Const<MPLUSN>>,
     {
         M + N == MPLUSN
     }
 
     fn dim_sub<const M: usize, const N: usize, const MMINUSN: usize>() -> bool
     where
-        ShapeConstraint: DimSub<Const<M>, Const<N>, Output = Const<MMINUSN>>
+        ShapeConstraint: DimSub<Const<M>, Const<N>, Output = Const<MMINUSN>>,
     {
         M - N == MMINUSN
     }
 
     fn dim_mul<const M: usize, const N: usize, const MN: usize>() -> bool
     where
-        ShapeConstraint: DimMul<Const<M>, Const<N>, Output = Const<MN>>
+        ShapeConstraint: DimMul<Const<M>, Const<N>, Output = Const<MN>>,
     {
         M * N == MN
     }
@@ -299,4 +277,3 @@ mod constraint_tests {
         assert!(dim_mul::<4, 4, 16>());
     }
 }
-

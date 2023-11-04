@@ -1,36 +1,23 @@
-use cglinalg_numeric::{
-    SimdCast,
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarOrd,
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
 use crate::constraint::{
-    Const,
-    DimAdd,
-    DimSub,
-    DimMul,
-    DimEq,
-    DimLt,
     CanMultiply,
     CanTransposeMultiply,
+    Const,
+    DimAdd,
+    DimEq,
+    DimLt,
+    DimMul,
+    DimSub,
     ShapeConstraint,
 };
 use crate::normed::{
-    Normed,
     Norm,
-};
-use crate::unit::{
-    Unit,
+    Normed,
 };
 use crate::point::{
     Point2,
     Point3,
 };
+use crate::unit::Unit;
 use crate::vector::{
     Vector,
     Vector2,
@@ -44,6 +31,17 @@ use crate::{
 use approx::{
     ulps_eq,
     ulps_ne,
+};
+use cglinalg_numeric::{
+    SimdCast,
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarOrd,
+    SimdScalarSigned,
+};
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
@@ -147,7 +145,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     }
 
     /// Tests whether the number of elements in the matrix is zero.
-    /// 
+    ///
     /// Returns `true` when the matrix is zero-dimensional, i.e. the number of rows is zero, or the
     /// number of columns is zero. It returns `false` otherwise.
     pub const fn is_empty(&self) -> bool {
@@ -156,8 +154,8 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
 
     /// The shape of the underlying array storing the matrix components.
     ///
-    /// The shape is the equivalent number of columns and rows of the 
-    /// array as though it represents a matrix. The order of the descriptions 
+    /// The shape is the equivalent number of columns and rows of the
+    /// array as though it represents a matrix. The order of the descriptions
     /// of the shape of the array is **(rows, columns)**.
     #[inline]
     pub const fn shape(&self) -> (usize, usize) {
@@ -177,7 +175,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C> 
+impl<S, const R: usize, const C: usize, const RC: usize> Matrix<S, R, C>
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
     ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
@@ -206,49 +204,40 @@ impl<S, const R: usize, const C: usize> AsMut<[[S; R]; C]> for Matrix<S, R, C> {
 impl<S, const R: usize, const C: usize> AsRef<[Vector<S, R>; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_ref(&self) -> &[Vector<S, R>; C] {
-        unsafe {
-            &*(self as *const Matrix<S, R, C> as *const [Vector<S, R>; C])
-        }
+        unsafe { &*(self as *const Matrix<S, R, C> as *const [Vector<S, R>; C]) }
     }
 }
 
 impl<S, const R: usize, const C: usize> AsMut<[Vector<S, R>; C]> for Matrix<S, R, C> {
     #[inline]
     fn as_mut(&mut self) -> &mut [Vector<S, R>; C] {
-        unsafe {
-            &mut *(self as *mut Matrix<S, R, C> as *mut [Vector<S, R>; C])
-        }
+        unsafe { &mut *(self as *mut Matrix<S, R, C> as *mut [Vector<S, R>; C]) }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C> 
+impl<S, const R: usize, const C: usize, const RC: usize> AsRef<[S; RC]> for Matrix<S, R, C>
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
     ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn as_ref(&self) -> &[S; RC] {
-        unsafe {
-            &*(self as *const Matrix<S, R, C> as *const [S; RC])
-        }
+        unsafe { &*(self as *const Matrix<S, R, C> as *const [S; RC]) }
     }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C> 
+impl<S, const R: usize, const C: usize, const RC: usize> AsMut<[S; RC]> for Matrix<S, R, C>
 where
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
     ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn as_mut(&mut self) -> &mut [S; RC] {
-        unsafe {
-            &mut *(self as *mut Matrix<S, R, C> as *mut [S; RC])
-        }
+        unsafe { &mut *(self as *mut Matrix<S, R, C> as *mut [S; RC]) }
     }
 }
 
-impl<S, const R: usize, const C: usize> ops::Index<usize> for Matrix<S, R, C> 
-{
+impl<S, const R: usize, const C: usize> ops::Index<usize> for Matrix<S, R, C> {
     type Output = Vector<S, R>;
 
     #[inline]
@@ -284,8 +273,8 @@ impl<S, const R: usize, const C: usize> ops::IndexMut<(usize, usize)> for Matrix
     }
 }
 
-impl<S, const R: usize, const C: usize> From<[[S; R]; C]> for Matrix<S, R, C> 
-where 
+impl<S, const R: usize, const C: usize> From<[[S; R]; C]> for Matrix<S, R, C>
+where
     S: Copy,
 {
     #[inline]
@@ -300,10 +289,8 @@ where
 {
     #[inline]
     fn from(data: &'a [[S; R]; C]) -> &'a Matrix<S, R, C> {
-        unsafe { 
-            &*(data as *const [[S; R]; C] as *const Matrix<S, R, C>)
-        }
-    }    
+        unsafe { &*(data as *const [[S; R]; C] as *const Matrix<S, R, C>) }
+    }
 }
 
 impl<'a, S, const R: usize, const C: usize> From<&'a [Vector<S, R>; C]> for &'a Matrix<S, R, C>
@@ -312,13 +299,11 @@ where
 {
     #[inline]
     fn from(data: &'a [Vector<S, R>; C]) -> &'a Matrix<S, R, C> {
-        unsafe { 
-            &*(data as *const [Vector<S, R>; C] as *const Matrix<S, R, C>)
-        }
-    }  
+        unsafe { &*(data as *const [Vector<S, R>; C] as *const Matrix<S, R, C>) }
+    }
 }
 
-impl<S, const R: usize, const C: usize, const RC: usize> From<[S; RC]> for Matrix<S, R, C> 
+impl<S, const R: usize, const C: usize, const RC: usize> From<[S; RC]> for Matrix<S, R, C>
 where
     S: Copy,
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
@@ -333,25 +318,23 @@ where
 }
 
 impl<'a, S, const R: usize, const C: usize, const RC: usize> From<&'a [S; RC]> for &'a Matrix<S, R, C>
-where 
+where
     S: Copy,
     ShapeConstraint: DimMul<Const<R>, Const<C>, Output = Const<RC>>,
     ShapeConstraint: DimMul<Const<C>, Const<R>, Output = Const<RC>>,
 {
     #[inline]
     fn from(array: &'a [S; RC]) -> &'a Matrix<S, R, C> {
-        unsafe { 
-            &*(array as *const [S; RC] as *const Matrix<S, R, C>)
-        }
+        unsafe { &*(array as *const [S; RC] as *const Matrix<S, R, C>) }
     }
 }
 
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     /// Determine whether this matrix is a square matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x3,
@@ -360,7 +343,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     /// #
     /// let zero_matrix2x3: Matrix2x3<i32> = Matrix2x3::zero();
     /// let zero_matrix3x3: Matrix3x3<i32> = Matrix3x3::zero();
-    /// 
+    ///
     /// assert!(!zero_matrix2x3.is_square());
     /// assert!(zero_matrix3x3.is_square());
     /// ```
@@ -372,8 +355,8 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     }
 }
 
-impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
-where 
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
     S: Copy,
 {
     /// Construct a new matrix from a fill value.
@@ -395,20 +378,18 @@ where
     ///     fill_value, fill_value, fill_value
     /// );
     /// let result = Matrix3x3::from_fill(fill_value);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub const fn from_fill(value: S) -> Self {
-        Self {
-            data: [[value; R]; C],
-        }
+        Self { data: [[value; R]; C] }
     }
 
     /// Construct a matrix from a set of column vectors.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -419,24 +400,22 @@ where
     /// let c1 = Vector3::new(4_i32, 5_i32, 6_i32);
     /// let c2 = Vector3::new(7_i32, 8_i32, 9_i32);
     /// let matrix = Matrix3x3::from_columns(&[c0, c1, c2]);
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0[0]); assert_eq!(matrix[0][1], c0[1]); assert_eq!(matrix[0][2], c0[2]);
     /// assert_eq!(matrix[1][0], c1[0]); assert_eq!(matrix[1][1], c1[1]); assert_eq!(matrix[1][2], c1[2]);
     /// assert_eq!(matrix[2][0], c2[0]); assert_eq!(matrix[2][1], c2[1]); assert_eq!(matrix[2][2], c2[2]);
     /// ```
     #[inline]
     pub fn from_columns(columns: &[Vector<S, R>; C]) -> Self {
-        let data_ptr = unsafe {
-            &*(columns as *const [Vector<S, R>; C] as *const [[S; R]; C])
-        };
-    
+        let data_ptr = unsafe { &*(columns as *const [Vector<S, R>; C] as *const [[S; R]; C]) };
+
         Self { data: *data_ptr }
     }
 
     /// Construct a matrix from a set of row vectors.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -447,7 +426,7 @@ where
     /// let r1 = Vector3::new(4_i32, 5_i32, 6_i32);
     /// let r2 = Vector3::new(7_i32, 8_i32, 9_i32);
     /// let matrix = Matrix3x3::from_rows(&[r0, r1, r2]);
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], r0[0]); assert_eq!(matrix[0][1], r1[0]); assert_eq!(matrix[0][2], r2[0]);
     /// assert_eq!(matrix[1][0], r0[1]); assert_eq!(matrix[1][1], r1[1]); assert_eq!(matrix[1][2], r2[1]);
     /// assert_eq!(matrix[2][0], r0[2]); assert_eq!(matrix[2][1], r1[2]); assert_eq!(matrix[2][2], r2[2]);
@@ -467,18 +446,18 @@ where
         Self { data }
     }
 
-    /// Map an operation on the elements of a matrix, returning a matrix whose 
+    /// Map an operation on the elements of a matrix, returning a matrix whose
     /// elements are elements of the new underlying type.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
-    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
     ///     13_i32, 14_i32, 15_i32, 16_i32
@@ -495,8 +474,8 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C> 
-    where 
+    pub fn map<T, F>(&self, mut op: F) -> Matrix<T, R, C>
+    where
         F: FnMut(S) -> T,
     {
         // SAFETY: Every location gets written into with a valid value of type `T`.
@@ -512,9 +491,9 @@ where
     }
 
     /// Get the row of the matrix by value.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -522,14 +501,14 @@ where
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
-    ///     1_i32, 2_i32, 3_i32, 
-    ///     4_i32, 5_i32, 6_i32, 
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
     ///     7_i32, 8_i32, 9_i32
     /// );
     /// let expected_0 = Vector3::new(1_i32, 4_i32, 7_i32);
     /// let expected_1 = Vector3::new(2_i32, 5_i32, 8_i32);
     /// let expected_2 = Vector3::new(3_i32, 6_i32, 9_i32);
-    /// 
+    ///
     /// assert_eq!(matrix.row(0), expected_0);
     /// assert_eq!(matrix.row(1), expected_1);
     /// assert_eq!(matrix.row(2), expected_2);
@@ -548,9 +527,9 @@ where
     }
 
     /// Get the column of the matrix by value.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -558,14 +537,14 @@ where
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
-    ///     1_i32, 2_i32, 3_i32, 
-    ///     4_i32, 5_i32, 6_i32, 
+    ///     1_i32, 2_i32, 3_i32,
+    ///     4_i32, 5_i32, 6_i32,
     ///     7_i32, 8_i32, 9_i32
     /// );
     /// let expected_0 = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let expected_1 = Vector3::new(4_i32, 5_i32, 6_i32);
     /// let expected_2 = Vector3::new(7_i32, 8_i32, 9_i32);
-    /// 
+    ///
     /// assert_eq!(matrix.column(0), expected_0);
     /// assert_eq!(matrix.column(1), expected_1);
     /// assert_eq!(matrix.column(2), expected_2);
@@ -581,7 +560,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let mut result = Matrix3x3::new(
@@ -612,7 +591,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x4, 
+    /// #     Matrix3x4,
     /// # };
     /// #
     /// let mut result = Matrix3x4::new(
@@ -646,17 +625,17 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let mut result = Matrix4x4::new(
-    ///     1_i32,  2_i32,  3_i32,  4_i32, 
+    ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
     ///     13_i32, 14_i32, 15_i32, 16_i32
     /// );
     /// let expected = Matrix4x4::new(
-    ///     1_i32, 2_i32,  3_i32,  13_i32, 
+    ///     1_i32, 2_i32,  3_i32,  13_i32,
     ///     5_i32, 6_i32,  7_i32,  8_i32,
     ///     9_i32, 10_i32, 11_i32, 12_i32,
     ///     4_i32, 14_i32, 15_i32, 16_i32
@@ -673,8 +652,8 @@ where
     }
 }
 
-impl<S, const R: usize, const C: usize> Matrix<S, R, C> 
-where 
+impl<S, const R: usize, const C: usize> Matrix<S, R, C>
+where
     S: SimdCast + Copy,
 {
     /// Cast a matrix from one type of scalars to another type of scalars.
@@ -685,7 +664,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix2x2,   
     /// # };
-    /// # 
+    /// #
     /// let matrix: Matrix2x2<i32> = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected: Option<Matrix2x2<f64>> = Some(Matrix2x2::new(1_f64, 2_f64, 3_f64, 4_f64));
     /// let result = matrix.try_cast::<f64>();
@@ -694,7 +673,7 @@ where
     /// ```
     #[allow(clippy::needless_range_loop)]
     #[inline]
-    pub fn try_cast<T>(&self) -> Option<Matrix<T, R, C>> 
+    pub fn try_cast<T>(&self) -> Option<Matrix<T, R, C>>
     where
         T: SimdCast,
     {
@@ -719,12 +698,12 @@ where
     S: SimdScalar,
 {
     /// Compute the transpose of a matrix.
-    /// 
+    ///
     /// Given a matrix `m`, the transpose of `m` is the matrix `m_tr` such that
     /// ```text
     /// forall c in 0..C. forall r in 0..R. m_tr[c][r] == m[r][c]
     /// ```
-    /// in other words, every column of `m_tr` is a row of `m`, and every row of 
+    /// in other words, every column of `m_tr` is a row of `m`, and every row of
     /// `m_tr` is a column of `m`.
     ///
     /// # Example
@@ -732,17 +711,17 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x4,
-    /// #     Matrix4x2, 
+    /// #     Matrix4x2,
     /// # };
     /// #
     /// let matrix = Matrix2x4::new(
-    ///     1_i32, 1_i32, 
-    ///     2_i32, 2_i32, 
+    ///     1_i32, 1_i32,
+    ///     2_i32, 2_i32,
     ///     3_i32, 3_i32,
     ///     4_i32, 4_i32
     /// );
     /// let expected = Matrix4x2::new(
-    ///     1_i32, 2_i32, 3_i32, 4_i32, 
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
     ///     1_i32, 2_i32, 3_i32, 4_i32
     /// );
     /// let result = matrix.transpose();
@@ -765,7 +744,7 @@ where
     /// Construct a zero matrix.
     ///
     /// A zero matrix is a matrix in which all of its elements are zero. In
-    /// particular, the **(R row, C column)** zero matrix is the matrix `zero` 
+    /// particular, the **(R row, C column)** zero matrix is the matrix `zero`
     /// such that
     /// ```text
     /// forall c in 0..C. forall r in 0..R. zero[c][r] == 0
@@ -775,7 +754,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
@@ -784,9 +763,7 @@ where
     /// ```
     #[inline]
     pub fn zero() -> Self {
-        Self { 
-            data: [[S::zero(); R]; C],
-        }
+        Self { data: [[S::zero(); R]; C] }
     }
 
     /// Determine whether a matrix is a zero matrix.
@@ -797,7 +774,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
@@ -818,16 +795,16 @@ where
     }
 
     /// Compute the product of two matrices component-wise.
-    /// 
-    /// Given two matrices `m1` and `m2` with `rows` rows and `columns` columns, 
-    /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows 
+    ///
+    /// Given two matrices `m1` and `m2` with `rows` rows and `columns` columns,
+    /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows
     /// and `columns` such that
     /// ```text
     /// forall c in 0..C. forall r in 0..R. m3[c][r] := m1[c][r] * m2[c][r]
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -849,7 +826,7 @@ where
     ///     90_f64, 112_f64, 136_f64
     /// );
     /// let result = m1.component_mul(&m2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -866,9 +843,9 @@ where
     }
 
     /// Compute the product of two matrices component-wise mutably in place.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -890,7 +867,7 @@ where
     ///     90_f64, 112_f64, 136_f64
     /// );
     /// result.component_mul_assign(&other);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -909,9 +886,9 @@ where
     S: SimdScalar,
 {
     /// Compute the dot product of two matrices.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// An example involving integer scalars.
     /// ```
     /// # use cglinalg_core::{
@@ -920,21 +897,21 @@ where
     /// #
     /// let matrix1 = Matrix2x3::new(
     ///     2_i32,  1_i32,
-    ///     0_i32, -1_i32, 
+    ///     0_i32, -1_i32,
     ///     6_i32,  2_i32,
     /// );
     /// let matrix2 = Matrix2x3::new(
     ///      8_i32,  4_i32,
-    ///     -3_i32,  1_i32, 
+    ///     -3_i32,  1_i32,
     ///      2_i32, -5_i32
     /// );
     /// let expected = 21_i32;
     /// let result = Matrix2x3::dot(&matrix1, &matrix2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
+    pub fn dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S
     where
         ShapeConstraint: DimEq<Const<R1>, Const<R2>> + DimEq<Const<R2>, Const<R1>>,
         ShapeConstraint: DimEq<Const<C1>, Const<C2>> + DimEq<Const<C2>, Const<C1>>,
@@ -951,17 +928,17 @@ where
     }
 
     /// Compute the matrix product of the transpose of `self` with `other`.
-    /// 
-    /// The function `tr_mul` satisfies the following property: Given a matrix 
-    /// `m2` with `R1` rows and `C1` columns, and a matrix `m2` with `R2` rows 
+    ///
+    /// The function `tr_mul` satisfies the following property: Given a matrix
+    /// `m2` with `R1` rows and `C1` columns, and a matrix `m2` with `R2` rows
     /// and `C2` columns, such that `R1 == R2`, the transpose product of `m1`
     /// and `m2` is given by
     /// ```text
     /// tr_mul(m1, m2) := transpose(m1) * m2
     /// ```
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
@@ -981,16 +958,16 @@ where
     ///     98_i32, 128_i32
     /// );
     /// let result = matrix1.tr_mul(&matrix2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let matrix1_tr = matrix1.transpose();
     /// let result_tr = matrix1_tr * matrix2;
-    /// 
+    ///
     /// assert_eq!(result_tr, expected);
     /// ```
     #[inline]
-    pub fn tr_mul<const R2: usize, const C2: usize, const C1C2: usize>(&self, other: &Matrix<S, R2, C2>) -> Matrix<S, C1, C2> 
+    pub fn tr_mul<const R2: usize, const C2: usize, const C1C2: usize>(&self, other: &Matrix<S, R2, C2>) -> Matrix<S, C1, C2>
     where
         ShapeConstraint: CanTransposeMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
         ShapeConstraint: DimMul<Const<C1>, Const<C2>, Output = Const<C1C2>>,
@@ -1004,7 +981,7 @@ where
                 for r in 0..R1 {
                     result_c1c2 += self.data[c1][r] * other.data[c2][r];
                 }
-                
+
                 result[c2][c1] = result_c1c2;
             }
         }
@@ -1013,7 +990,7 @@ where
     }
 
     /// Compute the dot product between the transpose of `self` and `other`.
-    /// 
+    ///
     /// Given a matrix `m1` with `R1` rows and `C1` columns, and a matrix `m2` with
     /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the transpose
     /// dot product of `m1` and `m2` is given by
@@ -1022,9 +999,9 @@ where
     /// ```
     /// where `transpose(m1)` has a shape of `C1` rows and `R1` columns, so that we can
     /// indeed compute the matrix dot product for `transpose(m1)` and `m2`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x3,
@@ -1042,16 +1019,16 @@ where
     /// );
     /// let expected = 212_i32;
     /// let result = matrix1.tr_dot(&matrix2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let matrix1_tr = matrix1.transpose();
     /// let result_tr = matrix1_tr.dot(&matrix2);
-    /// 
+    ///
     /// assert_eq!(result_tr, expected);
     /// ```
     #[inline]
-    pub fn tr_dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S 
+    pub fn tr_dot<const R2: usize, const C2: usize>(&self, other: &Matrix<S, R2, C2>) -> S
     where
         ShapeConstraint: DimEq<Const<R1>, Const<C2>> + DimEq<Const<C2>, Const<R1>>,
         ShapeConstraint: DimEq<Const<R2>, Const<C1>> + DimEq<Const<C1>, Const<R2>>,
@@ -1077,9 +1054,9 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
-    /// # 
+    /// #
     /// let mut result = Matrix4x4::new(
     ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
@@ -1088,9 +1065,9 @@ where
     /// );
     /// let expected = Matrix4x4::new(
     ///     -1_i32,  -2_i32,  -3_i32,  -4_i32,
-    ///     -5_i32,  -6_i32,  -7_i32,  -8_i32, 
+    ///     -5_i32,  -6_i32,  -7_i32,  -8_i32,
     ///     -9_i32,  -10_i32, -11_i32, -12_i32,
-    ///     -13_i32, -14_i32, -15_i32, -16_i32   
+    ///     -13_i32, -14_i32, -15_i32, -16_i32,
     /// );
     /// result.neg_mut();
     ///
@@ -1120,22 +1097,22 @@ where
     /// #     Matrix3x3,    
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let matrix0 = Matrix3x3::new(
-    ///     0_f64, 0_f64, 0_f64, 
+    ///     0_f64, 0_f64, 0_f64,
     ///     1_f64, 1_f64, 1_f64,
     ///     2_f64, 2_f64, 2_f64
     /// );
     /// let matrix1 = Matrix3x3::new(
-    ///     3_f64, 3_f64, 3_f64, 
+    ///     3_f64, 3_f64, 3_f64,
     ///     4_f64, 4_f64, 4_f64,
     ///     5_f64, 5_f64, 5_f64
     /// );
     /// let amount = 0.5_f64;
     /// let expected = Matrix3x3::new(
-    ///     1.5_f64, 1.5_f64, 1.5_f64, 
+    ///     1.5_f64, 1.5_f64, 1.5_f64,
     ///     2.5_f64, 2.5_f64, 2.5_f64,
     ///     3.5_f64, 3.5_f64, 3.5_f64
     /// );
@@ -1148,15 +1125,15 @@ where
         self + ((other - self) * amount)
     }
 
-    /// Returns `true` if the elements of a matrix are all finite. 
-    /// Otherwise, it returns `false`. 
+    /// Returns `true` if the elements of a matrix are all finite.
+    /// Otherwise, it returns `false`.
     ///
-    /// A matrix is finite when all of its elements are finite. This is useful 
-    /// for vector and matrix types working with fixed precision floating point 
+    /// A matrix is finite when all of its elements are finite. This is useful
+    /// for vector and matrix types working with fixed precision floating point
     /// values.
     ///
     /// # Example (Finite Matrix)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,  
@@ -1168,7 +1145,7 @@ where
     ///     9_f64,  10_f64, 11_f64, 12_f64,
     ///     13_f64, 14_f64, 15_f64, 16_f64
     /// );
-    /// 
+    ///
     /// assert!(matrix.is_finite());
     /// ```
     ///
@@ -1212,7 +1189,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let mut result = Matrix4x4::new(
@@ -1225,7 +1202,7 @@ where
     ///     1_i32, 2_i32, 3_i32, 4_i32,
     ///     1_i32, 2_i32, 3_i32, 4_i32,
     ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32 
+    ///     1_i32, 2_i32, 3_i32, 4_i32
     /// );
     /// result.transpose_mut();
     ///
@@ -1256,7 +1233,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let result = Matrix3x3::identity();
@@ -1265,7 +1242,7 @@ where
     ///     0_i32, 1_i32, 0_i32,
     ///     0_i32, 0_i32, 1_i32
     /// );
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1288,11 +1265,11 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::identity();
-    /// 
+    ///
     /// assert!(matrix.is_identity());
     /// ```
     #[inline]
@@ -1309,12 +1286,12 @@ where
         for i in 0..N {
             result &= self.data[i][i].is_one();
         }
-        
+
         result
     }
 
     /// Construct a new diagonal matrix from a given value where
-    /// each element along the diagonal is equal to `value`. The resulting 
+    /// each element along the diagonal is equal to `value`. The resulting
     /// matrix `matrix` satisfies the predicate
     /// ```text
     /// forall i in 0..N. matrix[i][i] == value
@@ -1326,7 +1303,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let result = Matrix4x4::from_diagonal_value(4_i32);
@@ -1334,9 +1311,9 @@ where
     ///     4_i32, 0_i32, 0_i32, 0_i32,
     ///     0_i32, 4_i32, 0_i32, 0_i32,
     ///     0_i32, 0_i32, 4_i32, 0_i32,
-    ///     0_i32, 0_i32, 0_i32, 4_i32 
+    ///     0_i32, 0_i32, 0_i32, 4_i32
     /// );
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1351,9 +1328,9 @@ where
     }
 
     /// Construct a new diagonal matrix from a vector of values
-    /// representing the elements along the diagonal. 
-    /// 
-    /// The resulting matrix `matrix` satisfies the predicate. Given a vector of 
+    /// representing the elements along the diagonal.
+    ///
+    /// The resulting matrix `matrix` satisfies the predicate. Given a vector of
     /// length `N` `diagonal`
     /// ```text
     /// forall i in 0..N. m[i][i] == diangonal[i]
@@ -1376,9 +1353,9 @@ where
     ///     2_i32, 0_i32, 0_i32, 0_i32,
     ///     0_i32, 3_i32, 0_i32, 0_i32,
     ///     0_i32, 0_i32, 4_i32, 0_i32,
-    ///     0_i32, 0_i32, 0_i32, 5_i32 
+    ///     0_i32, 0_i32, 0_i32, 5_i32
     /// );
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1393,7 +1370,7 @@ where
     }
 
     /// Get the diagonal part of a square matrix.
-    /// 
+    ///
     /// The resulting vector is a vector of all elements of the matrix `matrix`
     /// on the diagonal. It is the vector `diagonal` such that
     /// ```text
@@ -1404,7 +1381,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// #     Vector4,
     /// # };
     /// #
@@ -1429,7 +1406,7 @@ where
 
         result
     }
-    
+
     /// Compute the trace of a square matrix.
     ///
     /// The trace of a matrix is the sum of the diagonal elements.
@@ -1438,13 +1415,13 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_i32, 2_i32, 3_i32,
     ///     4_i32, 5_i32, 6_i32,
-    ///     7_i32, 8_i32, 9_i32 
+    ///     7_i32, 8_i32, 9_i32
     /// );
     ///
     /// assert_eq!(matrix.trace(), 15_i32);
@@ -1465,13 +1442,13 @@ impl<S, const N: usize> Matrix<S, N, N>
 where
     S: SimdScalarFloat,
 {
-    /// Determine whether a square matrix is a diagonal matrix. 
+    /// Determine whether a square matrix is a diagonal matrix.
     ///
-    /// A square matrix is a diagonal matrix if every off-diagonal 
+    /// A square matrix is a diagonal matrix if every off-diagonal
     /// element is zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -1489,7 +1466,7 @@ where
     ///     1_f32, 0_f32, 1_f32,
     ///     1_f32, 1_f32, 0_f32,
     /// );
-    /// 
+    ///
     /// assert!(diagonal_matrix.is_diagonal());
     /// assert!(zero.is_diagonal());
     /// assert!(identity.is_diagonal());
@@ -1508,14 +1485,14 @@ where
         result
     }
 
-    /// Determine whether a matrix is symmetric. 
+    /// Determine whether a matrix is symmetric.
     ///
-    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)` 
-    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix. 
+    /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)`
+    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix.
     /// Every diagonal matrix is a symmetric matrix.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -1533,7 +1510,7 @@ where
     /// );
     /// let zero: Matrix3x3<f32> = Matrix3x3::zero();
     /// let identity: Matrix3x3<f32> = Matrix3x3::identity();
-    /// 
+    ///
     /// assert!(symmetric_matrix.is_symmetric());
     /// assert!(!asymmetric_matrix.is_symmetric());
     /// assert!(zero.is_symmetric());
@@ -1568,7 +1545,7 @@ where
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "Matrix{}x{} [", R, C).unwrap();
-        
+
         for c in 0..(C - 1) {
             write!(formatter, "[").unwrap();
             for r in 0..(R - 1) {
@@ -1582,7 +1559,7 @@ where
             write!(formatter, "{}, ", self.data[C - 1][r]).unwrap();
         }
         write!(formatter, "{}]", self.data[C - 1][R - 1]).unwrap();
-        
+
         write!(formatter, "]")
     }
 }
@@ -1593,9 +1570,9 @@ where
     S: SimdScalarSigned,
 {
     /// Calculate the norm of a matrix with respect to the supplied [`Norm`] type.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -1615,7 +1592,7 @@ where
     /// let l1_norm = L1MatrixNorm::new();
     /// let linf_norm = LinfMatrixNorm::new();
     /// let frobenius_norm = FrobeniusNorm::new();
-    /// 
+    ///
     /// assert_eq!(matrix.apply_norm(&l1_norm), 27_f64);
     /// assert_eq!(matrix.apply_norm(&linf_norm), 20_f64);
     /// assert_relative_eq!(matrix.apply_norm(&frobenius_norm), 19.209372712298546, epsilon = 1e-10);
@@ -1625,11 +1602,11 @@ where
         norm.norm(self)
     }
 
-    /// Calculate the metric distance between two matrices with respect to the 
+    /// Calculate the metric distance between two matrices with respect to the
     /// supplied [`Norm`] type.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -1654,7 +1631,7 @@ where
     /// let l1_norm = L1MatrixNorm::new();
     /// let linf_norm = LinfMatrixNorm::new();
     /// let frobenius_norm = FrobeniusNorm::new();
-    /// 
+    ///
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &l1_norm), 26_f64);
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &linf_norm), 22_f64);
     /// assert_relative_eq!(matrix1.apply_metric_distance(&matrix2, &frobenius_norm), 19.05255888325765, epsilon = 1e-10);
@@ -1665,12 +1642,12 @@ where
     }
 
     /// Compute the squared **Frobenius** norm of a matrix.
-    /// 
-    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all 
+    ///
+    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all
     /// the elements of the matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -1684,7 +1661,7 @@ where
     /// );
     /// let expected = 516_i32;
     /// let result = matrix.norm_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1693,11 +1670,11 @@ where
     }
 
     /// Compute the squared **Frobenius** norm of a matrix.
-    /// 
+    ///
     /// This is a synonym for [`Matrix::norm_squared`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -1711,7 +1688,7 @@ where
     /// );
     /// let expected = 516_i32;
     /// let result = matrix.norm_squared();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1721,9 +1698,9 @@ where
 
     /// Compute the squared metric distance between two matrices with respect
     /// to the metric induced by the **Frobenius** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3
@@ -1741,7 +1718,7 @@ where
     /// );
     /// let expected = 260_i32;
     /// let result = matrix1.metric_distance_squared(&matrix2);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1755,9 +1732,9 @@ where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     /// Compute the **L1** norm of a matrix.
-    /// 
+    ///
     /// The matrix **L1** norm is also called the **maximum column sum norm**.
-    /// 
+    ///
     /// # Example
     /// ```
     /// # use cglinalg_core::{
@@ -1771,7 +1748,7 @@ where
     /// );
     /// let expected = 19_i32;
     /// let result = matrix.l1_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1785,11 +1762,11 @@ where
     }
 
     /// Compute the **L-infinity** norm of a matrix.
-    /// 
+    ///
     /// The matrix **L-infinity** norm is also called the **maximum row sum norm**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -1803,7 +1780,7 @@ where
     /// );
     /// let expected = 23_i32;
     /// let result = matrix.linf_norm();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1827,12 +1804,12 @@ where
     S: SimdScalarFloat,
 {
     /// Compute the **Frobenius** norm of a matrix.
-    /// 
-    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all 
+    ///
+    /// The squared **Frobenius** norm of a matrix is the sum of the squares of all
     /// the elements of the matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -1849,7 +1826,7 @@ where
     /// );
     /// let expected = 22.715633383201094;
     /// let result = matrix.norm();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1858,9 +1835,9 @@ where
     }
 
     /// Compute the **Frobenius** norm of a matrix.
-    /// 
+    ///
     /// This is a synonym for [`Matrix::norm`].
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -1877,7 +1854,7 @@ where
     /// );
     /// let expected = 22.715633383201094;
     /// let result = matrix.magnitude();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1885,11 +1862,11 @@ where
         self.norm()
     }
 
-    /// Compute the metric distance between two matrices with respect to the 
+    /// Compute the metric distance between two matrices with respect to the
     /// metric induced by the **Frobenius** norm.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3
@@ -1910,7 +1887,7 @@ where
     /// );
     /// let expected = 16.124515496597099;
     /// let result = matrix1.metric_distance(&matrix2);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1930,7 +1907,7 @@ impl L1MatrixNorm {
     }
 }
 
-impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for L1MatrixNorm 
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for L1MatrixNorm
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -1957,7 +1934,7 @@ impl FrobeniusNorm {
     }
 }
 
-impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for FrobeniusNorm 
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for FrobeniusNorm
 where
     S: SimdScalarFloat,
 {
@@ -1984,7 +1961,7 @@ impl LinfMatrixNorm {
     }
 }
 
-impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for LinfMatrixNorm 
+impl<S, const R: usize, const C: usize> Norm<Matrix<S, R, C>> for LinfMatrixNorm
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -2006,32 +1983,32 @@ where
     S: SimdScalarFloat,
 {
     type Output = S;
-    
+
     #[inline]
     fn norm_squared(&self) -> Self::Output {
         self.norm_squared()
     }
-    
+
     #[inline]
     fn norm(&self) -> Self::Output {
         self.norm()
     }
-    
+
     #[inline]
     fn scale(&self, scale: Self::Output) -> Self {
         self * scale
     }
-    
+
     #[inline]
     fn scale_mut(&mut self, scale: Self::Output) {
         *self = self.scale(scale);
     }
-    
+
     #[inline]
     fn unscale(&self, scale: Self::Output) -> Self {
         self * (Self::Output::one() / scale)
     }
-    
+
     #[inline]
     fn unscale_mut(&mut self, scale: Self::Output) {
         *self = self.unscale(scale);
@@ -2046,10 +2023,10 @@ where
     fn normalize_mut(&mut self) -> Self::Output {
         let norm = self.norm();
         *self = self.normalize();
-        
+
         norm
     }
-    
+
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.norm();
@@ -2059,7 +2036,7 @@ where
             Some(self.normalize())
         }
     }
-    
+
     #[inline]
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
         let norm = self.norm();
@@ -2069,12 +2046,12 @@ where
             Some(self.normalize_mut())
         }
     }
-    
+
     #[inline]
     fn distance_squared(&self, other: &Self) -> Self::Output {
         self.metric_distance_squared(other)
     }
-    
+
     #[inline]
     fn distance(&self, other: &Self) -> Self::Output {
         self.metric_distance(other)
@@ -2089,15 +2066,15 @@ where
     ///
     /// The matrix applies the same scale factor to all dimensions, so each
     /// component of a vector will be scaled by the same factor. In particular,
-    /// calling [`Matrix::from_scale(scale)`] is equivalent to calling 
+    /// calling [`Matrix::from_scale(scale)`] is equivalent to calling
     /// [`Matrix::from_nonuniform_scale`] with `scale` as each entry in the vector
     /// of scale factors.
     ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
     /// #
@@ -2109,9 +2086,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2123,7 +2100,7 @@ where
     /// let matrix = Matrix3x3::from_scale(scale);
     /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2143,10 +2120,10 @@ where
     /// in each dimension need not be identical.
     ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
     /// #
@@ -2160,9 +2137,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -2177,7 +2154,7 @@ where
     /// let matrix = Matrix3x3::from_nonuniform_scale(&scale_vector);
     /// let expected = Vector3::new(5_i32, 10_i32, 15_i32);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2215,9 +2192,9 @@ where
     /// | 0      ...    ...  scale   0 |
     /// | 0      ...    ...  0       1 |
     /// ```
-    /// In particular, this is a special case of the more general form in 
+    /// In particular, this is a special case of the more general form in
     /// [`Self::from_affine_nonuniform_scale`].
-    /// 
+    ///
     /// # Examples (Two Dimensions)
     ///
     /// ```
@@ -2231,10 +2208,10 @@ where
     /// let matrix = Matrix3x3::from_affine_scale(scale);
     /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the uniform affine scaling matrix in two dimensions.
     /// ```
     /// # use cglinalg_core::{
@@ -2249,16 +2226,16 @@ where
     ///     0_i32, 0_i32, 1_i32
     /// );
     /// let result = Matrix3x3::from_affine_scale(scale);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Examples (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let scale = 4_i32;
@@ -2269,12 +2246,12 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the uniform affine scaling matrix in three dimensions.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let scale = 4_i32;
@@ -2285,7 +2262,7 @@ where
     ///     0_i32, 0_i32, 0_i32, 1_i32
     /// );
     /// let result = Matrix4x4::from_affine_scale(scale);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2301,25 +2278,25 @@ where
 }
 
 impl<S, const N: usize, const NMINUS1: usize> Matrix<S, N, N>
-where 
+where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<NMINUS1>, Const<1>, Output = Const<N>>,
     ShapeConstraint: DimSub<Const<N>, Const<1>, Output = Const<NMINUS1>>,
 {
     /// Construct an affine scaling matrix.
     ///
-    /// This is the most general case for affine scaling matrices: the scale 
-    /// factor in each dimension need not be identical. Since this is an 
+    /// This is the most general case for affine scaling matrices: the scale
+    /// factor in each dimension need not be identical. Since this is an
     /// affine matrix, the `w` component is unaffected.
-    /// 
+    ///
     /// Let `scale` be a vector of scale factors, such that `scale[i]` is the
-    /// scale factor for component `i` of a vector. Let `m` be the affine 
-    /// scaling matrix corresponding to `scale`. The matrix `m` satisfies the 
+    /// scale factor for component `i` of a vector. Let `m` be the affine
+    /// scaling matrix corresponding to `scale`. The matrix `m` satisfies the
     /// following: given a vector `v`
     /// ```text
     /// forall i in 0..(N - 1). (m * v)[i] == scale[i] * v[i]
     /// ```
-    /// where `N` is the dimensionality of `m`. Since `m` is affine, `v` has 
+    /// where `N` is the dimensionality of `m`. Since `m` is affine, `v` has
     /// dimension `N - 1`. Morever, the matrix `m` has a form that satisfies
     /// ```text
     /// forall i in 0..(N - 1). m[i][i] == scale[i]
@@ -2349,15 +2326,15 @@ where
     /// let scale_y = 10_i32;
     /// let vector = Vector3::new(1_i32, 1_i32, 3_i32);
     /// let matrix = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
-    ///     scale_x, 
+    ///     scale_x,
     ///     scale_y
     /// ));
     /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the affine scaling matrix in two dimensions.
     /// ```
     /// # use cglinalg_core::{
@@ -2373,15 +2350,15 @@ where
     ///     0_i32,   0_i32,   1_i32
     /// );
     /// let result = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
-    ///     scale_x, 
+    ///     scale_x,
     ///     scale_y
     /// ));
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Examples (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -2403,7 +2380,7 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the affine scaling matrix in three dimensions.
     /// ```
     /// # use cglinalg_core::{
@@ -2416,7 +2393,7 @@ where
     /// let expected = Matrix4x4::new(
     ///     scale_x, 0_i32,   0_i32,   0_i32,
     ///     0_i32,   scale_y, 0_i32,   0_i32,
-    ///     0_i32,   0_i32,   scale_z, 0_i32, 
+    ///     0_i32,   0_i32,   scale_z, 0_i32,
     ///     0_i32,   0_i32,   0_i32,   1_i32
     /// );
     /// let result = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(
@@ -2424,7 +2401,7 @@ where
     ///     scale_y,
     ///     scale_z
     /// ));
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2439,7 +2416,7 @@ where
     }
 
     /// Construct an affine translation matrix.
-    /// 
+    ///
     /// Let `distance` be a vector of displacements: component `i` of `distance`
     /// adds `distance[i]` to component `i` of a vector. Let `m` be the affine
     /// translation matrix corresponding to `distance`. Then the matrix `m` satisfies
@@ -2449,16 +2426,16 @@ where
     /// ```
     /// where `N` is the dimensionality of `m`. Since `m` is affine, `distance`
     /// and `v` have dimensionality `N - 1`. Moreover, form of the matrix `m` is all `
-    /// 1`'s along the diagonal, and `0` among all over elements except for the last 
-    /// column, where each row except the last is the corresponding entry of `distance`. 
+    /// 1`'s along the diagonal, and `0` among all over elements except for the last
+    /// column, where each row except the last is the corresponding entry of `distance`.
     /// More precisely, the form of the matrix `m` satisfies
     /// ```text
     /// forall i in 0..N. m[i][i] == 1
     /// forall r in 0..(N - 1). m[N - 1][r] == distance[r]
     /// forall c in 0..(N - 1). forall r in 0..N. c != r ==> m[c][r] == 0
     /// ```
-    /// Note that we are indexing in column-major order, so that the last constraint clause 
-    /// indicates that every entry except the last one in the bottom row is zero. In 
+    /// Note that we are indexing in column-major order, so that the last constraint clause
+    /// indicates that every entry except the last one in the bottom row is zero. In
     /// particular, the affine translation matrix has the form
     /// ```text
     /// | 1  0   ...   distance[0]     |
@@ -2470,7 +2447,7 @@ where
     /// ```
     ///
     /// # Examples (Two Dimensions)
-    /// 
+    ///
     /// A homogeneous vector with a zero **z-component** should not translate.
     /// ```
     /// # use cglinalg_core::{
@@ -2484,10 +2461,10 @@ where
     /// let vector = Vector3::new(1_i32, 1_i32, 0_i32);
     /// let expected = Vector3::new(1_i32, 1_i32, 0_i32);
     /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected); 
+    ///
+    /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// A homogeneous vector with a unit **z-component** should translate.
     /// ```
     /// # use cglinalg_core::{
@@ -2501,10 +2478,10 @@ where
     /// let vector = Vector3::new(1_i32, 1_i32, 1_i32);
     /// let expected = Vector3::new(1_i32 + distance.x, 1_i32 + distance.y, 1_i32);
     /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected); 
+    ///
+    /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the affine translation matrix in two dimensions.
     /// ```
     /// # use cglinalg_core::{
@@ -2520,12 +2497,12 @@ where
     ///     distance[0], distance[1], 1_i32
     /// );
     /// let result = Matrix3x3::from_affine_translation(&distance);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Examples (Three Dimensions)
-    /// 
+    ///
     /// A homogeneous vector with a zero **w-component** should not translate.
     /// ```
     /// # use cglinalg_core::{
@@ -2539,10 +2516,10 @@ where
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 0_i32);
     /// let expected = Vector4::new(1_i32, 1_i32, 1_i32, 0_i32);
     /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected); 
+    ///
+    /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// A homogeneous vector with a unit **w-component** should translate.
     /// ```
     /// # use cglinalg_core::{
@@ -2555,16 +2532,16 @@ where
     /// let matrix = Matrix4x4::from_affine_translation(&distance);
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
     /// let expected = Vector4::new(
-    ///     1_i32 + distance.x, 
-    ///     1_i32 + distance.y, 
-    ///     1_i32 + distance.z, 
+    ///     1_i32 + distance.x,
+    ///     1_i32 + distance.y,
+    ///     1_i32 + distance.z,
     ///     1_i32
     /// );
     /// let result = matrix * vector;
-    /// 
-    /// assert_eq!(result, expected); 
+    ///
+    /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// The form of the affine translation matrix in three dimensions.
     /// ```
     /// # use cglinalg_core::{
@@ -2581,7 +2558,7 @@ where
     ///     distance[0], distance[1], distance[2], 1_i32
     /// );
     /// let result = Matrix4x4::from_affine_translation(&distance);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -2599,9 +2576,9 @@ where
 
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix1x1,
@@ -2609,7 +2586,7 @@ impl<S> Matrix1x1<S> {
     /// #
     /// let c0r0 = 1_i32;
     /// let matrix = Matrix1x1::new(c0r0);
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// ```
     #[rustfmt::skip]
@@ -2626,16 +2603,16 @@ where
     S: Copy,
 {
     /// Convert this 1x1 matrix into a scalar.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix1x1,
     /// # };
     /// #
     /// let vector = Matrix1x1::new(1_i32);
-    /// 
+    ///
     /// assert_eq!(vector.to_scalar(), 1_i32);
     /// ```
     #[inline]
@@ -2644,12 +2621,12 @@ where
     }
 }
 
-impl<S> Matrix1x1<S> 
+impl<S> Matrix1x1<S>
 where
     S: SimdScalarSigned,
 {
     /// Compute the determinant of a matrix.
-    /// 
+    ///
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
@@ -2657,7 +2634,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix1x1, 
+    /// #     Matrix1x1,
     /// # };
     /// #
     /// let matrix = Matrix1x1::new(-3_f64);
@@ -2670,13 +2647,13 @@ where
     }
 }
 
-impl<S> Matrix1x1<S> 
+impl<S> Matrix1x1<S>
 where
     S: SimdScalarFloat,
 {
-    /// Compute the inverse of a square matrix, if the inverse exists. 
+    /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// Given a square matrix `self` Compute the matrix `m` if it exists
     /// such that
     /// ```text
     /// m * self == self * m == 1.
@@ -2690,7 +2667,7 @@ where
     /// #     Matrix1x1,  
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let matrix = Matrix1x1::new(5_f64);
@@ -2719,11 +2696,11 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix1x1, 
+    /// #     Matrix1x1,
     /// # };
     /// #
     /// let matrix = Matrix1x1::new(-2_f64);
-    /// 
+    ///
     /// assert_eq!(matrix.determinant(), -2_f64);
     /// assert!(matrix.is_invertible());
     /// ```
@@ -2736,9 +2713,9 @@ where
 
 impl<S> Matrix2x2<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
@@ -2750,7 +2727,7 @@ impl<S> Matrix2x2<S> {
     ///     c0r0, c0r1,
     ///     c1r0, c1r1
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[1][0], c1r0);
@@ -2763,31 +2740,31 @@ impl<S> Matrix2x2<S> {
             data: [
                 [c0r0, c0r1],
                 [c1r0, c1r1],
-            ]
+            ],
         }
     }
 }
 
-impl<S> Matrix2x2<S> 
+impl<S> Matrix2x2<S>
 where
     S: SimdScalar,
 {
-    /// Construct a shearing matrix in two dimensions with respect to 
+    /// Construct a shearing matrix in two dimensions with respect to
     /// a line passing through the origin `[0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix2x2::from_shear`].
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
     /// #
@@ -2808,7 +2785,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector2::new( 1_i32, 0_i32),
     ///     Vector2::new(-1_i32, 0_i32),
@@ -2816,7 +2793,7 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[rustfmt::skip]
@@ -2828,22 +2805,22 @@ where
         )
     }
 
-    /// Construct a shearing matrix in two dimensions with respect to 
+    /// Construct a shearing matrix in two dimensions with respect to
     /// a line passing through the origin `[0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix2x2::from_shear`].
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
     /// #
@@ -2864,7 +2841,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector2::new(0_i32,  1_i32),
     ///     Vector2::new(0_i32, -1_i32),
@@ -2872,7 +2849,7 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[rustfmt::skip]
@@ -2885,41 +2862,41 @@ where
     }
 }
 
-impl<S> Matrix2x2<S> 
+impl<S> Matrix2x2<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a general shearing matrix in two dimensions with respect to 
+    /// Construct a general shearing matrix in two dimensions with respect to
     /// a line passing through the origin `[0, 0]`.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0]` so there is no translation term to account for.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The shearing matrix constructor has the following parameters
-    /// * `shear_factor`: The amount by which a point in a line parallel to the shearing 
+    /// * `shear_factor`: The amount by which a point in a line parallel to the shearing
     ///    line gets sheared.
     /// * `direction`: The direction along which the shearing happens.
     /// * `normal`: The normal vector to the shearing line.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The displacement of a point with respect to the shearing line is a function 
-    /// of the signed distance of the point from the shearing line. In particular, it 
-    /// is a function of the value of the component of the point projected along the 
+    ///
+    /// The displacement of a point with respect to the shearing line is a function
+    /// of the signed distance of the point from the shearing line. In particular, it
+    /// is a function of the value of the component of the point projected along the
     /// normal vector of the shearing line.
-    /// 
-    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal 
-    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n` 
-    /// form a coordinate frame in conjunction with the origin. Let `m` be the shearing 
-    /// factor. Let `q` be the point that results from applying the shearing 
+    ///
+    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal
+    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n`
+    /// form a coordinate frame in conjunction with the origin. Let `m` be the shearing
+    /// factor. Let `q` be the point that results from applying the shearing
     /// transformation to `p`. The point `q` is defined precisely as
     /// ```text
     /// q := p + (m * p_n) * v
     /// ```
-    /// where `p_n` is the component of `p` projected onto the normal vector `n`. 
+    /// where `p_n` is the component of `p` projected onto the normal vector `n`.
     /// In particular, `p_n := dot(p, n)`, so `q` is given by
     /// ```text
     /// q == p + (m * dot(p, n)) * v
@@ -2927,12 +2904,12 @@ where
     ///   == I * p + m * (v * n^T) * p
     ///   == (I + m * (v * n^T)) * p
     /// ```
-    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
     /// M := I + m * (v * n^T) == I + m * outer(v, n)
     /// ```
-    /// where `I` denotes the identity matrix. In the standard basis in Euclidean 
+    /// where `I` denotes the identity matrix. In the standard basis in Euclidean
     /// space, the outer product of `v` and `n` is given by
     /// ```text
     /// outer(v, n) := | v.x * n.x   v.x * n.y |
@@ -2942,7 +2919,7 @@ where
     /// ```text
     /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
     ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
-    /// 
+    ///
     ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
     ///                        | m * v.y * n.x       1 + m * v.y * n.y |
     /// ```
@@ -2951,9 +2928,9 @@ where
     /// M == | 1 + m * v.x * n.x   m * v.x * n.y     |
     ///      | m * v.y * n.x       1 + m * v.y * n.y |
     /// ```
-    /// 
+    ///
     /// # An Equivalent Interpretation Of The Shearing Factor
-    /// 
+    ///
     /// The projection of the vector `p` onto `v` is given by `p_v := dot(p, v) * v`.
     /// Observe that
     /// ```text
@@ -2965,7 +2942,7 @@ where
     /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
     /// is then given by
     /// ```text
-    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    /// tan(phi) := (q - p)_v / (p - p_v)_n
     ///          == dot(q - p, v) / dot(p - p_v, n)
     ///          == (m * dot(p, n) * dot(v, v)) / (dot(p, n) * dot(n, n))
     ///          == m * (dot(p, n) / dot(p, n))
@@ -2973,15 +2950,15 @@ where
     /// ```
     /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
     /// with respect to the unit normal `n`.
-    /// 
-    /// 
-    /// # Example 
-    /// 
-    /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the 
+    ///
+    ///
+    /// # Example
+    ///
+    /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the
     /// line `y == (1 / 2) * x`.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// #     Vector2,
     /// #     Unit,
     /// # };
@@ -2994,7 +2971,7 @@ where
     /// let direction = Unit::from_value(Vector2::new(2_f64, 1_f64));
     /// let normal = Unit::from_value(Vector2::new(-1_f64, 2_f64));
     /// let matrix = Matrix2x2::from_shear(shear_factor, &direction, &normal);
-    /// 
+    ///
     /// // The square's top and bottom sides run parallel to the line `y == (1 / 2) * x`.
     /// // The square's left and right sides run perpendicular to the line `y == (1 / 2) * x`.
     /// let vertices = [
@@ -3022,12 +2999,12 @@ where
     ///     ),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
     /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
     /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
     ///     Vector2::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64))),
@@ -3037,7 +3014,7 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
@@ -3055,16 +3032,16 @@ where
 
         Self::new(
             c0r0, c0r1,
-            c1r0, c1r1
+            c1r0, c1r1,
         )
     }
 }
 
-impl<S> Matrix2x2<S> 
+impl<S> Matrix2x2<S>
 where
     S: SimdScalarSigned,
 {
-    /// Construct a two-dimensional reflection matrix for reflecting through a 
+    /// Construct a two-dimensional reflection matrix for reflecting through a
     /// line through the origin in the **xy-plane**.
     ///
     /// # Example
@@ -3074,7 +3051,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
@@ -3085,15 +3062,15 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
-    /// In two dimensions there is an ambiguity in the choice of normal 
-    /// vector, and as a result, a normal vector to the line---or 
+    ///
+    /// In two dimensions there is an ambiguity in the choice of normal
+    /// vector, and as a result, a normal vector to the line---or
     /// its negation---will produce the same reflection.
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
@@ -3117,13 +3094,13 @@ where
 
 
         Self::new(
-            c0r0, c0r1, 
-            c1r0, c1r1
+            c0r0, c0r1,
+            c1r0, c1r1,
         )
     }
 
     /// Compute the determinant of a matrix.
-    /// 
+    ///
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
@@ -3131,12 +3108,12 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// # };
     /// #
     /// let matrix = Matrix2x2::new(
     ///     1_f64, 3_f64,
-    ///     2_f64, 4_f64 
+    ///     2_f64, 4_f64
     /// );
     ///
     /// assert_eq!(matrix.determinant(), -2_f64);
@@ -3147,7 +3124,7 @@ where
     }
 }
 
-impl<S> Matrix2x2<S> 
+impl<S> Matrix2x2<S>
 where
     S: SimdScalarFloat,
 {
@@ -3163,10 +3140,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3187,12 +3164,12 @@ where
         let (sin_angle, cos_angle) = Radians::sin_cos(angle.into());
 
         Self::new(
-             cos_angle, sin_angle, 
-            -sin_angle, cos_angle
+             cos_angle, sin_angle,
+            -sin_angle, cos_angle,
         )
     }
 
-    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// Construct a rotation matrix that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// # Example
@@ -3200,10 +3177,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3219,10 +3196,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3235,17 +3212,14 @@ where
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Self {
-        if let (Some(unit_v1), Some(unit_v2)) = (
-            Unit::try_from_value(*v1, S::zero()),
-            Unit::try_from_value(*v2, S::zero()),
-        ) {
+        if let (Some(unit_v1), Some(unit_v2)) = (Unit::try_from_value(*v1, S::zero()), Unit::try_from_value(*v2, S::zero())) {
             Self::rotation_between_axis(&unit_v1, &unit_v2)
         } else {
             Self::identity()
         }
     }
 
-    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// Construct a rotation matrix that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -3257,7 +3231,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3279,7 +3253,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3300,9 +3274,9 @@ where
         Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
 
-    /// Compute the inverse of a square matrix, if the inverse exists. 
+    /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// Given a square matrix `self` Compute the matrix `m` if it exists
     /// such that
     /// ```text
     /// m * self == self * m == 1.
@@ -3313,15 +3287,15 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2,  
+    /// #     Matrix2x2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let matrix = Matrix2x2::new(
     ///     2_f64, 3_f64,
-    ///     1_f64, 5_f64 
+    ///     1_f64, 5_f64
     /// );
     /// let expected = Matrix2x2::new(
     ///      5_f64 / 7_f64, -3_f64 / 7_f64,
@@ -3342,7 +3316,7 @@ where
 
             Some(Matrix2x2::new(
                 det_inv *  self.data[1][1], det_inv * -self.data[0][1],
-                det_inv * -self.data[1][0], det_inv *  self.data[0][0]
+                det_inv * -self.data[1][0], det_inv *  self.data[0][0],
             ))
         }
     }
@@ -3355,14 +3329,14 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix2x2, 
+    /// #     Matrix2x2,
     /// # };
     /// #
     /// let matrix = Matrix2x2::new(
     ///     1_f64, 2_f64,
     ///     2_f64, 1_f64   
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix.determinant(), -3_f64);
     /// assert!(matrix.is_invertible());
     /// ```
@@ -3374,9 +3348,9 @@ where
 
 impl<S> Matrix3x3<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -3390,7 +3364,7 @@ impl<S> Matrix3x3<S> {
     ///     c1r0, c1r1, c1r2,
     ///     c2r0, c2r1, c2r2
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[0][2], c0r2);
@@ -3413,7 +3387,7 @@ impl<S> Matrix3x3<S> {
                 [c0r0, c0r1, c0r2],
                 [c1r0, c1r1, c1r2],
                 [c2r0, c2r1, c2r2],
-            ]
+            ],
         }
     }
 }
@@ -3422,14 +3396,14 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalar,
 {
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
@@ -3438,7 +3412,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// #
     /// let shear_factor = 8_i32;
@@ -3466,7 +3440,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_i32, 0_i32,  1_i32),
     ///     Vector3::new(-1_i32, 0_i32,  1_i32),
@@ -3476,7 +3450,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3487,24 +3461,24 @@ where
 
         Self::new(
             one,          zero, zero,
-            shear_factor, one,  zero, 
-            zero,         zero, one
+            shear_factor, one,  zero,
+            zero,         zero, one,
         )
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -3534,9 +3508,9 @@ where
     ///     Vector3::new( 1_i32 - shear_factor, -1_i32, -1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_i32,  1_i32, 0_i32),
     ///     Vector3::new(-1_i32,  1_i32, 0_i32),
@@ -3546,7 +3520,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3558,18 +3532,18 @@ where
         Self::new(
             one,          zero, zero,
             zero,         one,  zero,
-            shear_factor, zero, one
+            shear_factor, zero, one,
         )
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
@@ -3578,7 +3552,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// #
     /// let shear_factor = 8_i32;
@@ -3604,9 +3578,9 @@ where
     ///     Vector3::new( 1_i32, -1_i32 + shear_factor, -1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new(0_i32,  1_i32,  1_i32),
     ///     Vector3::new(0_i32, -1_i32,  1_i32),
@@ -3616,7 +3590,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3628,23 +3602,23 @@ where
         Self::new(
             one,  shear_factor, zero,
             zero, one,          zero,
-            zero, zero,         one
+            zero, zero,         one,
         )
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **z-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -3674,9 +3648,9 @@ where
     ///     Vector3::new( 1_i32, -1_i32 - shear_factor, -1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_i32,  1_i32, 0_i32),
     ///     Vector3::new(-1_i32,  1_i32, 0_i32),
@@ -3686,7 +3660,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3698,18 +3672,18 @@ where
         Self::new(
             one,  zero,         zero,
             zero, one,          zero,
-            zero, shear_factor, one
+            zero, shear_factor, one,
         )
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
     ///
@@ -3718,7 +3692,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// #
     /// let shear_factor = 8_i32;
@@ -3744,9 +3718,9 @@ where
     ///     Vector3::new( 1_i32, -1_i32, -1_i32 + shear_factor),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new(0_i32,  1_i32,  1_i32),
     ///     Vector3::new(0_i32, -1_i32,  1_i32),
@@ -3756,7 +3730,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3768,23 +3742,23 @@ where
         Self::new(
             one,  zero, shear_factor,
             zero, one,  zero,
-            zero, zero, one   
+            zero, zero, one,
         )
     }
 
-    /// Construct a shearing matrix in three dimensions with respect to 
+    /// Construct a shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term.
-    /// 
+    ///
     /// For a more in depth exposition on the geometrical underpinnings of the shearing
     /// transformation in general, see [`Matrix3x3::from_shear`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -3814,9 +3788,9 @@ where
     ///     Vector3::new( 1_i32, -1_i32, -1_i32 - shear_factor),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_i32, 0_i32,  1_i32),
     ///     Vector3::new(-1_i32, 0_i32,  1_i32),
@@ -3826,7 +3800,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -3838,7 +3812,7 @@ where
         Self::new(
             one,  zero, zero,
             zero, one,  shear_factor,
-            zero, zero, one
+            zero, zero, one,
         )
     }
 }
@@ -3847,37 +3821,37 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a general shearing matrix in three dimensions with respect to 
+    /// Construct a general shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`.
-    /// 
-    /// This version of the shearing transformation is a linear transformation because 
-    /// the origin of the coordinate frame for applying the shearing transformation 
+    ///
+    /// This version of the shearing transformation is a linear transformation because
+    /// the origin of the coordinate frame for applying the shearing transformation
     /// is `[0, 0, 0]` so there is no translation term to account for.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The shearing matrix constructor has the following parameters
-    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing
     ///    plane gets sheared.
     /// * `direction`: The direction along which the shearing happens.
     /// * `normal`: The normal vector to the shearing plane.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The displacement of a point with respect to the shearing plane is a function 
-    /// of the signed distance of the point from the shearing plane. In particular, it 
-    /// is a function of the value of the component of the point projected along the 
+    ///
+    /// The displacement of a point with respect to the shearing plane is a function
+    /// of the signed distance of the point from the shearing plane. In particular, it
+    /// is a function of the value of the component of the point projected along the
     /// normal vector of the shearing plane.
-    /// 
-    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal 
+    ///
+    /// More precisely, let `v` be the shearing direction, let `n` be a vector normal
     /// to `v`, and let `p` be a point. In three dimensions, the unit vectors `v`, `n`, and
-    /// `v x n` form a coordinate frame in conjunction with the origin. Let `m` be the 
-    /// shearing factor. Let `q` be the point that results from applying the shearing 
+    /// `v x n` form a coordinate frame in conjunction with the origin. Let `m` be the
+    /// shearing factor. Let `q` be the point that results from applying the shearing
     /// transformation to `p`. The point `q` is defined precisely as
     /// ```text
     /// q := p + (m * p_n) * v
     /// ```
-    /// where `p_n` is the component of `p` projected onto the normal vector `n`. 
+    /// where `p_n` is the component of `p` projected onto the normal vector `n`.
     /// In particular, `p_n := dot(p, n)`, so `q` is given by
     /// ```text
     /// q == p + (m * dot(p, n)) * v
@@ -3885,12 +3859,12 @@ where
     ///   == I * p + m * (v * n^T) * p
     ///   == (I + m * (v * n^T)) * p
     /// ```
-    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
     /// M := I + m * (v * n^T) == I + m * outer(v, n)
     /// ```
-    /// where `I` denotes the identity matrix. In the standard basis in Euclidean 
+    /// where `I` denotes the identity matrix. In the standard basis in Euclidean
     /// space, the outer product of `v` and `n` is given by
     /// ```text
     ///                | v.x * n.x   v.x * n.y   v.x * n.z |
@@ -3902,7 +3876,7 @@ where
     ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
     /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
     ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
-    ///  
+    ///
     ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
     ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
     ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
@@ -3915,7 +3889,7 @@ where
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
-    /// 
+    ///
     /// The projection of the vector `p` onto `v` is given by `p_v := dot(p, v) * v`.
     /// Observe that
     /// ```text
@@ -3927,7 +3901,7 @@ where
     /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
     /// is then given by
     /// ```text
-    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    /// tan(phi) := (q - p)_v / (p - p_v)_n
     ///          == dot(q - p, v) / dot(p - p_v, n)
     ///          == (m * dot(p, n) * dot(v, v)) / (dot(p, n) * dot(n, n))
     ///          == m * (dot(p, n) / dot(p, n))
@@ -3935,13 +3909,13 @@ where
     /// ```
     /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
     /// with respect to the unit normal `n`.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// #     Unit,
     /// # };
     /// #
@@ -3955,9 +3929,9 @@ where
     /// );
     /// let expected_matrix = matrix;
     /// let result_matrix = Matrix3x3::from_shear(shear_factor, &direction, &normal);
-    /// 
+    ///
     /// assert_eq!(result_matrix, expected_matrix);
-    /// 
+    ///
     /// let vertices = [
     ///     Vector3::new( 1_f64,  1_f64,  1_f64),
     ///     Vector3::new(-1_f64,  1_f64,  1_f64),
@@ -3979,9 +3953,9 @@ where
     ///     Vector3::new( 1_f64 + shear_factor, -1_f64, -1_f64),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_f64, 0_f64,  1_f64),
     ///     Vector3::new(-1_f64, 0_f64,  1_f64),
@@ -3992,7 +3966,7 @@ where
     /// // Points in the shearing plane don't move.
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -4015,7 +3989,7 @@ where
         Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
         )
     }
 }
@@ -4024,18 +3998,18 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalar,
 {
-    /// Construct an affine shearing matrix in two dimensions with respect to 
+    /// Construct an affine shearing matrix in two dimensions with respect to
     /// a line passing through the origin `[0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix3x3::from_affine_shear`].
     ///
-    /// # Example 
-    /// 
+    /// # Example
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
     /// #
@@ -4056,7 +4030,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector3::new( 1_i32, 0_i32, 1_i32),
     ///     Vector3::new(-1_i32, 0_i32, 1_i32),
@@ -4064,7 +4038,7 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[rustfmt::skip]
@@ -4076,22 +4050,22 @@ where
         Self::new(
             one,          zero, zero,
             shear_factor, one,  zero,
-            zero,         zero, one
+            zero,         zero, one,
         )
     }
 
-    /// Construct an affine shearing matrix in two dimensions with respect to 
+    /// Construct an affine shearing matrix in two dimensions with respect to
     /// a line passing through the origin `[0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix3x3::from_affine_shear`].
     ///
-    /// # Example 
-    /// 
+    /// # Example
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
     /// #
@@ -4112,7 +4086,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector3::new(0_i32,  1_i32, 1_i32),
     ///     Vector3::new(0_i32, -1_i32, 1_i32),
@@ -4120,7 +4094,7 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_line, expected_in_line);
     /// ```
     #[rustfmt::skip]
@@ -4132,7 +4106,7 @@ where
         Self::new(
             one,  shear_factor, zero,
             zero, one,          zero,
-            zero, zero,         one
+            zero, zero,         one,
         )
     }
 }
@@ -4141,36 +4115,36 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a general affine shearing matrix in two dimensions with respect to 
+    /// Construct a general affine shearing matrix in two dimensions with respect to
     /// a line passing through the origin `origin`, not necessarily `[0, 0]`.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The affine shearing matrix constructor has four parameters
     /// * `origin`: The origin of the affine frame for the shearing transformation.
-    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing
     ///    line gets sheared.
     /// * `direction`: The direction along which the shearing happens in the shearing line.
     /// * `normal`: The normal vector to the shearing line.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The displacement of a point with respect to the shearing line is a function 
-    /// of the signed distance of the point from the shearing line. In particular, it 
-    /// is a function of the value of the component of the difference between the point 
-    /// and the origin of the affine frame projected along the normal vector of the 
+    ///
+    /// The displacement of a point with respect to the shearing line is a function
+    /// of the signed distance of the point from the shearing line. In particular, it
+    /// is a function of the value of the component of the difference between the point
+    /// and the origin of the affine frame projected along the normal vector of the
     /// shearing line.
-    /// 
-    /// More precisely, let `Q` be the origin of the affine frame for the shearing 
-    /// transformation, let `v` be the shearing direction, let `n` be a vector normal 
-    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n` 
-    /// form a coordinate frame in conjunction with the origin `Q`. Let `m` be the shearing 
-    /// factor. Let `q` be the point that results from applying the shearing 
+    ///
+    /// More precisely, let `Q` be the origin of the affine frame for the shearing
+    /// transformation, let `v` be the shearing direction, let `n` be a vector normal
+    /// to `v`, and let `p` be a point. In two dimensions, the unit vectors `v` and `n`
+    /// form a coordinate frame in conjunction with the origin `Q`. Let `m` be the shearing
+    /// factor. Let `q` be the point that results from applying the shearing
     /// transformation to `p`. The point `q` is defined precisely as
     /// ```text
     /// q := p + (m * (p - Q)_n) * v
     /// ```
-    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`. 
+    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`.
     /// In particular, `(p - Q)_n := dot(p - Q, n)`, so `q` is given by
     /// ```text
     /// q == p + (m * dot(p - Q, n)) * v
@@ -4179,17 +4153,17 @@ where
     ///   == I * p + m * (v * n^T) * p - m * dot(Q, n) * v
     ///   == (I + m * (v * n^T)) * p - m * dot(Q, n) * v
     /// ```
-    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
     /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
     ///      | 0^T                  1                 |
-    /// 
+    ///
     ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
     ///      | 0^T                    1                 |
     /// ```
-    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of 
-    /// the zero vector. In the standard basis in Euclidean space, the outer product 
+    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of
+    /// the zero vector. In the standard basis in Euclidean space, the outer product
     /// of `v` and `n` is given by
     /// ```text
     /// outer(v, n) := | v.x * n.x   v.x * n.y |
@@ -4199,7 +4173,7 @@ where
     /// ```text
     /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
     ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
-    /// 
+    ///
     ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
     ///                        | m * v.y * n.x       1 + m * v.y * n.y |
     /// ```
@@ -4211,7 +4185,7 @@ where
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
-    /// 
+    ///
     /// The projection of the vector `p - Q` onto `v` is given by `p_v := dot(p - Q, v) * v`.
     /// Observe that
     /// ```text
@@ -4223,7 +4197,7 @@ where
     /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
     /// is then given by
     /// ```text
-    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    /// tan(phi) := (q - p)_v / (p - p_v)_n
     ///          == dot(q - p, v) / dot(p - p_v, n)
     ///          == (m * dot(p - Q, n) * dot(v, v)) / (dot(p - Q, n) * dot(n, n))
     ///          == m * (dot(p - Q, n) / dot(p - Q, n))
@@ -4231,14 +4205,14 @@ where
     /// ```
     /// so the shearing factor `m` represents the tangent of the shearing angle `phi`
     /// with respect to the unit normal `n`.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point2,
     /// #     Vector2,
@@ -4266,12 +4240,12 @@ where
     ///     Vector3::new( 1_f64 - shear_factor, -1_f64, 1_f64),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
     /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
     /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// 
+    ///
     /// let vertices_in_line = [
     ///     Vector3::new( 1_f64, 0_f64, 1_f64),
     ///     Vector3::new(-1_f64, 0_f64, 1_f64),
@@ -4279,17 +4253,17 @@ where
     /// ];
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
     /// ```
-    /// 
+    ///
     /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// #     Vector3,
     /// #     Point2,
     /// #     Vector2,
@@ -4338,12 +4312,12 @@ where
     ///     ),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
     /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
     /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
     ///     Vector3::new(-3_f64 / f64::sqrt(5_f64), -3_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
@@ -4353,7 +4327,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
@@ -4363,9 +4337,9 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(
-        shear_factor: S, 
-        origin: &Point2<S>, 
-        direction: &Unit<Vector2<S>>, 
+        shear_factor: S,
+        origin: &Point2<S>,
+        direction: &Unit<Vector2<S>>,
         normal: &Unit<Vector2<S>>
     ) -> Self
     {
@@ -4388,7 +4362,7 @@ where
         Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
         )
     }
 }
@@ -4397,31 +4371,31 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalarSigned,
 {
-    /// Construct a two-dimensional affine reflection matrix in the **xy-plane** 
-    /// for a line with normal vector `normal` and bias vector `bias`. The bias 
+    /// Construct a two-dimensional affine reflection matrix in the **xy-plane**
+    /// for a line with normal vector `normal` and bias vector `bias`. The bias
     /// vector can be any known point on the line of reflection.
-    /// 
-    /// The affine version of reflection generalizes the two-dimensional 
-    /// `from_reflection` function in that `from_reflection` only works for 
-    /// lines that cross the origin. If the line does not cross the origin, we 
-    /// need to compute a translation in order to calculate the reflection 
-    /// matrix. Since translation operations are affine and not linear, 
-    /// constructing a general two-dimensional reflection requires an affine 
+    ///
+    /// The affine version of reflection generalizes the two-dimensional
+    /// `from_reflection` function in that `from_reflection` only works for
+    /// lines that cross the origin. If the line does not cross the origin, we
+    /// need to compute a translation in order to calculate the reflection
+    /// matrix. Since translation operations are affine and not linear,
+    /// constructing a general two-dimensional reflection requires an affine
     /// transformation instead of a linear one.
     ///
     /// # Discussion
-    /// 
-    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    ///
+    /// The reflection of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
-    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
     /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
-    /// of reflection. 
-    /// 
-    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
-    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
-    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
-    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    /// of reflection.
+    ///
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M`
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts
     /// on `v_per` and `v_par` as follows
     /// ```text
     /// Ref(v_per) :=  v_per
@@ -4469,7 +4443,7 @@ where
     ///
     /// # Example (Line Through The Origin)
     ///
-    /// Here is an example of reflecting a vector across the **x-axis** with 
+    /// Here is an example of reflecting a vector across the **x-axis** with
     /// the line of reflection passing through the origin.
     /// ```
     /// # use cglinalg_core::{
@@ -4477,7 +4451,7 @@ where
     /// #     Vector3,
     /// #     Vector2,
     /// #     Point2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
@@ -4489,9 +4463,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
-    /// In two dimensions there is an ambiguity in the choice of normal 
-    /// vector, and as a result, a normal vector to the line---or 
+    ///
+    /// In two dimensions there is an ambiguity in the choice of normal
+    /// vector, and as a result, a normal vector to the line---or
     /// its negation---will produce the same reflection.
     /// ```
     /// # use cglinalg_core::{
@@ -4499,7 +4473,7 @@ where
     /// #     Vector3,
     /// #     Vector2,
     /// #     Point2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
@@ -4523,7 +4497,7 @@ where
     /// #     Unit,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let bias = Point2::new(0_f64, 2_f64);
@@ -4559,7 +4533,7 @@ where
         Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
         )
     }
 
@@ -4577,8 +4551,8 @@ where
     /// #
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let expected = Matrix3x3::new(
-    ///     1_f64, 0_f64,  0_f64, 
-    ///     0_f64, 1_f64,  0_f64,  
+    ///     1_f64, 0_f64,  0_f64,
+    ///     0_f64, 1_f64,  0_f64,
     ///     0_f64, 0_f64, -1_f64
     /// );
     /// let result = Matrix3x3::from_reflection(&normal);
@@ -4602,16 +4576,16 @@ where
         let c2r0 = -two * normal[0] * normal[2];
         let c2r1 = -two * normal[1] * normal[2];
         let c2r2 =  one - two * normal[2] * normal[2];
-    
+
         Self::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
        )
     }
 
     /// Compute the determinant of a matrix.
-    /// 
+    ///
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
@@ -4619,7 +4593,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -4633,22 +4607,22 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn determinant(&self) -> S {
-        self.data[0][0] * self.data[1][1] * self.data[2][2] - 
+        self.data[0][0] * self.data[1][1] * self.data[2][2] -
         self.data[0][0] * self.data[1][2] * self.data[2][1] -
-        self.data[1][0] * self.data[0][1] * self.data[2][2] + 
+        self.data[1][0] * self.data[0][1] * self.data[2][2] +
         self.data[1][0] * self.data[0][2] * self.data[2][1] +
-        self.data[2][0] * self.data[0][1] * self.data[1][2] - 
+        self.data[2][0] * self.data[0][1] * self.data[1][2] -
         self.data[2][0] * self.data[0][2] * self.data[1][1]
     }
 
     /// Compute the cross product matrix for a given vector.
-    /// 
+    ///
     /// The cross matrix for a vector `a` is the matrix `A` such that for any
     /// vector `v`, `A` satisfies
     /// ```text
     /// A * v == cross(a, v)
     /// ```
-    /// In Euclidean space in the standard basis, the cross matrix has the 
+    /// In Euclidean space in the standard basis, the cross matrix has the
     /// following form. Given a vector `a`, the cross matrix for `a` is
     /// ```text
     ///                  | 0    -a.z   a.y |
@@ -4657,9 +4631,9 @@ where
     /// ```
     /// where `a.*` denote the components of the vector `a` in the standard Euclidean
     /// basis.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
@@ -4669,7 +4643,7 @@ where
     /// let a = Vector3::new(2_i32, 3_i32, 4_i32);
     /// let v = Vector3::new(43_i32, 5_i32, 89_i32);
     /// let cross_a = Matrix3x3::cross_matrix(&a);
-    /// 
+    ///
     /// assert_eq!(cross_a * v, a.cross(&v));
     /// ```
     #[rustfmt::skip]
@@ -4677,8 +4651,8 @@ where
     pub fn cross_matrix(vector: &Vector3<S>) -> Self {
         Matrix3x3::new(
              S::zero(),  vector[2], -vector[1],
-            -vector[2],  S::zero(),  vector[0], 
-             vector[1], -vector[0],  S::zero()
+            -vector[2],  S::zero(),  vector[0],
+             vector[1], -vector[0],  S::zero(),
         )
     }
 }
@@ -4687,10 +4661,10 @@ impl<S> Matrix3x3<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct an affine rotation matrix in two dimensions that rotates a 
+    /// Construct an affine rotation matrix in two dimensions that rotates a
     /// vector in the **xy-plane** by an angle `angle`.
     ///
-    /// This is the affine matrix counterpart to the 2x2 matrix function 
+    /// This is the affine matrix counterpart to the 2x2 matrix function
     /// `from_angle`.
     ///
     /// # Example
@@ -4702,10 +4676,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4729,14 +4703,14 @@ where
         Self::new(
              cos_angle, sin_angle, zero,
             -sin_angle, cos_angle, zero,
-             zero,      zero,      one
+             zero,      zero,      one,
         )
     }
 
     /// Construct a rotation matrix about the **x-axis** by an angle `angle`.
     ///
     /// # Example
-    /// 
+    ///
     /// In this example the rotation is in the **yz-plane**.
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -4745,10 +4719,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4777,7 +4751,7 @@ where
     /// Construct a rotation matrix about the **y-axis** by an angle `angle`.
     ///
     /// # Example
-    /// 
+    ///
     /// In this example the rotation is in the **zx-plane**.
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -4786,10 +4760,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4797,7 +4771,7 @@ where
     /// let vector = Vector3::new(1_f64, 0_f64, 1_f64);
     /// let expected = Vector3::new(1_f64, 0_f64, -1_f64);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
@@ -4818,7 +4792,7 @@ where
     /// Construct a rotation matrix about the **z-axis** by an angle `angle`.
     ///
     /// # Example
-    /// 
+    ///
     /// In this example the rotation is in the **xy-plane**.
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -4827,10 +4801,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4856,7 +4830,7 @@ where
         )
     }
 
-    /// Construct a rotation matrix about an arbitrary axis by an angle 
+    /// Construct a rotation matrix about an arbitrary axis by an angle
     /// `angle`.
     ///
     /// # Example
@@ -4872,7 +4846,7 @@ where
     /// #     Vector3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -4910,14 +4884,14 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the origin facing
+    /// the direction `direction` into the coordinate system of an observer
     /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** 
+    /// The function maps the direction `direction` to the **positive z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
-    /// 
+    ///
     ///
     /// # Example
     ///
@@ -4928,7 +4902,7 @@ where
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -4941,10 +4915,11 @@ where
     /// );
     /// let result = Matrix3x3::look_to_lh(&direction, &up);
     /// let unit_z = Vector3::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction.normalize(), unit_z, epsilon = 1e-10);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = direction.normalize();
@@ -4959,11 +4934,11 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the origin facing
+    /// the direction `direction` into the coordinate system of an observer
     /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** 
+    /// The function maps the direction `direction` to the **negative z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
@@ -4976,7 +4951,7 @@ where
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -4993,6 +4968,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction.normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let z_axis = -direction.normalize();
@@ -5007,11 +4983,11 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
-    /// the position `target` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the position `eye` facing
+    /// the position `target` into the coordinate system of an observer
     /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `target - eye` to the **positive z-axis** 
+    /// The function maps the direction `target - eye` to the **positive z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
     ///
@@ -5040,7 +5016,7 @@ where
     /// let result = Matrix3x3::look_at_lh(&eye, &target, &up);
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction, unit_z, epsilon = 1e-10);
     /// ```
@@ -5050,11 +5026,11 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `direction` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the origin facing
+    /// the direction `direction` into the coordinate system of an observer
     /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `target - eye` to the **negative z-axis** 
+    /// The function maps the direction `target - eye` to the **negative z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
@@ -5083,7 +5059,7 @@ where
     /// let result = Matrix3x3::look_at_rh(&eye, &target, &up);
     /// let direction = (target - eye).normalize();
     /// let minus_unit_z = -Vector3::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * direction, minus_unit_z, epsilon = 1e-10);
     /// ```
@@ -5094,7 +5070,7 @@ where
 
     /// Construct a rotation matrix that transforms the coordinate system of
     /// an observer located at the origin facing the **positive z-axis** into a
-    /// coordinate system of an observer located at the origin facing the 
+    /// coordinate system of an observer located at the origin facing the
     /// direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
@@ -5134,8 +5110,8 @@ where
 
     /// Construct a rotation matrix that transforms the coordinate system of
     /// an observer located at the origin facing the **negative z-axis** into a
-    /// coordinate system of an observer located at the origin facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// coordinate system of an observer located at the origin facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `direction`.
@@ -5173,11 +5149,11 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `target - eye` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the origin facing
+    /// the direction `target - eye` into the coordinate system of an observer
     /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `target - eyey` to the **positive z-axis** 
+    /// The function maps the direction `target - eyey` to the **positive z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
     /// This function is the inverse of [`look_at_lh`].
@@ -5207,7 +5183,7 @@ where
     /// let result = Matrix3x3::look_at_lh_inv(&eye, &target, &up);
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
     /// ```
@@ -5217,11 +5193,11 @@ where
     }
 
     /// Construct a coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing 
-    /// the direction `target - eye` into the coordinate system of an observer 
+    /// a coordinate system of an observer located at the origin facing
+    /// the direction `target - eye` into the coordinate system of an observer
     /// located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `target - eye` to the **negative z-axis** 
+    /// The function maps the direction `target - eye` to the **negative z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
     /// This function is the inverse of [`look_at_rh`].
@@ -5260,7 +5236,7 @@ where
         Self::look_at_rh(eye, target, up).transpose()
     }
 
-    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// Construct a rotation matrix that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// # Example
@@ -5283,21 +5259,16 @@ where
     /// let matrix = Matrix3x3::rotation_between(&v1, &v2).unwrap();
     /// let expected = Vector3::new(0_f64, 2_f64, 0_f64);
     /// let result = matrix * v1;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
-        if let (Some(unit_v1), Some(unit_v2)) = (
-            v1.try_normalize(S::zero()), 
-            v2.try_normalize(S::zero()))
-         {
+        if let (Some(unit_v1), Some(unit_v2)) = (v1.try_normalize(S::zero()), v2.try_normalize(S::zero())) {
             let cross = unit_v1.cross(&unit_v2);
 
             if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
-                return Some(
-                    Self::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2)))
-                );
+                return Some(Self::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2))));
             }
 
             if unit_v1.dot(&unit_v2) < S::zero() {
@@ -5308,7 +5279,7 @@ where
         Some(Self::identity())
     }
 
-    /// Construct a rotation matrix that rotates the shortest angular distance 
+    /// Construct a rotation matrix that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// # Example
@@ -5333,7 +5304,7 @@ where
     /// let vector = Vector3::unit_x() * 2_f64;
     /// let expected = Vector3::unit_y() * 2_f64;
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -5342,9 +5313,7 @@ where
         let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
 
         if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
-            return Some(
-                Self::from_axis_angle(&axis, Radians::acos(cos_angle))
-            );
+            return Some(Self::from_axis_angle(&axis, Radians::acos(cos_angle)));
         }
 
         if cos_angle < S::zero() {
@@ -5354,9 +5323,9 @@ where
         Some(Self::identity())
     }
 
-    /// Compute the inverse of a square matrix, if the inverse exists. 
+    /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// Given a square matrix `self` Compute the matrix `m` if it exists
     /// such that
     /// ```text
     /// m * self == self * m == 1.
@@ -5367,10 +5336,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3,  
+    /// #     Matrix3x3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -5397,17 +5366,17 @@ where
             let det_inv = S::one() / det;
 
             Some(Self::new(
-                det_inv * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]), 
-                det_inv * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]), 
+                det_inv * (self.data[1][1] * self.data[2][2] - self.data[1][2] * self.data[2][1]),
+                det_inv * (self.data[0][2] * self.data[2][1] - self.data[0][1] * self.data[2][2]),
                 det_inv * (self.data[0][1] * self.data[1][2] - self.data[0][2] * self.data[1][1]),
-        
+
                 det_inv * (self.data[1][2] * self.data[2][0] - self.data[1][0] * self.data[2][2]),
                 det_inv * (self.data[0][0] * self.data[2][2] - self.data[0][2] * self.data[2][0]),
                 det_inv * (self.data[0][2] * self.data[1][0] - self.data[0][0] * self.data[1][2]),
-    
-                det_inv * (self.data[1][0] * self.data[2][1] - self.data[1][1] * self.data[2][0]), 
-                det_inv * (self.data[0][1] * self.data[2][0] - self.data[0][0] * self.data[2][1]), 
-                det_inv * (self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0])
+
+                det_inv * (self.data[1][0] * self.data[2][1] - self.data[1][1] * self.data[2][0]),
+                det_inv * (self.data[0][1] * self.data[2][0] - self.data[0][0] * self.data[2][1]),
+                det_inv * (self.data[0][0] * self.data[1][1] - self.data[0][1] * self.data[1][0]),
             ))
         }
     }
@@ -5420,7 +5389,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix3x3, 
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
@@ -5428,7 +5397,7 @@ where
     ///     4_f64, 5_f64, 6_f64,
     ///     7_f64, 8_f64, 9_f64   
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix.determinant(), 0_f64);
     /// assert!(!matrix.is_invertible());
     /// ```
@@ -5480,9 +5449,9 @@ where
 
 impl<S> Matrix4x4<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -5496,9 +5465,9 @@ impl<S> Matrix4x4<S> {
     ///     c0r0, c0r1, c0r2, c0r3,
     ///     c1r0, c1r1, c1r2, c1r3,
     ///     c2r0, c2r1, c2r2, c2r3,
-    ///     c3r0, c3r1, c3r2, c3r3
+    ///     c3r0, c3r1, c3r2, c3r3,
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[0][2], c0r2);
@@ -5530,7 +5499,7 @@ impl<S> Matrix4x4<S> {
                 [c1r0, c1r1, c1r2, c1r3],
                 [c2r0, c2r1, c2r2, c2r3],
                 [c3r0, c3r1, c3r2, c3r3],
-            ]
+            ],
         }
     }
 }
@@ -5539,11 +5508,11 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalar,
 {
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **y-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
@@ -5551,7 +5520,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let shear_factor = 19_i32;
@@ -5579,7 +5548,7 @@ where
     /// let result = vertices.map(|v| matrix * v);
     ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_i32, 0_i32,  1_i32, 1_i32),
     ///     Vector4::new(-1_i32, 0_i32,  1_i32, 1_i32),
@@ -5589,7 +5558,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -5597,24 +5566,24 @@ where
     pub fn from_affine_shear_xy(shear_factor: S) -> Self {
         let one = S::one();
         let zero = S::zero();
-        
+
         Self::new(
             one,          zero, zero, zero,
             shear_factor, one,  zero, zero,
             zero,         zero, one,  zero,
-            zero,         zero, zero, one
+            zero,         zero, zero, one,
         )
     }
 
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **x-axis**
     /// as the shearing direction, and the **z-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -5644,9 +5613,9 @@ where
     ///     Vector4::new( 1_i32 - shear_factor, -1_i32, -1_i32, 1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_i32,  1_i32, 0_i32, 1_i32),
     ///     Vector4::new(-1_i32,  1_i32, 0_i32, 1_i32),
@@ -5656,7 +5625,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -5669,19 +5638,19 @@ where
             one,          zero, zero, zero,
             zero,         one,  zero, zero,
             shear_factor, zero, one,  zero,
-            zero,         zero, zero, one
+            zero,         zero, zero, one,
         )
     }
 
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -5711,9 +5680,9 @@ where
     ///     Vector4::new( 1_i32, -1_i32 + shear_factor, -1_i32, 1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new(0_i32,  1_i32,  1_i32, 1_i32),
     ///     Vector4::new(0_i32, -1_i32,  1_i32, 1_i32),
@@ -5723,7 +5692,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -5736,15 +5705,15 @@ where
             one,  shear_factor, zero, zero,
             zero, one,          zero, zero,
             zero, zero,         one,  zero,
-            zero, zero,         zero, one
+            zero, zero,         zero, one,
         )
     }
 
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **y-axis**
     /// as the shearing direction, and the **z-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
@@ -5752,7 +5721,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let shear_factor = 19_i32;
@@ -5778,9 +5747,9 @@ where
     ///     Vector4::new( 1_i32, -1_i32 - shear_factor, -1_i32, 1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_i32,  1_i32, 0_i32, 1_i32),
     ///     Vector4::new(-1_i32,  1_i32, 0_i32, 1_i32),
@@ -5790,7 +5759,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -5803,15 +5772,15 @@ where
             one,  zero,         zero, zero,
             zero, one,          zero, zero,
             zero, shear_factor, one,  zero,
-            zero, zero,         zero, one
+            zero, zero,         zero, one,
         )
     }
 
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
     ///
     /// # Example
@@ -5819,7 +5788,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// #
     /// let shear_factor = 19_i32;
@@ -5845,9 +5814,9 @@ where
     ///     Vector4::new( 1_i32, -1_i32, -1_i32 + shear_factor, 1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new(0_i32,  1_i32,  1_i32, 1_i32),
     ///     Vector4::new(0_i32, -1_i32,  1_i32, 1_i32),
@@ -5857,7 +5826,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     /// ```
@@ -5871,19 +5840,19 @@ where
             one,  zero, shear_factor, zero,
             zero, one,  zero,         zero,
             zero, zero, one,          zero,
-            zero, zero, zero,         one
+            zero, zero, zero,         one,
         )
     }
 
-    /// Construct an affine shearing matrix in three dimensions with respect to 
+    /// Construct an affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `[0, 0, 0]`, using the **z-axis**
     /// as the shearing direction, and the **x-axis** as the normal vector.
-    /// 
-    /// For a more in depth exposition on the geometrical underpinnings of the affine 
+    ///
+    /// For a more in depth exposition on the geometrical underpinnings of the affine
     /// shearing transformation in general, see [`Matrix4x4::from_affine_shear`].
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
@@ -5913,9 +5882,9 @@ where
     ///     Vector4::new( 1_i32, -1_i32, -1_i32 - shear_factor, 1_i32),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_i32, 0_i32,  1_i32, 1_i32),
     ///     Vector4::new(-1_i32, 0_i32,  1_i32, 1_i32),
@@ -5925,7 +5894,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_eq!(result_in_plane, expected_in_plane);
     /// ```
     #[rustfmt::skip]
@@ -5938,7 +5907,7 @@ where
             one,  zero, zero,         zero,
             zero, one,  shear_factor, zero,
             zero, zero, one,          zero,
-            zero, zero, zero,         one
+            zero, zero, zero,         one,
         )
     }
 }
@@ -5947,36 +5916,36 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a general affine shearing matrix in three dimensions with respect to 
+    /// Construct a general affine shearing matrix in three dimensions with respect to
     /// a plane passing through the origin `origin`, not necessarily `[0, 0, 0]`.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The affine shearing matrix constructor has four parameters
     /// * `origin`: The origin of the affine frame for the shearing transformation.
-    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing 
+    /// * `shear_factor`: The amount by which a point in a plane parallel to the shearing
     ///    plane gets sheared.
     /// * `direction`: The direction along which the shearing happens in the shearing plane.
     /// * `normal`: The normal vector to the shearing plane.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The displacement of a point with respect to the shearing plane is a function 
-    /// of the signed distance of the point from the shearing plane. In particular, it 
-    /// is a function of the value of the component of the difference between the point 
-    /// and the origin of the affine frame projected along the normal vector of the 
+    ///
+    /// The displacement of a point with respect to the shearing plane is a function
+    /// of the signed distance of the point from the shearing plane. In particular, it
+    /// is a function of the value of the component of the difference between the point
+    /// and the origin of the affine frame projected along the normal vector of the
     /// shearing plane.
-    /// 
-    /// More precisely, let `Q` be the origin of the affine frame for the shearing 
-    /// transformation, let `v` be the shearing direction, let `n` be a vector normal 
+    ///
+    /// More precisely, let `Q` be the origin of the affine frame for the shearing
+    /// transformation, let `v` be the shearing direction, let `n` be a vector normal
     /// to `v`, and let `p` be a point. In three dimensions, the unit vectors `v`, `n`, and
-    /// `v x n` form a coordinate frame in conjunction with the origin `Q`. Let `m` be the 
-    /// shearing factor. Let `q` be the point that results from applying the shearing 
+    /// `v x n` form a coordinate frame in conjunction with the origin `Q`. Let `m` be the
+    /// shearing factor. Let `q` be the point that results from applying the shearing
     /// transformation to `p`. The point `q` is defined precisely as
     /// ```text
     /// q := p + (m * (p - Q)_n) * v
     /// ```
-    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`. 
+    /// where `(p - Q)_n` is the component of `p - Q` projected onto the normal vector `n`.
     /// In particular, `(p - Q)_n := dot(p - Q, n)`, so `q` is given by
     /// ```text
     /// q == p + (m * dot(p - Q, n)) * v
@@ -5985,17 +5954,17 @@ where
     ///   == I * p + m * (v * n^T) * p - m * dot(Q, n) * v
     ///   == (I + m * (v * n^T)) * p - m * dot(Q, n) * v
     /// ```
-    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix 
+    /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
     /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
     ///      | 0^T                  1                 |
-    /// 
+    ///
     ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
     ///      | 0^T                    1                 |
     /// ```
-    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of 
-    /// the zero vector. In the standard basis in Euclidean space, the outer product 
+    /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of
+    /// the zero vector. In the standard basis in Euclidean space, the outer product
     /// of `v` and `n` is given by
     /// ```text
     ///                | v.x * n.x   v.x * n.y   v.x * n.z |
@@ -6007,7 +5976,7 @@ where
     ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
     /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
     ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
-    /// 
+    ///
     ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
     ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
     ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
@@ -6019,9 +5988,9 @@ where
     ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z   -m * dot(Q, n) * v |
     ///      | 0                   0                   0                    1                 |
     /// ```
-    /// 
+    ///
     /// # An Equivalent Interpretation Of The Shearing Factor
-    /// 
+    ///
     /// The projection of the vector `p - Q` onto `v` is given by `p_v := dot(p - Q, v) * v`.
     /// Observe that
     /// ```text
@@ -6033,7 +6002,7 @@ where
     /// The tangent of the angle `phi` with respect to the normal vector at `p_v`
     /// is then given by
     /// ```text
-    /// tan(phi) := (q - p)_v / (p - p_v)_n 
+    /// tan(phi) := (q - p)_v / (p - p_v)_n
     ///          == dot(q - p, v) / dot(p - p_v, n)
     ///          == (m * dot(p - Q, n) * dot(v, v)) / (dot(p - Q, n) * dot(n, n))
     ///          == m * (dot(p - Q, n) / dot(p - Q, n))
@@ -6087,7 +6056,7 @@ where
     ///     Vector4::new( 1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64 - shear_factor / f64::sqrt(2_f64), -1_f64, 1_f64),
     /// ];
     /// let result = vertices.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
     /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
     /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
@@ -6096,7 +6065,7 @@ where
     /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
     /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
     /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
-    /// 
+    ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
     ///     Vector4::new(-1_f64,  1_f64, 0_f64, 1_f64),
@@ -6106,7 +6075,7 @@ where
     /// ];
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
-    /// 
+    ///
     /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
     /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
@@ -6116,11 +6085,11 @@ where
     #[rustfmt::skip]
     #[inline]
     pub fn from_affine_shear(
-        shear_factor: S, 
-        origin: &Point3<S>, 
-        direction: &Unit<Vector3<S>>, 
+        shear_factor: S,
+        origin: &Point3<S>,
+        direction: &Unit<Vector3<S>>,
         normal: &Unit<Vector3<S>>
-    ) -> Self 
+    ) -> Self
     {
         let zero = S::zero();
         let one = S::one();
@@ -6150,7 +6119,7 @@ where
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 }
@@ -6160,30 +6129,30 @@ where
     S: SimdScalarSigned,
 {
     /// Construct a three-dimensional affine reflection matrix for a plane with
-    /// normal vector `normal` and bias vector `bias`. The bias vector can be 
+    /// normal vector `normal` and bias vector `bias`. The bias vector can be
     /// any known point on the plane of reflection.
-    /// 
-    /// The affine version of reflection generalizes the three-dimensional 
-    /// `from_reflection` function in that `from_reflection` only works for 
-    /// planes that cross the origin. If the plane does not cross the 
-    /// origin, we need to compute a translation for the reflection matrix. 
-    /// Since translation operations are affine and not linear, constructing a 
-    /// general three-dimensional reflection transformation requires an affine 
+    ///
+    /// The affine version of reflection generalizes the three-dimensional
+    /// `from_reflection` function in that `from_reflection` only works for
+    /// planes that cross the origin. If the plane does not cross the
+    /// origin, we need to compute a translation for the reflection matrix.
+    /// Since translation operations are affine and not linear, constructing a
+    /// general three-dimensional reflection transformation requires an affine
     /// transformation instead of a linear one.
     ///
     /// # Discussion
-    /// 
-    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    ///
+    /// The reflection of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
-    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
     /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
     /// of reflection.
-    /// 
-    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
-    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
-    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
-    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    ///
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M`
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts
     /// on `v_per` and `v_par` as follows
     /// ```text
     /// Ref(v_per) :=  v_per
@@ -6283,12 +6252,12 @@ where
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
     /// Compute the determinant of a matrix.
-    /// 
+    ///
     /// The determinant of a matrix is the signed volume of the parallelepiped
     /// swept out by the vectors represented by the matrix.
     ///
@@ -6296,7 +6265,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -6342,7 +6311,7 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a three-dimensional affine rotation matrix rotating a vector around the 
+    /// Construct a three-dimensional affine rotation matrix rotating a vector around the
     /// **x-axis** by an angle `angle` radians/degrees.
     ///
     /// # Example
@@ -6354,10 +6323,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,   
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6382,15 +6351,15 @@ where
             one,   zero,      zero,      zero,
             zero,  cos_angle, sin_angle, zero,
             zero, -sin_angle, cos_angle, zero,
-            zero,  zero,      zero,      one
+            zero,  zero,      zero,      one,
         )
     }
-        
-    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+
+    /// Construct a three-dimensional affine rotation matrix rotating a vector
     /// around the **y-axis** by an angle `angle` radians/degrees.
     ///
     /// # Example
-    /// 
+    ///
     /// In this example the rotation is in the **zx-plane**.
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -6399,10 +6368,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6410,7 +6379,7 @@ where
     /// let vector = Vector4::new(1_f64, 0_f64, 1_f64, 1_f64);
     /// let expected = Vector4::new(1_f64, 0_f64, -1_f64, 1_f64);
     /// let result = matrix * vector;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[rustfmt::skip]
@@ -6427,15 +6396,15 @@ where
             cos_angle, zero, -sin_angle, zero,
             zero,      one,   zero,      zero,
             sin_angle, zero,  cos_angle, zero,
-            zero,      zero,  zero,      one
+            zero,      zero,  zero,      one,
         )
     }
-    
-    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+
+    /// Construct a three-dimensional affine rotation matrix rotating a vector
     /// around the **z-axis** by an angle `angle` radians/degrees.
     ///
     /// # Example
-    /// 
+    ///
     /// In this example the rotation is in the **xy-plane**.
     /// ```
     /// # use cglinalg_trigonometry::{
@@ -6444,10 +6413,10 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4, 
+    /// #     Vector4,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6467,16 +6436,16 @@ where
         let (sin_angle, cos_angle) = angle.into().sin_cos();
         let one = S::one();
         let zero = S::zero();
-        
+
         Self::new(
              cos_angle, sin_angle, zero, zero,
             -sin_angle, cos_angle, zero, zero,
              zero,      zero,      one,  zero,
-             zero,      zero,      zero, one
+             zero,      zero,      zero, one,
         )
     }
 
-    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// Construct a three-dimensional affine rotation matrix rotating a vector
     /// around the axis `axis` by an angle `angle` radians/degrees.
     ///
     /// # Example
@@ -6531,29 +6500,29 @@ where
             one_minus_cos_angle * _axis[2] * _axis[2] + cos_angle,
             S::zero(),
 
-            S::zero(), 
-            S::zero(), 
-            S::zero(), 
+            S::zero(),
+            S::zero(),
+            S::zero(),
             S::one(),
         )
     }
 
     /// Construct a new orthographic projection matrix.
-    /// 
-    /// The `near` and `far` parameters are the absolute values of the positions 
-    /// of the **near plane** and the **far** plane, respectively, along the 
+    ///
+    /// The `near` and `far` parameters are the absolute values of the positions
+    /// of the **near plane** and the **far** plane, respectively, along the
     /// **negative z-axis**. In particular, the position of the **near plane** is
     /// `z == -near` and the position of the **far plane** is `z == -far`.
-    /// 
-    /// This function returns a homogeneous matrix representing an orthographic 
-    /// projection transformation with a right-handed coordinate system where the 
-    /// orthographic camera faces the **negative z-axis** with the **positive x-axis** 
-    /// going to the right, and the **positive y-axis** going up. The orthographic view 
-    /// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The 
-    /// normalized device coordinates this transformation maps to are 
+    ///
+    /// This function returns a homogeneous matrix representing an orthographic
+    /// projection transformation with a right-handed coordinate system where the
+    /// orthographic camera faces the **negative z-axis** with the **positive x-axis**
+    /// going to the right, and the **positive y-axis** going up. The orthographic view
+    /// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The
+    /// normalized device coordinates this transformation maps to are
     /// `[-1, 1] x [-1, 1] x [-1, 1]`.
-    /// 
-    /// The resulting matrix is identical to the one used by OpenGL. We provide 
+    ///
+    /// The resulting matrix is identical to the one used by OpenGL. We provide
     /// it here for reference
     /// ```text
     /// | m[0, 0]  0        0        m[3, 0] |
@@ -6574,7 +6543,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let left = -4_f64;
@@ -6624,26 +6593,26 @@ where
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
-    /// Construct a new possibly off-center perspective projection matrix based 
+    /// Construct a new possibly off-center perspective projection matrix based
     /// on arbitrary `left`, `right`, `bottom`, `top`, `near` and `far` planes.
     ///
-    /// The `near` and `far` parameters are the absolute values of the positions 
-    /// of the **near plane** and the **far** plane, respectively, along the 
+    /// The `near` and `far` parameters are the absolute values of the positions
+    /// of the **near plane** and the **far** plane, respectively, along the
     /// **negative z-axis**. In particular, the position of the **near plane** is
     /// `z == -near` and the position of the **far plane** is `z == -far`.
-    /// 
-    /// This function returns a homogeneous matrix representing a perspective 
-    /// projection transformation with a right-handed coordinate system where the 
-    /// perspective camera faces the **negative z-axis** with the **positive x-axis** 
-    /// going to the right, and the **positive y-axis** going up. The perspective view 
-    /// volume is the frustum contained in 
-    /// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device 
+    ///
+    /// This function returns a homogeneous matrix representing a perspective
+    /// projection transformation with a right-handed coordinate system where the
+    /// perspective camera faces the **negative z-axis** with the **positive x-axis**
+    /// going to the right, and the **positive y-axis** going up. The perspective view
+    /// volume is the frustum contained in
+    /// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device
     /// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
-    /// 
+    ///
     /// The resulting matrix is identical to the one used by OpenGL, provided here for
     /// reference
     /// ```text
@@ -6665,7 +6634,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let left = -4_f64;
@@ -6719,31 +6688,31 @@ where
         )
     }
 
-    /// Construct a perspective projection matrix based on the `near` 
-    /// plane, the `far` plane and the vertical field of view angle `vfov` and 
+    /// Construct a perspective projection matrix based on the `near`
+    /// plane, the `far` plane and the vertical field of view angle `vfov` and
     /// the horizontal/vertical aspect ratio `aspect_ratio`.
     ///
-    /// The `near` and `far` parameters are the absolute values of the positions 
-    /// of the **near plane** and the **far** plane, respectively, along the 
+    /// The `near` and `far` parameters are the absolute values of the positions
+    /// of the **near plane** and the **far** plane, respectively, along the
     /// **negative z-axis**. In particular, the position of the **near plane** is
-    /// `z == -near` and the position of the **far plane** is `z == -far`. The 
-    /// parameter `aspect_ratio` is the ratio of the width of the viewport to the 
+    /// `z == -near` and the position of the **far plane** is `z == -far`. The
+    /// parameter `aspect_ratio` is the ratio of the width of the viewport to the
     /// height of the viewport.
-    /// 
-    /// This function returns a homogeneous matrix representing a perspective 
-    /// projection transformation with a right-handed coordinate system where the 
-    /// perspective camera faces the **negative z-axis** with the **positive x-axis** 
-    /// going to the right, and the **positive y-axis** going up. The perspective view 
-    /// volume is the symmetric frustum contained in 
-    /// `[-right, right] x [-top, top] x [-near, -far]`, where 
+    ///
+    /// This function returns a homogeneous matrix representing a perspective
+    /// projection transformation with a right-handed coordinate system where the
+    /// perspective camera faces the **negative z-axis** with the **positive x-axis**
+    /// going to the right, and the **positive y-axis** going up. The perspective view
+    /// volume is the symmetric frustum contained in
+    /// `[-right, right] x [-top, top] x [-near, -far]`, where
     /// ```text
     /// tan(vfov / 2) == top / near
     /// right == aspect_ratio * top == aspect_ratio * n * tan(vfov / 2)
     /// top == near * tan(vfov / 2)
     /// ```
-    /// The normalized device coordinates this transformation maps to are 
+    /// The normalized device coordinates this transformation maps to are
     /// `[-1, 1] x [-1, 1] x [-1, 1]`.
-    /// 
+    ///
     /// The resulting matrix is identical to the one used by OpenGL, provided here for
     /// reference
     /// ```text
@@ -6758,7 +6727,7 @@ where
     /// m[3, 2] == -2 * f * n / (f - n)
     /// ```
     /// where the matrix entries are indexed in column-major order.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -6816,23 +6785,23 @@ where
         let c3r1 = zero;
         let c3r2 = -(two * far * near) / (far - near);
         let c3r3 = zero;
-        
+
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction of the target `target` to the 
+    /// The function maps the direction of the target `target` to the
     /// **positive z-axis** and locates the `eye` position to the origin in the
-    /// new the coordinate system. This transformation is a **left-handed** 
+    /// new the coordinate system. This transformation is a **left-handed**
     /// coordinate transformation.
     ///
     /// # Example
@@ -6846,7 +6815,7 @@ where
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -6856,17 +6825,17 @@ where
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///      -1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       0_f64,                     1_f64,  0_f64,                     0_f64,
     ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_to_lh(&eye, &direction, &up);
     /// let unit_z = Vector4::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(
-    ///     (result * direction.to_homogeneous()).normalize(), 
-    ///     unit_z, 
+    ///     (result * direction.to_homogeneous()).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -6883,23 +6852,23 @@ where
         let neg_eye_x = -eye_vec.dot(&x_axis);
         let neg_eye_y = -eye_vec.dot(&y_axis);
         let neg_eye_z = -eye_vec.dot(&z_axis);
-        
+
         Self::new(
             x_axis[0], y_axis[0], z_axis[0], zero,
             x_axis[1], y_axis[1], z_axis[1], zero,
             x_axis[2], y_axis[2], z_axis[2], zero,
-            neg_eye_x, neg_eye_y, neg_eye_z, one
+            neg_eye_x, neg_eye_y, neg_eye_z, one,
         )
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction of the target `target` to the 
+    /// The function maps the direction of the target `target` to the
     /// **negative z-axis** and locates the `eye` position to the origin in the
-    /// new the coordinate system. This transformation is a **right-handed** 
+    /// new the coordinate system. This transformation is a **right-handed**
     /// coordinate transformation.
     ///
     /// # Example
@@ -6913,7 +6882,7 @@ where
     /// #     Normed,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -6923,7 +6892,7 @@ where
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///      0_f64,                     1_f64,  0_f64,                     0_f64,
     ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
@@ -6932,8 +6901,8 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(
-    ///     (result * direction.to_homogeneous()).normalize(), 
-    ///     minus_unit_z, 
+    ///     (result * direction.to_homogeneous()).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10
     /// );
     /// ```
@@ -6950,23 +6919,23 @@ where
         let neg_eye_x = -eye_vec.dot(&x_axis);
         let neg_eye_y = -eye_vec.dot(&y_axis);
         let neg_eye_z = -eye_vec.dot(&z_axis);
-        
+
         Self::new(
             x_axis[0], y_axis[0], z_axis[0], zero,
             x_axis[1], y_axis[1], z_axis[1], zero,
             x_axis[2], y_axis[2], z_axis[2], zero,
-            neg_eye_x, neg_eye_y, neg_eye_z, one
+            neg_eye_x, neg_eye_y, neg_eye_z, one,
         )
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction of the target `target` to the 
+    /// The function maps the direction of the target `target` to the
     /// **positive z-axis** and locates the `eye` position to the origin in the
-    /// new the coordinate system. This transformation is a **left-handed** 
+    /// new the coordinate system. This transformation is a **left-handed**
     /// coordinate transformation.
     ///
     /// # Example
@@ -6989,14 +6958,14 @@ where
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///      -1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       0_f64,                     1_f64,  0_f64,                     0_f64,
     ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
     /// let direction = (target - eye).to_homogeneous();
     /// let unit_z = Vector4::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!((result * direction).normalize(), unit_z, epsilon = 1e-10);
     /// ```
@@ -7006,13 +6975,13 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the position `target` into the coordinate system of an observer located
     /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction of the target `target` to the 
+    /// The function maps the direction of the target `target` to the
     /// **negative z-axis** and locates the `eye` position to the origin in the
-    /// new the coordinate system. This transformation is a **right-handed** 
+    /// new the coordinate system. This transformation is a **right-handed**
     /// coordinate transformation.
     ///
     /// # Example
@@ -7022,7 +6991,7 @@ where
     /// #     Matrix4x4,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Point3, 
+    /// #     Point3,
     /// #     Normed,
     /// # };
     /// # use approx::{
@@ -7035,14 +7004,14 @@ where
     /// let up = Vector3::unit_z();
     /// let expected = Matrix4x4::new(
     ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
-    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64, 
+    ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///      0_f64,                     1_f64,  0_f64,                     0_f64,
     ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
     /// );
     /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
     /// let direction = (target - eye).to_homogeneous();
     /// let minus_unit_z = -Vector4::unit_z();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!((result * direction).normalize(), minus_unit_z, epsilon = 1e-10);
     /// ```
@@ -7052,18 +7021,18 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the 
-    /// **positive z-axis** into a coordinate system where the observer is 
-    /// located at the position `eye` facing the direction `direction`. The 
-    /// resulting coordinate transformation is a **left-handed** coordinate 
+    /// a coordinate system of an observer located at the origin facing the
+    /// **positive z-axis** into a coordinate system where the observer is
+    /// located at the position `eye` facing the direction `direction`. The
+    /// resulting coordinate transformation is a **left-handed** coordinate
     /// transformation.
     ///
-    /// The function maps the **positive z-axis** to the direction `direction`, 
+    /// The function maps the **positive z-axis** to the direction `direction`,
     /// and locates the origin of the coordinate system to the `eye` position.
     /// This function is the inverse of `look_to_lh`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -7072,7 +7041,7 @@ where
     /// #     Point3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -7088,7 +7057,7 @@ where
     /// let direction = direction.to_homogeneous();
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
@@ -7106,28 +7075,28 @@ where
         let eye_x = eye_vec.dot(&x_axis);
         let eye_y = eye_vec.dot(&y_axis);
         let eye_z = eye_vec.dot(&z_axis);
-        
+
         Self::new(
             x_axis[0], x_axis[1], x_axis[2], zero,
             y_axis[0], y_axis[1], y_axis[2], zero,
             z_axis[0], z_axis[1], z_axis[2], zero,
-            eye_x,     eye_y,     eye_z,     one
+            eye_x,     eye_y,     eye_z,     one,
         )
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the 
-    /// **negative z-axis** into a coordinate system where the observer is 
-    /// located at the position `eye` facing the direction `direction`. The 
-    /// resulting coordinate transformation is a **right-handed** coordinate 
+    /// a coordinate system of an observer located at the origin facing the
+    /// **negative z-axis** into a coordinate system where the observer is
+    /// located at the position `eye` facing the direction `direction`. The
+    /// resulting coordinate transformation is a **right-handed** coordinate
     /// transformation.
     ///
-    /// The function maps the **negative z-axis** to the direction `direction`, 
+    /// The function maps the **negative z-axis** to the direction `direction`,
     /// and locates the origin of the coordinate system to the `eye` position.
     /// This function is the inverse of `look_to_rh`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -7153,7 +7122,7 @@ where
     /// let direction = direction.to_homogeneous().normalize();
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
@@ -7171,7 +7140,7 @@ where
         let eye_x = eye_vec.dot(&x_axis);
         let eye_y = eye_vec.dot(&y_axis);
         let eye_z = eye_vec.dot(&z_axis);
-        
+
         Self::new(
             x_axis[0], x_axis[1], x_axis[2], zero,
             y_axis[0], y_axis[1], y_axis[2], zero,
@@ -7181,18 +7150,18 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the 
-    /// **positive z-axis** into a coordinate system where the observer is 
-    /// located at the position `eye` facing the direction `direction`. The 
-    /// resulting coordinate transformation is a **left-handed** coordinate 
+    /// a coordinate system of an observer located at the origin facing the
+    /// **positive z-axis** into a coordinate system where the observer is
+    /// located at the position `eye` facing the direction `direction`. The
+    /// resulting coordinate transformation is a **left-handed** coordinate
     /// transformation.
     ///
-    /// The function maps the **positive z-axis** to the direction `direction`, 
+    /// The function maps the **positive z-axis** to the direction `direction`,
     /// and locates the origin of the coordinate system to the `eye` position.
     /// This function is the inverse of `look_at_lh`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -7218,7 +7187,7 @@ where
     /// let direction = (target - eye).to_homogeneous().normalize();
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
@@ -7229,18 +7198,18 @@ where
     }
 
     /// Construct an affine coordinate transformation matrix that transforms
-    /// a coordinate system of an observer located at the origin facing the 
-    /// **negative z-axis** into a coordinate system where the observer is 
-    /// located at the position `eye` facing the direction `direction`. The 
-    /// resulting coordinate transformation is a **right-handed** coordinate 
+    /// a coordinate system of an observer located at the origin facing the
+    /// **negative z-axis** into a coordinate system where the observer is
+    /// located at the position `eye` facing the direction `direction`. The
+    /// resulting coordinate transformation is a **right-handed** coordinate
     /// transformation.
     ///
-    /// The function maps the **negative z-axis** to the direction `direction`, 
+    /// The function maps the **negative z-axis** to the direction `direction`,
     /// and locates the origin of the coordinate system to the `eye` position.
     /// This function is the inverse of `look_at_rh`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -7266,7 +7235,7 @@ where
     /// let direction = (target - eye).to_homogeneous().normalize();
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
     /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
@@ -7277,9 +7246,9 @@ where
     }
 
 
-    /// Compute the inverse of a square matrix, if the inverse exists. 
+    /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists 
+    /// Given a square matrix `self` Compute the matrix `m` if it exists
     /// such that
     /// ```text
     /// m * self == self * m == 1.
@@ -7290,10 +7259,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4,  
+    /// #     Matrix4x4,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
@@ -7336,7 +7305,7 @@ where
                       - self.data[0][0] * self.data[2][1] * self.data[3][3] - self.data[2][0] * self.data[3][1] * self.data[0][3] - self.data[3][0] * self.data[0][1] * self.data[2][3];
             let _c3r1 = self.data[0][0] * self.data[2][1] * self.data[3][2] + self.data[2][0] * self.data[3][1] * self.data[0][2] + self.data[3][0] * self.data[0][1] * self.data[2][2]
                       - self.data[3][0] * self.data[2][1] * self.data[0][2] - self.data[2][0] * self.data[0][1] * self.data[3][2] - self.data[0][0] * self.data[3][1] * self.data[2][2];
-            let _c0r2 = self.data[0][1] * self.data[1][2] * self.data[3][3] + self.data[1][1] * self.data[3][2] * self.data[0][3] + self.data[3][1] * self.data[0][2] * self.data[1][3] 
+            let _c0r2 = self.data[0][1] * self.data[1][2] * self.data[3][3] + self.data[1][1] * self.data[3][2] * self.data[0][3] + self.data[3][1] * self.data[0][2] * self.data[1][3]
                       - self.data[3][1] * self.data[1][2] * self.data[0][3] - self.data[1][1] * self.data[0][2] * self.data[3][3] - self.data[0][1] * self.data[3][2] * self.data[1][3];
             let _c1r2 = self.data[3][0] * self.data[1][2] * self.data[0][3] + self.data[1][0] * self.data[0][2] * self.data[3][3] + self.data[0][0] * self.data[3][2] * self.data[1][3]
                       - self.data[0][0] * self.data[1][2] * self.data[3][3] - self.data[1][0] * self.data[3][2] * self.data[0][3] - self.data[3][0] * self.data[0][2] * self.data[1][3];
@@ -7345,39 +7314,39 @@ where
             let _c3r2 = self.data[3][0] * self.data[1][1] * self.data[0][2] + self.data[1][0] * self.data[0][1] * self.data[3][2] + self.data[0][0] * self.data[3][1] * self.data[1][2]
                       - self.data[0][0] * self.data[1][1] * self.data[3][2] - self.data[1][0] * self.data[3][1] * self.data[0][2] - self.data[3][0] * self.data[0][1] * self.data[1][2];
             let _c0r3 = self.data[2][1] * self.data[1][2] * self.data[0][3] + self.data[1][1] * self.data[0][2] * self.data[2][3] + self.data[0][1] * self.data[2][2] * self.data[1][3]
-                      - self.data[0][1] * self.data[1][2] * self.data[2][3] - self.data[1][1] * self.data[2][2] * self.data[0][3] - self.data[2][1] * self.data[0][2] * self.data[1][3];  
+                      - self.data[0][1] * self.data[1][2] * self.data[2][3] - self.data[1][1] * self.data[2][2] * self.data[0][3] - self.data[2][1] * self.data[0][2] * self.data[1][3];
             let _c1r3 = self.data[0][0] * self.data[1][2] * self.data[2][3] + self.data[1][0] * self.data[2][2] * self.data[0][3] + self.data[2][0] * self.data[0][2] * self.data[1][3]
                       - self.data[2][0] * self.data[1][2] * self.data[0][3] - self.data[1][0] * self.data[0][2] * self.data[2][3] - self.data[0][0] * self.data[2][2] * self.data[1][3];
             let _c2r3 = self.data[2][0] * self.data[1][1] * self.data[0][3] + self.data[1][0] * self.data[0][1] * self.data[2][3] + self.data[0][0] * self.data[2][1] * self.data[1][3]
                       - self.data[0][0] * self.data[1][1] * self.data[2][3] - self.data[1][0] * self.data[2][1] * self.data[0][3] - self.data[2][0] * self.data[0][1] * self.data[1][3];
             let _c3r3 = self.data[0][0] * self.data[1][1] * self.data[2][2] + self.data[1][0] * self.data[2][1] * self.data[0][2] + self.data[2][0] * self.data[0][1] * self.data[1][2]
-                      - self.data[2][0] * self.data[1][1] * self.data[0][2] - self.data[1][0] * self.data[0][1] * self.data[2][2] - self.data[0][0] * self.data[2][1] * self.data[1][2]; 
+                      - self.data[2][0] * self.data[1][1] * self.data[0][2] - self.data[1][0] * self.data[0][1] * self.data[2][2] - self.data[0][0] * self.data[2][1] * self.data[1][2];
 
-            let c0r0 = det_inv * _c0r0; 
-            let c0r1 = det_inv * _c0r1; 
-            let c0r2 = det_inv * _c0r2; 
+            let c0r0 = det_inv * _c0r0;
+            let c0r1 = det_inv * _c0r1;
+            let c0r2 = det_inv * _c0r2;
             let c0r3 = det_inv * _c0r3;
-    
-            let c1r0 = det_inv * _c1r0; 
-            let c1r1 = det_inv * _c1r1; 
-            let c1r2 = det_inv * _c1r2; 
+
+            let c1r0 = det_inv * _c1r0;
+            let c1r1 = det_inv * _c1r1;
+            let c1r2 = det_inv * _c1r2;
             let c1r3 = det_inv * _c1r3;
-    
-            let c2r0 = det_inv * _c2r0; 
-            let c2r1 = det_inv * _c2r1; 
-            let c2r2 = det_inv * _c2r2; 
+
+            let c2r0 = det_inv * _c2r0;
+            let c2r1 = det_inv * _c2r1;
+            let c2r2 = det_inv * _c2r2;
             let c2r3 = det_inv * _c2r3;
-    
-            let c3r0 = det_inv * _c3r0; 
-            let c3r1 = det_inv * _c3r1; 
-            let c3r2 = det_inv * _c3r2; 
+
+            let c3r0 = det_inv * _c3r0;
+            let c3r1 = det_inv * _c3r1;
+            let c3r2 = det_inv * _c3r2;
             let c3r3 = det_inv * _c3r3;
 
             Some(Self::new(
                 c0r0, c0r1, c0r2, c0r3,
                 c1r0, c1r1, c1r2, c1r3,
                 c2r0, c2r1, c2r2, c2r3,
-                c3r0, c3r1, c3r2, c3r3
+                c3r0, c3r1, c3r2, c3r3,
             ))
         }
     }
@@ -7390,16 +7359,16 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,  2_f64,  3_f64,  4_f64,
     ///     5_f64,  6_f64,  7_f64,  8_f64,
     ///     9_f64,  10_f64, 11_f64, 12_f64,
-    ///     13_f64, 14_f64, 15_f64, 16_f64 
+    ///     13_f64, 14_f64, 15_f64, 16_f64
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix.determinant(), 0_f64);
     /// assert!(!matrix.is_invertible());
     /// ```
@@ -7411,9 +7380,9 @@ where
 
 impl<S> Matrix1x2<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix1x2,
@@ -7425,7 +7394,7 @@ impl<S> Matrix1x2<S> {
     ///     c0r0,
     ///     c1r0
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[1][0], c1r0);
     /// ```
@@ -7435,17 +7404,17 @@ impl<S> Matrix1x2<S> {
         Self {
             data: [
                 [c0r0],
-                [c1r0],    
-            ]
+                [c1r0],
+            ],
         }
     }
 }
 
 impl<S> Matrix1x3<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix1x3,
@@ -7459,7 +7428,7 @@ impl<S> Matrix1x3<S> {
     ///     c1r0,
     ///     c2r0
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[1][0], c1r0);
     /// assert_eq!(matrix[2][0], c2r0);
@@ -7472,16 +7441,16 @@ impl<S> Matrix1x3<S> {
                 [c0r0],
                 [c1r0],
                 [c2r0],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix1x4<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix1x4,
@@ -7497,7 +7466,7 @@ impl<S> Matrix1x4<S> {
     ///     c2r0,
     ///     c3r0
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[1][0], c1r0);
     /// assert_eq!(matrix[2][0], c2r0);
@@ -7512,16 +7481,16 @@ impl<S> Matrix1x4<S> {
                 [c1r0],
                 [c2r0],
                 [c3r0],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix2x3<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x3,
@@ -7535,7 +7504,7 @@ impl<S> Matrix2x3<S> {
     ///     c1r0, c1r1,
     ///     c2r0, c2r1
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[1][0], c1r0);
@@ -7546,25 +7515,25 @@ impl<S> Matrix2x3<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, 
-        c1r0: S, c1r1: S, 
-        c2r0: S, c2r1: S) -> Self 
+        c0r0: S, c0r1: S,
+        c1r0: S, c1r1: S,
+        c2r0: S, c2r1: S) -> Self
     {
         Self {
             data: [
                 [c0r0, c0r1],
                 [c1r0, c1r1],
                 [c2r0, c2r1],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix3x2<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x2,
@@ -7576,7 +7545,7 @@ impl<S> Matrix3x2<S> {
     ///     c0r0, c0r1, c0r2,
     ///     c1r0, c1r1, c1r2
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[0][2], c0r2);
@@ -7587,23 +7556,23 @@ impl<S> Matrix3x2<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, 
+        c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S) -> Self
     {
         Self {
             data: [
                 [c0r0, c0r1, c0r2],
                 [c1r0, c1r1, c1r2],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix2x4<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x4,
@@ -7619,7 +7588,7 @@ impl<S> Matrix2x4<S> {
     ///     c2r0, c2r1,
     ///     c3r0, c3r1
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[1][0], c1r0);
@@ -7632,10 +7601,10 @@ impl<S> Matrix2x4<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, 
-        c1r0: S, c1r1: S, 
+        c0r0: S, c0r1: S,
+        c1r0: S, c1r1: S,
         c2r0: S, c2r1: S,
-        c3r0: S, c3r1: S) -> Self 
+        c3r0: S, c3r1: S) -> Self
     {
         Self {
             data: [
@@ -7643,16 +7612,16 @@ impl<S> Matrix2x4<S> {
                 [c1r0, c1r1],
                 [c2r0, c2r1],
                 [c3r0, c3r1],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix4x2<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x2,
@@ -7670,7 +7639,7 @@ impl<S> Matrix4x2<S> {
     ///     c0r0, c0r1, c0r2, c0r3,
     ///     c1r0, c1r1, c1r2, c1r3
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[0][2], c0r2);
@@ -7683,8 +7652,8 @@ impl<S> Matrix4x2<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
-        c1r0: S, c1r1: S, c1r2: S, c1r3: S) -> Self 
+        c0r0: S, c0r1: S, c0r2: S, c0r3: S,
+        c1r0: S, c1r1: S, c1r2: S, c1r3: S) -> Self
     {
         Self {
             data: [
@@ -7697,9 +7666,9 @@ impl<S> Matrix4x2<S> {
 
 impl<S> Matrix3x4<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x4,
@@ -7715,7 +7684,7 @@ impl<S> Matrix3x4<S> {
     ///     c2r0, c2r1, c2r2,
     ///     c3r0, c3r1, c3r2
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[1][0], c1r0);
@@ -7728,7 +7697,7 @@ impl<S> Matrix3x4<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, 
+        c0r0: S, c0r1: S, c0r2: S,
         c1r0: S, c1r1: S, c1r2: S,
         c2r0: S, c2r1: S, c2r2: S,
         c3r0: S, c3r1: S, c3r2: S) -> Self
@@ -7739,16 +7708,16 @@ impl<S> Matrix3x4<S> {
                 [c1r0, c1r1, c1r2],
                 [c2r0, c2r1, c2r2],
                 [c3r0, c3r1, c3r2],
-            ]
+            ],
         }
     }
 }
 
 impl<S> Matrix4x3<S> {
     /// Construct a new matrix from its elements.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x3,
@@ -7762,7 +7731,7 @@ impl<S> Matrix4x3<S> {
     ///     c1r0, c1r1, c1r2, c1r3,
     ///     c2r0, c2r1, c2r2, c2r3
     /// );
-    /// 
+    ///
     /// assert_eq!(matrix[0][0], c0r0);
     /// assert_eq!(matrix[0][1], c0r1);
     /// assert_eq!(matrix[0][2], c0r2);
@@ -7779,7 +7748,7 @@ impl<S> Matrix4x3<S> {
     #[rustfmt::skip]
     #[inline]
     pub const fn new(
-        c0r0: S, c0r1: S, c0r2: S, c0r3: S, 
+        c0r0: S, c0r1: S, c0r2: S, c0r3: S,
         c1r0: S, c1r1: S, c1r2: S, c1r3: S,
         c2r0: S, c2r1: S, c2r2: S, c2r3: S) -> Self
     {
@@ -7788,37 +7757,37 @@ impl<S> Matrix4x3<S> {
                 [c0r0, c0r1, c0r2, c0r3],
                 [c1r0, c1r1, c1r2, c1r3],
                 [c2r0, c2r1, c2r2, c2r3],
-            ]
+            ],
         }
     }
 }
 
-impl_coords!(View1x1, { c0r0 });
-impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1 });
-impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2 });
-impl_coords!(View4x4, { 
-    c0r0, c0r1, c0r2, c0r3, 
-    c1r0, c1r1, c1r2, c1r3, 
-    c2r0, c2r1, c2r2, c2r3, 
-    c3r0, c3r1, c3r2, c3r3 
-});
-impl_coords!(View1x2, { c0r0, c1r0 });
-impl_coords!(View1x3, { c0r0, c1r0, c2r0 });
-impl_coords!(View1x4, { c0r0, c1r0, c2r0, c3r0 });
-impl_coords!(View2x3, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1 });
-impl_coords!(View2x4, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1 });
-impl_coords!(View3x4, { 
-    c0r0, c0r1, c0r2, 
-    c1r0, c1r1, c1r2, 
-    c2r0, c2r1, c2r2, 
-    c3r0, c3r1, c3r2
-});
-impl_coords!(View3x2, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2 });
-impl_coords!(View4x2, { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3 });
-impl_coords!(View4x3, { 
-    c0r0, c0r1, c0r2, c0r3, 
+impl_coords!(View1x1, { c0r0, });
+impl_coords!(View2x2, { c0r0, c0r1, c1r0, c1r1, });
+impl_coords!(View3x3, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, c2r0, c2r1, c2r2, });
+impl_coords!(View4x4, {
+    c0r0, c0r1, c0r2, c0r3,
     c1r0, c1r1, c1r2, c1r3,
-    c2r0, c2r1, c2r2, c2r3
+    c2r0, c2r1, c2r2, c2r3,
+    c3r0, c3r1, c3r2, c3r3,
+});
+impl_coords!(View1x2, { c0r0, c1r0, });
+impl_coords!(View1x3, { c0r0, c1r0, c2r0, });
+impl_coords!(View1x4, { c0r0, c1r0, c2r0, c3r0, });
+impl_coords!(View2x3, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, });
+impl_coords!(View2x4, { c0r0, c0r1, c1r0, c1r1, c2r0, c2r1, c3r0, c3r1, });
+impl_coords!(View3x4, {
+    c0r0, c0r1, c0r2,
+    c1r0, c1r1, c1r2,
+    c2r0, c2r1, c2r2,
+    c3r0, c3r1, c3r2,
+});
+impl_coords!(View3x2, { c0r0, c0r1, c0r2, c1r0, c1r1, c1r2, });
+impl_coords!(View4x2, { c0r0, c0r1, c0r2, c0r3, c1r0, c1r1, c1r2, c1r3, });
+impl_coords!(View4x3, {
+    c0r0, c0r1, c0r2, c0r3,
+    c1r0, c1r1, c1r2, c1r3,
+    c2r0, c2r1, c2r2, c2r3,
 });
 
 impl_coords_deref!(Matrix1x1, View1x1);
@@ -8313,6 +8282,7 @@ where
 {
     type Output = Matrix<S, R1, C2>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Matrix<S, R2, C2>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -8320,9 +8290,9 @@ where
         for c in 0..C2 {
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
-                    self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
-                    r
+                    self.as_ref(),
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c],
+                    r,
                 );
             }
         }
@@ -8340,6 +8310,7 @@ where
 {
     type Output = Matrix<S, R1, C2>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &Matrix<S, R2, C2>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -8347,9 +8318,9 @@ where
         for c in 0..C2 {
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
-                    self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c], 
-                    r
+                    self.as_ref(),
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c],
+                    r,
                 );
             }
         }
@@ -8367,6 +8338,7 @@ where
 {
     type Output = Matrix<S, R1, C2>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: Matrix<S, R2, C2>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -8374,9 +8346,9 @@ where
         for c in 0..C2 {
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
-                    self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c], 
-                    r
+                    self.as_ref(),
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(&other)[c],
+                    r,
                 );
             }
         }
@@ -8394,6 +8366,7 @@ where
 {
     type Output = Matrix<S, R1, C2>;
 
+    #[rustfmt::skip]
     #[inline]
     fn mul(self, other: &'b Matrix<S, R2, C2>) -> Self::Output {
         // PERFORMANCE: The const loop should get unrolled during optimization.
@@ -8401,9 +8374,9 @@ where
         for c in 0..C2 {
             for r in 0..R1 {
                 result[c][r] = dot_array_col(
-                    self.as_ref(), 
-                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c], 
-                    r
+                    self.as_ref(),
+                    &<Matrix<S, R2, C2> as AsRef<[[S; R2]; C2]>>::as_ref(other)[c],
+                    r,
                 );
             }
         }
@@ -8459,8 +8432,8 @@ where
 }
 
 impl<S, const R: usize, const C: usize> ops::SubAssign<&Matrix<S, R, C>> for Matrix<S, R, C>
-where 
-    S: SimdScalar
+where
+    S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: &Matrix<S, R, C>) {
@@ -8561,7 +8534,7 @@ where
                 result &= S::relative_eq(&self.data[c][r], &other.data[c][r], epsilon, max_relative);
             }
         }
-        
+
         result
     }
 }
@@ -8584,7 +8557,7 @@ where
                 result &= S::ulps_eq(&self.data[c][r], &other.data[c][r], epsilon, max_ulps);
             }
         }
-        
+
         result
     }
 }
@@ -8612,4 +8585,3 @@ where
         Unit::from_value_unchecked(-self.into_inner())
     }
 }
-

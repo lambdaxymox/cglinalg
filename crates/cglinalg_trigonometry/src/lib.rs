@@ -1,7 +1,7 @@
 use cglinalg_numeric::{
     SimdScalar,
-    SimdScalarSigned,
     SimdScalarFloat,
+    SimdScalarSigned,
 };
 
 use core::f64;
@@ -9,14 +9,14 @@ use core::fmt;
 use core::ops;
 
 
-/// Implement trigonometry for typed angles. 
+/// Implement trigonometry for typed angles.
 ///
-/// Making the units of the angles strongly typed enables us to make a careful 
-/// distinction between different units of angles to prevent trigonometric 
+/// Making the units of the angles strongly typed enables us to make a careful
+/// distinction between different units of angles to prevent trigonometric
 /// errors that arise from using incorrect angular units. For example, adding
-/// radians to degrees, or passing an angle in degrees to a trigonometric 
+/// radians to degrees, or passing an angle in degrees to a trigonometric
 /// function when one meant to pass an angle in units of radians.
-pub trait Angle 
+pub trait Angle
 where
     Self: Copy + Clone,
     Self: fmt::Debug + fmt::Display,
@@ -35,9 +35,9 @@ where
     type Dimensionless: SimdScalarFloat;
 
     /// The additive unit of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -51,9 +51,9 @@ where
     fn zero() -> Self;
 
     /// Determine whether a typed angle is zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -67,9 +67,9 @@ where
     fn is_zero(self) -> bool;
 
     /// The value of a full rotation around the unit circle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -84,9 +84,9 @@ where
     fn full_turn() -> Self;
 
     /// Compute the sine of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -100,15 +100,15 @@ where
     /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
     /// let expected = 1_f64 / f64::sqrt(2_f64);
     /// let result = pi_over_4.sin();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn sin(self) -> Self::Dimensionless;
 
     /// Compute the cosine of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -122,15 +122,15 @@ where
     /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
     /// let expected = 1_f64 / f64::sqrt(2_f64);
     /// let result = pi_over_4.cos();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn cos(self) -> Self::Dimensionless;
 
     /// Compute the tangent of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -144,15 +144,15 @@ where
     /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
     /// let expected = 1_f64;
     /// let result = pi_over_4.tan();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn tan(self) -> Self::Dimensionless;
 
     /// Compute the arcsine of a scalar value, returning a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -166,15 +166,15 @@ where
     /// let sin_pi_over_3 = f64::sqrt(3_f64) / 2_f64;
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::asin(sin_pi_over_3);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn asin(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arccosine of a scalar value, returning a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -188,15 +188,15 @@ where
     /// let cos_pi_over_3 = 1_f64 / 2_f64;
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::acos(cos_pi_over_3);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn acos(ratio: Self::Dimensionless) -> Self;
 
     /// Compute the arctangent of a scalar value, returning a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -210,16 +210,16 @@ where
     /// let tan_pi_over_3 = f64::sqrt(3_f64);
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::atan(tan_pi_over_3);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     fn atan(ratio: Self::Dimensionless) -> Self;
 
-    /// Compute the four quadrant arctangent of two arguments, returning a 
+    /// Compute the four quadrant arctangent of two arguments, returning a
     /// typed angle.
-    /// 
-    /// The return value is the arctangent of the quotient of the two input values. 
-    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent 
+    ///
+    /// The return value is the arctangent of the quotient of the two input values.
+    /// That is, given inputs `x` and `y`, and an angle `theta` whose tangent
     /// satisfies
     /// ```text
     /// tan2(theta) := y / x
@@ -236,9 +236,9 @@ where
     /// y >= 0          -> (arctan(y / x) + pi) in (pi / 2, pi]
     /// y < 0           -> (arctan(y / x) - pi) in (-pi, -pi / 2)
     /// ```
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -258,16 +258,16 @@ where
     /// let expected2 = Radians(3_f64 * pi / 4_f64);
     /// let result1 = Radians::atan2(y1, x1);
     /// let result2 = Radians::atan2(y2, x2);
-    /// 
+    ///
     /// assert_relative_eq!(result1, expected1, epsilon = 1e-10);
     /// assert_relative_eq!(result2, expected2, epsilon = 1e-10);
     /// ```
     fn atan2(y: Self::Dimensionless, x: Self::Dimensionless) -> Self;
 
     /// Simultaneously compute the sine and cosine of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -281,7 +281,7 @@ where
     /// let pi_over_4 = Radians(f64::consts::FRAC_PI_4);
     /// let expected = (1_f64/ f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = pi_over_4.sin_cos();
-    /// 
+    ///
     /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
     /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
     /// ```
@@ -291,9 +291,9 @@ where
     }
 
     /// The value of half of a full turn around the unit circle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -309,7 +309,7 @@ where
     /// let expected_degrees = Degrees(180_f64);
     /// let result_radians = Radians::full_turn_div_2();
     /// let result_degrees = Degrees::full_turn_div_2();
-    /// 
+    ///
     /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
     /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
     /// ```
@@ -320,9 +320,9 @@ where
     }
 
     /// The value of a one fourth of a full turn around the unit circle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -338,7 +338,7 @@ where
     /// let expected_degrees = Degrees(90_f64);
     /// let result_radians = Radians::full_turn_div_4();
     /// let result_degrees = Degrees::full_turn_div_4();
-    /// 
+    ///
     /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
     /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
     /// ```
@@ -349,9 +349,9 @@ where
     }
 
     /// The value of one sixth of a full turn around the unit circle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -367,7 +367,7 @@ where
     /// let expected_degrees = Degrees(60_f64);
     /// let result_radians = Radians::full_turn_div_6();
     /// let result_degrees = Degrees::full_turn_div_6();
-    /// 
+    ///
     /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
     /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
     /// ```
@@ -378,9 +378,9 @@ where
     }
 
     /// The value of one eighth of a full turn around the unit circle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -396,7 +396,7 @@ where
     /// let expected_degrees = Degrees(45_f64);
     /// let result_radians = Radians::full_turn_div_8();
     /// let result_degrees = Degrees::full_turn_div_8();
-    /// 
+    ///
     /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
     /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
     /// ```
@@ -407,9 +407,9 @@ where
     }
 
     /// Map an angle to its smallest congruent angle in the range `[0, full_turn)`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -423,7 +423,7 @@ where
     /// let angle = Radians(15_f64 * f64::consts::FRAC_PI_6);
     /// let expected = Radians(f64::consts::FRAC_PI_2);
     /// let result = angle.normalize();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -437,9 +437,9 @@ where
     }
 
     /// Map an angle to its smallest congruent angle in the range `[-full_turn / 2, full_turn / 2)`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -453,7 +453,7 @@ where
     /// let angle = Radians(15_f64 * f64::consts::FRAC_PI_6);
     /// let expected = Radians(f64::consts::FRAC_PI_2);
     /// let result = angle.normalize_signed();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -467,9 +467,9 @@ where
     }
 
     /// Compute the angle rotated by half of a turn.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -483,7 +483,7 @@ where
     /// let angle = Degrees(45_f64);
     /// let expected = Degrees(225_f64);
     /// let result = angle.opposite();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -493,17 +493,17 @@ where
 
     /// Compute the interior bisector of `self` and `other`, normalized to the
     /// range `[0, full_turn)`.
-    /// 
+    ///
     /// The interior bisector between two congruent angles `angle1` and `angle2` is
     /// given by
     /// ```text
     /// bisect(angle1, angle2) := angle1 + (1 / 2) * (angle2 - angle1)
     /// ```
-    /// That is, the interior bisector between two angles is the angle that is 
+    /// That is, the interior bisector between two angles is the angle that is
     /// interpolated half-way between `angle1` and `angle2`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -518,7 +518,7 @@ where
     /// let angle2 = Degrees(120_f64);
     /// let expected = Degrees(60_f64);
     /// let result = Degrees::bisect(angle1, angle2);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -528,9 +528,9 @@ where
     }
 
     /// Compute the cosecant of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -544,7 +544,7 @@ where
     /// let angle = Radians(f64::consts::FRAC_PI_6);
     /// let expected = 2_f64;
     /// let result = angle.csc();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -553,9 +553,9 @@ where
     }
 
     /// Compute the cotangent of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -569,7 +569,7 @@ where
     /// let angle = Radians(f64::consts::FRAC_PI_6);
     /// let expected = f64::sqrt(3_f64);
     /// let result = angle.cot();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     #[inline]
     fn cot(self) -> Self::Dimensionless {
@@ -577,9 +577,9 @@ where
     }
 
     /// Compute the secant of a typed angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -593,7 +593,7 @@ where
     /// let angle = Radians(f64::consts::FRAC_PI_6);
     /// let expected = 2_f64 / f64::sqrt(3_f64);
     /// let result = angle.sec();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     #[inline]
     fn sec(self) -> Self::Dimensionless {
@@ -606,14 +606,14 @@ where
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Radians<S>(pub S);
 
-impl<S> Radians<S> 
-where 
+impl<S> Radians<S>
+where
     S: SimdScalar,
 {
     /// Construct a typed angle of zero radians.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -622,7 +622,7 @@ where
     /// # use core::f64;
     /// #
     /// let zero_radians: Radians<f64> = Radians::zero();
-    /// 
+    ///
     /// assert!(zero_radians.is_zero());
     /// ```
     #[inline]
@@ -631,9 +631,9 @@ where
     }
 
     /// Determine whether a typed angle is zero radians.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -642,11 +642,11 @@ where
     /// # use core::f64;
     /// #
     /// let zero_radians: Radians<f64> = Radians::zero();
-    /// 
+    ///
     /// assert!(zero_radians.is_zero());
-    /// 
+    ///
     /// let pi_radians: Radians<f64> = Radians(f64::consts::PI);
-    /// 
+    ///
     /// assert!(!pi_radians.is_zero());
     /// ```
     #[inline]
@@ -655,8 +655,8 @@ where
     }
 }
 
-impl<S> Radians<S> 
-where 
+impl<S> Radians<S>
+where
     S: SimdScalarFloat,
 {
     /// Returns `true` if the underlying floating point number of the typed
@@ -672,7 +672,7 @@ where
     /// # use core::f64;
     /// #
     /// let angle: Radians<f64> = Radians(f64::consts::PI / 4_f64);
-    /// 
+    ///
     /// assert!(angle.is_finite());
     /// ```
     #[inline]
@@ -686,14 +686,14 @@ where
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Hash)]
 pub struct Degrees<S>(pub S);
 
-impl<S> Degrees<S> 
-where 
+impl<S> Degrees<S>
+where
     S: SimdScalar,
 {
     /// Construct a typed angle of zero degrees.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -702,7 +702,7 @@ where
     /// # use core::f64;
     /// #
     /// let zero_degrees: Degrees<f64> = Degrees::zero();
-    /// 
+    ///
     /// assert!(zero_degrees.is_zero());
     /// ```
     #[inline]
@@ -711,9 +711,9 @@ where
     }
 
     /// Determine whether a typed angle is zero degrees.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -722,11 +722,11 @@ where
     /// # use core::f64;
     /// #
     /// let zero_degrees: Degrees<f64> = Degrees::zero();
-    /// 
+    ///
     /// assert!(zero_degrees.is_zero());
-    /// 
+    ///
     /// let one_eighty_degrees: Degrees<f64> = Degrees(180_f64);
-    /// 
+    ///
     /// assert!(!one_eighty_degrees.is_zero());
     /// ```
     #[inline]
@@ -735,8 +735,8 @@ where
     }
 }
 
-impl<S> Degrees<S> 
-where 
+impl<S> Degrees<S>
+where
     S: SimdScalarFloat,
 {
     /// Returns `true` if the underlying floating point number of the typed
@@ -752,7 +752,7 @@ where
     /// #
     /// let angle = Degrees(45_f64);
     ///
-    /// assert!(angle.is_finite()); 
+    /// assert!(angle.is_finite());
     /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
@@ -778,8 +778,8 @@ where
     }
 }
 
-impl<S> From<Degrees<S>> for Radians<S> 
-where 
+impl<S> From<Degrees<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -788,8 +788,8 @@ where
     }
 }
 
-impl<S> From<Radians<S>> for Degrees<S> 
-where 
+impl<S> From<Radians<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -798,8 +798,8 @@ where
     }
 }
 
-impl<S> fmt::Display for Degrees<S> 
-where 
+impl<S> fmt::Display for Degrees<S>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -807,8 +807,8 @@ where
     }
 }
 
-impl<S> fmt::Display for Radians<S> 
-where 
+impl<S> fmt::Display for Radians<S>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -816,8 +816,8 @@ where
     }
 }
 
-impl<S> ops::Add<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::Add<Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -825,11 +825,11 @@ where
     #[inline]
     fn add(self, other: Degrees<S>) -> Self::Output {
         Degrees(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S> 
-where 
+impl<'a, S> ops::Add<&'a Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -837,11 +837,11 @@ where
     #[inline]
     fn add(self, other: &'a Degrees<S>) -> Self::Output {
         Degrees(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Add<Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -849,11 +849,11 @@ where
     #[inline]
     fn add(self, other: Degrees<S>) -> Self::Output {
         Degrees(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, 'b, S> ops::Add<&'b Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, 'b, S> ops::Add<&'b Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -861,11 +861,11 @@ where
     #[inline]
     fn add(self, other: &'b Degrees<S>) -> Self::Output {
         Degrees(self.0 + other.0)
-    } 
+    }
 }
 
-impl<S> ops::Sub<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::Sub<Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -873,11 +873,11 @@ where
     #[inline]
     fn sub(self, other: Degrees<S>) -> Self::Output {
         Degrees(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S> 
-where 
+impl<'a, S> ops::Sub<&'a Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -885,11 +885,11 @@ where
     #[inline]
     fn sub(self, other: &'a Degrees<S>) -> Self::Output {
         Degrees(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Sub<Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -897,11 +897,11 @@ where
     #[inline]
     fn sub(self, other: Degrees<S>) -> Self::Output {
         Degrees(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, 'b, S> ops::Sub<&'b Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, 'b, S> ops::Sub<&'b Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalar,
 {
     type Output = Degrees<S>;
@@ -909,10 +909,10 @@ where
     #[inline]
     fn sub(self, other: &'b Degrees<S>) -> Self::Output {
         Degrees(self.0 - other.0)
-    } 
+    }
 }
 
-impl<S> ops::Mul<S> for Degrees<S> 
+impl<S> ops::Mul<S> for Degrees<S>
 where
     S: SimdScalar,
 {
@@ -924,7 +924,7 @@ where
     }
 }
 
-impl<'a, S> ops::Mul<S> for &'a Degrees<S> 
+impl<'a, S> ops::Mul<S> for &'a Degrees<S>
 where
     S: SimdScalar,
 {
@@ -936,8 +936,8 @@ where
     }
 }
 
-impl<S> ops::Div<S> for Degrees<S> 
-where 
+impl<S> ops::Div<S> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -948,8 +948,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Div<S> for &'a Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -960,8 +960,8 @@ where
     }
 }
 
-impl<S> ops::Div<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::Div<Degrees<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -972,8 +972,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S> 
-where 
+impl<'a, S> ops::Div<&'a Degrees<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -984,8 +984,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Div<Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -996,8 +996,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'b Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, 'b, S> ops::Div<&'b Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -1008,8 +1008,8 @@ where
     }
 }
 
-impl<S> ops::Rem<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::Rem<Degrees<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -1020,8 +1020,8 @@ where
     }
 }
 
-impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S> 
-where 
+impl<'a, S> ops::Rem<&'a Degrees<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -1032,8 +1032,8 @@ where
     }
 }
 
-impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Rem<Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -1044,8 +1044,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'b Degrees<S>> for &'a Degrees<S> 
-where 
+impl<'a, 'b, S> ops::Rem<&'b Degrees<S>> for &'a Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Degrees<S>;
@@ -1056,8 +1056,8 @@ where
     }
 }
 
-impl<S> ops::Neg for Degrees<S> 
-where 
+impl<S> ops::Neg for Degrees<S>
+where
     S: SimdScalarSigned,
 {
     type Output = Degrees<S>;
@@ -1068,8 +1068,8 @@ where
     }
 }
 
-impl<'a, S> ops::Neg for &'a Degrees<S> 
-where 
+impl<'a, S> ops::Neg for &'a Degrees<S>
+where
     S: SimdScalarSigned,
 {
     type Output = Degrees<S>;
@@ -1080,58 +1080,58 @@ where
     }
 }
 
-impl<S> ops::AddAssign<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::AddAssign<Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Self) {
         *self = *self + other;
-    } 
+    }
 }
 
-impl<S> ops::SubAssign<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::SubAssign<Degrees<S>> for Degrees<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Self) {
         *self = *self - other;
-    } 
+    }
 }
 
-impl<S> ops::MulAssign<S> for Degrees<S> 
-where 
+impl<S> ops::MulAssign<S> for Degrees<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
         *self = *self * other;
-    } 
+    }
 }
 
-impl<S> ops::DivAssign<S> for Degrees<S> 
-where 
+impl<S> ops::DivAssign<S> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
         *self = *self / other;
-    } 
+    }
 }
 
-impl<S> ops::RemAssign<Degrees<S>> for Degrees<S> 
-where 
+impl<S> ops::RemAssign<Degrees<S>> for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
     fn rem_assign(&mut self, other: Self) {
         *self = *self % other;
-    } 
+    }
 }
 
-impl<S> approx::AbsDiffEq for Degrees<S> 
-where 
+impl<S> approx::AbsDiffEq for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1147,8 +1147,8 @@ where
     }
 }
 
-impl<S> approx::RelativeEq for Degrees<S> 
-where 
+impl<S> approx::RelativeEq for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1162,8 +1162,8 @@ where
     }
 }
 
-impl<S> approx::UlpsEq for Degrees<S> 
-where 
+impl<S> approx::UlpsEq for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1177,8 +1177,8 @@ where
     }
 }
 
-impl<S> ops::Add<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::Add<Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1186,11 +1186,11 @@ where
     #[inline]
     fn add(self, other: Radians<S>) -> Self::Output {
         Radians(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S> 
-where 
+impl<'a, S> ops::Add<&'a Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1198,11 +1198,11 @@ where
     #[inline]
     fn add(self, other: &'a Radians<S>) -> Self::Output {
         Radians(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Add<Radians<S>> for &'a Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1210,11 +1210,11 @@ where
     #[inline]
     fn add(self, other: Radians<S>) -> Self::Output {
         Radians(self.0 + other.0)
-    } 
+    }
 }
 
-impl<'a, 'b, S> ops::Add<&'b Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, 'b, S> ops::Add<&'b Radians<S>> for &'a Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1222,11 +1222,11 @@ where
     #[inline]
     fn add(self, other: &'b Radians<S>) -> Self::Output {
         Radians(self.0 + other.0)
-    } 
+    }
 }
 
-impl<S> ops::Sub<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::Sub<Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1234,11 +1234,11 @@ where
     #[inline]
     fn sub(self, other: Radians<S>) -> Self::Output {
         Radians(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S> 
-where 
+impl<'a, S> ops::Sub<&'a Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1246,11 +1246,11 @@ where
     #[inline]
     fn sub(self, other: &'a Radians<S>) -> Self::Output {
         Radians(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Sub<Radians<S>> for &'a Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1258,11 +1258,11 @@ where
     #[inline]
     fn sub(self, other: Radians<S>) -> Self::Output {
         Radians(self.0 - other.0)
-    } 
+    }
 }
 
-impl<'a, 'b, S> ops::Sub<&'b Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, 'b, S> ops::Sub<&'b Radians<S>> for &'a Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1270,11 +1270,11 @@ where
     #[inline]
     fn sub(self, other: &'b Radians<S>) -> Self::Output {
         Radians(self.0 - other.0)
-    } 
+    }
 }
 
-impl<S> ops::Mul<S> for Radians<S> 
-where 
+impl<S> ops::Mul<S> for Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1285,8 +1285,8 @@ where
     }
 }
 
-impl<'a, S> ops::Mul<S> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Mul<S> for &'a Radians<S>
+where
     S: SimdScalar,
 {
     type Output = Radians<S>;
@@ -1297,8 +1297,8 @@ where
     }
 }
 
-impl<S> ops::Div<S> for Radians<S> 
-where 
+impl<S> ops::Div<S> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1309,8 +1309,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<S> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Div<S> for &'a Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1321,8 +1321,8 @@ where
     }
 }
 
-impl<S> ops::Div<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::Div<Radians<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -1333,8 +1333,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S> 
-where 
+impl<'a, S> ops::Div<&'a Radians<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -1345,8 +1345,8 @@ where
     }
 }
 
-impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Div<Radians<S>> for &'a Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -1357,8 +1357,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Div<&'b Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, 'b, S> ops::Div<&'b Radians<S>> for &'a Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = S;
@@ -1369,8 +1369,8 @@ where
     }
 }
 
-impl<S> ops::Rem<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::Rem<Radians<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1381,8 +1381,8 @@ where
     }
 }
 
-impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S> 
-where 
+impl<'a, S> ops::Rem<&'a Radians<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1393,8 +1393,8 @@ where
     }
 }
 
-impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, S> ops::Rem<Radians<S>> for &'a Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1405,8 +1405,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Rem<&'b Radians<S>> for &'a Radians<S> 
-where 
+impl<'a, 'b, S> ops::Rem<&'b Radians<S>> for &'a Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Radians<S>;
@@ -1417,8 +1417,8 @@ where
     }
 }
 
-impl<S> ops::Neg for Radians<S> 
-where 
+impl<S> ops::Neg for Radians<S>
+where
     S: SimdScalarSigned,
 {
     type Output = Radians<S>;
@@ -1429,8 +1429,8 @@ where
     }
 }
 
-impl<'a, S> ops::Neg for &'a Radians<S> 
-where 
+impl<'a, S> ops::Neg for &'a Radians<S>
+where
     S: SimdScalarSigned,
 {
     type Output = Radians<S>;
@@ -1441,58 +1441,58 @@ where
     }
 }
 
-impl<S> ops::AddAssign<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::AddAssign<Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn add_assign(&mut self, other: Radians<S>) {
         self.0 += other.0;
-    } 
+    }
 }
 
-impl<S> ops::SubAssign<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::SubAssign<Radians<S>> for Radians<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn sub_assign(&mut self, other: Radians<S>) {
         self.0 -= other.0;
-    } 
+    }
 }
 
-impl<S> ops::MulAssign<S> for Radians<S> 
-where 
+impl<S> ops::MulAssign<S> for Radians<S>
+where
     S: SimdScalar,
 {
     #[inline]
     fn mul_assign(&mut self, other: S) {
         self.0 *= other;
-    } 
+    }
 }
 
-impl<S> ops::DivAssign<S> for Radians<S> 
-where 
+impl<S> ops::DivAssign<S> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
     fn div_assign(&mut self, other: S) {
         self.0 /= other;
-    } 
+    }
 }
 
-impl<S> ops::RemAssign<Radians<S>> for Radians<S> 
-where 
+impl<S> ops::RemAssign<Radians<S>> for Radians<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
     fn rem_assign(&mut self, other: Self) {
         self.0 = self.0 % other.0;
-    } 
+    }
 }
 
-impl<S> approx::AbsDiffEq for Radians<S> 
-where 
+impl<S> approx::AbsDiffEq for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1508,8 +1508,8 @@ where
     }
 }
 
-impl<S> approx::RelativeEq for Radians<S> 
-where 
+impl<S> approx::RelativeEq for Radians<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1523,8 +1523,8 @@ where
     }
 }
 
-impl<S> approx::UlpsEq for Radians<S> 
-where 
+impl<S> approx::UlpsEq for Radians<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1538,8 +1538,8 @@ where
     }
 }
 
-impl<S> Angle for Radians<S> 
-where 
+impl<S> Angle for Radians<S>
+where
     S: SimdScalarFloat,
 {
     type Dimensionless = S;
@@ -1595,8 +1595,8 @@ where
     }
 }
 
-impl<S> Angle for Degrees<S> 
-where 
+impl<S> Angle for Degrees<S>
+where
     S: SimdScalarFloat,
 {
     type Dimensionless = S;
@@ -1651,4 +1651,3 @@ where
         Radians(Self::Dimensionless::atan2(a, b)).into()
     }
 }
-

@@ -1,16 +1,12 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
 use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
 };
-use crate::quaternion::{
-    Quaternion,
+use crate::quaternion::Quaternion;
+use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
@@ -19,30 +15,30 @@ use core::fmt;
 /// A data type storing a set of Euler angles for representing a rotation about
 /// an arbitrary axis in three dimensions.
 ///
-/// The rotations are defined in the **ZYX** rotation order. That is, the Euler 
-/// rotation applies a rotation to the **z-axis**, followed by the **y-axis**, and 
-/// lastly the **x-axis**. The ranges of each axis are 
+/// The rotations are defined in the **ZYX** rotation order. That is, the Euler
+/// rotation applies a rotation to the **z-axis**, followed by the **y-axis**, and
+/// lastly the **x-axis**. The ranges of each axis are
 /// ```text
 /// x in [-pi, pi]
 /// y in [-pi/2, pi/2]
 /// z in [-pi, pi]
 /// ```
-/// where each interval includes its endpoints. There is no one correct way to 
+/// where each interval includes its endpoints. There is no one correct way to
 /// apply Euler angles, but the ZYX rotation order is one of the most commonly
 /// use rotation orders used in computer graphics.
 ///
 /// ## Note
-/// 
-/// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one 
-/// degree of freedom when rotations about two axes come into parallel alignment. 
-/// In particular, when an object rotates on one axis and enters into parallel 
-/// alignment with another rotation axis, the gimbal can no longer distinguish 
-/// two of the rotation axes: when one tries to Euler rotate along one gimbal, the 
+///
+/// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one
+/// degree of freedom when rotations about two axes come into parallel alignment.
+/// In particular, when an object rotates on one axis and enters into parallel
+/// alignment with another rotation axis, the gimbal can no longer distinguish
+/// two of the rotation axes: when one tries to Euler rotate along one gimbal, the
 /// other one rotates by the same amount; one degree of freedom is lost.
 /// Let's give a couple examples of Euler angles.
 ///
 /// # Example (No Gimbal Lock)
-/// 
+///
 /// The following example is a rotation without gimbal lock.
 /// ```
 /// # use cglinalg_trigonometry::{
@@ -75,15 +71,15 @@ use core::fmt;
 ///     c1r0, c1r1, c1r2,
 ///     c2r0, c2r1, c2r2
 /// );
-/// let result = Matrix3x3::from(euler); 
+/// let result = Matrix3x3::from(euler);
 ///
 /// assert_relative_eq!(result, expected, epsilon = 1e-8);
 /// ```
-/// 
+///
 /// # Example (Gimbal Lock)
-/// 
+///
 /// An Euler rotation can be represented as a product three rotations. We are using the ZYX
-/// rotation application order. 
+/// rotation application order.
 /// ```text
 /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
 /// ```
@@ -92,7 +88,7 @@ use core::fmt;
 ///               | 1   0            0         |
 /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
 ///               | 0   sin(rol)     cos(roll) |
-/// 
+///
 ///               |  cos(yaw)   0   sin(yaw) |
 /// R_y(yaw)   := |  0          1   0        |
 ///               | -sin(yaw)   0   cos(yaw) |
@@ -101,8 +97,8 @@ use core::fmt;
 /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
 ///               | 0             0            1 |
 /// ```
-/// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of 
-/// and sine of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`. 
+/// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of
+/// and sine of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`.
 /// Plugging this into the rotation equations gives the rotation matrix
 /// ```text
 ///      | 1   0            0         |   |  0   0   1 |   | cos(pitch)   -sin(pitch)   0 |
@@ -121,8 +117,8 @@ use core::fmt;
 ///   == |  sin(roll + pitch)   cos(roll + pitch) 0 |
 ///      | -cos(roll + pitch)   sin(roll + pitch) 0 |
 /// ```
-/// Changing either the values of the `pitch` or the `roll` has the same 
-/// effect: it rotates an object about the **z-axis**. We have lost the ability 
+/// Changing either the values of the `pitch` or the `roll` has the same
+/// effect: it rotates an object about the **z-axis**. We have lost the ability
 /// to roll about the **x-axis**. Let's illustrate this effect with some code.
 /// ```
 /// # use cglinalg_trigonometry::{
@@ -142,13 +138,13 @@ use core::fmt;
 /// let pitch = Degrees(15_f64);
 /// let euler = EulerAngles::new(roll, yaw, pitch);
 /// let matrix_z_locked = Matrix3x3::from(euler);
-/// 
+///
 /// assert_ulps_eq!(matrix_z_locked.c0r0, 0_f64);
 /// assert_ulps_eq!(matrix_z_locked.c1r0, 0_f64);
 /// assert_ulps_eq!(matrix_z_locked.c2r0, 1_f64);
 /// assert_ulps_eq!(matrix_z_locked.c2r1, 0_f64);
 /// assert_ulps_eq!(matrix_z_locked.c2r2, 0_f64);
-/// 
+///
 /// // Attempt to roll in the gimbal locked state.
 /// let euler_roll = EulerAngles::new(Degrees(15_f64), Degrees(0_f64), Degrees(0_f64));
 /// let matrix_roll = Matrix3x3::from(euler_roll);
@@ -164,10 +160,10 @@ use core::fmt;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct EulerAngles<A> {
-    /// The rotation angle about the **x-axis** in the **yz-plane**. This is also 
+    /// The rotation angle about the **x-axis** in the **yz-plane**. This is also
     /// known as the **roll** angle.
     pub x: A,
-    /// The rotation angle about the **y-axis** in the **zx-plane**. This is also 
+    /// The rotation angle about the **y-axis** in the **zx-plane**. This is also
     /// known as the **yaw** angle.
     pub y: A,
     /// The rotation angle about the **z-axis** in the **xy-plane**. This is also
@@ -177,9 +173,9 @@ pub struct EulerAngles<A> {
 
 impl<A> EulerAngles<A> {
     /// Construct a new set of Euler angles.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     EulerAngles,
@@ -189,11 +185,11 @@ impl<A> EulerAngles<A> {
     /// # };
     /// #
     /// let euler_angles = EulerAngles::new(
-    ///     Radians(1_f64), 
-    ///     Radians(2_f64), 
+    ///     Radians(1_f64),
+    ///     Radians(2_f64),
     ///     Radians(3_f64)
     /// );
-    /// 
+    ///
     /// assert_eq!(euler_angles.x, Radians(1_f64));
     /// assert_eq!(euler_angles.y, Radians(2_f64));
     /// assert_eq!(euler_angles.z, Radians(3_f64));
@@ -204,7 +200,7 @@ impl<A> EulerAngles<A> {
     }
 }
 
-impl<S, A> EulerAngles<A> 
+impl<S, A> EulerAngles<A>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -212,9 +208,9 @@ where
     /// Construct a zero element of the set of Euler angles.
     ///
     /// The zero element is the element where each Euler angle is zero.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     EulerAngles,
@@ -224,7 +220,7 @@ where
     /// # };
     /// #
     /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
-    /// 
+    ///
     /// assert!(euler_angles.is_zero());
     /// assert!(euler_angles.x.is_zero());
     /// assert!(euler_angles.y.is_zero());
@@ -234,11 +230,11 @@ where
     pub fn zero() -> Self {
         EulerAngles::new(A::zero(), A::zero(), A::zero())
     }
-    
+
     /// Test whether an Euler angle is self.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     EulerAngles,
@@ -248,15 +244,15 @@ where
     /// # };
     /// #
     /// let euler_angles = EulerAngles::new(
-    ///     Radians(0.1_f64), 
-    ///     Radians(0.2_f64), 
+    ///     Radians(0.1_f64),
+    ///     Radians(0.2_f64),
     ///     Radians(0.3_f64)
     /// );
-    /// 
+    ///
     /// assert!(!euler_angles.is_zero());
-    /// 
+    ///
     /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
-    /// 
+    ///
     /// assert!(euler_angles.is_zero());
     /// ```
     #[inline]
@@ -267,10 +263,10 @@ where
     /// Construct a rotation matrix from a set of Euler angles.
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
-    /// of three axial rotations: one for each axis in thee dimensions 
+    /// of three axial rotations: one for each axis in thee dimensions
     /// (`x`, `y`, `z`). The rotation matrix described by Euler angles can be
-    /// decomposed into a product of rotation matrices about each axis: let 
-    /// `R_x(roll)`, `R_y(yaw)`, and `R_z(pitch)` denote the rotations about 
+    /// decomposed into a product of rotation matrices about each axis: let
+    /// `R_x(roll)`, `R_y(yaw)`, and `R_z(pitch)` denote the rotations about
     /// the **x-axis**, **y-axis**, and **z-axis**, respectively. The Euler rotation
     /// is decomposed as follows:
     /// ```text
@@ -281,7 +277,7 @@ where
     ///               | 1   0            0         |
     /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
     ///               | 0   sin(rol)     cos(roll) |
-    /// 
+    ///
     ///               |  cos(yaw)   0   sin(yaw) |
     /// R_y(yaw)   := |  0          1   0        |
     ///               | -sin(yaw)   0   cos(yaw) |
@@ -307,14 +303,14 @@ where
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
     /// This yields the entries in the rotation matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     EulerAngles,
     /// #     Matrix3x3,
-    /// # }; 
+    /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
@@ -327,30 +323,30 @@ where
     ///     let roll = Radians(f64::consts::FRAC_PI_6);
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
-    /// 
+    ///
     ///     EulerAngles::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
     ///     let frac_1_2 = 1_f64 / 2_f64;
     ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
-    /// 
+    ///
     ///     Matrix3x3::new(
-    ///          frac_1_sqrt_2 * frac_1_2, 
-    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_sqrt_2 * frac_1_2,
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2,
     ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
-    ///         
+    ///
     ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
-    ///          
+    ///
     ///          frac_1_sqrt_2,
     ///         -frac_1_2 * frac_1_sqrt_2,
     ///          frac_sqrt_3_2 * frac_1_sqrt_2
     ///     )
     /// };
     /// let result = euler_angles.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
@@ -359,7 +355,7 @@ where
         let (sin_roll, cos_roll) = self.x.sin_cos();
         let (sin_yaw, cos_yaw) = self.y.sin_cos();
         let (sin_pitch, cos_pitch) = self.z.sin_cos();
-        
+
         let c0r0 =  cos_yaw * cos_pitch;
         let c0r1 =  cos_roll * sin_pitch + cos_pitch * sin_yaw * sin_roll;
         let c0r2 =  sin_pitch * sin_roll - cos_pitch * cos_roll * sin_yaw;
@@ -375,7 +371,7 @@ where
         Matrix3x3::new(
             c0r0, c0r1, c0r2,
             c1r0, c1r1, c1r2,
-            c2r0, c2r1, c2r2
+            c2r0, c2r1, c2r2,
         )
     }
 
@@ -383,9 +379,9 @@ where
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
     /// of three axial rotations: one for each axis in thee dimensions **(x, y, z)**.
-    /// The rotation matrix described by Euler angles can be decomposed into a 
-    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`, 
-    /// and `R_z(pitch)` denote the rotations about the 
+    /// The rotation matrix described by Euler angles can be decomposed into a
+    /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`,
+    /// and `R_z(pitch)` denote the rotations about the
     /// **x-axis**, **y-axis**, and **z-axis**, respectively. The Euler rotation
     /// is decomposed as follows
     /// ```text
@@ -396,7 +392,7 @@ where
     ///               | 1   0            0         |
     /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
     ///               | 0   sin(rol)     cos(roll) |
-    /// 
+    ///
     ///               |  cos(yaw)   0   sin(yaw) |
     /// R_y(yaw)   := |  0          1   0        |
     ///               | -sin(yaw)   0   cos(yaw) |
@@ -421,7 +417,7 @@ where
     /// m[2, 1] := -cos(yaw) * sin(roll)
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
-    /// This yields the entries in the rotation matrix. Since an affine rotation 
+    /// This yields the entries in the rotation matrix. Since an affine rotation
     /// matrix has no translation terms in it, the final matrix has the form
     /// ```text
     ///                        | m[0, 0]   m[1, 0]   m[2, 0]   0 |
@@ -430,14 +426,14 @@ where
     ///                        | 0         0         0         1 |
     /// ```
     /// as desired.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     EulerAngles,
     /// #     Matrix4x4,
-    /// # }; 
+    /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
@@ -446,34 +442,34 @@ where
     /// # };
     /// # use core::f64;
     /// #
-    /// let euler_angles = { 
+    /// let euler_angles = {
     ///     let roll = Radians(f64::consts::FRAC_PI_6);
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
-    /// 
+    ///
     ///     EulerAngles::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
     ///     let frac_1_2 = 1_f64 / 2_f64;
     ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
-    /// 
+    ///
     ///     Matrix4x4::new(
-    ///          frac_1_sqrt_2 * frac_1_2, 
-    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_sqrt_2 * frac_1_2,
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2,
     ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
     ///          0_f64,
-    ///         
+    ///
     ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          0_f64,
-    ///          
+    ///
     ///          frac_1_sqrt_2,
     ///         -frac_1_2 * frac_1_sqrt_2,
     ///          frac_sqrt_3_2 * frac_1_sqrt_2,
     ///          0_f64,
-    /// 
+    ///
     ///          0_f64,
     ///          0_f64,
     ///          0_f64,
@@ -481,7 +477,7 @@ where
     ///     )
     /// };
     /// let result = euler_angles.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[rustfmt::skip]
@@ -517,7 +513,7 @@ where
             c0r0, c0r1, c0r2, c0r3,
             c1r0, c1r1, c1r2, c1r3,
             c2r0, c2r1, c2r2, c2r3,
-            c3r0, c3r1, c3r2, c3r3
+            c3r0, c3r1, c3r2, c3r3,
         )
     }
 
@@ -533,7 +529,7 @@ where
         } else {
             let _pitch = Radians::atan2(-matrix[1][0], matrix[0][0]);
             let _roll = Radians::atan2(-matrix[2][1], matrix[2][2]);
-            
+
             (_pitch, _roll)
         };
 
@@ -541,20 +537,16 @@ where
     }
 }
 
-impl<A> fmt::Display for EulerAngles<A> 
+impl<A> fmt::Display for EulerAngles<A>
 where
     A: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "EulerAngles [roll={}, yaw={}, pitch={}]",
-            self.x, self.y, self.z
-        )
+        write!(formatter, "EulerAngles [roll={}, yaw={}, pitch={}]", self.x, self.y, self.z)
     }
 }
 
-impl<S, A> From<EulerAngles<A>> for Matrix3x3<S> 
+impl<S, A> From<EulerAngles<A>> for Matrix3x3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -565,7 +557,7 @@ where
     }
 }
 
-impl<S, A> From<&EulerAngles<A>> for Matrix3x3<S> 
+impl<S, A> From<&EulerAngles<A>> for Matrix3x3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -576,7 +568,7 @@ where
     }
 }
 
-impl<A, S> From<EulerAngles<A>> for Matrix4x4<S> 
+impl<A, S> From<EulerAngles<A>> for Matrix4x4<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -587,7 +579,7 @@ where
     }
 }
 
-impl<A, S> From<&EulerAngles<A>> for Matrix4x4<S> 
+impl<A, S> From<&EulerAngles<A>> for Matrix4x4<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -598,7 +590,7 @@ where
     }
 }
 
-impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>> 
+impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>>
 where
     S: SimdScalarFloat,
 {
@@ -609,7 +601,7 @@ where
     }
 }
 
-impl<S> From<&Quaternion<S>> for EulerAngles<Radians<S>> 
+impl<S> From<&Quaternion<S>> for EulerAngles<Radians<S>>
 where
     S: SimdScalarFloat,
 {
@@ -620,7 +612,7 @@ where
     }
 }
 
-impl<A> approx::AbsDiffEq for EulerAngles<A> 
+impl<A> approx::AbsDiffEq for EulerAngles<A>
 where
     A: Angle,
 {
@@ -631,15 +623,16 @@ where
         A::default_epsilon()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        A::abs_diff_eq(&self.x, &other.x, epsilon) && 
-        A::abs_diff_eq(&self.y, &other.y, epsilon) && 
-        A::abs_diff_eq(&self.z, &other.z, epsilon)
+        A::abs_diff_eq(&self.x, &other.x, epsilon)
+            && A::abs_diff_eq(&self.y, &other.y, epsilon)
+            && A::abs_diff_eq(&self.z, &other.z, epsilon)
     }
 }
 
-impl<A> approx::RelativeEq for EulerAngles<A> 
+impl<A> approx::RelativeEq for EulerAngles<A>
 where
     A: Angle,
 {
@@ -648,15 +641,16 @@ where
         A::default_max_relative()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        A::relative_eq(&self.x, &other.x, epsilon, max_relative) && 
-        A::relative_eq(&self.y, &other.y, epsilon, max_relative) &&
-        A::relative_eq(&self.z, &other.z, epsilon, max_relative)
+        A::relative_eq(&self.x, &other.x, epsilon, max_relative)
+            && A::relative_eq(&self.y, &other.y, epsilon, max_relative)
+            && A::relative_eq(&self.z, &other.z, epsilon, max_relative)
     }
 }
 
-impl<A> approx::UlpsEq for EulerAngles<A> 
+impl<A> approx::UlpsEq for EulerAngles<A>
 where
     A: Angle,
 {
@@ -665,11 +659,11 @@ where
         A::default_max_ulps()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        A::ulps_eq(&self.x, &other.x, epsilon, max_ulps) && 
-        A::ulps_eq(&self.y, &other.y, epsilon, max_ulps) && 
-        A::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
+        A::ulps_eq(&self.x, &other.x, epsilon, max_ulps)
+            && A::ulps_eq(&self.y, &other.y, epsilon, max_ulps)
+            && A::ulps_eq(&self.z, &other.z, epsilon, max_ulps)
     }
 }
-

@@ -12,92 +12,103 @@ use cglinalg_core::{
     Vector3,
     Vector4,
 };
-use core::ops::{
-    Mul,
-};
-use rand::{
-    Rng, 
-    prelude::Distribution,
-    distributions::Standard,
-};
-use rand_isaac::{
-    IsaacRng,
-};
+use core::ops::Mul;
 use criterion::{
     criterion_group,
     criterion_main,
 };
+use rand::{
+    distributions::Standard,
+    prelude::Distribution,
+    Rng,
+};
+use rand_isaac::IsaacRng;
 
 
-fn gen_matrix2x2<S>() -> Matrix2x2<S> 
-where 
+fn gen_matrix2x2<S>() -> Matrix2x2<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
-    Matrix2x2::new(
-        rng.gen(), rng.gen(),
-        rng.gen(), rng.gen()
-    )
+
+    Matrix2x2::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
 }
 
-fn gen_matrix3x3<S>() -> Matrix3x3<S> 
-where 
+fn gen_matrix3x3<S>() -> Matrix3x3<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Matrix3x3::new(
-        rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen()
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
     )
 }
 
-fn gen_matrix4x4<S>() -> Matrix4x4<S> 
-where 
+fn gen_matrix4x4<S>() -> Matrix4x4<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Matrix4x4::new(
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen(),
-        rng.gen(), rng.gen(), rng.gen(), rng.gen()
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
+        rng.gen(),
     )
 }
 
-fn gen_vector2<S>() -> Vector2<S> 
-where 
+fn gen_vector2<S>() -> Vector2<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Vector2::new(rng.gen(), rng.gen())
 }
 
-fn gen_vector3<S>() -> Vector3<S> 
-where 
+fn gen_vector3<S>() -> Vector3<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Vector3::new(rng.gen(), rng.gen(), rng.gen())
 }
 
-fn gen_vector4<S>() -> Vector4<S> 
-where 
+fn gen_vector4<S>() -> Vector4<S>
+where
     Standard: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
-    
+
     Vector4::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
 }
 
@@ -114,12 +125,36 @@ macro_rules! bench_binop(
     }
 );
 
-bench_binop!(matrix2x2_mul_vector2_f32,   f32, Matrix2x2<f32>, Vector2<f32>,   gen_matrix2x2, gen_vector2, mul);
-bench_binop!(matrix3x3_mul_vector3_f32,   f32, Matrix3x3<f32>, Vector3<f32>,   gen_matrix3x3, gen_vector3, mul);
-bench_binop!(matrix4x4_mul_vector4_f32,   f32, Matrix4x4<f32>, Vector4<f32>,   gen_matrix4x4, gen_vector4, mul);
-bench_binop!(matrix2x2_mul_matrix2x2_f32, f32, Matrix2x2<f32>, Matrix2x2<f32>, gen_matrix2x2, gen_vector2, mul);
-bench_binop!(matrix3x3_mul_matrix3x3_f32, f32, Matrix3x3<f32>, Matrix3x3<f32>, gen_matrix3x3, gen_vector3, mul);
-bench_binop!(matrix4x4_mul_matrix4x4_f32, f32, Matrix4x4<f32>, Matrix4x4<f32>, gen_matrix4x4, gen_vector4, mul);
+bench_binop!(matrix2x2_mul_vector2_f32, f32, Matrix2x2<f32>, Vector2<f32>, gen_matrix2x2, gen_vector2, mul);
+bench_binop!(matrix3x3_mul_vector3_f32, f32, Matrix3x3<f32>, Vector3<f32>, gen_matrix3x3, gen_vector3, mul);
+bench_binop!(matrix4x4_mul_vector4_f32, f32, Matrix4x4<f32>, Vector4<f32>, gen_matrix4x4, gen_vector4, mul);
+bench_binop!(
+    matrix2x2_mul_matrix2x2_f32,
+    f32,
+    Matrix2x2<f32>,
+    Matrix2x2<f32>,
+    gen_matrix2x2,
+    gen_vector2,
+    mul
+);
+bench_binop!(
+    matrix3x3_mul_matrix3x3_f32,
+    f32,
+    Matrix3x3<f32>,
+    Matrix3x3<f32>,
+    gen_matrix3x3,
+    gen_vector3,
+    mul
+);
+bench_binop!(
+    matrix4x4_mul_matrix4x4_f32,
+    f32,
+    Matrix4x4<f32>,
+    Matrix4x4<f32>,
+    gen_matrix4x4,
+    gen_vector4,
+    mul
+);
 
 
 criterion_group!(
@@ -132,4 +167,3 @@ criterion_group!(
     matrix4x4_mul_matrix4x4_f32,
 );
 criterion_main!(matrix_mul_benchmarks);
-

@@ -1,20 +1,18 @@
+extern crate cglinalg_complex;
 extern crate cglinalg_numeric;
 extern crate cglinalg_trigonometry;
-extern crate cglinalg_complex;
 extern crate proptest;
 
 
-use cglinalg_numeric::{
-    SimdScalar,
-    SimdScalarSigned,
-    SimdScalarFloat,
-};
-use cglinalg_complex::{
-    Complex, 
-};
 use approx::{
     relative_eq,
     relative_ne,
+};
+use cglinalg_complex::Complex;
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarFloat,
+    SimdScalarSigned,
 };
 
 use proptest::prelude::*;
@@ -26,7 +24,7 @@ where
 {
     use cglinalg_trigonometry::Radians;
 
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
@@ -45,7 +43,7 @@ fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl 
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -55,7 +53,7 @@ where
     any::<S>().prop_map(move |value| {
         let sign_value = value.signum();
         let abs_value = value.abs();
-        
+
         sign_value * rescale(abs_value, min_value, max_value)
     })
 }
@@ -64,7 +62,7 @@ fn strategy_complex_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl
 where
     S: SimdScalarSigned + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarSigned,
     {
@@ -78,7 +76,7 @@ where
         let abs_im = _im.abs();
         let re = sign_re * rescale(abs_re, min_value, max_value);
         let im = sign_im * rescale(abs_im, min_value, max_value);
-        
+
         Complex::new(re, im)
     })
 }
@@ -132,7 +130,7 @@ fn strategy_complex_i32_modulus_squared() -> impl Strategy<Value = Complex<i32>>
 }
 
 fn strategy_imaginary_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
+where
     S: SimdScalarFloat + Arbitrary,
 {
     fn rescale<S>(value: S, min_value: S, max_value: S) -> S
@@ -142,25 +140,21 @@ where
         min_value + (value % (max_value - min_value))
     }
 
-    any::<S>().prop_map(move |im| {
-        Complex::from_imaginary(rescale(im, min_value, max_value))
-    })
+    any::<S>().prop_map(move |im| Complex::from_imaginary(rescale(im, min_value, max_value)))
 }
 
 fn strategy_real_from_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Complex<S>>
-where 
+where
     S: SimdScalarFloat + Arbitrary,
 {
-    fn rescale<S>(value: S, min_value: S, max_value: S) -> S 
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
     where
         S: SimdScalarFloat,
     {
         min_value + (value % (max_value - min_value))
     }
 
-    any::<S>().prop_map(move |re| {
-        Complex::from_real(rescale(re, min_value, max_value))
-    })
+    any::<S>().prop_map(move |re| Complex::from_real(rescale(re, min_value, max_value)))
 }
 
 fn strategy_complex_f64_exp() -> impl Strategy<Value = Complex<f64>> {
@@ -191,7 +185,12 @@ fn strategy_complex_f64_sqrt() -> impl Strategy<Value = Complex<f64>> {
 }
 
 fn strategy_complex_f64_sqrt_product() -> impl Strategy<Value = Complex<f64>> {
-    strategy_complex_polar_from_range(f64::EPSILON, f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64), 0_f64, f64::two_pi())
+    strategy_complex_polar_from_range(
+        f64::EPSILON,
+        f64::sqrt(f64::sqrt(f64::MAX)) / f64::sqrt(2_f64),
+        0_f64,
+        f64::two_pi(),
+    )
 }
 
 fn strategy_complex_f64_cbrt() -> impl Strategy<Value = Complex<f64>> {
@@ -203,11 +202,11 @@ fn strategy_complex_f64_cbrt() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
-fn strategy_imaginary_f64_cos() -> impl Strategy<Value = Complex<f64>>{
+fn strategy_imaginary_f64_cos() -> impl Strategy<Value = Complex<f64>> {
     strategy_imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
-fn strategy_imaginary_f64_sin() -> impl Strategy<Value = Complex<f64>>{
+fn strategy_imaginary_f64_sin() -> impl Strategy<Value = Complex<f64>> {
     strategy_imaginary_from_range(f64::EPSILON, f64::ln(f64::MAX))
 }
 
@@ -311,13 +310,13 @@ fn strategy_complex_f64_atanh() -> impl Strategy<Value = Complex<f64>> {
 /// 0 * z == 0.
 /// ```
 fn prop_zero_times_complex_equals_zero<S>(z: Complex<S>) -> Result<(), TestCaseError>
-where 
+where
     S: SimdScalar,
 {
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(zero_complex * z, zero_complex);
-    
+
     Ok(())
 }
 
@@ -335,11 +334,11 @@ where
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(z * zero, zero_complex);
-    
+
     Ok(())
 }
 
-/// A zero complex number should act as the additive unit element of a set 
+/// A zero complex number should act as the additive unit element of a set
 /// of complex numbers.
 ///
 /// Given a complex number `z`
@@ -353,11 +352,11 @@ where
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(z + zero_complex, z);
-    
+
     Ok(())
 }
 
-/// A zero complex number should act as the additive unit element of a set 
+/// A zero complex number should act as the additive unit element of a set
 /// of complex numbers.
 ///
 /// Given a complex number `z`
@@ -371,11 +370,11 @@ where
     let zero_complex = Complex::zero();
 
     prop_assert_eq!(zero_complex + z, z);
-    
+
     Ok(())
 }
 
-/// Multiplying a complex number by a scalar `1` should give the original 
+/// Multiplying a complex number by a scalar `1` should give the original
 /// complex number.
 ///
 /// Given a complex number `z`
@@ -389,11 +388,11 @@ where
     let one = Complex::one();
 
     prop_assert_eq!(one * z, z);
-    
+
     Ok(())
 }
 
-/// Multiplying a complex number by a scalar `1` should give the original 
+/// Multiplying a complex number by a scalar `1` should give the original
 /// complex number.
 ///
 /// Given a complex number `z`
@@ -407,7 +406,7 @@ where
     let one = S::one();
 
     prop_assert_eq!(z * one, z);
-    
+
     Ok(())
 }
 
@@ -443,7 +442,7 @@ where
 }
 
 /// Complex number addition over floating point scalars should be commutative.
-/// 
+///
 /// Given complex numbers `z1` and `z2`, we have
 /// ```text
 /// z1 + z2 == z2 + z1
@@ -457,7 +456,7 @@ where
     Ok(())
 }
 
-/// Given three complex numbers of integer scalars, complex number addition 
+/// Given three complex numbers of integer scalars, complex number addition
 /// should be associative.
 ///
 /// Given complex numbers `z1`, `z2`, and `z3`, we have
@@ -473,7 +472,7 @@ where
     Ok(())
 }
 
-/// The zero complex number should act as an additive unit. 
+/// The zero complex number should act as an additive unit.
 ///
 /// Given a complex number `z`, we have
 /// ```text
@@ -490,7 +489,7 @@ where
     Ok(())
 }
 
-/// Every complex number should have an additive inverse. 
+/// Every complex number should have an additive inverse.
 ///
 /// Given a complex number `z`, there is a complex number `-z` such that
 /// ```text
@@ -547,7 +546,7 @@ where
 fn prop_scalar_times_complex_equals_complex_times_scalar<S>(c: S, z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
-{   
+{
     let c_complex = Complex::from_real(c);
 
     prop_assert_eq!(c_complex * z, z * c_complex);
@@ -567,14 +566,14 @@ where
 {
     let one = Complex::one();
 
-    prop_assert_eq!(z * one, z); 
+    prop_assert_eq!(z * one, z);
     prop_assert_eq!(one * z, z);
     prop_assert_eq!(z * one, one * z);
 
     Ok(())
 }
 
-/// Every nonzero complex number over floating point scalars has an 
+/// Every nonzero complex number over floating point scalars has an
 /// approximate multiplicative inverse.
 ///
 /// Given a complex number `z` and its inverse `z_inv`, we have
@@ -596,14 +595,14 @@ where
     Ok(())
 }
 
-/// Exact multiplication of two scalars and a complex number should be 
-/// compatible with multiplication of all scalars. 
+/// Exact multiplication of two scalars and a complex number should be
+/// compatible with multiplication of all scalars.
 ///
-/// In other words, scalar multiplication of two scalars with a 
-/// complex number should act associatively just like the multiplication 
-/// of three scalars. 
+/// In other words, scalar multiplication of two scalars with a
+/// complex number should act associatively just like the multiplication
+/// of three scalars.
 ///
-/// Given scalars `a` and `b`, and a complex number `z`, observe that `a == a + i0` 
+/// Given scalars `a` and `b`, and a complex number `z`, observe that `a == a + i0`
 /// and `b == b + i0`. We have
 /// ```text
 /// (a * b) * z == a * (b * z)
@@ -622,12 +621,12 @@ where
     Ok(())
 }
 
-/// Exact multiplication of two scalars and a complex number should be 
-/// compatible with multiplication of all scalars. 
+/// Exact multiplication of two scalars and a complex number should be
+/// compatible with multiplication of all scalars.
 ///
-/// In other words, scalar multiplication of two scalars with a 
-/// complex number should act associatively just like the multiplication 
-/// of three scalars. 
+/// In other words, scalar multiplication of two scalars with a
+/// complex number should act associatively just like the multiplication
+/// of three scalars.
 ///
 /// Given scalars `a` and `b`, and a complex number `z`, we have
 /// ```text
@@ -658,14 +657,14 @@ where
 }
 
 /// Multiplication of complex numbers over integer scalars is commutative.
-/// 
+///
 /// Given a complex number `z1` and another complex number `z2`, we have
 /// ```text
 /// z1 * z2 == z2 * z1
 /// ```
 fn prop_complex_multiplication_commutative<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
-    S: SimdScalar
+    S: SimdScalar,
 {
     prop_assert_eq!(z1 * z2, z2 * z1);
 
@@ -690,7 +689,7 @@ where
     Ok(())
 }
 
-/// Multiplication of a sum of scalars should distribute over a 
+/// Multiplication of a sum of scalars should distribute over a
 /// complex number.
 ///
 /// Given scalars `a` and `b` and a complex number `z`, we have
@@ -710,7 +709,7 @@ where
     Ok(())
 }
 
-/// Multiplication of two complex numbers by a scalar on the right 
+/// Multiplication of two complex numbers by a scalar on the right
 /// should distribute.
 ///
 /// Given complex numbers `z1` and `z2`, and a scalar `a`
@@ -726,8 +725,8 @@ where
     Ok(())
 }
 
-/// Multiplication of a complex number on the right by the sum of two 
-/// scalars should distribute over the two scalars. 
+/// Multiplication of a complex number on the right by the sum of two
+/// scalars should distribute over the two scalars.
 ///
 /// Given a complex number `z` and scalars `a` and `b`
 /// ```text
@@ -817,7 +816,7 @@ where
     Ok(())
 }
 
-/// The squared modulus of a complex number is nonnegative. 
+/// The squared modulus of a complex number is nonnegative.
 ///
 /// Given a complex number `z`
 /// ```text
@@ -830,30 +829,30 @@ where
     let zero = S::zero();
 
     prop_assert!(z.modulus_squared() >= zero);
-    
+
     Ok(())
 }
 
-/// The squared modulus function is point separating. In particular, if 
-/// the squared distance between two complex numbers `z1` and `z2` is 
+/// The squared modulus function is point separating. In particular, if
+/// the squared distance between two complex numbers `z1` and `z2` is
 /// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) == 0 => z1 == z2 
+/// modulus_squared(z1 - z2) == 0 => z1 == z2
 /// ```
-/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
+/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is
 /// nonzero
 /// ```text
 /// z1 != z2 => modulus_squared(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_approx_modulus_squared_point_separating<S>(
-    z1: Complex<S>, 
-    z2: Complex<S>, 
-    input_tolerance: S, 
-    output_tolerance: S
+    z1: Complex<S>,
+    z2: Complex<S>,
+    input_tolerance: S,
+    output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -893,20 +892,20 @@ where
     Ok(())
 }
 
-/// The squared modulus function is point separating. In particular, if 
-/// the squared distance between two complex numbers `z1` and `z2` is 
+/// The squared modulus function is point separating. In particular, if
+/// the squared distance between two complex numbers `z1` and `z2` is
 /// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) == 0 => z1 == z2 
+/// modulus_squared(z1 - z2) == 0 => z1 == z2
 /// ```
-/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is 
+/// Equivalently, if `z1` is not equal to `z2`, then their squared distance is
 /// nonzero
 /// ```text
 /// z1 != z2 => modulus_squared(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
 where
@@ -921,12 +920,12 @@ where
 }
 
 /// The squared modulus function is homogeneous.
-/// 
+///
 /// Given a complex number `z` and a scalar `c`
 /// ```text
 /// modulus_squared(z * c) == modulus_squared(z) * abs(c) * abs(c)
 /// ```
-fn prop_modulus_squared_homogeneous_squared<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError> 
+fn prop_modulus_squared_homogeneous_squared<S>(z: Complex<S>, c: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
@@ -938,7 +937,7 @@ where
     Ok(())
 }
 
-/// The modulus of a complex number is nonnegative. 
+/// The modulus of a complex number is nonnegative.
 ///
 /// Given a complex number `z`
 /// ```text
@@ -955,20 +954,20 @@ where
     Ok(())
 }
 
-/// The modulus function is point separating. In particular, if 
-/// the distance between two complex numbers `z1` and `z2` is 
+/// The modulus function is point separating. In particular, if
+/// the distance between two complex numbers `z1` and `z2` is
 /// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus(z1 - z2) == 0 => z1 == z2 
+/// modulus(z1 - z2) == 0 => z1 == z2
 /// ```
-/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
 /// z1 != z2 => modulus(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_approx_modulus_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -982,7 +981,7 @@ where
     Ok(())
 }
 
-/// The [`Complex::magnitude`] function and the [`Complex::modulus`] function 
+/// The [`Complex::magnitude`] function and the [`Complex::modulus`] function
 /// are synonyms. In particular, given a complex number `z`
 /// ```text
 /// magnitude(z) == norm(z)
@@ -1027,7 +1026,7 @@ where
     Ok(())
 }
 
-/// The **L1** norm of a complex number is nonnegative. 
+/// The **L1** norm of a complex number is nonnegative.
 ///
 /// Given a complex number `z`
 /// ```text
@@ -1044,8 +1043,8 @@ where
     Ok(())
 }
 
-/// The **L1** norm function is homogeneous. 
-/// 
+/// The **L1** norm function is homogeneous.
+///
 /// Given a complex number `z` and a scalar `c`
 /// ```text
 /// l1_norm(z * c) == l1_norm(z) * abs(c)
@@ -1063,7 +1062,7 @@ where
 }
 
 /// The **L1** norm satisfies the triangle inequality.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// l1_norm(z1 + z2) <= l1_norm(z1) + l1_norm(z2)
@@ -1080,20 +1079,20 @@ where
     Ok(())
 }
 
-/// The **L1** norm function is point separating. In particular, if 
-/// the distance between two complex numbers `z1` and `z2` is 
+/// The **L1** norm function is point separating. In particular, if
+/// the distance between two complex numbers `z1` and `z2` is
 /// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) == 0 => z1 == z2 
+/// l1_norm(z1 - z2) == 0 => z1 == z2
 /// ```
-/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
 /// z1 != z2 => l1_norm(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_approx_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1105,25 +1104,25 @@ where
     Ok(())
 }
 
-/// The **L1** norm function is point separating. In particular, if 
-/// the distance between two complex numbers `z1` and `z2` is 
+/// The **L1** norm function is point separating. In particular, if
+/// the distance between two complex numbers `z1` and `z2` is
 /// zero, then `z1 == z2`.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) == 0 => z1 == z2 
+/// l1_norm(z1 - z2) == 0 => z1 == z2
 /// ```
-/// Equivalently, if `z1` is not equal to `z2`, then their distance is 
+/// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
 /// z1 != z2 => l1_norm(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the 
+/// For the sake of testability, we use the second form to test the
 /// norm function.
 fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
-where 
+where
     S: SimdScalarSigned,
-{    
+{
     let zero = S::zero();
 
     prop_assume!(z1 != z2);
@@ -1132,9 +1131,9 @@ where
     Ok(())
 }
 
-/// The exponential of the sum of two complex numbers is the product of the 
+/// The exponential of the sum of two complex numbers is the product of the
 /// exponentials of the two complex numbers.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// exp(z1 + z2) == exp(z1) * exp(z2)
@@ -1152,12 +1151,12 @@ where
 }
 
 /// The complex exponential of a complex number is nonzero.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// exp(z) != 0
 /// ```
-fn prop_exp_complex_nonzero<S>(z: Complex<S>) -> Result<(), TestCaseError> 
+fn prop_exp_complex_nonzero<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1169,7 +1168,7 @@ where
 }
 
 /// The complex exponential satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// exp(-z) * exp(z) == exp(z) * exp(-z) == 1
@@ -1196,14 +1195,14 @@ where
 }
 
 /// The principal value of the complex logarithm satisfiess the following relation.
-/// 
+///
 /// Given non-zero complex numbers `z1` and `z2`, there is an integer `k` such that
 /// ```text
 /// ln(z1 * z2) - (ln(z1) + ln(z2)) == 2 * pi * k * i
 /// ```
-/// In particular `ln(z1 * z2)` and `ln(z1) + ln(z2)` are the same 
+/// In particular `ln(z1 * z2)` and `ln(z1) + ln(z2)` are the same
 /// modulo a branch cut. In particular, if we write `z1 := |z1| * exp(i * Arg(z1))`
-/// and `z2 := |z2| * exp(i * Arg(z2))`, we see that 
+/// and `z2 := |z2| * exp(i * Arg(z2))`, we see that
 /// ```text
 /// z1 * z2 == |z1| * exp(i * Arg(z1)) * |z2| * exp(i * Arg(z2))
 ///         == |z1| * |z2| * exp(i * Arg(z1)) * exp(i * Arg(z2))
@@ -1211,7 +1210,7 @@ where
 /// ```
 /// Thus if the sum of principal arguments of `z1` and `z2` lie in the principal
 /// branch of the complex numbers, i.e. `Arg(z1) + Arg(z2) in (-pi, pi]`, we see
-/// that 
+/// that
 /// ```text
 /// Arg(z1) + Arg(z2) == Arg(z1 * z2)
 /// ```
@@ -1235,7 +1234,7 @@ where
 /// ```text
 /// Ln(z1 * z2) - [Ln(z1) + Ln(z2)] == 0 == 2 * pi * 0 * i
 /// ```
-/// which implies that when `z1 * z2` is on the principal branch, 
+/// which implies that when `z1 * z2` is on the principal branch,
 /// that `k == 0`.
 fn prop_approx_ln_product<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
@@ -1255,7 +1254,7 @@ where
 }
 
 /// The real part of the complex logarithm is the logarithm of the complex modulus.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// re(ln(z)) == ln(modulus(z))
@@ -1274,7 +1273,7 @@ where
 
 /// The complex exponential and the principal value of the complex logarithm
 /// satisfy the folowing relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// exp(ln(z)) == z
@@ -1293,7 +1292,7 @@ where
 
 /// The complex exponential and the principal value of the complex logarithm
 /// satisfy the following relation.
-/// 
+///
 /// Given a complex number `z`, there is an integer `k` such that
 /// ```text
 /// ln(exp(z)) - z == 2 * pi * k * i
@@ -1317,9 +1316,9 @@ where
 
 /// The principal argument of two complex numbers that differ only by a phase factor
 /// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
-/// 
-/// Given complex numbers `z1` and `z2` such that `z1 := r * exp(i * angle)` and 
-/// `z2 := r * exp(i * (angle + 2 * pi * k))` where `r` is a floating point number 
+///
+/// Given complex numbers `z1` and `z2` such that `z1 := r * exp(i * angle)` and
+/// `z2 := r * exp(i * (angle + 2 * pi * k))` where `r` is a floating point number
 /// and `k` is an integer
 /// ```text
 /// arg(z1) == arg(z2)
@@ -1349,16 +1348,16 @@ where
 
 /// The argument of the quotient of two non-zero complex numbers satisfies the following
 /// relation.
-/// 
-/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
+///
+/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such
 /// that
 /// ```text
 /// arg(z1 * z2) - (arg(z1) + arg(z2)) == 2 * pi * k * i
 /// ```
 fn prop_approx_arg_complex_times_complex_equals_arg_complex_plus_arg_complex<S>(
-    z1: Complex<S>, 
-    z2: Complex<S>, 
-    tolerance: S
+    z1: Complex<S>,
+    z2: Complex<S>,
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -1378,16 +1377,16 @@ where
 
 /// The argument of the quotient of two non-zero complex numbers satisfies the following
 /// relation.
-/// 
-/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such 
+///
+/// Given two non-zero complex numbers `z1` and `z2`, there exists an integer `k` such
 /// that
 /// ```text
 /// arg(z1 / z2) - (arg(z1) - arg(z2)) == 2 * pi * k * i
 /// ```
 fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex<S>(
-    z1: Complex<S>, 
-    z2: Complex<S>, 
-    tolerance: S
+    z1: Complex<S>,
+    z2: Complex<S>,
+    tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -1406,7 +1405,7 @@ where
 }
 
 /// The principal argument of a complex number is in the range `[-pi, pi]`.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// -pi =< arg(z) <= pi
@@ -1425,7 +1424,7 @@ where
 
 /// The square of the positive square root of a complex number is the original
 /// complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sqrt(z) * sqrt(z) == z
@@ -1443,9 +1442,9 @@ where
     Ok(())
 }
 
-/// The square of the principal value of the square root of a the negation of a 
+/// The square of the principal value of the square root of a the negation of a
 /// complex number is negation of the original complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sqrt(-z) * sqrt(-z) == -z
@@ -1476,12 +1475,12 @@ where
 
 /// The square of the principal value of the conjugate of a complex number is
 /// the conjugate of the original complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sqrt(conjugate(z)) * sqrt(conjugate(z)) == conjugate(z)
 /// ```
-fn prop_approx_square_root_complex_conjugate_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_square_root_complex_conjugate_squared<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1494,9 +1493,9 @@ where
     Ok(())
 }
 
-/// The modulus of the square root of the product of two complex numbers is the 
+/// The modulus of the square root of the product of two complex numbers is the
 /// product of the moduli of the square roots of the individual complex numbers.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(zqrt(z2))
@@ -1507,7 +1506,7 @@ where
 {
     let lhs = (z1 * z2).sqrt().modulus();
     let rhs = z1.sqrt().modulus() * z2.sqrt().modulus();
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
 
     Ok(())
@@ -1515,7 +1514,7 @@ where
 
 /// The argument of the square root of a complex number should satisfy the
 /// following property.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// pi / 2 =< arg(sqrt(z)) <= pi / 2
@@ -1533,12 +1532,12 @@ where
 }
 
 /// The cube of the cubed root of a complex number is the original complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cubed(cbrt(z)) == z
 /// ```
-fn prop_approx_cubed_root_complex_cubed<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError> 
+fn prop_approx_cubed_root_complex_cubed<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1551,9 +1550,9 @@ where
     Ok(())
 }
 
-/// The cosine of a complex number with imaginary part zero equals the 
+/// The cosine of a complex number with imaginary part zero equals the
 /// cosine of the real part.
-/// 
+///
 /// Given a complex number `z` with imaginary part `im(z) == 0`
 /// ```text
 /// cos(z) == cos(re(z))
@@ -1572,7 +1571,7 @@ where
 
 /// The cosine of the negation of a complex number equals the cosine of the
 /// complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cos(-z) == cos(z)
@@ -1589,9 +1588,9 @@ where
     Ok(())
 }
 
-/// The cosine of a complex number with real part zero equals i times the 
+/// The cosine of a complex number with real part zero equals i times the
 /// hyperbolic cosine of the imaginary part.
-/// 
+///
 /// Given a complex number `z` with real part `re(z) == 0`
 /// ```text
 /// cos(z) == i * cosh(im(z))
@@ -1600,7 +1599,7 @@ fn prop_approx_cos_imaginary_equals_imaginary_cosh<S>(z: Complex<S>, tolerance: 
 where
     S: SimdScalarFloat,
 {
-    let im_z = z.imaginary(); 
+    let im_z = z.imaginary();
     let lhs = Complex::cos(Complex::from_imaginary(im_z));
     let rhs = Complex::cosh(Complex::from_real(im_z));
 
@@ -1611,7 +1610,7 @@ where
 
 /// The sine of a complex number with imaginary part zero equals the sine
 /// of the real part.
-/// 
+///
 /// Given a complex number `z` such that `im(z) == 0`
 /// ```text
 /// sin(z) == sin(re(z))
@@ -1630,7 +1629,7 @@ where
 
 /// The sine of the negation of a complex number equals the negation of the sine
 /// of the complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sin(-z) == -sin(z)
@@ -1647,9 +1646,9 @@ where
     Ok(())
 }
 
-/// The sine of a complex number with real part zero equals i times the 
+/// The sine of a complex number with real part zero equals i times the
 /// hyperbolic sine of the imaginary part.
-/// 
+///
 /// Given a complex number `z` with real part `re(z) == 0`
 /// ```text
 /// sin(z) == i * sinh(im(z))
@@ -1668,7 +1667,7 @@ where
 
 /// The tangent of a complex number with imaginary part zero equals the tangent
 /// of the real part.
-/// 
+///
 /// Given a complex number `z` such that `im(z) == 0`
 /// ```text
 /// tan(z) == tan(re(z))
@@ -1688,7 +1687,7 @@ where
 
 /// The tangent of the negation of a complex number equals the negation of the
 /// tangent of a complex number.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tan(-z) == -tan(z)
@@ -1708,7 +1707,7 @@ where
 
 /// The tangent of a complex number with real part zero equals i times the
 /// hyperbolic tangent of the imaginary part.
-/// 
+///
 /// Given a complex number `z` such that `re(z) == 0`
 /// ```text
 /// tan(z) == i * tanh(im(z))
@@ -1726,15 +1725,15 @@ where
 }
 
 /// The complex cosine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cos(2 * z) == cos(z) * cos(z) - sin(z) * sin(z)
 /// ```
 fn prop_approx_cos_two_times_angle_equals_two_times_cos_angle_squared_minus_sin_angle_squared<S>(
-    z: Complex<S>, 
+    z: Complex<S>,
     tolerance: S,
-    max_relative: S
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -1752,15 +1751,15 @@ where
 }
 
 /// The complex sine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sin(2 * z) == 2 * sin(z) * cos(z)
 /// ```
 fn prop_approx_sin_two_times_angle_equals_two_times_sin_angle_times_cos_angle<S>(
-    z: Complex<S>, 
-    tolerance: S, 
-    max_relative: S
+    z: Complex<S>,
+    tolerance: S,
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -1776,7 +1775,7 @@ where
 }
 
 /// The complex tangent function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tan(z) * (1 - tan(z) * tan(z)) == 2 * tan(z)
@@ -1798,7 +1797,7 @@ where
 }
 
 /// The complex cosine function satisfies the following relation.
-/// 
+///
 /// Given two complex numbers `z1` and `z2`
 /// ```text
 /// cos(z1 + z2) == cos(z1) * cos(z2) - sin(z1) * cos(z2)
@@ -1816,7 +1815,7 @@ where
 }
 
 /// The complex sine function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// sin(z1 + z2) == sin(z1) * cos(z2) + cos(z1) * sin(z2)
@@ -1834,7 +1833,7 @@ where
 }
 
 /// The complex tangent function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// tan(z1 + z2) * (1 - tan(z1) * tan(z2)) == tan(z1) + tan(z2)
@@ -1853,7 +1852,7 @@ where
 }
 
 /// The complex tangent function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// tan(z1 - z2) * (1 - tan(z1) * tan(z2)) == tan(z1) - tan(z2)
@@ -1872,7 +1871,7 @@ where
 }
 
 /// The complex arccosine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// acos(conjugate(z)) == conjugate(acos(z))
@@ -1890,7 +1889,7 @@ where
 }
 
 /// The complex arcsine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// asin(conjugate(z)) == conjugate(asin(z))
@@ -1908,7 +1907,7 @@ where
 }
 
 /// The complex arctangent function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// atan(conjugate(z)) == conjugate(atan(z))
@@ -1926,7 +1925,7 @@ where
 }
 
 /// The cosine and arccosine functions satisfy the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cos(acos(z)) == z
@@ -1937,14 +1936,14 @@ where
 {
     let lhs = z.acos().cos();
     let rhs = z;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
 /// The sine and arcsine functions satisfy the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sin(asin(z)) == z
@@ -1955,18 +1954,20 @@ where
 {
     let lhs = z.asin().sin();
     let rhs = z;
-    
+
     prop_assert!(
         relative_eq!(lhs, rhs, epsilon = tolerance),
         "z = {}; asin(z) = {}; sin(asin(z)) = {}",
-        z, z.asin(), lhs
+        z,
+        z.asin(),
+        lhs
     );
 
     Ok(())
 }
 
 /// The tangent and arctangent functions satisfy the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tan(atan(z)) == z
@@ -1977,14 +1978,14 @@ where
 {
     let lhs = z.atan().tan();
     let rhs = z;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
 /// The complex hyperbolic cosine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cosh(conjugate(z)) == conjugate(cosh(z))
@@ -1999,7 +2000,7 @@ where
 }
 
 /// The complex hyperbolic cosine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cosh(-z) == cosh(z)
@@ -2014,7 +2015,7 @@ where
 }
 
 /// The complex hyperbolic sine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sinh(conjugate(z)) == conjugate(sinh(z))
@@ -2029,7 +2030,7 @@ where
 }
 
 /// The complex hyperbolic sine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sinh(-z) == -sinh(z)
@@ -2044,7 +2045,7 @@ where
 }
 
 /// The complex hyperbolic tangent function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tanh(conjugate(z)) == conjugate(tanh(z))
@@ -2059,7 +2060,7 @@ where
 }
 
 /// The complex hyperbolic tangent function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tanh(-z) == -tanh(z)
@@ -2074,15 +2075,15 @@ where
 }
 
 /// The complex hyperbolic cosine satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cosh(2 * z) == cosh(z) * cosh(z) + sinh(z) * sinh(z)
 /// ```
 fn prop_approx_cosh_two_times_angle_equals_cosh_squared_plus_sinh_squared<S>(
-    z: Complex<S>, 
-    tolerance: S, 
-    max_relative: S
+    z: Complex<S>,
+    tolerance: S,
+    max_relative: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -2098,16 +2099,12 @@ where
 }
 
 /// The complex hyperbolic sine function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sinh(2 * z) == 2 * sinh(z) * cosh(z)
 /// ```
-fn prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(
-    z: Complex<S>, 
-    tolerance: S, 
-    max_relative: S
-) -> Result<(), TestCaseError>
+fn prop_approx_sinh_two_times_angle_equals_two_times_sinh_cosh<S>(z: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -2122,7 +2119,7 @@ where
 }
 
 /// The complex hyperbolic tangent function satisfies the following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tanh(2 * z) * (1 + tanh(z) * tanh(z)) == 2 * tanh(z)
@@ -2134,7 +2131,7 @@ where
     let one = Complex::one();
     let two = one + one;
     let tanh_two_z = (two * z).tanh();
-    let tanh_z_squared = z.tanh().squared(); 
+    let tanh_z_squared = z.tanh().squared();
     let lhs = tanh_two_z * (one + tanh_z_squared);
     let rhs = two * z.tanh();
 
@@ -2144,7 +2141,7 @@ where
 }
 
 /// The complex hyperbolic cosine function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// cosh(z1 + z2) == cosh(z1) * cosh(z2) + sinh(z1) * sinh(z2)
@@ -2162,7 +2159,7 @@ where
 }
 
 /// The complex hyperbolic sine function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z1`
 /// ```text
 /// sinh(z1 + z2) == sinh(z1) * cosh(z2) + cosh(z1) * sinh(z2)
@@ -2180,7 +2177,7 @@ where
 }
 
 /// The hyperbolic tangent function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// tanh(z1 + z2) * (1 + tanh(z1) * tanh(z2)) == tanh(z1) + tanh(z2)
@@ -2199,7 +2196,7 @@ where
 }
 
 /// The hyperbolic tangent function satisfies the following relation.
-/// 
+///
 /// Given complex numbers `z1` and `z2`
 /// ```text
 /// tanh(z1 - z2) * (1 - tanh(z1) * tanh(z2)) == tanh(z1) - tanh(z2)
@@ -2218,9 +2215,9 @@ where
 }
 
 
-/// The hyperbolic cosine and hyperbolic arccosine functions satisfy the 
+/// The hyperbolic cosine and hyperbolic arccosine functions satisfy the
 /// following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// cosh(acosh(z)) == z
@@ -2231,15 +2228,15 @@ where
 {
     let lhs = z.acosh().cosh();
     let rhs = z;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
-/// The hyperbolic sine and hyperbolic arcsine functions satisfy the 
+/// The hyperbolic sine and hyperbolic arcsine functions satisfy the
 /// following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// sinh(asinh(z)) == z
@@ -2250,15 +2247,15 @@ where
 {
     let lhs = z.asinh().sinh();
     let rhs = z;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
 }
 
-/// The hyperbolic tangent and hyperbolic arctangent functions satisfy the 
+/// The hyperbolic tangent and hyperbolic arctangent functions satisfy the
 /// following relation.
-/// 
+///
 /// Given a complex number `z`
 /// ```text
 /// tanh(atanh(z)) == z
@@ -2269,7 +2266,7 @@ where
 {
     let lhs = z.atanh().tanh();
     let rhs = z;
-    
+
     prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
 
     Ok(())
@@ -2285,7 +2282,7 @@ mod complex_f64_arithmetic_props {
             let z: super::Complex<f64> = z;
             super::prop_zero_times_complex_equals_zero(z)?
         }
-    
+
         #[test]
         fn prop_complex_times_zero_equals_zero(z in super::strategy_complex_f64_any()) {
             let z: super::Complex<f64> = z;
@@ -2344,7 +2341,7 @@ mod complex_f64_arithmetic_props {
 
         #[test]
         fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(
-            z1 in super::strategy_complex_f64_any(), 
+            z1 in super::strategy_complex_f64_any(),
             z2 in super::strategy_complex_f64_any()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -2354,7 +2351,7 @@ mod complex_f64_arithmetic_props {
 
         #[test]
         fn prop_scalar_times_complex_equals_complex_times_scalar(
-            c in super::strategy_scalar_f64_any(), 
+            c in super::strategy_scalar_f64_any(),
             z in super::strategy_complex_f64_any()
         ) {
             let c: f64 = c;
@@ -2392,7 +2389,7 @@ mod complex_i32_arithmetic_props {
             let z: super::Complex<i32> = z;
             super::prop_zero_times_complex_equals_zero(z)?
         }
-    
+
         #[test]
         fn prop_complex_times_zero_equals_zero(z in super::strategy_complex_i32_any()) {
             let z: super::Complex<i32> = z;
@@ -2425,7 +2422,7 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_complex1_plus_complex2_equals_refcomplex1_plus_refcomplex2(
-            z1 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
             z2 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2442,8 +2439,8 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_complex_addition_associative(
-            z1 in super::strategy_complex_i32_any(), 
-            z2 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
+            z2 in super::strategy_complex_i32_any(),
             z3 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2466,7 +2463,7 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_complex1_minus_complex2_equals_refcomplex1_minus_refcomplex2(
-            z1 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
             z2 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2476,7 +2473,7 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_scalar_times_complex_equals_complex_times_scalar(
-            c in super::strategy_scalar_i32_any(), 
+            c in super::strategy_scalar_i32_any(),
             z in super::strategy_complex_i32_any()
         ) {
             let c: i32 = c;
@@ -2486,8 +2483,8 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_scalar_multiplication_compatibility1(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(),
             z in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2498,8 +2495,8 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_scalar_multiplication_compatibility2(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(),
             z in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2510,8 +2507,8 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_complex_multiplication_associative(
-            z1 in super::strategy_complex_i32_any(), 
-            z2 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
+            z2 in super::strategy_complex_i32_any(),
             z3 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2528,7 +2525,7 @@ mod complex_i32_arithmetic_props {
 
         #[test]
         fn prop_complex_multiplication_commutative(
-            z1 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
             z2 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2544,8 +2541,8 @@ mod complex_i32_distributive_props {
     proptest! {
         #[test]
         fn prop_distribution_over_complex_addition(
-            a in super::strategy_scalar_i32_any(), 
-            z1 in super::strategy_complex_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            z1 in super::strategy_complex_i32_any(),
             z2 in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2557,7 +2554,7 @@ mod complex_i32_distributive_props {
         #[test]
         fn prop_distribution_over_scalar_addition(
             a in super::strategy_scalar_i32_any(),
-            b in super::strategy_scalar_i32_any(), 
+            b in super::strategy_scalar_i32_any(),
             z in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2568,8 +2565,8 @@ mod complex_i32_distributive_props {
 
         #[test]
         fn prop_distribution_over_complex_addition1(
-            a in super::strategy_scalar_i32_any(), 
-            z1 in super::strategy_complex_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            z1 in super::strategy_complex_i32_any(),
             z2 in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2580,8 +2577,8 @@ mod complex_i32_distributive_props {
 
         #[test]
         fn prop_distribution_over_scalar_addition1(
-            a in super::strategy_scalar_i32_any(), 
-            b in super::strategy_scalar_i32_any(), 
+            a in super::strategy_scalar_i32_any(),
+            b in super::strategy_scalar_i32_any(),
             z in super::strategy_complex_i32_any()
         ) {
             let a: i32 = a;
@@ -2592,8 +2589,8 @@ mod complex_i32_distributive_props {
 
         #[test]
         fn prop_complex_multiplication_right_distributive(
-            z1 in super::strategy_complex_i32_any(), 
-            z2 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
+            z2 in super::strategy_complex_i32_any(),
             z3 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2604,8 +2601,8 @@ mod complex_i32_distributive_props {
 
         #[test]
         fn prop_complex_multiplication_left_distributive(
-            z1 in super::strategy_complex_i32_any(), 
-            z2 in super::strategy_complex_i32_any(), 
+            z1 in super::strategy_complex_i32_any(),
+            z2 in super::strategy_complex_i32_any(),
             z3 in super::strategy_complex_i32_any()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2635,7 +2632,7 @@ mod complex_f64_conjugation_props {
 
         #[test]
         fn prop_complex_conjugation_transposes_products(
-            z1 in super::strategy_complex_f64_any(), 
+            z1 in super::strategy_complex_f64_any(),
             z2 in super::strategy_complex_f64_any()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -2684,7 +2681,7 @@ mod complex_f64_modulus_squared_props {
 
         #[test]
         fn prop_approx_modulus_squared_point_separating(
-            z1 in super::strategy_complex_f64_modulus_squared(), 
+            z1 in super::strategy_complex_f64_modulus_squared(),
             z2 in super::strategy_complex_f64_modulus_squared()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -2724,7 +2721,7 @@ mod complex_i32_modulus_squared_props {
 
         #[test]
         fn prop_modulus_squared_point_separating(
-            z1 in super::strategy_complex_i32_modulus_squared(), 
+            z1 in super::strategy_complex_i32_modulus_squared(),
             z2 in super::strategy_complex_i32_modulus_squared()
         ) {
             let z1: super::Complex<i32> = z1;
@@ -2904,7 +2901,7 @@ mod complex_f64_ln_props {
 #[cfg(test)]
 mod complex_f64_exp_ln_props {
     use proptest::prelude::*;
-    proptest!{
+    proptest! {
         #[test]
         fn prop_approx_exp_ln_identity(z in super::strategy_complex_f64_ln()) {
             let z: super::Complex<f64> = z;
@@ -2941,7 +2938,7 @@ mod complex_f64_arg_props {
 
         #[test]
         fn prop_approx_arg_complex_div_complex_equals_arg_complex_minus_arg_complex(
-            z1 in super::strategy_complex_f64_any(), 
+            z1 in super::strategy_complex_f64_any(),
             z2 in super::strategy_complex_f64_any()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -3105,7 +3102,7 @@ mod complex_f64_trigonometry_props {
 
         #[test]
         fn prop_tan_angle_difference(
-            z1 in super::strategy_complex_f64_tan_angle_difference(), 
+            z1 in super::strategy_complex_f64_tan_angle_difference(),
             z2 in super::strategy_complex_f64_tan_angle_difference()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -3238,7 +3235,7 @@ mod complex_f64_hyperbolic_props {
 
         #[test]
         fn prop_approx_tanh_angle_difference(
-            z1 in super::strategy_complex_f64_tanh_angle_difference(), 
+            z1 in super::strategy_complex_f64_tanh_angle_difference(),
             z2 in super::strategy_complex_f64_tanh_angle_difference()
         ) {
             let z1: super::Complex<f64> = z1;
@@ -3271,4 +3268,3 @@ mod complex_f64_hyperbolic_inverse_props {
         }
     }
 }
-
