@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg_numeric"
-version = "0.19.0"
+version = "0.19.1"
 edition = "2021"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."

@@ -1906,11 +1906,11 @@ where
     ///          frac_1_sqrt_2 * frac_1_2,
     ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2,
     ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
-    ///         
+    ///
     ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_sqrt_3_2 * frac_1_2 - frac_1_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
     ///          frac_1_2 * frac_1_2 + frac_sqrt_3_2 * frac_1_sqrt_2 * frac_sqrt_3_2,
-    ///          
+    ///
     ///          frac_1_sqrt_2,
     ///         -frac_1_2 * frac_1_sqrt_2,
     ///          frac_sqrt_3_2 * frac_1_sqrt_2
