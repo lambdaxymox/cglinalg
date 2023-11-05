@@ -1,39 +1,35 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
+use crate::transform::Transform3;
 use cglinalg_core::{
     Matrix4x4,
     Point3,
     Vector3,
 };
-use crate::transform::{
-    Transform3,
+use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
 use core::ops;
 
 
-/// A perspective projection transformation based on arbitrary `left`, `right`, 
+/// A perspective projection transformation based on arbitrary `left`, `right`,
 /// `bottom`, `top`, `near`, and `far` planes.
 ///
-/// The `near` and `far` parameters are the absolute values of the positions 
-/// of the **near plane** and the **far** plane, respectively, along the 
+/// The `near` and `far` parameters are the absolute values of the positions
+/// of the **near plane** and the **far** plane, respectively, along the
 /// **negative z-axis**. In particular, the position of the **near plane** is
 /// `z == -near` and the position of the **far plane** is `z == -far`.
-/// 
-/// This data type represents a homogeneous matrix representing a perspective 
-/// projection transformation with a right-handed coordinate system where the 
-/// perspective camera faces the **negative z-axis** with the **positive x-axis** 
-/// going to the right, and the **positive y-axis** going up. The perspective view 
-/// volume is the frustum contained in 
-/// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device 
+///
+/// This data type represents a homogeneous matrix representing a perspective
+/// projection transformation with a right-handed coordinate system where the
+/// perspective camera faces the **negative z-axis** with the **positive x-axis**
+/// going to the right, and the **positive y-axis** going up. The perspective view
+/// volume is the frustum contained in
+/// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device
 /// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
-/// 
+///
 /// The underlying matrix is identical to the one used by OpenGL, provided here for
 /// reference
 /// ```text
@@ -55,59 +51,59 @@ pub struct Perspective3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Perspective3<S> 
-where 
+impl<S> Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a new perspective projection transformation.
     ///
-    /// The perspective projection transformation uses a right-handed 
+    /// The perspective projection transformation uses a right-handed
     /// coordinate system where the **negative z-axis** is the camera view direction.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The parameters must satisfy
     /// ```text
     /// left < right
     /// bottom < top
     /// 0 < near < far
     /// ```
-    /// to construct a useful perspective projection. In particular, `near` and 
-    /// `far` are the respective absolute values of the placement of the near and 
+    /// to construct a useful perspective projection. In particular, `near` and
+    /// `far` are the respective absolute values of the placement of the near and
     /// far planes along the **z-axis**.
-    /// 
+    ///
     /// `left` is the horizontal position of the left plane in camera space.
     /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    /// 
+    ///
     /// `right` is the horizontal position of the right plane in camera space.
     /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    /// 
+    ///
     /// `bottom` is the vertical position of the bottom plane in camera space.
     /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    /// 
+    ///
     /// `top` is the vertical position of the top plane in camera space.
     /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    /// 
-    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    ///
+    /// `near` is the distance along the **negative z-axis** of the near plane from the
     /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
-    /// 
-    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    ///
+    /// `far` the distance along the **negative z-axis** of the far plane from the
     /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
-    /// 
+    ///
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -131,21 +127,21 @@ where
         }
     }
 
-    /// Get the position of the near plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the near plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -169,21 +165,21 @@ where
         ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
-    /// Get the position of the far plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the far plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -207,21 +203,21 @@ where
         ((one - ratio) / two) * self.matrix[3][2]
     }
 
-    /// Get the position of the right plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the right plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -246,21 +242,21 @@ where
         (two * near * (ratio / (ratio - one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the left plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the left plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -276,7 +272,7 @@ where
     /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn left(&self)-> S {
+    pub fn left(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (self.matrix[2][0] + one) / (self.matrix[2][0] - one);
@@ -285,21 +281,21 @@ where
         (two * near * (one / (ratio - one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the top plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the top plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -324,7 +320,7 @@ where
         (two * near * (ratio / (ratio - one))) * (one / self.matrix[1][1])
     }
 
-    /// Get the position of the bottom plane of the viewing 
+    /// Get the position of the bottom plane of the viewing
     /// frustum descibed by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
@@ -332,13 +328,13 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -369,13 +365,13 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Matrix4x4, 
+    /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -403,16 +399,16 @@ where
     /// Apply the projective projection transformation to a point.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -431,27 +427,27 @@ where
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse_w = -S::one() / point.z;
-        
+
         Point3::new(
             (self.matrix.c0r0 * point.x + self.matrix.c2r0 * point.z) * inverse_w,
             (self.matrix.c1r1 * point.y + self.matrix.c3r1 * point.z) * inverse_w,
-            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w
+            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w,
         )
     }
 
     /// Apply the perspective projection transformation to a vector.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -464,33 +460,33 @@ where
     /// let vector = Vector3::new(-1_f64, -1_f64, 4_f64);
     /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_vector(&vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let projected_vector = self.matrix * vector.extend(S::one());
         let one_div_w = S::one() / projected_vector.w;
-        
+
         (projected_vector * one_div_w).contract()
     }
 
     /// Unproject a point from normalized device coordinates back to camera
-    /// view space. 
-    /// 
+    /// view space.
+    ///
     /// This is the inverse operation of `project_point`.
     ///
     /// # Example
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -504,7 +500,7 @@ where
     /// let expected = point;
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -524,21 +520,21 @@ where
         // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
         // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
         // ```
-        // 
+        //
         // This leads to optimizated unprojection equivalent to the original
         // calculation via matrix calclulation.
-        // We can save nine multiplications, nine additions, and one matrix 
+        // We can save nine multiplications, nine additions, and one matrix
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
         let c0r0 = (self.right() - self.left()) / (two * self.near());
         let c1r1 = (self.top() - self.bottom()) / (two * self.near());
-        let c2r3 =  (self.near() - self.far()) / (two * self.far() * self.near());
-        let c3r0 =  (self.left() + self.right()) / (two * self.near());
-        let c3r1 =  (self.bottom() + self.top()) / (two * self.near());
+        let c2r3 = (self.near() - self.far()) / (two * self.far() * self.near());
+        let c3r0 = (self.left() + self.right()) / (two * self.near());
+        let c3r1 = (self.bottom() + self.top()) / (two * self.near());
         let c3r2 = -one;
-        let c3r3 =  (self.far() + self.near()) / (two * self.far() * self.near());
+        let c3r3 = (self.far() + self.near()) / (two * self.far() * self.near());
         let w = c2r3 * point.z + c3r3;
         let inverse_w = one / w;
 
@@ -550,21 +546,21 @@ where
     }
 
     /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. 
+    /// camera view space.
     ///
     /// This is the inverse operation of `project_vector`.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -3_f64;
@@ -578,7 +574,7 @@ where
     /// let expected = vector;
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -598,21 +594,21 @@ where
         // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
         // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
         // ```
-        // 
+        //
         // This leads to optimizated unprojection equivalent to the original
         // calculation via matrix calclulation.
-        // We can save nine multiplications, nine additions, and one matrix 
+        // We can save nine multiplications, nine additions, and one matrix
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
         let c0r0 = (self.right() - self.left()) / (two * self.near());
         let c1r1 = (self.top() - self.bottom()) / (two * self.near());
-        let c2r3 =  (self.near() - self.far()) / (two * self.far() * self.near());
-        let c3r0 =  (self.left() + self.right()) / (two * self.near());
-        let c3r1 =  (self.bottom() + self.top()) / (two * self.near());
+        let c2r3 = (self.near() - self.far()) / (two * self.far() * self.near());
+        let c3r0 = (self.left() + self.right()) / (two * self.near());
+        let c3r1 = (self.bottom() + self.top()) / (two * self.near());
         let c3r2 = -one;
-        let c3r3 =  (self.far() + self.near()) / (two * self.far() * self.near());
+        let c3r3 = (self.far() + self.near()) / (two * self.far() * self.near());
         let w = c2r3 * vector.z + c3r3;
         let inverse_w = one / w;
 
@@ -624,9 +620,9 @@ where
     }
 
     /// Convert a perspective projection to a projective matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Perspective3,
@@ -664,9 +660,9 @@ where
     }
 
     /// Convert a perspective projection to a generic transformation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Perspective3,
@@ -712,8 +708,8 @@ impl<S> AsRef<Matrix4x4<S>> for Perspective3<S> {
     }
 }
 
-impl<S> fmt::Display for Perspective3<S> 
-where 
+impl<S> fmt::Display for Perspective3<S>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -731,8 +727,8 @@ where
     }
 }
 
-impl<S> approx::AbsDiffEq for Perspective3<S> 
-where 
+impl<S> approx::AbsDiffEq for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -748,8 +744,8 @@ where
     }
 }
 
-impl<S> approx::RelativeEq for Perspective3<S> 
-where 
+impl<S> approx::RelativeEq for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -763,8 +759,8 @@ where
     }
 }
 
-impl<S> approx::UlpsEq for Perspective3<S> 
-where 
+impl<S> approx::UlpsEq for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -778,8 +774,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Perspective3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -790,8 +786,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Perspective3<S> 
-where 
+impl<S> ops::Mul<&Point3<S>> for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -802,8 +798,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Perspective3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for &Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -814,8 +810,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -826,8 +822,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for Perspective3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -838,8 +834,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Vector3<S>> for Perspective3<S> 
-where 
+impl<S> ops::Mul<&Vector3<S>> for Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -850,8 +846,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for &Perspective3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for &Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -862,8 +858,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Perspective3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Perspective3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -878,27 +874,27 @@ where
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates based on the perspective field of view model.
 ///
-/// The `near` and `far` parameters are the absolute values of the positions 
-/// of the **near plane** and the **far** plane, respectively, along the 
+/// The `near` and `far` parameters are the absolute values of the positions
+/// of the **near plane** and the **far** plane, respectively, along the
 /// **negative z-axis**. In particular, the position of the **near plane** is
-/// `z == -near` and the position of the **far plane** is `z == -far`. The 
-/// parameter `aspect_ratio` is the ratio of the width of the viewport to the 
+/// `z == -near` and the position of the **far plane** is `z == -far`. The
+/// parameter `aspect_ratio` is the ratio of the width of the viewport to the
 /// height of the viewport.
-/// 
-/// This data type represents a homogeneous matrix representing a perspective 
-/// projection transformation with a right-handed coordinate system where the 
-/// perspective camera faces the **negative z-axis** with the **positive x-axis** 
-/// going to the right, and the **positive y-axis** going up. The perspective view 
-/// volume is the symmetric frustum contained in 
-/// `[-right, right] x [-top, top] x [-near, -far]`, where 
+///
+/// This data type represents a homogeneous matrix representing a perspective
+/// projection transformation with a right-handed coordinate system where the
+/// perspective camera faces the **negative z-axis** with the **positive x-axis**
+/// going to the right, and the **positive y-axis** going up. The perspective view
+/// volume is the symmetric frustum contained in
+/// `[-right, right] x [-top, top] x [-near, -far]`, where
 /// ```text
 /// tan(vfov / 2) == top / near
 /// right == aspect_ratio * top == aspect_ratio * n * tan(vfov / 2)
 /// top == near * tan(vfov / 2)
 /// ```
-/// The normalized device coordinates this transformation maps to are 
+/// The normalized device coordinates this transformation maps to are
 /// `[-1, 1] x [-1, 1] x [-1, 1]`.
-/// 
+///
 /// The underlying matrix is identical to the one used by OpenGL, provided here for
 /// reference
 /// ```text
@@ -918,37 +914,37 @@ pub struct PerspectiveFov3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> PerspectiveFov3<S> 
-where 
+impl<S> PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a new perspective projection transformation.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The parameters must satisfy
     /// ```text
     /// 0 < near < far (along the negative z-axis)
     /// ```
-    /// to construct a useful perspective projection. In particular, `near` and 
-    /// `far` are the respective absolute values of the placement of the near and 
+    /// to construct a useful perspective projection. In particular, `near` and
+    /// `far` are the respective absolute values of the placement of the near and
     /// far planes along the **z-axis**.
-    /// 
+    ///
     /// `vfov` is the angle of the field of view of the perspective projection.
-    /// 
+    ///
     /// `aspect` is the ratio of the width of the horizontal span of the viewport to
-    /// height of the vertical span of the viewport. 
-    /// 
-    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    /// height of the vertical span of the viewport.
+    ///
+    /// `near` is the distance along the **negative z-axis** of the near plane from the
     /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
-    /// 
-    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    ///
+    /// `far` the distance along the **negative z-axis** of the far plane from the
     /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
     ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -965,7 +961,7 @@ where
     /// let near = 0.1_f64;
     /// let far = 100_f64;
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
-    /// 
+    ///
     /// assert_relative_eq!(perspective.vfov(),         vfov.into(),  epsilon = 1e-10);
     /// assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio, epsilon = 1e-10);
     /// assert_relative_eq!(perspective.near(),         near,         epsilon = 1e-10);
@@ -983,9 +979,9 @@ where
     }
 
     /// Get the vertical field of view angle.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1004,7 +1000,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = vfov.into();
     /// let result = perspective.vfov();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1023,10 +1019,10 @@ where
         // m[2, 2] := -(far + near) / (far - near)
         // m[3, 2] := - 2 * far * near / (far - near)
         // ```
-        // We can reconstruct the vertical field of view component from the 
-        // `m[1, 1]` component follows. 
+        // We can reconstruct the vertical field of view component from the
+        // `m[1, 1]` component follows.
         // ```text
-        // m[1, 1] := 1 / tan(vfov / 2) 
+        // m[1, 1] := 1 / tan(vfov / 2)
         //     <==> tan(vfov / 2) == 1 / m[1, 1]
         //     <==> vfov / 2 == atan(1 / m[1, 1])
         //     <==> vfov = 2 * atan(1 / m[1, 1])
@@ -1039,12 +1035,12 @@ where
         Radians(vfov)
     }
 
-    /// Get the position of the near plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the near plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1063,7 +1059,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = near;
     /// let result = perspective.near();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1100,8 +1096,8 @@ where
         //       == (2 * far) / (2 * near)
         //       == far / near
         // ```
-        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive 
-        // `near` we now use the `m[3, 2]` component. Observe that 
+        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive
+        // `near` we now use the `m[3, 2]` component. Observe that
         // `far == ratio * near`. We then have
         // ```text
         // m[3, 2] := (-2 * far * near) / (far - near)
@@ -1123,10 +1119,10 @@ where
         ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
-    /// Get the position of the far plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the far plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1145,7 +1141,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = far;
     /// let result = perspective.far();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1182,8 +1178,8 @@ where
         //       == (2 * far) / (2 * near)
         //       == far / near
         // ```
-        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive 
-        // `far` we now use the `m[3, 2]` component. Observe that 
+        // hence the name `ratio`. This uses the `m[2, 2]` component. To derive
+        // `far` we now use the `m[3, 2]` component. Observe that
         // `near == far / ratio`. We then have
         // ```text
         // m[3, 2] := (-2 * far * near) / (far - near)
@@ -1206,12 +1202,12 @@ where
         ((one - ratio) / two) * self.matrix[3][2]
     }
 
-    /// Get the aspect ratio. The aspect ratio is the ratio of the 
-    /// width of the viewing plane of the view volume to the height of the 
+    /// Get the aspect ratio. The aspect ratio is the ratio of the
+    /// width of the viewing plane of the view volume to the height of the
     /// viewing plane of the view volume.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1227,7 +1223,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = aspect_ratio;
     /// let result = perspective.aspect_ratio();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -1257,12 +1253,12 @@ where
         self.matrix[1][1] / self.matrix[0][0]
     }
 
-    /// Get the position of the right plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the right plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1282,7 +1278,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.right();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1292,12 +1288,12 @@ where
         abs_near / self.matrix[0][0]
     }
 
-    /// Get the position of the left plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the left plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1317,7 +1313,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.left();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1325,12 +1321,12 @@ where
         -self.right()
     }
 
-    /// Get the position of the top plane of the viewing 
-    /// frustum described by the perspective projection of the plane 
+    /// Get the position of the top plane of the viewing
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1350,22 +1346,22 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.top();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn top(&self) -> S {
         let abs_near = self.near().abs();
-        
+
         abs_near / self.matrix[1][1]
     }
 
-    /// Get the position of the bottom plane of the viewing 
+    /// Get the position of the bottom plane of the viewing
     /// frustum descibed by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1385,7 +1381,7 @@ where
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.bottom();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1463,7 +1459,7 @@ where
     /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1472,7 +1468,7 @@ where
         Point3::new(
             (self.matrix.c0r0 * point.x) * inverse_w,
             (self.matrix.c1r1 * point.y) * inverse_w,
-            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w
+            (self.matrix.c2r2 * point.z + self.matrix.c3r2) * inverse_w,
         )
     }
 
@@ -1505,20 +1501,20 @@ where
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let projected_vector = self.matrix * vector.extend(S::one());
         let one_div_w = S::one() / projected_vector.w;
-        
+
         (projected_vector * one_div_w).contract()
     }
 
     /// Unproject a point from normalized device coordinates back to camera
-    /// view space. 
-    /// 
+    /// view space.
+    ///
     /// This is the inverse operation of `project_point`.
     ///
     /// # Example
@@ -1549,7 +1545,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let expected = point;
     /// let result = perspective.unproject_point(&projected_point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -1569,17 +1565,17 @@ where
         // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
         // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
         // ```
-        // 
+        //
         // This leads to optimizated unprojection equivalent to the original
         // calculation via matrix calclulation.
-        // We can save nine multiplications, nine additions, and one matrix 
+        // We can save nine multiplications, nine additions, and one matrix
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
         let near = self.near();
         let far = self.far();
-        let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
+        let tan_vfov_div_2 = Radians::tan(self.vfov() / two);
         let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
         let right = self.aspect_ratio() * top;
@@ -1587,11 +1583,11 @@ where
 
         let c0r0 = (right - left) / (two * near);
         let c1r1 = (top - bottom) / (two * near);
-        let c2r3 =  (near - far) / (two * far * near);
-        let c3r0 =  (left + right) / (two * near);
-        let c3r1 =  (bottom + top) / (two * near);
+        let c2r3 = (near - far) / (two * far * near);
+        let c3r0 = (left + right) / (two * near);
+        let c3r1 = (bottom + top) / (two * near);
         let c3r2 = -one;
-        let c3r3 =  (far + near) / (two * far * near);
+        let c3r3 = (far + near) / (two * far * near);
         let w = c2r3 * point.z + c3r3;
         let inverse_w = one / w;
 
@@ -1603,7 +1599,7 @@ where
     }
 
     /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. 
+    /// camera view space.
     ///
     /// This is the inverse operation of `project_vector`.
     ///
@@ -1634,7 +1630,7 @@ where
     /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
     /// let projected_vector = perspective.project_vector(&vector);
     /// let expected = vector;
-    /// let result = perspective.unproject_vector(&projected_vector); 
+    /// let result = perspective.unproject_vector(&projected_vector);
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
@@ -1655,17 +1651,17 @@ where
         // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
         // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
         // ```
-        // 
+        //
         // This leads to optimizated unprojection equivalent to the original
         // calculation via matrix calclulation.
-        // We can save nine multiplications, nine additions, and one matrix 
+        // We can save nine multiplications, nine additions, and one matrix
         // construction by only applying the nonzero elements
         // c0r0, c1r1, c2r3, c3r0, c3r1, c3r2, and c3r3 to the input vector.
         let one = S::one();
         let two = one + one;
         let near = self.near();
         let far = self.far();
-        let tan_vfov_div_2 = Radians::tan(self.vfov() / two); 
+        let tan_vfov_div_2 = Radians::tan(self.vfov() / two);
         let top = self.near() * tan_vfov_div_2;
         let bottom = -top;
         let right = self.aspect_ratio() * top;
@@ -1673,11 +1669,11 @@ where
 
         let c0r0 = (right - left) / (two * near);
         let c1r1 = (top - bottom) / (two * near);
-        let c2r3 =  (near - far) / (two * far * near);
-        let c3r0 =  (left + right) / (two * near);
-        let c3r1 =  (bottom + top) / (two * near);
+        let c2r3 = (near - far) / (two * far * near);
+        let c3r0 = (left + right) / (two * near);
+        let c3r1 = (bottom + top) / (two * near);
         let c3r2 = -one;
-        let c3r3 =  (far + near) / (two * far * near);
+        let c3r3 = (far + near) / (two * far * near);
         let w = c2r3 * vector.z + c3r3;
         let inverse_w = one / w;
 
@@ -1689,9 +1685,9 @@ where
     }
 
     /// Convert a perspective projection to a projective matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1733,9 +1729,9 @@ where
     }
 
     /// Convert a perspective projection to a generic transformation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
@@ -1785,8 +1781,8 @@ impl<S> AsRef<Matrix4x4<S>> for PerspectiveFov3<S> {
     }
 }
 
-impl<S> fmt::Display for PerspectiveFov3<S> 
-where 
+impl<S> fmt::Display for PerspectiveFov3<S>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -1804,8 +1800,8 @@ where
     }
 }
 
-impl<S> approx::AbsDiffEq for PerspectiveFov3<S> 
-where 
+impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1821,8 +1817,8 @@ where
     }
 }
 
-impl<S> approx::RelativeEq for PerspectiveFov3<S> 
-where 
+impl<S> approx::RelativeEq for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1836,8 +1832,8 @@ where
     }
 }
 
-impl<S> approx::UlpsEq for PerspectiveFov3<S> 
-where 
+impl<S> approx::UlpsEq for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1851,8 +1847,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -1863,8 +1859,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<&Point3<S>> for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -1875,8 +1871,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for &PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -1887,8 +1883,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -1899,8 +1895,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -1911,8 +1907,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Vector3<S>> for PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<&Vector3<S>> for PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -1923,8 +1919,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for &PerspectiveFov3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for &PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -1935,8 +1931,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b PerspectiveFov3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b PerspectiveFov3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -1948,23 +1944,23 @@ where
 }
 
 
-/// An orthographic projection with arbitrary `left`, `right`, 
+/// An orthographic projection with arbitrary `left`, `right`,
 /// `top`, `bottom`, `near`, and `far` planes.
 ///
-/// The `near` and `far` parameters are the absolute values of the positions 
-/// of the **near plane** and the **far** plane, respectively, along the 
+/// The `near` and `far` parameters are the absolute values of the positions
+/// of the **near plane** and the **far** plane, respectively, along the
 /// **negative z-axis**. In particular, the position of the **near plane** is
 /// `z == -near` and the position of the **far plane** is `z == -far`.
-/// 
-/// This data type represents a homogeneous matrix representing an orthographic 
-/// projection transformation with a right-handed coordinate system where the 
-/// orthographic camera faces the **negative z-axis** with the **positive x-axis** 
-/// going to the right, and the **positive y-axis** going up. The orthographic view 
-/// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The 
-/// normalized device coordinates this transformation maps to are 
+///
+/// This data type represents a homogeneous matrix representing an orthographic
+/// projection transformation with a right-handed coordinate system where the
+/// orthographic camera faces the **negative z-axis** with the **positive x-axis**
+/// going to the right, and the **positive y-axis** going up. The orthographic view
+/// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The
+/// normalized device coordinates this transformation maps to are
 /// `[-1, 1] x [-1, 1] x [-1, 1]`.
-/// 
-/// The underlying matrix is identical to the one used by OpenGL. We provide 
+///
+/// The underlying matrix is identical to the one used by OpenGL. We provide
 /// it here for reference
 /// ```text
 /// | m[0, 0]  0        0        m[3, 0] |
@@ -1985,41 +1981,41 @@ pub struct Orthographic3<S> {
     matrix: Matrix4x4<S>,
 }
 
-impl<S> Orthographic3<S> 
-where 
+impl<S> Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a new orthographic projection.
-    /// 
+    ///
     /// # Parameters
-    /// 
+    ///
     /// The parameters must satisfy
     /// ```text
     /// left < right
     /// bottom < top
     /// 0 < near < far
     /// ```
-    /// to construct a useful orthographic projection. In particular, `near` and 
-    /// `far` are the respective absolute values of the placement of the near and 
+    /// to construct a useful orthographic projection. In particular, `near` and
+    /// `far` are the respective absolute values of the placement of the near and
     /// far planes along the **z-axis**.
-    /// 
+    ///
     /// `left` is the horizontal position of the left plane in camera space.
     /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    /// 
+    ///
     /// `right` is the horizontal position of the right plane in camera space.
     /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    /// 
+    ///
     /// `bottom` is the vertical position of the bottom plane in camera space.
     /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    /// 
+    ///
     /// `top` is the vertical position of the top plane in camera space.
     /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    /// 
-    /// `near` is the distance along the **negative z-axis** of the near plane from the 
+    ///
+    /// `near` is the distance along the **negative z-axis** of the near plane from the
     /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
-    /// 
-    /// `far` the distance along the **negative z-axis** of the far plane from the 
+    ///
+    /// `far` the distance along the **negative z-axis** of the far plane from the
     /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
     /// the **negative z-axis**.
     ///
@@ -2033,7 +2029,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2058,8 +2054,8 @@ where
         }
     }
 
-    /// Get the position of the near plane of the viewing 
-    /// volume described by the orthographic projection of the plane 
+    /// Get the position of the near plane of the viewing
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
     /// # Example
@@ -2072,7 +2068,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2097,8 +2093,8 @@ where
         (-two / (ratio - one)) * (one / self.matrix[2][2])
     }
 
-    /// Get the position of the far plane of the viewing 
-    /// volume described by the orthographic projection of the plane 
+    /// Get the position of the far plane of the viewing
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
     /// # Example
@@ -2111,7 +2107,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2136,8 +2132,8 @@ where
         ((-two * ratio) / (ratio - one)) * (one / self.matrix[2][2])
     }
 
-    /// Get the position of the right plane of the viewing 
-    /// volume described by the orthographic projection of the plane 
+    /// Get the position of the right plane of the viewing
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
@@ -2150,7 +2146,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2175,8 +2171,8 @@ where
         ((two * ratio) / (ratio - one)) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the left plane of the viewing 
-    /// volume described by the orthographic projection of the plane 
+    /// Get the position of the left plane of the viewing
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
     /// # Example
@@ -2189,7 +2185,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2206,7 +2202,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
-    pub fn left(&self)-> S {
+    pub fn left(&self) -> S {
         let one = S::one();
         let two = one + one;
         let ratio = (-self.matrix[3][0] + one) / (-self.matrix[3][0] - one);
@@ -2214,8 +2210,8 @@ where
         (two / (ratio - one)) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the top plane of the viewing 
-    /// volume described by the orthographic projection of the plane 
+    /// Get the position of the top plane of the viewing
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example
@@ -2228,7 +2224,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2250,10 +2246,10 @@ where
         let two = one + one;
         let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);
 
-        ((two * ratio) / (ratio - one) ) * (one / self.matrix[1][1])
+        ((two * ratio) / (ratio - one)) * (one / self.matrix[1][1])
     }
 
-    /// Get the position of the bottom plane of the viewing 
+    /// Get the position of the bottom plane of the viewing
     /// volume descibed by the orthographic projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
@@ -2267,7 +2263,7 @@ where
     /// #     Orthographic3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2289,7 +2285,7 @@ where
         let two = one + one;
         let ratio = (-self.matrix[3][1] + one) / (-self.matrix[3][1] - one);
 
-        (two / (ratio - one) ) * (one / self.matrix[1][1])
+        (two / (ratio - one)) * (one / self.matrix[1][1])
     }
 
     /// Get the underlying matrix implementing the orthographic transformation.
@@ -2313,7 +2309,7 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let expected = Matrix4x4::new(
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
-    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
     ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
     /// );
@@ -2356,7 +2352,7 @@ where
         Point3::new(
             self.matrix.c0r0 * point.x + self.matrix.c3r0,
             self.matrix.c1r1 * point.y + self.matrix.c3r1,
-            self.matrix.c2r2 * point.z + self.matrix.c3r2
+            self.matrix.c2r2 * point.z + self.matrix.c3r2,
         )
     }
 
@@ -2390,12 +2386,12 @@ where
         Vector3::new(
             self.matrix.c0r0 * vector.x,
             self.matrix.c1r1 * vector.y,
-            self.matrix.c2r2 * vector.z
+            self.matrix.c2r2 * vector.z,
         )
     }
 
     /// Unproject a point from normalized devices coordinates back to camera
-    /// view space. 
+    /// view space.
     ///
     /// This is the inverse operation of `project_point`.
     ///
@@ -2427,22 +2423,18 @@ where
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         let one = S::one();
         let one_half = one / (one + one);
-        let c0r0 =  one_half * (self.right() - self.left());
-        let c1r1 =  one_half * (self.top() - self.bottom());
+        let c0r0 = one_half * (self.right() - self.left());
+        let c1r1 = one_half * (self.top() - self.bottom());
         let c2r2 = -one_half * (self.far() - self.near());
-        let c3r0 =  one_half * (self.left() + self.right());
-        let c3r1 =  one_half * (self.bottom() + self.top());
+        let c3r0 = one_half * (self.left() + self.right());
+        let c3r1 = one_half * (self.bottom() + self.top());
         let c3r2 = -one_half * (self.far() + self.near());
 
-        Point3::new(
-            c0r0 * point.x + c3r0,
-            c1r1 * point.y + c3r1,
-            c2r2 * point.z + c3r2
-        )
+        Point3::new(c0r0 * point.x + c3r0, c1r1 * point.y + c3r1, c2r2 * point.z + c3r2)
     }
 
     /// Unproject a vector from normalized device coordinates back to
-    /// camera view space. 
+    /// camera view space.
     ///
     /// This is the inverse operation of `project_vector`.
     ///
@@ -2474,17 +2466,17 @@ where
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         let one = S::one();
         let one_half = one / (one + one);
-        let c0r0 =  one_half * (self.right() - self.left());
-        let c1r1 =  one_half * (self.top() - self.bottom());
+        let c0r0 = one_half * (self.right() - self.left());
+        let c1r1 = one_half * (self.top() - self.bottom());
         let c2r2 = -one_half * (self.far() - self.near());
 
         Vector3::new(c0r0 * vector.x, c1r1 * vector.y, c2r2 * vector.z)
     }
 
     /// Convert an orthographic projection to a projective matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Orthographic3,
@@ -2505,7 +2497,7 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let expected = Matrix4x4::new(
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
-    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
     ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
     /// );
@@ -2519,9 +2511,9 @@ where
     }
 
     /// Convert a orthographic projection to a generic transformation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Orthographic3,
@@ -2543,7 +2535,7 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
-    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64, 
+    ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
     ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
     /// ));
@@ -2564,8 +2556,8 @@ impl<S> AsRef<Matrix4x4<S>> for Orthographic3<S> {
     }
 }
 
-impl<S> fmt::Display for Orthographic3<S> 
-where 
+impl<S> fmt::Display for Orthographic3<S>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -2583,8 +2575,8 @@ where
     }
 }
 
-impl<S> approx::AbsDiffEq for Orthographic3<S> 
-where 
+impl<S> approx::AbsDiffEq for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -2600,8 +2592,8 @@ where
     }
 }
 
-impl<S> approx::RelativeEq for Orthographic3<S> 
-where 
+impl<S> approx::RelativeEq for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -2615,8 +2607,8 @@ where
     }
 }
 
-impl<S> approx::UlpsEq for Orthographic3<S> 
-where 
+impl<S> approx::UlpsEq for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -2630,8 +2622,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for Orthographic3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -2642,8 +2634,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Point3<S>> for Orthographic3<S> 
-where 
+impl<S> ops::Mul<&Point3<S>> for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -2654,8 +2646,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Point3<S>> for &Orthographic3<S> 
-where 
+impl<S> ops::Mul<Point3<S>> for &Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -2666,8 +2658,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Point3<S>> for &'b Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Point3<S>;
@@ -2678,8 +2670,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for Orthographic3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -2690,8 +2682,8 @@ where
     }
 }
 
-impl<S> ops::Mul<&Vector3<S>> for Orthographic3<S> 
-where 
+impl<S> ops::Mul<&Vector3<S>> for Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -2702,8 +2694,8 @@ where
     }
 }
 
-impl<S> ops::Mul<Vector3<S>> for &Orthographic3<S> 
-where 
+impl<S> ops::Mul<Vector3<S>> for &Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -2714,8 +2706,8 @@ where
     }
 }
 
-impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Orthographic3<S> 
-where 
+impl<'a, 'b, S> ops::Mul<&'a Vector3<S>> for &'b Orthographic3<S>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector3<S>;
@@ -2725,4 +2717,3 @@ where
         self.project_vector(other)
     }
 }
-

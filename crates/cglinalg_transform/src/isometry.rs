@@ -1,36 +1,32 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
-use cglinalg_core::{
-    Const,
-    ShapeConstraint,
-    DimAdd,
-    DimMul,
-    DimLt,
-    Matrix,
-    Point,
-    Point3,
-    Vector,
-    Vector2,
-    Vector3,
-    Unit,
-};
 use crate::rotation::{
     Rotation,
     Rotation2,
     Rotation3,
 };
+use crate::transform::Transform;
 use crate::translation::{
     Translation,
     Translation2,
     Translation3,
 };
-use crate::transform::{
-    Transform,
+use cglinalg_core::{
+    Const,
+    DimAdd,
+    DimLt,
+    DimMul,
+    Matrix,
+    Point,
+    Point3,
+    ShapeConstraint,
+    Unit,
+    Vector,
+    Vector2,
+    Vector3,
+};
+use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
@@ -44,15 +40,15 @@ pub type Isometry2<S> = Isometry<S, 2>;
 pub type Isometry3<S> = Isometry<S, 3>;
 
 
-/// An isometry (i.e. rigid body transformation) is a transformation whose motion 
-/// does not distort the shape of an object. 
+/// An isometry (i.e. rigid body transformation) is a transformation whose motion
+/// does not distort the shape of an object.
 ///
-/// In terms of transformations, an isometry is a combination of 
+/// In terms of transformations, an isometry is a combination of
 /// a rotation and a translation. Rigid body transformations preserve the lengths
-/// of vectors, hence the name isometry. In terms of transforming points and 
+/// of vectors, hence the name isometry. In terms of transforming points and
 /// vectors, an isometry applies the rotation, followed by the translation.
-/// 
-/// This is the most general isometry type. The vast majority of applications 
+///
+/// This is the most general isometry type. The vast majority of applications
 /// should use [`Isometry2`] or [`Isometry3`] instead of this type directly.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -63,14 +59,14 @@ pub struct Isometry<S, const N: usize> {
     pub(crate) translation: Translation<S, N>,
 }
 
-impl<S, const N: usize> Isometry<S, N> 
-where 
+impl<S, const N: usize> Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     /// Construct a new isometry directly from a translation and a rotation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -91,16 +87,16 @@ where
     /// let isometry = Isometry2::from_parts(&translation, &rotation);
     /// let point = Point2::new(1_f64, 0_f64);
     /// let expected = Point2::new(
-    ///     1_f64 / f64::sqrt(2_f64) + 1_f64, 
+    ///     1_f64 / f64::sqrt(2_f64) + 1_f64,
     ///     1_f64 / f64::sqrt(2_f64) + 2_f64
     /// );
     /// let result = isometry.apply_point(&point);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -121,12 +117,12 @@ where
     /// let isometry = Isometry3::from_parts(&translation, &rotation);
     /// let point = Point3::new(1_f64, 0_f64, 3_f64);
     /// let expected = Point3::new(
-    ///     1_f64 / f64::sqrt(2_f64) + 1_f64, 
+    ///     1_f64 / f64::sqrt(2_f64) + 1_f64,
     ///     1_f64 / f64::sqrt(2_f64) + 2_f64,
     ///     3_f64
     /// );
     /// let result = isometry.apply_point(&point);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -138,13 +134,13 @@ where
     }
 
     /// Construct a new isometry from a translation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
-    /// #     Translation2, 
+    /// #     Translation2,
     /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
@@ -155,16 +151,16 @@ where
     /// let point = Point2::origin();
     /// let expected = Point2::new(1_f64, 2_f64);
     /// let result = isometry.apply_point(&point);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
-    /// #     Translation3, 
+    /// #     Translation3,
     /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -175,7 +171,7 @@ where
     /// let point = Point3::origin();
     /// let expected = Point3::new(1_f64, 2_f64, 3_f64);
     /// let result = isometry.apply_point(&point);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -184,9 +180,9 @@ where
     }
 
     /// Construct a new isometry from a rotation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -208,12 +204,12 @@ where
     /// let point = Point2::new(1_f64, 0_f64);
     /// let expected = Point2::new(0_f64, 1_f64);
     /// let result = rotation.apply_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -235,7 +231,7 @@ where
     /// let point = Point3::new(1_f64, 0_f64, 0_f64);
     /// let expected = Point3::new(0_f64, 1_f64, 0_f64);
     /// let result = rotation.apply_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -244,14 +240,14 @@ where
     }
 }
 
-impl<S, const N: usize> Isometry<S, N> 
-where 
+impl<S, const N: usize> Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     /// Get the rotation component of an isometry.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -269,12 +265,12 @@ where
     /// let isometry = Isometry2::from_parts(&translation, &rotation);
     /// let expected = &rotation;
     /// let result = isometry.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -292,7 +288,7 @@ where
     /// let isometry = Isometry3::from_parts(&translation, &rotation);
     /// let expected = &rotation;
     /// let result = isometry.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -301,9 +297,9 @@ where
     }
 
     /// Get the translation part of an isometry.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -321,12 +317,12 @@ where
     /// let isometry = Isometry2::from_parts(&translation, &rotation);
     /// let expected = &rotation;
     /// let result = isometry.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -344,7 +340,7 @@ where
     /// let isometry = Isometry3::from_parts(&translation, &rotation);
     /// let expected = &rotation;
     /// let result = isometry.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -368,7 +364,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -381,9 +377,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -397,7 +393,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -417,7 +413,7 @@ where
         let distance = self.translation.as_ref();
         let vector = rotation.apply_vector(&(-distance));
         let translation = Translation::from_vector(&vector);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
@@ -431,7 +427,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -449,9 +445,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -459,7 +455,7 @@ where
     /// # use cglinalg_core::{
     /// #     Point3,
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -490,7 +486,7 @@ where
     /// The isometry applies the rotation followed by the translation.
     ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -503,7 +499,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -516,9 +512,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -532,7 +528,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -543,7 +539,7 @@ where
     /// let point = Point3::new(f64::sqrt(2_f64), f64::sqrt(2_f64), f64::sqrt(2_f64));
     /// let expected = Point3::new(1_f64, 4_f64, f64::sqrt(2_f64) + 3_f64);
     /// let result = isometry.apply_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -570,7 +566,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -583,9 +579,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -598,7 +594,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -636,7 +632,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -650,9 +646,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -678,14 +674,14 @@ where
     /// let expected = point;
     /// let transformed_point = isometry.apply_point(&point);
     /// let result = isometry.inverse_apply_point(&transformed_point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         self.rotation.inverse_apply_point(&(point - self.translation.as_ref()))
     }
-    
+
     /// Transform a vector with the inverse of an isometry.
     ///
     /// The inverse isometry applies the inverse rotation to vectors.
@@ -703,7 +699,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -717,9 +713,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -732,7 +728,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -744,7 +740,7 @@ where
     /// let expected = vector;
     /// let transformed_vector = isometry.apply_vector(&vector);
     /// let result = isometry.inverse_apply_vector(&transformed_vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -768,15 +764,15 @@ where
     /// #     Isometry2,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let isometry = Isometry2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
-    /// 
+    ///
     /// assert_eq!(isometry * point, point);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -789,23 +785,23 @@ where
     /// #     Isometry3,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let isometry = Isometry3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
-    /// 
+    ///
     /// assert_eq!(isometry * point, point);
     /// ```
     #[inline]
     pub fn identity() -> Self {
         Self {
             rotation: Rotation::identity(),
-            translation: Translation::identity()
+            translation: Translation::identity(),
         }
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Isometry<S, N> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> Isometry<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -821,7 +817,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -842,9 +838,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -852,7 +848,7 @@ where
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -888,9 +884,9 @@ where
     }
 
     /// Convert an isometry into a generic transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -919,12 +915,12 @@ where
     ///      2_f64,                    3_f64,                    1_f64
     /// ));
     /// let result = isometry.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -954,32 +950,32 @@ where
     ///     2_f64,                    3_f64,                    4_f64, 1_f64
     /// ));
     /// let result = isometry.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
         let matrix = self.to_affine_matrix();
-        
+
         Transform::from_matrix_unchecked(matrix)
     }
 }
 
-impl<S, const N: usize> fmt::Display for Isometry<S, N> 
-where 
+impl<S, const N: usize> fmt::Display for Isometry<S, N>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(
-            formatter, 
-            "Isometry{} [rotation={}, translation={}]", 
+            formatter,
+            "Isometry{} [rotation={}, translation={}]",
             N, self.rotation, self.translation
         )
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<Isometry<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<Isometry<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -991,8 +987,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<&Isometry<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<&Isometry<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -1004,8 +1000,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::AbsDiffEq for Isometry<S, N> 
-where 
+impl<S, const N: usize> approx::AbsDiffEq for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1017,21 +1013,13 @@ where
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Rotation::abs_diff_eq(
-            &self.rotation, 
-            &other.rotation, 
-            epsilon
-        ) 
-        && Translation::abs_diff_eq(
-            &self.translation, 
-            &other.translation, 
-            epsilon
-        )
+        Rotation::abs_diff_eq(&self.rotation, &other.rotation, epsilon)
+            && Translation::abs_diff_eq(&self.translation, &other.translation, epsilon)
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Isometry<S, N> 
-where 
+impl<S, const N: usize> approx::RelativeEq for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1041,23 +1029,13 @@ where
 
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Rotation::relative_eq(
-            &self.rotation, 
-            &other.rotation, 
-            epsilon, 
-            max_relative
-        ) 
-        && Translation::relative_eq(
-            &self.translation, 
-            &other.translation, 
-            epsilon, 
-            max_relative
-        )
+        Rotation::relative_eq(&self.rotation, &other.rotation, epsilon, max_relative)
+            && Translation::relative_eq(&self.translation, &other.translation, epsilon, max_relative)
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Isometry<S, N> 
-where 
+impl<S, const N: usize> approx::UlpsEq for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1067,23 +1045,13 @@ where
 
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Rotation::ulps_eq(
-            &self.rotation, 
-            &other.rotation, 
-            epsilon, 
-            max_ulps
-        ) 
-        && Translation::ulps_eq(
-            &self.translation, 
-            &other.translation, 
-            epsilon, 
-            max_ulps
-        )
+        Rotation::ulps_eq(&self.rotation, &other.rotation, epsilon, max_ulps)
+            && Translation::ulps_eq(&self.translation, &other.translation, epsilon, max_ulps)
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1094,8 +1062,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Point<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1106,8 +1074,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for &Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1118,8 +1086,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Isometry<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1130,8 +1098,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1142,8 +1110,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1154,8 +1122,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Isometry<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1166,8 +1134,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Isometry<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Isometry<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1178,8 +1146,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1191,13 +1159,13 @@ where
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
-            &(self.rotation * other.rotation)
+            &(self.rotation * other.rotation),
         )
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Isometry<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Isometry<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1209,13 +1177,13 @@ where
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
-            &(self.rotation * other.rotation)
+            &(self.rotation * other.rotation),
         )
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Isometry<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Isometry<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1227,13 +1195,13 @@ where
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
-            &(self.rotation * other.rotation)
+            &(self.rotation * other.rotation),
         )
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Isometry<S, N> 
-where 
+impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Isometry<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1245,14 +1213,14 @@ where
 
         Isometry::from_parts(
             &Translation::from_vector(&(self.translation.vector + shift)),
-            &(self.rotation * other.rotation)
+            &(self.rotation * other.rotation),
         )
     }
 }
 
 
-impl<S> Isometry2<S> 
-where 
+impl<S> Isometry2<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a new isometry from a rotation angle and a displacement vector.
@@ -1265,7 +1233,7 @@ where
     /// #     Degrees,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -1302,13 +1270,13 @@ where
     /// #     Degrees,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Point2, 
+    /// #     Point2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let isometry = Isometry2::from_angle(Degrees(45_f64));
@@ -1325,11 +1293,11 @@ where
     {
         let translation = Translation2::identity();
         let rotation = Rotation2::from_angle(angle);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -1338,7 +1306,7 @@ where
     /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -1363,7 +1331,7 @@ where
         Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between vectors.
     ///
     /// # Example
@@ -1371,7 +1339,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry2,
@@ -1388,10 +1356,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Self {
-        if let (Some(unit_a), Some(unit_b)) = (
-            Unit::try_from_value(*a, S::zero()), 
-            Unit::try_from_value(*b, S::zero()))
-        {
+        if let (Some(unit_a), Some(unit_b)) = (Unit::try_from_value(*a, S::zero()), Unit::try_from_value(*b, S::zero())) {
             Self::rotation_between_axis(&unit_a, &unit_b)
         } else {
             Self::identity()
@@ -1399,11 +1364,11 @@ where
     }
 }
 
-impl<S> Isometry3<S> 
-where 
+impl<S> Isometry3<S>
+where
     S: SimdScalarFloat,
 {
-    /// Construct a new isometry from a rotation axis, rotation angle, and a 
+    /// Construct a new isometry from a rotation axis, rotation angle, and a
     /// displacement vector.
     ///
     /// # Example
@@ -1414,7 +1379,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -1453,7 +1418,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,
@@ -1476,11 +1441,11 @@ where
     {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_axis_angle(axis, angle);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **yz-plane** about 
+    /// Construct an isometry from a rotation angle in the **yz-plane** about
     /// the **x-axis**.
     ///
     /// # Example
@@ -1508,11 +1473,11 @@ where
     {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_x(angle);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **zx-plane** about 
+    /// Construct an isometry from a rotation angle in the **zx-plane** about
     /// the **y-axis**.
     ///
     /// # Example
@@ -1540,11 +1505,11 @@ where
     {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_y(angle);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an isometry from a rotation angle in the **xy-plane** about 
+    /// Construct an isometry from a rotation angle in the **xy-plane** about
     /// the **z-axis**.
     ///
     /// # Example
@@ -1572,11 +1537,11 @@ where
     {
         let translation = Translation3::identity();
         let rotation = Rotation3::from_angle_z(angle);
-        
+
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// The rotation uses the unit directional vectors of the input vectors.
@@ -1585,13 +1550,13 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -1604,10 +1569,10 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {        
+    pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
         if let (Some(unit_v1), Some(unit_v2)) = (
-            Unit::try_from_value(*v1, S::default_epsilon()), 
-            Unit::try_from_value(*v2, S::default_epsilon())
+            Unit::try_from_value(*v1, S::default_epsilon()),
+            Unit::try_from_value(*v2, S::default_epsilon()),
         ) {
             Self::rotation_between_axis(&unit_v1, &unit_v2)
         } else {
@@ -1615,7 +1580,7 @@ where
         }
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -1629,7 +1594,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -1642,20 +1607,20 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {    
+    pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
         Rotation3::rotation_between_axis(v1, v2).map(|rotation| {
             let translation = Translation3::identity();
             Self::from_parts(&translation, &rotation)
         })
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the position `eye` facing the direction 
-    /// `direction` into a coordinate system of an observer located at the 
-    /// origin facing the **positive z-axis**. The resulting coordinate 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the position `eye` facing the direction
+    /// `direction` into a coordinate system of an observer located at the
+    /// origin facing the **positive z-axis**. The resulting coordinate
     /// transformation is a **left-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the direction `direction` to the 
+    /// The resulting isometry maps the direction `direction` to the
     /// **positive z-axis** and locates position `eye` to the the origin.
     ///
     /// # Example
@@ -1683,13 +1648,13 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
-    ///     origin, 
+    ///     isometry.apply_point(&eye),
+    ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&direction).normalize(), 
-    ///     unit_z, 
+    ///     isometry.apply_vector(&direction).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1702,13 +1667,13 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the position `eye` facing the direction 
-    /// `direction` into a coordinate system of an observer located at the 
-    /// origin facing the **negative z-axis** The resulting coordinate 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the position `eye` facing the direction
+    /// `direction` into a coordinate system of an observer located at the
+    /// origin facing the **negative z-axis** The resulting coordinate
     /// transformation is a **right-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the direction `direction` to the 
+    /// The resulting isometry maps the direction `direction` to the
     /// **negative z-axis** and locates the position `eye` to the origin.
     ///
     /// # Example
@@ -1736,13 +1701,13 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
-    ///     origin, 
+    ///     isometry.apply_point(&eye),
+    ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&direction).normalize(), 
-    ///     minus_unit_z, 
+    ///     isometry.apply_vector(&direction).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1755,15 +1720,15 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an coordinate transformation that transforms the 
-    /// coordinate system of an observer located at the position `eye` facing 
-    /// the direction of the target `target` into the coordinate system of an 
+    /// Construct an coordinate transformation that transforms the
+    /// coordinate system of an observer located at the position `eye` facing
+    /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **positive z-axis**.
     ///
-    /// The isometry maps the direction along the ray between the eye position 
-    /// `eye` and position of the target `target` to the **positive z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system. 
-    /// This transformation is a **left-handed** coordinate transformation. 
+    /// The isometry maps the direction along the ray between the eye position
+    /// `eye` and position of the target `target` to the **positive z-axis** and
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a **left-handed** coordinate transformation.
     ///
     /// # Example
     ///
@@ -1779,7 +1744,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1789,13 +1754,13 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&direction).normalize(), 
-    ///     unit_z, 
+    ///     isometry.apply_vector(&direction).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
-    ///     origin, 
+    ///     isometry.apply_point(&eye),
+    ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1809,14 +1774,14 @@ where
     }
 
     /// Construct an coordinate transformation that transforms the
-    /// coordinate system of an observer located at the position `eye` facing 
-    /// the direction of the target `target` into the coordinate system of an 
+    /// coordinate system of an observer located at the position `eye` facing
+    /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction along the ray between the eye position 
-    /// `eye` and position of the target `target` to the **negative z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system. 
-    /// This transformation is a **right-handed** coordinate transformation. 
+    /// The function maps the direction along the ray between the eye position
+    /// `eye` and position of the target `target` to the **negative z-axis** and
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a **right-handed** coordinate transformation.
     ///
     /// # Example
     ///
@@ -1832,7 +1797,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1842,13 +1807,13 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&direction).normalize(), 
-    ///     minus_unit_z, 
+    ///     isometry.apply_vector(&direction).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
-    ///     origin, 
+    ///     isometry.apply_point(&eye),
+    ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1857,18 +1822,18 @@ where
         let rotation = Rotation3::look_at_rh(eye, target, up);
         let vector = rotation * (-eye) - Point3::origin();
         let translation = Translation3::from_vector(&vector);
-    
-        Self::from_parts(&translation, &rotation)  
+
+        Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **positive z-axis** to the direction 
-    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// The resulting isometry maps the **positive z-axis** to the direction
+    /// `direction` and locates the origin of the coordinate system to the `eye`
     /// position.
     ///
     /// # Example
@@ -1896,8 +1861,8 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&unit_z).normalize(), 
-    ///     direction.normalize(), 
+    ///     isometry.apply_vector(&unit_z).normalize(),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1910,14 +1875,14 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **negative z-axis** to the direction 
-    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// The resulting isometry maps the **negative z-axis** to the direction
+    /// `direction` and locates the origin of the coordinate system to the `eye`
     /// position.
     ///
     /// # Example
@@ -1944,8 +1909,8 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&minus_unit_z), 
-    ///     direction.normalize(), 
+    ///     isometry.apply_vector(&minus_unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1958,14 +1923,14 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **positive z-axis** to the direction 
-    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// The resulting isometry maps the **positive z-axis** to the direction
+    /// `direction` and locates the origin of the coordinate system to the `eye`
     /// position.
     ///
     /// # Example
@@ -1992,8 +1957,8 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&unit_z), 
-    ///     direction.normalize(), 
+    ///     isometry.apply_vector(&unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -2006,14 +1971,14 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
-    /// The resulting isometry maps the **negative z-axis** to the direction 
-    /// `direction` and locates the origin of the coordinate system to the `eye` 
+    /// The resulting isometry maps the **negative z-axis** to the direction
+    /// `direction` and locates the origin of the coordinate system to the `eye`
     /// position.
     ///
     /// # Example
@@ -2040,8 +2005,8 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&minus_unit_z), 
-    ///     direction.normalize(), 
+    ///     isometry.apply_vector(&minus_unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -2054,4 +2019,3 @@ where
         Self::from_parts(&translation, &rotation)
     }
 }
-

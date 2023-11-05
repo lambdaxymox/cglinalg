@@ -1,20 +1,18 @@
-use cglinalg_numeric::{
-    SimdScalar,
-    SimdScalarFloat,
-};
+use crate::transform::Transform;
 use cglinalg_core::{
     Const,
-    ShapeConstraint,
     DimAdd,
     DimSub,
     Matrix,
+    Point,
+    ShapeConstraint,
     Vector,
     Vector2,
     Vector3,
-    Point,
 };
-use crate::transform::{
-    Transform,
+use cglinalg_numeric::{
+    SimdScalar,
+    SimdScalarFloat,
 };
 
 use core::fmt;
@@ -30,16 +28,16 @@ pub type Scale3<S> = Scale<S, 3>;
 
 /// The scale transformation which supports nonuniform scaling.
 ///
-/// A scale transformation is a linear map that scales each component of a 
-/// vector by a specified amount. Let `s` be a vector of numbers. Let `S` be 
-/// a scale transformation that  scales a vector `v` by an amount `s[i]` on 
-/// component `i` of `v`. The scale transformation `S` acts on a vector `v` 
+/// A scale transformation is a linear map that scales each component of a
+/// vector by a specified amount. Let `s` be a vector of numbers. Let `S` be
+/// a scale transformation that  scales a vector `v` by an amount `s[i]` on
+/// component `i` of `v`. The scale transformation `S` acts on a vector `v`
 /// as follows
 /// ```text
 /// forall i in 0..N. (Sv)[i] := s[i] * v[i]
 /// ```
 /// where `N` is the dimensionality of the vector `v`. In particular, in
-/// Euclidean space, the scale transformation `S` acts as a diagonal matrix 
+/// Euclidean space, the scale transformation `S` acts as a diagonal matrix
 /// where
 /// ```text
 /// forall i in 0..N. S[i][i] := s[i]
@@ -50,14 +48,14 @@ pub struct Scale<S, const N: usize> {
     vector: Vector<S, N>,
 }
 
-impl<S, const N: usize> Scale<S, N> 
-where 
+impl<S, const N: usize> Scale<S, N>
+where
     S: SimdScalar,
 {
     /// Construct a scale transformation from a nonuniform scale across coordinates.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -71,12 +69,12 @@ where
     /// let vector = Vector2::new(1_f64, 1_f64);
     /// let expected = Vector2::new(5_f64, 7_f64);
     /// let result = scale.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -90,20 +88,18 @@ where
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
     /// let result = scale.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub const fn from_nonuniform_scale(vector: &Vector<S, N>) -> Self {
-        Self { 
-            vector: *vector, 
-        }
+        Self { vector: *vector }
     }
 
     /// Construct a scale transformation from a uniform scale factor.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -117,12 +113,12 @@ where
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(20_f64, 40_f64);
     /// let result = scale.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -136,7 +132,7 @@ where
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(20_f64, 40_f64, 60_f64);
     /// let result = scale.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -147,7 +143,7 @@ where
     }
 
     /// Apply a scale transformation to a vector.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -168,12 +164,12 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -187,7 +183,7 @@ where
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let result = scale.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -224,13 +220,13 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -244,7 +240,7 @@ where
     /// let point = Point3::new(1_f64, 1_f64, 1_f64);
     /// let expected = Point3::new(2_f64, 3_f64, 4_f64);
     /// let result = scale.apply_point(&point);
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -258,9 +254,9 @@ where
         result
     }
 
-    /// Construct the identity scaling transformation. 
+    /// Construct the identity scaling transformation.
     ///
-    /// The identity is the scale transform with a scale factor of `1` for 
+    /// The identity is the scale transform with a scale factor of `1` for
     /// each component.
     ///
     /// # Example (Two Dimensions)
@@ -275,12 +271,12 @@ where
     /// #
     /// let scale = Scale2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
-    /// 
+    ///
     /// assert_eq!(scale * point, point);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,  
@@ -291,7 +287,7 @@ where
     /// #
     /// let scale = Scale3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
-    /// 
+    ///
     /// assert_eq!(scale * point, point);
     /// ```
     #[inline]
@@ -301,9 +297,9 @@ where
 
     /// Convert a scaling transformation into a vector with the scaling factors
     /// in each component.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -315,12 +311,12 @@ where
     /// let expected = Vector2::new(5_f64, 7_f64);
     /// let scale = Scale2::from_nonuniform_scale(&expected);
     /// let result = scale.to_vector();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -332,7 +328,7 @@ where
     /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
     /// let scale = Scale3::from_nonuniform_scale(&expected);
     /// let result = scale.to_vector();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -341,12 +337,12 @@ where
     }
 
     /// Convert a scale transformation to a matrix.
-    /// 
+    ///
     /// The resulting matrix is not an affine. For an affine matrix,
     /// use [`Scale::to_affine_matrix`].
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -363,12 +359,12 @@ where
     ///     0_f64, 7_f64
     /// );
     /// let result = scale.to_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -386,7 +382,7 @@ where
     ///     0_f64, 0_f64, 11_f64
     /// );
     /// let result = scale.to_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -395,13 +391,13 @@ where
     }
 }
 
-impl<S, const N: usize> Scale<S, N> 
-where 
+impl<S, const N: usize> Scale<S, N>
+where
     S: SimdScalarFloat,
 {
-    /// Construct a scale transformation that scales each coordinate by the 
+    /// Construct a scale transformation that scales each coordinate by the
     /// reciprocal of the scaling factors of the scale operator `self`.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -409,7 +405,7 @@ where
     /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
-    /// #     Scale2, 
+    /// #     Scale2,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -417,22 +413,22 @@ where
     /// let scale_vector = Vector2::new(scale_x, scale_y);
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let expected = Scale2::from_nonuniform_scale(&Vector2::new(
-    ///     1_f64 / scale_x, 
+    ///     1_f64 / scale_x,
     ///     1_f64 / scale_y
     /// ));
     /// let result = scale.inverse();
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #      Vector3,
     /// # };
     /// # use cglinalg_transform::{
-    /// #     Scale3, 
+    /// #     Scale3,
     /// # };
     /// #
     /// let scale_x = 2_f64;
@@ -461,9 +457,9 @@ where
 
     /// Apply the inverse transformation of the scale transformation to a vector.
     ///
-    /// Construct a scale transformation that scales each coordinate by the 
+    /// Construct a scale transformation that scales each coordinate by the
     /// reciprocal of the scaling factors of the scale operator `self`.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -484,9 +480,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -519,9 +515,9 @@ where
 
     /// Apply the inverse transformation of the scale transformation to a point.
     ///
-    /// Construct a scale transformation that scales each coordinate by the 
+    /// Construct a scale transformation that scales each coordinate by the
     /// reciprocal of the scaling factors of the scale operator `self`.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -543,9 +539,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -586,9 +582,9 @@ where
     ShapeConstraint: DimSub<Const<NPLUS1>, Const<1>, Output = Const<N>>,
 {
     /// Convert a scale transformation to an affine matrix.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -606,12 +602,12 @@ where
     ///     0_f64, 0_f64, 1_f64
     /// );
     /// let result = scale.to_affine_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -630,7 +626,7 @@ where
     ///     0_f64, 0_f64, 0_f64, 1_f64
     /// );
     /// let result = scale.to_affine_matrix();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -639,9 +635,9 @@ where
     }
 
     /// Convert a scale transformation into a generic transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale2,
@@ -660,12 +656,12 @@ where
     ///     0_f64, 0_f64, 1_f64
     /// ));
     /// let result = scale.to_transform();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Scale3,
@@ -685,7 +681,7 @@ where
     ///     0_f64, 0_f64, 0_f64, 1_f64
     /// ));
     /// let result = scale.to_transform();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -694,8 +690,8 @@ where
     }
 }
 
-impl<S, const N: usize> fmt::Display for Scale<S, N> 
-where 
+impl<S, const N: usize> fmt::Display for Scale<S, N>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -703,8 +699,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<Scale<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<Scale<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -716,8 +712,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<&Scale<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<&Scale<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalar,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -729,8 +725,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::AbsDiffEq for Scale<S, N> 
-where 
+impl<S, const N: usize> approx::AbsDiffEq for Scale<S, N>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -746,8 +742,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Scale<S, N> 
-where 
+impl<S, const N: usize> approx::RelativeEq for Scale<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -761,8 +757,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Scale<S, N> 
-where 
+impl<S, const N: usize> approx::UlpsEq for Scale<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -776,8 +772,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Point<S, N>;
@@ -788,8 +784,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Point<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Point<S, N>;
@@ -800,8 +796,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for &Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Point<S, N>;
@@ -812,8 +808,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Scale<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Point<S, N>;
@@ -824,8 +820,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Vector<S, N>;
@@ -836,8 +832,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Vector<S, N>;
@@ -848,8 +844,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Vector<S, N>;
@@ -860,8 +856,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Scale<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Vector<S, N>;
@@ -872,8 +868,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Scale<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Scale<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Scale<S, N>;
@@ -881,13 +877,13 @@ where
     #[inline]
     fn mul(self, other: Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
-        
+
         Scale::from_nonuniform_scale(&vector)
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Scale<S, N>> for Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Scale<S, N>> for Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Scale<S, N>;
@@ -895,13 +891,13 @@ where
     #[inline]
     fn mul(self, other: &Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
-        
+
         Scale::from_nonuniform_scale(&vector)
     }
 }
 
-impl<S, const N: usize> ops::Mul<Scale<S, N>> for &Scale<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Scale<S, N>> for &Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Scale<S, N>;
@@ -909,13 +905,13 @@ where
     #[inline]
     fn mul(self, other: Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
-        
+
         Scale::from_nonuniform_scale(&vector)
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Scale<S, N>> for &'b Scale<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Scale<S, N>> for &'b Scale<S, N>
+where
     S: SimdScalar,
 {
     type Output = Scale<S, N>;
@@ -923,7 +919,7 @@ where
     #[inline]
     fn mul(self, other: &'a Scale<S, N>) -> Self::Output {
         let vector = self.vector.component_mul(&other.vector);
-        
+
         Scale::from_nonuniform_scale(&vector)
     }
 }
@@ -936,7 +932,7 @@ where
     /// Construct a scale transformation from the components of the scale transformation.
     #[inline]
     pub const fn new(scale_x: S, scale_y: S) -> Self {
-        Self { 
+        Self {
             vector: Vector2::new(scale_x, scale_y),
         }
     }
@@ -949,9 +945,8 @@ where
     /// Construct a scale transformation from the components of the scale transformation.
     #[inline]
     pub const fn new(scale_x: S, scale_y: S, scale_z: S) -> Self {
-        Self { 
+        Self {
             vector: Vector3::new(scale_x, scale_y, scale_z),
         }
     }
 }
-

@@ -1,20 +1,12 @@
-use cglinalg_numeric::{
-    SimdScalarFloat
-};
+use crate::isometry::Isometry;
+use crate::rotation::Rotation;
+use crate::translation::Translation;
 use cglinalg_core::{
-    DimMul,
     Const,
+    DimMul,
     ShapeConstraint,
 };
-use crate::isometry::{
-    Isometry,
-};
-use crate::rotation::{
-    Rotation,
-};
-use crate::translation::{
-    Translation,
-};
+use cglinalg_numeric::SimdScalarFloat;
 
 use core::ops;
 
@@ -138,7 +130,7 @@ where
     fn mul(self, other: Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
         let new_translation = Translation::from_vector(&new_vector);
-        
+
         Isometry::from_parts(&new_translation, &self.rotation)
     }
 }
@@ -154,7 +146,7 @@ where
     fn mul(self, other: &Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
         let new_translation = Translation::from_vector(&new_vector);
-        
+
         Isometry::from_parts(&new_translation, &self.rotation)
     }
 }
@@ -170,7 +162,7 @@ where
     fn mul(self, other: Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
         let new_translation = Translation::from_vector(&new_vector);
-        
+
         Isometry::from_parts(&new_translation, &self.rotation)
     }
 }
@@ -186,7 +178,7 @@ where
     fn mul(self, other: &'b Translation<S, N>) -> Self::Output {
         let new_vector = self.translation.vector + self.rotation.apply_vector(&other.vector);
         let new_translation = Translation::from_vector(&new_vector);
-        
+
         Isometry::from_parts(&new_translation, &self.rotation)
     }
 }
@@ -374,4 +366,3 @@ where
         Isometry::from_parts(&new_translation, &new_rotation)
     }
 }
-

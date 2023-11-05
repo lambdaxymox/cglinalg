@@ -1,37 +1,27 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Radians,
-};
-use cglinalg_core::{
-    Const,
-    ShapeConstraint,
-    DimAdd,
-    DimMul,
-    DimLt,
-    Matrix,
-    Point,
-    Point3,
-    Vector,
-    Vector3,
-    Unit,
-    Normed,
-};
-use crate::rotation::{
-    Rotation,
-};
-use crate::translation::{
-    Translation,
-};
-use crate::transform::{
-    Transform,
-};
 use crate::isometry::{
     Isometry,
     Isometry2,
     Isometry3,
 };
+use crate::rotation::Rotation;
+use crate::transform::Transform;
+use crate::translation::Translation;
+use cglinalg_core::{
+    Const,
+    DimAdd,
+    DimLt,
+    DimMul,
+    Matrix,
+    Normed,
+    Point,
+    Point3,
+    ShapeConstraint,
+    Unit,
+    Vector,
+    Vector3,
+};
+use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_trigonometry::Radians;
 
 use core::fmt;
 use core::ops;
@@ -56,15 +46,15 @@ pub struct Similarity<S, const N: usize> {
     scale: S,
 }
 
-impl<S, const N: usize> Similarity<S, N> 
-where 
+impl<S, const N: usize> Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     /// Construct a similarity transformation directly from the scale, rotation,
     /// and translation parts.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -94,12 +84,12 @@ where
     ///     scale * (-1_f64 / f64::sqrt(2_f64)) + 2_f64
     /// );
     /// let result = similarity.apply_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -130,13 +120,13 @@ where
     ///     scale * 3_f64 + 3_f64
     /// );
     /// let result = similarity.apply_point(&point);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
     pub const fn from_parts(translation: &Translation<S, N>, rotation: &Rotation<S, N>, scale: S) -> Self {
         let isometry = Isometry::from_parts(translation, rotation);
-        
+
         Self { isometry, scale }
     }
 
@@ -159,7 +149,7 @@ where
     /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
     /// let rotation = Rotation2::from_angle(angle);
     /// let similarity = Similarity2::from_rotation(&rotation);
@@ -169,26 +159,26 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let axis = Unit::from_value(Vector3::unit_z());
     /// let angle = Radians(f64::consts::FRAC_PI_4);
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
@@ -203,10 +193,7 @@ where
     pub fn from_rotation(rotation: &Rotation<S, N>) -> Self {
         let isometry = Isometry::from_rotation(rotation);
 
-        Self {
-            isometry,
-            scale: S::one(),
-        }
+        Self { isometry, scale: S::one() }
     }
 
     /// Construct a similarity transformation from a scale factor only.
@@ -229,13 +216,13 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
-    /// # }; 
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
@@ -276,19 +263,19 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// #     Translation3,
     /// # };
-    /// # 
+    /// #
     /// let distance = Vector3::new(5_f64, 5_f64, 5_f64);
     /// let translation = Translation3::from_vector(&distance);
     /// let similarity = Similarity3::from_translation(&translation);
@@ -300,10 +287,7 @@ where
     pub fn from_translation(translation: &Translation<S, N>) -> Self {
         let isometry = Isometry::from_translation(translation);
 
-        Self {
-            isometry,
-            scale: S::one(),
-        }
+        Self { isometry, scale: S::one() }
     }
 
     /// Construct a similarity transformation from an isometry.
@@ -323,7 +307,7 @@ where
     /// #     Isometry2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -337,9 +321,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -354,7 +338,7 @@ where
     /// #     Isometry3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -378,9 +362,9 @@ where
     }
 
     /// Get the uniform scale factor of the similarity transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -400,12 +384,12 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let expected = scale;
     /// let result = similarity.scale();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -425,7 +409,7 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let expected = scale;
     /// let result = similarity.scale();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -434,9 +418,9 @@ where
     }
 
     /// Get the rotation part of the similarity transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -456,12 +440,12 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let expected = &rotation;
     /// let result = similarity.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -481,7 +465,7 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let expected = &rotation;
     /// let result = similarity.rotation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -490,9 +474,9 @@ where
     }
 
     /// Get the translation part of the similarity transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -512,12 +496,12 @@ where
     /// let similarity = Similarity2::from_parts(&translation, &rotation, scale);
     /// let expected = &translation;
     /// let result = similarity.translation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -537,7 +521,7 @@ where
     /// let similarity = Similarity3::from_parts(&translation, &rotation, scale);
     /// let expected = &translation;
     /// let result = similarity.translation();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -551,7 +535,7 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point2, 
+    /// #     Point2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -562,12 +546,12 @@ where
     ///
     /// assert_eq!(similarity * point, point);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Point3, 
+    /// #     Point3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -587,8 +571,8 @@ where
     }
 }
 
-impl<S, const N: usize> Similarity<S, N> 
-where 
+impl<S, const N: usize> Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     /// Calculate the inverse of the similarity transformation.
@@ -626,9 +610,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -688,7 +672,7 @@ where
     /// #     Translation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let scale = 5_f64;
@@ -706,9 +690,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Degrees,
@@ -753,7 +737,7 @@ where
     /// Apply the inverse of a similarity transformation to a point.
     ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -768,7 +752,7 @@ where
     /// #     Translation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -787,7 +771,7 @@ where
     /// ```
     ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -795,7 +779,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -803,7 +787,7 @@ where
     /// #     Translation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -825,7 +809,7 @@ where
     pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         self.isometry.inverse_apply_point(point) / self.scale
     }
-    
+
     /// Apply the inverse of a similarity transformation to a vector.
     ///
     /// # Example (Two Dimensions)
@@ -836,7 +820,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -844,7 +828,7 @@ where
     /// #     Translation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -861,16 +845,16 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -922,7 +906,7 @@ where
     /// #     Translation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -938,9 +922,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -948,7 +932,7 @@ where
     /// # use cglinalg_core::{
     /// #     Vector3,
     /// #     Point3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -956,7 +940,7 @@ where
     /// #     Translation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -976,7 +960,7 @@ where
     #[inline]
     pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         let scaled_point = point * self.scale;
-        
+
         self.isometry.apply_point(&scaled_point)
     }
 
@@ -993,7 +977,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -1017,16 +1001,16 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -1054,14 +1038,13 @@ where
     #[inline]
     pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         let scaled_vector = vector * self.scale;
-        
+
         self.isometry.apply_vector(&scaled_vector)
     }
-
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Similarity<S, N> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -1103,9 +1086,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
@@ -1122,7 +1105,7 @@ where
     /// #     Translation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let scale = 2_f64;
@@ -1148,7 +1131,7 @@ where
         let scale = self.scale;
         let mut rotation = self.isometry.rotation().matrix().clone();
         rotation.scale_mut(scale);
-        
+
         let mut result = Matrix::from(rotation);
         for i in 0..N {
             result[N][i] = translation[i];
@@ -1158,9 +1141,9 @@ where
     }
 
     /// Convert a similarity transformation to a generic transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity2,
@@ -1192,12 +1175,12 @@ where
     ///     2_f64,                               3_f64,                              1_f64
     /// ));
     /// let result = similarity.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-14);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Similarity3,
@@ -1230,7 +1213,7 @@ where
     ///     2_f64,                               3_f64,                              4_f64,         1_f64
     /// ));
     /// let result = similarity.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-14);
     /// ```
     #[inline]
@@ -1241,8 +1224,8 @@ where
     }
 }
 
-impl<S, const N: usize> fmt::Display for Similarity<S, N> 
-where 
+impl<S, const N: usize> fmt::Display for Similarity<S, N>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -1254,8 +1237,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -1267,8 +1250,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<&Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<&Similarity<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -1280,8 +1263,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::AbsDiffEq for Similarity<S, N> 
-where 
+impl<S, const N: usize> approx::AbsDiffEq for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -1291,15 +1274,16 @@ where
         S::default_epsilon()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Isometry::abs_diff_eq(&self.isometry, &other.isometry, epsilon) 
+        Isometry::abs_diff_eq(&self.isometry, &other.isometry, epsilon)
             && S::abs_diff_eq(&self.scale, &other.scale, epsilon)
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Similarity<S, N> 
-where 
+impl<S, const N: usize> approx::RelativeEq for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1307,15 +1291,16 @@ where
         S::default_max_relative()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Isometry::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative) 
+        Isometry::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative)
             && S::relative_eq(&self.scale, &other.scale, epsilon, max_relative)
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Similarity<S, N> 
-where 
+impl<S, const N: usize> approx::UlpsEq for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1323,15 +1308,16 @@ where
         S::default_max_ulps()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Isometry::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps) 
+        Isometry::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps)
             && S::ulps_eq(&self.scale, &other.scale, epsilon, max_ulps)
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1342,8 +1328,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Point<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1354,8 +1340,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for &Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1366,8 +1352,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Similarity<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -1378,8 +1364,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1390,8 +1376,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1402,8 +1388,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Similarity<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1414,8 +1400,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Similarity<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Similarity<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -1426,8 +1412,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1443,8 +1429,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<&Isometry<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1460,10 +1446,10 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Isometry<S, N>> for &Similarity<S, N>
+where
     S: SimdScalarFloat,
-    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>
+    ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
     type Output = Similarity<S, N>;
 
@@ -1477,8 +1463,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Similarity<S, N> 
-where 
+impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Isometry<S, N>> for &'b Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1494,8 +1480,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1510,8 +1496,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<&Similarity<S, N>> for Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<&Similarity<S, N>> for Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1526,8 +1512,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for &Similarity<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Similarity<S, N>> for &Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1542,8 +1528,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Similarity<S, N>> for &'b Similarity<S, N> 
-where 
+impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Similarity<S, N>> for &'b Similarity<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1559,8 +1545,8 @@ where
 }
 
 
-impl<S> Similarity2<S> 
-where 
+impl<S> Similarity2<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a two-dimensional similarity transformation from a rotation
@@ -1579,7 +1565,7 @@ where
     /// #     Similarity2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -1598,13 +1584,13 @@ where
     {
         Self {
             isometry: Isometry2::from_angle(angle),
-            scale: S::one()
+            scale: S::one(),
         }
     }
 }
 
-impl<S> Similarity3<S> 
-where 
+impl<S> Similarity3<S>
+where
     S: SimdScalarFloat,
 {
     /// Construct a similarity transformation from the axis and angle
@@ -1618,13 +1604,13 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Vector3,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Similarity3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1634,7 +1620,7 @@ where
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Vector3::new(-1_f64 / f64::sqrt(2_f64), 3_f64 / f64::sqrt(2_f64), 3_f64);
     /// let result = similarity.apply_vector(&vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -1644,17 +1630,17 @@ where
     {
         Self {
             isometry: Isometry3::from_axis_angle(axis, angle),
-            scale: S::one()
+            scale: S::one(),
         }
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the position `eye` facing the direction 
-    /// `direction` into a coordinate system of an observer located at the 
-    /// origin facing the **positive z-axis**. The resulting coordinate 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the position `eye` facing the direction
+    /// `direction` into a coordinate system of an observer located at the
+    /// origin facing the **positive z-axis**. The resulting coordinate
     /// transformation is a **left-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the direction `direction` to the 
+    /// The similarity transformation maps the direction `direction` to the
     /// **positive z-axis** to the direction, and locates the position `eye` to
     /// the origin.
     ///
@@ -1683,12 +1669,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
+    ///     isometry.apply_point(&eye),
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&direction).normalize(), 
+    ///     isometry.apply_vector(&direction).normalize(),
     ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
@@ -1696,17 +1682,17 @@ where
     #[inline]
     pub fn look_to_lh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_to_lh(eye, direction, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the position `eye` facing the direction 
-    /// `direction` into a coordinate system of an observer located at the 
-    /// origin facing the **negative z-axis**. The resulting coordinate 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the position `eye` facing the direction
+    /// `direction` into a coordinate system of an observer located at the
+    /// origin facing the **negative z-axis**. The resulting coordinate
     /// transformation is a **right-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the direction `direction` to the 
+    /// The similarity transformation maps the direction `direction` to the
     /// **negative z-axis** to the direction, and locates the position `eye` to
     /// the origin.
     ///
@@ -1735,7 +1721,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_point(&eye), 
+    ///     isometry.apply_point(&eye),
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
@@ -1748,19 +1734,19 @@ where
     #[inline]
     pub fn look_to_rh(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_to_rh(eye, direction, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
     /// Construct an similarity transformation that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
-    /// the direction of the target `target` into the coordinate system of an 
+    /// a coordinate system of an observer located at the position `eye` facing
+    /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **positive z-axis**.
     ///
-    /// The similarity transformation maps the direction along the ray between 
-    /// the eye position `eye` and the position of the target `target` to 
-    /// the **positive z-axis** and locates the `eye` position at the origin 
-    /// in the new the coordinate system. This transformation is a 
+    /// The similarity transformation maps the direction along the ray between
+    /// the eye position `eye` and the position of the target `target` to
+    /// the **positive z-axis** and locates the `eye` position at the origin
+    /// in the new the coordinate system. This transformation is a
     /// **left-handed** coordinate transformation.
     ///
     /// # Example
@@ -1777,7 +1763,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1788,31 +1774,31 @@ where
     ///
     /// assert_relative_eq!(
     ///     similarity.apply_vector(&direction).normalize(),
-    ///     unit_z, 
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
-    ///     similarity.apply_point(&eye), 
+    ///     similarity.apply_point(&eye),
     ///     origin,
     ///     epsilon = 1e-10,
     /// );
     /// ```
     #[inline]
-    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {      
+    pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_at_lh(eye, target, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
     /// Construct an similarity transformation that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
-    /// the direction of the target `target` into the coordinate system of an 
+    /// a coordinate system of an observer located at the position `eye` facing
+    /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction along the ray between the eye position 
-    /// `eye` and position of the target `target` to the **negative z-axis** and 
-    /// locates the `eye` position to the origin in the new the coordinate system. 
-    /// This transformation is a **right-handed** coordinate transformation. 
+    /// The function maps the direction along the ray between the eye position
+    /// `eye` and position of the target `target` to the **negative z-axis** and
+    /// locates the `eye` position to the origin in the new the coordinate system.
+    /// This transformation is a **right-handed** coordinate transformation.
     ///
     /// # Example
     ///
@@ -1828,7 +1814,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let target = Point3::new(0_f64, 6_f64, 0_f64);
     /// let up: Vector3<f64> = Vector3::unit_x();
     /// let eye = Point3::new(1_f64, 2_f64, 3_f64);
@@ -1838,8 +1824,8 @@ where
     /// let origin = Point3::origin();
     ///
     /// assert_relative_eq!(
-    ///     similarity.apply_vector(&direction).normalize(), 
-    ///     minus_unit_z, 
+    ///     similarity.apply_vector(&direction).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// assert_relative_eq!(
@@ -1851,17 +1837,17 @@ where
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_at_rh(eye, target, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the direction `direction` to the 
+    /// The similarity transformation maps the direction `direction` to the
     /// **positive z-axis** to the direction, and locates the position `eye` to
     /// the origin.
     ///
@@ -1889,7 +1875,7 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&unit_z), 
+    ///     isometry.apply_vector(&unit_z),
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1897,18 +1883,18 @@ where
     #[inline]
     pub fn look_to_lh_inv(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_to_lh_inv(eye, direction, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the **negative z-axis** to the direction 
-    /// of `target - eye`, and locates the origin of the coordinate system to 
+    /// The similarity transformation maps the **negative z-axis** to the direction
+    /// of `target - eye`, and locates the origin of the coordinate system to
     /// the `eye` position.
     ///
     /// # Example
@@ -1935,7 +1921,7 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z),
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1943,17 +1929,17 @@ where
     #[inline]
     pub fn look_to_rh_inv(eye: &Point3<S>, direction: &Vector3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_to_rh_inv(eye, direction, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the direction `direction` to the 
+    /// The similarity transformation maps the direction `direction` to the
     /// **positive z-axis** to the direction, and locates the position `eye` to
     /// the origin.
     ///
@@ -1981,7 +1967,7 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&unit_z), 
+    ///     isometry.apply_vector(&unit_z),
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -1989,18 +1975,18 @@ where
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_at_lh_inv(eye, target, up);
-    
+
         Self::from_isometry(&isometry)
     }
 
-    /// Construct a similarity transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position `eye` facing the 
-    /// direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a similarity transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position `eye` facing the
+    /// direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
-    /// The similarity transformation maps the **negative z-axis** to the direction 
-    /// of `target - eye`, and locates the origin of the coordinate system to 
+    /// The similarity transformation maps the **negative z-axis** to the direction
+    /// of `target - eye`, and locates the origin of the coordinate system to
     /// the `eye` position.
     ///
     /// # Example
@@ -2027,7 +2013,7 @@ where
     /// let direction = target - eye;
     ///
     /// assert_relative_eq!(
-    ///     isometry.apply_vector(&minus_unit_z), 
+    ///     isometry.apply_vector(&minus_unit_z),
     ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
@@ -2035,8 +2021,7 @@ where
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
         let isometry = Isometry3::look_at_rh_inv(eye, target, up);
-    
+
         Self::from_isometry(&isometry)
     }
 }
-

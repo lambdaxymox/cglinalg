@@ -1,30 +1,26 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
-};
-use cglinalg_trigonometry::{
-    Angle,
-    Radians,
-};
+use crate::transform::Transform;
 use cglinalg_core::{
     Const,
-    ShapeConstraint,
     DimAdd,
-    DimMul,
     DimLt,
+    DimMul,
+    EulerAngles,
     Matrix,
     Matrix2x2,
     Matrix3x3,
     Point,
     Point3,
+    Quaternion,
+    ShapeConstraint,
+    Unit,
     Vector,
     Vector2,
     Vector3,
-    Quaternion,
-    Unit,
-    EulerAngles,
 };
-use crate::transform::{
-    Transform,
+use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_trigonometry::{
+    Angle,
+    Radians,
 };
 
 use core::fmt;
@@ -40,18 +36,18 @@ pub type Rotation3<S> = Rotation<S, 3>;
 
 /// A rotation matrix.
 ///
-/// This is the most general rotation type. The vast majority of applications 
+/// This is the most general rotation type. The vast majority of applications
 /// should use [`Rotation2`] or [`Rotation3`] instead of this type directly.
-/// 
-/// Two-dimensional rotations are different than three-dimensional rotations 
-/// because mathematically we cannot define an axis of rotation in two 
-/// dimensions. Instead we have to talk about rotating in the **xy-plane** by an 
-/// angle. In low-dimensional settings, the notion of rotation axis is 
-/// only well-defined in three dimensions because dimension three is the 
-/// only dimension where every plane is guaranteed to have a normal vector. 
-/// 
-/// If one wants to talk about rotating a vector in the the **xy-plane** about a 
-/// normal vector, we are implicitly rotating about the **z-axis** in 
+///
+/// Two-dimensional rotations are different than three-dimensional rotations
+/// because mathematically we cannot define an axis of rotation in two
+/// dimensions. Instead we have to talk about rotating in the **xy-plane** by an
+/// angle. In low-dimensional settings, the notion of rotation axis is
+/// only well-defined in three dimensions because dimension three is the
+/// only dimension where every plane is guaranteed to have a normal vector.
+///
+/// If one wants to talk about rotating a vector in the the **xy-plane** about a
+/// normal vector, we are implicitly rotating about the **z-axis** in
 /// three dimensions.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -59,14 +55,14 @@ pub struct Rotation<S, const N: usize> {
     matrix: Matrix<S, N, N>,
 }
 
-impl<S, const N: usize> Rotation<S, N> 
-where 
+impl<S, const N: usize> Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     /// Get a reference to the underlying matrix that represents the rotation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -90,12 +86,12 @@ where
     ///     -1_f64,  0_f64
     /// );
     /// let result = rotation.matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -120,7 +116,7 @@ where
     ///      0_f64,  0_f64,  1_f64
     /// );
     /// let result = rotation.matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -128,13 +124,13 @@ where
         &self.matrix
     }
 
-    /// Construct a rotation that rotates a vector in the opposite direction 
-    /// of `self`. 
+    /// Construct a rotation that rotates a vector in the opposite direction
+    /// of `self`.
     ///
-    /// Given a rotation operator that rotates a vector about a normal vector 
-    /// `axis` by an angle `theta`, construct a rotation that rotates a 
+    /// Given a rotation operator that rotates a vector about a normal vector
+    /// `axis` by an angle `theta`, construct a rotation that rotates a
     /// vector about the same axis by an angle `-theta`.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -154,9 +150,9 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -169,7 +165,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
     /// let axis = Unit::from_value(Vector3::unit_z());
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
@@ -210,10 +206,10 @@ where
     /// result.inverse_mut();
     ///
     /// assert_eq!(result, expected);
-    /// ``` 
-    /// 
+    /// ```
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -234,7 +230,7 @@ where
     /// result.inverse_mut();
     ///
     /// assert_eq!(result, expected);
-    /// ``` 
+    /// ```
     #[inline]
     pub fn inverse_mut(&mut self) {
         self.matrix.transpose_mut()
@@ -249,7 +245,7 @@ where
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -267,9 +263,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -282,7 +278,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -309,7 +305,7 @@ where
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Point2, 
+    /// #     Point2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -327,9 +323,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -343,7 +339,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -357,7 +353,7 @@ where
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
-    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> { 
+    pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
         let vector = point.to_vector();
         let result = self.matrix * vector;
 
@@ -373,7 +369,7 @@ where
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -396,9 +392,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -411,7 +407,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -428,7 +424,7 @@ where
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
         let inverse = self.inverse();
-        
+
         inverse.matrix * vector
     }
 
@@ -441,7 +437,7 @@ where
     /// #     Radians,
     /// # };
     /// # use cglinalg_core::{
-    /// #     Point2, 
+    /// #     Point2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -464,9 +460,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
@@ -480,7 +476,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -525,9 +521,9 @@ where
     /// assert_eq!(rotation * point, point);
     /// assert_eq!(rotation.inverse(), rotation);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Point3,
@@ -544,18 +540,18 @@ where
     /// ```
     #[inline]
     pub fn identity() -> Self {
-        Self { 
+        Self {
             matrix: Matrix::identity(),
         }
     }
 
     /// Convert a rotation transformation to a matrix.
-    /// 
+    ///
     /// The resulting matrix is not an affine. For an affine matrix,
     /// use [`Rotation::to_affine_matrix`].
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -578,12 +574,12 @@ where
     ///      0_f64, -1_f64
     /// );
     /// let result = rotation.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -607,7 +603,7 @@ where
     ///      0_f64,  0_f64, 1_f64
     /// );
     /// let result = rotation.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -616,17 +612,17 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> Rotation<S, N> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> Rotation<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimLt<Const<N>, Const<NPLUS1>>,
 {
     /// Convert a rotation to a generic affine matrix.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -651,12 +647,12 @@ where
     ///      0_f64,                     0_f64,                    1_f64
     /// );
     /// let result = rotation.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -685,7 +681,7 @@ where
     ///      0_f64,                     0_f64,                    0_f64, 1_f64
     /// );
     /// let result = rotation.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -694,9 +690,9 @@ where
     }
 
     /// Convert a rotation to a generic transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -722,12 +718,12 @@ where
     /// ));
     /// let expected = Transform2::from_matrix_unchecked(matrix);
     /// let result = rotation.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -757,7 +753,7 @@ where
     /// ));
     /// let expected = Transform3::from_matrix_unchecked(matrix);
     /// let result = rotation.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -766,8 +762,8 @@ where
     }
 }
 
-impl<S, const N: usize> fmt::Display for Rotation<S, N> 
-where 
+impl<S, const N: usize> fmt::Display for Rotation<S, N>
+where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -782,8 +778,8 @@ impl<S, const N: usize> AsRef<Matrix<S, N, N>> for Rotation<S, N> {
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<Rotation<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<Rotation<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -795,8 +791,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NPLUS1: usize> From<&Rotation<S, N>> for Matrix<S, NPLUS1, NPLUS1> 
-where 
+impl<S, const N: usize, const NPLUS1: usize> From<&Rotation<S, N>> for Matrix<S, NPLUS1, NPLUS1>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
     ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
@@ -808,8 +804,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N> 
-where 
+impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -825,8 +821,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::RelativeEq for Rotation<S, N> 
-where 
+impl<S, const N: usize> approx::RelativeEq for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -840,8 +836,8 @@ where
     }
 }
 
-impl<S, const N: usize> approx::UlpsEq for Rotation<S, N> 
-where 
+impl<S, const N: usize> approx::UlpsEq for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -855,8 +851,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -867,8 +863,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -879,8 +875,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -891,8 +887,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Rotation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -903,8 +899,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -915,8 +911,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<&Point<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<&Point<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -927,8 +923,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Point<S, N>> for &Rotation<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Point<S, N>> for &Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -939,8 +935,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Rotation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Rotation<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -951,8 +947,8 @@ where
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -961,13 +957,13 @@ where
     #[inline]
     fn mul(self, other: Rotation<S, N>) -> Self::Output {
         Rotation {
-            matrix: self.matrix() * other.matrix()
+            matrix: self.matrix() * other.matrix(),
         }
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<&Rotation<S, N>> for Rotation<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<&Rotation<S, N>> for Rotation<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -976,13 +972,13 @@ where
     #[inline]
     fn mul(self, other: &Rotation<S, N>) -> Self::Output {
         Rotation {
-            matrix: self.matrix() * other.matrix()
+            matrix: self.matrix() * other.matrix(),
         }
     }
 }
 
-impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for &Rotation<S, N> 
-where 
+impl<S, const N: usize, const NN: usize> ops::Mul<Rotation<S, N>> for &Rotation<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -991,13 +987,13 @@ where
     #[inline]
     fn mul(self, other: Rotation<S, N>) -> Self::Output {
         Rotation {
-            matrix: self.matrix() * other.matrix()
+            matrix: self.matrix() * other.matrix(),
         }
     }
 }
 
-impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Rotation<S, N>> for &'b Rotation<S, N> 
-where 
+impl<'a, 'b, S, const N: usize, const NN: usize> ops::Mul<&'a Rotation<S, N>> for &'b Rotation<S, N>
+where
     S: SimdScalarFloat,
     ShapeConstraint: DimMul<Const<N>, Const<N>, Output = Const<NN>>,
 {
@@ -1006,13 +1002,13 @@ where
     #[inline]
     fn mul(self, other: &'a Rotation<S, N>) -> Self::Output {
         Rotation {
-            matrix: self.matrix() * other.matrix()
+            matrix: self.matrix() * other.matrix(),
         }
     }
 }
 
-impl<S> Rotation2<S> 
-where 
+impl<S> Rotation2<S>
+where
     S: SimdScalarFloat,
 {
     /// Get the rotation angle of the rotation transformation.
@@ -1030,7 +1026,7 @@ where
     /// #     Rotation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -1060,7 +1056,7 @@ where
     /// #     Rotation2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -1082,7 +1078,7 @@ where
         }
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -1091,7 +1087,7 @@ where
     /// # use cglinalg_core::{
     /// #     Point2,
     /// #     Vector2,
-    /// #     Unit, 
+    /// #     Unit,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -1116,7 +1112,7 @@ where
         Self::from_angle(Radians::atan2(sin_angle, cos_angle))
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between vectors.
     ///
     /// # Example
@@ -1124,7 +1120,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2, 
+    /// #     Vector2,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation2,
@@ -1141,10 +1137,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between(a: &Vector2<S>, b: &Vector2<S>) -> Self {
-        if let (Some(unit_a), Some(unit_b)) = (
-            Unit::try_from_value(*a, S::zero()), 
-            Unit::try_from_value(*b, S::zero()))
-        {
+        if let (Some(unit_a), Some(unit_b)) = (Unit::try_from_value(*a, S::zero()), Unit::try_from_value(*b, S::zero())) {
             Self::rotation_between_axis(&unit_a, &unit_b)
         } else {
             Self::identity()
@@ -1152,8 +1145,8 @@ where
     }
 }
 
-impl<S> Rotation3<S> 
-where 
+impl<S> Rotation3<S>
+where
     S: SimdScalarFloat,
 {
     /// Get the rotation angle of the rotation transformation.
@@ -1171,7 +1164,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -1207,7 +1200,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(90_f64);
@@ -1232,7 +1225,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     relative_eq,
     /// # };
     /// #
     /// let angle = Degrees(0_f64);
@@ -1243,12 +1236,13 @@ where
     ///
     /// assert_eq!(result, expected);
     /// ```
+    #[rustfmt::skip]
     #[inline]
     pub fn axis(&self) -> Option<Unit<Vector3<S>>> {
         let axis = Vector3::new(
             self.matrix.c1r2 - self.matrix.c2r1,
             self.matrix.c2r0 - self.matrix.c0r2,
-            self.matrix.c0r1 - self.matrix.c1r0
+            self.matrix.c0r1 - self.matrix.c1r0,
         );
 
         Unit::try_from_value(axis, S::default_epsilon())
@@ -1257,7 +1251,7 @@ where
     /// Compute the axis and angle of the rotation.
     ///
     /// Returns `None` if the rotation angle is `0` or `pi`.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -1272,7 +1266,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     relative_eq, 
+    /// #     relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1306,7 +1300,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1315,7 +1309,7 @@ where
     /// let quaternion = Quaternion::from_axis_angle(&axis, angle);
     /// let expected = Rotation3::from_axis_angle(&axis, angle);
     /// let result = Rotation3::from_quaternion(&quaternion);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -1325,7 +1319,7 @@ where
         }
     }
 
-    /// Construct a new three-dimensional rotation about an axis `axis` by 
+    /// Construct a new three-dimensional rotation about an axis `axis` by
     /// an angle `angle`.
     ///
     /// # Example
@@ -1343,21 +1337,21 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
     /// let rotation = Rotation3::from_axis_angle(&axis, angle);
-    /// 
+    ///
     /// let expected_axis_angle = Some((axis, angle));
     /// assert_eq!(rotation.axis_angle(), expected_axis_angle);
-    /// 
+    ///
     /// // Rotate a vector ninety degrees.
     /// let unit_x = Vector3::unit_x();
     /// let expected = Vector3::unit_y();
     /// let result = rotation.apply_vector(&unit_x);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
     #[inline]
@@ -1370,7 +1364,7 @@ where
         }
     }
 
-    /// Construct a new three-dimensional rotation about the **x-axis** in the 
+    /// Construct a new three-dimensional rotation about the **x-axis** in the
     /// **yz-plane** by an angle `angle`.
     ///
     /// # Examples
@@ -1387,7 +1381,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
     /// let axis = Unit::from_value(Vector3::unit_x());
     /// let rotation = Rotation3::from_angle_x(angle);
@@ -1405,7 +1399,7 @@ where
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_x()), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the **y-axis** in the 
+    /// Construct a new three-dimensional rotation about the **y-axis** in the
     /// **zx-plane** by an angle `angle`.
     ///
     /// # Examples
@@ -1422,7 +1416,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
     /// let axis = Unit::from_value(Vector3::unit_y());
     /// let rotation = Rotation3::from_angle_y(angle);
@@ -1440,7 +1434,7 @@ where
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_y()), angle)
     }
 
-    /// Construct a new three-dimensional rotation about the **z-axis** in the 
+    /// Construct a new three-dimensional rotation about the **z-axis** in the
     /// **xy-plane** by an angle `angle`.
     ///
     /// # Examples
@@ -1457,7 +1451,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use core::f64;
-    /// # 
+    /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
     /// let axis = Unit::from_value(Vector3::unit_z());
     /// let rotation = Rotation3::from_angle_z(angle);
@@ -1475,10 +1469,10 @@ where
         Self::from_axis_angle(&Unit::from_value_unchecked(Vector3::unit_z()), angle)
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the direction `direction` 
-    /// into a coordinate system of an observer located at the origin facing 
-    /// the **positive z-axis**. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the direction `direction`
+    /// into a coordinate system of an observer located at the origin facing
+    /// the **positive z-axis**. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps `direction` to the **positive z-axis**.
@@ -1504,8 +1498,8 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&direction).normalize(), 
-    ///     unit_z, 
+    ///     rotation.apply_vector(&direction).normalize(),
+    ///     unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1516,10 +1510,10 @@ where
         }
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the direction `direction` 
-    /// into a coordinate system of an observer located at the origin facing 
-    /// the **negative z-axis**. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the direction `direction`
+    /// into a coordinate system of an observer located at the origin facing
+    /// the **negative z-axis**. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The resulting transformation maps `direction` to the **negative z-axis**.
@@ -1545,8 +1539,8 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&direction).normalize(), 
-    ///     minus_unit_z, 
+    ///     rotation.apply_vector(&direction).normalize(),
+    ///     minus_unit_z,
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1558,11 +1552,11 @@ where
     }
 
     /// Construct a coordinate transformation that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the direction `direction` into the coordinate system of an observer located
     /// at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `direction` to the **positive z-axis** and 
+    /// The function maps the direction `direction` to the **positive z-axis** and
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a **left-handed** coordinate transformation.
     ///
@@ -1580,7 +1574,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
     /// let target = Point3::origin();
     /// let up: Vector3<f64> = Vector3::unit_x();
@@ -1599,11 +1593,11 @@ where
     }
 
     /// Construct a coordinate transformation that transforms
-    /// a coordinate system of an observer located at the position `eye` facing 
+    /// a coordinate system of an observer located at the position `eye` facing
     /// the direction `direction` into the coordinate system of an observer located
     /// at the origin facing the **negative z-axis**.
     ///
-    /// The function maps the direction `direction` to the **negative z-axis** and 
+    /// The function maps the direction `direction` to the **negative z-axis** and
     /// locates the `eye` position to the origin in the new the coordinate system.
     /// This transformation is a **right-handed** coordinate transformation.
     ///
@@ -1621,7 +1615,7 @@ where
     /// # use approx::{
     /// #     assert_relative_eq,
     /// # };
-    /// # 
+    /// #
     /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
     /// let target = Point3::origin();
     /// let up: Vector3<f64> = Vector3::unit_x();
@@ -1639,10 +1633,10 @@ where
         }
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position origin facing 
-    /// the direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position origin facing
+    /// the direction `direction`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **positive z-axis** to `direction`.
@@ -1669,8 +1663,8 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&unit_z), 
-    ///     direction.normalize(), 
+    ///     rotation.apply_vector(&unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1681,10 +1675,10 @@ where
         }
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position origin facing 
-    /// the direction `direction`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position origin facing
+    /// the direction `direction`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **negative z-axis** to `direction`.
@@ -1711,8 +1705,8 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&minus_unit_z), 
-    ///     direction.normalize(), 
+    ///     rotation.apply_vector(&minus_unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1723,10 +1717,10 @@ where
         }
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **positive z-axis** into a 
-    /// coordinate system of an observer located at the position origin facing 
-    /// the direction `target - eye`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **positive z-axis** into a
+    /// coordinate system of an observer located at the position origin facing
+    /// the direction `target - eye`. The resulting coordinate transformation is a
     /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **positive z-axis** to `target - eye`.
@@ -1756,8 +1750,8 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&unit_z), 
-    ///     direction.normalize(), 
+    ///     rotation.apply_vector(&unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1768,10 +1762,10 @@ where
         }
     }
 
-    /// Construct a coordinate transformation that maps the coordinate system 
-    /// of an observer located at the origin facing the **negative z-axis** into a 
-    /// coordinate system of an observer located at the position origin facing 
-    /// the direction `target - eye`. The resulting coordinate transformation is a 
+    /// Construct a coordinate transformation that maps the coordinate system
+    /// of an observer located at the origin facing the **negative z-axis** into a
+    /// coordinate system of an observer located at the position origin facing
+    /// the direction `target - eye`. The resulting coordinate transformation is a
     /// **right-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **negative z-axis** to `target - eye`.
@@ -1801,8 +1795,8 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&minus_unit_z), 
-    ///     direction.normalize(), 
+    ///     rotation.apply_vector(&minus_unit_z),
+    ///     direction.normalize(),
     ///     epsilon = 1e-10,
     /// );
     /// ```
@@ -1813,7 +1807,7 @@ where
         }
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two vectors.
     ///
     /// The rotation uses the unit directional vectors of the input vectors.
@@ -1822,13 +1816,13 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3, 
+    /// #     Vector3,
     /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -1845,7 +1839,7 @@ where
         Quaternion::rotation_between(v1, v2).map(|q| q.into())
     }
 
-    /// Construct a rotation that rotates the shortest angular distance 
+    /// Construct a rotation that rotates the shortest angular distance
     /// between two unit vectors.
     ///
     /// # Example
@@ -1859,7 +1853,7 @@ where
     /// #     Rotation3,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
@@ -1877,9 +1871,9 @@ where
     }
 
     /// Construct a rotation matrix from a set of Euler angles.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -1900,17 +1894,17 @@ where
     ///     let roll = Radians(f64::consts::FRAC_PI_6);
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
-    /// 
+    ///
     ///     EulerAngles::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
     ///     let frac_1_2 = 1_f64 / 2_f64;
     ///     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
-    /// 
+    ///
     ///     Matrix3x3::new(
-    ///          frac_1_sqrt_2 * frac_1_2, 
-    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    ///          frac_1_sqrt_2 * frac_1_2,
+    ///          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2,
     ///          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
     ///         
     ///         -frac_1_sqrt_2 * frac_sqrt_3_2,
@@ -1924,18 +1918,19 @@ where
     /// };
     /// let rotation = Rotation3::from_euler_angles(&euler_angles);
     /// let result = rotation.to_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
+    #[rustfmt::skip]
     #[inline]
-    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self 
+    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self
     where
         A: Angle + Into<Radians<S>>,
     {
         let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
             euler_angles.x.into(),
             euler_angles.y.into(),
-            euler_angles.z.into()
+            euler_angles.z.into(),
         );
 
         Self {
@@ -1945,15 +1940,15 @@ where
 
     /// Extract Euler angles from a rotation matrix, in units of radians.
     ///
-    /// We explain the method because the formulas are not exactly obvious. 
+    /// We explain the method because the formulas are not exactly obvious.
     ///
     /// ## The Setup For Extracting Euler Angles
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
     /// of three axial rotations: one for each axis in three dimensions `(x, y, z)`.
-    /// The rotation matrix described by Euler angles can be decomposed into a 
-    /// product of rotation matrices about each axis: let `R_x(roll)`, 
-    /// `R_y(yaw)`, and `R_z(pitch)` denote the rotations about the 
+    /// The rotation matrix described by Euler angles can be decomposed into a
+    /// product of rotation matrices about each axis: let `R_x(roll)`,
+    /// `R_y(yaw)`, and `R_z(pitch)` denote the rotations about the
     /// **x-axis**, **y-axis**, and **z-axis**, respectively. The Euler rotation
     /// is decomposed as follows
     /// ```text
@@ -1964,7 +1959,7 @@ where
     ///               | 1   0            0         |
     /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
     ///               | 0   sin(rol)     cos(roll) |
-    /// 
+    ///
     ///               |  cos(yaw)   0   sin(yaw) |
     /// R_y(yaw)   := |  0          1   0        |
     ///               | -sin(yaw)   0   cos(yaw) |
@@ -1990,7 +1985,7 @@ where
     /// m[2, 2] :=  cos(yaw) * cos(roll)
     /// ```
     /// from which the angles can be extracted.
-    /// 
+    ///
     /// ## The Method For Extracting Euler Angles
     ///
     /// We can now extract Euler angles from the matrix. From the entry `m[2, 0]` we
@@ -2004,15 +1999,15 @@ where
     /// ```
     /// There are two situations to consider: when `cos(yaw) != 0` and when
     /// `cos(yaw) == 0`.
-    /// 
+    ///
     /// ### Cos(yaw) != 0
-    /// 
+    ///
     /// When `cos(yaw) != 0`, the entries `m[2, 1]` and `m[2, 2]` are positive multiples
     /// of `cos(yaw)`, so we can use them to compute the `roll` angle. If we negate
     /// the entry `m[2, 1]` and divide by the entry `m[2, 2]` we obtain
     /// ```text
     ///   -m[2, 1]        -(-cos(yaw) * sin(roll))        cos(yaw) * sin(roll)  
-    /// ------------ == ---------------------------- == ------------------------ 
+    /// ------------ == ---------------------------- == ------------------------
     ///    m[2, 2]          cos(yaw) * cos(roll)          cos(yaw) * cos(roll)   
     ///
     ///                   sin(roll)
@@ -2024,13 +2019,13 @@ where
     /// roll == atan2(-m[2, 1], m[2, 2])
     /// ```
     /// To derive the formula for the `pitch` angle, we make use of the entries `m[1, 0]`
-    /// and `m[0, 0]`. If we negate the entry `m[1, 0]` and divide by the entry 
+    /// and `m[0, 0]`. If we negate the entry `m[1, 0]` and divide by the entry
     /// `m[0, 0]`, we obtain
     /// ```text
     ///   -m[1, 0]        -(-cos(yaw) * sin(pitch))        cos(yaw) * sin(pitch)
     /// ------------ == ----------------------------- == -------------------------
     ///    m[0, 0]          cos(yaw) * cos(pitch)          cos(yaw) * cos(pitch)
-    /// 
+    ///
     ///                   sin(pitch)
     ///              == -------------- =: tan(pitch)
     ///                   cos(pitch)
@@ -2039,18 +2034,18 @@ where
     /// ```text
     /// pitch == atan2(-m[1, 0], m[0, 0])
     /// ```
-    /// 
+    ///
     /// ### Cos(yaw) == 0
-    /// 
-    /// When `cos(yaw) == 0`, the entries `m[2, 1]` and `m[2, 2]` cannot be used since 
+    ///
+    /// When `cos(yaw) == 0`, the entries `m[2, 1]` and `m[2, 2]` cannot be used since
     /// they are both zero. In this case, the `pitch` and `roll` angles are not unique:
-    /// multiple Euler rotations can produce the same axis and angle. By convention, we 
-    /// choose 
+    /// multiple Euler rotations can produce the same axis and angle. By convention, we
+    /// choose
     /// ```text
     /// pitch == 0
-    /// ``` 
-    /// and then we can make use of the remaining entries in the matrix to compute 
-    /// the `roll` angle. When `pitch == 0` and `cos(yaw) == 0`, the entries `m[1, 1]` 
+    /// ```
+    /// and then we can make use of the remaining entries in the matrix to compute
+    /// the `roll` angle. When `pitch == 0` and `cos(yaw) == 0`, the entries `m[1, 1]`
     /// and `m[1, 2]` take the form
     /// ```text
     /// m[1, 1] == cos(roll)
@@ -2067,13 +2062,13 @@ where
     /// roll = atan2(m[1, 2], m[1, 1])
     /// ```
     /// This gives us the Euler angles for the rotation matrix.
-    /// 
+    ///
     /// ### Note
-    /// The method here is just one method of extracting Euler angles. More than one 
+    /// The method here is just one method of extracting Euler angles. More than one
     /// set of Euler angles can generate the same axis and rotation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_transform::{
     /// #     Rotation3,
@@ -2081,7 +2076,7 @@ where
     /// # use cglinalg_core::{
     /// #     EulerAngles,
     /// #     Matrix3x3,
-    /// # }; 
+    /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// # };
@@ -2094,10 +2089,10 @@ where
     /// #     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
     /// #     let frac_1_2 = 1_f64 / 2_f64;
     /// #     let frac_sqrt_3_2 = f64::sqrt(3_f64) / 2_f64;
-    /// # 
+    /// #
     /// #     Matrix3x3::new(
-    /// #          frac_1_sqrt_2 * frac_1_2, 
-    /// #          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2, 
+    /// #          frac_1_sqrt_2 * frac_1_2,
+    /// #          frac_sqrt_3_2 * frac_sqrt_3_2 + frac_1_2 * frac_1_sqrt_2 * frac_1_2,
     /// #          frac_1_2 * frac_sqrt_3_2 - frac_sqrt_3_2 * frac_1_sqrt_2 * frac_1_2,
     /// #        
     /// #         -frac_1_sqrt_2 * frac_sqrt_3_2,
@@ -2109,7 +2104,7 @@ where
     /// #          frac_sqrt_3_2 * frac_1_sqrt_2,
     /// #     )
     /// # };
-    /// # 
+    /// #
     /// let expected = {
     ///     let roll = Radians(f64::consts::FRAC_PI_6);
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
@@ -2123,7 +2118,7 @@ where
     /// # assert_relative_eq!(rotation.to_matrix(), matrix, epsilon = 1e-10);
     /// #
     /// let result = rotation.euler_angles();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-10);
     /// ```
     #[inline]
@@ -2138,7 +2133,7 @@ where
         } else {
             let _pitch = Radians::atan2(-self.matrix[1][0], self.matrix[0][0]);
             let _roll = Radians::atan2(-self.matrix[2][1], self.matrix[2][2]);
-            
+
             (_pitch, _roll)
         };
 
@@ -2146,8 +2141,8 @@ where
     }
 }
 
-impl<S> From<Quaternion<S>> for Rotation3<S> 
-where 
+impl<S> From<Quaternion<S>> for Rotation3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -2156,8 +2151,8 @@ where
     }
 }
 
-impl<S> From<&Quaternion<S>> for Rotation3<S> 
-where 
+impl<S> From<&Quaternion<S>> for Rotation3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -2166,31 +2161,33 @@ where
     }
 }
 
-impl<S> From<Rotation3<S>> for Quaternion<S> 
-where 
+impl<S> From<Rotation3<S>> for Quaternion<S>
+where
     S: SimdScalarFloat,
 {
+    #[rustfmt::skip]
     #[inline]
     fn from(rotation: Rotation3<S>) -> Quaternion<S> {
         let matrix = Matrix3x3::new(
             rotation.matrix.c0r0, rotation.matrix.c0r1, rotation.matrix.c0r2,
             rotation.matrix.c1r0, rotation.matrix.c1r1, rotation.matrix.c1r2,
-            rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2
+            rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2,
         );
         Quaternion::from(&matrix)
     }
 }
 
-impl<S> From<&Rotation3<S>> for Quaternion<S> 
-where 
+impl<S> From<&Rotation3<S>> for Quaternion<S>
+where
     S: SimdScalarFloat,
 {
+    #[rustfmt::skip]
     #[inline]
     fn from(rotation: &Rotation3<S>) -> Quaternion<S> {
         let matrix = Matrix3x3::new(
             rotation.matrix.c0r0, rotation.matrix.c0r1, rotation.matrix.c0r2,
             rotation.matrix.c1r0, rotation.matrix.c1r1, rotation.matrix.c1r2,
-            rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2
+            rotation.matrix.c2r0, rotation.matrix.c2r1, rotation.matrix.c2r2,
         );
         Quaternion::from(&matrix)
     }
@@ -2217,4 +2214,3 @@ where
         Rotation3::from_euler_angles(euler_angles)
     }
 }
-

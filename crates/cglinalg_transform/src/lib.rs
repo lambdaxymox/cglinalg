@@ -22,4 +22,3 @@ pub use transform::*;
 pub use translation::*;
 
 pub use isometry_ops::*;
-

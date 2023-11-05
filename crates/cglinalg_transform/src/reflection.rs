@@ -1,18 +1,16 @@
-use cglinalg_numeric::{
-    SimdScalarFloat,
+use crate::transform::{
+    Transform,
+    Transform2,
+    Transform3,
 };
 use cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
-    Vector,
     Point,
     Unit,
+    Vector,
 };
-use crate::transform::{
-    Transform2,
-    Transform3,
-    Transform,
-};
+use cglinalg_numeric::SimdScalarFloat;
 
 use core::fmt;
 use core::ops;
@@ -26,12 +24,12 @@ pub type Reflection3<S> = Reflection<S, 3>;
 
 
 /// A reflection transformation about a mirror plane.
-/// 
-/// The normal vector `normal` is a vector perpendicular to the plane of 
-/// reflection, the plane in which points are reflected across. This means 
+///
+/// The normal vector `normal` is a vector perpendicular to the plane of
+/// reflection, the plane in which points are reflected across. This means
 /// that points are moved in a direction parallel to `normal`.
-/// 
-/// This is the most general reflection type. The vast majority of applications 
+///
+/// This is the most general reflection type. The vast majority of applications
 /// should use [`Reflection2`] or [`Reflection3`] instead of this type directly.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -40,15 +38,15 @@ pub struct Reflection<S, const N: usize> {
     bias: Point<S, N>,
 }
 
-impl<S, const N: usize> Reflection<S, N> 
-where 
+impl<S, const N: usize> Reflection<S, N>
+where
     S: SimdScalarFloat,
 {
-    /// Construct a new reflection transformation from the vector normal to the 
+    /// Construct a new reflection transformation from the vector normal to the
     /// plane of reflection.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
     /// # use cglinalg_transform::{
@@ -67,19 +65,19 @@ where
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let expected = Vector2::new(-1_f64, 2_f64);
     /// let result = reflection.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(result, expected);
-    /// 
+    ///
     /// // In two dimensions, we can just as well use the opposite normal.
     /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
     /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
     /// let opposite_result = opposite_reflection.apply_vector(&vector);
-    /// 
+    ///
     /// assert_eq!(opposite_result, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
     /// # use cglinalg_transform::{
@@ -100,7 +98,7 @@ where
     /// let vector = Vector3::new(-5_f64, 7_f64, -3_f64);
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
     /// let result = reflection.apply_vector(&vector);
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -113,11 +111,11 @@ where
 
     /// Return the bias for calculating the reflections.
     ///
-    /// The `bias` is the coordinates of a known point in the plane of 
+    /// The `bias` is the coordinates of a known point in the plane of
     /// reflection.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
     /// # use cglinalg_transform::{
@@ -133,12 +131,12 @@ where
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
     /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
-    /// 
+    ///
     /// assert_eq!(reflection.bias(), bias);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
     /// # use cglinalg_transform::{
@@ -153,7 +151,7 @@ where
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
     /// let bias = Point3::origin();
     /// let reflection = Reflection3::from_normal_bias(&normal, &bias);
-    /// 
+    ///
     /// assert_eq!(reflection.bias(), bias);
     /// ```
     #[inline]
@@ -162,13 +160,13 @@ where
     }
 
     /// Return the normal vector to the reflection plane.
-    /// 
+    ///
     /// There is an ambiguity in the choice of normal to a line in
     /// two dimensions. One can choose either a normal vector or its negation
     /// to construct the reflection and get the same reflection transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
-    /// 
+    ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
     /// # use cglinalg_transform::{
@@ -185,12 +183,12 @@ where
     /// let unit_normal: Unit<Vector2<f64>> = Unit::from_value(normal);
     /// let bias = Point2::origin();
     /// let reflection = Reflection2::from_normal_bias(&unit_normal, &bias);
-    /// 
+    ///
     /// assert_eq!(reflection.normal(), normal);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
     /// # use cglinalg_transform::{
@@ -208,7 +206,7 @@ where
     /// let reflection = Reflection3::from_normal_bias(&unit_normal, &bias);
     /// let expected = normal / normal.norm();
     /// let result = reflection.normal();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -217,26 +215,26 @@ where
     }
 }
 
-impl<S, const N: usize> Reflection<S, N> 
-where 
+impl<S, const N: usize> Reflection<S, N>
+where
     S: SimdScalarFloat,
 {
-    /// Reflect a vector across the plane described by the reflection 
+    /// Reflect a vector across the plane described by the reflection
     /// transformation.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    ///
+    /// The reflection of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
-    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
     /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
-    /// of reflection. 
-    /// 
-    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
-    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
-    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
-    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    /// of reflection.
+    ///
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M`
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts
     /// on `v_per` and `v_par` as follows
     /// ```text
     /// Ref(v_per) :=  v_per
@@ -281,7 +279,7 @@ where
     ///      |  0                    0                    0                    1                   |
     /// ```
     /// which correspond exactly the how the respective matrices are implemented.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -294,11 +292,11 @@ where
     /// #     Reflection2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
-    ///     -1_f64 / 2_f64, 
+    ///     -1_f64 / 2_f64,
     ///      1_f64
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
@@ -309,7 +307,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
     ///
     /// ```
@@ -340,22 +338,22 @@ where
         vector - self.normal * factor
     }
 
-    /// Reflect a point across the plane described by the reflection 
+    /// Reflect a point across the plane described by the reflection
     /// transformation.
-    /// 
+    ///
     /// # Discussion
-    /// 
-    /// The reflection of a point is defined as follows. Let `M` be the plane of 
+    ///
+    /// The reflection of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
-    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror 
+    /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
     /// plane `M`. To reflect points correctly, we need a known point `Q` in the plane
-    /// of reflection. 
-    /// 
-    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that 
-    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is 
-    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M` 
-    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts 
+    /// of reflection.
+    ///
+    /// For a vector `v`, we can choose vectors `v_per` and `v_par` such that
+    /// `v == v_per + v_par`, `v_per` is perpendicular to the `n` and `v_par` is
+    /// parallel to `n`. Stated different, `v_per` is parallel to the mirror plane `M`
+    /// and `v_par` is perpendicular to the mirror plane `M`. The reflection `Ref` acts
     /// on `v_per` and `v_par` as follows
     /// ```text
     /// Ref(v_per) :=  v_per
@@ -413,11 +411,11 @@ where
     /// #     Reflection2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
-    ///     -1_f64 / 2_f64, 
+    ///     -1_f64 / 2_f64,
     ///      1_f64
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
@@ -428,9 +426,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -459,9 +457,9 @@ where
         point - self.normal * factor
     }
 
-    /// Reflect a vector across the plane described by the reflection 
+    /// Reflect a vector across the plane described by the reflection
     /// transformation.
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -474,11 +472,11 @@ where
     /// #     Reflection2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
-    ///     -1_f64 / 2_f64, 
+    ///     -1_f64 / 2_f64,
     ///      1_f64
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
@@ -489,7 +487,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
     ///
     /// ```
@@ -516,7 +514,7 @@ where
         self.apply_vector(vector)
     }
 
-    /// Reflect a point across the plane described by the reflection 
+    /// Reflect a point across the plane described by the reflection
     /// transformation.
     ///
     /// # Example (Two Dimensions)
@@ -531,11 +529,11 @@ where
     /// #     Reflection2,
     /// # };
     /// # use approx::{
-    /// #     assert_relative_eq, 
+    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
-    ///     -1_f64 / 2_f64, 
+    ///     -1_f64 / 2_f64,
     ///      1_f64
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
@@ -546,9 +544,9 @@ where
     ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-8);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Vector3,
@@ -574,7 +572,7 @@ where
     }
 
     /// Compute the inverse of a reflection.
-    /// 
+    ///
     /// The inverse of a reflection transformation is the reflection transformation
     /// itself. That is, given a reflection `r`
     /// ```text
@@ -584,7 +582,7 @@ where
     /// ```text
     /// r * r == id
     /// ```
-    /// where `id` is the identity transformation. In other words, given a 
+    /// where `id` is the identity transformation. In other words, given a
     /// point `p`
     /// ```text
     /// r * (r * p) == (r * r) * p == p
@@ -593,7 +591,7 @@ where
     /// ```text
     /// r * (r * v) == (r * r) * v == v
     /// ```
-    /// 
+    ///
     /// # Example (Two Dimensions)
     ///
     /// ```
@@ -618,7 +616,7 @@ where
     /// assert_eq!(result1, expected);
     /// assert_eq!(result2, expected);
     /// ```
-    /// 
+    ///
     /// # Example (Three Dimensions)
     ///
     /// ```
@@ -627,7 +625,7 @@ where
     /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3, 
+    /// #     Vector3,
     /// #     Unit,
     /// # };
     /// #
@@ -659,7 +657,7 @@ where
 }
 
 impl<S, const N: usize> approx::AbsDiffEq for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
@@ -669,6 +667,7 @@ where
         S::default_epsilon()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
         Vector::abs_diff_eq(&self.normal, &other.normal, epsilon)
@@ -677,7 +676,7 @@ where
 }
 
 impl<S, const N: usize> approx::RelativeEq for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -685,15 +684,16 @@ where
         S::default_max_relative()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
         Vector::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
-           && Point::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
+            && Point::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
     }
 }
 
 impl<S, const N: usize> approx::UlpsEq for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -701,6 +701,7 @@ where
         S::default_max_ulps()
     }
 
+    #[rustfmt::skip]
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
@@ -709,7 +710,7 @@ where
 }
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -721,7 +722,7 @@ where
 }
 
 impl<S, const N: usize> ops::Mul<&Point<S, N>> for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -733,7 +734,7 @@ where
 }
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for &Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -745,7 +746,7 @@ where
 }
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Point<S, N>> for &'b Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Point<S, N>;
@@ -757,7 +758,7 @@ where
 }
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -769,8 +770,8 @@ where
 }
 
 impl<S, const N: usize> ops::Mul<&Vector<S, N>> for Reflection<S, N>
-where 
-    S: SimdScalarFloat
+where
+    S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
 
@@ -780,8 +781,8 @@ where
     }
 }
 
-impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N> 
-where 
+impl<S, const N: usize> ops::Mul<Vector<S, N>> for &Reflection<S, N>
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -793,7 +794,7 @@ where
 }
 
 impl<'a, 'b, S, const N: usize> ops::Mul<&'a Vector<S, N>> for &'b Reflection<S, N>
-where 
+where
     S: SimdScalarFloat,
 {
     type Output = Vector<S, N>;
@@ -805,14 +806,14 @@ where
 }
 
 
-impl<S> Reflection2<S> 
-where 
+impl<S> Reflection2<S>
+where
     S: SimdScalarFloat,
 {
     /// Convert a reflection to an affine matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// A reflection about the plane `y == 2 * x`.
     /// ```
     /// # use cglinalg_transform::{
@@ -837,7 +838,7 @@ where
     ///      0_f64,         0_f64,         1_f64
     /// );
     /// let result = reflection.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -848,9 +849,9 @@ where
     }
 
     /// Convert a reflection to a generic transformation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// A reflection about the plane `y == 2 * x`.
     /// ```
     /// # use cglinalg_transform::{
@@ -876,7 +877,7 @@ where
     ///      0_f64,         0_f64,         1_f64
     /// ));
     /// let result = reflection.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -885,8 +886,8 @@ where
     }
 }
 
-impl<S> From<Reflection2<S>> for Matrix3x3<S> 
-where 
+impl<S> From<Reflection2<S>> for Matrix3x3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -895,8 +896,8 @@ where
     }
 }
 
-impl<S> From<&Reflection2<S>> for Matrix3x3<S> 
-where 
+impl<S> From<&Reflection2<S>> for Matrix3x3<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -906,14 +907,14 @@ where
 }
 
 
-impl<S> Reflection3<S> 
-where 
+impl<S> Reflection3<S>
+where
     S: SimdScalarFloat,
 {
     /// Convert a reflection to an affine matrix.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
     /// # use cglinalg_transform::{
@@ -939,7 +940,7 @@ where
     ///      0_f64,          0_f64,          0_f64,         1_f64
     /// );
     /// let result = reflection.to_affine_matrix();
-    /// 
+    ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -950,9 +951,9 @@ where
     }
 
     /// Convert a reflection to a generic transformation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
     /// # use cglinalg_transform::{
@@ -979,7 +980,7 @@ where
     ///      0_f64,          0_f64,          0_f64,         1_f64
     /// ));
     /// let result = reflection.to_transform();
-    /// 
+    ///
     /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
     /// ```
     #[inline]
@@ -988,8 +989,8 @@ where
     }
 }
 
-impl<S> From<Reflection3<S>> for Matrix4x4<S> 
-where 
+impl<S> From<Reflection3<S>> for Matrix4x4<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -998,8 +999,8 @@ where
     }
 }
 
-impl<S> From<&Reflection3<S>> for Matrix4x4<S> 
-where 
+impl<S> From<&Reflection3<S>> for Matrix4x4<S>
+where
     S: SimdScalarFloat,
 {
     #[inline]
@@ -1007,4 +1008,3 @@ where
         transformation.to_affine_matrix()
     }
 }
-
