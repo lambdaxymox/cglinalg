@@ -111,9 +111,33 @@ bench_binop!(
     gen_quaternion,
     mul
 );
-bench_binop!(scalar_mul_quaternion_f32, f32, f32, Quaternion<f32>, gen_scalar, gen_quaternion, mul);
-bench_binop!(quaternion_mul_scalar_f32, f32, Quaternion<f32>, f32, gen_quaternion, gen_scalar, mul);
-bench_binop!(quaternion_div_scalar_f32, f32, Quaternion<f32>, f32, gen_quaternion, gen_scalar, div);
+bench_binop!(
+    scalar_mul_quaternion_f32,
+    f32,
+    f32,
+    Quaternion<f32>,
+    gen_scalar,
+    gen_quaternion,
+    mul
+);
+bench_binop!(
+    quaternion_mul_scalar_f32,
+    f32,
+    Quaternion<f32>,
+    f32,
+    gen_quaternion,
+    gen_scalar,
+    mul
+);
+bench_binop!(
+    quaternion_div_scalar_f32,
+    f32,
+    Quaternion<f32>,
+    f32,
+    gen_quaternion,
+    gen_scalar,
+    div
+);
 
 bench_binop_ref!(
     quaternion_dot_quaternion_f32,

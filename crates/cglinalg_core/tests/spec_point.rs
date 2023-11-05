@@ -454,7 +454,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_approx_norm_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_norm_point_separating<S, const N: usize>(
+    p1: Point<S, N>,
+    p2: Point<S, N>,
+    input_tolerance: S,
+    output_tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -597,9 +602,30 @@ macro_rules! exact_arithmetic_props {
     };
 }
 
-exact_arithmetic_props!(point1_i64_arithmetic_props, Point1, Vector1, i64, strategy_point_any, strategy_vector_any);
-exact_arithmetic_props!(point2_i64_arithmetic_props, Point2, Vector2, i64, strategy_point_any, strategy_vector_any);
-exact_arithmetic_props!(point3_i64_arithmetic_props, Point3, Vector3, i64, strategy_point_any, strategy_vector_any);
+exact_arithmetic_props!(
+    point1_i64_arithmetic_props,
+    Point1,
+    Vector1,
+    i64,
+    strategy_point_any,
+    strategy_vector_any
+);
+exact_arithmetic_props!(
+    point2_i64_arithmetic_props,
+    Point2,
+    Vector2,
+    i64,
+    strategy_point_any,
+    strategy_vector_any
+);
+exact_arithmetic_props!(
+    point3_i64_arithmetic_props,
+    Point3,
+    Vector3,
+    i64,
+    strategy_point_any,
+    strategy_vector_any
+);
 
 
 macro_rules! approx_arithmetic_props {
@@ -652,9 +678,33 @@ macro_rules! approx_arithmetic_props {
     };
 }
 
-approx_arithmetic_props!(point1_f64_arithmetic_props, Point1, Vector1, f64, strategy_point_any, strategy_vector_any, 1e-7);
-approx_arithmetic_props!(point2_f64_arithmetic_props, Point2, Vector2, f64, strategy_point_any, strategy_vector_any, 1e-7);
-approx_arithmetic_props!(point3_f64_arithmetic_props, Point3, Vector3, f64, strategy_point_any, strategy_vector_any, 1e-7);
+approx_arithmetic_props!(
+    point1_f64_arithmetic_props,
+    Point1,
+    Vector1,
+    f64,
+    strategy_point_any,
+    strategy_vector_any,
+    1e-7
+);
+approx_arithmetic_props!(
+    point2_f64_arithmetic_props,
+    Point2,
+    Vector2,
+    f64,
+    strategy_point_any,
+    strategy_vector_any,
+    1e-7
+);
+approx_arithmetic_props!(
+    point3_f64_arithmetic_props,
+    Point3,
+    Vector3,
+    f64,
+    strategy_point_any,
+    strategy_vector_any,
+    1e-7
+);
 
 
 macro_rules! exact_norm_squared_props {

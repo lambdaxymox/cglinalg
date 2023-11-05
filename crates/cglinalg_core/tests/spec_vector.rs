@@ -485,7 +485,11 @@ where
 /// ```text
 /// dot(v1, v2 + v3) == dot(v1, v2) + dot(v1, v3)
 /// ```
-fn prop_vector_dot_product_right_distributive<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError>
+fn prop_vector_dot_product_right_distributive<S, const N: usize>(
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    v3: Vector<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -503,7 +507,11 @@ where
 /// ```text
 /// dot(v1 + v2, v3) == dot(v1, v3) + dot(v2, v3)
 /// ```
-fn prop_vector_dot_product_left_distributive<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError>
+fn prop_vector_dot_product_left_distributive<S, const N: usize>(
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    v3: Vector<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -521,7 +529,12 @@ where
 /// ```text
 /// dot(v1 * a, v2 * b) == dot(v1, v2) * (a * b)
 /// ```
-fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
+fn prop_vector_dot_product_times_scalars_commutative<S, const N: usize>(
+    a: S,
+    b: S,
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -539,7 +552,13 @@ where
 /// ```text
 /// dot(v1, v2 * a + v3 * b) == dot(v1, v2) * a + dot(v2, v3) * b
 /// ```
-fn prop_vector_dot_product_right_bilinear<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError>
+fn prop_vector_dot_product_right_bilinear<S, const N: usize>(
+    a: S,
+    b: S,
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    v3: Vector<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -557,7 +576,13 @@ where
 /// ```text
 /// dot(v1 * a + v2 * b, v3) == dot(v1, v3) * a + dot(v2, v3) * b
 /// ```
-fn prop_vector_dot_product_left_bilinear<S, const N: usize>(a: S, b: S, v1: Vector<S, N>, v2: Vector<S, N>, v3: Vector<S, N>) -> Result<(), TestCaseError>
+fn prop_vector_dot_product_left_bilinear<S, const N: usize>(
+    a: S,
+    b: S,
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    v3: Vector<S, N>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -947,7 +972,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the norm
 /// function.
-fn prop_approx_lp_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_lp_norm_point_separating<S, const N: usize>(
+    v1: Vector<S, N>,
+    v2: Vector<S, N>,
+    p: u32,
+    tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1388,10 +1418,34 @@ macro_rules! exact_distributive_props {
     };
 }
 
-exact_distributive_props!(vector1_i32_distributive_props, Vector1, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_distributive_props!(vector2_i32_distributive_props, Vector2, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_distributive_props!(vector3_i32_distributive_props, Vector3, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_distributive_props!(vector4_i32_distributive_props, Vector4, i32, strategy_vector_any, strategy_scalar_i32_any);
+exact_distributive_props!(
+    vector1_i32_distributive_props,
+    Vector1,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_distributive_props!(
+    vector2_i32_distributive_props,
+    Vector2,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_distributive_props!(
+    vector3_i32_distributive_props,
+    Vector3,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_distributive_props!(
+    vector4_i32_distributive_props,
+    Vector4,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! exact_dot_product_props {
@@ -1456,10 +1510,34 @@ macro_rules! exact_dot_product_props {
     }
 }
 
-exact_dot_product_props!(vector1_i32_dot_product_props, Vector1, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_dot_product_props!(vector2_i32_dot_product_props, Vector2, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_dot_product_props!(vector3_i32_dot_product_props, Vector3, i32, strategy_vector_any, strategy_scalar_i32_any);
-exact_dot_product_props!(vector4_i32_dot_product_props, Vector4, i32, strategy_vector_any, strategy_scalar_i32_any);
+exact_dot_product_props!(
+    vector1_i32_dot_product_props,
+    Vector1,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_dot_product_props!(
+    vector2_i32_dot_product_props,
+    Vector2,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_dot_product_props!(
+    vector3_i32_dot_product_props,
+    Vector3,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
+exact_dot_product_props!(
+    vector4_i32_dot_product_props,
+    Vector4,
+    i32,
+    strategy_vector_any,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! exact_cross_product_props {
@@ -1625,10 +1703,38 @@ macro_rules! approx_norm_squared_props {
     };
 }
 
-approx_norm_squared_props!(vector1_f64_norm_squared_props, Vector1, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector2_f64_norm_squared_props, Vector2, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector3_f64_norm_squared_props, Vector3, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
-approx_norm_squared_props!(vector4_f64_norm_squared_props, Vector4, f64, strategy_vector_f64_norm_squared, 1e-10, 1e-20);
+approx_norm_squared_props!(
+    vector1_f64_norm_squared_props,
+    Vector1,
+    f64,
+    strategy_vector_f64_norm_squared,
+    1e-10,
+    1e-20
+);
+approx_norm_squared_props!(
+    vector2_f64_norm_squared_props,
+    Vector2,
+    f64,
+    strategy_vector_f64_norm_squared,
+    1e-10,
+    1e-20
+);
+approx_norm_squared_props!(
+    vector3_f64_norm_squared_props,
+    Vector3,
+    f64,
+    strategy_vector_f64_norm_squared,
+    1e-10,
+    1e-20
+);
+approx_norm_squared_props!(
+    vector4_f64_norm_squared_props,
+    Vector4,
+    f64,
+    strategy_vector_f64_norm_squared,
+    1e-10,
+    1e-20
+);
 
 
 macro_rules! approx_norm_squared_synonym_props {
@@ -1676,10 +1782,38 @@ macro_rules! approx_norm_props {
     };
 }
 
-approx_norm_props!(vector1_f64_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_norm_props!(vector2_f64_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_norm_props!(vector3_f64_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_norm_props!(vector4_f64_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_norm_props!(
+    vector1_f64_norm_props,
+    Vector1,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_norm_props!(
+    vector2_f64_norm_props,
+    Vector2,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_norm_props!(
+    vector3_f64_norm_props,
+    Vector3,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_norm_props!(
+    vector4_f64_norm_props,
+    Vector4,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
 
 
 macro_rules! exact_l1_norm_props {
@@ -1772,10 +1906,38 @@ macro_rules! approx_l1_norm_props {
     };
 }
 
-approx_l1_norm_props!(vector1_f64_l1_norm_props, Vector1, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector2_f64_l1_norm_props, Vector2, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector3_f64_l1_norm_props, Vector3, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
-approx_l1_norm_props!(vector4_f64_l1_norm_props, Vector4, f64, strategy_vector_any, strategy_any_scalar_f64, 1e-8);
+approx_l1_norm_props!(
+    vector1_f64_l1_norm_props,
+    Vector1,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_l1_norm_props!(
+    vector2_f64_l1_norm_props,
+    Vector2,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_l1_norm_props!(
+    vector3_f64_l1_norm_props,
+    Vector3,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
+approx_l1_norm_props!(
+    vector4_f64_l1_norm_props,
+    Vector4,
+    f64,
+    strategy_vector_any,
+    strategy_any_scalar_f64,
+    1e-8
+);
 
 
 macro_rules! approx_lp_norm_props {
@@ -1943,10 +2105,38 @@ macro_rules! approx_linf_norm_props {
     };
 }
 
-approx_linf_norm_props!(vector1_f64_linf_norm_props, Vector1, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
-approx_linf_norm_props!(vector2_f64_linf_norm_props, Vector2, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
-approx_linf_norm_props!(vector3_f64_linf_norm_props, Vector3, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
-approx_linf_norm_props!(vector4_f64_linf_norm_props, Vector4, f64, strategy_vector_any, strategy_scalar_f64_any, 1e-8);
+approx_linf_norm_props!(
+    vector1_f64_linf_norm_props,
+    Vector1,
+    f64,
+    strategy_vector_any,
+    strategy_scalar_f64_any,
+    1e-8
+);
+approx_linf_norm_props!(
+    vector2_f64_linf_norm_props,
+    Vector2,
+    f64,
+    strategy_vector_any,
+    strategy_scalar_f64_any,
+    1e-8
+);
+approx_linf_norm_props!(
+    vector3_f64_linf_norm_props,
+    Vector3,
+    f64,
+    strategy_vector_any,
+    strategy_scalar_f64_any,
+    1e-8
+);
+approx_linf_norm_props!(
+    vector4_f64_linf_norm_props,
+    Vector4,
+    f64,
+    strategy_vector_any,
+    strategy_scalar_f64_any,
+    1e-8
+);
 
 
 macro_rules! norm_synonym_props {

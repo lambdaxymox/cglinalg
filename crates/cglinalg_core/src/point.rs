@@ -165,7 +165,9 @@ where
     where
         F: FnMut(S) -> T,
     {
-        Point { coords: self.coords.map(op) }
+        Point {
+            coords: self.coords.map(op),
+        }
     }
 }
 
@@ -664,7 +666,9 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords + other }
+        Self::Output {
+            coords: self.coords + other,
+        }
     }
 }
 
@@ -676,7 +680,9 @@ where
 
     #[inline]
     fn add(self, other: &Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords + other }
+        Self::Output {
+            coords: self.coords + other,
+        }
     }
 }
 
@@ -688,7 +694,9 @@ where
 
     #[inline]
     fn add(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords + other }
+        Self::Output {
+            coords: self.coords + other,
+        }
     }
 }
 
@@ -700,7 +708,9 @@ where
 
     #[inline]
     fn add(self, other: &'b Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords + other }
+        Self::Output {
+            coords: self.coords + other,
+        }
     }
 }
 
@@ -712,7 +722,9 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords - other }
+        Self::Output {
+            coords: self.coords - other,
+        }
     }
 }
 
@@ -724,7 +736,9 @@ where
 
     #[inline]
     fn sub(self, other: &Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords - other }
+        Self::Output {
+            coords: self.coords - other,
+        }
     }
 }
 
@@ -736,7 +750,9 @@ where
 
     #[inline]
     fn sub(self, other: Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords - other }
+        Self::Output {
+            coords: self.coords - other,
+        }
     }
 }
 
@@ -748,7 +764,9 @@ where
 
     #[inline]
     fn sub(self, other: &'b Vector<S, N>) -> Self::Output {
-        Self::Output { coords: self.coords - other }
+        Self::Output {
+            coords: self.coords - other,
+        }
     }
 }
 
@@ -808,7 +826,9 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords * other }
+        Self::Output {
+            coords: self.coords * other,
+        }
     }
 }
 
@@ -820,7 +840,9 @@ where
 
     #[inline]
     fn mul(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords * other }
+        Self::Output {
+            coords: self.coords * other,
+        }
     }
 }
 
@@ -832,7 +854,9 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords / other }
+        Self::Output {
+            coords: self.coords / other,
+        }
     }
 }
 
@@ -844,7 +868,9 @@ where
 
     #[inline]
     fn div(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords / other }
+        Self::Output {
+            coords: self.coords / other,
+        }
     }
 }
 
@@ -856,7 +882,9 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords % other }
+        Self::Output {
+            coords: self.coords % other,
+        }
     }
 }
 
@@ -868,7 +896,9 @@ where
 
     #[inline]
     fn rem(self, other: S) -> Self::Output {
-        Self::Output { coords: self.coords % other }
+        Self::Output {
+            coords: self.coords % other,
+        }
     }
 }
 
@@ -1186,7 +1216,9 @@ impl<S> Point2<S> {
     /// ```
     #[inline]
     pub const fn new(x: S, y: S) -> Self {
-        Self { coords: Vector2::new(x, y) }
+        Self {
+            coords: Vector2::new(x, y),
+        }
     }
 }
 
@@ -1211,7 +1243,9 @@ impl<S> Point3<S> {
     /// ```
     #[inline]
     pub const fn new(x: S, y: S, z: S) -> Self {
-        Self { coords: Vector3::new(x, y, z) }
+        Self {
+            coords: Vector3::new(x, y, z),
+        }
     }
 }
 

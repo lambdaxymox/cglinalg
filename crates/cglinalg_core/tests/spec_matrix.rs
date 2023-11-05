@@ -60,7 +60,10 @@ where
     })
 }
 
-fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C>>
+fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(
+    min_value: S,
+    max_value: S,
+) -> impl Strategy<Value = Matrix<S, R, C>>
 where
     S: SimdScalarSigned + Arbitrary,
 {
@@ -165,7 +168,10 @@ where
 /// ```text
 /// m1 + m2 == m2 + m1
 /// ```
-fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_addition_commutative<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -341,7 +347,11 @@ where
 /// ```text
 /// m * (a * b) == (m * a) * b
 /// ```
-fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize>(a: S, b: S, m: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_scalar_matrix_multiplication_compatible<S, const R: usize, const C: usize>(
+    a: S,
+    b: S,
+    m: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -587,7 +597,11 @@ where
 /// ```text
 /// m.swap_rows(row1, row2).swap_rows(row1, row2) == m
 /// ```
-fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, row1: usize, row2: usize) -> Result<(), TestCaseError>
+fn prop_swap_rows_twice_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    row1: usize,
+    row2: usize,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -606,7 +620,11 @@ where
 /// ```text
 /// m.swap_columns(col1, col2) == m.swap_columns(col2, col1)
 /// ```
-fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, col1: usize, col2: usize) -> Result<(), TestCaseError>
+fn prop_swap_columns_commutative<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    col1: usize,
+    col2: usize,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -645,7 +663,11 @@ where
 /// ```text
 /// m.swap_columns(col1, col2).swap_columns(col1, col2) == m
 /// ```
-fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, col1: usize, col2: usize) -> Result<(), TestCaseError>
+fn prop_swap_columns_twice_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    col1: usize,
+    col2: usize,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -690,7 +712,11 @@ where
 /// ```text
 /// m.swap_elements((col, row), (col, row)) == m
 /// ```
-fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, col: usize, row: usize) -> Result<(), TestCaseError>
+fn prop_swap_identical_elements_is_identity<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    col: usize,
+    row: usize,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -820,7 +846,12 @@ where
 /// ```text
 /// dot(m1 * c1, m2 * c2) == dot(m1, m2) * (c1 * c2)
 /// ```
-fn prop_matrix_dot_product_homogeneous<S, const R: usize, const C: usize>(c1: S, c2: S, m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_dot_product_homogeneous<S, const R: usize, const C: usize>(
+    c1: S,
+    c2: S,
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -884,7 +915,10 @@ where
 /// m1 != m2 ==> l1_norm(m1) != l1_norm(m2)
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -920,7 +954,10 @@ where
 /// ```text
 /// l1_norm(m1 + m2) <= l1_norm(m1) + l1_norm(m2)
 /// ```
-fn prop_matrix_l1_norm_triangle_inequality<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_l1_norm_triangle_inequality<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -943,7 +980,10 @@ where
 /// m != 0 ==> l1_norm(m) != 0
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_approx_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1032,7 +1072,10 @@ where
 /// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -1073,7 +1116,10 @@ where
 /// m != 0 ==> linf_norm(m) != 0
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_approx_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1116,7 +1162,10 @@ where
 /// ```text
 /// linf_norm(m1 + m2) <= linf_norm(m1) + linf_norm(m2)
 /// ```
-fn prop_matrix_linf_norm_triangle_inequality<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_linf_norm_triangle_inequality<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -1180,7 +1229,10 @@ where
 /// m1 != m2 ==> norm_squared(m1) != norm_squared(m2)
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_matrix_norm_squared_point_separating2<S, const R: usize, const C: usize>(m1: Matrix<S, R, C>, m2: Matrix<S, R, C>) -> Result<(), TestCaseError>
+fn prop_matrix_norm_squared_point_separating2<S, const R: usize, const C: usize>(
+    m1: Matrix<S, R, C>,
+    m2: Matrix<S, R, C>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
@@ -1269,7 +1321,10 @@ where
 /// m != 0 ==> norm(m) != 0
 /// ```
 /// For the sake of testability, we use the second form.
-fn prop_approx_matrix_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_matrix_norm_point_separating1<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
+    tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1386,7 +1441,12 @@ where
 /// ```text
 /// trace(m1 + m2) == trace(m1) = trace(m2)
 /// ```
-fn prop_approx_matrix_trace_linear<S, const N: usize>(m1: Matrix<S, N, N>, m2: Matrix<S, N, N>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_matrix_trace_linear<S, const N: usize>(
+    m1: Matrix<S, N, N>,
+    m2: Matrix<S, N, N>,
+    tolerance: S,
+    max_relative: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -1428,7 +1488,12 @@ where
 /// ```text
 /// trace(m * c) == trace(m) * c
 /// ```
-fn prop_approx_matrix_trace_scalar_product<S, const N: usize>(c: S, m: Matrix<S, N, N>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
+fn prop_approx_matrix_trace_scalar_product<S, const N: usize>(
+    c: S,
+    m: Matrix<S, N, N>,
+    tolerance: S,
+    max_relative: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -2293,17 +2358,77 @@ macro_rules! exact_l1_norm_props {
     };
 }
 
-exact_l1_norm_props!(matrix1x1_i32_l1_norm_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix2x2_i32_l1_norm_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix3x3_i32_l1_norm_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix4x4_i32_l1_norm_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_l1_norm_props!(
+    matrix1x1_i32_l1_norm_props,
+    Matrix1x1,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix2x2_i32_l1_norm_props,
+    Matrix2x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix3x3_i32_l1_norm_props,
+    Matrix3x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix4x4_i32_l1_norm_props,
+    Matrix4x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
 
-exact_l1_norm_props!(matrix2x3_i32_l1_norm_props, Matrix2x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix3x2_i32_l1_norm_props, Matrix3x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix2x4_i32_l1_norm_props, Matrix2x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix4x2_i32_l1_norm_props, Matrix4x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix3x4_i32_l1_norm_props, Matrix3x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_l1_norm_props!(matrix4x3_i32_l1_norm_props, Matrix4x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_l1_norm_props!(
+    matrix2x3_i32_l1_norm_props,
+    Matrix2x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix3x2_i32_l1_norm_props,
+    Matrix3x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix2x4_i32_l1_norm_props,
+    Matrix2x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix4x2_i32_l1_norm_props,
+    Matrix4x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix3x4_i32_l1_norm_props,
+    Matrix3x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_l1_norm_props!(
+    matrix4x3_i32_l1_norm_props,
+    Matrix4x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! approx_l1_norm_props {
@@ -2335,17 +2460,77 @@ macro_rules! approx_l1_norm_props {
     };
 }
 
-approx_l1_norm_props!(matrix1x1_f64_l1_norm_props, Matrix1x1, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix2x2_f64_l1_norm_props, Matrix2x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix3x3_f64_l1_norm_props, Matrix3x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix4x4_f64_l1_norm_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_l1_norm_props!(
+    matrix1x1_f64_l1_norm_props,
+    Matrix1x1,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix2x2_f64_l1_norm_props,
+    Matrix2x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix3x3_f64_l1_norm_props,
+    Matrix3x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix4x4_f64_l1_norm_props,
+    Matrix4x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
-approx_l1_norm_props!(matrix2x3_f64_l1_norm_props, Matrix2x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix3x2_f64_l1_norm_props, Matrix3x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix2x4_f64_l1_norm_props, Matrix2x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix4x2_f64_l1_norm_props, Matrix4x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix3x4_f64_l1_norm_props, Matrix3x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_l1_norm_props!(matrix4x3_f64_l1_norm_props, Matrix4x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_l1_norm_props!(
+    matrix2x3_f64_l1_norm_props,
+    Matrix2x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix3x2_f64_l1_norm_props,
+    Matrix3x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix2x4_f64_l1_norm_props,
+    Matrix2x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix4x2_f64_l1_norm_props,
+    Matrix4x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix3x4_f64_l1_norm_props,
+    Matrix3x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_l1_norm_props!(
+    matrix4x3_f64_l1_norm_props,
+    Matrix4x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
 
 macro_rules! exact_linf_norm_props {
@@ -2391,17 +2576,77 @@ macro_rules! exact_linf_norm_props {
     };
 }
 
-exact_linf_norm_props!(matrix1x1_i32_linf_norm_props, Matrix1x1, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix2x2_i32_linf_norm_props, Matrix2x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix3x3_i32_linf_norm_props, Matrix3x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix4x4_i32_linf_norm_props, Matrix4x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_linf_norm_props!(
+    matrix1x1_i32_linf_norm_props,
+    Matrix1x1,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix2x2_i32_linf_norm_props,
+    Matrix2x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix3x3_i32_linf_norm_props,
+    Matrix3x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix4x4_i32_linf_norm_props,
+    Matrix4x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
 
-exact_linf_norm_props!(matrix2x3_i32_linf_norm_props, Matrix2x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix3x2_i32_linf_norm_props, Matrix3x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix2x4_i32_linf_norm_props, Matrix2x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix4x2_i32_linf_norm_props, Matrix4x2, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix3x4_i32_linf_norm_props, Matrix3x4, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
-exact_linf_norm_props!(matrix4x3_i32_linf_norm_props, Matrix4x3, i32, strategy_matrix_i32_norm, strategy_scalar_i32_any);
+exact_linf_norm_props!(
+    matrix2x3_i32_linf_norm_props,
+    Matrix2x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix3x2_i32_linf_norm_props,
+    Matrix3x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix2x4_i32_linf_norm_props,
+    Matrix2x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix4x2_i32_linf_norm_props,
+    Matrix4x2,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix3x4_i32_linf_norm_props,
+    Matrix3x4,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
+exact_linf_norm_props!(
+    matrix4x3_i32_linf_norm_props,
+    Matrix4x3,
+    i32,
+    strategy_matrix_i32_norm,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! approx_linf_norm_props {
@@ -2433,17 +2678,77 @@ macro_rules! approx_linf_norm_props {
     };
 }
 
-approx_linf_norm_props!(matrix1x1_f64_linf_norm_props, Matrix1x1, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix2x2_f64_linf_norm_props, Matrix2x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix3x3_f64_linf_norm_props, Matrix3x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix4x4_f64_linf_norm_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_linf_norm_props!(
+    matrix1x1_f64_linf_norm_props,
+    Matrix1x1,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix2x2_f64_linf_norm_props,
+    Matrix2x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix3x3_f64_linf_norm_props,
+    Matrix3x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix4x4_f64_linf_norm_props,
+    Matrix4x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
-approx_linf_norm_props!(matrix2x3_f64_linf_norm_props, Matrix2x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix3x2_f64_linf_norm_props, Matrix3x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix2x4_f64_linf_norm_props, Matrix2x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix4x2_f64_linf_norm_props, Matrix4x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix3x4_f64_linf_norm_props, Matrix3x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_linf_norm_props!(matrix4x3_f64_linf_norm_props, Matrix4x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_linf_norm_props!(
+    matrix2x3_f64_linf_norm_props,
+    Matrix2x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix3x2_f64_linf_norm_props,
+    Matrix3x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix2x4_f64_linf_norm_props,
+    Matrix2x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix4x2_f64_linf_norm_props,
+    Matrix4x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix3x4_f64_linf_norm_props,
+    Matrix3x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_linf_norm_props!(
+    matrix4x3_f64_linf_norm_props,
+    Matrix4x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
 
 macro_rules! exact_norm_squared_props {
@@ -2762,17 +3067,77 @@ macro_rules! approx_norm_props {
     };
 }
 
-approx_norm_props!(matrix1x1_f64_norm_props, Matrix1x1, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix2x2_f64_norm_props, Matrix2x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix3x3_f64_norm_props, Matrix3x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix4x4_f64_norm_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_norm_props!(
+    matrix1x1_f64_norm_props,
+    Matrix1x1,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix2x2_f64_norm_props,
+    Matrix2x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix3x3_f64_norm_props,
+    Matrix3x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix4x4_f64_norm_props,
+    Matrix4x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
-approx_norm_props!(matrix2x3_f64_norm_props, Matrix2x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix3x2_f64_norm_props, Matrix3x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix2x4_f64_norm_props, Matrix2x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix4x2_f64_norm_props, Matrix4x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix3x4_f64_norm_props, Matrix3x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_norm_props!(matrix4x3_f64_norm_props, Matrix4x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_norm_props!(
+    matrix2x3_f64_norm_props,
+    Matrix2x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix3x2_f64_norm_props,
+    Matrix3x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix2x4_f64_norm_props,
+    Matrix2x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix4x2_f64_norm_props,
+    Matrix4x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix3x4_f64_norm_props,
+    Matrix3x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_norm_props!(
+    matrix4x3_f64_norm_props,
+    Matrix4x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
 
 macro_rules! exact_trace_props {
@@ -2812,10 +3177,34 @@ macro_rules! exact_trace_props {
     };
 }
 
-exact_trace_props!(matrix1x1_i32_trace_props, Matrix1x1, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_trace_props!(matrix2x2_i32_trace_props, Matrix2x2, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_trace_props!(matrix3x3_i32_trace_props, Matrix3x3, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
-exact_trace_props!(matrix4x4_i32_trace_props, Matrix4x4, i32, strategy_matrix_i32_any, strategy_scalar_i32_any);
+exact_trace_props!(
+    matrix1x1_i32_trace_props,
+    Matrix1x1,
+    i32,
+    strategy_matrix_i32_any,
+    strategy_scalar_i32_any
+);
+exact_trace_props!(
+    matrix2x2_i32_trace_props,
+    Matrix2x2,
+    i32,
+    strategy_matrix_i32_any,
+    strategy_scalar_i32_any
+);
+exact_trace_props!(
+    matrix3x3_i32_trace_props,
+    Matrix3x3,
+    i32,
+    strategy_matrix_i32_any,
+    strategy_scalar_i32_any
+);
+exact_trace_props!(
+    matrix4x4_i32_trace_props,
+    Matrix4x4,
+    i32,
+    strategy_matrix_i32_any,
+    strategy_scalar_i32_any
+);
 
 
 macro_rules! approx_trace_props {
@@ -2855,10 +3244,34 @@ macro_rules! approx_trace_props {
     };
 }
 
-approx_trace_props!(matrix1x1_f64_trace_props, Matrix1x1, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_trace_props!(matrix2x2_f64_trace_props, Matrix2x2, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_trace_props!(matrix3x3_f64_trace_props, Matrix3x3, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
-approx_trace_props!(matrix4x4_f64_trace_props, Matrix4x4, f64, strategy_matrix_f64_any, strategy_scalar_f64_any);
+approx_trace_props!(
+    matrix1x1_f64_trace_props,
+    Matrix1x1,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_trace_props!(
+    matrix2x2_f64_trace_props,
+    Matrix2x2,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_trace_props!(
+    matrix3x3_f64_trace_props,
+    Matrix3x3,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
+approx_trace_props!(
+    matrix4x4_f64_trace_props,
+    Matrix4x4,
+    f64,
+    strategy_matrix_f64_any,
+    strategy_scalar_f64_any
+);
 
 
 macro_rules! exact_row_vector_dot_product_props {
@@ -2878,10 +3291,30 @@ macro_rules! exact_row_vector_dot_product_props {
     };
 }
 
-exact_row_vector_dot_product_props!(matrix1x1_i32_column_vector_dot_product_props, Matrix1x1, i32, strategy_matrix_i32_any);
-exact_row_vector_dot_product_props!(matrix1x2_i32_column_vector_dot_product_props, Matrix1x2, i32, strategy_matrix_i32_any);
-exact_row_vector_dot_product_props!(matrix1x3_i32_column_vector_dot_product_props, Matrix1x3, i32, strategy_matrix_i32_any);
-exact_row_vector_dot_product_props!(matrix1x4_i32_column_vector_dot_product_props, Matrix1x4, i32, strategy_matrix_i32_any);
+exact_row_vector_dot_product_props!(
+    matrix1x1_i32_column_vector_dot_product_props,
+    Matrix1x1,
+    i32,
+    strategy_matrix_i32_any
+);
+exact_row_vector_dot_product_props!(
+    matrix1x2_i32_column_vector_dot_product_props,
+    Matrix1x2,
+    i32,
+    strategy_matrix_i32_any
+);
+exact_row_vector_dot_product_props!(
+    matrix1x3_i32_column_vector_dot_product_props,
+    Matrix1x3,
+    i32,
+    strategy_matrix_i32_any
+);
+exact_row_vector_dot_product_props!(
+    matrix1x4_i32_column_vector_dot_product_props,
+    Matrix1x4,
+    i32,
+    strategy_matrix_i32_any
+);
 
 
 macro_rules! exact_tr_mul_props {

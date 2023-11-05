@@ -229,7 +229,9 @@ where
     where
         F: FnMut(S) -> T,
     {
-        Quaternion { coords: self.coords.map(op) }
+        Quaternion {
+            coords: self.coords.map(op),
+        }
     }
 
     /// Get the scalar part of a quaternion.
@@ -4104,7 +4106,11 @@ where
     S: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(formatter, "{} + [{}, {}, {}]", self.coords[0], self.coords[1], self.coords[2], self.coords[3])
+        writeln!(
+            formatter,
+            "{} + [{}, {}, {}]",
+            self.coords[0], self.coords[1], self.coords[2], self.coords[3]
+        )
     }
 }
 

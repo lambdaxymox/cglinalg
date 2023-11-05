@@ -125,9 +125,33 @@ macro_rules! bench_binop(
     }
 );
 
-bench_binop!(matrix2x2_mul_vector2_f32, f32, Matrix2x2<f32>, Vector2<f32>, gen_matrix2x2, gen_vector2, mul);
-bench_binop!(matrix3x3_mul_vector3_f32, f32, Matrix3x3<f32>, Vector3<f32>, gen_matrix3x3, gen_vector3, mul);
-bench_binop!(matrix4x4_mul_vector4_f32, f32, Matrix4x4<f32>, Vector4<f32>, gen_matrix4x4, gen_vector4, mul);
+bench_binop!(
+    matrix2x2_mul_vector2_f32,
+    f32,
+    Matrix2x2<f32>,
+    Vector2<f32>,
+    gen_matrix2x2,
+    gen_vector2,
+    mul
+);
+bench_binop!(
+    matrix3x3_mul_vector3_f32,
+    f32,
+    Matrix3x3<f32>,
+    Vector3<f32>,
+    gen_matrix3x3,
+    gen_vector3,
+    mul
+);
+bench_binop!(
+    matrix4x4_mul_vector4_f32,
+    f32,
+    Matrix4x4<f32>,
+    Vector4<f32>,
+    gen_matrix4x4,
+    gen_vector4,
+    mul
+);
 bench_binop!(
     matrix2x2_mul_matrix2x2_f32,
     f32,

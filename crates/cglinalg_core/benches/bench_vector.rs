@@ -118,15 +118,79 @@ macro_rules! bench_unop(
     }
 );
 
-bench_binop!(vector1_add_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, add);
-bench_binop!(vector2_add_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, add);
-bench_binop!(vector3_add_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, add);
-bench_binop!(vector4_add_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, add);
+bench_binop!(
+    vector1_add_vector1_f32,
+    f32,
+    Vector1<f32>,
+    Vector1<f32>,
+    gen_vector1,
+    gen_vector1,
+    add
+);
+bench_binop!(
+    vector2_add_vector2_f32,
+    f32,
+    Vector2<f32>,
+    Vector2<f32>,
+    gen_vector2,
+    gen_vector2,
+    add
+);
+bench_binop!(
+    vector3_add_vector3_f32,
+    f32,
+    Vector3<f32>,
+    Vector3<f32>,
+    gen_vector3,
+    gen_vector3,
+    add
+);
+bench_binop!(
+    vector4_add_vector4_f32,
+    f32,
+    Vector4<f32>,
+    Vector4<f32>,
+    gen_vector4,
+    gen_vector4,
+    add
+);
 
-bench_binop!(vector1_sub_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, sub);
-bench_binop!(vector2_sub_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, sub);
-bench_binop!(vector3_sub_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, sub);
-bench_binop!(vector4_sub_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, sub);
+bench_binop!(
+    vector1_sub_vector1_f32,
+    f32,
+    Vector1<f32>,
+    Vector1<f32>,
+    gen_vector1,
+    gen_vector1,
+    sub
+);
+bench_binop!(
+    vector2_sub_vector2_f32,
+    f32,
+    Vector2<f32>,
+    Vector2<f32>,
+    gen_vector2,
+    gen_vector2,
+    sub
+);
+bench_binop!(
+    vector3_sub_vector3_f32,
+    f32,
+    Vector3<f32>,
+    Vector3<f32>,
+    gen_vector3,
+    gen_vector3,
+    sub
+);
+bench_binop!(
+    vector4_sub_vector4_f32,
+    f32,
+    Vector4<f32>,
+    Vector4<f32>,
+    gen_vector4,
+    gen_vector4,
+    sub
+);
 
 bench_binop!(scalar_mul_vector1_f32, f32, f32, Vector1<f32>, gen_scalar, gen_vector1, mul);
 bench_binop!(scalar_mul_vector2_f32, f32, f32, Vector2<f32>, gen_scalar, gen_vector2, mul);
@@ -143,12 +207,52 @@ bench_binop!(vector2_div_scalar_f32, f32, Vector2<f32>, f32, gen_vector2, gen_sc
 bench_binop!(vector3_div_scalar_f32, f32, Vector3<f32>, f32, gen_vector3, gen_scalar, div);
 bench_binop!(vector4_div_scalar_f32, f32, Vector4<f32>, f32, gen_vector4, gen_scalar, div);
 
-bench_binop_ref!(vector1_dot_vector1_f32, f32, Vector1<f32>, Vector1<f32>, gen_vector1, gen_vector1, dot);
-bench_binop_ref!(vector2_dot_vector2_f32, f32, Vector2<f32>, Vector2<f32>, gen_vector2, gen_vector2, dot);
-bench_binop_ref!(vector3_dot_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, dot);
-bench_binop_ref!(vector4_dot_vector4_f32, f32, Vector4<f32>, Vector4<f32>, gen_vector4, gen_vector4, dot);
+bench_binop_ref!(
+    vector1_dot_vector1_f32,
+    f32,
+    Vector1<f32>,
+    Vector1<f32>,
+    gen_vector1,
+    gen_vector1,
+    dot
+);
+bench_binop_ref!(
+    vector2_dot_vector2_f32,
+    f32,
+    Vector2<f32>,
+    Vector2<f32>,
+    gen_vector2,
+    gen_vector2,
+    dot
+);
+bench_binop_ref!(
+    vector3_dot_vector3_f32,
+    f32,
+    Vector3<f32>,
+    Vector3<f32>,
+    gen_vector3,
+    gen_vector3,
+    dot
+);
+bench_binop_ref!(
+    vector4_dot_vector4_f32,
+    f32,
+    Vector4<f32>,
+    Vector4<f32>,
+    gen_vector4,
+    gen_vector4,
+    dot
+);
 
-bench_binop_ref!(vector3_cross_vector3_f32, f32, Vector3<f32>, Vector3<f32>, gen_vector3, gen_vector3, cross);
+bench_binop_ref!(
+    vector3_cross_vector3_f32,
+    f32,
+    Vector3<f32>,
+    Vector3<f32>,
+    gen_vector3,
+    gen_vector3,
+    cross
+);
 
 bench_unop!(vector1_norm_f32, f32, Vector1<f32>, gen_vector1, norm);
 bench_unop!(vector2_norm_f32, f32, Vector2<f32>, gen_vector2, norm);

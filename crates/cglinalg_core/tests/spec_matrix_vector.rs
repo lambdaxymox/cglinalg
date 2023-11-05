@@ -29,7 +29,10 @@ use cglinalg_numeric::SimdScalarSigned;
 use proptest::prelude::*;
 
 
-fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Matrix<S, R, C>>
+fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(
+    min_value: S,
+    max_value: S,
+) -> impl Strategy<Value = Matrix<S, R, C>>
 where
     S: SimdScalarSigned + Arbitrary,
 {

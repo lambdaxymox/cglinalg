@@ -8273,7 +8273,8 @@ where
     }
 }
 
-impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for Matrix<S, R1, C1>
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>>
+    for Matrix<S, R1, C1>
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
@@ -8301,7 +8302,8 @@ where
     }
 }
 
-impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&Matrix<S, R2, C2>> for Matrix<S, R1, C1>
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&Matrix<S, R2, C2>>
+    for Matrix<S, R1, C1>
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
@@ -8329,7 +8331,8 @@ where
     }
 }
 
-impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>> for &Matrix<S, R1, C1>
+impl<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<Matrix<S, R2, C2>>
+    for &Matrix<S, R1, C1>
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,
@@ -8357,7 +8360,8 @@ where
     }
 }
 
-impl<'a, 'b, S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&'b Matrix<S, R2, C2>> for &'a Matrix<S, R1, C1>
+impl<'a, 'b, S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const R1C2: usize> ops::Mul<&'b Matrix<S, R2, C2>>
+    for &'a Matrix<S, R1, C1>
 where
     S: SimdScalar,
     ShapeConstraint: CanMultiply<Const<R1>, Const<C1>, Const<R2>, Const<C2>>,

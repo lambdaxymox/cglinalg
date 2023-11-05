@@ -606,7 +606,11 @@ where
 /// ```text
 /// (q1 + q2) * q3 == q1 * q3 + q2 * q3
 /// ```
-fn prop_quaternion_multiplication_right_distributive<S>(q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
+fn prop_quaternion_multiplication_right_distributive<S>(
+    q1: Quaternion<S>,
+    q2: Quaternion<S>,
+    q3: Quaternion<S>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -702,7 +706,13 @@ where
 /// ```text
 /// dot(q1, q2 * a + q3 * b) == dot(q1, q2) * a + dot(q1, q3) * b
 /// ```
-fn prop_quaternion_dot_product_right_bilinear<S>(a: S, b: S, q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_right_bilinear<S>(
+    a: S,
+    b: S,
+    q1: Quaternion<S>,
+    q2: Quaternion<S>,
+    q3: Quaternion<S>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -721,7 +731,13 @@ where
 /// ```text
 /// dot(q1 * a + q2 * b, q3) == dot(q1, q3) * a + dot(q2, q3) * b
 /// ```
-fn prop_quaternion_dot_product_left_bilinear<S>(a: S, b: S, q1: Quaternion<S>, q2: Quaternion<S>, q3: Quaternion<S>) -> Result<(), TestCaseError>
+fn prop_quaternion_dot_product_left_bilinear<S>(
+    a: S,
+    b: S,
+    q1: Quaternion<S>,
+    q2: Quaternion<S>,
+    q3: Quaternion<S>,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
@@ -855,7 +871,12 @@ where
 /// ```
 /// For the sake of testability, we use the second form to test the
 /// norm function.
-fn prop_approx_modulus_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(
+    q1: Quaternion<S>,
+    q2: Quaternion<S>,
+    input_tolerance: S,
+    output_tolerance: S,
+) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
