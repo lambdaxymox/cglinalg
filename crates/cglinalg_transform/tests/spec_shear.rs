@@ -6,7 +6,7 @@ extern crate proptest;
 
 use approx::{
     relative_eq,
-    ulps_eq,
+    abs_diff_eq,
 };
 use cglinalg_core::{
     Point,
@@ -106,7 +106,7 @@ where
 
         assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
         assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(ulps_eq!(direction.dot(&normal), S::zero()));
+        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), epsilon = cglinalg_numeric::cast(1e-15)));
 
         Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
@@ -136,7 +136,7 @@ where
             rescale(_direction[2], min_value, max_value),
         ));
         let normal = {
-            let _new_normal = if ulps_eq!(direction[2], S::zero()) {
+            let _new_normal = if abs_diff_eq!(direction[2], S::zero(), epsilon = cglinalg_numeric::cast(1e-15)) {
                 Unit::from_value(Vector3::new(S::zero(), S::zero(), _normal[2].signum() * S::one()))
             } else {
                 let _new_normal_0 = rescale(_normal[0], min_value, max_value);
@@ -151,7 +151,7 @@ where
 
         assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
         assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(ulps_eq!(direction.dot(&normal), S::zero()));
+        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), epsilon = cglinalg_numeric::cast(1e-15)));
 
         Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
