@@ -4,7 +4,7 @@ use cglinalg_core::{
     DimAdd,
     DimLt,
     DimMul,
-    EulerAngles,
+    Euler,
     Matrix,
     Matrix2x2,
     Matrix3x3,
@@ -1601,7 +1601,7 @@ where
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     EulerAngles,
+    /// #     Euler,
     /// #     Matrix3x3,
     /// # };
     /// # use cglinalg_transform::Rotation3;
@@ -1613,7 +1613,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
@@ -1641,11 +1641,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self
+    pub fn from_euler_angles<A>(euler_angles: &Euler<A>) -> Self
     where
         A: Angle + Into<Radians<S>>,
     {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+        let euler_radians: Euler<Radians<S>> = Euler::new(
             euler_angles.x.into(),
             euler_angles.y.into(),
             euler_angles.z.into(),
@@ -1790,7 +1790,7 @@ where
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     EulerAngles,
+    /// #     Euler,
     /// #     Matrix3x3,
     /// # };
     /// # use cglinalg_transform::Rotation3;
@@ -1822,7 +1822,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///     
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let rotation = Rotation3::from_euler_angles(&expected);
     /// #
@@ -1834,7 +1834,7 @@ where
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
-    pub fn euler_angles(&self) -> EulerAngles<Radians<S>> {
+    pub fn euler_angles(&self) -> Euler<Radians<S>> {
         let yaw = Radians::asin(self.matrix[2][0]);
         let cos_yaw = Radians::cos(yaw);
         let (pitch, roll) = if cos_yaw.abs().is_zero() {
@@ -1849,7 +1849,7 @@ where
             (_pitch, _roll)
         };
 
-        EulerAngles::new(roll, yaw, pitch)
+        Euler::new(roll, yaw, pitch)
     }
 }
 
@@ -1905,24 +1905,24 @@ where
     }
 }
 
-impl<S, A> From<EulerAngles<A>> for Rotation3<S>
+impl<S, A> From<Euler<A>> for Rotation3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S> + Into<Radians<S>>,
 {
     #[inline]
-    fn from(euler_angles: EulerAngles<A>) -> Rotation3<S> {
+    fn from(euler_angles: Euler<A>) -> Rotation3<S> {
         Rotation3::from_euler_angles(&euler_angles)
     }
 }
 
-impl<S, A> From<&EulerAngles<A>> for Rotation3<S>
+impl<S, A> From<&Euler<A>> for Rotation3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S> + Into<Radians<S>>,
 {
     #[inline]
-    fn from(euler_angles: &EulerAngles<A>) -> Rotation3<S> {
+    fn from(euler_angles: &Euler<A>) -> Rotation3<S> {
         Rotation3::from_euler_angles(euler_angles)
     }
 }

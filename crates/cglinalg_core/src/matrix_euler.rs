@@ -1,4 +1,4 @@
-use crate::euler::EulerAngles;
+use crate::euler::Euler;
 use crate::matrix::{
     Matrix3x3,
     Matrix4x4,
@@ -22,7 +22,7 @@ where
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     EulerAngles,
+    /// #     Euler,
     /// # };
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
@@ -32,7 +32,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
@@ -59,11 +59,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self
+    pub fn from_euler_angles<A>(euler_angles: &Euler<A>) -> Self
     where
         A: Angle + Into<Radians<S>>,
     {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+        let euler_radians: Euler<Radians<S>> = Euler::new(
             euler_angles.x.into(),
             euler_angles.y.into(),
             euler_angles.z.into(),
@@ -84,7 +84,7 @@ where
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     EulerAngles,
+    /// #     Euler,
     /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_trigonometry::Radians;
@@ -95,7 +95,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
@@ -130,11 +130,11 @@ where
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_euler_angles<A>(euler_angles: &EulerAngles<A>) -> Self
+    pub fn from_euler_angles<A>(euler_angles: &Euler<A>) -> Self
     where
         A: Angle + Into<Radians<S>>,
     {
-        let euler_radians: EulerAngles<Radians<S>> = EulerAngles::new(
+        let euler_radians: Euler<Radians<S>> = Euler::new(
             euler_angles.x.into(),
             euler_angles.y.into(),
             euler_angles.z.into(),

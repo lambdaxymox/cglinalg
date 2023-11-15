@@ -745,7 +745,7 @@ mod rotation3_tests {
 #[cfg(test)]
 mod rotation3_euler_angle_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_core::EulerAngles;
+    use cglinalg_core::Euler;
     use cglinalg_transform::Rotation3;
     use cglinalg_trigonometry::{
         Angle,
@@ -759,7 +759,7 @@ mod rotation3_euler_angle_tests {
         let yaw_zx: Radians<f64> = Radians::zero();
         let pitch_xy: Radians<f64> = Radians::zero();
         let rotation = Rotation3::from_angle_x(roll_yz);
-        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let expected = Euler::new(roll_yz, yaw_zx, pitch_xy);
         let result = rotation.euler_angles();
 
         assert_eq!(result, expected);
@@ -771,7 +771,7 @@ mod rotation3_euler_angle_tests {
         let yaw_zx: Radians<f64> = Radians::full_turn_div_6();
         let pitch_xy: Radians<f64> = Radians::zero();
         let rotation = Rotation3::from_angle_y(yaw_zx);
-        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let expected = Euler::new(roll_yz, yaw_zx, pitch_xy);
         let result = rotation.euler_angles();
 
         assert_eq!(result, expected);
@@ -783,7 +783,7 @@ mod rotation3_euler_angle_tests {
         let yaw_zx: Radians<f64> = Radians::zero();
         let pitch_xy: Radians<f64> = Radians::full_turn_div_6();
         let rotation = Rotation3::from_angle_z(pitch_xy);
-        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let expected = Euler::new(roll_yz, yaw_zx, pitch_xy);
         let result = rotation.euler_angles();
 
         assert_eq!(result, expected);
@@ -798,7 +798,7 @@ mod rotation3_euler_angle_tests {
         let rotation_zx = Rotation3::from_angle_y(yaw_zx);
         let rotation_xy = Rotation3::from_angle_z(pitch_xy);
         let rotation = rotation_yz * rotation_zx * rotation_xy;
-        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let expected = Euler::new(roll_yz, yaw_zx, pitch_xy);
         let result = rotation.euler_angles();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -813,7 +813,7 @@ mod rotation3_euler_angle_tests {
         let rotation_zx = Rotation3::from_angle_y(yaw_zx);
         let rotation_xy = Rotation3::from_angle_z(pitch_xy);
         let rotation = rotation_yz * rotation_zx * rotation_xy;
-        let expected = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
+        let expected = Euler::new(roll_yz, yaw_zx, pitch_xy);
         let result = rotation.euler_angles();
 
         assert_eq!(result, expected);

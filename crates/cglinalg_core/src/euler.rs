@@ -85,7 +85,7 @@ use core::fmt;
 /// ```
 /// # use approx_cmp::assert_relative_eq;
 /// # use cglinalg_core::{
-/// #     EulerAngles,
+/// #     Euler,
 /// #     Matrix3x3,
 /// # };
 /// # use cglinalg_trigonometry::Degrees;
@@ -93,7 +93,7 @@ use core::fmt;
 /// let roll = Degrees(45_f64);
 /// let yaw = Degrees(30_f64);
 /// let pitch = Degrees(15_f64);
-/// let euler = EulerAngles::new(roll, yaw, pitch);
+/// let euler = Euler::new(roll, yaw, pitch);
 ///
 /// let c0r0 =  (1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (1_f64 + f64::sqrt(3_f64));
 /// let c0r1 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) - 1_f64);
@@ -119,7 +119,7 @@ use core::fmt;
 /// ```
 /// # use approx_cmp::assert_ulps_eq;
 /// # use cglinalg_core::{
-/// #    EulerAngles,
+/// #    Euler,
 /// #    Matrix3x3,
 /// # };
 /// # use cglinalg_numeric::SimdScalarCmp;
@@ -129,7 +129,7 @@ use core::fmt;
 /// let roll = Degrees(45_f64);
 /// let yaw = Degrees(90_f64);
 /// let pitch = Degrees(15_f64);
-/// let euler = EulerAngles::new(roll, yaw, pitch);
+/// let euler = Euler::new(roll, yaw, pitch);
 /// let matrix_z_locked = Matrix3x3::from(euler);
 ///
 /// assert_ulps_eq!(matrix_z_locked.c0r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
@@ -139,7 +139,7 @@ use core::fmt;
 /// assert_ulps_eq!(matrix_z_locked.c2r2, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
 ///
 /// // Attempt to roll in the gimbal locked state.
-/// let euler_roll = EulerAngles::new(Degrees(15_f64), Degrees(0_f64), Degrees(0_f64));
+/// let euler_roll = Euler::new(Degrees(15_f64), Degrees(0_f64), Degrees(0_f64));
 /// let matrix_roll = Matrix3x3::from(euler_roll);
 /// let matrix = matrix_roll * matrix_z_locked;
 ///
@@ -152,7 +152,7 @@ use core::fmt;
 /// ```
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct EulerAngles<A> {
+pub struct Euler<A> {
     /// The rotation angle about the **x-axis** in the **yz-plane**. This is also
     /// known as the **roll** angle.
     pub x: A,
@@ -164,16 +164,16 @@ pub struct EulerAngles<A> {
     pub z: A,
 }
 
-impl<A> EulerAngles<A> {
+impl<A> Euler<A> {
     /// Construct a new set of Euler angles.
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::EulerAngles;
+    /// # use cglinalg_core::Euler;
     /// # use cglinalg_trigonometry::Radians;
     /// #
-    /// let euler_angles = EulerAngles::new(
+    /// let euler_angles = Euler::new(
     ///     Radians(1_f64),
     ///     Radians(2_f64),
     ///     Radians(3_f64)
@@ -189,7 +189,7 @@ impl<A> EulerAngles<A> {
     }
 }
 
-impl<S, A> EulerAngles<A>
+impl<S, A> Euler<A>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
@@ -201,10 +201,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::EulerAngles;
+    /// # use cglinalg_core::Euler;
     /// # use cglinalg_trigonometry::Radians;
     /// #
-    /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
+    /// let euler_angles: Euler<Radians<f64>> = Euler::zero();
     ///
     /// assert!(euler_angles.is_zero());
     /// assert!(euler_angles.x.is_zero());
@@ -213,7 +213,7 @@ where
     /// ```
     #[inline]
     pub fn zero() -> Self {
-        EulerAngles::new(A::zero(), A::zero(), A::zero())
+        Euler::new(A::zero(), A::zero(), A::zero())
     }
 
     /// Test whether an Euler angle is self.
@@ -221,10 +221,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::EulerAngles;
+    /// # use cglinalg_core::Euler;
     /// # use cglinalg_trigonometry::Radians;
     /// #
-    /// let euler_angles = EulerAngles::new(
+    /// let euler_angles = Euler::new(
     ///     Radians(0.1_f64),
     ///     Radians(0.2_f64),
     ///     Radians(0.3_f64)
@@ -232,7 +232,7 @@ where
     ///
     /// assert!(!euler_angles.is_zero());
     ///
-    /// let euler_angles: EulerAngles<Radians<f64>> = EulerAngles::zero();
+    /// let euler_angles: Euler<Radians<f64>> = Euler::zero();
     ///
     /// assert!(euler_angles.is_zero());
     /// ```
@@ -290,7 +290,7 @@ where
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     EulerAngles,
+    /// #     Euler,
     /// #     Matrix3x3,
     /// # };
     /// # use cglinalg_trigonometry::Radians;
@@ -301,7 +301,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
@@ -409,7 +409,7 @@ where
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     EulerAngles,
+    /// #     Euler,
     /// #     Matrix4x4,
     /// # };
     /// # use cglinalg_trigonometry::Radians;
@@ -420,7 +420,7 @@ where
     ///     let yaw = Radians(f64::consts::FRAC_PI_4);
     ///     let pitch = Radians(f64::consts::FRAC_PI_3);
     ///
-    ///     EulerAngles::new(roll, yaw, pitch)
+    ///     Euler::new(roll, yaw, pitch)
     /// };
     /// let expected = {
     ///     let frac_1_sqrt_2 = 1_f64 / f64::sqrt(2_f64);
@@ -491,7 +491,7 @@ where
     }
 
     #[inline]
-    fn from_matrix(matrix: &Matrix3x3<S>) -> EulerAngles<Radians<S>> {
+    fn from_matrix(matrix: &Matrix3x3<S>) -> Euler<Radians<S>> {
         let yaw = Radians::asin(matrix[2][0]);
         let cos_yaw = Radians::cos(yaw);
         let (pitch, roll) = if cos_yaw.abs().is_zero() {
@@ -506,91 +506,91 @@ where
             (_pitch, _roll)
         };
 
-        EulerAngles::new(roll, yaw, pitch)
+        Euler::new(roll, yaw, pitch)
     }
 }
 
-impl<A> fmt::Display for EulerAngles<A>
+impl<A> fmt::Display for Euler<A>
 where
     A: fmt::Display,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "EulerAngles [roll={}, yaw={}, pitch={}]", self.x, self.y, self.z)
+        write!(formatter, "Euler [roll={}, yaw={}, pitch={}]", self.x, self.y, self.z)
     }
 }
 
-impl<S, A> From<EulerAngles<A>> for Matrix3x3<S>
+impl<S, A> From<Euler<A>> for Matrix3x3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
 {
     #[inline]
-    fn from(euler: EulerAngles<A>) -> Matrix3x3<S> {
+    fn from(euler: Euler<A>) -> Matrix3x3<S> {
         euler.to_matrix()
     }
 }
 
-impl<S, A> From<&EulerAngles<A>> for Matrix3x3<S>
+impl<S, A> From<&Euler<A>> for Matrix3x3<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
 {
     #[inline]
-    fn from(euler: &EulerAngles<A>) -> Matrix3x3<S> {
+    fn from(euler: &Euler<A>) -> Matrix3x3<S> {
         euler.to_matrix()
     }
 }
 
-impl<A, S> From<EulerAngles<A>> for Matrix4x4<S>
+impl<A, S> From<Euler<A>> for Matrix4x4<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
 {
     #[inline]
-    fn from(euler: EulerAngles<A>) -> Matrix4x4<S> {
+    fn from(euler: Euler<A>) -> Matrix4x4<S> {
         euler.to_affine_matrix()
     }
 }
 
-impl<A, S> From<&EulerAngles<A>> for Matrix4x4<S>
+impl<A, S> From<&Euler<A>> for Matrix4x4<S>
 where
     S: SimdScalarFloat,
     A: Angle<Dimensionless = S>,
 {
     #[inline]
-    fn from(euler: &EulerAngles<A>) -> Matrix4x4<S> {
+    fn from(euler: &Euler<A>) -> Matrix4x4<S> {
         euler.to_affine_matrix()
     }
 }
 
-impl<S> From<Quaternion<S>> for EulerAngles<Radians<S>>
+impl<S> From<Quaternion<S>> for Euler<Radians<S>>
 where
     S: SimdScalarFloat,
 {
     #[inline]
-    fn from(quaternion: Quaternion<S>) -> EulerAngles<Radians<S>> {
+    fn from(quaternion: Quaternion<S>) -> Euler<Radians<S>> {
         let rotation_matrix = quaternion.to_matrix();
         Self::from_matrix(&rotation_matrix)
     }
 }
 
-impl<S> From<&Quaternion<S>> for EulerAngles<Radians<S>>
+impl<S> From<&Quaternion<S>> for Euler<Radians<S>>
 where
     S: SimdScalarFloat,
 {
     #[inline]
-    fn from(quaternion: &Quaternion<S>) -> EulerAngles<Radians<S>> {
+    fn from(quaternion: &Quaternion<S>) -> Euler<Radians<S>> {
         let rotation_matrix = quaternion.to_matrix();
         Self::from_matrix(&rotation_matrix)
     }
 }
 
 
-impl<A> approx_cmp::AbsDiffEq for EulerAngles<A>
+impl<A> approx_cmp::AbsDiffEq for Euler<A>
 where
     A: Angle,
 {
-    type Tolerance = EulerAngles<<A as approx_cmp::AbsDiffEq>::Tolerance>;
+    type Tolerance = Euler<<A as approx_cmp::AbsDiffEq>::Tolerance>;
 
     #[inline]
     fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
@@ -600,7 +600,7 @@ where
     }
 }
 
-impl<A> approx_cmp::AbsDiffAllEq for EulerAngles<A>
+impl<A> approx_cmp::AbsDiffAllEq for Euler<A>
 where
     A: Angle,
 {
@@ -614,16 +614,16 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertAbsDiffEq for EulerAngles<A>
+impl<A> approx_cmp::AssertAbsDiffEq for Euler<A>
 where
     A: Angle,
 {
-    type DebugAbsDiff = EulerAngles<<A as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
-    type DebugTolerance = EulerAngles<<A as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+    type DebugAbsDiff = Euler<<A as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = Euler<<A as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.x, &other.x),
             approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.y, &other.y),
             approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.z, &other.z),
@@ -632,7 +632,7 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.x, &other.x, &max_abs_diff.x),
             approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.y, &other.y, &max_abs_diff.y),
             approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.z, &other.z, &max_abs_diff.z),
@@ -640,15 +640,15 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertAbsDiffAllEq for EulerAngles<A>
+impl<A> approx_cmp::AssertAbsDiffAllEq for Euler<A>
 where
     A: Angle,
 {
-    type AllDebugTolerance = EulerAngles<<A as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+    type AllDebugTolerance = Euler<<A as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.x, &other.x, max_abs_diff),
             approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.y, &other.y, max_abs_diff),
             approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.z, &other.z, max_abs_diff),
@@ -656,11 +656,11 @@ where
     }
 }
 
-impl<A> approx_cmp::RelativeEq for EulerAngles<A>
+impl<A> approx_cmp::RelativeEq for Euler<A>
 where
     A: Angle,
 {
-    type Tolerance = EulerAngles<<A as approx_cmp::RelativeEq>::Tolerance>;
+    type Tolerance = Euler<<A as approx_cmp::RelativeEq>::Tolerance>;
 
     #[inline]
     fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
@@ -670,7 +670,7 @@ where
     }
 }
 
-impl<A> approx_cmp::RelativeAllEq for EulerAngles<A>
+impl<A> approx_cmp::RelativeAllEq for Euler<A>
 where
     A: Angle,
 {
@@ -684,16 +684,16 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertRelativeEq for EulerAngles<A>
+impl<A> approx_cmp::AssertRelativeEq for Euler<A>
 where
     A: Angle,
 {
-    type DebugAbsDiff = EulerAngles<<A as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
-    type DebugTolerance = EulerAngles<<A as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+    type DebugAbsDiff = Euler<<A as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = Euler<<A as approx_cmp::AssertRelativeEq>::DebugTolerance>;
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertRelativeEq::debug_abs_diff(&self.x, &other.x),
             approx_cmp::AssertRelativeEq::debug_abs_diff(&self.y, &other.y),
             approx_cmp::AssertRelativeEq::debug_abs_diff(&self.z, &other.z),
@@ -702,7 +702,7 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.x, &other.x, &max_abs_diff.x),
             approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.y, &other.y, &max_abs_diff.y),
             approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.z, &other.z, &max_abs_diff.z),
@@ -711,7 +711,7 @@ where
 
     #[inline]
     fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.x, &other.x, &max_relative.x),
             approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.y, &other.y, &max_relative.y),
             approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.z, &other.z, &max_relative.z),
@@ -719,15 +719,15 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertRelativeAllEq for EulerAngles<A>
+impl<A> approx_cmp::AssertRelativeAllEq for Euler<A>
 where
     A: Angle,
 {
-    type AllDebugTolerance = EulerAngles<<A as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+    type AllDebugTolerance = Euler<<A as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.x, &other.x, max_abs_diff),
             approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.y, &other.y, max_abs_diff),
             approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.z, &other.z, max_abs_diff),
@@ -736,7 +736,7 @@ where
 
     #[inline]
     fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.x, &other.x, max_relative),
             approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.y, &other.y, max_relative),
             approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.z, &other.z, max_relative),
@@ -744,13 +744,13 @@ where
     }
 }
 
-impl<A> approx_cmp::UlpsEq for EulerAngles<A>
+impl<A> approx_cmp::UlpsEq for Euler<A>
 where
     A: Angle,
     A::UlpsTolerance: Sized,
 {
-    type Tolerance = EulerAngles<<A as approx_cmp::UlpsEq>::Tolerance>;
-    type UlpsTolerance = EulerAngles<<A as approx_cmp::UlpsEq>::UlpsTolerance>;
+    type Tolerance = Euler<<A as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = Euler<<A as approx_cmp::UlpsEq>::UlpsTolerance>;
 
     #[inline]
     fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
@@ -760,7 +760,7 @@ where
     }
 }
 
-impl<A> approx_cmp::UlpsAllEq for EulerAngles<A>
+impl<A> approx_cmp::UlpsAllEq for Euler<A>
 where
     A: Angle,
 {
@@ -775,19 +775,19 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertUlpsEq for EulerAngles<A>
+impl<A> approx_cmp::AssertUlpsEq for Euler<A>
 where
     A: Angle,
     A::UlpsTolerance: Sized,
 {
-    type DebugAbsDiff = EulerAngles<<A as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
-    type DebugUlpsDiff = EulerAngles<<A as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
-    type DebugTolerance = EulerAngles<<A as approx_cmp::AssertUlpsEq>::DebugTolerance>;
-    type DebugUlpsTolerance = EulerAngles<<A as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+    type DebugAbsDiff = Euler<<A as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = Euler<<A as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = Euler<<A as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = Euler<<A as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsEq::debug_abs_diff(&self.x, &other.x),
             approx_cmp::AssertUlpsEq::debug_abs_diff(&self.y, &other.y),
             approx_cmp::AssertUlpsEq::debug_abs_diff(&self.z, &other.z),
@@ -796,7 +796,7 @@ where
 
     #[inline]
     fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.x, &other.x),
             approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.y, &other.y),
             approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.z, &other.z),
@@ -805,7 +805,7 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.x, &other.x, &max_abs_diff.x),
             approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.y, &other.y, &max_abs_diff.y),
             approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.z, &other.z, &max_abs_diff.z),
@@ -814,7 +814,7 @@ where
 
     #[inline]
     fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.x, &other.x, &max_ulps.x),
             approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.y, &other.y, &max_ulps.y),
             approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.z, &other.z, &max_ulps.z),
@@ -822,16 +822,16 @@ where
     }
 }
 
-impl<A> approx_cmp::AssertUlpsAllEq for EulerAngles<A>
+impl<A> approx_cmp::AssertUlpsAllEq for Euler<A>
 where
     A: Angle,
 {
-    type AllDebugTolerance = EulerAngles<<A as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
-    type AllDebugUlpsTolerance = EulerAngles<<A as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+    type AllDebugTolerance = Euler<<A as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = Euler<<A as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.x, &other.x, max_abs_diff),
             approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.y, &other.y, max_abs_diff),
             approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.z, &other.z, max_abs_diff),
@@ -840,7 +840,7 @@ where
 
     #[inline]
     fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
-        EulerAngles::new(
+        Euler::new(
             approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.x, &other.x, max_ulps),
             approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.y, &other.y, max_ulps),
             approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.z, &other.z, max_ulps),
