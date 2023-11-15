@@ -1625,7 +1625,6 @@ where
     }
 }
 
-
 impl<S> Angle for Radians<S>
 where
     S: SimdScalarFloat,
