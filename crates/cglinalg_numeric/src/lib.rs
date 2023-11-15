@@ -98,7 +98,7 @@ where
 {
 }
 
-/// A trait representing numbers with subtraction and additive inverses.
+/// A trait representing numbers with additive inverses.
 pub trait SimdScalarSigned: SimdScalar + num_traits::Signed {
     /// Determine whether the sign of the number is positive.
     ///
@@ -303,10 +303,9 @@ pub trait SimdScalarSigned: SimdScalar + num_traits::Signed {
     fn abs(self) -> Self;
 }
 
-pub trait SimdScalarOrd
-where
-    Self: SimdScalar + PartialOrd,
-{
+/// A trait representing numbers that can be partially ordered, but not
+/// necessarily totally ordered.
+pub trait SimdScalarOrd: SimdScalar + PartialOrd {
     /// Calculate the maximum value of two numbers.
     ///
     /// # Examples
@@ -323,7 +322,6 @@ where
     /// Examples of using `max` with integers.
     /// ```
     /// # use cglinalg_numeric::SimdScalarOrd;
-    /// # // use core::i32;
     /// #
     /// assert_eq!(SimdScalarOrd::max(1_i32, 2_i32), 2_i32);
     /// assert_eq!(SimdScalarOrd::max(-1_i32, -2_i32), -1_i32);
@@ -383,12 +381,28 @@ where
     fn clamp(self, min_value: Self, max_value: Self) -> Self;
 }
 
-/// A trait representing numbers that have finite minimum and maximum values
-/// that they can represent.
-pub trait SimdScalarBounded
-where
-    Self: SimdScalar + SimdScalarOrd,
-{
+/// A trait representing numbers that have finite minimum values and finite 
+/// maximum values that they can represent.
+/// 
+/// # Example
+/// 
+/// ```
+/// # use cglinalg_numeric::SimdScalarBounded;
+/// # use core::i16;
+/// #
+/// let min: i16 = SimdScalarBounded::min_value();
+/// let max: i16 = SimdScalarBounded::max_value();
+/// 
+/// assert!(min < max);
+/// 
+/// let lower_bound = min + 1_i16;
+/// let upper_bound = max - 1_i16;
+/// for i in lower_bound..=upper_bound {
+///     assert!(i > min);
+///     assert!(i < max);
+/// }
+/// ```
+pub trait SimdScalarBounded: SimdScalar + SimdScalarOrd {
     /// Returns the smallest finite value of a number type.
     ///
     /// # Examples
@@ -440,6 +454,43 @@ where
     fn max_value() -> Self;
 }
 
+/// A trait representing number types that can be approximately compared.
+/// 
+/// This trait exists primarily to put together all of the traits exposed by
+/// the [`approx_cmp`] crate in one place.
+/// 
+/// # Examples
+/// 
+/// ```
+/// # use approx_cmp::{
+/// #     assert_abs_diff_eq,
+/// #     assert_abs_diff_ne,
+/// #     assert_relative_eq,
+/// #     assert_relative_ne,
+/// #     assert_ulps_eq,
+/// #     assert_ulps_ne,
+/// # };
+/// # use cglinalg_numeric::SimdScalarCmp;
+/// #
+/// let max_abs_diff: f64 = SimdScalarCmp::default_epsilon();
+/// let max_relative: f64 = SimdScalarCmp::default_epsilon();
+/// let max_ulps: u64 = <f64 as SimdScalarCmp>::default_max_ulps();
+/// 
+/// assert_abs_diff_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= max_abs_diff);
+/// assert_abs_diff_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= max_abs_diff);
+/// assert_abs_diff_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= max_abs_diff);
+/// assert_abs_diff_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= max_abs_diff);
+/// 
+/// assert_relative_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= 0_f64, relative <= max_relative);
+/// assert_relative_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= 0_f64, relative <= max_relative);
+/// assert_relative_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= 0_f64, relative <= max_relative);
+/// assert_relative_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= 0_f64, relative <= max_relative);
+/// 
+/// assert_ulps_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= 0_f64, ulps <= max_ulps);
+/// assert_ulps_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= 0_f64, ulps <= max_ulps);
+/// assert_ulps_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= 0_f64, ulps <= max_ulps);
+/// assert_ulps_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= 0_f64, ulps <= max_ulps);
+/// ```
 pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
     + approx_cmp::AbsDiffAllEq<AllTolerance = Self>
     + approx_cmp::AssertAbsDiffEq<DebugAbsDiff = Self, DebugTolerance = Self>
@@ -464,6 +515,9 @@ pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
     >
     + approx_cmp::AssertUlpsAllEq<AllDebugTolerance = Self>
 {
+    /// The underlying integer data type representing floating point numbers.
+    /// This is defined for ulps comparisons. [`Self::IntegerRepr`] should be
+    /// in one-to-one correspondence with [`Self`].
     type IntegerRepr: Copy + Clone + fmt::Debug;
 
     /// Returns the default epsilon for a floating point data type.
@@ -1450,7 +1504,8 @@ pub trait SimdScalarFloat: SimdScalarSigned
     fn machine_epsilon() -> Self;
 }
 
-impl<T> SimdScalar for T where
+impl<T> SimdScalar for T
+where
     T: Copy
         + Clone
         + fmt::Debug
