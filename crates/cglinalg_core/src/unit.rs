@@ -10,8 +10,8 @@ use core::ops;
 /// This type enforces the requirement that values have a unit norm. This
 /// is useful when one needs to know the direction a vector is pointing for
 /// operations like constructing rotations. The unit type statically enforces
-/// the requirement that an input argument be normalized. This reduces the 
-/// chance of errors from passing an unnormalized vector or a zero vector into 
+/// the requirement that an input argument be normalized. This reduces the
+/// chance of errors from passing an unnormalized vector or a zero vector into
 /// a calculation involving unit vectors.
 #[repr(transparent)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -49,13 +49,13 @@ impl<T> Unit<T> {
 
     /// Wraps an object into a unit type, assuming that it is normalized without
     /// checking.
-    /// 
+    ///
     /// This function will not try to normalize the input value This function
-    /// should only be used situationally, such as for performance reasons 
+    /// should only be used situationally, such as for performance reasons
     /// when one can guarantee that the input vector is a unit vector.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Unit,
@@ -64,7 +64,7 @@ impl<T> Unit<T> {
     /// #
     /// let expected = Vector3::new(3_f64, 5_f64, 7_f64);
     /// let result = Unit::from_value_unchecked(expected).into_inner();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
@@ -103,9 +103,9 @@ where
     T: Normed,
 {
     /// Construct a new unit value, normalizing the input value.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::{
     /// #     Unit,
@@ -114,7 +114,7 @@ where
     /// #
     /// let vector = Vector3::new(2_f64, 4_f64, 8_f64);
     /// let unit_vector = Unit::from_value(vector);
-    /// 
+    ///
     /// assert_ne!(vector.norm(), 1_f64);
     /// assert_eq!(unit_vector.norm(), 1_f64);
     /// ```

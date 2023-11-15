@@ -645,9 +645,9 @@ where
     }
 
     /// Compute the inverse of the transformation.
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the transformation is not invertible.
     ///
     /// # Example
@@ -767,9 +767,9 @@ where
     /// Compute the inverse of the transformation.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the transformation is not invertible.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -876,7 +876,7 @@ where
     #[inline]
     fn from(matrix: Matrix<S, NPLUS1, NPLUS1>) -> Self {
         Self { matrix }
-    }    
+    }
 }
 
 impl<S, const N: usize, const NPLUS1: usize> From<&Matrix<S, NPLUS1, NPLUS1>> for TransformTol<S, N, NPLUS1>
@@ -888,7 +888,7 @@ where
     #[inline]
     fn from(matrix: &Matrix<S, NPLUS1, NPLUS1>) -> Self {
         Self { matrix: *matrix }
-    }    
+    }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -908,7 +908,7 @@ where
     #[inline]
     const fn from(matrix: Matrix<S, NPLUS1, NPLUS1>) -> Self {
         Self { matrix }
-    }    
+    }
 }
 
 impl<S, const N: usize, const NPLUS1: usize> approx_cmp::AbsDiffEq for Transform<S, N, NPLUS1>

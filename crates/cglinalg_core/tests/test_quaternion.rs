@@ -471,7 +471,12 @@ mod arg_tests {
         // The principal argument is half of the angle of rotation.
         let principal_arg_q = q.arg();
 
-        assert_relative_eq!(principal_arg_q, f64::consts::FRAC_PI_8, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            principal_arg_q,
+            f64::consts::FRAC_PI_8,
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
 
         for k in 0..100 {
             let _k = k as f64;
@@ -1164,7 +1169,12 @@ mod square_root_tests {
         let scalar = Quaternion::from_real(scalar_part);
         let sqrt_scalar = scalar.sqrt();
 
-        assert_relative_eq!(sqrt_scalar * sqrt_scalar, scalar, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            sqrt_scalar * sqrt_scalar,
+            scalar,
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]

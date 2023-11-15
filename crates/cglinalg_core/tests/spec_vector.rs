@@ -728,7 +728,12 @@ where
 {
     let zero_vector = Vector::zero();
 
-    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        v,
+        zero_vector,
+        abs_diff_all <= input_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(v.norm_squared() > output_tolerance);
 
     Ok(())
@@ -831,7 +836,12 @@ where
 {
     let zero_vector = Vector::zero();
 
-    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        v,
+        zero_vector,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(v.norm() > tolerance);
 
     Ok(())
@@ -872,7 +882,12 @@ where
 {
     let zero_vector = Vector::zero();
 
-    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        v,
+        zero_vector,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(v.l1_norm() > tolerance);
 
     Ok(())
@@ -968,17 +983,18 @@ where
 /// v1 != v2 ==> lp_norm(v1 - v2) != 0
 /// ```
 /// For the sake of testability, we test point separation from zero.
-fn prop_approx_lp_norm_point_separating<S, const N: usize>(
-    v: Vector<S, N>,
-    p: u32,
-    tolerance: S,
-) -> Result<(), TestCaseError>
+fn prop_approx_lp_norm_point_separating<S, const N: usize>(v: Vector<S, N>, p: u32, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let zero_vector = Vector::zero();
 
-    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        v,
+        zero_vector,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(v.lp_norm(p) > tolerance);
 
     Ok(())
@@ -1019,7 +1035,12 @@ where
 {
     let zero_vector = Vector::zero();
 
-    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        v,
+        zero_vector,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(v.linf_norm() > tolerance);
 
     Ok(())

@@ -504,8 +504,18 @@ where
     let one = Quaternion::identity();
     let q_inv = q.try_inverse().unwrap();
 
-    prop_assert!(relative_eq!(q * q_inv, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(q_inv * q, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        q * q_inv,
+        one,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        q_inv * q,
+        one,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -864,17 +874,18 @@ where
 /// q1 != q2 ==> modulus_squared(q1 - q2) != 0
 /// ```
 /// For the sake of testability, we test point separation from zero.
-fn prop_approx_modulus_squared_point_separating<S>(
-    q: Quaternion<S>,
-    input_tolerance: S,
-    output_tolerance: S,
-) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(q: Quaternion<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let zero_quaternion = Quaternion::zero();
 
-    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        q,
+        zero_quaternion,
+        abs_diff_all <= input_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(q.modulus_squared() > output_tolerance);
 
     Ok(())
@@ -947,7 +958,12 @@ where
 {
     let zero_quaternion = Quaternion::zero();
 
-    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        q,
+        zero_quaternion,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(q.modulus() > tolerance);
 
     Ok(())
@@ -1053,7 +1069,12 @@ where
 {
     let zero_quaternion = Quaternion::zero();
 
-    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        q,
+        zero_quaternion,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(q.l1_norm() > tolerance);
 
     Ok(())
@@ -1156,8 +1177,18 @@ where
     let exp_q = q.exp();
     let exp_negative_q = (-q).exp();
 
-    prop_assert!(relative_eq!(exp_negative_q * exp_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(exp_q * exp_negative_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        exp_negative_q * exp_q,
+        unit_s,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        exp_q * exp_negative_q,
+        unit_s,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1176,7 +1207,12 @@ where
     let lhs = q.ln().scalar();
     let rhs = q.norm().ln();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1251,7 +1287,12 @@ where
     let lhs = q.arg();
     let rhs = new_q.arg();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1288,7 +1329,11 @@ where
 {
     // Ensure that the vector part is sufficiently far from zero for the square
     // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-6)));
+    prop_assume!(abs_diff_ne!(
+        q.vector(),
+        Vector3::zero(),
+        abs_diff_all <= cglinalg_numeric::cast(1e-6)
+    ));
 
     let sqrt_q = q.sqrt();
     let lhs = sqrt_q * sqrt_q;
@@ -1312,7 +1357,11 @@ where
 {
     // Ensure that the vector part is sufficiently far from zero for the square
     // root to be well-defined for `q`.
-    prop_assume!(abs_diff_ne!(q.vector(), Vector3::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-6)));
+    prop_assume!(abs_diff_ne!(
+        q.vector(),
+        Vector3::zero(),
+        abs_diff_all <= cglinalg_numeric::cast(1e-6)
+    ));
 
     let q_conjugate = q.conjugate();
     let sqrt_q_conjugate = q_conjugate.sqrt();
@@ -1386,7 +1435,12 @@ where
     let one = S::one();
     let negative_one = Quaternion::from_real(-one);
     prop_assume!(q.is_pure());
-    prop_assert!(relative_eq!(q.squared(), negative_one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        q.squared(),
+        negative_one,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1404,7 +1458,12 @@ where
     let lhs = q.cos() * q.cos() + q.sin() * q.sin();
     let rhs = Quaternion::identity();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1538,7 +1597,12 @@ where
     let lhs = q.cosh() * q.cosh() - q.sinh() * q.sinh();
     let rhs = Quaternion::identity();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

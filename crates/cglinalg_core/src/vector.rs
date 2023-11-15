@@ -1246,21 +1246,14 @@ where
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(
-            &self.data,
-            &other.data,
-        );
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.data, &other.data);
 
         Vector::from(result)
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
         Vector::from(result)
     }
@@ -1274,11 +1267,7 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Vector::from(result)
     }
@@ -1295,12 +1284,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
-            result &= approx_cmp::RelativeEq::relative_eq(
-                &self.data[i],
-                &other.data[i],
-                &max_abs_diff.data[i],
-                &max_relative.data[i],
-            );
+            result &= approx_cmp::RelativeEq::relative_eq(&self.data[i], &other.data[i], &max_abs_diff.data[i], &max_relative.data[i]);
         }
 
         result
@@ -1318,12 +1302,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
-            result &= approx_cmp::RelativeAllEq::relative_all_eq(
-                &self.data[i],
-                &other.data[i],
-                max_abs_diff,
-                max_relative,
-            );
+            result &= approx_cmp::RelativeAllEq::relative_all_eq(&self.data[i], &other.data[i], max_abs_diff, max_relative);
         }
 
         result
@@ -1346,22 +1325,14 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
         Vector::from(result)
     }
 
     #[inline]
     fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(
-            &self.data,
-            &other.data,
-            &max_relative.data,
-        );
+        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.data, &other.data, &max_relative.data);
 
         Vector::from(result)
     }
@@ -1375,22 +1346,14 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Vector::from(result)
     }
 
     #[inline]
     fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(
-            &self.data,
-            &other.data,
-            max_relative,
-        );
+        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.data, &other.data, max_relative);
 
         Vector::from(result)
     }
@@ -1409,12 +1372,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
-            result &= approx_cmp::UlpsEq::ulps_eq(
-                &self.data[i],
-                &other.data[i],
-                &max_abs_diff.data[i],
-                &max_ulps.data[i],
-            );
+            result &= approx_cmp::UlpsEq::ulps_eq(&self.data[i], &other.data[i], &max_abs_diff.data[i], &max_ulps.data[i]);
         }
 
         result
@@ -1433,12 +1391,7 @@ where
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = true;
         for i in 0..N {
-            result &= approx_cmp::UlpsAllEq::ulps_all_eq(
-                &self.data[i],
-                &other.data[i],
-                max_abs_diff,
-                max_ulps,
-            );
+            result &= approx_cmp::UlpsAllEq::ulps_all_eq(&self.data[i], &other.data[i], max_abs_diff, max_ulps);
         }
 
         result
@@ -1466,29 +1419,21 @@ where
     fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
         let data = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.data, &other.data);
 
-        Vector { data, }
+        Vector { data }
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
-        Vector { data, }
+        Vector { data }
     }
 
     #[inline]
     fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
-        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(
-            &self.data,
-            &other.data,
-            &max_ulps.data,
-        );
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.data, &other.data, &max_ulps.data);
 
-        Vector { data, }
+        Vector { data }
     }
 }
 
@@ -1501,24 +1446,16 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Vector::from(result)
     }
 
     #[inline]
     fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
-        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(
-            &self.data,
-            &other.data,
-            max_ulps,
-        );
+        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.data, &other.data, max_ulps);
 
-        Vector { data, }
+        Vector { data }
     }
 }
 

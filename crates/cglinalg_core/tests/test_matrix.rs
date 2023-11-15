@@ -1078,8 +1078,18 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
     fn test_from_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle.cos(),
+            2_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle.sin(),
+            1_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -2950,8 +2960,18 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let tan_rotation_angle_z_xy = 1_f64;
         let rotation_angle_z_xy = Radians::atan2(tan_rotation_angle_z_xy, 1_f64);
 
-        assert_relative_eq!(rotation_angle_z_xy.cos(), 1_f64 / f64::sqrt(2_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle_z_xy.sin(), 1_f64 / f64::sqrt(2_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle_z_xy.cos(),
+            1_f64 / f64::sqrt(2_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle_z_xy.sin(),
+            1_f64 / f64::sqrt(2_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -2959,8 +2979,18 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let tan_rotation_y_zx = -f64::sqrt(2_f64 / 3_f64);
         let rotation_angle_y_zx = Radians::atan2(tan_rotation_y_zx, 1_f64);
 
-        assert_relative_eq!(rotation_angle_y_zx.cos(), f64::sqrt(3_f64 / 5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle_y_zx.sin(), -f64::sqrt(2_f64 / 5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle_y_zx.cos(),
+            f64::sqrt(3_f64 / 5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle_y_zx.sin(),
+            -f64::sqrt(2_f64 / 5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -3684,8 +3714,18 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle.cos(),
+            2_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle.sin(),
+            1_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -3728,9 +3768,24 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let rotated_origin = Vector3::new(f64::sqrt(5_f64), 0_f64, 1_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
 
-        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            result_rotated_translated_origin[0],
+            origin[0],
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            result_rotated_translated_origin[1],
+            origin[1],
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            result_rotated_translated_origin[2],
+            1_f64,
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -6264,16 +6319,36 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     fn test_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
 
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle_x_yz.cos(),
+            3_f64 / f64::sqrt(13_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle_x_yz.sin(),
+            2_f64 / f64::sqrt(13_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
     fn test_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
 
-        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle_z_xy.cos(),
+            f64::sqrt(4_f64 / 17_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle_z_xy.sin(),
+            f64::sqrt(13_f64 / 17_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]

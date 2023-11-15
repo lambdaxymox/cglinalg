@@ -195,7 +195,12 @@ where
     let lhs = r.matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -213,7 +218,12 @@ where
     let lhs = r.matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -256,9 +266,24 @@ where
     let lhs = r * r.inverse();
     let rhs = r.inverse() * r;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        lhs,
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        rhs,
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -346,7 +371,12 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -374,7 +404,12 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -394,7 +429,12 @@ where
     let lhs = (r.angle() - angle) / Radians(S::two_pi());
     let rhs = lhs.round();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

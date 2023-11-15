@@ -774,8 +774,18 @@ mod shear2_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle.cos(),
+            2_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle.sin(),
+            1_f64 / f64::sqrt(5_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -827,7 +837,12 @@ mod shear2_noncoordinate_plane_tests {
         let rotated_origin = Point2::new(f64::sqrt(5_f64), 0_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
 
-        assert_relative_eq!(result_rotated_translated_origin, origin, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            result_rotated_translated_origin,
+            origin,
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[test]
@@ -3506,8 +3521,18 @@ mod shear3_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
 
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(
+            rotation_angle_x_yz.cos(),
+            3_f64 / f64::sqrt(13_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
+        assert_relative_eq!(
+            rotation_angle_x_yz.sin(),
+            2_f64 / f64::sqrt(13_f64),
+            abs_diff_all <= 1e-10,
+            relative_all <= f64::EPSILON
+        );
     }
 
     #[rustfmt::skip]

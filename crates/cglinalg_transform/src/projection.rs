@@ -994,7 +994,6 @@ where
 }
 
 
-
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates based on the perspective field of view model.
 ///
@@ -2192,7 +2191,6 @@ where
         PerspectiveFov3Tol::from(matrix)
     }
 }
-
 
 
 /// An orthographic projection with arbitrary `left`, `right`,

@@ -785,7 +785,12 @@ mod square_root_tests {
         let result = sqrt_z;
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-16, relative_all <= f64::EPSILON);
-        assert_relative_eq!((sqrt_z * sqrt_z).imaginary(), z.imaginary(), abs_diff_all <= 1e-10, relative_all <= 1e-15);
+        assert_relative_eq!(
+            (sqrt_z * sqrt_z).imaginary(),
+            z.imaginary(),
+            abs_diff_all <= 1e-10,
+            relative_all <= 1e-15
+        );
     }
 
     #[test]

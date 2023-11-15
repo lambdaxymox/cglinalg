@@ -253,9 +253,24 @@ where
     let lhs = m * m.inverse();
     let rhs = m.inverse() * m;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        lhs,
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        rhs,
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -341,7 +356,12 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -369,7 +389,12 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

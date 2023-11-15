@@ -30,24 +30,15 @@ where
     Self: ops::Rem<Self, Output = Self>,
     Self: approx_cmp::AbsDiffEq<Tolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::AbsDiffAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
-    Self: approx_cmp::AssertAbsDiffEq<
-        DebugAbsDiff = <Self as Angle>::Dimensionless,
-        DebugTolerance = <Self as Angle>::Dimensionless,
-    >,
+    Self: approx_cmp::AssertAbsDiffEq<DebugAbsDiff = <Self as Angle>::Dimensionless, DebugTolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::AssertAbsDiffAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::RelativeEq<Tolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::RelativeAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
-    Self: approx_cmp::AssertRelativeEq<
-        Tolerance = <Self as Angle>::Dimensionless,
-        DebugTolerance = <Self as Angle>::Dimensionless,
-    >,
+    Self: approx_cmp::AssertRelativeEq<Tolerance = <Self as Angle>::Dimensionless, DebugTolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::AssertRelativeAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::UlpsEq<Tolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::UlpsAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
-    Self: approx_cmp::AssertUlpsEq<
-        DebugAbsDiff = <Self as Angle>::Dimensionless,
-        DebugTolerance = <Self as Angle>::Dimensionless,
-    >,
+    Self: approx_cmp::AssertUlpsEq<DebugAbsDiff = <Self as Angle>::Dimensionless, DebugTolerance = <Self as Angle>::Dimensionless>,
     Self: approx_cmp::AssertUlpsAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
 {
     type Dimensionless: SimdScalarFloat;
@@ -990,7 +981,7 @@ macro_rules! impl_approx_cmp_angle {
                 approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.0, &other.0, max_ulps)
             }
         }
-    }
+    };
 }
 
 impl_approx_cmp_angle!(Degrees);

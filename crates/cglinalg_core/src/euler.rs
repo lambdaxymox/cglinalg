@@ -78,7 +78,7 @@ use core::fmt;
 /// Changing either the values of the `pitch` or the `roll` has the same
 /// effect: it rotates an object about the **z-axis**. We have lost the ability
 /// to roll about the **x-axis**.
-/// 
+///
 /// # Example (No Gimbal Lock)
 ///
 /// The following example is a rotation without gimbal lock.

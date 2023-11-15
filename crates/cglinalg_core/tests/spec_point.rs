@@ -242,7 +242,12 @@ where
     let lhs = (p + v1) + v2;
     let rhs = p + (v1 + v2);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -351,7 +356,12 @@ where
 {
     let zero_point = Point::origin();
 
-    prop_assume!(relative_ne!(p, zero_point, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        p,
+        zero_point,
+        abs_diff_all <= input_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(p.norm_squared() > output_tolerance);
 
     Ok(())
@@ -459,8 +469,18 @@ where
     let zero = S::zero();
     let zero_point = Point::origin();
 
-    prop_assume!(relative_ne!(p, zero_point, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_ne!(p.norm(), zero, abs_diff_all <= output_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        p,
+        zero_point,
+        abs_diff_all <= input_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_ne!(
+        p.norm(),
+        zero,
+        abs_diff_all <= output_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

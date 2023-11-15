@@ -1434,8 +1434,17 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps()) 
-                    && ulps_eq!(self.data[j][i], S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps());
+                result &= ulps_eq!(
+                    self.data[i][j],
+                    S::zero(),
+                    abs_diff_all <= S::default_epsilon(),
+                    ulps_all <= S::default_max_ulps()
+                ) && ulps_eq!(
+                    self.data[j][i],
+                    S::zero(),
+                    abs_diff_all <= S::default_epsilon(),
+                    ulps_all <= S::default_max_ulps()
+                );
             }
         }
 
@@ -1445,7 +1454,7 @@ where
     /// Determine whether a matrix is symmetric.
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)`
-    /// for each row `i` and column `j`. More precisely, let `m` be a 
+    /// for each row `i` and column `j`. More precisely, let `m` be a
     /// (`R` row, `C` column) matrix. Then `m` is symmetric provided that
     /// ```text
     /// forall c :: [0..C]. forall r :: [0..R]. m[c][r] == m[r][c]
@@ -1481,7 +1490,12 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], self.data[j][i], abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps());
+                result &= ulps_eq!(
+                    self.data[i][j],
+                    self.data[j][i],
+                    abs_diff_all <= S::default_epsilon(),
+                    ulps_all <= S::default_max_ulps()
+                );
             }
         }
 
@@ -1552,10 +1566,10 @@ where
     ///
     /// assert_eq!(matrix.apply_norm(&l1_norm), 27_f64);
     /// assert_eq!(matrix.apply_norm(&linf_norm), 20_f64);
-    /// 
+    ///
     /// let result = matrix.apply_norm(&frobenius_norm);
     /// let expected = 19.209372712298546_f64;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
@@ -1593,10 +1607,10 @@ where
     ///
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &l1_norm), 26_f64);
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &linf_norm), 22_f64);
-    /// 
+    ///
     /// let result = matrix1.apply_metric_distance(&matrix2, &frobenius_norm);
     /// let expected = 19.05255888325765_f64;
-    /// 
+    ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
@@ -2635,15 +2649,20 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+        ulps_ne!(
+            self.determinant(),
+            S::zero(),
+            abs_diff_all <= S::default_epsilon(),
+            ulps_all <= S::default_max_ulps()
+        )
     }
 
     /// Compute the inverse of a square matrix.
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the [`Matrix`] is not invertible.
-    /// 
+    ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::Matrix1x1;
@@ -3263,13 +3282,18 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+        ulps_ne!(
+            self.determinant(),
+            S::zero(),
+            abs_diff_all <= S::default_epsilon(),
+            ulps_all <= S::default_max_ulps()
+        )
     }
 
     /// Compute the inverse of a square matrix.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the [`Matrix`] is not invertible.
     ///
     /// # Example
@@ -5345,13 +5369,18 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+        ulps_ne!(
+            self.determinant(),
+            S::zero(),
+            abs_diff_all <= S::default_epsilon(),
+            ulps_all <= S::default_max_ulps()
+        )
     }
 
     /// Compute the inverse of a square matrix.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the [`Matrix`] is not invertible.
     ///
     /// # Example
@@ -7302,13 +7331,18 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+        ulps_ne!(
+            self.determinant(),
+            S::zero(),
+            abs_diff_all <= S::default_epsilon(),
+            ulps_all <= S::default_max_ulps()
+        )
     }
-    
+
     /// Compute the inverse of a square matrix.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the [`Matrix`] is not invertible.
     ///
     /// # Example
@@ -8488,21 +8522,14 @@ where
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(
-            &self.data,
-            &other.data,
-        );
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.data, &other.data);
 
         Matrix::from(result)
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
         Matrix::from(result)
     }
@@ -8516,11 +8543,7 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Matrix::from(result)
     }
@@ -8587,22 +8610,14 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
         Matrix::from(result)
     }
 
     #[inline]
     fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(
-            &self.data,
-            &other.data,
-            &max_relative.data,
-        );
+        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.data, &other.data, &max_relative.data);
 
         Matrix::from(result)
     }
@@ -8616,22 +8631,14 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Matrix::from(result)
     }
 
     #[inline]
     fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(
-            &self.data,
-            &other.data,
-            max_relative,
-        );
+        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.data, &other.data, max_relative);
 
         Matrix::from(result)
     }
@@ -8651,12 +8658,7 @@ where
         let mut result = true;
         for c in 0..C {
             for r in 0..R {
-                result &= S::ulps_eq(
-                    &self.data[c][r],
-                    &other.data[c][r],
-                    &max_abs_diff.data[c][r],
-                    &max_ulps.data[c][r],
-                );
+                result &= S::ulps_eq(&self.data[c][r], &other.data[c][r], &max_abs_diff.data[c][r], &max_ulps.data[c][r]);
             }
         }
 
@@ -8706,29 +8708,21 @@ where
     fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
         let data = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.data, &other.data);
 
-        Matrix { data, }
+        Matrix { data }
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(
-            &self.data,
-            &other.data,
-            &max_abs_diff.data,
-        );
+        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
-        Matrix { data, }
+        Matrix { data }
     }
 
     #[inline]
     fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
-        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(
-            &self.data,
-            &other.data,
-            &max_ulps.data,
-        );
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.data, &other.data, &max_ulps.data);
 
-        Matrix { data, }
+        Matrix { data }
     }
 }
 
@@ -8741,24 +8735,16 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(
-            &self.data,
-            &other.data,
-            max_abs_diff,
-        );
+        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
         Matrix::from(result)
     }
 
     #[inline]
     fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
-        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(
-            &self.data,
-            &other.data,
-            max_ulps,
-        );
+        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.data, &other.data, max_ulps);
 
-        Matrix { data, }
+        Matrix { data }
     }
 }
 

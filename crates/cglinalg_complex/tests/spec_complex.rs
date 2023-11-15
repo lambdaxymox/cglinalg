@@ -583,8 +583,18 @@ where
     let one = Complex::one();
     let z_inv = z.try_inverse().unwrap();
 
-    prop_assert!(relative_eq!(z * z_inv, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(z_inv * z, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        z * z_inv,
+        one,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        z_inv * z,
+        one,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -841,17 +851,18 @@ where
 /// z1 != z2 ==> modulus_squared(z1 - z2) != 0
 /// ```
 /// For the sake of testability, we test point separation from zero.
-fn prop_approx_modulus_squared_point_separating<S>(
-    z: Complex<S>,
-    input_tolerance: S,
-    output_tolerance: S,
-) -> Result<(), TestCaseError>
+fn prop_approx_modulus_squared_point_separating<S>(z: Complex<S>, input_tolerance: S, output_tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
     let zero_complex = Complex::zero();
 
-    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        z,
+        zero_complex,
+        abs_diff_all <= input_tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(z.modulus_squared() > output_tolerance);
 
     Ok(())
@@ -968,12 +979,22 @@ where
 {
     let zero_complex = Complex::zero();
 
-    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        z,
+        zero_complex,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     let lhs = z.modulus();
     let rhs = S::zero();
 
-    prop_assert!(relative_ne!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_ne!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1096,7 +1117,12 @@ where
 {
     let zero_complex = Complex::zero();
 
-    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        z,
+        zero_complex,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(z.l1_norm() > tolerance);
 
     Ok(())
@@ -1182,12 +1208,22 @@ where
     let lhs1 = exp_negative_z * exp_z;
     let rhs1 = unit_re;
 
-    prop_assert!(relative_eq!(lhs1, rhs1, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs1,
+        rhs1,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     let lhs2 = exp_z * exp_negative_z;
     let rhs2 = unit_re;
 
-    prop_assert!(relative_eq!(lhs2, rhs2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs2,
+        rhs2,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1246,7 +1282,12 @@ where
     let lhs = (ln_z1_times_z2 - ln_z1_plus_ln_z2) / S::two_pi();
     let rhs = Complex::new(lhs.real().round(), lhs.imaginary().round());
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1264,7 +1305,12 @@ where
     let lhs = z.ln().real();
     let rhs = z.modulus().ln();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1283,7 +1329,12 @@ where
     let lhs = z.ln().exp();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1306,7 +1357,12 @@ where
     let lhs = (ln_exp_z - z) / (S::two_pi());
     let rhs = Complex::new(lhs.real().round(), lhs.imaginary().round());
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1339,7 +1395,12 @@ where
     let lhs = z.arg();
     let rhs = new_z.arg();
 
-    prop_assert!(relative_eq!(lhs.abs(), rhs.abs(), abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs.abs(),
+        rhs.abs(),
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1368,7 +1429,12 @@ where
     let lhs = (arg_z1_times_z2 - arg_z1_plus_arg_z2) / S::two_pi();
     let rhs = lhs.round();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1397,7 +1463,12 @@ where
     let lhs = (arg_z1_div_z2 - arg_z1_minus_arg_z2) / S::two_pi();
     let rhs = lhs.round();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1564,7 +1635,12 @@ where
     let lhs = z_re.cos().real();
     let rhs = re_z.cos();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1583,7 +1659,12 @@ where
     let lhs = (-z).cos();
     let rhs = z.cos();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1603,7 +1684,12 @@ where
     let lhs = Complex::cos(Complex::from_imaginary(im_z));
     let rhs = Complex::cosh(Complex::from_real(im_z));
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1622,7 +1708,12 @@ where
     let re_z = z.real();
     let z_re = Complex::from_real(re_z);
 
-    prop_assert!(relative_eq!(z_re.sin().real(), re_z.sin(), abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        z_re.sin().real(),
+        re_z.sin(),
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1641,7 +1732,12 @@ where
     let lhs = (-z).sin();
     let rhs = -(z.sin());
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1662,7 +1758,12 @@ where
     let lhs = (i * im_z).sin();
     let rhs = i * im_z.sinh();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1682,7 +1783,12 @@ where
     let lhs = tan_z.real();
     let rhs = z.real().tan();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1701,7 +1807,12 @@ where
     let lhs = (-z).tan();
     let rhs = -(z.tan());
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1723,7 +1834,12 @@ where
     let lhs = (i * im_z).tan();
     let rhs = i * im_z.tanh();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1887,7 +2003,12 @@ where
     let lhs = z.conjugate().acos();
     let rhs = z.acos().conjugate();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1905,7 +2026,12 @@ where
     let lhs = z.conjugate().asin();
     let rhs = z.asin().conjugate();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1923,7 +2049,12 @@ where
     let lhs = z.conjugate().atan();
     let rhs = z.atan().conjugate();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1941,7 +2072,12 @@ where
     let lhs = z.acos().cos();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -1983,7 +2119,12 @@ where
     let lhs = z.atan().tan();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2013,7 +2154,12 @@ fn prop_approx_cosh_negative_z_equals_negative_cosh_z<S>(z: Complex<S>, toleranc
 where
     S: SimdScalarFloat,
 {
-    prop_assert!(relative_eq!((-z).cosh(), z.cosh(), abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        (-z).cosh(),
+        z.cosh(),
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2043,7 +2189,12 @@ fn prop_approx_sinh_negative_z_equals_negative_sinh_z<S>(z: Complex<S>, toleranc
 where
     S: SimdScalarFloat,
 {
-    prop_assert!(relative_eq!((-z).sinh(), -z.sinh(), abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        (-z).sinh(),
+        -z.sinh(),
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2076,7 +2227,12 @@ where
     let lhs = (-z).tanh();
     let rhs = -z.tanh();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2236,7 +2392,12 @@ where
     let lhs = z.acosh().cosh();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2255,7 +2416,12 @@ where
     let lhs = z.asinh().sinh();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -2274,7 +2440,12 @@ where
     let lhs = z.atanh().tanh();
     let rhs = z;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

@@ -1,6 +1,6 @@
 use approx_cmp::{
-    relative_eq,
     abs_diff_eq,
+    relative_eq,
 };
 use cglinalg_core::{
     Point,
@@ -165,7 +165,11 @@ where
             abs_diff_all <= cglinalg_numeric::cast(1e-14),
             relative_all <= S::default_epsilon(),
         ));
-        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)));
+        assert!(abs_diff_eq!(
+            direction.dot(&normal),
+            S::zero(),
+            abs_diff_all <= cglinalg_numeric::cast(1e-15)
+        ));
 
         Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
@@ -279,7 +283,12 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(3_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -298,7 +307,12 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(4_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -316,7 +330,12 @@ where
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

@@ -1608,7 +1608,7 @@ where
     /// Compute the inverse of a quaternion.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the [`Quaternion`] is not invertible.
     ///
     /// # Example
@@ -4569,7 +4569,7 @@ where
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.coords, &other.coords,  max_abs_diff)
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
     }
 
     #[inline]

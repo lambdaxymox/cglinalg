@@ -109,7 +109,12 @@ where
     let recovered_angle = A::asin(sin_angle);
     let sin_recovered_angle = recovered_angle.sin();
 
-    prop_assert!(relative_eq!(sin_recovered_angle, sin_angle, abs_diff <= tolerance, relative <= tolerance));
+    prop_assert!(relative_eq!(
+        sin_recovered_angle,
+        sin_angle,
+        abs_diff <= tolerance,
+        relative <= tolerance
+    ));
 
     Ok(())
 }
@@ -134,7 +139,12 @@ where
     let recovered_angle = A::acos(cos_angle);
     let cos_recovered_angle = recovered_angle.cos();
 
-    prop_assert!(relative_eq!(cos_recovered_angle, cos_angle, abs_diff <= tolerance, relative <= tolerance));
+    prop_assert!(relative_eq!(
+        cos_recovered_angle,
+        cos_angle,
+        abs_diff <= tolerance,
+        relative <= tolerance
+    ));
 
     Ok(())
 }
@@ -189,8 +199,18 @@ where
 {
     let angle_plus_full_turn = angle + A::full_turn();
 
-    prop_assert!(relative_eq!(angle.sin(), angle_plus_full_turn.sin(), abs_diff <= tolerance, relative <= tolerance));
-    prop_assert!(relative_eq!(angle.cos(), angle_plus_full_turn.cos(), abs_diff <= tolerance, relative <= tolerance));
+    prop_assert!(relative_eq!(
+        angle.sin(),
+        angle_plus_full_turn.sin(),
+        abs_diff <= tolerance,
+        relative <= tolerance
+    ));
+    prop_assert!(relative_eq!(
+        angle.cos(),
+        angle_plus_full_turn.cos(),
+        abs_diff <= tolerance,
+        relative <= tolerance
+    ));
 
     Ok(())
 }

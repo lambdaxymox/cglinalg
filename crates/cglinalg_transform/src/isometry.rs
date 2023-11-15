@@ -1821,7 +1821,7 @@ where
         let rhs_rotation = other.rotation.matrix();
         let lhs_translation = self.translation.vector();
         let rhs_translation = other.translation.vector();
-        
+
         approx_cmp::AbsDiffEq::abs_diff_eq(lhs_rotation, rhs_rotation, &max_abs_diff.rotation)
             && approx_cmp::AbsDiffEq::abs_diff_eq(lhs_translation, rhs_translation, &max_abs_diff.translation)
     }
@@ -1919,7 +1919,12 @@ where
         let rhs_translation = other.translation.vector();
 
         approx_cmp::RelativeEq::relative_eq(lhs_rotation, rhs_rotation, &max_abs_diff.rotation, &max_relative.rotation)
-            && approx_cmp::RelativeEq::relative_eq(lhs_translation, rhs_translation, &max_abs_diff.translation, &max_relative.translation)
+            && approx_cmp::RelativeEq::relative_eq(
+                lhs_translation,
+                rhs_translation,
+                &max_abs_diff.translation,
+                &max_relative.translation,
+            )
     }
 }
 

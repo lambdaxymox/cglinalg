@@ -1827,7 +1827,11 @@ pub struct SimilarityTol<S, const N: usize> {
 impl<S, const N: usize> SimilarityTol<S, N> {
     #[inline]
     pub const fn from_parts(translation: Vector<S, N>, rotation: Matrix<S, N, N>, scale: S) -> Self {
-        Self { rotation, translation, scale }
+        Self {
+            rotation,
+            translation,
+            scale,
+        }
     }
 }
 
@@ -1842,7 +1846,11 @@ pub struct SimilarityDiff<S, const N: usize> {
 impl<S, const N: usize> SimilarityDiff<S, N> {
     #[inline]
     const fn from_parts(translation: Vector<S, N>, rotation: Matrix<S, N, N>, scale: S) -> Self {
-        Self { rotation, translation, scale }
+        Self {
+            rotation,
+            translation,
+            scale,
+        }
     }
 }
 
@@ -1982,7 +1990,12 @@ where
         let rhs_scale = &other.scale();
 
         approx_cmp::RelativeEq::relative_eq(lhs_rotation, rhs_rotation, &max_abs_diff.rotation, &max_relative.rotation)
-            && approx_cmp::RelativeEq::relative_eq(lhs_translation, rhs_translation, &max_abs_diff.translation, &max_relative.translation)
+            && approx_cmp::RelativeEq::relative_eq(
+                lhs_translation,
+                rhs_translation,
+                &max_abs_diff.translation,
+                &max_relative.translation,
+            )
             && approx_cmp::RelativeEq::relative_eq(lhs_scale, rhs_scale, &max_abs_diff.scale, &max_relative.scale)
     }
 }

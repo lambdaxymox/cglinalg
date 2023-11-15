@@ -2022,7 +2022,12 @@ pub struct ShearTol<S, const N: usize> {
 impl<S, const N: usize> ShearTol<S, N> {
     #[inline]
     pub const fn from_parts(shear_factor: S, origin: Vector<S, N>, direction: Vector<S, N>, normal: Vector<S, N>) -> Self {
-        Self { shear_factor, origin, direction, normal }
+        Self {
+            shear_factor,
+            origin,
+            direction,
+            normal,
+        }
     }
 }
 
@@ -2038,7 +2043,12 @@ pub struct ShearDiff<S, const N: usize> {
 impl<S, const N: usize> ShearDiff<S, N> {
     #[inline]
     const fn from_parts(shear_factor: S, origin: Vector<S, N>, direction: Vector<S, N>, normal: Vector<S, N>) -> Self {
-        Self { shear_factor, origin, direction, normal }
+        Self {
+            shear_factor,
+            origin,
+            direction,
+            normal,
+        }
     }
 }
 
@@ -2201,8 +2211,12 @@ where
         let lhs_normal = &self.normal();
         let rhs_normal = &other.normal();
 
-        approx_cmp::RelativeEq::relative_eq(lhs_shear_factor, rhs_shear_factor, &max_abs_diff.shear_factor, &max_relative.shear_factor)
-            && approx_cmp::RelativeEq::relative_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_relative.origin)
+        approx_cmp::RelativeEq::relative_eq(
+            lhs_shear_factor,
+            rhs_shear_factor,
+            &max_abs_diff.shear_factor,
+            &max_relative.shear_factor,
+        ) && approx_cmp::RelativeEq::relative_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_relative.origin)
             && approx_cmp::RelativeEq::relative_eq(lhs_direction, rhs_direction, &max_abs_diff.direction, &max_relative.direction)
             && approx_cmp::RelativeEq::relative_eq(lhs_normal, rhs_normal, &max_abs_diff.normal, &max_relative.normal)
     }
@@ -2394,8 +2408,12 @@ where
         let lhs_normal = &self.normal();
         let rhs_normal = &other.normal();
 
-        approx_cmp::UlpsEq::ulps_eq(lhs_shear_factor, rhs_shear_factor, &max_abs_diff.shear_factor, &max_ulps.shear_factor)
-            && approx_cmp::UlpsEq::ulps_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_ulps.origin)
+        approx_cmp::UlpsEq::ulps_eq(
+            lhs_shear_factor,
+            rhs_shear_factor,
+            &max_abs_diff.shear_factor,
+            &max_ulps.shear_factor,
+        ) && approx_cmp::UlpsEq::ulps_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_ulps.origin)
             && approx_cmp::UlpsEq::ulps_eq(lhs_direction, rhs_direction, &max_abs_diff.direction, &max_ulps.direction)
             && approx_cmp::UlpsEq::ulps_eq(lhs_normal, rhs_normal, &max_abs_diff.normal, &max_ulps.normal)
     }

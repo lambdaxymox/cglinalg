@@ -958,7 +958,12 @@ where
 {
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        m,
+        zero_matrix,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(m.l1_norm() > tolerance);
 
     Ok(())
@@ -1024,7 +1029,7 @@ where
 }
 
 /// The matrix **L-infinity** norm is point separating.
-/// 
+///
 /// Given matrices `m1` and `m2`
 /// ```text
 /// linf_norm(m1) == linf_norm(m2) ==> m1 == m2
@@ -1043,7 +1048,12 @@ where
 {
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        m,
+        zero_matrix,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
     prop_assert!(m.linf_norm() > tolerance);
 
     Ok(())
@@ -1198,8 +1208,18 @@ where
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_ne!(m.norm(), zero, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(
+        m,
+        zero_matrix,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_ne!(
+        m.norm(),
+        zero,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

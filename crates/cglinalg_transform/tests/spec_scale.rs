@@ -180,8 +180,18 @@ where
 {
     let identity = Scale::identity();
 
-    prop_assert!(relative_eq!(s * s.inverse(), identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_eq!(s.inverse() * s, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        s * s.inverse(),
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
+    prop_assert!(relative_eq!(
+        s.inverse() * s,
+        identity,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -248,7 +258,12 @@ where
     let lhs = (s1 * s2) * p;
     let rhs = (s2 * s1) * p;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -271,7 +286,12 @@ where
     let lhs = (s1 * s2) * v;
     let rhs = (s2 * s1) * v;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -294,7 +314,12 @@ where
     let lhs = s * (s.inverse() * p);
     let rhs = s.inverse() * (s * p);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }
@@ -317,7 +342,12 @@ where
     let lhs = s * (s.inverse() * v);
     let rhs = s.inverse() * (s * v);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(
+        lhs,
+        rhs,
+        abs_diff_all <= tolerance,
+        relative_all <= S::default_epsilon()
+    ));
 
     Ok(())
 }

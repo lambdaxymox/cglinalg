@@ -639,7 +639,7 @@ where
     /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, f64::NAN);
-    /// 
+    ///
     /// assert!(!z.is_finite());
     /// ```
     #[inline]
@@ -1216,7 +1216,7 @@ where
     /// Calculate the multiplicative inverse of a complex number.
     ///
     /// # Safety
-    /// 
+    ///
     /// Panics if the complex number is not invertible.
     ///
     /// # Example

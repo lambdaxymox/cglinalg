@@ -453,9 +453,9 @@ where
     }
 
     /// Get the underlying shift vector for a translation.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_core::Vector2;
     /// # use cglinalg_transform::Translation2;
@@ -464,7 +464,7 @@ where
     /// let translation = Translation2::from_vector(&vector);
     /// let expected = &vector;
     /// let result = translation.vector();
-    /// 
+    ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]

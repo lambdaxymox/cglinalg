@@ -913,9 +913,9 @@ pub struct ReflectionTol<S, const N: usize> {
 impl<S, const N: usize> ReflectionTol<S, N> {
     #[inline]
     pub const fn from_parts(normal: Vector<S, N>, bias: Vector<S, N>) -> Self {
-        Self { normal, bias, }
+        Self { normal, bias }
     }
-} 
+}
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -927,9 +927,9 @@ pub struct ReflectionDiff<S, const N: usize> {
 impl<S, const N: usize> ReflectionDiff<S, N> {
     #[inline]
     const fn from_parts(normal: Vector<S, N>, bias: Vector<S, N>) -> Self {
-        Self { normal, bias, }
+        Self { normal, bias }
     }
-} 
+}
 
 impl<S, const N: usize> approx_cmp::AbsDiffEq for Reflection<S, N>
 where

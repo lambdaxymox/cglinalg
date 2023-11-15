@@ -67,7 +67,7 @@ where
 
 /// A data type with this trait can be cast to between numeric types.
 ///
-/// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of 
+/// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of
 /// [`cglinalg`] from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
 pub trait SimdCast
 where
@@ -381,20 +381,20 @@ pub trait SimdScalarOrd: SimdScalar + PartialOrd {
     fn clamp(self, min_value: Self, max_value: Self) -> Self;
 }
 
-/// A trait representing numbers that have finite minimum values and finite 
+/// A trait representing numbers that have finite minimum values and finite
 /// maximum values that they can represent.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// # use cglinalg_numeric::SimdScalarBounded;
 /// # use core::i16;
 /// #
 /// let min: i16 = SimdScalarBounded::min_value();
 /// let max: i16 = SimdScalarBounded::max_value();
-/// 
+///
 /// assert!(min < max);
-/// 
+///
 /// let lower_bound = min + 1_i16;
 /// let upper_bound = max - 1_i16;
 /// for i in lower_bound..=upper_bound {
@@ -455,12 +455,12 @@ pub trait SimdScalarBounded: SimdScalar + SimdScalarOrd {
 }
 
 /// A trait representing number types that can be approximately compared.
-/// 
+///
 /// This trait exists primarily to put together all of the traits exposed by
 /// the [`approx_cmp`] crate in one place.
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// # use approx_cmp::{
 /// #     assert_abs_diff_eq,
@@ -475,23 +475,24 @@ pub trait SimdScalarBounded: SimdScalar + SimdScalarOrd {
 /// let max_abs_diff: f64 = SimdScalarCmp::default_epsilon();
 /// let max_relative: f64 = SimdScalarCmp::default_epsilon();
 /// let max_ulps: u64 = <f64 as SimdScalarCmp>::default_max_ulps();
-/// 
+///
 /// assert_abs_diff_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= max_abs_diff);
 /// assert_abs_diff_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= max_abs_diff);
 /// assert_abs_diff_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= max_abs_diff);
 /// assert_abs_diff_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= max_abs_diff);
-/// 
+///
 /// assert_relative_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= 0_f64, relative <= max_relative);
 /// assert_relative_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= 0_f64, relative <= max_relative);
 /// assert_relative_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= 0_f64, relative <= max_relative);
 /// assert_relative_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= 0_f64, relative <= max_relative);
-/// 
+///
 /// assert_ulps_eq!(1_f64, 1_f64 - 1e-16, abs_diff <= 0_f64, ulps <= max_ulps);
 /// assert_ulps_eq!(1_f64, 1_f64 + 1e-16, abs_diff <= 0_f64, ulps <= max_ulps);
 /// assert_ulps_ne!(1_f64, 1_f64 - 1e-15, abs_diff <= 0_f64, ulps <= max_ulps);
 /// assert_ulps_ne!(1_f64, 1_f64 + 1e-15, abs_diff <= 0_f64, ulps <= max_ulps);
 /// ```
-pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
+pub trait SimdScalarCmp:
+    approx_cmp::AbsDiffEq<Tolerance = Self>
     + approx_cmp::AbsDiffAllEq<AllTolerance = Self>
     + approx_cmp::AssertAbsDiffEq<DebugAbsDiff = Self, DebugTolerance = Self>
     + approx_cmp::AssertAbsDiffAllEq<AllDebugTolerance = Self>
@@ -499,21 +500,14 @@ pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
     + approx_cmp::RelativeAllEq<AllTolerance = Self>
     + approx_cmp::AssertRelativeEq<DebugAbsDiff = Self, DebugTolerance = Self>
     + approx_cmp::AssertRelativeAllEq<AllDebugTolerance = Self>
-    + approx_cmp::UlpsEq<
-        Tolerance = Self,
-        UlpsTolerance = Self::IntegerRepr,    
-    >
-    + approx_cmp::UlpsAllEq<
-        AllTolerance = Self,
-        AllUlpsTolerance = Self::IntegerRepr,
-    >
+    + approx_cmp::UlpsEq<Tolerance = Self, UlpsTolerance = Self::IntegerRepr>
+    + approx_cmp::UlpsAllEq<AllTolerance = Self, AllUlpsTolerance = Self::IntegerRepr>
     + approx_cmp::AssertUlpsEq<
         DebugAbsDiff = Self,
         DebugUlpsDiff = Option<Self::IntegerRepr>,
         DebugTolerance = Self,
         DebugUlpsTolerance = Self::IntegerRepr,
-    >
-    + approx_cmp::AssertUlpsAllEq<AllDebugTolerance = Self>
+    > + approx_cmp::AssertUlpsAllEq<AllDebugTolerance = Self>
 {
     /// The underlying integer data type representing floating point numbers.
     /// This is defined for ulps comparisons. [`Self::IntegerRepr`] should be
@@ -537,14 +531,14 @@ pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
     /// ```
     fn default_epsilon() -> Self;
 
-    /// Returns the default ulps tolerance for a floating point data 
+    /// Returns the default ulps tolerance for a floating point data
     /// type.
-    /// 
+    ///
     /// The ulps tolerance is an upper bound on the ulps approximation error
     /// for two floating point numbers to be considered equal.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// # use cglinalg_numeric::SimdScalarCmp;
     /// # use core::f32;
@@ -558,11 +552,7 @@ pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
 
 /// A trait representing numbers that have the properties of finite precision
 /// floating point arithmetic.
-pub trait SimdScalarFloat: SimdScalarSigned
-    + SimdScalarOrd
-    + SimdScalarBounded
-    + SimdScalarCmp
-{
+pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded + SimdScalarCmp {
     /// Return the largest integer less than or equal to `self`.
     ///
     /// # Examples
@@ -1504,8 +1494,7 @@ pub trait SimdScalarFloat: SimdScalarSigned
     fn machine_epsilon() -> Self;
 }
 
-impl<T> SimdScalar for T
-where
+impl<T> SimdScalar for T where
     T: Copy
         + Clone
         + fmt::Debug
@@ -1985,7 +1974,7 @@ macro_rules! impl_simd_scalar_float {
                 num_traits::Float::epsilon()
             }
         }
-    }
+    };
 }
 
 impl_simd_scalar_float!(f32, u32);
