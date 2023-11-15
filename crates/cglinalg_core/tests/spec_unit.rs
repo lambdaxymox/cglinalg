@@ -1,9 +1,3 @@
-extern crate cglinalg_complex;
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate proptest;
-
-
 use cglinalg_complex::Complex;
 use cglinalg_core::{
     Normed,

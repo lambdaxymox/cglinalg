@@ -1,7 +1,3 @@
-extern crate cglinalg_complex;
-extern crate cglinalg_trigonometry;
-
-
 #[cfg(test)]
 mod index_tests {
     use cglinalg_complex::Complex;

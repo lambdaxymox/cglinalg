@@ -1,9 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate cglinalg_trigonometry;
-extern crate proptest;
-
-
 use approx_cmp::{
     abs_diff_ne,
     relative_eq,

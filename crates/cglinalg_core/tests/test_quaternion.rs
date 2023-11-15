@@ -1,7 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_trigonometry;
-
-
 #[cfg(test)]
 mod storage_tests {
     use cglinalg_core::Quaternion;

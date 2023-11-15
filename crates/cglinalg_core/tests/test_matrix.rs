@@ -1,7 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_trigonometry;
-
-
 #[cfg(test)]
 mod matrix2x2_tests {
     use approx_cmp::assert_relative_eq;

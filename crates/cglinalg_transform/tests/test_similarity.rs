@@ -1,7 +1,3 @@
-extern crate cglinalg_transform;
-extern crate cglinalg_trigonometry;
-
-
 #[cfg(test)]
 mod similarity2_tests {
     use approx_cmp::assert_relative_eq;

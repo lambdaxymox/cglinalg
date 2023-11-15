@@ -1,6 +1,3 @@
-extern crate cglinalg_core;
-
-
 #[cfg(test)]
 mod vector1_tests {
     use cglinalg_core::{

@@ -1,6 +1,3 @@
-extern crate cglinalg_transform;
-
-
 #[cfg(test)]
 mod shear2_tests {
     use cglinalg_core::{

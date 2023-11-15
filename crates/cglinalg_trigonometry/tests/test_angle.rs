@@ -1,6 +1,3 @@
-extern crate cglinalg_trigonometry;
-
-
 #[cfg(test)]
 mod conversion_tests {
     use cglinalg_trigonometry::{

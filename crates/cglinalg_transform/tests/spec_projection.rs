@@ -1,11 +1,3 @@
-extern crate approx_cmp;
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate cglinalg_transform;
-extern crate cglinalg_trigonometry;
-extern crate proptest;
-
-
 use approx_cmp::relative_eq;
 use cglinalg_core::{
     Point2,

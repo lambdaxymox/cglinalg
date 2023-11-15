@@ -1,8 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate proptest;
-
-
 use cglinalg_core::{
     Matrix,
     Matrix1x1,

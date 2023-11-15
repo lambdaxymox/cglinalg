@@ -1,9 +1,3 @@
-extern crate cglinalg_core;
-extern crate criterion;
-extern crate rand;
-extern crate rand_isaac;
-
-
 use cglinalg_core::{
     Normed,
     Vector1,

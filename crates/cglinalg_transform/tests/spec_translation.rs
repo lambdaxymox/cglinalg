@@ -1,9 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate cglinalg_transform;
-extern crate proptest;
-
-
 use cglinalg_core::{
     Point,
     Point2,

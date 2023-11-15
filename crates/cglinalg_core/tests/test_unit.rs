@@ -1,6 +1,3 @@
-extern crate cglinalg_core;
-
-
 use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     Quaternion,

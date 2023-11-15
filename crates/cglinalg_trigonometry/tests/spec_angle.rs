@@ -1,8 +1,3 @@
-extern crate cglinalg_numeric;
-extern crate cglinalg_trigonometry;
-extern crate proptest;
-
-
 use approx_cmp::relative_eq;
 use cglinalg_numeric::SimdScalarFloat;
 use cglinalg_trigonometry::{

@@ -1,6 +1,3 @@
-extern crate cglinalg_transform;
-
-
 #[cfg(test)]
 mod scale2_tests {
     use approx_cmp::assert_relative_eq;

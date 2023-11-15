@@ -1,8 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_numeric;
-extern crate proptest;
-
-
 use approx_cmp::relative_ne;
 use cglinalg_core::{
     Vector,

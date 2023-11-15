@@ -1,7 +1,3 @@
-extern crate cglinalg_transform;
-extern crate cglinalg_trigonometry;
-
-
 use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     Matrix4x4,

@@ -1,7 +1,3 @@
-extern crate cglinalg_core;
-extern crate cglinalg_trigonometry;
-
-
 use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     Euler,
