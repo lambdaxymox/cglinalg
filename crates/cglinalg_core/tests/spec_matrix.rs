@@ -771,7 +771,7 @@ where
     Ok(())
 }
 
-/// The matrix dot product is point separating from zero.
+/// The matrix dot product is point separating.
 ///
 /// Given a matrix `m`, the dot product of `m` with itself satisfies the property
 /// ```text
@@ -880,30 +880,6 @@ where
     Ok(())
 }
 
-/// The matrix **L1** norm is point separating from zero.
-///
-/// Given a matrix `m`
-/// ```text
-/// l1_norm(m) == 0 ==> m == 0
-/// ```
-/// Equivalently, if `m` is not zero
-/// ```text
-/// m != 0 ==> l1_norm(m) != 0
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned + SimdScalarOrd,
-{
-    let zero = S::zero();
-    let zero_matrix = Matrix::zero();
-
-    prop_assume!(m != zero_matrix);
-    prop_assert_ne!(m.l1_norm(), zero);
-
-    Ok(())
-}
-
 /// The matrix **L1** norm is point separating.
 ///
 /// Given matrices `m1` and `m2`
@@ -914,18 +890,16 @@ where
 /// ```text
 /// m1 != m2 ==> l1_norm(m1) != l1_norm(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
-) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_matrix_l1_norm_point_separating<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
+    let zero_matrix = Matrix::zero();
 
-    prop_assume!(m1 != m2);
-    prop_assert_ne!((m1 - m2).l1_norm(), zero);
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.l1_norm(), zero);
 
     Ok(())
 }
@@ -969,32 +943,6 @@ where
     Ok(())
 }
 
-/// The matrix **L1** norm is point separating from zero.
-///
-/// Given a matrix `m`
-/// ```text
-/// l1_norm(m) == 0 ==> m == 0
-/// ```
-/// Equivalently, if `m` is not zero
-/// ```text
-/// m != 0 ==> l1_norm(m) != 0
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_l1_norm_point_separating1<S, const R: usize, const C: usize>(
-    m: Matrix<S, R, C>,
-    tolerance: S,
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat,
-{
-    let zero_matrix = Matrix::zero();
-
-    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(m.l1_norm() > tolerance);
-
-    Ok(())
-}
-
 /// The matrix **L1** norm is point separating.
 ///
 /// Given matrices `m1` and `m2`
@@ -1005,17 +953,18 @@ where
 /// ```text
 /// m1 != m2 ==> l1_norm(m1) != l1_norm(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_l1_norm_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_matrix_l1_norm_point_separating<S, const R: usize, const C: usize>(
+    m: Matrix<S, R, C>,
     tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((m1 - m2).l1_norm() > tolerance);
+    let zero_matrix = Matrix::zero();
+
+    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(m.l1_norm() > tolerance);
 
     Ok(())
 }
@@ -1037,30 +986,6 @@ where
     Ok(())
 }
 
-/// The matrix **L-infinity** norm is point separating from zero.
-///
-/// Given a matrix `m`
-/// ```text
-/// linf_norm(m) == 0 ==> m == 0
-/// ```
-/// Equivalently, if `m` is not zero
-/// ```text
-/// m != 0 ==> linf_norm(m) != 0
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned + SimdScalarOrd,
-{
-    let zero = S::zero();
-    let zero_matrix = Matrix::zero();
-
-    prop_assume!(m != zero_matrix);
-    prop_assert_ne!(m.linf_norm(), zero);
-
-    Ok(())
-}
-
 /// The matrix **L-infinity** norm is point separating.
 ///
 /// Given matrices `m1` and `m2`
@@ -1071,18 +996,16 @@ where
 /// ```text
 /// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
-) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_matrix_linf_norm_point_separating<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
+    let zero_matrix = Matrix::zero();
 
-    prop_assume!(m1 != m2);
-    prop_assert_ne!((m1 - m2).linf_norm(), zero);
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.linf_norm(), zero);
 
     Ok(())
 }
@@ -1105,18 +1028,18 @@ where
     Ok(())
 }
 
-/// The matrix **L-infinity** norm is point separating from zero.
-///
-/// Given a matrix `m`
+/// The matrix **L-infinity** norm is point separating.
+/// 
+/// Given matrices `m1` and `m2`
 /// ```text
-/// linf_norm(m) == 0 ==> m == 0
+/// linf_norm(m1) == linf_norm(m2) ==> m1 == m2
 /// ```
-/// Equivalently, if `m` is not zero
+/// Equivalently
 /// ```text
-/// m != 0 ==> linf_norm(m) != 0
+/// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_linf_norm_point_separating1<S, const R: usize, const C: usize>(
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_matrix_linf_norm_point_separating<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>,
     tolerance: S,
 ) -> Result<(), TestCaseError>
@@ -1127,31 +1050,6 @@ where
 
     prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!(m.linf_norm() > tolerance);
-
-    Ok(())
-}
-
-/// The matrix **L-infinity** norm is point separating.
-///
-/// Given matrices `m1` and `m2`
-/// ```text
-/// linf_norm(m1) == linf_norm(m2) ==> m1 == m2
-/// ```
-/// Equivalently
-/// ```text
-/// m1 != m2 ==> linf_norm(m1) != linf_norm(m2)
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_linf_norm_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
-    tolerance: S,
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat,
-{
-    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((m1 - m2).linf_norm() > tolerance);
 
     Ok(())
 }
@@ -1194,30 +1092,6 @@ where
     Ok(())
 }
 
-/// The squared matrix **Frobenius** norm is point separating from zero.
-///
-/// Given a matrix `m`
-/// ```text
-/// norm_squared(m) == 0 ==> m == 0
-/// ```
-/// Equivalently, if `m` is not zero
-/// ```text
-/// m != 0 ==> norm_squared(m) != 0
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_norm_squared_point_separating1<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
-where
-    S: SimdScalarSigned + SimdScalarOrd,
-{
-    let zero = S::zero();
-    let zero_matrix = Matrix::zero();
-
-    prop_assume!(m != zero_matrix);
-    prop_assert_ne!(m.norm_squared(), zero);
-
-    Ok(())
-}
-
 /// The squared matrix **Frobenius** norm is point separating.
 ///
 /// Given matrices `m1` and `m2`
@@ -1228,18 +1102,16 @@ where
 /// ```text
 /// m1 != m2 ==> norm_squared(m1) != norm_squared(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_matrix_norm_squared_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
-) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_matrix_norm_squared_point_separating<S, const R: usize, const C: usize>(m: Matrix<S, R, C>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
+    let zero_matrix = Matrix::zero();
 
-    prop_assume!(m1 != m2);
-    prop_assert_ne!((m1 - m2).norm_squared(), zero);
+    prop_assume!(m != zero_matrix);
+    prop_assert_ne!(m.norm_squared(), zero);
 
     Ok(())
 }
@@ -1310,18 +1182,18 @@ where
     Ok(())
 }
 
-/// The matrix **Frobenius** norm is point separating from zero.
+/// The matrix **Frobenius** norm is point separating.
 ///
-/// Given a matrix `m`
+/// Given matrices `m1` and `m2`
 /// ```text
-/// norm(m) == 0 ==> m == 0
+/// norm(m1) == norm(m2) ==> m1 == m2
 /// ```
-/// Equivalently, if `m` is not zero
+/// Equivalently
 /// ```text
-/// m != 0 ==> norm(m) != 0
+/// m1 != m2 ==> norm(m1) != norm(m2)
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_norm_point_separating1<S, const R: usize, const C: usize>(
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_matrix_norm_point_separating<S, const R: usize, const C: usize>(
     m: Matrix<S, R, C>,
     tolerance: S,
 ) -> Result<(), TestCaseError>
@@ -1333,31 +1205,6 @@ where
 
     prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!(relative_ne!(m.norm(), zero, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-
-    Ok(())
-}
-
-/// The matrix **Frobenius** norm is point separating.
-///
-/// Given matrices `m1` and `m2`
-/// ```text
-/// norm(m1) == norm(m2) ==> m1 == m2
-/// ```
-/// Equivalently
-/// ```text
-/// m1 != m2 ==> norm(m1) != norm(m2)
-/// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_matrix_norm_point_separating2<S, const R: usize, const C: usize>(
-    m1: Matrix<S, R, C>,
-    m2: Matrix<S, R, C>,
-    tolerance: S,
-) -> Result<(), TestCaseError>
-where
-    S: SimdScalarFloat,
-{
-    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_ne!(m1.norm(), m2.norm(), abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -2328,16 +2175,9 @@ macro_rules! exact_l1_norm_props {
                 }
 
                 #[test]
-                fn prop_matrix_l1_norm_point_separating1(m in super::$MatrixGen()) {
+                fn prop_matrix_l1_norm_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_matrix_l1_norm_point_separating1(m)?
-                }
-
-                #[test]
-                fn prop_matrix_l1_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_matrix_l1_norm_point_separating2(m1, m2)?
+                    super::prop_matrix_l1_norm_point_separating(m)?
                 }
 
                 #[test]
@@ -2444,16 +2284,9 @@ macro_rules! approx_l1_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_matrix_l1_norm_point_separating1(m in super::$MatrixGen()) {
+                fn prop_approx_matrix_l1_norm_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_approx_matrix_l1_norm_point_separating1(m, 1e-10)?
-                }
-
-                #[test]
-                fn prop_approx_matrix_l1_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_approx_matrix_l1_norm_point_separating2(m1, m2, 1e-10)?
+                    super::prop_approx_matrix_l1_norm_point_separating(m, 1e-10)?
                 }
             }
         }
@@ -2546,16 +2379,9 @@ macro_rules! exact_linf_norm_props {
                 }
 
                 #[test]
-                fn prop_matrix_linf_norm_point_separating1(m in super::$MatrixGen()) {
+                fn prop_matrix_linf_norm_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_matrix_linf_norm_point_separating1(m)?
-                }
-
-                #[test]
-                fn prop_matrix_linf_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_matrix_linf_norm_point_separating2(m1, m2)?
+                    super::prop_matrix_linf_norm_point_separating(m)?
                 }
 
                 #[test]
@@ -2662,16 +2488,9 @@ macro_rules! approx_linf_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_matrix_linf_norm_point_separating1(m in super::$MatrixGen()) {
+                fn prop_approx_matrix_linf_norm_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_approx_matrix_linf_norm_point_separating1(m, 1e-10)?
-                }
-
-                #[test]
-                fn prop_approx_matrix_linf_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_approx_matrix_linf_norm_point_separating2(m1, m2, 1e-10)?
+                    super::prop_approx_matrix_linf_norm_point_separating(m, 1e-10)?
                 }
             }
         }
@@ -2764,16 +2583,9 @@ macro_rules! exact_norm_squared_props {
                 }
 
                 #[test]
-                fn prop_matrix_norm_squared_point_separating1(m in super::$MatrixGen()) {
+                fn prop_matrix_norm_squared_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_matrix_norm_squared_point_separating1(m)?
-                }
-
-                #[test]
-                fn prop_matrix_norm_squared_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_matrix_norm_squared_point_separating2(m1, m2)?
+                    super::prop_matrix_norm_squared_point_separating(m)?
                 }
 
                 #[test]
@@ -3051,16 +2863,9 @@ macro_rules! approx_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_matrix_norm_point_separating1(m in super::$MatrixGen()) {
+                fn prop_approx_matrix_norm_point_separating(m in super::$MatrixGen()) {
                     let m: super::$MatrixType<$ScalarType> = m;
-                    super::prop_approx_matrix_norm_point_separating1(m, 1e-10)?
-                }
-
-                #[test]
-                fn prop_approx_matrix_norm_point_separating2(m1 in super::$MatrixGen(), m2 in super::$MatrixGen()) {
-                    let m1: super::$MatrixType<$ScalarType> = m1;
-                    let m2: super::$MatrixType<$ScalarType> = m2;
-                    super::prop_approx_matrix_norm_point_separating2(m1, m2, 1e-10)?
+                    super::prop_approx_matrix_norm_point_separating(m, 1e-10)?
                 }
             }
         }

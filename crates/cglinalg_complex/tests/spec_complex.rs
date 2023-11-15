@@ -839,26 +839,26 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) == 0 => z1 == z2
+/// modulus_squared(z1 - z2) == 0 ==> z1 == z2
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their squared distance is
 /// nonzero
 /// ```text
-/// z1 != z2 => modulus_squared(z1 - z2) != 0
+/// z1 != z2 ==> modulus_squared(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_modulus_squared_point_separating<S>(
-    z1: Complex<S>,
-    z2: Complex<S>,
+    z: Complex<S>,
     input_tolerance: S,
     output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(z1, z2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((z1 - z2).modulus_squared() > output_tolerance);
+    let zero_complex = Complex::zero();
+
+    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(z.modulus_squared() > output_tolerance);
 
     Ok(())
 }
@@ -898,23 +898,23 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus_squared(z1 - z2) == 0 => z1 == z2
+/// modulus_squared(z1 - z2) == 0 ==> z1 == z2
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their squared distance is
 /// nonzero
 /// ```text
-/// z1 != z2 => modulus_squared(z1 - z2) != 0
+/// z1 != z2 ==> modulus_squared(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_modulus_squared_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_modulus_squared_point_separating<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
     let zero = S::zero();
+    let zero_complex = Complex::zero();
 
-    // prop_assume!(z1 != z2);
-    prop_assert_ne!((z1 - z2).modulus_squared(), zero);
+    prop_assume!(z != zero_complex);
+    prop_assert_ne!(z.modulus_squared(), zero);
 
     Ok(())
 }
@@ -960,22 +960,23 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus(z1 - z2) == 0 => z1 == z2
+/// modulus(z1 - z2) == 0 ==> z1 == z2
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
-/// z1 != z2 => modulus(z1 - z2) != 0
+/// z1 != z2 ==> modulus(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_approx_modulus_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_modulus_point_separating<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(z1, z2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    let zero_complex = Complex::zero();
 
-    let lhs = (z1 - z2).modulus();
+    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+
+    let lhs = z.modulus();
     let rhs = S::zero();
 
     prop_assert!(relative_ne!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
@@ -1087,21 +1088,22 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) == 0 => z1 == z2
+/// l1_norm(z1 - z2) == 0 ==> z1 == z2
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
-/// z1 != z2 => l1_norm(z1 - z2) != 0
+/// z1 != z2 ==> l1_norm(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_approx_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_l1_norm_point_separating<S>(z: Complex<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(z1, z2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((z1 - z2).l1_norm() > tolerance);
+    let zero_complex = Complex::zero();
+
+    prop_assume!(relative_ne!(z, zero_complex, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(z.l1_norm() > tolerance);
 
     Ok(())
 }
@@ -1112,23 +1114,23 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// l1_norm(z1 - z2) == 0 => z1 == z2
+/// l1_norm(z1 - z2) == 0 ==> z1 == z2
 /// ```
 /// Equivalently, if `z1` is not equal to `z2`, then their distance is
 /// nonzero
 /// ```text
-/// z1 != z2 => l1_norm(z1 - z2) != 0
+/// z1 != z2 ==> l1_norm(z1 - z2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_l1_norm_point_separating<S>(z1: Complex<S>, z2: Complex<S>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_l1_norm_point_separating<S>(z: Complex<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
     let zero = S::zero();
+    let zero_complex = Complex::zero();
 
-    prop_assume!(z1 != z2);
-    prop_assert_ne!((z1 - z2).l1_norm(), zero);
+    prop_assume!(z != zero_complex);
+    prop_assert_ne!(z.l1_norm(), zero);
 
     Ok(())
 }
@@ -2691,13 +2693,9 @@ mod complex_f64_modulus_squared_props {
         }
 
         #[test]
-        fn prop_approx_modulus_squared_point_separating(
-            z1 in super::strategy_complex_f64_modulus_squared(),
-            z2 in super::strategy_complex_f64_modulus_squared()
-        ) {
-            let z1: super::Complex<f64> = z1;
-            let z2: super::Complex<f64> = z2;
-            super::prop_approx_modulus_squared_point_separating(z1, z2, 1e-10, 1e-20)?
+        fn prop_approx_modulus_squared_point_separating(z in super::strategy_complex_f64_modulus_squared()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_modulus_squared_point_separating(z, 1e-10, 1e-20)?
         }
     }
 }
@@ -2731,13 +2729,9 @@ mod complex_i32_modulus_squared_props {
         }
 
         #[test]
-        fn prop_modulus_squared_point_separating(
-            z1 in super::strategy_complex_i32_modulus_squared(),
-            z2 in super::strategy_complex_i32_modulus_squared()
-        ) {
-            let z1: super::Complex<i32> = z1;
-            let z2: super::Complex<i32> = z2;
-            super::prop_modulus_squared_point_separating(z1, z2)?
+        fn prop_modulus_squared_point_separating(z in super::strategy_complex_i32_modulus_squared()) {
+            let z: super::Complex<i32> = z;
+            super::prop_modulus_squared_point_separating(z)?
         }
 
         #[test]
@@ -2778,13 +2772,9 @@ mod complex_f64_modulus_props {
         }
 
         #[test]
-        fn prop_approx_modulus_point_separating(
-            z1 in super::strategy_complex_f64_any(),
-            z2 in super::strategy_complex_f64_any()
-        ) {
-            let z1: super::Complex<f64> = z1;
-            let z2: super::Complex<f64> = z2;
-            super::prop_approx_modulus_point_separating(z1, z2, 1e-8)?
+        fn prop_approx_modulus_point_separating(z in super::strategy_complex_f64_any()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_modulus_point_separating(z, 1e-8)?
         }
     }
 }
@@ -2824,10 +2814,9 @@ mod complex_f64_l1_norm_props {
         }
 
         #[test]
-        fn prop_approx_l1_norm_point_separating(z1 in super::strategy_complex_f64_any(), z2 in super::strategy_complex_f64_any()) {
-            let z1: super::Complex<f64> = z1;
-            let z2: super::Complex<f64> = z2;
-            super::prop_approx_l1_norm_point_separating(z1, z2, 1e-8)?
+        fn prop_approx_l1_norm_point_separating(z in super::strategy_complex_f64_any()) {
+            let z: super::Complex<f64> = z;
+            super::prop_approx_l1_norm_point_separating(z, 1e-8)?
         }
     }
 }
@@ -2843,10 +2832,9 @@ mod complex_i32_l1_norm_props {
         }
 
         #[test]
-        fn prop_l1_norm_point_separating(z1 in super::strategy_complex_i32_any(), z2 in super::strategy_complex_i32_any()) {
-            let z1: super::Complex<i32> = z1;
-            let z2: super::Complex<i32> = z2;
-            super::prop_l1_norm_point_separating(z1, z2)?
+        fn prop_l1_norm_point_separating(z in super::strategy_complex_i32_any()) {
+            let z: super::Complex<i32> = z;
+            super::prop_l1_norm_point_separating(z)?
         }
 
         #[test]

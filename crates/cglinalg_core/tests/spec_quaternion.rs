@@ -817,23 +817,23 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus_squared(q1 - q2) == 0 => q1 == q2
+/// modulus_squared(q1 - q2) == 0 ==> q1 == q2
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their squared distance is
 /// nonzero
 /// ```text
-/// q1 != q2 => modulus_squared(q1 - q2) != 0
+/// q1 != q2 ==> modulus_squared(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_modulus_squared_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_modulus_squared_point_separating<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
     let zero = S::zero();
+    let zero_quaternion = Quaternion::zero();
 
-    prop_assume!(q1 != q2);
-    prop_assert_ne!((q1 - q2).modulus_squared(), zero);
+    prop_assume!(q != zero_quaternion);
+    prop_assert_ne!(q.modulus_squared(), zero);
 
     Ok(())
 }
@@ -862,26 +862,26 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus_squared(q1 - q2) == 0 => q1 == q2
+/// modulus_squared(q1 - q2) == 0 ==> q1 == q2
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their squared distance is
 /// nonzero
 /// ```text
-/// q1 != q2 => modulus_squared(q1 - q2) != 0
+/// q1 != q2 ==> modulus_squared(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_modulus_squared_point_separating<S>(
-    q1: Quaternion<S>,
-    q2: Quaternion<S>,
+    q: Quaternion<S>,
     input_tolerance: S,
     output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((q1 - q2).modulus_squared() > output_tolerance);
+    let zero_quaternion = Quaternion::zero();
+
+    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(q.modulus_squared() > output_tolerance);
 
     Ok(())
 }
@@ -939,21 +939,22 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// modulus(q1 - q2) == 0 => q1 == q2
+/// modulus(q1 - q2) == 0 ==> q1 == q2
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
-/// q1 != q2 => modulus(q1 - q2) != 0
+/// q1 != q2 ==> modulus(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_approx_modulus_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_modulus_point_separating<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((q1 - q2).modulus() > tolerance);
+    let zero_quaternion = Quaternion::zero();
+
+    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(q.modulus() > tolerance);
 
     Ok(())
 }
@@ -981,23 +982,23 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// l1_norm(q1 - q2) = 0 => q1 = q2
+/// l1_norm(q1 - q2) = 0 ==> q1 = q2
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
-/// q1 != q2 => l1_norm(q1 - q2) != 0
+/// q1 != q2 ==> l1_norm(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_l1_norm_point_separating<S>(q: Quaternion<S>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
     let zero = S::zero();
+    let zero_quaternion = Quaternion::zero();
 
-    prop_assume!(q1 != q2);
-    prop_assert_ne!((q1 - q2).l1_norm(), zero);
+    prop_assume!(q != zero_quaternion);
+    prop_assert_ne!(q.l1_norm(), zero);
 
     Ok(())
 }
@@ -1044,21 +1045,22 @@ where
 ///
 /// Given quaternions `q1` and `q2`
 /// ```text
-/// l1_norm(q1 - q2) == 0 => q1 == q2
+/// l1_norm(q1 - q2) == 0 ==> q1 == q2
 /// ```
 /// Equivalently, if `q1` is not equal to `q2`, then their distance is
 /// nonzero
 /// ```text
-/// q1 != q2 => l1_norm(q1 - q2) != 0
+/// q1 != q2 ==> l1_norm(q1 - q2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the
-/// norm function.
-fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_l1_norm_point_separating<S>(q: Quaternion<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((q1 - q2).l1_norm() > tolerance);
+    let zero_quaternion = Quaternion::zero();
+
+    prop_assume!(relative_ne!(q, zero_quaternion, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(q.l1_norm() > tolerance);
 
     Ok(())
 }
@@ -2199,12 +2201,10 @@ mod quaternion_f64_modulus_squared_props {
 
         #[test]
         fn prop_approx_modulus_squared_point_separating(
-            q1 in super::strategy_quaternion_f64_norm_squared(),
-            q2 in super::strategy_quaternion_f64_norm_squared()
+            q in super::strategy_quaternion_f64_norm_squared()
         ) {
-            let q1: super::Quaternion<f64> = q1;
-            let q2: super::Quaternion<f64> = q2;
-            super::prop_approx_modulus_squared_point_separating(q1, q2, 1e-10, 1e-20)?
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_modulus_squared_point_separating(q, 1e-10, 1e-20)?
         }
     }
 }
@@ -2240,12 +2240,10 @@ mod quaternion_i32_modulus_squared_props {
 
         #[test]
         fn prop_modulus_squared_point_separating(
-            q1 in super::strategy_quaternion_i32_norm_squared(),
-            q2 in super::strategy_quaternion_i32_norm_squared()
+            q in super::strategy_quaternion_i32_norm_squared()
         ) {
-            let q1: super::Quaternion<i32> = q1;
-            let q2: super::Quaternion<i32> = q2;
-            super::prop_modulus_squared_point_separating(q1, q2)?
+            let q: super::Quaternion<i32> = q;
+            super::prop_modulus_squared_point_separating(q)?
         }
 
         #[test]
@@ -2291,10 +2289,9 @@ mod quaternion_f64_modulus_props {
         }
 
         #[test]
-        fn prop_approx_modulus_point_separating(q1 in super::strategy_quaternion_f64_any(), q2 in super::strategy_quaternion_f64_any()) {
-            let q1: super::Quaternion<f64> = q1;
-            let q2: super::Quaternion<f64> = q2;
-            super::prop_approx_modulus_point_separating(q1, q2, 1e-10)?
+        fn prop_approx_modulus_point_separating(q in super::strategy_quaternion_f64_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_modulus_point_separating(q, 1e-10)?
         }
     }
 }
@@ -2311,10 +2308,9 @@ mod quaternion_f64_l1_norm_props {
         }
 
         #[test]
-        fn prop_approx_l1_norm_point_separating(q1 in super::strategy_quaternion_f64_any(), q2 in super::strategy_quaternion_f64_any()) {
-            let q1: super::Quaternion<f64> = q1;
-            let q2: super::Quaternion<f64> = q2;
-            super::prop_approx_l1_norm_point_separating(q1, q2, 1e-10)?
+        fn prop_approx_l1_norm_point_separating(q in super::strategy_quaternion_f64_any()) {
+            let q: super::Quaternion<f64> = q;
+            super::prop_approx_l1_norm_point_separating(q, 1e-10)?
         }
     }
 }
@@ -2331,10 +2327,9 @@ mod quaternion_i32_l1_norm_props {
         }
 
         #[test]
-        fn prop_l1_norm_point_separating(q1 in super::strategy_quaternion_i32_any(), q2 in super::strategy_quaternion_i32_any()) {
-            let q1: super::Quaternion<i32> = q1;
-            let q2: super::Quaternion<i32> = q2;
-            super::prop_l1_norm_point_separating(q1, q2)?
+        fn prop_l1_norm_point_separating(q in super::strategy_quaternion_i32_any()) {
+            let q: super::Quaternion<i32> = q;
+            super::prop_l1_norm_point_separating(q)?
         }
 
         #[test]

@@ -339,25 +339,25 @@ where
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) == 0 => p1 == p2
+/// norm_squared(p1 - p2) == 0 ==> p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
-/// p1 != p2 => norm_squared(p1 - p2) != 0
+/// p1 != p2 ==> norm_squared(p1 - p2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_norm_squared_point_separating<S, const N: usize>(
-    p1: Point<S, N>,
-    p2: Point<S, N>,
+    p: Point<S, N>,
     input_tolerance: S,
     output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((p1 - p2).norm_squared() > output_tolerance);
+    let zero_point = Point::origin();
+
+    prop_assume!(relative_ne!(p, zero_point, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(p.norm_squared() > output_tolerance);
 
     Ok(())
 }
@@ -367,22 +367,22 @@ where
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm_squared(p1 - p2) == 0 => p1 == p2
+/// norm_squared(p1 - p2) == 0 ==> p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their squared distance is nonzero
 /// ```text
-/// p1 != p2 => norm_squared(p1 - p2) != 0
+/// p1 != p2 ==> norm_squared(p1 - p2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
-fn prop_norm_squared_point_separating<S, const N: usize>(p1: Point<S, N>, p2: Point<S, N>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_norm_squared_point_separating<S, const N: usize>(p: Point<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
     let zero = S::zero();
+    let zero_point = Point::origin();
 
-    prop_assume!(p1 != p2);
-    prop_assert_ne!((p1 - p2).norm_squared(), zero);
+    prop_assume!(p != zero_point);
+    prop_assert_ne!(p.norm_squared(), zero);
 
     Ok(())
 }
@@ -446,17 +446,15 @@ where
 ///
 /// Given vectors `p1` and `p2`
 /// ```text
-/// norm(p1 - p2) == 0 => p1 == p2
+/// norm(p1 - p2) == 0 ==> p1 == p2
 /// ```
 /// Equivalently, if `p1` is not equal to `p2`, then their distance is nonzero
 /// ```text
-/// p1 != p2 => norm(p1 - p2) != 0
+/// p1 != p2 ==> norm(p1 - p2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_norm_point_separating<S, const N: usize>(
-    p1: Point<S, N>,
-    p2: Point<S, N>,
+    p: Point<S, N>,
     input_tolerance: S,
     output_tolerance: S,
 ) -> Result<(), TestCaseError>
@@ -464,9 +462,10 @@ where
     S: SimdScalarFloat,
 {
     let zero = S::zero();
+    let zero_point = Point::origin();
 
-    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!(relative_ne!((p1 - p2).norm(), zero, abs_diff_all <= output_tolerance, relative_all <= S::default_epsilon()));
+    prop_assume!(relative_ne!(p, zero_point, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_ne!(p.norm(), zero, abs_diff_all <= output_tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -720,10 +719,9 @@ macro_rules! exact_norm_squared_props {
                 }
 
                 #[test]
-                fn prop_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                    let p1: super::$PointType<$ScalarType> = p1;
-                    let p2: super::$PointType<$ScalarType> = p2;
-                    super::prop_norm_squared_point_separating(p1, p2)?
+                fn prop_norm_squared_point_separating(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_norm_squared_point_separating(p)?
                 }
 
                 #[test]
@@ -773,10 +771,9 @@ macro_rules! approx_norm_squared_props {
                 }
 
                 #[test]
-                fn prop_approx_norm_squared_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                    let p1: super::$PointType<$ScalarType> = p1;
-                    let p2: super::$PointType<$ScalarType> = p2;
-                    super::prop_approx_norm_squared_point_separating(p1, p2, $input_tolerance, $output_tolerance)?
+                fn prop_approx_norm_squared_point_separating(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_approx_norm_squared_point_separating(p, $input_tolerance, $output_tolerance)?
                 }
             }
         }
@@ -864,10 +861,9 @@ macro_rules! approx_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_norm_point_separating(p1 in super::$PointGen(), p2 in super::$PointGen()) {
-                    let p1: super::$PointType<$ScalarType> = p1;
-                    let p2: super::$PointType<$ScalarType> = p2;
-                    super::prop_approx_norm_point_separating(p1, p2, $tolerance, $tolerance)?
+                fn prop_approx_norm_point_separating(p in super::$PointGen()) {
+                    let p: super::$PointType<$ScalarType> = p;
+                    super::prop_approx_norm_point_separating(p, $tolerance, $tolerance)?
                 }
             }
         }

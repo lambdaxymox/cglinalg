@@ -716,25 +716,25 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v1 - v2) == 0 => v1 == v2
+/// norm_squared(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
-/// v1 != v2 => norm_squared(v1 - v2) != 0
+/// v1 != v2 ==> norm_squared(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_norm_squared_point_separating<S, const N: usize>(
-    v1: Vector<S, N>,
-    v2: Vector<S, N>,
+    v: Vector<S, N>,
     input_tolerance: S,
     output_tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((v1 - v2).norm_squared() > output_tolerance);
+    let zero_vector = Vector::zero();
+
+    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(v.norm_squared() > output_tolerance);
 
     Ok(())
 }
@@ -759,22 +759,22 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm_squared(v1 - v2) == 0 => v1 == v2
+/// norm_squared(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their squared distance is nonzero
 /// ```text
-/// v1 != v2 => norm_squared(v1 - v2) != 0
+/// v1 != v2 ==> norm_squared(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
-fn prop_norm_squared_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_norm_squared_point_separating<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalar,
 {
     let zero = S::zero();
+    let zero_vector = Vector::zero();
 
-    prop_assume!(v1 != v2);
-    prop_assert_ne!((v1 - v2).norm_squared(), zero);
+    prop_assume!(v != zero_vector);
+    prop_assert_ne!(v.norm_squared(), zero);
 
     Ok(())
 }
@@ -823,20 +823,21 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// norm(v1 - v2) == 0 => v1 == v2
+/// norm(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => norm(v1 - v2) != 0
+/// v1 != v2 ==> norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
-fn prop_approx_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_norm_point_separating<S, const N: usize>(v: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((v1 - v2).norm() > tolerance);
+    let zero_vector = Vector::zero();
+
+    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(v.norm() > tolerance);
 
     Ok(())
 }
@@ -863,20 +864,21 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v1 - v2) == 0 => v1 == v2
+/// l1_norm(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => l1_norm(v1 - v2) != 0
+/// v1 != v2 ==> l1_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
-fn prop_approx_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_l1_norm_point_separating<S, const N: usize>(v: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((v1 - v2).l1_norm() > tolerance);
+    let zero_vector = Vector::zero();
+
+    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(v.l1_norm() > tolerance);
 
     Ok(())
 }
@@ -886,22 +888,22 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// l1_norm(v1 - v2) = 0 => v1 == v2
+/// l1_norm(v1 - v2) = 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => l1_norm(v1 - v2) != 0
+/// v1 != v2 ==> l1_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
-fn prop_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_l1_norm_point_separating<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned,
 {
     let zero = S::zero();
+    let zero_vector = Vector::zero();
 
-    prop_assume!(v1 != v2);
-    prop_assert_ne!((v1 - v2).l1_norm(), zero);
+    prop_assume!(v != zero_vector);
+    prop_assert_ne!(v.l1_norm(), zero);
 
     Ok(())
 }
@@ -964,25 +966,25 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// lp_norm(v1 - v2) == 0 => v1 == v2
+/// lp_norm(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => lp_norm(v1 - v2) != 0
+/// v1 != v2 ==> lp_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form to test the norm
-/// function.
+/// For the sake of testability, we test point separation from zero.
 fn prop_approx_lp_norm_point_separating<S, const N: usize>(
-    v1: Vector<S, N>,
-    v2: Vector<S, N>,
+    v: Vector<S, N>,
     p: u32,
     tolerance: S,
 ) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((v1 - v2).lp_norm(p) > tolerance, "\nlp_norm(v - w, p) = {}\n", (v1 - v2).lp_norm(p));
+    let zero_vector = Vector::zero();
+
+    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(v.lp_norm(p) > tolerance);
 
     Ok(())
 }
@@ -1009,19 +1011,21 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v1 - v2) == 0 => v1 == v2
+/// linf_norm(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => linf_norm(v1 - v2) != 0
+/// v1 != v2 ==> linf_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_approx_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_approx_linf_norm_point_separating<S, const N: usize>(v: Vector<S, N>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
-    prop_assert!((v1 - v2).linf_norm() > tolerance);
+    let zero_vector = Vector::zero();
+
+    prop_assume!(relative_ne!(v, zero_vector, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(v.linf_norm() > tolerance);
 
     Ok(())
 }
@@ -1031,21 +1035,22 @@ where
 ///
 /// Given vectors `v1` and `v2`
 /// ```text
-/// linf_norm(v1 - v2) == 0 => v1 == v2
+/// linf_norm(v1 - v2) == 0 ==> v1 == v2
 /// ```
 /// Equivalently, if `v1` is not equal to `v2`, then their distance is nonzero
 /// ```text
-/// v1 != v2 => linf_norm(v1 - v2) != 0
+/// v1 != v2 ==> linf_norm(v1 - v2) != 0
 /// ```
-/// For the sake of testability, we use the second form.
-fn prop_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Vector<S, N>) -> Result<(), TestCaseError>
+/// For the sake of testability, we test point separation from zero.
+fn prop_linf_norm_point_separating<S, const N: usize>(v: Vector<S, N>) -> Result<(), TestCaseError>
 where
     S: SimdScalarSigned + SimdScalarOrd,
 {
     let zero = S::zero();
+    let zero_vector = Vector::zero();
 
-    prop_assume!(v1 != v2);
-    prop_assert_ne!((v1 - v2).linf_norm(), zero);
+    prop_assume!(v != zero_vector);
+    prop_assert_ne!(v.linf_norm(), zero);
 
     Ok(())
 }
@@ -1611,10 +1616,9 @@ macro_rules! exact_norm_squared_props {
                 }
 
                 #[test]
-                fn prop_norm_squared_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_norm_squared_point_separating(v1, v2)?
+                fn prop_norm_squared_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_norm_squared_point_separating(v)?
                 }
 
                 #[test]
@@ -1693,10 +1697,9 @@ macro_rules! approx_norm_squared_props {
                 }
 
                 #[test]
-                fn prop_approx_norm_squared_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_approx_norm_squared_point_separating(v1, v2, $input_tolerance, $output_tolerance)?
+                fn prop_approx_norm_squared_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_approx_norm_squared_point_separating(v, $input_tolerance, $output_tolerance)?
                 }
             }
         }
@@ -1772,10 +1775,9 @@ macro_rules! approx_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_approx_norm_point_separating(v1, v2, $tolerance)?
+                fn prop_approx_norm_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_approx_norm_point_separating(v, $tolerance)?
                 }
             }
         }
@@ -1829,10 +1831,9 @@ macro_rules! exact_l1_norm_props {
                 }
 
                 #[test]
-                fn prop_l1_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_l1_norm_point_separating(v1, v2)?
+                fn prop_l1_norm_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_l1_norm_point_separating(v)?
                 }
 
                 #[test]
@@ -1896,10 +1897,9 @@ macro_rules! approx_l1_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_l1_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_approx_l1_norm_point_separating(v1, v2, $tolerance)?
+                fn prop_approx_l1_norm_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_approx_l1_norm_point_separating(v, $tolerance)?
                 }
             }
         }
@@ -1953,10 +1953,9 @@ macro_rules! approx_lp_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_lp_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen(), p in super::$DegreeGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_approx_lp_norm_point_separating(v1, v2, p, $tolerance)?
+                fn prop_approx_lp_norm_point_separating(v in super::$VectorGen(), p in super::$DegreeGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_approx_lp_norm_point_separating(v, p, $tolerance)?
                 }
             }
         }
@@ -2014,10 +2013,9 @@ macro_rules! exact_linf_norm_props {
                 }
 
                 #[test]
-                fn prop_linf_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_linf_norm_point_separating(v1, v2)?
+                fn prop_linf_norm_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_linf_norm_point_separating(v)?
                 }
 
                 #[test]
@@ -2081,10 +2079,9 @@ macro_rules! approx_linf_norm_props {
                 }
 
                 #[test]
-                fn prop_approx_linf_norm_point_separating(v1 in super::$VectorGen(), v2 in super::$VectorGen()) {
-                    let v1: super::$VectorType<$ScalarType> = v1;
-                    let v2: super::$VectorType<$ScalarType> = v2;
-                    super::prop_approx_linf_norm_point_separating(v1, v2, $tolerance)?
+                fn prop_approx_linf_norm_point_separating(v in super::$VectorGen()) {
+                    let v: super::$VectorType<$ScalarType> = v;
+                    super::prop_approx_linf_norm_point_separating(v, $tolerance)?
                 }
 
                 #[test]
