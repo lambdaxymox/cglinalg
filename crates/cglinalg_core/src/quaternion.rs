@@ -1196,7 +1196,7 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
-    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64,
     /// );
     /// let result = quaternion.to_matrix();
     ///
@@ -1224,7 +1224,7 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
     ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),
-    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64),
     /// );
     /// let result = quaternion.to_matrix();
     ///
@@ -1281,7 +1281,7 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,
-    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64
+    ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64,
     /// );
     /// let mut result = Matrix3x3::zero();
     ///
@@ -1312,7 +1312,7 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,
     ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),
-    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64)
+    ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64),
     /// );
     /// let mut result = Matrix3x3::zero();
     ///
@@ -1366,7 +1366,7 @@ where
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
     ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64, 0_f64,
-    ///     0_f64,                  0_f64,                  0_f64,                  1_f64
+    ///     0_f64,                  0_f64,                  0_f64,                  1_f64,
     /// );
     /// let result = quaternion.to_affine_matrix();
     ///
@@ -1395,7 +1395,7 @@ where
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
     ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         0_f64,
     ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), 0_f64,
-    ///     0_f64,                           0_f64,                           0_f64,                           1_f64
+    ///     0_f64,                           0_f64,                           0_f64,                           1_f64,
     /// );
     /// let result = quaternion.to_affine_matrix();
     ///
@@ -1463,7 +1463,7 @@ where
     ///     1_f64 - scale * 25_f64, scale * 10_f64,         scale * 5_f64,          0_f64,
     ///     scale * 2_f64,          1_f64 - scale * 20_f64, scale * 14_f64,         0_f64,
     ///     scale * 11_f64,         scale * 10_f64,         1_f64 - scale * 13_f64, 0_f64,
-    ///     0_f64,                  0_f64,                  0_f64,                  1_f64
+    ///     0_f64,                  0_f64,                  0_f64,                  1_f64,
     /// );
     /// let mut result = Matrix4x4::zero();
     ///
@@ -1496,7 +1496,7 @@ where
     ///     1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         scale * 0_f64,                   0_f64,
     ///     scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), scale * (1_f64 / 2_f64),         0_f64,
     ///     scale * (1_f64 / 2_f64),         scale * 0_f64,                   1_f64 - scale * (1_f64 / 2_f64), 0_f64,
-    ///     0_f64,                           0_f64,                           0_f64,                           1_f64
+    ///     0_f64,                           0_f64,                           0_f64,                           1_f64,
     /// );
     /// let mut result = Matrix4x4::zero();
     ///
@@ -1997,7 +1997,7 @@ where
     /// # let sqrt_norm_q = f64::sqrt(norm_q);
     /// # let expected = Quaternion::from_parts(
     /// #     sqrt_norm_q * cos_angle_over_two,
-    /// #     sqrt_norm_q * sin_angle_over_two * Vector3::unit_z()
+    /// #     sqrt_norm_q * sin_angle_over_two * Vector3::unit_z(),
     /// # );
     /// # let result = q.sqrt();
     /// #
@@ -2291,7 +2291,7 @@ where
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let expected = Quaternion::from_axis_angle(
     ///    &unit_z,
-    ///    Radians::full_turn_div_4()
+    ///    Radians::full_turn_div_4(),
     /// );
     /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
     ///
@@ -2328,7 +2328,7 @@ where
     /// let unit_z: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let expected = Quaternion::from_axis_angle(
     ///    &unit_z,
-    ///    Radians::full_turn_div_4()
+    ///    Radians::full_turn_div_4(),
     /// );
     /// let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
     ///
@@ -2797,16 +2797,16 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let q1 = Quaternion::from_parts(
     ///    Angle::cos(angle1 / 2_f64),
-    ///    Angle::sin(angle1 / 2_f64) * unit_z
+    ///    Angle::sin(angle1 / 2_f64) * unit_z,
     /// );
     /// let q2 = Quaternion::from_parts(
     ///    Angle::cos(angle2 / 2_f64),
-    ///    Angle::sin(angle2 / 2_f64) * unit_z
+    ///    Angle::sin(angle2 / 2_f64) * unit_z,
     /// );
     /// let angle_expected = Degrees(90_f64);
     /// let expected = Quaternion::from_parts(
     ///    Angle::cos(angle_expected / 2_f64),
-    ///    Angle::sin(angle_expected / 2_f64) * unit_z
+    ///    Angle::sin(angle_expected / 2_f64) * unit_z,
     /// );
     /// let result = q1.slerp(&q2, 0.5);
     ///
@@ -3152,7 +3152,7 @@ where
     ///     f64::sqrt(5_f64) * f64::sqrt(2_f64) / 4_f64,
     ///     0_f64,
     ///     0_f64,
-    ///     -f64::sqrt(2_f64) / 4_f64
+    ///     -f64::sqrt(2_f64) / 4_f64,
     /// );
     /// let result = quaternion.acos();
     ///
@@ -3234,7 +3234,7 @@ where
     ///     f64::sqrt(5_f64) * f64::sqrt(2_f64) / 4_f64,
     ///     0_f64,
     ///     0_f64,
-    ///     f64::sqrt(2_f64) / 4_f64
+    ///     f64::sqrt(2_f64) / 4_f64,
     /// );
     /// let result = quaternion.asin();
     ///
@@ -3332,7 +3332,7 @@ where
     ///     2_f64 / 3_f64,
     ///     0_f64,
     ///     0_f64,
-    ///     f64::sqrt(5_f64) / 3_f64
+    ///     f64::sqrt(5_f64) / 3_f64,
     /// );
     /// let result = quaternion.atan();
     ///
