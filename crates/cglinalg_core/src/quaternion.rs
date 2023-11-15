@@ -1653,7 +1653,7 @@ where
     /// ```
     #[inline]
     pub fn arg(&self) -> S {
-        Self::arg_eps(&self, S::machine_epsilon())
+        Self::arg_eps(self, S::machine_epsilon())
     }
 
     #[inline]
@@ -1765,7 +1765,7 @@ where
     /// ```
     #[inline]
     pub fn exp(&self) -> Self {
-        Self::exp_eps(&self, S::machine_epsilon())
+        Self::exp_eps(self, S::machine_epsilon())
     }
 
     #[inline]
@@ -1849,7 +1849,7 @@ where
     /// ```
     #[inline]
     pub fn ln(&self) -> Self {
-        Self::ln_eps(&self, S::machine_epsilon())
+        Self::ln_eps(self, S::machine_epsilon())
     }
 
     #[inline]
