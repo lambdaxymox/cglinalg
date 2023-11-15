@@ -99,10 +99,7 @@ where
 }
 
 /// A trait representing numbers with subtraction and additive inverses.
-pub trait SimdScalarSigned
-where
-    Self: SimdScalar + num_traits::Signed,
-{
+pub trait SimdScalarSigned: SimdScalar + num_traits::Signed {
     /// Determine whether the sign of the number is positive.
     ///
     /// # Examples
@@ -468,6 +465,41 @@ pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
     + approx_cmp::AssertUlpsAllEq<AllDebugTolerance = Self>
 {
     type IntegerRepr: Copy + Clone + fmt::Debug;
+
+    /// Returns the default epsilon for a floating point data type.
+    ///
+    /// The default epsilon for a floating point number type is typically
+    /// the machine epsilon. See [`SimdScalarFloat::machine_epsilon`].
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_numeric::SimdScalarCmp;
+    /// # use core::f32;
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(f32::default_epsilon(), f32::EPSILON);
+    /// assert_eq!(f64::default_epsilon(), f64::EPSILON);
+    /// ```
+    fn default_epsilon() -> Self;
+
+    /// Returns the default ulps tolerance for a floating point data 
+    /// type.
+    /// 
+    /// The ulps tolerance is an upper bound on the ulps approximation error
+    /// for two floating point numbers to be considered equal.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_numeric::SimdScalarCmp;
+    /// # use core::f32;
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(f32::default_max_ulps(), 4_u32);
+    /// assert_eq!(f64::default_max_ulps(), 4_u64);
+    /// ```
+    fn default_max_ulps() -> Self::IntegerRepr;
 }
 
 /// A trait representing numbers that have the properties of finite precision
@@ -476,7 +508,6 @@ pub trait SimdScalarFloat: SimdScalarSigned
     + SimdScalarOrd
     + SimdScalarBounded
     + SimdScalarCmp
-    + ops::Neg<Output = Self>
 {
     /// Return the largest integer less than or equal to `self`.
     ///
@@ -1417,24 +1448,6 @@ pub trait SimdScalarFloat: SimdScalarSigned
     /// assert_eq!(f64::machine_epsilon(), f64::EPSILON);
     /// ```
     fn machine_epsilon() -> Self;
-
-    /// Returns the default ulps tolerance for a floating point data 
-    /// type.
-    /// 
-    /// The ulps tolerance is an upper bound on the ulps approximation error
-    /// for two floating point numbers to be considered equal.
-    /// 
-    /// # Example
-    /// 
-    /// ```
-    /// # use cglinalg_numeric::SimdScalarFloat;
-    /// # use core::f32;
-    /// # use core::f64;
-    /// #
-    /// assert_eq!(f32::default_ulps(), 4_u32);
-    /// assert_eq!(f64::default_ulps(), 4_u64);
-    /// ```
-    fn default_ulps() -> <Self as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
 }
 
 impl<T> SimdScalar for T where
@@ -1596,6 +1609,14 @@ macro_rules! impl_simd_scalar_float {
     ($ScalarType:ty, $IntegerType:ty) => {
         impl SimdScalarCmp for $ScalarType {
             type IntegerRepr = $IntegerType;
+
+            fn default_epsilon() -> Self {
+                num_traits::Float::epsilon()
+            }
+
+            fn default_max_ulps() -> Self::IntegerRepr {
+                4
+            }
         }
 
         impl SimdScalarFloat for $ScalarType {
@@ -1907,11 +1928,6 @@ macro_rules! impl_simd_scalar_float {
             #[inline]
             fn machine_epsilon() -> Self {
                 num_traits::Float::epsilon()
-            }
-
-            #[inline]
-            fn default_ulps() -> Self::IntegerRepr {
-                4
             }
         }
     }

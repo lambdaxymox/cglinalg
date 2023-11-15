@@ -1355,8 +1355,8 @@ where
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
         if let (Some(unit_v1), Some(unit_v2)) = (
-            Unit::try_from_value(*v1, S::machine_epsilon()),
-            Unit::try_from_value(*v2, S::machine_epsilon()),
+            Unit::try_from_value(*v1, S::default_epsilon()),
+            Unit::try_from_value(*v2, S::default_epsilon()),
         ) {
             Self::rotation_between_axis(&unit_v1, &unit_v2)
         } else {

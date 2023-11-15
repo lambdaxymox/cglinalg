@@ -733,7 +733,7 @@ fn prop_approx_norm_squared_point_separating<S, const N: usize>(
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= input_tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((v1 - v2).norm_squared() > output_tolerance);
 
     Ok(())
@@ -835,7 +835,7 @@ fn prop_approx_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2: Ve
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((v1 - v2).norm() > tolerance);
 
     Ok(())
@@ -875,7 +875,7 @@ fn prop_approx_l1_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v2:
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((v1 - v2).l1_norm() > tolerance);
 
     Ok(())
@@ -981,7 +981,7 @@ fn prop_approx_lp_norm_point_separating<S, const N: usize>(
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((v1 - v2).lp_norm(p) > tolerance, "\nlp_norm(v - w, p) = {}\n", (v1 - v2).lp_norm(p));
 
     Ok(())
@@ -1020,7 +1020,7 @@ fn prop_approx_linf_norm_point_separating<S, const N: usize>(v1: Vector<S, N>, v
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(v1, v2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((v1 - v2).linf_norm() > tolerance);
 
     Ok(())

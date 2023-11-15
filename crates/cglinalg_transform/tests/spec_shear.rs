@@ -108,13 +108,13 @@ where
             direction.norm(),
             S::one(),
             abs_diff_all <= cglinalg_numeric::cast(1e-14),
-            relative_all <= S::machine_epsilon(),
+            relative_all <= S::default_epsilon(),
         ));
         assert!(relative_eq!(
             normal.norm(),
             S::one(),
             abs_diff_all <= cglinalg_numeric::cast(1e-14),
-            relative_all <= S::machine_epsilon(),
+            relative_all <= S::default_epsilon(),
         ));
         assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)));
 
@@ -163,13 +163,13 @@ where
             direction.norm(),
             S::one(),
             abs_diff_all <= cglinalg_numeric::cast(1e-14),
-            relative_all <= S::machine_epsilon(),
+            relative_all <= S::default_epsilon(),
         ));
         assert!(relative_eq!(
             normal.norm(),
             S::one(),
             abs_diff_all <= cglinalg_numeric::cast(1e-14),
-            relative_all <= S::machine_epsilon(),
+            relative_all <= S::default_epsilon(),
         ));
         assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)));
 
@@ -285,7 +285,7 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(3_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -304,7 +304,7 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(4_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -322,7 +322,7 @@ where
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -341,7 +341,7 @@ where
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }

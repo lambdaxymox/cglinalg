@@ -1562,7 +1562,7 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
-        self.inverse_eps(S::machine_epsilon())
+        self.inverse_eps(S::default_epsilon())
     }
 
     #[inline]
@@ -1597,7 +1597,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        self.is_invertible_eps(S::machine_epsilon())
+        self.is_invertible_eps(S::default_epsilon())
     }
 
     #[inline]
@@ -1653,7 +1653,7 @@ where
     /// ```
     #[inline]
     pub fn arg(&self) -> S {
-        Self::arg_eps(self, S::machine_epsilon())
+        Self::arg_eps(self, S::default_epsilon())
     }
 
     #[inline]
@@ -1765,7 +1765,7 @@ where
     /// ```
     #[inline]
     pub fn exp(&self) -> Self {
-        Self::exp_eps(self, S::machine_epsilon())
+        Self::exp_eps(self, S::default_epsilon())
     }
 
     #[inline]
@@ -1849,7 +1849,7 @@ where
     /// ```
     #[inline]
     pub fn ln(&self) -> Self {
-        Self::ln_eps(self, S::machine_epsilon())
+        Self::ln_eps(self, S::default_epsilon())
     }
 
     #[inline]
@@ -2064,7 +2064,7 @@ where
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
-        self.sqrt_eps(S::machine_epsilon())
+        self.sqrt_eps(S::default_epsilon())
     }
 
     #[inline]
@@ -2336,7 +2336,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> {
-        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::machine_epsilon())
+        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::default_epsilon())
     }
 
     #[inline]

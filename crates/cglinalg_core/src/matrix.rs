@@ -1434,8 +1434,8 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps()) 
-                    && ulps_eq!(self.data[j][i], S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps());
+                result &= ulps_eq!(self.data[i][j], S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps()) 
+                    && ulps_eq!(self.data[j][i], S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps());
             }
         }
 
@@ -1481,7 +1481,7 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], self.data[j][i], abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps());
+                result &= ulps_eq!(self.data[i][j], self.data[j][i], abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps());
             }
         }
 
@@ -2635,7 +2635,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
     }
 }
 
@@ -3242,7 +3242,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
     }
 }
 
@@ -5154,7 +5154,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
-        Self::rotation_between_eps(v1, v2, S::machine_epsilon())
+        Self::rotation_between_eps(v1, v2, S::default_epsilon())
     }
 
     #[inline]
@@ -5202,7 +5202,7 @@ where
     /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> {
-        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::machine_epsilon())
+        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::default_epsilon())
     }
 
     #[inline]
@@ -5295,7 +5295,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
     }
 }
 
@@ -7221,7 +7221,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
     }
 }
 

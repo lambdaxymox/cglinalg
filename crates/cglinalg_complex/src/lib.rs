@@ -1205,7 +1205,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(self) -> bool {
-        self.is_invertible_eps(S::machine_epsilon())
+        self.is_invertible_eps(S::default_epsilon())
     }
 
     #[inline]

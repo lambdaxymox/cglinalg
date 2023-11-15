@@ -1033,7 +1033,7 @@ where
             self.matrix.c0r1 - self.matrix.c1r0,
         );
 
-        Unit::try_from_value(axis, S::machine_epsilon())
+        Unit::try_from_value(axis, S::default_epsilon())
     }
 
     /// Compute the axis and angle of the rotation.

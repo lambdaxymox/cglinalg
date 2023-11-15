@@ -27,7 +27,7 @@ use core::fmt;
 /// apply Euler angles, but the ZYX rotation order is one of the most commonly
 /// use rotation orders used in computer graphics.
 ///
-/// ## Note
+/// ## Discussion
 ///
 /// Euler angles are prone to gimbal lock. Gimbal lock is the loss of one
 /// degree of freedom when rotations about two axes come into parallel alignment.
@@ -37,45 +37,7 @@ use core::fmt;
 /// other one rotates by the same amount; one degree of freedom is lost.
 /// Let's give a couple examples of Euler angles.
 ///
-/// # Example (No Gimbal Lock)
-///
-/// The following example is a rotation without gimbal lock.
-/// ```
-/// # use approx_cmp::assert_relative_eq;
-/// # use cglinalg_core::{
-/// #     EulerAngles,
-/// #     Matrix3x3,
-/// # };
-/// # use cglinalg_trigonometry::Degrees;
-///
-/// let roll = Degrees(45_f64);
-/// let yaw = Degrees(30_f64);
-/// let pitch = Degrees(15_f64);
-/// let euler = EulerAngles::new(roll, yaw, pitch);
-///
-/// let c0r0 =  (1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (1_f64 + f64::sqrt(3_f64));
-/// let c0r1 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) - 1_f64);
-/// let c0r2 =  (1_f64 / 8_f64) * (f64::sqrt(3_f64) - 3_f64);
-/// let c1r0 = -(1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (f64::sqrt(3_f64) - 1_f64);
-/// let c1r1 =  (1_f64 / 8_f64) * (3_f64 + f64::sqrt(3_f64));
-/// let c1r2 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) + 1_f64);
-/// let c2r0 =  1_f64 / 2_f64;
-/// let c2r1 = -(1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
-/// let c2r2 =  (1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
-/// let expected = Matrix3x3::new(
-///     c0r0, c0r1, c0r2,
-///     c1r0, c1r1, c1r2,
-///     c2r0, c2r1, c2r2
-/// );
-/// let result = Matrix3x3::from(euler);
-///
-/// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
-/// ```
-///
-/// # Example (Gimbal Lock)
-///
-/// An Euler rotation can be represented as a product three rotations. We are using the ZYX
-/// rotation application order.
+/// An Euler rotation can be represented as a product three rotations.
 /// ```text
 /// R(roll, yaw, pitch) == R_x(roll) * R_y(yaw) * R_z(pitch)
 /// ```
@@ -115,14 +77,52 @@ use core::fmt;
 /// ```
 /// Changing either the values of the `pitch` or the `roll` has the same
 /// effect: it rotates an object about the **z-axis**. We have lost the ability
-/// to roll about the **x-axis**. Let's illustrate this effect with some code.
+/// to roll about the **x-axis**.
+/// 
+/// # Example (No Gimbal Lock)
+///
+/// The following example is a rotation without gimbal lock.
+/// ```
+/// # use approx_cmp::assert_relative_eq;
+/// # use cglinalg_core::{
+/// #     EulerAngles,
+/// #     Matrix3x3,
+/// # };
+/// # use cglinalg_trigonometry::Degrees;
+///
+/// let roll = Degrees(45_f64);
+/// let yaw = Degrees(30_f64);
+/// let pitch = Degrees(15_f64);
+/// let euler = EulerAngles::new(roll, yaw, pitch);
+///
+/// let c0r0 =  (1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (1_f64 + f64::sqrt(3_f64));
+/// let c0r1 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) - 1_f64);
+/// let c0r2 =  (1_f64 / 8_f64) * (f64::sqrt(3_f64) - 3_f64);
+/// let c1r0 = -(1_f64 / 4_f64) * f64::sqrt(3_f64 / 2_f64) * (f64::sqrt(3_f64) - 1_f64);
+/// let c1r1 =  (1_f64 / 8_f64) * (3_f64 + f64::sqrt(3_f64));
+/// let c1r2 =  (1_f64 / 8_f64) * (3_f64 * f64::sqrt(3_f64) + 1_f64);
+/// let c2r0 =  1_f64 / 2_f64;
+/// let c2r1 = -(1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
+/// let c2r2 =  (1_f64 / 2_f64) * f64::sqrt(3_f64 / 2_f64);
+/// let expected = Matrix3x3::new(
+///     c0r0, c0r1, c0r2,
+///     c1r0, c1r1, c1r2,
+///     c2r0, c2r1, c2r2
+/// );
+/// let result = Matrix3x3::from(euler);
+///
+/// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+/// ```
+///
+/// # Example (Gimbal Lock)
+///
 /// ```
 /// # use approx_cmp::assert_ulps_eq;
 /// # use cglinalg_core::{
 /// #    EulerAngles,
 /// #    Matrix3x3,
 /// # };
-/// # use cglinalg_numeric::SimdScalarFloat;
+/// # use cglinalg_numeric::SimdScalarCmp;
 /// # use cglinalg_trigonometry::Degrees;
 /// #
 /// // Gimbal lock the x-axis.
@@ -132,11 +132,11 @@ use core::fmt;
 /// let euler = EulerAngles::new(roll, yaw, pitch);
 /// let matrix_z_locked = Matrix3x3::from(euler);
 ///
-/// assert_ulps_eq!(matrix_z_locked.c0r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix_z_locked.c1r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix_z_locked.c2r0, 1_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix_z_locked.c2r1, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix_z_locked.c2r2, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
+/// assert_ulps_eq!(matrix_z_locked.c0r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix_z_locked.c1r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix_z_locked.c2r0, 1_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix_z_locked.c2r1, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix_z_locked.c2r2, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
 ///
 /// // Attempt to roll in the gimbal locked state.
 /// let euler_roll = EulerAngles::new(Degrees(15_f64), Degrees(0_f64), Degrees(0_f64));
@@ -144,11 +144,11 @@ use core::fmt;
 /// let matrix = matrix_roll * matrix_z_locked;
 ///
 /// // But the matrix is still gimbal locked.
-/// assert_ulps_eq!(matrix.c0r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix.c1r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix.c2r0, 1_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix.c2r1, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
-/// assert_ulps_eq!(matrix.c2r2, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_ulps());
+/// assert_ulps_eq!(matrix.c0r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix.c1r0, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix.c2r0, 1_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix.c2r1, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
+/// assert_ulps_eq!(matrix.c2r2, 0_f64, abs_diff_all <= f64::EPSILON, ulps_all <= f64::default_max_ulps());
 /// ```
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]

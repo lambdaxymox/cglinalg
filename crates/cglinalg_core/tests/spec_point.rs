@@ -247,7 +247,7 @@ where
     let lhs = (p + v1) + v2;
     let rhs = p + (v1 + v2);
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -356,7 +356,7 @@ fn prop_approx_norm_squared_point_separating<S, const N: usize>(
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((p1 - p2).norm_squared() > output_tolerance);
 
     Ok(())
@@ -465,8 +465,8 @@ where
 {
     let zero = S::zero();
 
-    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_ne!((p1 - p2).norm(), zero, abs_diff_all <= output_tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(p1, p2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_ne!((p1 - p2).norm(), zero, abs_diff_all <= output_tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }

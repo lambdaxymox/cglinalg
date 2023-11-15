@@ -65,9 +65,9 @@ where
     any::<(S, S, S, S)>().prop_map(move |(_angle, _axis_x, _axis_y, _axis_z)| {
         let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
         let unnormalized_axis = {
-            let axis_x = rescale(_axis_x, S::machine_epsilon(), S::one());
-            let axis_y = rescale(_axis_y, S::machine_epsilon(), S::one());
-            let axis_z = rescale(_axis_z, S::machine_epsilon(), S::one());
+            let axis_x = rescale(_axis_x, S::default_epsilon(), S::one());
+            let axis_y = rescale(_axis_y, S::default_epsilon(), S::one());
+            let axis_z = rescale(_axis_z, S::default_epsilon(), S::one());
 
             Vector3::new(axis_x, axis_y, axis_z)
         };
@@ -203,7 +203,7 @@ where
     let lhs = r.matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -221,7 +221,7 @@ where
     let lhs = r.matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -264,9 +264,9 @@ where
     let lhs = r * r.inverse();
     let rhs = r.inverse() * r;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -354,7 +354,7 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -382,7 +382,7 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -402,7 +402,7 @@ where
     let lhs = (r.angle() - angle) / Radians(S::two_pi());
     let rhs = lhs.round();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }

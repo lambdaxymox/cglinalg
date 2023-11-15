@@ -40,9 +40,9 @@ where
         let scale = SimdScalarSigned::abs(rescale(_scale, min_scale, max_scale));
         let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
         let unnormalized_axis = {
-            let axis_x = rescale(_axis_x, S::machine_epsilon(), S::one());
-            let axis_y = rescale(_axis_y, S::machine_epsilon(), S::one());
-            let axis_z = rescale(_axis_z, S::machine_epsilon(), S::one());
+            let axis_x = rescale(_axis_x, S::default_epsilon(), S::one());
+            let axis_y = rescale(_axis_y, S::default_epsilon(), S::one());
+            let axis_z = rescale(_axis_z, S::default_epsilon(), S::one());
 
             Vector3::new(axis_x, axis_y, axis_z)
         };
@@ -154,9 +154,9 @@ where
     }
 
     any::<(S, S, S)>().prop_map(move |(_qx, _qy, _qz)| {
-        let qx = rescale(_qx, S::machine_epsilon(), S::one());
-        let qy = rescale(_qy, S::machine_epsilon(), S::one());
-        let qz = rescale(_qz, S::machine_epsilon(), S::one());
+        let qx = rescale(_qx, S::default_epsilon(), S::one());
+        let qy = rescale(_qy, S::default_epsilon(), S::one());
+        let qz = rescale(_qz, S::default_epsilon(), S::one());
         let vector = Vector3::new(qx, qy, qz).normalize();
 
         Quaternion::from_pure(vector)
@@ -510,8 +510,8 @@ where
     let one = Quaternion::identity();
     let q_inv = q.inverse().unwrap();
 
-    prop_assert!(relative_eq!(q * q_inv, one, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(q_inv * q, one, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(q * q_inv, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(q_inv * q, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -880,7 +880,7 @@ fn prop_approx_modulus_squared_point_separating<S>(
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= input_tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= input_tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((q1 - q2).modulus_squared() > output_tolerance);
 
     Ok(())
@@ -952,7 +952,7 @@ fn prop_approx_modulus_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>,
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((q1 - q2).modulus() > tolerance);
 
     Ok(())
@@ -1057,7 +1057,7 @@ fn prop_approx_l1_norm_point_separating<S>(q1: Quaternion<S>, q2: Quaternion<S>,
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assume!(relative_ne!(q1, q2, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!((q1 - q2).l1_norm() > tolerance);
 
     Ok(())
@@ -1160,8 +1160,8 @@ where
     let exp_q = q.exp();
     let exp_negative_q = (-q).exp();
 
-    prop_assert!(relative_eq!(exp_negative_q * exp_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(exp_q * exp_negative_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(exp_negative_q * exp_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(exp_q * exp_negative_q, unit_s, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -1180,7 +1180,7 @@ where
     let lhs = q.ln().scalar();
     let rhs = q.norm().ln();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -1255,7 +1255,7 @@ where
     let lhs = q.arg();
     let rhs = new_q.arg();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -1390,7 +1390,7 @@ where
     let one = S::one();
     let negative_one = Quaternion::from_real(-one);
     prop_assume!(q.is_pure());
-    prop_assert!(relative_eq!(q.squared(), negative_one, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(q.squared(), negative_one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -1408,7 +1408,7 @@ where
     let lhs = q.cos() * q.cos() + q.sin() * q.sin();
     let rhs = Quaternion::identity();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -1542,7 +1542,7 @@ where
     let lhs = q.cosh() * q.cosh() - q.sinh() * q.sinh();
     let rhs = Quaternion::identity();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }

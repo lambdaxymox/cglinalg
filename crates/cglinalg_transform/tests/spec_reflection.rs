@@ -42,8 +42,8 @@ where
             let sign_normal_1 = _normal[1].signum();
             let abs_normal_0 = _normal[0].abs();
             let abs_normal_1 = _normal[1].abs();
-            let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::machine_epsilon(), S::one());
-            let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::machine_epsilon(), S::one());
+            let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::default_epsilon(), S::one());
+            let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::default_epsilon(), S::one());
 
             Unit::from_value(Vector2::new(normal_0, normal_1))
         };
@@ -81,9 +81,9 @@ where
             let abs_normal_0 = _normal[0].abs();
             let abs_normal_1 = _normal[1].abs();
             let abs_normal_2 = _normal[2].abs();
-            let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::machine_epsilon(), S::one());
-            let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::machine_epsilon(), S::one());
-            let normal_2 = sign_normal_2 * rescale(abs_normal_2, S::machine_epsilon(), S::one());
+            let normal_0 = sign_normal_0 * rescale(abs_normal_0, S::default_epsilon(), S::one());
+            let normal_1 = sign_normal_1 * rescale(abs_normal_1, S::default_epsilon(), S::one());
+            let normal_2 = sign_normal_2 * rescale(abs_normal_2, S::default_epsilon(), S::one());
 
             Unit::from_value(Vector3::new(normal_0, normal_1, normal_2))
         };
@@ -197,7 +197,7 @@ where
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -215,7 +215,7 @@ where
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -233,7 +233,7 @@ where
     let lhs = (r * v).norm();
     let rhs = v.norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -256,7 +256,7 @@ where
     let lhs = r * (r * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -279,7 +279,7 @@ where
     let lhs = r * (r * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }

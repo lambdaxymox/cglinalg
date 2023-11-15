@@ -160,9 +160,9 @@ where
         let rotation = {
             let angle = Radians(SimdScalarSigned::abs(rescale(_angle, min_angle, max_angle)));
             let unnormalized_axis = {
-                let axis_x = rescale(_axis[0], S::machine_epsilon(), S::one());
-                let axis_y = rescale(_axis[1], S::machine_epsilon(), S::one());
-                let axis_z = rescale(_axis[2], S::machine_epsilon(), S::one());
+                let axis_x = rescale(_axis[0], S::default_epsilon(), S::one());
+                let axis_y = rescale(_axis[1], S::default_epsilon(), S::one());
+                let axis_z = rescale(_axis[2], S::default_epsilon(), S::one());
 
                 Vector3::new(axis_x, axis_y, axis_z)
             };
@@ -260,9 +260,9 @@ where
     let lhs = m * m.inverse();
     let rhs = m.inverse() * m;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
-    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
+    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -348,7 +348,7 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
@@ -376,7 +376,7 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
 
     Ok(())
 }
