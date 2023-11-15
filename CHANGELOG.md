@@ -6,6 +6,24 @@ Change log dates follow the ISO 8601 standard (YEAR-MONTH-DAY).
 
 ## [Unreleased]
 
+## [0.20.0] - 2023-11-15
+Integate a new approximate comparison library.
+
+### Added
+- Introduced various `try_inverse` functions that return an `Option<Self>` for 
+  objects that may not have an inverse.
+- Added a `SimdScalarCmp` trait to marshall together the various approximate comparison
+  traits from `approx_cmp` into one trait.
+
+### Changed
+- Documentation improvements.
+- Removed `approx` crate in favor of the `approx_cmp` floating point comparison crate.
+- Changes in documentation's matrix notation.
+- Change type signature of various `inverse` functions to return a `Self` instead of `Option<Self>`.
+- Various bits of refactoring.
+- Redesign point separation property tests to be less prone to catastrophic 
+  cancellations causing the tests to spuriously fail.
+
 ## [0.19.1] - 2023-11-04
 Some small project level improvements.
 

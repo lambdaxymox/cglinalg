@@ -13,9 +13,7 @@ The library is designed with the following goals in mind:
   fixed-sized array so they can be sent to across FFI boundaries.
 * **Few Dependencies** -- The library should be relatively self-contained. To 
   support portability and maintainability, **cglinalg** is designed with few 
-  external dependencies. The biggest dependencies---`proptest` and 
-  `criterion`---are development dependencies only. Also, the library only uses
-  stable Rust.
+  external dependencies. Also, the library only uses stable Rust.
 * **Type Safety** -- Leverage Rust's type system and zero-cost abstractions 
   to ensure code correctness, abstraction, and intelligibility do not come 
   at the cost of performance.
@@ -31,7 +29,7 @@ To use the library in your project, add **cglinalg** as a dependency in your
 `Cargo.toml` file:
 ```toml
 [dependencies]
-cglinalg = "0.19.1"
+cglinalg = "0.20.0"
 ```
 After that, place the crate declaration in either your `lib.rs` file or 
 your `main.rs` file
@@ -75,8 +73,5 @@ Specific features of the library include:
 * Orthographic projections and perspective projections for camera models.
 * Typed angles and typed angle trigonometry that statically guarantee that 
   trigonometry is done in the right units.
-* The library makes heavy use of property testing via the `proptest` crate
-  in addition to Rust's type system to ensure code correctness.
-* The library makes heavy use of statistical microbenchmarking using the 
-  `criterion` crate.
-
+* The library makes heavy use of property testing ensure code correctness.
+* The library makes heavy use of statistical microbenchmarking.
