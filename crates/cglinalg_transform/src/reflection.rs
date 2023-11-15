@@ -247,22 +247,22 @@ where
     /// ```
     /// and the corresponding affine matrix has the form
     /// ```text
-    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
-    ///      | 0^T                   1                 |
+    /// M := [ I - 2 * outer(n, n)   2 * dot(Q, n) * n ]
+    ///      [ 0^T                   1                 ]
     /// ```
     /// geometrically. In the standard basis in two-dimensional Euclidean space, we
     /// have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
-    ///      |  0                    0                   1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y ]
+    ///      [  0                    0                   1                   ]
     /// ```
     /// and in three-dimensional Euclidean space we have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
-    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
-    ///      |  0                    0                    0                    1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y ]
+    ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
+    ///      [  0                    0                    0                    1                   ]
     /// ```
     /// which correspond exactly the how the respective matrices are implemented.
     ///
@@ -360,22 +360,22 @@ where
     /// ```
     /// and the corresponding affine matrix has the form
     /// ```text
-    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
-    ///      | 0^T                   1                 |
+    /// M := [ I - 2 * outer(n, n)   2 * dot(Q, n) * n ]
+    ///      [ 0^T                   1                 ]
     /// ```
     /// geometrically. In the standard basis in two-dimensional Euclidean space, we
     /// have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
-    ///      |  0                    0                   1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y ]
+    ///      [  0                    0                   1                   ]
     /// ```
     /// and in three-dimensional Euclidean space we have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
-    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
-    ///      |  0                    0                    0                    1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y ]
+    ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
+    ///      [  0                    0                    0                    1                   ]
     /// ```
     /// which correspond exactly the how the respective matrices are implemented.
     ///

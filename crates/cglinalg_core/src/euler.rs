@@ -43,37 +43,37 @@ use core::fmt;
 /// ```
 /// The corresponding rotation matrices are
 /// ```text
-///               | 1   0            0         |
-/// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
-///               | 0   sin(rol)     cos(roll) |
+///               [ 1   0            0         ]
+/// R_x(roll)  := [ 0   cos(roll)   -sin(roll) ]
+///               [ 0   sin(rol)     cos(roll) ]
 ///
-///               |  cos(yaw)   0   sin(yaw) |
-/// R_y(yaw)   := |  0          1   0        |
-///               | -sin(yaw)   0   cos(yaw) |
+///               [  cos(yaw)   0   sin(yaw) ]
+/// R_y(yaw)   := [  0          1   0        ]
+///               [ -sin(yaw)   0   cos(yaw) ]
 ///
-///               | cos(pitch)   -sin(pitch)   0 |
-/// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
-///               | 0             0            1 |
+///               [ cos(pitch)   -sin(pitch)   0 ]
+/// R_z(pitch) := [ sin(pitch)    cos(pitch)   0 ]
+///               [ 0             0            1 ]
 /// ```
 /// Let's examine what happens when the yaw angle is `pi / 2`. The cosine of
 /// and sine of this angle are `cos(pi / 2) == 0` and `sin(pi / 2) == 1`.
 /// Plugging this into the rotation equations gives the rotation matrix
 /// ```text
-///      | 1   0            0         |   |  0   0   1 |   | cos(pitch)   -sin(pitch)   0 |
-/// R == | 0   cos(roll)   -sin(roll) | * |  0   1   0 | * | sin(pitch)    cos(pitch)   0 |
-///      | 0   sin(roll)    cos(roll) |   | -1   0   0 |   | 0             0            1 |
+///      [ 1   0            0         ]   [  0   0   1 ]   [ cos(pitch)   -sin(pitch)   0 ]
+/// R == [ 0   cos(roll)   -sin(roll) ] * [  0   1   0 ] * [ sin(pitch)    cos(pitch)   0 ]
+///      [ 0   sin(roll)    cos(roll) ]   [ -1   0   0 ]   [ 0             0            1 ]
 ///
-///      | 1    0            0         |   | cos(pitch)   -sin(pitch)   0 |
-///   == | 0    sin(roll)    cos(roll) | * | sin(pitch)    cos(pitch)   0 |
-///      | 0   -cos(roll)    sin(roll) |   | 0             0            1 |
+///      [ 1    0            0         ]   [ cos(pitch)   -sin(pitch)   0 ]
+///   == [ 0    sin(roll)    cos(roll) ] * [ sin(pitch)    cos(pitch)   0 ]
+///      [ 0   -cos(roll)    sin(roll) ]   [ 0             0            1 ]
 ///
-///      |  0                                              0                                           1 |
-///   == |  sin(roll)*cos(pitch) + cos(roll)*sin(pitch)   -sin(roll)*sin(pitch) + cos(roll)*cos(pitch) 0 |
-///      | -cos(roll)*cos(pitch) + sin(roll)*sin(pitch)    cos(roll)*sin(pitch) + sin(roll)*cos(pitch) 0 |
+///      [  0                                              0                                           1 ]
+///   == [  sin(roll)*cos(pitch) + cos(roll)*sin(pitch)   -sin(roll)*sin(pitch) + cos(roll)*cos(pitch) 0 ]
+///      [ -cos(roll)*cos(pitch) + sin(roll)*sin(pitch)    cos(roll)*sin(pitch) + sin(roll)*cos(pitch) 0 ]
 ///
-///      |  0                   0                 1 |
-///   == |  sin(roll + pitch)   cos(roll + pitch) 0 |
-///      | -cos(roll + pitch)   sin(roll + pitch) 0 |
+///      [  0                   0                 1 ]
+///   == [  sin(roll + pitch)   cos(roll + pitch) 0 ]
+///      [ -cos(roll + pitch)   sin(roll + pitch) 0 ]
 /// ```
 /// Changing either the values of the `pitch` or the `roll` has the same
 /// effect: it rotates an object about the **z-axis**. We have lost the ability
@@ -255,23 +255,23 @@ where
     /// ```
     /// The corresponding rotation matrices are
     /// ```text
-    ///               | 1   0            0         |
-    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
-    ///               | 0   sin(rol)     cos(roll) |
+    ///               [ 1   0            0         ]
+    /// R_x(roll)  := [ 0   cos(roll)   -sin(roll) ]
+    ///               [ 0   sin(rol)     cos(roll) ]
     ///
-    ///               |  cos(yaw)   0   sin(yaw) |
-    /// R_y(yaw)   := |  0          1   0        |
-    ///               | -sin(yaw)   0   cos(yaw) |
+    ///               [  cos(yaw)   0   sin(yaw) ]
+    /// R_y(yaw)   := [  0          1   0        ]
+    ///               [ -sin(yaw)   0   cos(yaw) ]
     ///
-    ///               | cos(pitch)   -sin(pitch)   0 |
-    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
-    ///               | 0             0            1 |
+    ///               [ cos(pitch)   -sin(pitch)   0 ]
+    /// R_z(pitch) := [ sin(pitch)    cos(pitch)   0 ]
+    ///               [ 0             0            1 ]
     /// ```
     /// Multiplying out the axial rotations yields the following rotation matrix.
     /// ```text
-    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
-    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
-    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    ///                        [ m[0, 0]   m[1, 0]   m[2, 0] ]
+    /// R(roll, yaw, pitch) == [ m[0, 1]   m[1, 1]   m[2, 1] ]
+    ///                        [ m[0, 2]   m[1, 2]   m[2, 2] ]
     /// where (indexing from zero in column-major order `m[column, row]`)
     /// m[0, 0] :=  cos(yaw) * cos(pitch)
     /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
@@ -366,23 +366,23 @@ where
     /// ```
     /// The corresponding rotation matrices are
     /// ```text
-    ///               | 1   0            0         |
-    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
-    ///               | 0   sin(rol)     cos(roll) |
+    ///               [ 1   0            0         ]
+    /// R_x(roll)  := [ 0   cos(roll)   -sin(roll) ]
+    ///               [ 0   sin(rol)     cos(roll) ]
     ///
-    ///               |  cos(yaw)   0   sin(yaw) |
-    /// R_y(yaw)   := |  0          1   0        |
-    ///               | -sin(yaw)   0   cos(yaw) |
+    ///               [  cos(yaw)   0   sin(yaw) ]
+    /// R_y(yaw)   := [  0          1   0        ]
+    ///               [ -sin(yaw)   0   cos(yaw) ]
     ///
-    ///               | cos(pitch)   -sin(pitch)   0 |
-    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
-    ///               | 0             0            1 |
+    ///               [ cos(pitch)   -sin(pitch)   0 ]
+    /// R_z(pitch) := [ sin(pitch)    cos(pitch)   0 ]
+    ///               [ 0             0            1 ]
     /// ```
     /// Multiplying out the axial rotations yields the following rotation matrix.
     /// ```text
-    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
-    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
-    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    ///                        [ m[0, 0]   m[1, 0]   m[2, 0] ]
+    /// R(roll, yaw, pitch) == [ m[0, 1]   m[1, 1]   m[2, 1] ]
+    ///                        [ m[0, 2]   m[1, 2]   m[2, 2] ]
     /// where (indexing from zero in column-major order `m[column, row]`)
     /// m[0, 0] :=  cos(yaw) * cos(pitch)
     /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
@@ -397,10 +397,10 @@ where
     /// This yields the entries in the rotation matrix. Since an affine rotation
     /// matrix has no translation terms in it, the final matrix has the form
     /// ```text
-    ///                        | m[0, 0]   m[1, 0]   m[2, 0]   0 |
-    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1]   0 |
-    ///                        | m[0, 2]   m[1, 2]   m[2, 2]   0 |
-    ///                        | 0         0         0         1 |
+    ///                        [ m[0, 0]   m[1, 0]   m[2, 0]   0 ]
+    /// R(roll, yaw, pitch) == [ m[0, 1]   m[1, 1]   m[2, 1]   0 ]
+    ///                        [ m[0, 2]   m[1, 2]   m[2, 2]   0 ]
+    ///                        [ 0         0         0         1 ]
     /// ```
     /// as desired.
     ///

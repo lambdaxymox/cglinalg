@@ -2126,12 +2126,12 @@ where
     /// ```
     /// The uniform affine scaling matrix has the general form
     /// ```text
-    /// | scale  0      ...  0       0 |
-    /// | 0      scale  ...  0       0 |
-    /// | .      .           .       . |
-    /// | .      .           .       . |
-    /// | 0      ...    ...  scale   0 |
-    /// | 0      ...    ...  0       1 |
+    /// [ scale  0      ...  0       0 ]
+    /// [ 0      scale  ...  0       0 ]
+    /// [ .      .           .       . ]
+    /// [ .      .           .       . ]
+    /// [ 0      ...    ...  scale   0 ]
+    /// [ 0      ...    ...  0       1 ]
     /// ```
     /// In particular, this is a special case of the more general form in
     /// [`Self::from_affine_nonuniform_scale`].
@@ -2246,12 +2246,12 @@ where
     /// ```
     /// The affine scaling matrix has the general form
     /// ```text
-    /// | scale[0] 0         ...  0             0 |
-    /// | 0        scale[1]  ...  0             0 |
-    /// | .        .              .             . |
-    /// | .        .              .             . |
-    /// | 0        ...       ...  scale[N - 2]  0 |
-    /// | 0        ...       ...  0             1 |
+    /// [ scale[0] 0         ...  0             0 ]
+    /// [ 0        scale[1]  ...  0             0 ]
+    /// [ .        .              .             . ]
+    /// [ .        .              .             . ]
+    /// [ 0        ...       ...  scale[N - 2]  0 ]
+    /// [ 0        ...       ...  0             1 ]
     /// ```
     ///
     /// # Examples (Two Dimensions)
@@ -2379,12 +2379,12 @@ where
     /// indicates that every entry except the last one in the bottom row is zero. In
     /// particular, the affine translation matrix has the form
     /// ```text
-    /// | 1  0   ...   distance[0]     |
-    /// | 0  1   ...   distance[1]     |
-    /// | .  .   ...   .               |
-    /// | .  .   ...   .               |
-    /// | 0  0   ...   distance[N - 2] |
-    /// | 0  0   ...   1               |
+    /// [ 1  0   ...   distance[0]     ]
+    /// [ 0  1   ...   distance[1]     ]
+    /// [ .  .   ...   .               ]
+    /// [ .  .   ...   .               ]
+    /// [ 0  0   ...   distance[N - 2] ]
+    /// [ 0  0   ...   1               ]
     /// ```
     ///
     /// # Examples (Two Dimensions)
@@ -2860,21 +2860,21 @@ where
     /// where `I` denotes the identity matrix. In the standard basis in Euclidean
     /// space, the outer product of `v` and `n` is given by
     /// ```text
-    /// outer(v, n) := | v.x * n.x   v.x * n.y |
-    ///                | v.y * n.x   v.y * n.y |
+    /// outer(v, n) := [ v.x * n.x   v.x * n.y ]
+    ///                [ v.y * n.x   v.y * n.y ]
     /// ```
     /// so the right-hand side of the expression for the shearing matrix is
     /// ```text
-    /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
-    ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
+    /// I + m * outer(v, n) == [ 1 0 ] + m * [ v.x * n.x   v.x * n.y ]
+    ///                        [ 0 1 ]       [ v.y * n.x   v.y * n.y ]
     ///
-    ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
-    ///                        | m * v.y * n.x       1 + m * v.y * n.y |
+    ///                     == [ 1 + m * v.x * n.x   m * v.x * n.y     ]
+    ///                        [ m * v.y * n.x       1 + m * v.y * n.y ]
     /// ```
     /// which leads to the formula used to implement the shearing transformation
     /// ```text
-    /// M == | 1 + m * v.x * n.x   m * v.x * n.y     |
-    ///      | m * v.y * n.x       1 + m * v.y * n.y |
+    /// M == [ 1 + m * v.x * n.x   m * v.x * n.y     ]
+    ///      [ m * v.y * n.x       1 + m * v.y * n.y ]
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
@@ -3815,25 +3815,25 @@ where
     /// where `I` denotes the identity matrix. In the standard basis in Euclidean
     /// space, the outer product of `v` and `n` is given by
     /// ```text
-    ///                | v.x * n.x   v.x * n.y   v.x * n.z |
-    /// outer(v, n) := | v.y * n.x   v.y * n.y   v.y * n.z |
-    ///                | v.z * n.x   v.z * n.y   v.z * n.z |
+    ///                [ v.x * n.x   v.x * n.y   v.x * n.z ]
+    /// outer(v, n) := [ v.y * n.x   v.y * n.y   v.y * n.z ]
+    ///                [ v.z * n.x   v.z * n.y   v.z * n.z ]
     /// ```
     /// so the right-hand side of the expression for the shearing matrix is
     /// ```text
-    ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
-    /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
-    ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
+    ///                        [ 1 0 0 ]       [ v.x * n.x   v.x * n.y   v.x * n.z ]
+    /// I + m * outer(v, n) == [ 0 1 0 ] + m * [ v.y * n.x   v.y * n.y   v.y * n.z ]
+    ///                        [ 0 0 1 ]       [ v.z * n.x   v.z * n.y   v.z * n.z ]
     ///
-    ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
-    ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
-    ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    ///                        [ 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     ]
+    ///                     == [ m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     ]
+    ///                        [ m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z ]
     /// ```
     /// which leads to the formula used to implement the shearing transformation
     /// ```text
-    ///      | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
-    /// M == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
-    ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    ///      [ 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     ]
+    /// M == [ m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     ]
+    ///      [ m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z ]
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
@@ -4104,32 +4104,32 @@ where
     /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
-    /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
-    ///      | 0^T                  1                 |
+    /// M := [ I + m * (v * n^T)   -m * dot(Q, n) * v ]
+    ///      [ 0^T                  1                 ]
     ///
-    ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
-    ///      | 0^T                    1                 |
+    ///   == [ I + m * outer(v, t)   -m * dot(Q, n) * v ]
+    ///      [ 0^T                    1                 ]
     /// ```
     /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of
     /// the zero vector. In the standard basis in Euclidean space, the outer product
     /// of `v` and `n` is given by
     /// ```text
-    /// outer(v, n) := | v.x * n.x   v.x * n.y |
-    ///                | v.y * n.x   v.y * n.y |
+    /// outer(v, n) := [ v.x * n.x   v.x * n.y ]
+    ///                [ v.y * n.x   v.y * n.y ]
     /// ```
     /// so the right-hand side of the expression for the shearing matrix is
     /// ```text
-    /// I + m * outer(v, n) == | 1 0 | + m * | v.x * n.x   v.x * n.y |
-    ///                        | 0 1 |       | v.y * n.x   v.y * n.y |
+    /// I + m * outer(v, n) == [ 1 0 ] + m * [ v.x * n.x   v.x * n.y ]
+    ///                        [ 0 1 ]       [ v.y * n.x   v.y * n.y ]
     ///
-    ///                     == | 1 + m * v.x * n.x   m * v.x * n.y     |
-    ///                        | m * v.y * n.x       1 + m * v.y * n.y |
+    ///                     == [ 1 + m * v.x * n.x   m * v.x * n.y     ]
+    ///                        [ m * v.y * n.x       1 + m * v.y * n.y ]
     /// ```
     /// which leads to the formula used to implement the shearing transformation
     /// ```text
-    ///      | 1 + m * v.x * n.x   m * v.x * n.y      -m * dot(Q, n) * v |
-    /// M == | m * v.y * n.x       1 + m* v.y * n.y   -m * dot(Q, n) * v |
-    ///      | 0                   0                   1                 |
+    ///      [ 1 + m * v.x * n.x   m * v.x * n.y      -m * dot(Q, n) * v ]
+    /// M == [ m * v.y * n.x       1 + m* v.y * n.y   -m * dot(Q, n) * v ]
+    ///      [ 0                   0                   1                 ]
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
@@ -4354,22 +4354,22 @@ where
     /// ```
     /// and the corresponding affine matrix has the form
     /// ```text
-    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
-    ///      | 0^T                   1                 |
+    /// M := [ I - 2 * outer(n, n)   2 * dot(Q, n) * n ]
+    ///      [ 0^T                   1                 ]
     /// ```
     /// geometrically. In the standard basis in two-dimensional Euclidean space, we
     /// have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
-    ///      |  0                    0                   1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y ]
+    ///      [  0                    0                   1                   ]
     /// ```
     /// and in three-dimensional Euclidean space we have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
-    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
-    ///      |  0                    0                    0                    1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y ]
+    ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
+    ///      [  0                    0                    0                    1                   ]
     /// ```
     /// which correspond exactly the how the respective matrices are implemented.
     ///
@@ -4553,9 +4553,9 @@ where
     /// In Euclidean space in the standard basis, the cross matrix has the
     /// following form. Given a vector `a`, the cross matrix for `a` is
     /// ```text
-    ///                  | 0    -a.z   a.y |
-    /// A := cross(a) := | a.z   0    -a.x |
-    ///                  | -a.y  a.x   0   |
+    ///                  [ 0    -a.z   a.y ]
+    /// A := cross(a) := [ a.z   0    -a.x ]
+    ///                  [ -a.y  a.x   0   ]
     /// ```
     /// where `a.*` denote the components of the vector `a` in the standard Euclidean
     /// basis.
@@ -5928,36 +5928,36 @@ where
     /// where `v * n^T` denotes the outer product of `v` and `n`. The shearing matrix
     /// in geometric form is given by
     /// ```text
-    /// M := | I + m * (v * n^T)   -m * dot(Q, n) * v |
-    ///      | 0^T                  1                 |
+    /// M := [ I + m * (v * n^T)   -m * dot(Q, n) * v ]
+    ///      [ 0^T                  1                 ]
     ///
-    ///   == | I + m * outer(v, t)   -m * dot(Q, n) * v |
-    ///      | 0^T                    1                 |
+    ///   == [ I + m * outer(v, t)   -m * dot(Q, n) * v ]
+    ///      [ 0^T                    1                 ]
     /// ```
     /// where `I` denotes the identity matrix, and `0^T` denotes the transpose of
     /// the zero vector. In the standard basis in Euclidean space, the outer product
     /// of `v` and `n` is given by
     /// ```text
-    ///                | v.x * n.x   v.x * n.y   v.x * n.z |
-    /// outer(v, n) := | v.y * n.x   v.y * n.y   v.y * n.z |
-    ///                | v.z * n.x   v.z * n.y   v.z * n.z |
+    ///                [ v.x * n.x   v.x * n.y   v.x * n.z ]
+    /// outer(v, n) := [ v.y * n.x   v.y * n.y   v.y * n.z ]
+    ///                [ v.z * n.x   v.z * n.y   v.z * n.z ]
     /// ```
     /// so the right-hand side of the expression for the shearing matrix is
     /// ```text
-    ///                        | 1 0 0 |       | v.x * n.x   v.x * n.y   v.x * n.z |
-    /// I + m * outer(v, n) == | 0 1 0 | + m * | v.y * n.x   v.y * n.y   v.y * n.z |
-    ///                        | 0 0 1 |       | v.z * n.x   v.z * n.y   v.z * n.z |
+    ///                        [ 1 0 0 ]       [ v.x * n.x   v.x * n.y   v.x * n.z ]
+    /// I + m * outer(v, n) == [ 0 1 0 ] + m * [ v.y * n.x   v.y * n.y   v.y * n.z ]
+    ///                        [ 0 0 1 ]       [ v.z * n.x   v.z * n.y   v.z * n.z ]
     ///
-    ///                        | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     |
-    ///                     == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     |
-    ///                        | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z |
+    ///                        [ 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z     ]
+    ///                     == [ m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z     ]
+    ///                        [ m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z ]
     /// ```
     /// which leads to the formula used to implement the shearing transformation
     /// ```text
-    ///      | 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z       -m * dot(Q, n) * v |
-    /// M == | m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z       -m * dot(Q, n) * v |
-    ///      | m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z   -m * dot(Q, n) * v |
-    ///      | 0                   0                   0                    1                 |
+    ///      [ 1 + m * v.x * n.x   m * v.x * n.y       m * v.x * n.z       -m * dot(Q, n) * v ]
+    /// M == [ m * v.y * n.x       1 + m * v.y * n.y   m * v.y * n.z       -m * dot(Q, n) * v ]
+    ///      [ m * v.z * n.x       m * v.z * n.y       1 + m * v.z * n.z   -m * dot(Q, n) * v ]
+    ///      [ 0                   0                   0                    1                 ]
     /// ```
     ///
     /// # An Equivalent Interpretation Of The Shearing Factor
@@ -6137,22 +6137,22 @@ where
     /// ```
     /// and the corresponding affine matrix has the form
     /// ```text
-    /// M := | I - 2 * outer(n, n)   2 * dot(Q, n) * n |
-    ///      | 0^T                   1                 |
+    /// M := [ I - 2 * outer(n, n)   2 * dot(Q, n) * n ]
+    ///      [ 0^T                   1                 ]
     /// ```
     /// geometrically. In the standard basis in two-dimensional Euclidean space, we
     /// have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y |
-    ///      |  0                    0                   1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   2 * dot(Q, n) * n.y ]
+    ///      [  0                    0                   1                   ]
     /// ```
     /// and in three-dimensional Euclidean space we have
     /// ```text
-    ///      |  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x |
-    /// M == | -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y |
-    ///      | -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z |
-    ///      |  0                    0                    0                    1                   |
+    ///      [  1 - 2 * n.x * n.x   -2 * n.x * n.y       -2 * n.x * n.z        2 * dot(Q, n) * n.x ]
+    /// M == [ -2 * n.y * n.x        1 - 2 * n.y * n.y   -2 * n.y * n.z        2 * dot(Q, n) * n.y ]
+    ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
+    ///      [  0                    0                    0                    1                   ]
     /// ```
     /// which correspond exactly the how the respective matrices are implemented.
     ///
@@ -6473,10 +6473,10 @@ where
     /// The resulting matrix is identical to the one used by OpenGL. We provide
     /// it here for reference
     /// ```text
-    /// | m[0, 0]  0        0        m[3, 0] |
-    /// | 0        m[1, 1]  0        m[3, 1] |
-    /// | 0        0        m[2, 2]  m[3, 2] |
-    /// | 0        0        0        1       |
+    /// [ m[0, 0]  0        0        m[3, 0] ]
+    /// [ 0        m[1, 1]  0        m[3, 1] ]
+    /// [ 0        0        m[2, 2]  m[3, 2] ]
+    /// [ 0        0        0        1       ]
     /// where
     /// m[0, 0] == 2 / (r - l)
     /// m[3, 0] == -(r + l) / (r - l)
@@ -6562,10 +6562,10 @@ where
     /// The resulting matrix is identical to the one used by OpenGL, provided here for
     /// reference
     /// ```text
-    /// | m[0, 0]  0         m[2, 0]  0       |
-    /// | 0        m[1, 1]   m[2, 1]  0       |
-    /// | 0        0         m[2, 2]  m[3, 2] |
-    /// | 0        0        -1        0       |
+    /// [ m[0, 0]  0         m[2, 0]  0       ]
+    /// [ 0        m[1, 1]   m[2, 1]  0       ]
+    /// [ 0        0         m[2, 2]  m[3, 2] ]
+    /// [ 0        0        -1        0       ]
     /// where
     /// m[0, 0] == 2 * n / (r - l)
     /// m[2, 0] == (r + l) / (r - l)
@@ -6660,10 +6660,10 @@ where
     /// The resulting matrix is identical to the one used by OpenGL, provided here for
     /// reference
     /// ```text
-    /// | m[0, 0] 0         0        0       |
-    /// | 0       m[1, 1]   0        0       |
-    /// | 0       0         m[2, 2]  m[3, 2] |
-    /// | 0       0        -1        0       |
+    /// [ m[0, 0] 0         0        0       ]
+    /// [ 0       m[1, 1]   0        0       ]
+    /// [ 0       0         m[2, 2]  m[3, 2] ]
+    /// [ 0       0        -1        0       ]
     /// where
     /// m[0, 0] == 1 / (aspect_ratio * tan(vfov / 2))
     /// m[1, 1] == 1 / tan(vfov / 2)

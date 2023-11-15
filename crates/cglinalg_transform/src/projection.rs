@@ -33,10 +33,10 @@ use core::ops;
 /// The underlying matrix is identical to the one used by OpenGL, provided here
 /// for reference
 /// ```text
-/// | m[0, 0]  0         m[2, 0]  0       |
-/// | 0        m[1, 1]   m[2, 1]  0       |
-/// | 0        0         m[2, 2]  m[3, 2] |
-/// | 0        0        -1        0       |
+/// [ m[0, 0]  0         m[2, 0]  0       ]
+/// [ 0        m[1, 1]   m[2, 1]  0       ]
+/// [ 0        0         m[2, 2]  m[3, 2] ]
+/// [ 0        0        -1        0       ]
 /// where
 /// m[0, 0] == 2 * n / (r - l)
 /// m[2, 0] == (r + l) / (r - l)
@@ -441,18 +441,18 @@ where
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         // The perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ 2*n/(r - l)   0               (r + l)/(r - l)    0             ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0             2*n/(t - b)     (t + b)/(t - b)    0             ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0             0              -1                  0             ]
         // ```
         //
         // The inverse matrix of the perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ (r - l)/(2*n)   0               0                   (r + l)/(2*n)   ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0               0               0                  -1               ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) ]
         // ```
         //
         // This leads to optimizated unprojection equivalent to the original
@@ -509,18 +509,18 @@ where
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         // The perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ 2*n/(r - l)   0               (r + l)/(r - l)    0             ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0             2*n/(t - b)     (t + b)/(t - b)    0             ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0             0              -1                  0             ]
         // ```
         //
         // The inverse matrix of the perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ (r - l)/(2*n)   0               0                   (r + l)/(2*n)   ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0               0               0                  -1               ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) ]
         // ```
         //
         // This leads to optimizated unprojection equivalent to the original
@@ -1022,10 +1022,10 @@ where
 /// The underlying matrix is identical to the one used by OpenGL, provided here
 /// for reference
 /// ```text
-/// | m[0, 0] 0         0        0       |
-/// | 0       m[1, 1]   0        0       |
-/// | 0       0         m[2, 2]  m[3, 2] |
-/// | 0       0        -1        0       |
+/// [ m[0, 0] 0         0        0       ]
+/// [ 0       m[1, 1]   0        0       ]
+/// [ 0       0         m[2, 2]  m[3, 2] ]
+/// [ 0       0        -1        0       ]
 /// where
 /// m[0, 0] == 1 / (aspect_ratio * tan(vfov / 2))
 /// m[1, 1] == 1 / tan(vfov / 2)
@@ -1119,10 +1119,10 @@ where
     pub fn vfov(&self) -> Radians<S> {
         // The perspective projection field of view matrix has the form
         // ```text
-        // | m[0, 0]  0         0        0       |
-        // | 0        m[1, 1]   0        0       |
-        // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1        0       |
+        // [ m[0, 0]  0         0        0       ]
+        // [ 0        m[1, 1]   0        0       ]
+        // [ 0        0         m[2, 2]  m[3, 2] ]
+        // [ 0        0        -1        0       ]
         // ```
         // where
         // ```text
@@ -1172,10 +1172,10 @@ where
     pub fn near(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
-        // | m[0, 0]  0         0        0       |
-        // | 0        m[1, 1]   0        0       |
-        // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1        0       |
+        // [ m[0, 0]  0         0        0       ]
+        // [ 0        m[1, 1]   0        0       ]
+        // [ 0        0         m[2, 2]  m[3, 2] ]
+        // [ 0        0        -1        0       ]
         // ```
         // where
         // ```text
@@ -1248,10 +1248,10 @@ where
     pub fn far(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
-        // | m[0, 0]  0         0        0       |
-        // | 0        m[1, 1]   0        0       |
-        // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1        0       |
+        // [ m[0, 0]  0         0        0       ]
+        // [ 0        m[1, 1]   0        0       ]
+        // [ 0        0         m[2, 2]  m[3, 2] ]
+        // [ 0        0        -1        0       ]
         // ```
         // where
         // ```text
@@ -1326,10 +1326,10 @@ where
     pub fn aspect_ratio(&self) -> S {
         // The perspective projection field of view matrix has the form
         // ```text
-        // | m[0, 0]  0         0        0       |
-        // | 0        m[1, 1]   0        0       |
-        // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1        0       |
+        // [ m[0, 0]  0         0        0       ]
+        // [ 0        m[1, 1]   0        0       ]
+        // [ 0        0         m[2, 2]  m[3, 2] ]
+        // [ 0        0        -1        0       ]
         // ```
         // where
         // ```text
@@ -1608,18 +1608,18 @@ where
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
         // The perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ 2*n/(r - l)   0               (r + l)/(r - l)    0             ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0             2*n/(t - b)     (t + b)/(t - b)    0             ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0             0              -1                  0             ]
         // ```
         //
         // The inverse matrix of the perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ (r - l)/(2*n)   0               0                   (r + l)/(2*n)   ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0               0               0                  -1               ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) ]
         // ```
         //
         // This leads to optimizated unprojection equivalent to the original
@@ -1690,18 +1690,18 @@ where
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
         // The perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | 2*n/(r - l)   0               (r + l)/(r - l)    0             |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0             2*n/(t - b)     (t + b)/(t - b)    0             |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0             0              -1                  0             |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ 2*n/(r - l)   0               (r + l)/(r - l)    0             ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0             2*n/(t - b)     (t + b)/(t - b)    0             ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0             0              -(f + n)/(f - n)   -2*f*n/(f - n) ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0             0              -1                  0             ]
         // ```
         //
         // The inverse matrix of the perspective projection matrix has the form
         // ```text
-        // | c0r0 c1r0 c2r0 c3r0 |    | (r - l)/(2*n)   0               0                   (r + l)/(2*n)   |
-        // | c0r1 c1r1 c2r1 c3r1 | == | 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   |
-        // | c0r2 c1r2 c2r2 c3r2 |    | 0               0               0                  -1               |
-        // | c0r3 c1r3 c2r3 c3r3 |    | 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) |
+        // [ c0r0 c1r0 c2r0 c3r0 ]    [ (r - l)/(2*n)   0               0                   (r + l)/(2*n)   ]
+        // [ c0r1 c1r1 c2r1 c3r1 ] == [ 0               (t - b)/(2*n)   0                   (t + b)/(2*n)   ]
+        // [ c0r2 c1r2 c2r2 c3r2 ]    [ 0               0               0                  -1               ]
+        // [ c0r3 c1r3 c2r3 c3r3 ]    [ 0               0               (f - n)/(-2*f*n)    (f + n)/(2*f*n) ]
         // ```
         //
         // This leads to optimizated unprojection equivalent to the original
@@ -2214,10 +2214,10 @@ where
 /// The underlying matrix is identical to the one used by OpenGL, provided here
 /// for reference
 /// ```text
-/// | m[0, 0]  0        0        m[3, 0] |
-/// | 0        m[1, 1]  0        m[3, 1] |
-/// | 0        0        m[2, 2]  m[3, 2] |
-/// | 0        0        0        1       |
+/// [ m[0, 0]  0        0        m[3, 0] ]
+/// [ 0        m[1, 1]  0        m[3, 1] ]
+/// [ 0        0        m[2, 2]  m[3, 2] ]
+/// [ 0        0        0        1       ]
 /// where
 /// m[0, 0] == 2 / (r - l)
 /// m[3, 0] == -(r + l) / (r - l)

@@ -1674,23 +1674,23 @@ where
     /// ```
     /// The corresponding rotation matrices are
     /// ```text
-    ///               | 1   0            0         |
-    /// R_x(roll)  := | 0   cos(roll)   -sin(roll) |
-    ///               | 0   sin(rol)     cos(roll) |
+    ///               [ 1   0            0         ]
+    /// R_x(roll)  := [ 0   cos(roll)   -sin(roll) ]
+    ///               [ 0   sin(rol)     cos(roll) ]
     ///
-    ///               |  cos(yaw)   0   sin(yaw) |
-    /// R_y(yaw)   := |  0          1   0        |
-    ///               | -sin(yaw)   0   cos(yaw) |
+    ///               [  cos(yaw)   0   sin(yaw) ]
+    /// R_y(yaw)   := [  0          1   0        ]
+    ///               [ -sin(yaw)   0   cos(yaw) ]
     ///
-    ///               | cos(pitch)   -sin(pitch)   0 |
-    /// R_z(pitch) := | sin(pitch)    cos(pitch)   0 |
-    ///               | 0             0            1 |
+    ///               [ cos(pitch)   -sin(pitch)   0 ]
+    /// R_z(pitch) := [ sin(pitch)    cos(pitch)   0 ]
+    ///               [ 0             0            1 ]
     /// ```
     /// Multiplying out the axial rotations yields the following rotation matrix.
     /// ```text
-    ///                        | m[0, 0]   m[1, 0]   m[2, 0] |
-    /// R(roll, yaw, pitch) == | m[0, 1]   m[1, 1]   m[2, 1] |
-    ///                        | m[0, 2]   m[1, 2]   m[2, 2] |
+    ///                        [ m[0, 0]   m[1, 0]   m[2, 0] ]
+    /// R(roll, yaw, pitch) == [ m[0, 1]   m[1, 1]   m[2, 1] ]
+    ///                        [ m[0, 2]   m[1, 2]   m[2, 2] ]
     /// where (indexing from zero in column-major order `m[column, row]`)
     /// m[0, 0] :=  cos(yaw) * cos(pitch)
     /// m[0, 1] :=  cos(roll) * sin(pitch) + cos(pitch) * sin(yaw) * sin(roll)
