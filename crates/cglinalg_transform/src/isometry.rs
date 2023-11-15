@@ -1820,7 +1820,7 @@ where
         let lhs_rotation = self.rotation.matrix();
         let rhs_rotation = other.rotation.matrix();
         let lhs_translation = self.translation.vector();
-        let rhs_translation = self.translation.vector();
+        let rhs_translation = other.translation.vector();
         
         approx_cmp::AbsDiffEq::abs_diff_eq(lhs_rotation, rhs_rotation, &max_abs_diff.rotation)
             && approx_cmp::AbsDiffEq::abs_diff_eq(lhs_translation, rhs_translation, &max_abs_diff.translation)
