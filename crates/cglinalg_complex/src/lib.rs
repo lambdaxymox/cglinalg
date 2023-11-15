@@ -3007,54 +3007,6 @@ macro_rules! impl_scalar_complex_div_ops {
 
 impl_scalar_complex_div_ops!(i8, i16, i32, i64, i128, isize, f32, f64);
 
-/*
-impl<S> approx::AbsDiffEq for Complex<S>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.re, &other.re, epsilon) && S::abs_diff_eq(&self.im, &other.im, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Complex<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        S::relative_eq(&self.re, &other.re, epsilon, max_relative) && S::relative_eq(&self.im, &other.im, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Complex<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.re, &other.re, epsilon, max_ulps) && S::ulps_eq(&self.im, &other.im, epsilon, max_ulps)
-    }
-}
-*/
 
 impl<S> approx_cmp::AbsDiffEq for Complex<S>
 where

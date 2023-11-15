@@ -1194,63 +1194,7 @@ where
         )
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.shear_factor, &other.shear_factor, epsilon)
-            && Point::abs_diff_eq(&self.origin, &other.origin, epsilon)
-            && Vector::abs_diff_eq(&self.direction, &other.direction, epsilon)
-            && Vector::abs_diff_eq(&self.normal, &other.normal, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Shear<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        S::relative_eq(&self.shear_factor, &other.shear_factor, epsilon, max_relative)
-            && Point::relative_eq(&self.origin, &other.origin, epsilon, max_relative)
-            && Vector::relative_eq(&self.direction, &other.direction, epsilon, max_relative)
-            && Vector::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Shear<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.shear_factor, &other.shear_factor, epsilon, max_ulps)
-            && Point::ulps_eq(&self.origin, &other.origin, epsilon, max_ulps)
-            && Vector::ulps_eq(&self.direction, &other.direction, epsilon, max_ulps)
-            && Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Shear<S, N>
 where
     S: SimdScalarSigned,

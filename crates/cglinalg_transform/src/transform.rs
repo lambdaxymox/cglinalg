@@ -408,60 +408,7 @@ where
         transform.to_matrix()
     }
 }
-/*
-impl<S, const N: usize, const NPLUS1: usize> approx::AbsDiffEq for Transform<S, N, NPLUS1>
-where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S, const N: usize, const NPLUS1: usize> approx::RelativeEq for Transform<S, N, NPLUS1>
-where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize, const NPLUS1: usize> approx::UlpsEq for Transform<S, N, NPLUS1>
-where
-    S: SimdScalarFloat,
-    ShapeConstraint: DimAdd<Const<N>, Const<1>, Output = Const<NPLUS1>>,
-    ShapeConstraint: DimAdd<Const<1>, Const<N>, Output = Const<NPLUS1>>,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize, const NPLUS1: usize> ops::Mul<Point<S, N>> for Transform<S, N, NPLUS1>
 where
     S: SimdScalar,

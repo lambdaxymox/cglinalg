@@ -4373,60 +4373,8 @@ where
         self.coords %= other;
     }
 }
-/*
-impl<S> approx::AbsDiffEq for Quaternion<S>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
 
-    #[rustfmt::skip]
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        S::abs_diff_eq(&self.scalar(), &other.scalar(), epsilon)
-            && Vector3::abs_diff_eq(&self.vector(), &other.vector(), epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Quaternion<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        S::relative_eq(&self.scalar(), &other.scalar(), epsilon, max_relative)
-            && Vector3::relative_eq(&self.vector(), &other.vector(), epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Quaternion<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps)
-            && Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
-    }
-}
-*/
 impl<S> approx_cmp::AbsDiffEq for Quaternion<S>
 where
     S: SimdScalarFloat,

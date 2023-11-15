@@ -8313,78 +8313,8 @@ where
         }
     }
 }
-/*
-impl<S, const R: usize, const C: usize> approx::AbsDiffEq for Matrix<S, R, C>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
 
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = true;
-        for c in 0..C {
-            for r in 0..R {
-                result &= S::abs_diff_eq(&self.data[c][r], &other.data[c][r], epsilon);
-            }
-        }
-
-        result
-    }
-}
-
-impl<S, const R: usize, const C: usize> approx::RelativeEq for Matrix<S, R, C>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = true;
-        for c in 0..C {
-            for r in 0..R {
-                result &= S::relative_eq(&self.data[c][r], &other.data[c][r], epsilon, max_relative);
-            }
-        }
-
-        result
-    }
-}
-
-impl<S, const R: usize, const C: usize> approx::UlpsEq for Matrix<S, R, C>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        // PERFORMANCE: The const loop should get unrolled during optimization.
-        let mut result = true;
-        for c in 0..C {
-            for r in 0..R {
-                result &= S::ulps_eq(&self.data[c][r], &other.data[c][r], epsilon, max_ulps);
-            }
-        }
-
-        result
-    }
-}
-*/
 impl<S, const R: usize, const C: usize> approx_cmp::AbsDiffEq for Matrix<S, R, C>
 where
     S: SimdScalarFloat,

@@ -1136,60 +1136,7 @@ where
         isometry.to_affine_matrix()
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Similarity<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Isometry::abs_diff_eq(&self.isometry, &other.isometry, epsilon)
-            && S::abs_diff_eq(&self.scale, &other.scale, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Similarity<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Isometry::relative_eq(&self.isometry, &other.isometry, epsilon, max_relative)
-            && S::relative_eq(&self.scale, &other.scale, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Similarity<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Isometry::ulps_eq(&self.isometry, &other.isometry, epsilon, max_ulps)
-            && S::ulps_eq(&self.scale, &other.scale, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Similarity<S, N>
 where
     S: SimdScalarFloat,

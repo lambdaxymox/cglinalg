@@ -675,54 +675,7 @@ where
         rotation.to_affine_matrix()
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Rotation<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Rotation<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N>
 where
     S: SimdScalarFloat,

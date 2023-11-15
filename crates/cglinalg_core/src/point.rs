@@ -1003,54 +1003,8 @@ where
         self.coords %= other;
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Point<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
 
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector::abs_diff_eq(&self.coords, &other.coords, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Point<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Vector::relative_eq(&self.coords, &other.coords, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Point<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Vector::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize> approx_cmp::AbsDiffEq for Point<S, N>
 where
     S: SimdScalarFloat,

@@ -863,58 +863,6 @@ where
         isometry.to_affine_matrix()
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Isometry<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Rotation::abs_diff_eq(&self.rotation, &other.rotation, epsilon)
-            && Translation::abs_diff_eq(&self.translation, &other.translation, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Isometry<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Rotation::relative_eq(&self.rotation, &other.rotation, epsilon, max_relative)
-            && Translation::relative_eq(&self.translation, &other.translation, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Isometry<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Rotation::ulps_eq(&self.rotation, &other.rotation, epsilon, max_ulps)
-            && Translation::ulps_eq(&self.translation, &other.translation, epsilon, max_ulps)
-    }
-}
-*/
-
 
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Isometry<S, N>
 where

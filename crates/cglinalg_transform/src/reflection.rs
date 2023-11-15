@@ -613,60 +613,7 @@ where
         write!(formatter, "Reflection{} [normal = {}, bias = {}]", N, self.normal, self.bias)
     }
 }
-/*
-impl<S, const N: usize> approx::AbsDiffEq for Reflection<S, N>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Vector::abs_diff_eq(&self.normal, &other.normal, epsilon)
-            && Point::abs_diff_eq(&self.bias, &other.bias, epsilon)
-    }
-}
-
-impl<S, const N: usize> approx::RelativeEq for Reflection<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Vector::relative_eq(&self.normal, &other.normal, epsilon, max_relative)
-            && Point::relative_eq(&self.bias, &other.bias, epsilon, max_relative)
-    }
-}
-
-impl<S, const N: usize> approx::UlpsEq for Reflection<S, N>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[rustfmt::skip]
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
-            && Point::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
-    }
-}
-*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Reflection<S, N>
 where
     S: SimdScalarFloat,

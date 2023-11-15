@@ -640,54 +640,7 @@ where
         perspective.to_projective_matrix()
     }
 }
-/*
-impl<S> approx::AbsDiffEq for Perspective3<S>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Perspective3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Perspective3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 impl<S> ops::Mul<Point3<S>> for Perspective3<S>
 where
     S: SimdScalarFloat,
@@ -1888,54 +1841,7 @@ where
         perspective.to_projective_matrix()
     }
 }
-/*
-impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
 
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for PerspectiveFov3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for PerspectiveFov3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S>
 where
     S: SimdScalarFloat,
@@ -2847,54 +2753,6 @@ where
         orthographic.to_projective_matrix()
     }
 }
-/*
-impl<S> approx::AbsDiffEq for Orthographic3<S>
-where
-    S: SimdScalarFloat,
-{
-    type Epsilon = <S as approx::AbsDiffEq>::Epsilon;
-
-    #[inline]
-    fn default_epsilon() -> Self::Epsilon {
-        S::default_epsilon()
-    }
-
-    #[inline]
-    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
-        Matrix4x4::abs_diff_eq(&self.matrix, &other.matrix, epsilon)
-    }
-}
-
-impl<S> approx::RelativeEq for Orthographic3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_relative() -> Self::Epsilon {
-        S::default_max_relative()
-    }
-
-    #[inline]
-    fn relative_eq(&self, other: &Self, epsilon: Self::Epsilon, max_relative: Self::Epsilon) -> bool {
-        Matrix4x4::relative_eq(&self.matrix, &other.matrix, epsilon, max_relative)
-    }
-}
-
-impl<S> approx::UlpsEq for Orthographic3<S>
-where
-    S: SimdScalarFloat,
-{
-    #[inline]
-    fn default_max_ulps() -> u32 {
-        S::default_max_ulps()
-    }
-
-    #[inline]
-    fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
-        Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
-    }
-}
-*/
 
 impl<S> ops::Mul<Point3<S>> for Orthographic3<S>
 where

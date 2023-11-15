@@ -50,7 +50,7 @@ where
     ///
     ///          frac_1_sqrt_2,
     ///         -frac_1_2 * frac_1_sqrt_2,
-    ///          frac_sqrt_3_2 * frac_1_sqrt_2
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2,
     ///     )
     /// };
     /// let result = Matrix3x3::from_euler_angles(&euler_angles);
@@ -121,7 +121,7 @@ where
     ///          0_f64,
     ///          0_f64,
     ///          0_f64,
-    ///          1_f64
+    ///          1_f64,
     ///     )
     /// };
     /// let result = euler_angles.to_affine_matrix();
