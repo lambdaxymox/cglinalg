@@ -3,7 +3,7 @@ extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_numeric::SimdScalarFloat;
 use cglinalg_trigonometry::{
     Angle,
@@ -114,7 +114,7 @@ where
     let recovered_angle = A::asin(sin_angle);
     let sin_recovered_angle = recovered_angle.sin();
 
-    prop_assert!(relative_eq!(sin_recovered_angle, sin_angle, epsilon = tolerance));
+    prop_assert!(relative_eq!(sin_recovered_angle, sin_angle, abs_diff <= tolerance, relative <= tolerance));
 
     Ok(())
 }
@@ -139,7 +139,7 @@ where
     let recovered_angle = A::acos(cos_angle);
     let cos_recovered_angle = recovered_angle.cos();
 
-    prop_assert!(relative_eq!(cos_recovered_angle, cos_angle, epsilon = tolerance));
+    prop_assert!(relative_eq!(cos_recovered_angle, cos_angle, abs_diff <= tolerance, relative <= tolerance));
 
     Ok(())
 }
@@ -167,7 +167,7 @@ where
     let tan_recovered_angle = recovered_angle.tan();
 
     prop_assert!(
-        relative_eq!(tan_recovered_angle, tan_angle, epsilon = tolerance),
+        relative_eq!(tan_recovered_angle, tan_angle, abs_diff <= tolerance, relative <= tolerance),
         "angle = {}\nrecovered_angle = {}\ntan_angle = {}\ntan_recovered_angle = {}",
         angle,
         recovered_angle,
@@ -194,8 +194,8 @@ where
 {
     let angle_plus_full_turn = angle + A::full_turn();
 
-    prop_assert!(relative_eq!(angle.sin(), angle_plus_full_turn.sin(), epsilon = tolerance));
-    prop_assert!(relative_eq!(angle.cos(), angle_plus_full_turn.cos(), epsilon = tolerance));
+    prop_assert!(relative_eq!(angle.sin(), angle_plus_full_turn.sin(), abs_diff <= tolerance, relative <= tolerance));
+    prop_assert!(relative_eq!(angle.cos(), angle_plus_full_turn.cos(), abs_diff <= tolerance, relative <= tolerance));
 
     Ok(())
 }
@@ -215,7 +215,7 @@ where
     let lhs = angle.cos() * angle.cos() + angle.sin() * angle.sin();
     let rhs = one;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff <= tolerance, relative <= tolerance));
 
     Ok(())
 }

@@ -1,11 +1,11 @@
-extern crate approx;
+extern crate approx_cmp;
 extern crate cglinalg_core;
 extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_core::{
     Point,
     Point2,
@@ -197,7 +197,7 @@ where
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -215,7 +215,7 @@ where
     let lhs = r.to_affine_matrix().determinant();
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -233,7 +233,7 @@ where
     let lhs = (r * v).norm();
     let rhs = v.norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -256,7 +256,7 @@ where
     let lhs = r * (r * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -279,7 +279,7 @@ where
     let lhs = r * (r * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }

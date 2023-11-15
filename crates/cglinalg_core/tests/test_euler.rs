@@ -2,7 +2,7 @@ extern crate cglinalg_core;
 extern crate cglinalg_trigonometry;
 
 
-use approx::assert_relative_eq;
+use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     EulerAngles,
     Matrix3x3,
@@ -41,7 +41,7 @@ fn test_to_matrix() {
     );
     let result = euler.to_matrix();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
 
@@ -91,7 +91,7 @@ fn test_to_affine_matrix() {
     );
     let result = euler.to_affine_matrix();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);  
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);  
 }
 
 
@@ -153,7 +153,7 @@ fn test_euler_angles_to_matrix_rotation_matrix1() {
     let expected = matrix;
     let result = euler_angles.to_matrix();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -169,7 +169,7 @@ fn test_euler_angles_to_matrix_rotation_matrix2() {
     let expected = matrix;
     let result = euler_angles.to_matrix();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -185,7 +185,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse1() {
     let expected = matrix.transpose();
     let result = euler_angles.to_matrix().inverse().unwrap();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -201,7 +201,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse2() {
     let expected = matrix.transpose();
     let result = euler_angles.to_matrix().inverse().unwrap();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -217,7 +217,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse3() {
     let expected = matrix.transpose();
     let result = euler_angles.to_affine_matrix().inverse().unwrap();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -233,5 +233,5 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse4() {
     let expected = matrix.transpose();
     let result = euler_angles.to_affine_matrix().inverse().unwrap();
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }

@@ -688,7 +688,7 @@ mod shear2_coordinate_plane_tests {
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
 mod shear2_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Point2,
@@ -777,8 +777,8 @@ mod shear2_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -787,7 +787,7 @@ mod shear2_noncoordinate_plane_tests {
         let expected = rotation_matrix();
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -796,7 +796,7 @@ mod shear2_noncoordinate_plane_tests {
         let expected = rotation_matrix_inv();
         let result = rotation_inv.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -819,10 +819,10 @@ mod shear2_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -833,8 +833,8 @@ mod shear2_noncoordinate_plane_tests {
         let rotated_origin = Point2::new(f64::sqrt(5_f64), 0_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
 
-        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], epsilon = 1e-10);
-        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], epsilon = 1e-10);
+        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -848,7 +848,7 @@ mod shear2_noncoordinate_plane_tests {
             translation_inv * rotation_inv * _direction
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -862,7 +862,7 @@ mod shear2_noncoordinate_plane_tests {
             translation_inv * rotation_inv * _normal
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -899,10 +899,10 @@ mod shear2_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| shear.apply_vector(&v));
     
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -920,7 +920,7 @@ mod shear2_noncoordinate_plane_tests {
         );
         let result = shear.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -943,7 +943,7 @@ mod shear2_noncoordinate_plane_tests {
             isometry * _shear_matrix_xy * isometry_inv
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -965,18 +965,18 @@ mod shear2_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| shear.apply_vector(&v));
     
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod shear3_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Point3,
         Unit,
@@ -1794,14 +1794,14 @@ mod shear3_tests {
         let expected = 4_f64;
         let result = shear.to_affine_matrix().trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod shear3_inverse_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Point3,
         Unit,
@@ -2629,7 +2629,7 @@ mod shear3_inverse_tests {
         let expected = 4_f64;
         let result = shear_inv.to_affine_matrix().trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -3299,7 +3299,7 @@ mod shear3_coordinate_plane_tests {
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
 #[cfg(test)]
 mod shear3_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -3520,8 +3520,8 @@ mod shear3_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
 
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3529,8 +3529,8 @@ mod shear3_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
 
-        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64),  epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64),  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3548,7 +3548,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = rotation_x_yz();
         let result = Rotation3::from_angle_x(rotation_angle_x_yz);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3557,7 +3557,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = rotation_x_yz_inv();
         let result = Rotation3::from_angle_x(-rotation_angle_x_yz);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3566,7 +3566,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = rotation_z_xy();
         let result = Rotation3::from_angle_z(rotation_angle_z_xy);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3575,7 +3575,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = rotation_z_xy_inv();
         let result = Rotation3::from_angle_z(-rotation_angle_z_xy);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3584,7 +3584,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation = rotation();
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3593,7 +3593,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation_inv = rotation_inv();
         let result = rotation_inv.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3603,7 +3603,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation = Rotation3::from_angle_x(rotation_angle_x_yz);
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3613,7 +3613,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation = Rotation3::from_angle_x(-rotation_angle_x_yz);
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3623,7 +3623,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation = Rotation3::from_angle_z(rotation_angle_z_xy);
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3633,7 +3633,7 @@ mod shear3_noncoordinate_plane_tests {
         let rotation = Rotation3::from_angle_z(-rotation_angle_z_xy);
         let result = rotation.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3642,7 +3642,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = shear_matrix_xz_matrix();
         let result = shear.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3654,7 +3654,7 @@ mod shear3_noncoordinate_plane_tests {
         let expected = origin;
         let result = translation * rotation * origin_xz;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3667,7 +3667,7 @@ mod shear3_noncoordinate_plane_tests {
             rotation_inv * _direction
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3680,7 +3680,7 @@ mod shear3_noncoordinate_plane_tests {
             rotation_inv * _normal
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3742,14 +3742,14 @@ mod shear3_noncoordinate_plane_tests {
         ];
         let result = vertices_xz.map(|vertex_xz| translation * rotation * vertex_xz);
 
-        assert_relative_eq!(result[0], vertices[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], vertices[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], vertices[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], vertices[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], vertices[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], vertices[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], vertices[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], vertices[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], vertices[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], vertices[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], vertices[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], vertices[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], vertices[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], vertices[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], vertices[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], vertices[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3846,14 +3846,14 @@ mod shear3_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| shear * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3894,7 +3894,7 @@ mod shear3_noncoordinate_plane_tests {
         };
         let result = shear.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3918,14 +3918,14 @@ mod shear3_noncoordinate_plane_tests {
             isometry * _shear_matrix_xz * isometry_inv
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod shear3_trace_determinant_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -4003,7 +4003,7 @@ mod shear3_trace_determinant_tests {
         let direction = direction();
         let normal = normal();
 
-        assert_relative_eq!(direction.dot(&normal), 0_f64, epsilon = 1e-10);
+        assert_relative_eq!(direction.dot(&normal), 0_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4012,7 +4012,7 @@ mod shear3_trace_determinant_tests {
         let shear = shear_transformation();
         let result = shear.to_affine_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4022,7 +4022,7 @@ mod shear3_trace_determinant_tests {
         let expected = 4_f64;
         let result = matrix.trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4031,7 +4031,7 @@ mod shear3_trace_determinant_tests {
         let expected = 4_f64;
         let result = matrix.trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
@@ -4043,7 +4043,7 @@ mod shear3_trace_determinant_tests {
         let expected = 1.25_f64;
         let result = matrix.determinant();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
@@ -4054,6 +4054,6 @@ mod shear3_trace_determinant_tests {
         let expected = 0.75_f64;
         let result = matrix.determinant();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }

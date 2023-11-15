@@ -14,8 +14,8 @@ use cglinalg_numeric::{
 ///
 /// ```
 /// # use cglinalg_core::{
+/// #     Normed,
 /// #     Vector4,
-/// #     Normed,  
 /// # };
 /// #
 /// // The norm of the vector.
@@ -59,8 +59,8 @@ where
     /// Computing the squared **L2** norm of a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -70,15 +70,13 @@ where
     ///
     /// Computing the squared **Frobenius** norm of a matrix.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Unit,
     /// #     Normed,
+    /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -96,8 +94,8 @@ where
     /// Computing the **L2** norm of a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -107,15 +105,13 @@ where
     ///
     /// Computing the **Frobenius** norm of a matrix.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #      Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Unit,
     /// #     Normed,
+    /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -135,8 +131,8 @@ where
     /// Scaling a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// #      Normed,
+    /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = f64::sqrt(2_f64);
@@ -178,8 +174,8 @@ where
     /// Mutably scaling a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = f64::sqrt(2_f64);
@@ -220,12 +216,10 @@ where
     ///
     /// Unscaling a vector.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = 3_f64;
@@ -234,18 +228,16 @@ where
     /// let expected = Vector3::new(0_f64, 0_f64, norm / scale);
     /// let result = vector.unscale(scale);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_eq!(result.norm(), norm / scale);
     /// ```
     ///
     /// Unscaling a matrix.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -262,7 +254,7 @@ where
     /// );
     /// let result = matrix.unscale(scale);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn unscale(&self, scale: Self::Output) -> Self;
 
@@ -274,12 +266,10 @@ where
     ///
     /// Mutably unscaling a vector.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = 3_f64;
@@ -288,18 +278,16 @@ where
     /// let expected = Vector3::new(0_f64, 0_f64, norm / scale);
     /// result.unscale_mut(scale);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_eq!(result.norm(), norm / scale);
     /// ```
     ///
     /// Mutably unscaling a matrix.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -316,7 +304,7 @@ where
     /// );
     /// result.unscale_mut(scale);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn unscale_mut(&mut self, scale: Self::Output);
 
@@ -327,8 +315,8 @@ where
     /// Normalizing a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64, 1_f64, 1_f64);
@@ -345,15 +333,13 @@ where
     ///
     /// Normalizing a matrix.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Unit,
     /// #     Normed,
+    /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_3);
@@ -380,8 +366,8 @@ where
     /// Mutably normalizing a vector.
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let mut result = Vector3::new(1_f64, 1_f64, 1_f64);
@@ -399,15 +385,13 @@ where
     ///
     /// Mutably normalizing a matrix.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Unit,
     /// #     Normed,
+    /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_3);
@@ -440,8 +424,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -463,8 +447,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -496,8 +480,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector1 = Vector3::new(0_f64, 1_f64, 0_f64);
@@ -515,8 +499,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector1 = Vector3::new(0_f64, 1_f64, 0_f64);
@@ -549,9 +533,9 @@ pub trait Norm<V> {
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Norm,
     /// #     L1Norm,
+    /// #     Norm,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -571,9 +555,9 @@ pub trait Norm<V> {
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
+    /// #     L2Norm,
     /// #     Norm,
-    /// #     L2Norm,  
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #

@@ -28,9 +28,27 @@ where
     Self: ops::Div<Self, Output = <Self as Angle>::Dimensionless>,
     Self: ops::Div<<Self as Angle>::Dimensionless, Output = Self>,
     Self: ops::Rem<Self, Output = Self>,
-    Self: approx::AbsDiffEq<Epsilon = <Self as Angle>::Dimensionless>,
-    Self: approx::RelativeEq<Epsilon = <Self as Angle>::Dimensionless>,
-    Self: approx::UlpsEq<Epsilon = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::AbsDiffEq<Tolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::AbsDiffAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::AssertAbsDiffEq<
+        DebugAbsDiff = <Self as Angle>::Dimensionless,
+        DebugTolerance = <Self as Angle>::Dimensionless,
+    >,
+    Self: approx_cmp::AssertAbsDiffAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::RelativeEq<Tolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::RelativeAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::AssertRelativeEq<
+        Tolerance = <Self as Angle>::Dimensionless,
+        DebugTolerance = <Self as Angle>::Dimensionless,
+    >,
+    Self: approx_cmp::AssertRelativeAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::UlpsEq<Tolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::UlpsAllEq<AllTolerance = <Self as Angle>::Dimensionless>,
+    Self: approx_cmp::AssertUlpsEq<
+        DebugAbsDiff = <Self as Angle>::Dimensionless,
+        DebugTolerance = <Self as Angle>::Dimensionless,
+    >,
+    Self: approx_cmp::AssertUlpsAllEq<AllDebugTolerance = <Self as Angle>::Dimensionless>,
 {
     type Dimensionless: SimdScalarFloat;
 
@@ -88,12 +106,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -101,7 +117,7 @@ where
     /// let expected = 1_f64 / f64::sqrt(2_f64);
     /// let result = pi_over_4.sin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn sin(self) -> Self::Dimensionless;
 
@@ -110,12 +126,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -123,7 +137,7 @@ where
     /// let expected = 1_f64 / f64::sqrt(2_f64);
     /// let result = pi_over_4.cos();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn cos(self) -> Self::Dimensionless;
 
@@ -132,12 +146,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -145,7 +157,7 @@ where
     /// let expected = 1_f64;
     /// let result = pi_over_4.tan();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn tan(self) -> Self::Dimensionless;
 
@@ -154,12 +166,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -167,7 +177,7 @@ where
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::asin(sin_pi_over_3);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn asin(ratio: Self::Dimensionless) -> Self;
 
@@ -176,12 +186,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -189,7 +197,7 @@ where
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::acos(cos_pi_over_3);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn acos(ratio: Self::Dimensionless) -> Self;
 
@@ -198,12 +206,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -211,7 +217,7 @@ where
     /// let expected = Radians(f64::consts::FRAC_PI_3);
     /// let result = Radians::atan(tan_pi_over_3);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn atan(ratio: Self::Dimensionless) -> Self;
 
@@ -240,12 +246,10 @@ where
     /// # Examples
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// #     Angle,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -259,8 +263,8 @@ where
     /// let result1 = Radians::atan2(y1, x1);
     /// let result2 = Radians::atan2(y2, x2);
     ///
-    /// assert_relative_eq!(result1, expected1, epsilon = 1e-10);
-    /// assert_relative_eq!(result2, expected2, epsilon = 1e-10);
+    /// assert_relative_eq!(result1, expected1, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result2, expected2, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn atan2(y: Self::Dimensionless, x: Self::Dimensionless) -> Self;
 
@@ -269,12 +273,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Radians,
     /// #     Angle,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -282,8 +284,8 @@ where
     /// let expected = (1_f64/ f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = pi_over_4.sin_cos();
     ///
-    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
-    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
+    /// assert_relative_eq!(result.0, expected.0, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result.1, expected.1, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn sin_cos(self) -> (Self::Dimensionless, Self::Dimensionless) {
@@ -295,13 +297,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -310,8 +310,8 @@ where
     /// let result_radians = Radians::full_turn_div_2();
     /// let result_degrees = Degrees::full_turn_div_2();
     ///
-    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
-    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// assert_relative_eq!(result_radians, expected_radians, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_degrees, expected_degrees, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn full_turn_div_2() -> Self {
@@ -324,13 +324,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -339,8 +337,8 @@ where
     /// let result_radians = Radians::full_turn_div_4();
     /// let result_degrees = Degrees::full_turn_div_4();
     ///
-    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
-    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// assert_relative_eq!(result_radians, expected_radians, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_degrees, expected_degrees, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn full_turn_div_4() -> Self {
@@ -353,13 +351,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -368,8 +364,8 @@ where
     /// let result_radians = Radians::full_turn_div_6();
     /// let result_degrees = Degrees::full_turn_div_6();
     ///
-    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
-    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// assert_relative_eq!(result_radians, expected_radians, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_degrees, expected_degrees, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn full_turn_div_6() -> Self {
@@ -382,13 +378,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -397,8 +391,8 @@ where
     /// let result_radians = Radians::full_turn_div_8();
     /// let result_degrees = Degrees::full_turn_div_8();
     ///
-    /// assert_relative_eq!(result_radians, expected_radians, epsilon = 1e-10);
-    /// assert_relative_eq!(result_degrees, expected_degrees, epsilon = 1e-10);
+    /// assert_relative_eq!(result_radians, expected_radians, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_degrees, expected_degrees, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn full_turn_div_8() -> Self {
@@ -411,12 +405,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -424,7 +416,7 @@ where
     /// let expected = Radians(f64::consts::FRAC_PI_2);
     /// let result = angle.normalize();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn normalize(self) -> Self {
@@ -441,12 +433,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -454,7 +444,7 @@ where
     /// let expected = Radians(f64::consts::FRAC_PI_2);
     /// let result = angle.normalize_signed();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn normalize_signed(self) -> Self {
@@ -471,12 +461,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -484,7 +472,7 @@ where
     /// let expected = Degrees(225_f64);
     /// let result = angle.opposite();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn opposite(self) -> Self {
@@ -505,12 +493,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -519,7 +505,7 @@ where
     /// let expected = Degrees(60_f64);
     /// let result = Degrees::bisect(angle1, angle2);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn bisect(self, other: Self) -> Self {
@@ -532,12 +518,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -545,7 +529,7 @@ where
     /// let expected = 2_f64;
     /// let result = angle.csc();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     fn csc(self) -> Self::Dimensionless {
@@ -557,12 +541,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -570,7 +552,7 @@ where
     /// let expected = f64::sqrt(3_f64);
     /// let result = angle.cot();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     #[inline]
     fn cot(self) -> Self::Dimensionless {
         Self::tan(self).recip()
@@ -581,12 +563,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -594,7 +574,7 @@ where
     /// let expected = 2_f64 / f64::sqrt(3_f64);
     /// let result = angle.sec();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     #[inline]
     fn sec(self) -> Self::Dimensionless {
         Self::cos(self).recip()
@@ -815,6 +795,207 @@ where
         write!(formatter, "{} radians", self.0)
     }
 }
+
+
+macro_rules! impl_approx_cmp_angle {
+    ($T:ident) => {
+        impl<S> approx_cmp::AbsDiffEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type Tolerance = <S as approx_cmp::AbsDiffEq>::Tolerance;
+
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+                approx_cmp::AbsDiffEq::abs_diff_eq(&self.0, &other.0, max_abs_diff)
+            }
+        }
+
+        impl<S> approx_cmp::AbsDiffAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+            #[inline]
+            fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+                approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.0, &other.0, max_abs_diff)
+            }
+        }
+
+        impl<S> approx_cmp::AssertAbsDiffEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type DebugAbsDiff = <S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff;
+            type DebugTolerance = <S as approx_cmp::AssertAbsDiffEq>::DebugTolerance;
+
+            #[inline]
+            fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+                approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.0, &other.0)
+            }
+
+            #[inline]
+            fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+                approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+        }
+
+        impl<S> approx_cmp::AssertAbsDiffAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllDebugTolerance = <S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance;
+
+            #[inline]
+            fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+                approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+        }
+
+        impl<S> approx_cmp::RelativeEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type Tolerance = <S as approx_cmp::RelativeEq>::Tolerance;
+
+            #[inline]
+            fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+                approx_cmp::RelativeEq::relative_eq(&self.0, &other.0, max_abs_diff, max_relative)
+            }
+        }
+
+        impl<S> approx_cmp::RelativeAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+            #[inline]
+            fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+                approx_cmp::RelativeAllEq::relative_all_eq(&self.0, &other.0, max_abs_diff, max_relative)
+            }
+        }
+
+        impl<S> approx_cmp::AssertRelativeEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type DebugAbsDiff = <S as approx_cmp::AssertRelativeEq>::DebugAbsDiff;
+            type DebugTolerance = <S as approx_cmp::AssertRelativeEq>::DebugTolerance;
+
+            #[inline]
+            fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+                approx_cmp::AssertRelativeEq::debug_abs_diff(&self.0, &other.0)
+            }
+
+            #[inline]
+            fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+                approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+
+            #[inline]
+            fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+                approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.0, &other.0, max_relative)
+            }
+        }
+
+        impl<S> approx_cmp::AssertRelativeAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllDebugTolerance = <S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance;
+
+            #[inline]
+            fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+                approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+
+            #[inline]
+            fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+                approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.0, &other.0, max_relative)
+            }
+        }
+
+        impl<S> approx_cmp::UlpsEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type Tolerance = <S as approx_cmp::UlpsEq>::Tolerance;
+            type UlpsTolerance = <S as approx_cmp::UlpsEq>::UlpsTolerance;
+
+            #[inline]
+            fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+                approx_cmp::UlpsEq::ulps_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+            }
+        }
+
+        impl<S> approx_cmp::UlpsAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+            type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+            #[inline]
+            fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+                approx_cmp::UlpsAllEq::ulps_all_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+            }
+        }
+
+        impl<S> approx_cmp::AssertUlpsEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type DebugAbsDiff = <S as approx_cmp::AssertUlpsEq>::DebugAbsDiff;
+            type DebugUlpsDiff = <S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff;
+            type DebugTolerance = <S as approx_cmp::AssertUlpsEq>::DebugTolerance;
+            type DebugUlpsTolerance = <S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance;
+
+            #[inline]
+            fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+                approx_cmp::AssertUlpsEq::debug_abs_diff(&self.0, &other.0)
+            }
+
+            #[inline]
+            fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+                approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.0, &other.0)
+            }
+
+            #[inline]
+            fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+                approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+
+            #[inline]
+            fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+                approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.0, &other.0, max_ulps)
+            }
+        }
+
+        impl<S> approx_cmp::AssertUlpsAllEq for $T<S>
+        where
+            S: SimdScalarFloat,
+        {
+            type AllDebugTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance;
+            type AllDebugUlpsTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance;
+
+            #[inline]
+            fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+                approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+            }
+
+            #[inline]
+            fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+                approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.0, &other.0, max_ulps)
+            }
+        }
+    }
+}
+
+impl_approx_cmp_angle!(Degrees);
+impl_approx_cmp_angle!(Radians);
+
 
 impl<S> ops::Add<Degrees<S>> for Degrees<S>
 where
@@ -1129,7 +1310,7 @@ where
         *self = *self % other;
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for Degrees<S>
 where
     S: SimdScalarFloat,
@@ -1176,7 +1357,200 @@ where
         S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
     }
 }
+*/
+/*
+impl<S> approx_cmp::AbsDiffEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::AbsDiffEq>::Tolerance;
 
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        S::abs_diff_eq(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        S::abs_diff_all_eq(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertAbsDiffEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::RelativeEq>::Tolerance;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.0, &other.0, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.0, &other.0, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertRelativeEq>::DebugAbsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertRelativeEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertRelativeEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.0, &other.0, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.0, &other.0, max_relative)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::UlpsEq>::Tolerance;
+    type UlpsTolerance = <S as approx_cmp::UlpsEq>::UlpsTolerance;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        S::ulps_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        S::ulps_all_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertUlpsEq>::DebugAbsDiff;
+    type DebugUlpsDiff = <S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertUlpsEq>::DebugTolerance;
+    type DebugUlpsTolerance = <S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertUlpsEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.0, &other.0, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Degrees<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance;
+    type AllDebugUlpsTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.0, &other.0, max_ulps)
+    }
+}
+*/
 impl<S> ops::Add<Radians<S>> for Radians<S>
 where
     S: SimdScalar,
@@ -1490,7 +1864,7 @@ where
         self.0 = self.0 % other.0;
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for Radians<S>
 where
     S: SimdScalarFloat,
@@ -1537,6 +1911,200 @@ where
         S::ulps_eq(&self.0, &other.0, epsilon, max_ulps)
     }
 }
+*/
+/*
+impl<S> approx_cmp::AbsDiffEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::AbsDiffEq>::Tolerance;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        S::abs_diff_eq(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        S::abs_diff_all_eq(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertAbsDiffEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::RelativeEq>::Tolerance;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.0, &other.0, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.0, &other.0, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertRelativeEq>::DebugAbsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertRelativeEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertRelativeEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.0, &other.0, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.0, &other.0, max_relative)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = <S as approx_cmp::UlpsEq>::Tolerance;
+    type UlpsTolerance = <S as approx_cmp::UlpsEq>::UlpsTolerance;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.0, &other.0, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = <S as approx_cmp::AssertUlpsEq>::DebugAbsDiff;
+    type DebugUlpsDiff = <S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff;
+    type DebugTolerance = <S as approx_cmp::AssertUlpsEq>::DebugTolerance;
+    type DebugUlpsTolerance = <S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertUlpsEq::debug_abs_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.0, &other.0)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.0, &other.0, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Radians<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance;
+    type AllDebugUlpsTolerance = <S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.0, &other.0, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.0, &other.0, max_ulps)
+    }
+}
+*/
 
 impl<S> Angle for Radians<S>
 where

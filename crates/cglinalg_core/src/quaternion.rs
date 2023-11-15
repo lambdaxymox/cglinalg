@@ -111,9 +111,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,   
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion: Quaternion<i32> = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected: Option<Quaternion<f64>> = Some(Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64));
@@ -169,8 +167,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let vector = Vector4::new(1_f32, 2_f32, 3_f32, 4_f32);
@@ -194,9 +192,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let result = Quaternion::from_fill(1_f64);
     /// let expected = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64);
@@ -214,9 +210,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,  
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let vector: Quaternion<f32> = Quaternion::new(1_f32, 2_f32, 3_f32, 4_f32);
     /// let expected: Quaternion<f64> = Quaternion::new(-2_f64, -3_f64, -4_f64, -5_f64);
@@ -288,9 +282,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let unit_s: Quaternion<f64> = Quaternion::unit_s();
     ///
@@ -309,9 +301,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let unit_x: Quaternion<f64> = Quaternion::unit_x();
     ///
@@ -330,9 +320,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let unit_y: Quaternion<f64> = Quaternion::unit_y();
     ///
@@ -351,9 +339,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let unit_z: Quaternion<f64> = Quaternion::unit_z();
     ///
@@ -376,9 +362,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let zero_quat = Quaternion::zero();
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -423,9 +407,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let identity = Quaternion::identity();
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -445,9 +427,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let one = Quaternion::one();
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -465,9 +445,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let identity: Quaternion<f64> = Quaternion::identity();
     /// assert!(identity.is_identity());
@@ -541,9 +519,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::from_real(1_i32);
     ///
@@ -581,9 +557,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion1 = Quaternion::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let quaternion2 = Quaternion::new(5_i32, 6_i32, 7_i32, 8_i32);
@@ -613,14 +587,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -642,14 +616,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -673,14 +647,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -703,17 +677,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -725,7 +697,7 @@ where
     /// let expected = f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64);
     /// let result = quaternion1.metric_distance_squared(&quaternion2);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn metric_distance_squared(&self, other: &Self) -> S {
@@ -814,9 +786,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(24, 7, 23, 9);
     /// let expected = Quaternion::new(-83, 336, 1104, 432);
@@ -833,9 +803,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(2_f64, 4_f64, 6_f64, 8_f64);
     /// let expected = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -862,9 +830,7 @@ where
     ///
     /// An example computing the **L1** norm of a quaternion of [`f64`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, -3_f64, 4_f64);
     /// let expected = 10_f64;
@@ -875,9 +841,7 @@ where
     ///
     /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(1_i32, 2_i32, -3_i32, 4_i32);
     /// let expected = 10_i32;
@@ -908,14 +872,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -939,14 +903,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -969,17 +933,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// # use core::f64;
     /// #
@@ -991,7 +953,7 @@ where
     /// let expected = f64::sqrt(f64::sqrt(2_f64) * (f64::sqrt(2_f64) - 1_f64));
     /// let result = quaternion1.metric_distance(&quaternion2);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
@@ -1005,14 +967,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let axis = Unit::from_value(Vector3::unit_z());
@@ -1035,14 +995,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let axis = Unit::from_value(Vector3::unit_z());
@@ -1070,18 +1028,16 @@ where
     ///
     /// Construct a quaternion for performing a 30 degree rotation about the **z-axis**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
+    /// #     Normed,
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
-    /// #     Normed,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1090,11 +1046,11 @@ where
     /// let sin_pi_over_12 = (f64::sqrt(3_f64) - 1_f64) / (2_f64 * f64::sqrt(2_f64));
     /// let expected = Quaternion::new(cos_pi_over_12, 0_f64, 0_f64, sin_pi_over_12);
     ///
-    /// assert_relative_eq!(expected.norm_squared(), 1_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(expected.norm_squared(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let result = Quaternion::from_axis_angle(&axis, pi_over_6);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// A quaternion constructed from an axis and an angle will have the
@@ -1115,17 +1071,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1136,7 +1090,7 @@ where
     /// let q_inv = q.inverse().unwrap();
     /// let result = q * p * q_inv;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
@@ -1169,7 +1123,7 @@ where
     /// let matrix = Matrix3x3::new(
     ///       1_f64 / 2_f64,            f64::sqrt(3_f64) / 2_f64, 0_f64,
     ///      -f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64,            0_f64,
-    ///       0_f64,                    0_f64,                    1_f64
+    ///       0_f64,                    0_f64,                    1_f64,
     /// );
     /// let scalar = f64::sqrt(3_f64) / 2_f64;
     /// let vector = Vector3::new(0_f64, 0_f64, 1_f64 / 2_f64);
@@ -1230,13 +1184,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1248,7 +1200,7 @@ where
     /// );
     /// let result = quaternion.to_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// The following example shows the result of converting an unit
@@ -1257,13 +1209,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -1278,7 +1228,7 @@ where
     /// );
     /// let result = quaternion.to_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1319,13 +1269,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Matrix3x3,  
+    /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1341,7 +1289,7 @@ where
     ///
     /// quaternion.to_matrix_mut(&mut result);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     /// The following example shows the result of converting an unit
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
@@ -1349,13 +1297,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Matrix3x3,  
+    /// #     Matrix3x3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -1374,7 +1320,7 @@ where
     ///
     /// quaternion.to_matrix_mut(&mut result);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_matrix_mut(&self, matrix: &mut Matrix3x3<S>) {
@@ -1407,13 +1353,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix4x4,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1426,7 +1370,7 @@ where
     /// );
     /// let result = quaternion.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// The following example shows the result of converting an unit
@@ -1435,13 +1379,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix4x4,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -1457,7 +1399,7 @@ where
     /// );
     /// let result = quaternion.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -1508,13 +1450,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Matrix4x4,  
+    /// #     Matrix4x4,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -1531,7 +1471,7 @@ where
     ///
     /// quaternion.to_affine_matrix_mut(&mut result);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// The following example shows the result of converting an unit
@@ -1540,13 +1480,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Matrix4x4,  
+    /// #     Matrix4x4,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 1_f64, 1_f64) / 2_f64;
@@ -1566,7 +1504,7 @@ where
     ///
     /// quaternion.to_affine_matrix_mut(&mut result);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_affine_matrix_mut(&self, matrix: &mut Matrix4x4<S>) {
@@ -1609,9 +1547,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     ///
@@ -1626,13 +1562,13 @@ where
     /// ```
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
-        self.inverse_eps(S::default_epsilon())
+        self.inverse_eps(S::machine_epsilon())
     }
 
     #[inline]
-    fn inverse_eps(&self, epsilon: S) -> Option<Self> {
+    fn inverse_eps(&self, threshold: S) -> Option<Self> {
         let norm_squared = self.norm_squared();
-        if norm_squared <= epsilon * epsilon {
+        if norm_squared <= threshold * threshold {
             None
         } else {
             Some(self.conjugate() / norm_squared)
@@ -1648,9 +1584,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     ///
@@ -1663,12 +1597,12 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        self.is_invertible_eps(S::default_epsilon())
+        self.is_invertible_eps(S::machine_epsilon())
     }
 
     #[inline]
-    fn is_invertible_eps(&self, epsilon: S) -> bool {
-        self.norm_squared() >= epsilon * epsilon
+    fn is_invertible_eps(&self, threshold: S) -> bool {
+        self.norm_squared() >= threshold * threshold
     }
 
     /// Compute the principal (value of the) argument of a quaternion.
@@ -1697,12 +1631,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -1717,16 +1649,16 @@ where
     /// let expected = pi_over_three;
     /// let result = quaternion.arg();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn arg(&self) -> S {
-        self.arg_eps(S::default_epsilon())
+        Self::arg_eps(&self, S::machine_epsilon())
     }
 
     #[inline]
-    fn arg_eps(&self, epsilon: S) -> S {
-        if self.scalar() * self.scalar() <= epsilon * epsilon {
+    fn arg_eps(&self, threshold: S) -> S {
+        if self.scalar() * self.scalar() <= threshold * threshold {
             S::frac_pi_2()
         } else {
             S::atan2(self.vector().norm(), self.scalar())
@@ -1763,12 +1695,10 @@ where
     ///
     /// A computation involving the unit **x-axis** pure quaternion.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1778,17 +1708,15 @@ where
     /// let result = (unit_x * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// A computation involving the unit **y-axis** pure quaternion.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1798,17 +1726,15 @@ where
     /// let result = (unit_y * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// A computation involving the unit **z-axis** pure quaternion.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1818,17 +1744,15 @@ where
     /// let result = (unit_z * pi).exp();
     /// let expected = Quaternion::from_parts(-1_f64, zero_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// A computation involving the unit **z-axis** pure quaternion again.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1837,17 +1761,17 @@ where
     /// let result = (unit_z * pi_over_two).exp();
     /// let expected = unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn exp(&self) -> Self {
-        self.exp_eps(S::default_epsilon())
+        Self::exp_eps(&self, S::machine_epsilon())
     }
 
     #[inline]
-    fn exp_eps(&self, epsilon: S) -> Self {
+    fn exp_eps(&self, threshold: S) -> Self {
         let norm_v_squared = self.vector().norm_squared();
-        if norm_v_squared <= epsilon * epsilon {
+        if norm_v_squared <= threshold * threshold {
             Self::from_parts(self.scalar().exp(), Vector3::zero())
         } else {
             let norm_v = norm_v_squared.sqrt();
@@ -1888,12 +1812,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1903,18 +1825,16 @@ where
     /// let expected = Quaternion::new(f64::ln(f64::sqrt(2_f64)), 0_f64, 0_f64, pi / 4_f64);
     /// let result = quaternion.ln();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -1925,17 +1845,17 @@ where
     /// let expected = Quaternion::from_parts(scalar, vector);
     /// let result = quaternion.ln();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn ln(&self) -> Self {
-        self.ln_eps(S::default_epsilon())
+        Self::ln_eps(&self, S::machine_epsilon())
     }
 
     #[inline]
-    fn ln_eps(&self, epsilon: S) -> Self {
+    fn ln_eps(&self, threshold: S) -> Self {
         let norm_v_squared = self.vector().norm_squared();
-        if norm_v_squared <= epsilon * epsilon {
+        if norm_v_squared <= threshold * threshold {
             // The principal value of the natural logarithm of `q` is well-defined when
             // `|vector(q)| == 0` due to the continuity of the function when |v| = 0.
             // That is, `Arg(q) / |vector(q)| -> 0` as `|vector(q)| -> 0` so that
@@ -1959,12 +1879,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let scalar = 1_f64;
@@ -1974,7 +1892,7 @@ where
     /// let expected = 2_f64 * Quaternion::unit_z();
     /// let result = quaternion.powf(exponent);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn powf(&self, exponent: S) -> Self {
@@ -2062,13 +1980,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Normed,
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let q = Quaternion::from_parts(1_f64, Vector3::unit_z() * 4_f64);
@@ -2085,15 +2001,15 @@ where
     /// # );
     /// # let result = q.sqrt();
     /// #
-    /// # assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// # assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// #
     /// let sqrt_q = q.sqrt();
     ///
-    /// assert_relative_eq!(sqrt_q * sqrt_q, q, epsilon = 1e-10);
+    /// assert_relative_eq!(sqrt_q * sqrt_q, q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let minus_sqrt_q = -sqrt_q;
     ///
-    /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, epsilon = 1e-10);
+    /// assert_relative_eq!(minus_sqrt_q * minus_sqrt_q, q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Discussion
@@ -2130,9 +2046,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::from_real(-1_f64);
     /// let unit_scalar: Quaternion<f64> = Quaternion::unit_s();
@@ -2150,20 +2064,20 @@ where
     ///     DOI:10.1007/978-3-0348-0622-0. p. 9_
     #[inline]
     pub fn sqrt(&self) -> Self {
-        self.sqrt_eps(S::default_epsilon())
+        self.sqrt_eps(S::machine_epsilon())
     }
 
     #[inline]
-    fn sqrt_eps(&self, epsilon: S) -> Self {
+    fn sqrt_eps(&self, threshold: S) -> Self {
         let norm_self_squared = self.norm_squared();
-        if norm_self_squared <= epsilon * epsilon {
+        if norm_self_squared <= threshold * threshold {
             // We have a zero quaternion.
             return Self::zero();
         }
 
         let norm_v_squared = self.vector().norm_squared();
         let norm_self = S::sqrt(norm_self_squared);
-        if norm_v_squared <= epsilon * epsilon {
+        if norm_v_squared <= threshold * threshold {
             let sqrt_norm_self = S::sqrt(norm_self);
             // We have a non-zero real quaternion.
             if self.scalar() > S::zero() {
@@ -2203,12 +2117,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
@@ -2219,7 +2129,7 @@ where
     ///
     /// let result = result.unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn div_left(&self, left: &Self) -> Option<Self> {
@@ -2241,12 +2151,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     /// let p = Quaternion::new(5_f64, 7_f64, 11_f64, 13_f64);
@@ -2257,7 +2163,7 @@ where
     ///
     /// let result = result.unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn div_right(&self, right: &Self) -> Option<Self> {
@@ -2273,9 +2179,7 @@ where
     /// # Example (Generic Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(4_f64, 2_f64, 6_f64, 11_f64);
     /// let p = Quaternion::new(1_f64, 5_f64, 12_f64, 14_f64);
@@ -2288,9 +2192,7 @@ where
     /// # Example (Pure Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(0_f64, 7_f64, 11_f64, 4_f64);
     /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
@@ -2303,9 +2205,7 @@ where
     /// # Example (Real Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::from_real(3_f64);
     /// let p = Quaternion::from_real(10_f64);
@@ -2327,9 +2227,7 @@ where
     /// # Example (Generic Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(4_f64, 2_f64, 6_f64, 11_f64);
     /// let p = Quaternion::new(1_f64, 5_f64, 12_f64, 14_f64);
@@ -2340,9 +2238,7 @@ where
     /// # Example (Pure Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(0_f64, 7_f64, 11_f64, 4_f64);
     /// let p = Quaternion::new(0_f64, 2_f64, 3_f64, 4_f64);
@@ -2355,9 +2251,7 @@ where
     /// # Example (Real Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::from_real(3_f64);
     /// let p = Quaternion::from_real(10_f64);
@@ -2381,17 +2275,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Quaternion,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// #     Vector3,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
@@ -2403,7 +2295,7 @@ where
     /// );
     /// let result = Quaternion::rotation_between(&v1, &v2).unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
@@ -2420,17 +2312,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,   
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
@@ -2442,15 +2332,20 @@ where
     /// );
     /// let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> {
+        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::machine_epsilon())
+    }
+
+    #[inline]
+    fn rotation_between_axis_eps(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>, threshold: S) -> Option<Self> {
         let v1 = unit_v1.as_ref();
         let v2 = unit_v2.as_ref();
         let v1_cross_v2 = v1.cross(v2);
 
-        if let Some(axis) = Unit::try_from_value(v1_cross_v2, S::default_epsilon()) {
+        if let Some(axis) = Unit::try_from_value(v1_cross_v2, threshold) {
             let cos_theta = v1.dot(v2);
 
             if cos_theta <= -S::one() {
@@ -2488,13 +2383,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let direction: Vector3<f64> = -Vector3::unit_x();
@@ -2508,9 +2401,9 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = - unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * direction, unit_z, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * (-direction), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * direction, unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * (-direction), minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_lh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2528,14 +2421,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
+    /// #     Normed,
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
     /// # };
     /// # use core::f64;
     /// #
@@ -2559,9 +2450,9 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!((rotation * (-direction)).normalize(), unit_z, epsilon = 1e-10);
-    /// assert_relative_eq!((rotation * direction).normalize(), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((rotation * (-direction)).normalize(), unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((rotation * direction).normalize(), minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_rh(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2577,15 +2468,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Quaternion,
-    /// #     Vector3,
     /// #     Normed,
     /// #     Point3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Quaternion,
+    /// #     Vector3,
     /// # };
     /// #
     /// let eye = Point3::new(-3_f64, 1_f64, -2_f64);
@@ -2600,12 +2489,14 @@ where
     /// assert_relative_eq!(
     ///     (rotation * direction).normalize(),
     ///     unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// assert_relative_eq!(
     ///     (rotation * (-direction)).normalize(),
     ///     minus_unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -2622,15 +2513,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Quaternion,
     /// #     Vector3,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-3_f64, 1_f64, -2_f64);
@@ -2645,12 +2534,14 @@ where
     /// assert_relative_eq!(
     ///     (rotation * direction).normalize(),
     ///     minus_unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// assert_relative_eq!(
     ///     (rotation * (-direction)).normalize(),
     ///     unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -2669,13 +2560,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Quaternion,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let direction: Vector3<f64> = -Vector3::unit_x();
@@ -2689,9 +2578,9 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * minus_unit_z, -direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * minus_unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2710,13 +2599,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Quaternion,
-    /// #     Vector3,    
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -2740,9 +2627,9 @@ where
     /// let unit_z = Vector3::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * unit_z, -direction, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * minus_unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -2760,15 +2647,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Quaternion,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -2789,8 +2674,8 @@ where
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -2809,15 +2694,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Quaternion,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -2838,8 +2721,8 @@ where
     /// let direction = (target - eye).normalize();
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(rotation * minus_unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(rotation * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -2851,9 +2734,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,  
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
     /// let v1 = Quaternion::new(10_f64, 20_f64, 30_f64, 40_f64);
@@ -2874,8 +2755,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Normed,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let v0 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
@@ -2901,16 +2782,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,   
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
     /// # };
     /// #
     /// let angle1 = Degrees(30_f64);
@@ -2931,7 +2810,7 @@ where
     /// );
     /// let result = q1.slerp(&q2, 0.5);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn slerp(&self, other: &Self, amount: S) -> Self {
@@ -3005,9 +2884,7 @@ where
     /// # Example (Finite Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
@@ -3017,9 +2894,7 @@ where
     /// # Example (Not A Finite Quaternion)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let quaternion = Quaternion::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
     ///
@@ -3037,8 +2912,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Quaternion,
     /// #     Normed,
+    /// #     Quaternion,
     /// # };
     /// #
     /// let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -3080,22 +2955,20 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
+    /// # use approx_cmp::{
     /// #     assert_relative_eq,
     /// #     assert_relative_ne,
     /// # };
+    /// # use cglinalg_core::Quaternion;
     /// #
     /// let q = Quaternion::new(0_f64, 5_f64, 2_f64, 8_f64);
     /// let p = Quaternion::new(0_f64, 1_f64, 2_f64, 3_f64);
     /// let q_proj = q.project(&p);
     /// let q_rej = q.reject(&p);
     ///
-    /// assert_relative_eq!(q_proj + q_rej, q, epsilon = 1e-10);
-    /// assert_relative_ne!(q_proj.dot(&p), 0_f64);
-    /// assert_relative_eq!(q_rej.dot(&p), 0_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(q_proj + q_rej, q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_ne!(q_proj.dot(&p), 0_f64, abs_diff_all <= f64::EPSILON, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(q_rej.dot(&p), 0_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn reject(&self, other: &Self) -> Self {
@@ -3123,17 +2996,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let scalar = 3_f64 * (f64::sqrt(3_f64) / 2_f64);
@@ -3145,13 +3014,14 @@ where
     /// let expected = (norm, angle_over_two, Some(axis));
     /// let result = quaternion.polar_decomposition();
     ///
-    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-8);
-    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-8);
+    /// assert_relative_eq!(result.0, expected.0, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result.1, expected.1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// assert!(result.2.is_some());
     /// assert_relative_eq!(
     ///     result.2.unwrap().as_ref(),
     ///     expected.2.unwrap().as_ref(),
-    ///     epsilon = 1e-8
+    ///     abs_diff_all <= 1e-8,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -3187,15 +3057,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Quaternion,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// #
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let scale = 3_f64;
@@ -3237,12 +3104,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// let pi_over_two = f64::consts::FRAC_PI_2;
@@ -3250,7 +3113,7 @@ where
     /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, -3_f64 / 4_f64);
     /// let result = quaternion.cos();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cos(&self) -> Self {
@@ -3276,12 +3139,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden Ratio.
@@ -3297,7 +3156,7 @@ where
     /// );
     /// let result = quaternion.acos();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn acos(&self) -> Self {
@@ -3327,12 +3186,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// let pi_over_two = f64::consts::FRAC_PI_2;
@@ -3340,7 +3195,7 @@ where
     /// let expected = Quaternion::from_real(5_f64 / 4_f64);
     /// let result = quaternion.sin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn sin(&self) -> Self {
@@ -3366,12 +3221,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden Ratio.
@@ -3387,7 +3238,7 @@ where
     /// );
     /// let result = quaternion.asin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn asin(&self) -> Self {
@@ -3429,12 +3280,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// let pi_over_two = f64::consts::FRAC_PI_2;
@@ -3442,7 +3289,7 @@ where
     /// let expected = Quaternion::new(0_f64, 0_f64, 0_f64, 5_f64 / 3_f64);
     /// let result = quaternion.tan();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn tan(&self) -> Self {
@@ -3472,12 +3319,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden Ratio.
@@ -3493,7 +3336,7 @@ where
     /// );
     /// let result = quaternion.atan();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn atan(&self) -> Self {
@@ -3524,12 +3367,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3539,7 +3378,7 @@ where
     /// let expected = Quaternion::new(0_f64, f64::sqrt(5_f64) / 2_f64, 0_f64, 0_f64);
     /// let result = quaternion.cosh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cosh(&self) -> Self {
@@ -3565,12 +3404,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3580,7 +3415,7 @@ where
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let result = quaternion.acosh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn acosh(&self) -> Self {
@@ -3608,12 +3443,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3623,7 +3454,7 @@ where
     /// let expected = Quaternion::new(0_f64, 3_f64 / 2_f64, 0_f64, 0_f64);
     /// let result = quaternion.sinh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn sinh(&self) -> Self {
@@ -3649,12 +3480,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3664,7 +3491,7 @@ where
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), pi_over_two, 0_f64, 0_f64);
     /// let result = quaternion.asinh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn asinh(&self) -> Self {
@@ -3705,12 +3532,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3720,7 +3543,7 @@ where
     /// let expected = Quaternion::from_real(3_f64 / f64::sqrt(5_f64));
     /// let result = quaternion.tanh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn tanh(&self) -> Self {
@@ -3750,12 +3573,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Quaternion,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Quaternion;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -3765,7 +3584,7 @@ where
     /// let expected = Quaternion::new(f64::ln(1_f64 + phi), 0_f64, 0_f64, 0_f64);
     /// let result = quaternion.atanh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn atanh(&self) -> Self {
@@ -4554,7 +4373,7 @@ where
         self.coords %= other;
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for Quaternion<S>
 where
     S: SimdScalarFloat,
@@ -4605,6 +4424,200 @@ where
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.scalar(), &other.scalar(), epsilon, max_ulps)
             && Vector3::ulps_eq(&self.vector(), &other.vector(), epsilon, max_ulps)
+    }
+}
+*/
+impl<S> approx_cmp::AbsDiffEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector4<<S as approx_cmp::AbsDiffEq>::Tolerance>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector4<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = Vector4<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector4<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector4<<S as approx_cmp::RelativeEq>::Tolerance>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.coords, &other.coords, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.coords, &other.coords, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector4<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = Vector4<<S as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertRelativeEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.coords, &other.coords, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector4<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.coords, &other.coords, max_relative)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type Tolerance = Vector4<<S as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = Vector4<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.coords, &other.coords, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.coords, &other.coords, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type DebugAbsDiff = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertUlpsEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.coords, &other.coords,  max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.coords, &other.coords, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Quaternion<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector4<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = Vector4<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.coords, &other.coords, max_ulps)
     }
 }
 

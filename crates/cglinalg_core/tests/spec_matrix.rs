@@ -3,7 +3,7 @@ extern crate cglinalg_numeric;
 extern crate proptest;
 
 
-use approx::{
+use approx_cmp::{
     relative_eq,
     relative_ne,
 };
@@ -989,7 +989,7 @@ where
 {
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
+    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
     prop_assert!(m.l1_norm() > tolerance);
 
     Ok(())
@@ -1014,7 +1014,7 @@ fn prop_approx_matrix_l1_norm_point_separating2<S, const R: usize, const C: usiz
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
+    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
     prop_assert!((m1 - m2).l1_norm() > tolerance);
 
     Ok(())
@@ -1125,7 +1125,7 @@ where
 {
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
+    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
     prop_assert!(m.linf_norm() > tolerance);
 
     Ok(())
@@ -1150,7 +1150,7 @@ fn prop_approx_matrix_linf_norm_point_separating2<S, const R: usize, const C: us
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
+    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
     prop_assert!((m1 - m2).linf_norm() > tolerance);
 
     Ok(())
@@ -1331,8 +1331,8 @@ where
     let zero = S::zero();
     let zero_matrix = Matrix::zero();
 
-    prop_assume!(relative_ne!(m, zero_matrix, epsilon = tolerance));
-    prop_assert!(relative_ne!(m.norm(), zero, epsilon = tolerance));
+    prop_assume!(relative_ne!(m, zero_matrix, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_ne!(m.norm(), zero, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -1356,8 +1356,8 @@ fn prop_approx_matrix_norm_point_separating2<S, const R: usize, const C: usize>(
 where
     S: SimdScalarFloat,
 {
-    prop_assume!(relative_ne!(m1, m2, epsilon = tolerance));
-    prop_assert!(relative_ne!(m1.norm(), m2.norm(), epsilon = tolerance));
+    prop_assume!(relative_ne!(m1, m2, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_ne!(m1.norm(), m2.norm(), abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -1453,7 +1453,7 @@ where
     let lhs = (m1 + m2).trace();
     let rhs = m1.trace() + m2.trace();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -1477,7 +1477,7 @@ where
     let lhs = (m1 * m2).trace();
     let rhs = (m2 * m1).trace();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -1500,7 +1500,7 @@ where
     let lhs = (m * c).trace();
     let rhs = m.trace() * c;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }

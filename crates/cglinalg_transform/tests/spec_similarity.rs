@@ -1,11 +1,11 @@
-extern crate approx;
+extern crate approx_cmp;
 extern crate cglinalg_core;
 extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_core::{
     Const,
     DimMul,
@@ -260,7 +260,7 @@ where
     let lhs = (m * v).norm();
     let rhs = m.scale().abs() * v.norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -284,9 +284,9 @@ where
     let lhs = m * m.inverse();
     let rhs = m.inverse() * m;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
-    prop_assert!(relative_eq!(lhs, identity, epsilon = tolerance));
-    prop_assert!(relative_eq!(rhs, identity, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -311,13 +311,13 @@ where
     let lhs = m * (m.inverse() * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     /*
     let lhs = m.inverse() * (m * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
     */
     Ok(())
 }
@@ -342,12 +342,12 @@ where
     let lhs = m * (m.inverse() * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     let lhs = m.inverse() * (m * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -373,7 +373,7 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -401,7 +401,7 @@ where
     let lhs = m1 * m2;
     let rhs = m3;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }

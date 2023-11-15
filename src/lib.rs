@@ -10,7 +10,7 @@ extern crate alloc;
 #[cfg(feature = "std")]
 extern crate std;
 
-extern crate approx;
+extern crate approx_cmp;
 extern crate num_traits;
 
 extern crate cglinalg_complex;

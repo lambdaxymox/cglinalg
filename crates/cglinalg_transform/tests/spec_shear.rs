@@ -4,7 +4,7 @@ extern crate cglinalg_transform;
 extern crate proptest;
 
 
-use approx::{
+use approx_cmp::{
     relative_eq,
     abs_diff_eq,
 };
@@ -104,9 +104,19 @@ where
         ));
         let normal = Unit::from_value(Vector2::new(-direction[1], direction[0]));
 
-        assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), epsilon = cglinalg_numeric::cast(1e-15)));
+        assert!(relative_eq!(
+            direction.norm(),
+            S::one(),
+            abs_diff_all <= cglinalg_numeric::cast(1e-14),
+            relative_all <= S::machine_epsilon(),
+        ));
+        assert!(relative_eq!(
+            normal.norm(),
+            S::one(),
+            abs_diff_all <= cglinalg_numeric::cast(1e-14),
+            relative_all <= S::machine_epsilon(),
+        ));
+        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)));
 
         Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
@@ -136,7 +146,7 @@ where
             rescale(_direction[2], min_value, max_value),
         ));
         let normal = {
-            let _new_normal = if abs_diff_eq!(direction[2], S::zero(), epsilon = cglinalg_numeric::cast(1e-15)) {
+            let _new_normal = if abs_diff_eq!(direction[2], S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)) {
                 Unit::from_value(Vector3::new(S::zero(), S::zero(), _normal[2].signum() * S::one()))
             } else {
                 let _new_normal_0 = rescale(_normal[0], min_value, max_value);
@@ -149,9 +159,19 @@ where
             _new_normal
         };
 
-        assert!(relative_eq!(direction.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(relative_eq!(normal.norm(), S::one(), epsilon = cglinalg_numeric::cast(1e-14)));
-        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), epsilon = cglinalg_numeric::cast(1e-15)));
+        assert!(relative_eq!(
+            direction.norm(),
+            S::one(),
+            abs_diff_all <= cglinalg_numeric::cast(1e-14),
+            relative_all <= S::machine_epsilon(),
+        ));
+        assert!(relative_eq!(
+            normal.norm(),
+            S::one(),
+            abs_diff_all <= cglinalg_numeric::cast(1e-14),
+            relative_all <= S::machine_epsilon(),
+        ));
+        assert!(abs_diff_eq!(direction.dot(&normal), S::zero(), abs_diff_all <= cglinalg_numeric::cast(1e-15)));
 
         Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal)
     })
@@ -265,7 +285,7 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(3_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -284,7 +304,7 @@ where
     let lhs = s.to_affine_matrix().trace();
     let rhs = cglinalg_numeric::cast(4_f64);
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -302,7 +322,7 @@ where
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -321,7 +341,7 @@ where
     let lhs = s.to_affine_matrix().determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance), "lhs = {}", lhs);
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }

@@ -64,48 +64,36 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
     /// let rotation = Rotation2::from_angle(angle);
     /// let expected = Matrix2x2::new(
     ///      0_f64,  1_f64,
-    ///     -1_f64,  0_f64
+    ///     -1_f64,  0_f64,
     /// );
     /// let result = rotation.matrix();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -113,11 +101,11 @@ where
     /// let expected = Matrix3x3::new(
     ///      0_f64,  1_f64,  0_f64,
     ///     -1_f64,  0_f64,  0_f64,
-    ///      0_f64,  0_f64,  1_f64
+    ///      0_f64,  0_f64,  1_f64,
     /// );
     /// let result = rotation.matrix();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix<S, N, N> {
@@ -134,12 +122,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,    
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
@@ -154,16 +138,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
@@ -188,16 +168,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -211,16 +187,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -241,18 +213,10 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_4);
@@ -261,25 +225,19 @@ where
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_2);
@@ -289,7 +247,7 @@ where
     /// let expected = -Vector3::unit_y();
     /// let result = rotation.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -301,18 +259,10 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_4);
@@ -321,26 +271,20 @@ where
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_2);
@@ -350,7 +294,7 @@ where
     /// let expected = Point3::new(0_f64, -1_f64, 0_f64);
     /// let result = rotation.apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -365,18 +309,10 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -385,30 +321,24 @@ where
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let expected = Vector2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.inverse_apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_2);
@@ -419,7 +349,7 @@ where
     /// let rotated_vector = rotation.apply_vector(&vector);
     /// let result = rotation.inverse_apply_vector(&rotated_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```   
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -433,18 +363,10 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -453,31 +375,25 @@ where
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let expected = Point2::new(1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64));
     /// let result = rotation.inverse_apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(-f64::consts::FRAC_PI_2);
@@ -488,7 +404,7 @@ where
     /// let rotated_point = rotation.apply_point(&point);
     /// let result = rotation.inverse_apply_point(&rotated_point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -508,12 +424,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Rotation2;
     /// #
     /// let rotation = Rotation2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
@@ -525,12 +437,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Rotation3;
     /// #
     /// let rotation = Rotation3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
@@ -553,46 +461,30 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix2x2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::PI);
     /// let rotation = Rotation2::from_angle(angle);
     /// let expected = Matrix2x2::new(
     ///     -1_f64,  0_f64,
-    ///      0_f64, -1_f64
+    ///      0_f64, -1_f64,
     /// );
     /// let result = rotation.to_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix3x3;
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::PI);
@@ -600,11 +492,11 @@ where
     /// let expected = Matrix3x3::new(
     ///     -1_f64,  0_f64, 0_f64,
     ///      0_f64, -1_f64, 0_f64,
-    ///      0_f64,  0_f64, 1_f64
+    ///      0_f64,  0_f64, 1_f64,
     /// );
     /// let result = rotation.to_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub const fn to_matrix(&self) -> Matrix<S, N, N> {
@@ -624,19 +516,13 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Matrix3x3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
@@ -644,31 +530,25 @@ where
     /// let expected = Matrix3x3::new(
     ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64,
     ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64,
-    ///      0_f64,                     0_f64,                    1_f64
+    ///      0_f64,                     0_f64,                    1_f64,
     /// );
     /// let result = rotation.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Matrix4x4,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
@@ -678,11 +558,11 @@ where
     ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64, 0_f64,
     ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64, 0_f64,
     ///      0_f64,                     0_f64,                    1_f64, 0_f64,
-    ///      0_f64,                     0_f64,                    0_f64, 1_f64
+    ///      0_f64,                     0_f64,                    0_f64, 1_f64,
     /// );
     /// let result = rotation.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix<S, NPLUS1, NPLUS1> {
@@ -694,53 +574,45 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// #     Transform2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Matrix3x3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
+    /// # use cglinalg_transform::{
+    /// #     Rotation2,
+    /// #     Transform2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
     /// let rotation = Rotation2::from_angle(angle);
     /// let matrix = Matrix3x3::from(Matrix2x2::new(
     ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64,
-    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64
+    ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,
     /// ));
     /// let expected = Transform2::from_matrix_unchecked(matrix);
     /// let result = rotation.to_transform();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Matrix4x4,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg_transform::{
     /// #     Rotation3,
     /// #     Transform3,
     /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Matrix4x4,
-    /// #     Vector3,
-    /// #     Unit,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_3);
@@ -749,12 +621,12 @@ where
     /// let matrix = Matrix4x4::from(Matrix3x3::new(
     ///      1_f64 / 2_f64,             f64::sqrt(3_f64) / 2_f64, 0_f64,
     ///     -f64::sqrt(3_f64) / 2_f64,  1_f64 / 2_f64,            0_f64,
-    ///      0_f64,                     0_f64,                    1_f64
+    ///      0_f64,                     0_f64,                    1_f64,
     /// ));
     /// let expected = Transform3::from_matrix_unchecked(matrix);
     /// let result = rotation.to_transform();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform<S, N, NPLUS1> {
@@ -803,7 +675,7 @@ where
         rotation.to_affine_matrix()
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Rotation<S, N>
 where
     S: SimdScalarFloat,
@@ -850,7 +722,7 @@ where
         Matrix::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Rotation<S, N>
 where
     S: SimdScalarFloat,
@@ -1016,25 +888,17 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let angle = Degrees(90_f64);
     /// let rotation = Rotation2::from_angle(angle);
     /// let expected = angle.into();
     /// let result = rotation.angle();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn angle(&self) -> Radians<S> {
@@ -1046,18 +910,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Rotation2;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let angle = Degrees(90_f64);
     /// let rotation = Rotation2::from_angle(angle);
@@ -1065,7 +921,10 @@ where
     /// let unit_y = Vector2::unit_y();
     ///
     /// assert_relative_eq!(
-    ///     rotation.apply_vector(&unit_x), unit_y, epsilon = 1e-8
+    ///     rotation.apply_vector(&unit_x),
+    ///     unit_y,
+    ///     abs_diff_all <= 1e-8,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1086,12 +945,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
     /// let vector1 = Unit::from_value(Vector2::unit_y());
@@ -1122,9 +979,7 @@ where
     /// #     Point2,
     /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation2,
-    /// # };
+    /// # use cglinalg_transform::Rotation2;
     /// #
     /// let point = Point2::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
     /// let vector1 = 3_f64 * Vector2::unit_y();
@@ -1154,18 +1009,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq,
-    /// # };
+    /// # use approx_cmp::relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let angle = Degrees(90_f64);
     /// let rotation = Rotation3::from_angle_z(angle);
@@ -1189,19 +1036,13 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let angle = Degrees(90_f64);
     /// let axis = Unit::from_value(Vector3::unit_z());
@@ -1214,19 +1055,13 @@ where
     ///
     /// If the rotation angle is zero, the function returns `None`.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let angle = Degrees(0_f64);
     /// let axis = Unit::from_value(Vector3::unit_z());
@@ -1245,7 +1080,7 @@ where
             self.matrix.c0r1 - self.matrix.c1r0,
         );
 
-        Unit::try_from_value(axis, S::default_epsilon())
+        Unit::try_from_value(axis, S::machine_epsilon())
     }
 
     /// Compute the axis and angle of the rotation.
@@ -1255,19 +1090,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_6);
@@ -1288,20 +1117,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Quaternion,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -1310,7 +1133,7 @@ where
     /// let expected = Rotation3::from_axis_angle(&axis, angle);
     /// let result = Rotation3::from_quaternion(&quaternion);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_quaternion(quaternion: &Quaternion<S>) -> Self {
@@ -1325,19 +1148,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -1352,7 +1171,7 @@ where
     /// let expected = Vector3::unit_y();
     /// let result = rotation.apply_vector(&unit_x);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_axis_angle<A>(axis: &Unit<Vector3<S>>, angle: A) -> Self
@@ -1370,16 +1189,12 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -1405,16 +1220,12 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -1440,16 +1251,12 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_2);
@@ -1480,16 +1287,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
@@ -1500,7 +1303,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&direction).normalize(),
     ///     unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1521,16 +1325,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
@@ -1541,7 +1341,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&direction).normalize(),
     ///     minus_unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1563,17 +1364,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// #
     /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
     /// let target = Point3::origin();
@@ -1583,7 +1380,7 @@ where
     /// let result = rotation.apply_vector(&direction).normalize();
     /// let expected = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -1604,17 +1401,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// #
     /// let eye = Point3::new(0_f64, -5_f64, 0_f64);
     /// let target = Point3::origin();
@@ -1624,7 +1417,7 @@ where
     /// let result = rotation.apply_vector(&direction).normalize();
     /// let expected = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -1645,16 +1438,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
@@ -1665,7 +1454,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&unit_z),
     ///     direction.normalize(),
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1687,16 +1477,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let direction = Vector3::new(1_f64, -1_f64, 1_f64);
@@ -1707,7 +1493,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&minus_unit_z),
     ///     direction.normalize(),
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1729,17 +1516,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(-1_f64, 1_f64, -1_f64);
@@ -1752,7 +1535,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&unit_z),
     ///     direction.normalize(),
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1774,17 +1558,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// # use core::f64;
     /// #
     /// let eye = Point3::new(-1_f64, 1_f64, -1_f64);
@@ -1797,7 +1577,8 @@ where
     /// assert_relative_eq!(
     ///     rotation.apply_vector(&minus_unit_z),
     ///     direction.normalize(),
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[inline]
@@ -1815,15 +1596,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Rotation3;
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
     /// let vector1 = 5_f64 * Vector3::unit_y();
@@ -1832,7 +1607,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = rotation.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Rotation3<S>> {
@@ -1845,16 +1620,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
     /// #
     /// let vector = 3_f64 * Vector3::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64, 0_f64);
     /// let unit1 = Unit::from_value(5_f64 * Vector3::unit_y());
@@ -1863,7 +1634,7 @@ where
     /// let expected = 3_f64 * Vector3::new(1_f64 / 2_f64, -f64::sqrt(3_f64) / 2_f64, 0_f64);
     /// let result = rotation.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between_axis(v1: &Unit<Vector3<S>>, v2: &Unit<Vector3<S>>) -> Option<Self> {
@@ -1875,19 +1646,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Matrix3x3,
     /// #     EulerAngles,
+    /// #     Matrix3x3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let euler_angles = {
@@ -1913,13 +1678,13 @@ where
     ///
     ///          frac_1_sqrt_2,
     ///         -frac_1_2 * frac_1_sqrt_2,
-    ///          frac_sqrt_3_2 * frac_1_sqrt_2
+    ///          frac_sqrt_3_2 * frac_1_sqrt_2,
     ///     )
     /// };
     /// let rotation = Rotation3::from_euler_angles(&euler_angles);
     /// let result = rotation.to_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -2070,19 +1835,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Rotation3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     EulerAngles,
     /// #     Matrix3x3,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Rotation3;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// # let matrix = {
@@ -2115,11 +1874,11 @@ where
     /// let rotation = Rotation3::from_euler_angles(&expected);
     /// #
     /// # // Internal test for checking the integrity of the doctest.
-    /// # assert_relative_eq!(rotation.to_matrix(), matrix, epsilon = 1e-10);
+    /// # assert_relative_eq!(rotation.to_matrix(), matrix, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// #
     /// let result = rotation.euler_angles();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn euler_angles(&self) -> EulerAngles<Radians<S>> {
@@ -2212,5 +1971,261 @@ where
     #[inline]
     fn from(euler_angles: &EulerAngles<A>) -> Rotation3<S> {
         Rotation3::from_euler_angles(euler_angles)
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct RotationTol<S, const N: usize> {
+    matrix: Matrix<S, N, N>,
+}
+
+impl<S, const N: usize> From<Matrix<S, N, N>> for RotationTol<S, N> {
+    #[inline]
+    fn from(matrix: Matrix<S, N, N>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S, const N: usize> From<&Matrix<S, N, N>> for RotationTol<S, N>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(matrix: &Matrix<S, N, N>) -> Self {
+        Self { matrix: *matrix }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct RotationDiff<S, const N: usize> {
+    matrix: Matrix<S, N, N>,
+}
+
+impl<S, const N: usize> RotationDiff<S, N> {
+    #[inline]
+    const fn from(matrix: Matrix<S, N, N>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = RotationTol<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.matrix, &other.matrix, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = RotationDiff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = RotationTol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        RotationDiff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        RotationTol::from(matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = RotationTol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        RotationTol::from(matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = RotationTol<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_relative.matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = RotationDiff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = RotationTol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        RotationDiff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        RotationTol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.matrix, &other.matrix, &max_relative.matrix);
+
+        RotationTol::from(matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = RotationTol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        RotationTol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.matrix, &other.matrix, max_relative);
+
+        RotationTol::from(matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = RotationTol<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = RotationTol<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_ulps.matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = RotationDiff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = RotationDiff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = RotationTol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = RotationTol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        RotationDiff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.matrix, &other.matrix);
+
+        RotationDiff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        RotationTol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.matrix, &other.matrix, &max_ulps.matrix);
+
+        RotationTol::from(matrix)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Rotation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = RotationTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = RotationTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        RotationTol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.matrix, &other.matrix, max_ulps);
+
+        RotationTol::from(matrix)
     }
 }

@@ -1,7 +1,7 @@
 extern crate cglinalg_core;
 
 
-use approx::assert_relative_eq;
+use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     Quaternion,
     Unit,
@@ -108,7 +108,7 @@ fn test_unit_vector1() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -118,7 +118,7 @@ fn test_unit_vector2() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -128,7 +128,7 @@ fn test_unit_vector3() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_eq!(vector.norm(), norm);
 }
 
@@ -138,7 +138,7 @@ fn test_unit_vector4() {
     let (wrapped, norm) = Unit::from_value_with_norm(vector);
     let unit_vector = wrapped.as_ref();
 
-    assert_relative_eq!(unit_vector.norm(), 1_f64, epsilon = 1e-10);
+    assert_relative_eq!(unit_vector.norm(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_eq!(vector.norm(), norm);
 }
 

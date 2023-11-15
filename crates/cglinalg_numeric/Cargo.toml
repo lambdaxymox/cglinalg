@@ -41,9 +41,10 @@ alloc = []
 std = []
 
 
-[dependencies.approx]
-version = "0.5.1"
-default-features = false
+[dependencies.approx_cmp]
+git = "https://github.com/lambdaxymox/approx_cmp/"
+version = "1.0.0"
+features = ["core"]
 
 [dependencies.num-traits]
 version = "0.2.16"

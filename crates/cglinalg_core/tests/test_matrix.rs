@@ -4,7 +4,7 @@ extern crate cglinalg_trigonometry;
 
 #[cfg(test)]
 mod matrix2x2_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix2x2,
         Vector2,
@@ -254,7 +254,7 @@ mod matrix2x2_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -386,7 +386,7 @@ mod matrix2x2_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
 
     #[test]
@@ -523,7 +523,7 @@ mod matrix2x2_tests {
         );
         let result = matrix.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -593,7 +593,7 @@ mod matrix2x2_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix2x2::identity();
 
-        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -606,7 +606,7 @@ mod matrix2x2_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix2x2::identity();
 
-        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);        
+        assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);        
     }
 
     #[rustfmt::skip]
@@ -646,7 +646,7 @@ mod matrix2x2_tests {
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -737,7 +737,7 @@ mod matrix2x2_tests {
 
 #[cfg(test)]
 mod matrix2x2_rotation_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix2x2,
         Unit,
@@ -757,12 +757,12 @@ mod matrix2x2_rotation_tests {
         let expected = unit_y;
         let result = matrix * unit_x;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 
         let expected = -unit_x;
         let result = matrix * unit_y;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -776,7 +776,7 @@ mod matrix2x2_rotation_tests {
         );
         let result = Matrix2x2::rotation_between(&unit_x, &unit_y);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -790,14 +790,14 @@ mod matrix2x2_rotation_tests {
         );
         let result = Matrix2x2::rotation_between_axis(&unit_x, &unit_y);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod matrix2x2_reflection_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix2x2,
         Unit,
@@ -888,7 +888,7 @@ mod matrix2x2_reflection_tests {
         );
         let result = Matrix2x2::from_reflection(&normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     /// Construct a reflection matrix test case for reflection about the 
@@ -906,7 +906,7 @@ mod matrix2x2_reflection_tests {
         );
         let result = Matrix2x2::from_reflection(&normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 }
 
@@ -1023,7 +1023,7 @@ mod matrix2x2_shear_tests {
 /// Shearing about the line `y == (1 / 2) * x`.
 #[cfg(test)]
 mod matrix2x2_shear_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix2x2,
         Unit,
@@ -1082,8 +1082,8 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
     fn test_from_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1092,7 +1092,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = rotation();
         let result = Matrix2x2::from_angle(rotation_angle);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1102,7 +1102,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = rotation_inv();
         let result = computed_rotation.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1124,10 +1124,10 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices_xy.map(|v| rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1137,7 +1137,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = Vector2::unit_x();
         let result = rotation_inv * direction.into_inner();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1147,7 +1147,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = Vector2::unit_y();
         let result = rotation_inv * normal.into_inner();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1183,10 +1183,10 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1201,7 +1201,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         );
         let result = Matrix2x2::from_shear(shear_factor, &direction, &normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1215,7 +1215,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = Matrix2x2::from_shear(shear_factor, &direction, &normal);
         let result = rotation * shear_matrix_xy * rotation_inv;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1235,18 +1235,18 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod matrix3x3_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Vector2,
@@ -1533,7 +1533,7 @@ mod matrix3x3_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1683,7 +1683,7 @@ mod matrix3x3_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
 
     #[test]
@@ -1833,7 +1833,7 @@ mod matrix3x3_tests {
         );
         let result = matrix.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1905,7 +1905,7 @@ mod matrix3x3_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix3x3::identity();
 
-        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1948,7 +1948,7 @@ mod matrix3x3_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix3x3::identity();
 
-        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);
+        assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1962,7 +1962,7 @@ mod matrix3x3_tests {
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -2124,7 +2124,7 @@ mod matrix3x3_tests {
 
 #[cfg(test)]
 mod matrix3x3_rotation_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Normed,
@@ -2148,7 +2148,7 @@ mod matrix3x3_rotation_tests {
         let expected = unit_z;
         let result = matrix * unit_y;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2160,7 +2160,7 @@ mod matrix3x3_rotation_tests {
         let expected = unit_x;
         let result = matrix * unit_z;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2172,7 +2172,7 @@ mod matrix3x3_rotation_tests {
         let expected = unit_y;
         let result = matrix * unit_x;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2184,7 +2184,7 @@ mod matrix3x3_rotation_tests {
         let expected = Vector3::new(1_f64, 1_f64, 1_f64);
         let result = matrix * vector;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2195,12 +2195,12 @@ mod matrix3x3_rotation_tests {
         let expected = unit_y.extend(0_f64);
         let result = matrix * unit_x.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 
         let expected = -unit_x.extend(0_f64);
         let result = matrix * unit_y.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2212,7 +2212,7 @@ mod matrix3x3_rotation_tests {
         let expected = unit_z;
         let result = look_to * direction.normalize();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2224,7 +2224,7 @@ mod matrix3x3_rotation_tests {
         let expected = minus_unit_z;
         let result = look_to * direction;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2238,7 +2238,7 @@ mod matrix3x3_rotation_tests {
         let expected = unit_z;
         let result = look_at * direction.normalize();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2252,7 +2252,7 @@ mod matrix3x3_rotation_tests {
         let expected = minus_unit_z;
         let result = look_at * direction.normalize();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -2267,14 +2267,14 @@ mod matrix3x3_rotation_tests {
         );
         let result = Matrix3x3::rotation_between(&unit_x, &unit_y).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod matrix3x3_reflection_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Point2,
@@ -2378,7 +2378,7 @@ mod matrix3x3_reflection_tests {
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     /// Construct a reflection matrix test case for reflection about the 
@@ -2399,7 +2399,7 @@ mod matrix3x3_reflection_tests {
         );
         let result = Matrix3x3::from_affine_reflection(&normal, &bias);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
@@ -2414,7 +2414,7 @@ mod matrix3x3_reflection_tests {
         let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
         let result = matrix * vector;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     /// Construct an affine reflection matrix about the line `y = (1/2)x + 2`.
@@ -2429,7 +2429,7 @@ mod matrix3x3_reflection_tests {
         let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
         let result = matrix * vector;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -2846,7 +2846,7 @@ mod matrix3x3_shear_tests {
 /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
 #[cfg(test)]
 mod matrix3x3_shear_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Unit,
@@ -2964,8 +2964,8 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let tan_rotation_angle_z_xy = 1_f64;
         let rotation_angle_z_xy = Radians::atan2(tan_rotation_angle_z_xy, 1_f64);
 
-        assert_relative_eq!(rotation_angle_z_xy.cos(), 1_f64 / f64::sqrt(2_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_z_xy.sin(), 1_f64 / f64::sqrt(2_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_z_xy.cos(), 1_f64 / f64::sqrt(2_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_z_xy.sin(), 1_f64 / f64::sqrt(2_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2973,8 +2973,8 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let tan_rotation_y_zx = -f64::sqrt(2_f64 / 3_f64);
         let rotation_angle_y_zx = Radians::atan2(tan_rotation_y_zx, 1_f64);
 
-        assert_relative_eq!(rotation_angle_y_zx.cos(), f64::sqrt(3_f64 / 5_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_y_zx.sin(), -f64::sqrt(2_f64 / 5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_y_zx.cos(), f64::sqrt(3_f64 / 5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_y_zx.sin(), -f64::sqrt(2_f64 / 5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2983,7 +2983,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = rotation_z_xy();
         let result = Matrix3x3::from_angle_z(rotation_angle_z_xy);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2993,7 +2993,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let result_inv = Matrix3x3::from_angle_z(rotation_angle_z_xy);
         let result = result_inv.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3002,7 +3002,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = rotation_y_zx();
         let result = Matrix3x3::from_angle_y(rotation_angle_y_zx);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3012,7 +3012,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let result_inv = Matrix3x3::from_angle_y(rotation_angle_y_zx);
         let result = result_inv.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3022,7 +3022,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = rotation();
         let result = rotation_z_xy * rotation_y_zx;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3032,7 +3032,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = rotation_inv();
         let result = rotation_y_zx_inv * rotation_z_xy_inv;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3042,7 +3042,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = Vector3::unit_x();
         let result = rotation_inv * direction.into_inner();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3052,7 +3052,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = Vector3::unit_z();
         let result = rotation_inv * normal.into_inner();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3114,14 +3114,14 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3217,14 +3217,14 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3254,7 +3254,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         };
         let result = Matrix3x3::from_shear(shear_factor, &direction, &normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3268,7 +3268,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = Matrix3x3::from_shear(shear_factor, &direction, &normal);
         let result = rotation * shear_matrix_xz * rotation_inv;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3328,15 +3328,15 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
-        assert_relative_eq!(result[8], expected[8], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[8], expected[8], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -3644,7 +3644,7 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
 #[cfg(test)]
 mod matrix3x3_affine_shear_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Point2,
@@ -3720,8 +3720,8 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_angle() {
         let rotation_angle = rotation_angle();
 
-        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle.cos(), 2_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle.sin(), 1_f64 / f64::sqrt(5_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3730,7 +3730,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = rotation();
         let result = Matrix3x3::from_affine_angle(rotation_angle);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3753,10 +3753,10 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3767,9 +3767,9 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let rotated_origin = Vector3::new(f64::sqrt(5_f64), 0_f64, 1_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
 
-        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], epsilon = 1e-10);
-        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], epsilon = 1e-10);
-        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64, epsilon = 1e-10);
+        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result_rotated_translated_origin[2], 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3783,7 +3783,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
             translation_inv * rotation_inv * _direction
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3797,7 +3797,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
             translation_inv * rotation_inv * _normal
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3838,10 +3838,10 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3858,7 +3858,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         );
         let result = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3875,7 +3875,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = Matrix3x3::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let result = (translation * rotation) * shear_matrix_xy * (rotation_inv * translation_inv);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3897,18 +3897,18 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
     
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod matrix4x4_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Vector3,
@@ -4235,7 +4235,7 @@ mod matrix4x4_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4403,7 +4403,7 @@ mod matrix4x4_tests {
         );
         let result = a_matrix * b_matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4597,7 +4597,7 @@ mod matrix4x4_tests {
         );
         let result = matrix.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4679,7 +4679,7 @@ mod matrix4x4_tests {
             -0.0007967195911958656_f64, 0.01365031989418242_f64,  0.0001408581712825875_f64, -0.002040325515611523_f64,
         );
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4694,7 +4694,7 @@ mod matrix4x4_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix4x4::identity();
 
-        assert_relative_eq!(matrix * matrix_inverse, identity, epsilon = 1e-8);
+        assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4725,7 +4725,7 @@ mod matrix4x4_tests {
         let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
         let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
 
-        assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, epsilon = 1e-8);
+        assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4740,7 +4740,7 @@ mod matrix4x4_tests {
         let matrix_inverse = matrix.inverse().unwrap();
         let identity = Matrix4x4::identity();
 
-        assert_relative_eq!(matrix_inverse * matrix, identity, epsilon = 1e-8);
+        assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4755,7 +4755,7 @@ mod matrix4x4_tests {
         let result = matrix.inverse().unwrap().inverse().unwrap();
         let expected = matrix;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4900,7 +4900,7 @@ mod matrix4x4_tests {
 
 #[cfg(test)]
 mod matrix4x4_projection_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::Matrix4x4;
     use cglinalg_trigonometry::Degrees;
 
@@ -4940,7 +4940,7 @@ mod matrix4x4_projection_tests {
         );
         let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -4967,7 +4967,7 @@ mod matrix4x4_projection_tests {
 
 #[cfg(test)]
 mod matrix4x4_rotation_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Normed,
@@ -4991,7 +4991,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_z.extend(0_f64);
         let result = matrix * unit_y.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5003,7 +5003,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_x.extend(0_f64);
         let result = matrix * unit_z.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5015,7 +5015,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_y.extend(0_f64);
         let result = matrix * unit_x.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5027,7 +5027,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_z.extend(0_f64);
         let result = matrix * unit_y.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5039,7 +5039,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_x.extend(0_f64);
         let result = matrix * unit_z.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5051,7 +5051,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_y.extend(0_f64);
         let result = matrix * unit_x.extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5063,7 +5063,7 @@ mod matrix4x4_rotation_tests {
         let expected = Vector4::new(1_f64, 1_f64, 1_f64, 0_f64);
         let result = matrix * vector;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5077,7 +5077,7 @@ mod matrix4x4_rotation_tests {
         let expected = minus_unit_z.extend(0_f64);
         let result = look_at * direction.normalize().extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5091,7 +5091,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_z.extend(0_f64);
         let result = look_at * direction.normalize().extend(0_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5153,7 +5153,7 @@ mod matrix4x4_rotation_tests {
         let expected = unit_z;
         let result = look_to * direction.normalize().to_homogeneous();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5166,7 +5166,7 @@ mod matrix4x4_rotation_tests {
         let expected = minus_unit_z;
         let result = look_to * (-direction).normalize().to_homogeneous();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 }
 
@@ -6136,7 +6136,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
 #[cfg(test)]
 mod matrix4x4_affine_shear_noncoordinate_plane_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -6310,16 +6310,16 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     fn test_rotation_angle_x_yz() {
         let rotation_angle_x_yz = rotation_angle_x_yz();
 
-        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_x_yz.cos(), 3_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_x_yz.sin(), 2_f64 / f64::sqrt(13_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
     fn test_rotation_angle_z_xy() {
         let rotation_angle_z_xy = rotation_angle_z_xy();
 
-        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64), epsilon = 1e-10);
-        assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), epsilon = 1e-10);
+        assert_relative_eq!(rotation_angle_z_xy.cos(), f64::sqrt(4_f64 / 17_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(rotation_angle_z_xy.sin(), f64::sqrt(13_f64 / 17_f64), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6337,7 +6337,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let expected = rotation_x_yz();
         let result = Matrix4x4::from_affine_angle_x(rotation_angle_x_yz);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6346,7 +6346,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let expected = rotation_x_yz_inv();
         let result = Matrix4x4::from_affine_angle_x(-rotation_angle_x_yz);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6355,7 +6355,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let expected = rotation_z_xy();
         let result = Matrix4x4::from_affine_angle_z(rotation_angle_z_xy);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6364,7 +6364,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let expected = rotation_z_xy_inv();
         let result = Matrix4x4::from_affine_angle_z(-rotation_angle_z_xy);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6374,7 +6374,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let rotation_z_xy = rotation_z_xy();
         let result = rotation_x_yz * rotation_z_xy;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6383,7 +6383,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let rotation = rotation();
         let result = rotation.inverse().unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6399,7 +6399,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             Point3::new(_origin_xz[0], _origin_xz[1], _origin_xz[2])
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6412,7 +6412,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             rotation_inv * _direction
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6425,7 +6425,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             rotation_inv * _normal
         };
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -6495,14 +6495,14 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices_xz.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], vertices[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], vertices[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], vertices[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], vertices[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], vertices[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], vertices[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], vertices[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], vertices[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], vertices[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], vertices[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], vertices[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], vertices[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], vertices[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], vertices[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], vertices[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], vertices[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -6615,14 +6615,14 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-        assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-        assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-        assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-        assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-        assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-        assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-        assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -6662,7 +6662,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         };
         let result = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6679,7 +6679,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         let expected = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
         let result = (translation * rotation) * shear_matrix_xz * (rotation_inv * translation_inv);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6700,7 +6700,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
 
 #[cfg(test)]
 mod matrix4x4_trace_determinant_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -6776,7 +6776,7 @@ mod matrix4x4_trace_determinant_tests {
         let direction = direction();
         let normal = normal();
 
-        assert_relative_eq!(direction.dot(&normal), 0_f64, epsilon = 1e-10);
+        assert_relative_eq!(direction.dot(&normal), 0_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6784,7 +6784,7 @@ mod matrix4x4_trace_determinant_tests {
         let expected = expected_matrix();
         let result = shear_matrix();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6793,7 +6793,7 @@ mod matrix4x4_trace_determinant_tests {
         let expected = 4_f64;
         let result = matrix.trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6802,7 +6802,7 @@ mod matrix4x4_trace_determinant_tests {
         let expected = 4_f64;
         let result = matrix.trace();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
@@ -6813,7 +6813,7 @@ mod matrix4x4_trace_determinant_tests {
         let expected = 1.25_f64;
         let result = matrix.determinant();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
@@ -6824,7 +6824,7 @@ mod matrix4x4_trace_determinant_tests {
         let expected = 0.75_f64;
         let result = matrix.determinant();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 

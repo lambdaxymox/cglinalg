@@ -49,14 +49,12 @@ where
     ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// // Normal to the plane of reflection.
     /// let normal = Unit::from_value(Vector2::unit_x());
@@ -68,7 +66,7 @@ where
     ///
     /// assert_eq!(result, expected);
     ///
-    /// // In two dimensions, we can just as well use the opposite normal.
+    /// // We can just as well use the opposite normal.
     /// let opposite_normal = Unit::from_value(-Vector2::unit_x());
     /// let opposite_reflection = Reflection2::from_normal_bias(&opposite_normal, &bias);
     /// let opposite_result = opposite_reflection.apply_vector(&vector);
@@ -80,17 +78,13 @@ where
     ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
     /// let bias = Point3::origin();
@@ -99,7 +93,7 @@ where
     /// let expected = Vector3::new(-13_f64 / 3_f64, 23_f64 / 3_f64, -7_f64 / 3_f64);
     /// let result = reflection.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_normal_bias(normal: &Unit<Vector<S, N>>, bias: &Point<S, N>) -> Self {
@@ -118,14 +112,12 @@ where
     ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// // Normal to the plane of reflection.
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::unit_x());
@@ -139,14 +131,12 @@ where
     ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
     /// let bias = Point3::origin();
@@ -169,14 +159,12 @@ where
     ///
     /// A reflection about the **y-axis** using the origin as the bias.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// // Normal to the plane of reflection.
     /// let normal = Vector2::unit_x();
@@ -191,14 +179,12 @@ where
     ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal = Vector3::new(1_f64, 1_f64, 1_f64);
     /// let unit_normal = Unit::from_value(normal);
@@ -283,21 +269,17 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
     ///     -1_f64 / 2_f64,
-    ///      1_f64
+    ///      1_f64,
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -305,20 +287,18 @@ where
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
     /// let result = reflection.apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let bias = Point3::origin();
@@ -402,21 +382,17 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
     ///     -1_f64 / 2_f64,
-    ///      1_f64
+    ///      1_f64,
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -424,20 +400,18 @@ where
     /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
     /// let result = reflection.apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let bias = Point3::origin();
@@ -463,21 +437,17 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
     ///     -1_f64 / 2_f64,
-    ///      1_f64
+    ///      1_f64,
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -485,20 +455,18 @@ where
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
     /// let result = reflection.inverse_apply_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let bias = Point3::origin();
@@ -520,21 +488,17 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let normal: Unit<Vector2<f64>> = Unit::from_value(Vector2::new(
     ///     -1_f64 / 2_f64,
-    ///      1_f64
+    ///      1_f64,
     /// ));
     /// let bias = Point2::new(0_f64, 1_f64);
     /// let reflection = Reflection2::from_normal_bias(&normal, &bias);
@@ -542,20 +506,18 @@ where
     /// let expected = Point2::new(3_f64 / 5_f64, 9_f64 / 5_f64);
     /// let result = reflection.inverse_apply_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
     /// let bias = Point3::origin();
@@ -595,14 +557,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let bias = Point2::new(-2_f64, 3_f64);
     /// let normal = Unit::from_value(Vector2::unit_x());
@@ -620,14 +580,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let bias = Point3::new(-2_f64, 3_f64, -4_f64);
     /// let normal = Unit::from_value(Vector3::unit_z());
@@ -655,7 +613,7 @@ where
         write!(formatter, "Reflection{} [normal = {}, bias = {}]", N, self.normal, self.bias)
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Reflection<S, N>
 where
     S: SimdScalarFloat,
@@ -708,7 +666,7 @@ where
             && Point::ulps_eq(&self.bias, &other.bias, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Reflection<S, N>
 where
     S: SimdScalarFloat,
@@ -816,18 +774,14 @@ where
     ///
     /// A reflection about the plane `y == 2 * x`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection2;
     /// #
     /// let normal = Unit::from_value(Vector2::new(-2_f64, 1_f64));
     /// let bias = Point2::origin();
@@ -835,11 +789,11 @@ where
     /// let expected = Matrix3x3::new(
     ///     -3_f64 / 5_f64, 4_f64 / 5_f64, 0_f64,
     ///      4_f64 / 5_f64, 3_f64 / 5_f64, 0_f64,
-    ///      0_f64,         0_f64,         1_f64
+    ///      0_f64,         0_f64,         1_f64,
     /// );
     /// let result = reflection.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
@@ -854,18 +808,16 @@ where
     ///
     /// A reflection about the plane `y == 2 * x`.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Point2,
+    /// #     Unit,
+    /// #     Vector2,
+    /// # };
     /// # use cglinalg_transform::{
     /// #     Reflection2,
     /// #     Transform2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector2,
-    /// #     Point2,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::new(-2_f64, 1_f64));
@@ -874,11 +826,11 @@ where
     /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
     ///     -3_f64 / 5_f64, 4_f64 / 5_f64, 0_f64,
     ///      4_f64 / 5_f64, 3_f64 / 5_f64, 0_f64,
-    ///      0_f64,         0_f64,         1_f64
+    ///      0_f64,         0_f64,         1_f64,
     /// ));
     /// let result = reflection.to_transform();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform2<S> {
@@ -917,18 +869,14 @@ where
     ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Reflection3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Reflection3;
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
     /// let bias = Point3::origin();
@@ -937,11 +885,11 @@ where
     ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
     ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
     ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
-    ///      0_f64,          0_f64,          0_f64,         1_f64
+    ///      0_f64,          0_f64,          0_f64,         1_f64,
     /// );
     /// let result = reflection.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
@@ -956,18 +904,16 @@ where
     ///
     /// A reflection about the plane `x + y == -z`.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Point3,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg_transform::{
     /// #     Reflection3,
     /// #     Transform3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// #     Vector3,
-    /// #     Point3,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::new(1_f64, 1_f64, 1_f64));
@@ -977,11 +923,11 @@ where
     ///      1_f64 / 3_f64, -2_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
     ///     -2_f64 / 3_f64,  1_f64 / 3_f64, -2_f64 / 3_f64, 0_f64,
     ///     -2_f64 / 3_f64, -2_f64 / 3_f64,  1_f64 / 3_f64, 0_f64,
-    ///      0_f64,          0_f64,          0_f64,         1_f64
+    ///      0_f64,          0_f64,          0_f64,         1_f64,
     /// ));
     /// let result = reflection.to_transform();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-15);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
@@ -1006,5 +952,273 @@ where
     #[inline]
     fn from(transformation: &Reflection3<S>) -> Matrix4x4<S> {
         transformation.to_affine_matrix()
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ReflectionTol<S, const N: usize> {
+    normal: Vector<S, N>,
+    bias: Vector<S, N>,
+}
+
+impl<S, const N: usize> ReflectionTol<S, N> {
+    #[inline]
+    pub const fn from_parts(normal: Vector<S, N>, bias: Vector<S, N>) -> Self {
+        Self { normal, bias, }
+    }
+} 
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ReflectionDiff<S, const N: usize> {
+    normal: Vector<S, N>,
+    bias: Vector<S, N>,
+}
+
+impl<S, const N: usize> ReflectionDiff<S, N> {
+    #[inline]
+    const fn from_parts(normal: Vector<S, N>, bias: Vector<S, N>) -> Self {
+        Self { normal, bias, }
+    }
+} 
+
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ReflectionTol<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.normal, &other.normal, &max_abs_diff.normal)
+            && approx_cmp::AbsDiffEq::abs_diff_eq(&self.bias, &other.bias, &max_abs_diff.bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.normal, &other.normal, max_abs_diff)
+            && approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.bias, &other.bias, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ReflectionDiff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ReflectionTol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let normal = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.normal, &other.normal);
+        let bias = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.bias, &other.bias);
+
+        ReflectionDiff::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let normal = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.normal, &other.normal, &max_abs_diff.normal);
+        let bias = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.bias, &other.bias, &max_abs_diff.bias);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ReflectionTol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let normal = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.normal, &other.normal, max_abs_diff);
+        let bias = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.bias, &other.bias, max_abs_diff);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ReflectionTol<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.normal, &other.normal, &max_abs_diff.normal, &max_relative.normal)
+            && approx_cmp::RelativeEq::relative_eq(&self.bias, &other.bias, &max_abs_diff.bias, &max_relative.bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.normal, &other.normal, max_abs_diff, max_relative)
+            && approx_cmp::RelativeAllEq::relative_all_eq(&self.bias, &other.bias, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ReflectionDiff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ReflectionTol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let normal = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.normal, &other.normal);
+        let bias = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.bias, &other.bias);
+
+        ReflectionDiff::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let normal = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.normal, &other.normal, &max_abs_diff.normal);
+        let bias = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.bias, &other.bias, &max_abs_diff.bias);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let normal = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.normal, &other.normal, &max_relative.normal);
+        let bias = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.bias, &other.bias, &max_relative.bias);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ReflectionTol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let normal = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.normal, &other.normal, max_abs_diff);
+        let bias = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.bias, &other.bias, max_abs_diff);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let normal = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.normal, &other.normal, max_relative);
+        let bias = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.bias, &other.bias, max_relative);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ReflectionTol<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = ReflectionTol<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.normal, &other.normal, &max_abs_diff.normal, &max_ulps.normal)
+            && approx_cmp::UlpsEq::ulps_eq(&self.bias, &other.bias, &max_abs_diff.bias, &max_ulps.bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.normal, &other.normal, max_abs_diff, max_ulps)
+            && approx_cmp::UlpsAllEq::ulps_all_eq(&self.bias, &other.bias, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ReflectionDiff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = ReflectionDiff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = ReflectionTol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = ReflectionTol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let normal = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.normal, &other.normal);
+        let bias = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.bias, &other.bias);
+
+        ReflectionDiff::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let normal = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.normal, &other.normal);
+        let bias = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.bias, &other.bias);
+
+        ReflectionDiff::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let normal = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.normal, &other.normal, &max_abs_diff.normal);
+        let bias = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.bias, &other.bias, &max_abs_diff.bias);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let normal = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.normal, &other.normal, &max_ulps.normal);
+        let bias = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.bias, &other.bias, &max_ulps.bias);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Reflection<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ReflectionTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = ReflectionTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let normal = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.normal, &other.normal, max_abs_diff);
+        let bias = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.bias, &other.bias, max_abs_diff);
+
+        ReflectionTol::from_parts(normal, bias)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let normal = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.normal, &other.normal, max_ulps);
+        let bias = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.bias, &other.bias, max_ulps);
+
+        ReflectionTol::from_parts(normal, bias)
     }
 }

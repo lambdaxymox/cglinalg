@@ -11,9 +11,6 @@ use core::ops;
 /// # Example
 ///
 /// ```
-/// # use cglinalg_numeric::{
-/// #     
-/// # };
 /// # use core::i16;
 /// # use core::i32;
 /// #
@@ -42,9 +39,6 @@ where
 /// # Example
 ///
 /// ```
-/// # use cglinalg_numeric::{
-/// #     
-/// # };
 /// # use core::i16;
 /// # use core::i32;
 /// # use core::i64;
@@ -73,8 +67,8 @@ where
 
 /// A data type with this trait can be cast to between numeric types.
 ///
-/// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of [`cglinalg`]
-/// from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
+/// This trait is a facade on [`num_traits::NumCast`] to uncouple the rest of 
+/// [`cglinalg`] from [`num_traits`] outside of the [`cglinalg_numeric`] crate.
 pub trait SimdCast
 where
     Self: num_traits::NumCast,
@@ -115,9 +109,7 @@ where
     ///
     /// Examples of using `is_sign_positive` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::f64;
     /// #
     /// let nan = f64::NAN;
@@ -133,9 +125,7 @@ where
     ///
     /// Examples of using `is_sign_positive` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::i32;
     /// #
     /// let value = 7_i32;
@@ -152,9 +142,7 @@ where
     ///
     /// Examples of using `is_sign_negative` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::f64;
     /// #
     /// let nan = f64::NAN;
@@ -170,9 +158,7 @@ where
     ///
     /// Examples of using `is_sign_negative` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::i32;
     /// #
     /// let value = 7_i32;
@@ -194,9 +180,7 @@ where
     ///
     /// Examples of using `copysign` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::f64;
     /// #
     /// let value = 3.5_f64;
@@ -213,9 +197,7 @@ where
     ///
     /// Examples of using `copysign` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::i32;
     /// #
     /// let value = 3_i32;
@@ -249,9 +231,7 @@ where
     ///
     /// Examples of using `signum` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::f64;
     /// #
     /// let value = 6.9_f64;
@@ -270,9 +250,7 @@ where
     ///
     /// Examples of using `signum` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::i32;
     /// #
     /// let value = 6_i32;
@@ -302,9 +280,7 @@ where
     ///
     /// Examples of using `abs` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::f64;
     /// #
     /// let value1 = 6.9_f64;
@@ -318,9 +294,7 @@ where
     ///
     /// Examples of using `abs` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarSigned,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarSigned;
     /// # use core::i32;
     /// #
     /// let value1 = 6_i32;
@@ -342,9 +316,7 @@ where
     ///
     /// Examples of using `max` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarOrd::max(1_f64, 2_f64), 2_f64);
@@ -353,9 +325,7 @@ where
     ///
     /// Examples of using `max` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # // use core::i32;
     /// #
     /// assert_eq!(SimdScalarOrd::max(1_i32, 2_i32), 2_i32);
@@ -369,9 +339,7 @@ where
     ///
     /// Examples of using `min` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarOrd::min(1_f64, 2_f64), 1_f64);
@@ -380,9 +348,7 @@ where
     ///
     /// Examples of using `min` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # use core::i32;
     /// #
     /// assert_eq!(SimdScalarOrd::min(1_i32, 2_i32), 1_i32);
@@ -399,9 +365,7 @@ where
     ///
     /// Examples of using `clamp` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarOrd::clamp(-3_f64, -2_f64, 1_f64), -2_f64);
@@ -412,9 +376,7 @@ where
     ///
     /// Examples of using `clamp` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarOrd,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarOrd;
     /// # use core::i32;
     /// #
     /// assert_eq!(SimdScalarOrd::clamp(-3_i32, -2_i32, 1_i32), -2_i32);
@@ -436,9 +398,7 @@ where
     ///
     /// An example of using `min_value` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarBounded,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarBounded;
     /// # use core::f64;
     /// #
     /// let min_value_f64 = f64::min_value();
@@ -448,9 +408,7 @@ where
     ///
     /// An example of using `min_value` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarBounded,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarBounded;
     /// # use core::i32;
     /// #
     /// let min_value_i32 = i32::min_value();
@@ -465,9 +423,7 @@ where
     ///
     /// An example of using `max_value` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarBounded,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarBounded;
     /// # use core::f64;
     /// #
     /// let max_value_f64 = f64::max_value();
@@ -477,9 +433,7 @@ where
     ///
     /// An example of using `max_value` with integers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarBounded,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarBounded;
     /// # use core::i32;
     /// #
     /// let max_value_i32 = i32::max_value();
@@ -489,15 +443,39 @@ where
     fn max_value() -> Self;
 }
 
+pub trait SimdScalarCmp: approx_cmp::AbsDiffEq<Tolerance = Self>
+    + approx_cmp::AbsDiffAllEq<AllTolerance = Self>
+    + approx_cmp::AssertAbsDiffEq<DebugAbsDiff = Self, DebugTolerance = Self>
+    + approx_cmp::AssertAbsDiffAllEq<AllDebugTolerance = Self>
+    + approx_cmp::RelativeEq<Tolerance = Self>
+    + approx_cmp::RelativeAllEq<AllTolerance = Self>
+    + approx_cmp::AssertRelativeEq<DebugAbsDiff = Self, DebugTolerance = Self>
+    + approx_cmp::AssertRelativeAllEq<AllDebugTolerance = Self>
+    + approx_cmp::UlpsEq<
+        Tolerance = Self,
+        UlpsTolerance = Self::IntegerRepr,    
+    >
+    + approx_cmp::UlpsAllEq<
+        AllTolerance = Self,
+        AllUlpsTolerance = Self::IntegerRepr,
+    >
+    + approx_cmp::AssertUlpsEq<
+        DebugAbsDiff = Self,
+        DebugUlpsDiff = Option<Self::IntegerRepr>,
+        DebugTolerance = Self,
+        DebugUlpsTolerance = Self::IntegerRepr,
+    >
+    + approx_cmp::AssertUlpsAllEq<AllDebugTolerance = Self>
+{
+    type IntegerRepr: Copy + Clone + fmt::Debug;
+}
+
 /// A trait representing numbers that have the properties of finite precision
 /// floating point arithmetic.
-pub trait SimdScalarFloat:
-    SimdScalarSigned
+pub trait SimdScalarFloat: SimdScalarSigned
     + SimdScalarOrd
     + SimdScalarBounded
-    + approx::AbsDiffEq<Epsilon = Self>
-    + approx::RelativeEq<Epsilon = Self>
-    + approx::UlpsEq<Epsilon = Self>
+    + SimdScalarCmp
     + ops::Neg<Output = Self>
 {
     /// Return the largest integer less than or equal to `self`.
@@ -505,9 +483,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarFloat::floor(3.01_f64), 3_f64);
@@ -521,9 +497,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarFloat::ceil(3.01_f64), 4_f64);
@@ -537,9 +511,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarFloat::round(3.3_f64), 3_f64);
@@ -556,9 +528,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// assert_eq!(SimdScalarFloat::trunc(3.7_f64), 3_f64);
@@ -572,16 +542,12 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
-    /// assert_relative_eq!(SimdScalarFloat::fract(3.6_f64), 0.6_f64, epsilon = 1e-10);
-    /// assert_relative_eq!(SimdScalarFloat::fract(-3.6_f64), -0.6_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(SimdScalarFloat::fract(3.6_f64), 0.6_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(SimdScalarFloat::fract(-3.6_f64), -0.6_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn fract(self) -> Self;
 
@@ -600,19 +566,15 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let m = 10_f64;
     /// let a = 4_f64;
     /// let b = 60_f64;
     ///
-    /// assert_relative_eq!(m.mul_add(a, b), m * a + b, epsilon = 1e-10);
+    /// assert_relative_eq!(m.mul_add(a, b), m * a + b, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn mul_add(self, a: Self, b: Self) -> Self;
 
@@ -622,9 +584,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 3_f64;
@@ -641,9 +601,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 2_f64;
@@ -676,12 +634,8 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let pi = f64::pi();
@@ -690,8 +644,18 @@ pub trait SimdScalarFloat:
     /// let x2 = -3_f64;
     /// let y2 = 3_f64;
     ///
-    /// assert_relative_eq!(SimdScalarFloat::atan2(y1, x1), -pi / 4_f64, epsilon = 1e-10);
-    /// assert_relative_eq!(SimdScalarFloat::atan2(y2, x2), 3_f64 * pi / 4_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     SimdScalarFloat::atan2(y1, x1),
+    ///     -pi / 4_f64,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
+    /// assert_relative_eq!(
+    ///     SimdScalarFloat::atan2(y2, x2),
+    ///     3_f64 * pi / 4_f64,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     fn atan2(self, other: Self) -> Self;
 
@@ -700,20 +664,16 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = (f64::frac_1_sqrt_2(), f64::frac_1_sqrt_2());
     /// let result = SimdScalarFloat::sin_cos(pi_over_4);
     ///
-    /// assert_relative_eq!(result.0, expected.0, epsilon = 1e-10);
-    /// assert_relative_eq!(result.1, expected.1, epsilon = 1e-10);
+    /// assert_relative_eq!(result.0, expected.0, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result.1, expected.1, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn sin_cos(self) -> (Self, Self);
 
@@ -722,19 +682,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = f64::frac_1_sqrt_2();
     /// let result = SimdScalarFloat::sin(pi_over_4);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn sin(self) -> Self;
 
@@ -743,19 +699,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = f64::frac_1_sqrt_2();
     /// let result = SimdScalarFloat::cos(pi_over_4);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn cos(self) -> Self;
 
@@ -764,19 +716,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let pi_over_4 = f64::frac_pi_4();
     /// let expected = 1_f64;
     /// let result = SimdScalarFloat::tan(pi_over_4);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn tan(self) -> Self;
 
@@ -785,9 +733,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let sin_pi_over_2 = 1_f64;
@@ -803,9 +749,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let cos_pi_over_4 = f64::frac_1_sqrt_2();
@@ -821,9 +765,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let tan_pi_over_4 = 1_f64;
@@ -845,12 +787,8 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -858,7 +796,7 @@ pub trait SimdScalarFloat:
     /// let expected = 1_f64 / 2_f64;
     /// let result = SimdScalarFloat::sinh(SimdScalarFloat::ln(phi));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn sinh(self) -> Self;
 
@@ -873,12 +811,8 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -886,7 +820,7 @@ pub trait SimdScalarFloat:
     /// let expected = (1_f64 / 2_f64) * f64::sqrt(5_f64);
     /// let result = SimdScalarFloat::cosh(SimdScalarFloat::ln(phi));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn cosh(self) -> Self;
 
@@ -901,12 +835,8 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -914,7 +844,7 @@ pub trait SimdScalarFloat:
     /// let expected = (1_f64 / 5_f64) * f64::sqrt(5_f64);
     /// let result = SimdScalarFloat::tanh(SimdScalarFloat::ln(phi));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn tanh(self) -> Self;
 
@@ -923,19 +853,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 1_f64;
     /// let expected = 1_f64;
     /// let result = x.sinh().asinh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn asinh(self) -> Self;
 
@@ -944,19 +870,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 1_f64;
     /// let expected = 1_f64;
     /// let result = x.cosh().acosh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn acosh(self) -> Self;
 
@@ -965,19 +887,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let e = f64::e();
     /// let expected = e;
     /// let result = e.tanh().atanh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn atanh(self) -> Self;
 
@@ -986,12 +904,8 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// // Golden ratio.
@@ -1013,12 +927,8 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 27_f64;
@@ -1026,45 +936,37 @@ pub trait SimdScalarFloat:
     /// let expected = 3_f64;
     /// let result = value.log(base);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn log(self, base: Self) -> Self;
 
     /// Compute the logarithm of a number `self` with respect to a base of 2.
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 32_f64;
     /// let expected = 5_f64;
     /// let result = value.log2();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn log2(self) -> Self;
 
     /// Compute the logarithm of a number `self` with respect to a base of 10.
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 100_f64;
     /// let expected = 2_f64;
     /// let result = value.log10();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn log10(self) -> Self;
 
@@ -1073,19 +975,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = SimdScalarFloat::exp(1_f64);
     /// let expected = 1_f64;
     /// let result = value.ln();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn ln(self) -> Self;
 
@@ -1095,19 +993,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #      SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = f64::e() - 1_f64;
     /// let expected = 1_f64;
     /// let result = value.ln_1p();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn ln_1p(self) -> Self;
 
@@ -1118,9 +1012,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// #
     /// let positive = 4_f64;
     /// let negative = -4_f64;
@@ -1137,9 +1029,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// #
     /// let value = 8_f64;
     ///
@@ -1159,19 +1049,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let expected = 1_f64;
     /// let e = SimdScalarFloat::exp(1_f64);
     /// let result = SimdScalarFloat::ln(e);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn exp(self) -> Self;
 
@@ -1185,19 +1071,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 2_f64;
     /// let expected = 4_f64;
     /// let result = SimdScalarFloat::exp2(value);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn exp2(self) -> Self;
 
@@ -1207,19 +1089,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 7_f64;
     /// let expected = 6_f64;
     /// let result = SimdScalarFloat::exp_m1(SimdScalarFloat::ln(value));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn exp_m1(self) -> Self;
 
@@ -1228,19 +1106,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 2_f64;
     /// let expected = x * x;
     /// let result = x.powi(2_i32);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn powi(self, n: i32) -> Self;
 
@@ -1249,19 +1123,15 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let x = 2_f64;
     /// let expected = x * x;
     /// let result = x.powf(2_f64);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     fn powf(self, n: Self) -> Self;
 
@@ -1270,9 +1140,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 7_f64;
@@ -1294,9 +1162,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 7_f64;
@@ -1317,9 +1183,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let value = 7_f64;
@@ -1341,9 +1205,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let min_positive_value = f64::MIN_POSITIVE;
@@ -1370,9 +1232,7 @@ pub trait SimdScalarFloat:
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let min_positive_value = f64::MIN_POSITIVE;
@@ -1402,9 +1262,7 @@ pub trait SimdScalarFloat:
     ///
     /// An example of using `min_positive` with floating point numbers.
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let min_positive = f64::min_positive_value();
@@ -1469,9 +1327,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// #
     /// let nan = f64::nan();
     ///
@@ -1532,9 +1388,7 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
     /// # use core::f64;
     /// #
     /// let neg_infinity = f64::neg_infinity();
@@ -1555,14 +1409,32 @@ pub trait SimdScalarFloat:
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_numeric::{
-    /// #     SimdScalarFloat,
-    /// # };
+    /// # use cglinalg_numeric::SimdScalarFloat;
+    /// # use core::f32;
     /// # use core::f64;
     /// #
+    /// assert_eq!(f32::machine_epsilon(), f32::EPSILON);
     /// assert_eq!(f64::machine_epsilon(), f64::EPSILON);
     /// ```
     fn machine_epsilon() -> Self;
+
+    /// Returns the default ulps tolerance for a floating point data 
+    /// type.
+    /// 
+    /// The ulps tolerance is an upper bound on the ulps approximation error
+    /// for two floating point numbers to be considered equal.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_numeric::SimdScalarFloat;
+    /// # use core::f32;
+    /// # use core::f64;
+    /// #
+    /// assert_eq!(f32::default_ulps(), 4_u32);
+    /// assert_eq!(f64::default_ulps(), 4_u64);
+    /// ```
+    fn default_ulps() -> <Self as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
 }
 
 impl<T> SimdScalar for T where
@@ -1721,7 +1593,11 @@ impl_simd_scalar_bounded!(f64, f64::MIN, f64::MAX);
 
 
 macro_rules! impl_simd_scalar_float {
-    ($($ScalarType:ty),* $(,)*) => {$(
+    ($ScalarType:ty, $IntegerType:ty) => {
+        impl SimdScalarCmp for $ScalarType {
+            type IntegerRepr = $IntegerType;
+        }
+
         impl SimdScalarFloat for $ScalarType {
             #[inline]
             fn floor(self) -> Self {
@@ -2032,8 +1908,14 @@ macro_rules! impl_simd_scalar_float {
             fn machine_epsilon() -> Self {
                 num_traits::Float::epsilon()
             }
+
+            #[inline]
+            fn default_ulps() -> Self::IntegerRepr {
+                4
+            }
         }
-    )*}
+    }
 }
 
-impl_simd_scalar_float!(f32, f64);
+impl_simd_scalar_float!(f32, u32);
+impl_simd_scalar_float!(f64, u64);

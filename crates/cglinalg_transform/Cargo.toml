@@ -42,9 +42,10 @@ std = []
 
 [dependencies]
 
-[dependencies.approx]
-version = "0.5.1"
-default-features = false
+[dependencies.approx_cmp]
+git = "https://github.com/lambdaxymox/approx_cmp/"
+version = "1.0.0"
+features = ["core"]
 
 [dependencies.cglinalg_numeric]
 path = "../cglinalg_numeric"

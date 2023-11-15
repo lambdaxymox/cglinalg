@@ -28,7 +28,7 @@ use crate::{
     impl_coords,
     impl_coords_deref,
 };
-use approx::{
+use approx_cmp::{
     ulps_eq,
     ulps_ne,
 };
@@ -367,9 +367,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,  
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let fill_value = 3_i32;
     /// let expected = Matrix3x3::new(
@@ -452,21 +450,19 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
-    ///     13_i32, 14_i32, 15_i32, 16_i32
+    ///     13_i32, 14_i32, 15_i32, 16_i32,
     /// );
     /// let expected = Matrix4x4::new(
     ///     2_f64,  4_f64,  6_f64,  8_f64,
     ///     10_f64, 12_f64, 14_f64, 16_f64,
     ///     18_f64, 20_f64, 22_f64, 24_f64,
-    ///     26_f64, 28_f64, 30_f64, 32_f64
+    ///     26_f64, 28_f64, 30_f64, 32_f64,
     /// );
     /// let result = matrix.map(|comp| (2 * comp) as f64);
     ///
@@ -503,7 +499,7 @@ where
     /// let matrix = Matrix3x3::new(
     ///     1_i32, 2_i32, 3_i32,
     ///     4_i32, 5_i32, 6_i32,
-    ///     7_i32, 8_i32, 9_i32
+    ///     7_i32, 8_i32, 9_i32,
     /// );
     /// let expected_0 = Vector3::new(1_i32, 4_i32, 7_i32);
     /// let expected_1 = Vector3::new(2_i32, 5_i32, 8_i32);
@@ -539,7 +535,7 @@ where
     /// let matrix = Matrix3x3::new(
     ///     1_i32, 2_i32, 3_i32,
     ///     4_i32, 5_i32, 6_i32,
-    ///     7_i32, 8_i32, 9_i32
+    ///     7_i32, 8_i32, 9_i32,
     /// );
     /// let expected_0 = Vector3::new(1_i32, 2_i32, 3_i32);
     /// let expected_1 = Vector3::new(4_i32, 5_i32, 6_i32);
@@ -559,19 +555,17 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let mut result = Matrix3x3::new(
     ///     1_i32, 2_i32, 3_i32,
     ///     1_i32, 2_i32, 3_i32,
-    ///     1_i32, 2_i32, 3_i32
+    ///     1_i32, 2_i32, 3_i32,
     /// );
     /// let expected = Matrix3x3::new(
     ///     3_i32, 2_i32, 1_i32,
     ///     3_i32, 2_i32, 1_i32,
-    ///     3_i32, 2_i32, 1_i32
+    ///     3_i32, 2_i32, 1_i32,
     /// );
     /// result.swap_rows(0, 2);
     ///
@@ -590,22 +584,20 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x4,
-    /// # };
+    /// # use cglinalg_core::Matrix3x4;
     /// #
     /// let mut result = Matrix3x4::new(
     ///     1_i32, 1_i32, 1_i32,
     ///     2_i32, 2_i32, 2_i32,
     ///     3_i32, 3_i32, 3_i32,
-    ///     4_i32, 4_i32, 4_i32
+    ///     4_i32, 4_i32, 4_i32,
     ///
     /// );
     /// let expected = Matrix3x4::new(
     ///     2_i32, 2_i32, 2_i32,
     ///     4_i32, 4_i32, 4_i32,
     ///     3_i32, 3_i32, 3_i32,
-    ///     1_i32, 1_i32, 1_i32
+    ///     1_i32, 1_i32, 1_i32,
     /// );
     /// result.swap_columns(0, 1);
     /// result.swap_columns(1, 3);
@@ -624,21 +616,19 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let mut result = Matrix4x4::new(
     ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
-    ///     13_i32, 14_i32, 15_i32, 16_i32
+    ///     13_i32, 14_i32, 15_i32, 16_i32,
     /// );
     /// let expected = Matrix4x4::new(
     ///     1_i32, 2_i32,  3_i32,  13_i32,
     ///     5_i32, 6_i32,  7_i32,  8_i32,
     ///     9_i32, 10_i32, 11_i32, 12_i32,
-    ///     4_i32, 14_i32, 15_i32, 16_i32
+    ///     4_i32, 14_i32, 15_i32, 16_i32,
     /// );
     /// result.swap((0, 3), (3, 0));
     ///
@@ -661,9 +651,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,   
-    /// # };
+    /// # use cglinalg_core::Matrix2x2;
     /// #
     /// let matrix: Matrix2x2<i32> = Matrix2x2::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected: Option<Matrix2x2<f64>> = Some(Matrix2x2::new(1_f64, 2_f64, 3_f64, 4_f64));
@@ -718,11 +706,11 @@ where
     ///     1_i32, 1_i32,
     ///     2_i32, 2_i32,
     ///     3_i32, 3_i32,
-    ///     4_i32, 4_i32
+    ///     4_i32, 4_i32,
     /// );
     /// let expected = Matrix4x2::new(
     ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
     /// );
     /// let result = matrix.transpose();
     ///
@@ -753,9 +741,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
     ///
@@ -773,9 +759,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::zero();
     ///
@@ -806,24 +790,22 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let m1 = Matrix3x3::new(
     ///     0_f64, 1_f64, 2_f64,
     ///     3_f64, 4_f64, 5_f64,
-    ///     6_f64, 7_f64, 8_f64
+    ///     6_f64, 7_f64, 8_f64,
     /// );
     /// let m2 = Matrix3x3::new(
     ///     9_f64,  10_f64, 11_f64,
     ///     12_f64, 13_f64, 14_f64,
-    ///     15_f64, 16_f64, 17_f64
+    ///     15_f64, 16_f64, 17_f64,
     /// );
     /// let expected = Matrix3x3::new(
     ///     0_f64,  10_f64,  22_f64,
     ///     36_f64, 52_f64,  70_f64,
-    ///     90_f64, 112_f64, 136_f64
+    ///     90_f64, 112_f64, 136_f64,
     /// );
     /// let result = m1.component_mul(&m2);
     ///
@@ -847,24 +829,22 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let mut result = Matrix3x3::new(
     ///     0_f64, 1_f64, 2_f64,
     ///     3_f64, 4_f64, 5_f64,
-    ///     6_f64, 7_f64, 8_f64
+    ///     6_f64, 7_f64, 8_f64,
     /// );
     /// let other = Matrix3x3::new(
     ///     9_f64,  10_f64, 11_f64,
     ///     12_f64, 13_f64, 14_f64,
-    ///     15_f64, 16_f64, 17_f64
+    ///     15_f64, 16_f64, 17_f64,
     /// );
     /// let expected = Matrix3x3::new(
     ///     0_f64,  10_f64,  22_f64,
     ///     36_f64, 52_f64,  70_f64,
-    ///     90_f64, 112_f64, 136_f64
+    ///     90_f64, 112_f64, 136_f64,
     /// );
     /// result.component_mul_assign(&other);
     ///
@@ -891,9 +871,7 @@ where
     ///
     /// An example involving integer scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x3,
-    /// # };
+    /// # use cglinalg_core::Matrix2x3;
     /// #
     /// let matrix1 = Matrix2x3::new(
     ///     2_i32,  1_i32,
@@ -903,7 +881,7 @@ where
     /// let matrix2 = Matrix2x3::new(
     ///      8_i32,  4_i32,
     ///     -3_i32,  1_i32,
-    ///      2_i32, -5_i32
+    ///      2_i32, -5_i32,
     /// );
     /// let expected = 21_i32;
     /// let result = Matrix2x3::dot(&matrix1, &matrix2);
@@ -947,15 +925,15 @@ where
     /// #
     /// let matrix1 = Matrix3x2::new(
     ///     1_i32, 3_i32, 5_i32,
-    ///     2_i32, 4_i32, 6_i32
+    ///     2_i32, 4_i32, 6_i32,
     /// );
     /// let matrix2 = Matrix3x2::new(
     ///     7_i32, 9_i32,  11_i32,
-    ///     8_i32, 10_i32, 12_i32
+    ///     8_i32, 10_i32, 12_i32,
     /// );
     /// let expected = Matrix2x2::new(
     ///     89_i32, 116_i32,
-    ///     98_i32, 128_i32
+    ///     98_i32, 128_i32,
     /// );
     /// let result = matrix1.tr_mul(&matrix2);
     ///
@@ -1011,11 +989,11 @@ where
     /// let matrix1 = Matrix2x3::new(
     ///     1_i32, 4_i32,
     ///     2_i32, 5_i32,
-    ///     3_i32, 6_i32
+    ///     3_i32, 6_i32,
     /// );
     /// let matrix2 = Matrix3x2::new(
     ///     7_i32, 9_i32,  11_i32,
-    ///     8_i32, 10_i32, 12_i32
+    ///     8_i32, 10_i32, 12_i32,
     /// );
     /// let expected = 212_i32;
     /// let result = matrix1.tr_dot(&matrix2);
@@ -1053,15 +1031,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let mut result = Matrix4x4::new(
     ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
-    ///     13_i32, 14_i32, 15_i32, 16_i32
+    ///     13_i32, 14_i32, 15_i32, 16_i32,
     /// );
     /// let expected = Matrix4x4::new(
     ///     -1_i32,  -2_i32,  -3_i32,  -4_i32,
@@ -1093,32 +1069,28 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,    
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix0 = Matrix3x3::new(
     ///     0_f64, 0_f64, 0_f64,
     ///     1_f64, 1_f64, 1_f64,
-    ///     2_f64, 2_f64, 2_f64
+    ///     2_f64, 2_f64, 2_f64,
     /// );
     /// let matrix1 = Matrix3x3::new(
     ///     3_f64, 3_f64, 3_f64,
     ///     4_f64, 4_f64, 4_f64,
-    ///     5_f64, 5_f64, 5_f64
+    ///     5_f64, 5_f64, 5_f64,
     /// );
     /// let amount = 0.5_f64;
     /// let expected = Matrix3x3::new(
     ///     1.5_f64, 1.5_f64, 1.5_f64,
     ///     2.5_f64, 2.5_f64, 2.5_f64,
-    ///     3.5_f64, 3.5_f64, 3.5_f64
+    ///     3.5_f64, 3.5_f64, 3.5_f64,
     /// );
     /// let result = matrix0.lerp(&matrix1, amount);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn lerp(&self, other: &Self, amount: S) -> Self {
@@ -1135,15 +1107,13 @@ where
     /// # Example (Finite Matrix)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,  
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,  2_f64,  3_f64,  4_f64,
     ///     5_f64,  6_f64,  7_f64,  8_f64,
     ///     9_f64,  10_f64, 11_f64, 12_f64,
-    ///     13_f64, 14_f64, 15_f64, 16_f64
+    ///     13_f64, 14_f64, 15_f64, 16_f64,
     /// );
     ///
     /// assert!(matrix.is_finite());
@@ -1152,15 +1122,13 @@ where
     /// # Example (Not A Finite Matrix)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,    
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,             2_f64,             3_f64,             4_f64,
     ///     f64::NAN,          f64::NAN,          f64::NAN,          f64::NAN,
     ///     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,     f64::INFINITY,
-    ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY
+    ///     f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY,
     /// );
     ///
     /// assert!(!matrix.is_finite());
@@ -1188,21 +1156,19 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let mut result = Matrix4x4::new(
     ///     1_i32, 1_i32, 1_i32, 1_i32,
     ///     2_i32, 2_i32, 2_i32, 2_i32,
     ///     3_i32, 3_i32, 3_i32, 3_i32,
-    ///     4_i32, 4_i32, 4_i32, 4_i32
+    ///     4_i32, 4_i32, 4_i32, 4_i32,
     /// );
     /// let expected = Matrix4x4::new(
     ///     1_i32, 2_i32, 3_i32, 4_i32,
     ///     1_i32, 2_i32, 3_i32, 4_i32,
     ///     1_i32, 2_i32, 3_i32, 4_i32,
-    ///     1_i32, 2_i32, 3_i32, 4_i32
+    ///     1_i32, 2_i32, 3_i32, 4_i32,
     /// );
     /// result.transpose_mut();
     ///
@@ -1232,15 +1198,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let result = Matrix3x3::identity();
     /// let expected = Matrix3x3::new(
     ///     1_i32, 0_i32, 0_i32,
     ///     0_i32, 1_i32, 0_i32,
-    ///     0_i32, 0_i32, 1_i32
+    ///     0_i32, 0_i32, 1_i32,
     /// );
     ///
     /// assert_eq!(result, expected);
@@ -1264,9 +1228,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix: Matrix4x4<i32> = Matrix4x4::identity();
     ///
@@ -1302,16 +1264,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let result = Matrix4x4::from_diagonal_value(4_i32);
     /// let expected = Matrix4x4::new(
     ///     4_i32, 0_i32, 0_i32, 0_i32,
     ///     0_i32, 4_i32, 0_i32, 0_i32,
     ///     0_i32, 0_i32, 4_i32, 0_i32,
-    ///     0_i32, 0_i32, 0_i32, 4_i32
+    ///     0_i32, 0_i32, 0_i32, 4_i32,
     /// );
     ///
     /// assert_eq!(result, expected);
@@ -1353,7 +1313,7 @@ where
     ///     2_i32, 0_i32, 0_i32, 0_i32,
     ///     0_i32, 3_i32, 0_i32, 0_i32,
     ///     0_i32, 0_i32, 4_i32, 0_i32,
-    ///     0_i32, 0_i32, 0_i32, 5_i32
+    ///     0_i32, 0_i32, 0_i32, 5_i32,
     /// );
     ///
     /// assert_eq!(result, expected);
@@ -1389,7 +1349,7 @@ where
     ///     1_i32,  2_i32,  3_i32,  4_i32,
     ///     5_i32,  6_i32,  7_i32,  8_i32,
     ///     9_i32,  10_i32, 11_i32, 12_i32,
-    ///     13_i32, 14_i32, 15_i32, 16_i32
+    ///     13_i32, 14_i32, 15_i32, 16_i32,
     /// );
     /// let expected = Vector4::new(1_i32, 6_i32, 11_i32, 16_i32);
     /// let result = matrix.diagonal();
@@ -1414,14 +1374,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_i32, 2_i32, 3_i32,
     ///     4_i32, 5_i32, 6_i32,
-    ///     7_i32, 8_i32, 9_i32
+    ///     7_i32, 8_i32, 9_i32,
     /// );
     ///
     /// assert_eq!(matrix.trace(), 15_i32);
@@ -1450,9 +1408,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let diagonal_matrix = Matrix3x3::new(
     ///     1_f32, 0_f32, 0_f32,
@@ -1478,7 +1434,8 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], S::zero()) && ulps_eq!(self.data[j][i], S::zero());
+                result &= ulps_eq!(self.data[i][j], S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps()) 
+                    && ulps_eq!(self.data[j][i], S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps());
             }
         }
 
@@ -1494,9 +1451,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let symmetric_matrix = Matrix3x3::new(
     ///     1_f32, 2_f32, 3_f32,
@@ -1522,7 +1477,7 @@ where
         let mut result = true;
         for i in 0..N {
             for j in 0..i {
-                result &= ulps_eq!(self.data[i][j], self.data[j][i]);
+                result &= ulps_eq!(self.data[i][j], self.data[j][i], abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps());
             }
         }
 
@@ -1574,20 +1529,18 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// #     FrobeniusNorm,
     /// #     L1MatrixNorm,
     /// #     LinfMatrixNorm,
-    /// #     FrobeniusNorm,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_f64, 2_f64, 3_f64,
     ///     5_f64, 6_f64, 7_f64,
-    ///     8_f64, 9_f64, 10_f64
+    ///     8_f64, 9_f64, 10_f64,
     /// );
     /// let l1_norm = L1MatrixNorm::new();
     /// let linf_norm = LinfMatrixNorm::new();
@@ -1595,7 +1548,11 @@ where
     ///
     /// assert_eq!(matrix.apply_norm(&l1_norm), 27_f64);
     /// assert_eq!(matrix.apply_norm(&linf_norm), 20_f64);
-    /// assert_relative_eq!(matrix.apply_norm(&frobenius_norm), 19.209372712298546, epsilon = 1e-10);
+    /// 
+    /// let result = matrix.apply_norm(&frobenius_norm);
+    /// let expected = 19.209372712298546_f64;
+    /// 
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_norm(&self, norm: &impl Norm<Matrix<S, R, C>, Output = S>) -> S {
@@ -1608,25 +1565,23 @@ where
     /// # Examples
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// #     FrobeniusNorm,
     /// #     L1MatrixNorm,
     /// #     LinfMatrixNorm,
-    /// #     FrobeniusNorm,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Matrix3x3,
     /// # };
     /// #
     /// let matrix1 = Matrix3x3::new(
     ///     1_f64, 2_f64, 3_f64,
     ///     5_f64, 6_f64, 7_f64,
-    ///     8_f64, 9_f64, 10_f64
+    ///     8_f64, 9_f64, 10_f64,
     /// );
     /// let matrix2 = Matrix3x3::new(
     ///     0_f64, -5_f64,  6_f64,
     ///    -3_f64,  1_f64,  20_f64,
-    ///     7_f64,  12_f64, 4_f64
+    ///     7_f64,  12_f64, 4_f64,
     /// );
     /// let l1_norm = L1MatrixNorm::new();
     /// let linf_norm = LinfMatrixNorm::new();
@@ -1634,7 +1589,11 @@ where
     ///
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &l1_norm), 26_f64);
     /// assert_eq!(matrix1.apply_metric_distance(&matrix2, &linf_norm), 22_f64);
-    /// assert_relative_eq!(matrix1.apply_metric_distance(&matrix2, &frobenius_norm), 19.05255888325765, epsilon = 1e-10);
+    /// 
+    /// let result = matrix1.apply_metric_distance(&matrix2, &frobenius_norm);
+    /// let expected = 19.05255888325765_f64;
+    /// 
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_metric_distance(&self, other: &Self, norm: &impl Norm<Matrix<S, R, C>, Output = S>) -> S {
@@ -1649,15 +1608,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     -7_i32,  1_i32, 5_i32, 0_i32,
     ///      1_i32, -5_i32, 8_i32, 2_i32,
     ///      5_i32,  6_i32, 3_i32, 6_i32,
-    ///      0_i32,  4_i32, 0_i32, 15_i32
+    ///      0_i32,  4_i32, 0_i32, 15_i32,
     /// );
     /// let expected = 516_i32;
     /// let result = matrix.norm_squared();
@@ -1676,15 +1633,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     -7_i32,  1_i32, 5_i32, 0_i32,
     ///      1_i32, -5_i32, 8_i32, 2_i32,
     ///      5_i32,  6_i32, 3_i32, 6_i32,
-    ///      0_i32,  4_i32, 0_i32, 15_i32
+    ///      0_i32,  4_i32, 0_i32, 15_i32,
     /// );
     /// let expected = 516_i32;
     /// let result = matrix.norm_squared();
@@ -1702,19 +1657,17 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix1 = Matrix3x3::new(
     ///     -7_i32,  5_i32, -9_i32,
     ///      1_i32, -5_i32,  8_i32,
-    ///      5_i32,  6_i32,  3_i32
+    ///      5_i32,  6_i32,  3_i32,
     /// );
     /// let matrix2 = Matrix3x3::new(
     ///     2_i32, 6_i32, 1_i32,
     ///     1_i32, 2_i32, 8_i32,
-    ///     3_i32, 1_i32, 3_i32
+    ///     3_i32, 1_i32, 3_i32,
     /// );
     /// let expected = 260_i32;
     /// let result = matrix1.metric_distance_squared(&matrix2);
@@ -1737,14 +1690,12 @@ where
     ///
     /// # Example
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix = Matrix3x3::new(
     ///     -3_i32, 2_i32, 0_i32,
     ///      5_i32, 6_i32, 2_i32,
-    ///      7_i32, 4_i32, 8_i32
+    ///      7_i32, 4_i32, 8_i32,
     /// );
     /// let expected = 19_i32;
     /// let result = matrix.l1_norm();
@@ -1768,15 +1719,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     -7_i32,  1_i32, 5_i32, 0_i32,
     ///      1_i32, -5_i32, 8_i32, 2_i32,
     ///      5_i32,  6_i32, 3_i32, 6_i32,
-    ///      0_i32,  4_i32, 0_i32, 15_i32
+    ///      0_i32,  4_i32, 0_i32, 15_i32,
     /// );
     /// let expected = 23_i32;
     /// let result = matrix.linf_norm();
@@ -1811,23 +1760,19 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     -7_f64,  1_f64, 5_f64, 0_f64,
     ///      1_f64, -5_f64, 8_f64, 2_f64,
     ///      5_f64,  6_f64, 3_f64, 6_f64,
-    ///      0_f64,  4_f64, 0_f64, 15_f64
+    ///      0_f64,  4_f64, 0_f64, 15_f64,
     /// );
     /// let expected = 22.715633383201094;
     /// let result = matrix.norm();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn norm(&self) -> S {
@@ -1839,23 +1784,19 @@ where
     /// This is a synonym for [`Matrix::norm`].
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     -7_f64,  1_f64, 5_f64, 0_f64,
     ///      1_f64, -5_f64, 8_f64, 2_f64,
     ///      5_f64,  6_f64, 3_f64, 6_f64,
-    ///      0_f64,  4_f64, 0_f64, 15_f64
+    ///      0_f64,  4_f64, 0_f64, 15_f64,
     /// );
     /// let expected = 22.715633383201094;
     /// let result = matrix.magnitude();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn magnitude(&self) -> S {
@@ -1868,27 +1809,23 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix1 = Matrix3x3::new(
     ///     -7_f64,  5_f64, -9_f64,
     ///      1_f64, -5_f64,  8_f64,
-    ///      5_f64,  6_f64,  3_f64
+    ///      5_f64,  6_f64,  3_f64,
     /// );
     /// let matrix2 = Matrix3x3::new(
     ///     2_f64, 6_f64, 1_f64,
     ///     1_f64, 2_f64, 8_f64,
-    ///     3_f64, 1_f64, 3_f64
+    ///     3_f64, 1_f64, 3_f64,
     /// );
     /// let expected = 16.124515496597099;
     /// let result = matrix1.metric_distance(&matrix2);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn metric_distance(&self, other: &Self) -> S {
@@ -2092,7 +2029,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,  
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = 5_i32;
@@ -2143,7 +2080,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,  
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale_x = 5_i32;
@@ -2200,7 +2137,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,  
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = 5_i32;
@@ -2216,14 +2153,14 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,  
+    /// #     Vector3,
     /// # };
     /// #
     /// let scale = 5_i32;
     /// let expected = Matrix3x3::new(
     ///     scale, 0_i32, 0_i32,
     ///     0_i32, scale, 0_i32,
-    ///     0_i32, 0_i32, 1_i32
+    ///     0_i32, 0_i32, 1_i32,
     /// );
     /// let result = Matrix3x3::from_affine_scale(scale);
     ///
@@ -2259,7 +2196,7 @@ where
     ///     scale, 0_i32, 0_i32, 0_i32,
     ///     0_i32, scale, 0_i32, 0_i32,
     ///     0_i32, 0_i32, scale, 0_i32,
-    ///     0_i32, 0_i32, 0_i32, 1_i32
+    ///     0_i32, 0_i32, 0_i32, 1_i32,
     /// );
     /// let result = Matrix4x4::from_affine_scale(scale);
     ///
@@ -2327,7 +2264,7 @@ where
     /// let vector = Vector3::new(1_i32, 1_i32, 3_i32);
     /// let matrix = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
     ///     scale_x,
-    ///     scale_y
+    ///     scale_y,
     /// ));
     /// let expected = Vector3::new(5_i32, 10_i32, 3_i32);
     /// let result = matrix * vector;
@@ -2351,7 +2288,7 @@ where
     /// );
     /// let result = Matrix3x3::from_affine_nonuniform_scale(&Vector2::new(
     ///     scale_x,
-    ///     scale_y
+    ///     scale_y,
     /// ));
     ///
     /// assert_eq!(result, expected);
@@ -2362,8 +2299,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let scale_x = 4_i32;
@@ -2372,7 +2309,7 @@ where
     /// let matrix = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(
     ///     scale_x,
     ///     scale_y,
-    ///     scale_z
+    ///     scale_z,
     /// ));
     /// let vector = Vector4::new(1_i32, 1_i32, 1_i32, 1_i32);
     /// let expected = Vector4::new(4_i32, 6_i32, 8_i32, 1_i32);
@@ -2394,12 +2331,12 @@ where
     ///     scale_x, 0_i32,   0_i32,   0_i32,
     ///     0_i32,   scale_y, 0_i32,   0_i32,
     ///     0_i32,   0_i32,   scale_z, 0_i32,
-    ///     0_i32,   0_i32,   0_i32,   1_i32
+    ///     0_i32,   0_i32,   0_i32,   1_i32,
     /// );
     /// let result = Matrix4x4::from_affine_nonuniform_scale(&Vector3::new(
     ///     scale_x,
     ///     scale_y,
-    ///     scale_z
+    ///     scale_z,
     /// ));
     ///
     /// assert_eq!(result, expected);
@@ -2494,7 +2431,7 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_i32,       0_i32,       0_i32,
     ///     0_i32,       1_i32,       0_i32,
-    ///     distance[0], distance[1], 1_i32
+    ///     distance[0], distance[1], 1_i32,
     /// );
     /// let result = Matrix3x3::from_affine_translation(&distance);
     ///
@@ -2507,8 +2444,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
@@ -2524,8 +2461,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
@@ -2535,7 +2472,7 @@ where
     ///     1_i32 + distance.x,
     ///     1_i32 + distance.y,
     ///     1_i32 + distance.z,
-    ///     1_i32
+    ///     1_i32,
     /// );
     /// let result = matrix * vector;
     ///
@@ -2546,8 +2483,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let distance = Vector3::new(3_i32, 7_i32, 11_i32);
@@ -2555,7 +2492,7 @@ where
     ///     1_i32,       0_i32,       0_i32,       0_i32,
     ///     0_i32,       1_i32,       0_i32,       0_i32,
     ///     0_i32,       0_i32,       1_i32,       0_i32,
-    ///     distance[0], distance[1], distance[2], 1_i32
+    ///     distance[0], distance[1], distance[2], 1_i32,
     /// );
     /// let result = Matrix4x4::from_affine_translation(&distance);
     ///
@@ -2580,9 +2517,7 @@ impl<S> Matrix1x1<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,
-    /// # };
+    /// # use cglinalg_core::Matrix1x1;
     /// #
     /// let c0r0 = 1_i32;
     /// let matrix = Matrix1x1::new(c0r0);
@@ -2607,9 +2542,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,
-    /// # };
+    /// # use cglinalg_core::Matrix1x1;
     /// #
     /// let vector = Matrix1x1::new(1_i32);
     ///
@@ -2633,9 +2566,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,
-    /// # };
+    /// # use cglinalg_core::Matrix1x1;
     /// #
     /// let matrix = Matrix1x1::new(-3_f64);
     ///
@@ -2663,18 +2594,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,  
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix1x1;
     /// #
     /// let matrix = Matrix1x1::new(5_f64);
     /// let expected = Matrix1x1::new(1_f64 / 5_f64);
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse(&self) -> Option<Self> {
@@ -2695,9 +2622,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x1,
-    /// # };
+    /// # use cglinalg_core::Matrix1x1;
     /// #
     /// let matrix = Matrix1x1::new(-2_f64);
     ///
@@ -2706,7 +2631,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
     }
 }
 
@@ -2717,15 +2642,13 @@ impl<S> Matrix2x2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
+    /// # use cglinalg_core::Matrix2x2;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32;
     /// let c1r0 = 2_i32; let c1r1 = 3_i32;
     /// let matrix = Matrix2x2::new(
     ///     c0r0, c0r1,
-    ///     c1r0, c1r1
+    ///     c1r0, c1r1,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -2957,13 +2880,11 @@ where
     /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the
     /// line `y == (1 / 2) * x`.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
     /// # };
     /// # use core::f64;
     /// #
@@ -3000,10 +2921,10 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Vector2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
@@ -3015,11 +2936,11 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3050,8 +2971,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
@@ -3069,8 +2990,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
     /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
@@ -3107,9 +3028,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
+    /// # use cglinalg_core::Matrix2x2;
     /// #
     /// let matrix = Matrix2x2::new(
     ///     1_f64, 3_f64,
@@ -3134,16 +3053,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -3153,7 +3070,7 @@ where
     /// let expected = unit_y;
     /// let result = matrix * unit_x;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3175,12 +3092,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3190,16 +3105,14 @@ where
     /// let expected = -Vector2::unit_x();
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3208,7 +3121,7 @@ where
     /// let result = matrix * v1;
     /// let expected = v2;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector2<S>, v2: &Vector2<S>) -> Self {
@@ -3225,13 +3138,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3243,17 +3154,15 @@ where
     /// let expected = -Vector2::unit_x();
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     /// The matrix returned by `rotation_between` should make `v1` and `v2` collinear.
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
-    /// #     Vector2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
     /// # };
     /// #
     /// let v1 = Vector2::new(1_f64, 1_f64);
@@ -3264,7 +3173,7 @@ where
     /// let result = matrix * v1;
     /// let expected = v2;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between_axis(v1: &Unit<Vector2<S>>, v2: &Unit<Vector2<S>>) -> Self {
@@ -3286,24 +3195,20 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix2x2;
     /// #
     /// let matrix = Matrix2x2::new(
     ///     2_f64, 3_f64,
-    ///     1_f64, 5_f64
+    ///     1_f64, 5_f64,
     /// );
     /// let expected = Matrix2x2::new(
     ///      5_f64 / 7_f64, -3_f64 / 7_f64,
-    ///     -1_f64 / 7_f64,  2_f64 / 7_f64
+    ///     -1_f64 / 7_f64,  2_f64 / 7_f64,
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -3328,13 +3233,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x2,
-    /// # };
+    /// # use cglinalg_core::Matrix2x2;
     /// #
     /// let matrix = Matrix2x2::new(
     ///     1_f64, 2_f64,
-    ///     2_f64, 1_f64   
+    ///     2_f64, 1_f64,
     /// );
     ///
     /// assert_eq!(matrix.determinant(), -3_f64);
@@ -3342,7 +3245,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
     }
 }
 
@@ -3352,9 +3255,7 @@ impl<S> Matrix3x3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32; let c0r2 = 3_i32;
     /// let c1r0 = 4_i32; let c1r1 = 5_i32; let c1r2 = 6_i32;
@@ -3362,7 +3263,7 @@ impl<S> Matrix3x3<S> {
     /// let matrix = Matrix3x3::new(
     ///     c0r0, c0r1, c0r2,
     ///     c1r0, c1r1, c1r2,
-    ///     c2r0, c2r1, c2r2
+    ///     c2r0, c2r1, c2r2,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -3915,8 +3816,8 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
     /// #
     /// let shear_factor = 8_f64;
@@ -3925,7 +3826,7 @@ where
     /// let matrix = Matrix3x3::new(
     ///      1_f64,        0_f64, 0_f64,
     ///     -shear_factor, 1_f64, 0_f64,
-    ///      0_f64,        0_f64, 1_f64
+    ///      0_f64,        0_f64, 1_f64,
     /// );
     /// let expected_matrix = matrix;
     /// let result_matrix = Matrix3x3::from_shear(shear_factor, &direction, &normal);
@@ -4211,15 +4112,13 @@ where
     /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
+    /// #     Vector3,
     /// # };
     /// #
     /// let shear_factor = 15_f64;
@@ -4241,10 +4140,10 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Vector3::new( 1_f64, 0_f64, 1_f64),
@@ -4254,23 +4153,21 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -4313,10 +4210,10 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
@@ -4328,11 +4225,11 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4448,10 +4345,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
+    /// #     Vector3,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector2::unit_y());
@@ -4470,10 +4367,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
+    /// #     Vector2,
+    /// #     Vector3,
     /// # };
     /// #
     /// let minus_normal = Unit::from_value(-Vector2::unit_y());
@@ -4489,15 +4386,13 @@ where
     /// # Example (Line That Does Not Cross The Origin)
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Vector2,
     /// #     Point2,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
+    /// #     Vector3,
     /// # };
     /// #
     /// let bias = Point2::new(0_f64, 2_f64);
@@ -4509,7 +4404,7 @@ where
     /// let expected = Vector3::new(-1_f64, 4_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4545,15 +4440,15 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
     /// #
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let expected = Matrix3x3::new(
     ///     1_f64, 0_f64,  0_f64,
     ///     0_f64, 1_f64,  0_f64,
-    ///     0_f64, 0_f64, -1_f64
+    ///     0_f64, 0_f64, -1_f64,
     /// );
     /// let result = Matrix3x3::from_reflection(&normal);
     ///
@@ -4592,14 +4487,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_f64, 4_f64, 7_f64,
     ///     2_f64, 5_f64, 8_f64,
-    ///     3_f64, 6_f64, 9_f64
+    ///     3_f64, 6_f64, 9_f64,
     /// );
     ///
     /// assert_eq!(matrix.determinant(), 0_f64);
@@ -4670,16 +4563,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4688,7 +4579,7 @@ where
     /// let expected = Vector3::unit_y();
     /// let result = matrix * unit_x;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4713,16 +4604,14 @@ where
     ///
     /// In this example the rotation is in the **yz-plane**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4731,7 +4620,7 @@ where
     /// let expected = Vector3::new(0_f64, -1_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4754,16 +4643,14 @@ where
     ///
     /// In this example the rotation is in the **zx-plane**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4772,7 +4659,7 @@ where
     /// let expected = Vector3::new(1_f64, 0_f64, -1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4795,16 +4682,14 @@ where
     ///
     /// In this example the rotation is in the **xy-plane**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -4813,7 +4698,7 @@ where
     /// let expected = Vector3::new(-1_f64, 1_f64, 0_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4836,17 +4721,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Unit,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -4856,7 +4739,7 @@ where
     /// let expected = Vector3::unit_y();
     /// let result = matrix * unit_x;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4896,13 +4779,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -4916,8 +4797,8 @@ where
     /// let result = Matrix3x3::look_to_lh(&direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * direction.normalize(), unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * direction.normalize(), unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4945,13 +4826,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -4965,8 +4844,8 @@ where
     /// let result = Matrix3x3::look_to_rh(&direction, &up);
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * direction.normalize(), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * direction.normalize(), minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4994,14 +4873,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5017,8 +4894,8 @@ where
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * direction, unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * direction, unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5037,14 +4914,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5060,8 +4935,8 @@ where
     /// let direction = (target - eye).normalize();
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * direction, minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * direction, minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5080,13 +4955,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5100,8 +4973,8 @@ where
     /// let result = Matrix3x3::look_to_lh_inv(&direction, &up);
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, direction.normalize(), epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, direction.normalize(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -5120,13 +4993,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,    
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5140,8 +5011,8 @@ where
     /// let result = Matrix3x3::look_to_rh_inv(&direction, &up);
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, direction.normalize(), epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, direction.normalize(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_to_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -5161,14 +5032,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5184,8 +5053,8 @@ where
     /// let direction = (target - eye).normalize();
     /// let unit_z = Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5205,14 +5074,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
+    /// #     Point3,
+    /// #     Vector3,
     /// # };
     /// # use core::f64;
     /// #
@@ -5222,14 +5089,14 @@ where
     /// let expected = Matrix3x3::new(
     ///      1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,
     ///      0_f64,                     0_f64,                    1_f64,
-    ///     -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64
+    ///     -1_f64 / f64::sqrt(2_f64), -1_f64 / f64::sqrt(2_f64), 0_f64,
     /// );
     /// let result = Matrix3x3::look_at_rh_inv(&eye, &target, &up);
     /// let direction = (target - eye).normalize();
     /// let minus_unit_z = -Vector3::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5242,16 +5109,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,   
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let v1: Vector3<f64> = Vector3::unit_x() * 2_f64;
@@ -5260,14 +5125,19 @@ where
     /// let expected = Vector3::new(0_f64, 2_f64, 0_f64);
     /// let result = matrix * v1;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between(v1: &Vector3<S>, v2: &Vector3<S>) -> Option<Self> {
+        Self::rotation_between_eps(v1, v2, S::machine_epsilon())
+    }
+
+    #[inline]
+    fn rotation_between_eps(v1: &Vector3<S>, v2: &Vector3<S>, threshold: S) -> Option<Self> {
         if let (Some(unit_v1), Some(unit_v2)) = (v1.try_normalize(S::zero()), v2.try_normalize(S::zero())) {
             let cross = unit_v1.cross(&unit_v2);
 
-            if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
+            if let Some(axis) = Unit::try_from_value(cross, threshold) {
                 return Some(Self::from_axis_angle(&axis, Radians::acos(unit_v1.dot(&unit_v2))));
             }
 
@@ -5285,17 +5155,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Radians,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// #     Vector3,
-    /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,   
     /// # };
     /// #
     /// let unit_v1: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x() * 2_f64);
@@ -5305,14 +5173,19 @@ where
     /// let expected = Vector3::unit_y() * 2_f64;
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn rotation_between_axis(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>) -> Option<Self> {
+        Self::rotation_between_axis_eps(unit_v1, unit_v2, S::machine_epsilon())
+    }
+
+    #[inline]
+    fn rotation_between_axis_eps(unit_v1: &Unit<Vector3<S>>, unit_v2: &Unit<Vector3<S>>, threshold: S) -> Option<Self> {
         let cross = unit_v1.as_ref().cross(unit_v2.as_ref());
         let cos_angle = unit_v1.as_ref().dot(unit_v2.as_ref());
 
-        if let Some(axis) = Unit::try_from_value(cross, S::default_epsilon()) {
+        if let Some(axis) = Unit::try_from_value(cross, threshold) {
             return Some(Self::from_axis_angle(&axis, Radians::acos(cos_angle)));
         }
 
@@ -5335,26 +5208,22 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_f64, 4_f64, 7_f64,
     ///     2_f64, 5_f64, 8_f64,
-    ///     5_f64, 6_f64, 11_f64
+    ///     5_f64, 6_f64, 11_f64,
     /// );
     /// let expected = Matrix3x3::new(
     ///     -7_f64 / 12_f64,   2_f64 / 12_f64,   3_f64 / 12_f64,
     ///     -18_f64 / 12_f64,  24_f64 / 12_f64, -6_f64 / 12_f64,
-    ///      13_f64 / 12_f64, -14_f64 / 12_f64,  3_f64 / 12_f64
+    ///      13_f64 / 12_f64, -14_f64 / 12_f64,  3_f64 / 12_f64,
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -5388,14 +5257,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
     /// #
     /// let matrix = Matrix3x3::new(
     ///     1_f64, 2_f64, 3_f64,
     ///     4_f64, 5_f64, 6_f64,
-    ///     7_f64, 8_f64, 9_f64   
+    ///     7_f64, 8_f64, 9_f64,
     /// );
     ///
     /// assert_eq!(matrix.determinant(), 0_f64);
@@ -5403,7 +5270,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
     }
 }
 
@@ -5453,9 +5320,7 @@ impl<S> Matrix4x4<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let c0r0 = 1_i32;  let c0r1 = 2_i32;  let c0r2 = 3_i32;  let c0r3 = 4_i32;
     /// let c1r0 = 5_i32;  let c1r1 = 6_i32;  let c1r2 = 7_i32;  let c1r3 = 8_i32;
@@ -6014,15 +5879,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// # use core::f64;
     /// #
@@ -6031,7 +5894,7 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     1_f64 / f64::sqrt(2_f64),
     ///     1_f64 / f64::sqrt(2_f64),
-    ///     0_f64
+    ///     0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let matrix = Matrix4x4::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -6057,14 +5920,14 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
@@ -6076,11 +5939,11 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6203,10 +6066,10 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
-    /// #     Vector4,
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let bias = Point3::new(0_f64, 0_f64, 0_f64);
@@ -6215,7 +6078,7 @@ where
     ///     1_f64, 0_f64,  0_f64, 0_f64,
     ///     0_f64, 1_f64,  0_f64, 0_f64,
     ///     0_f64, 0_f64, -1_f64, 0_f64,
-    ///     0_f64, 0_f64,  0_f64, 1_f64
+    ///     0_f64, 0_f64,  0_f64, 1_f64,
     /// );
     /// let result = Matrix4x4::from_affine_reflection(&normal, &bias);
     ///
@@ -6264,15 +6127,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     4_f64, 12_f64, 34_f64, 67_f64,
     ///     7_f64, 15_f64, 9_f64,  6_f64,
     ///     1_f64, 3_f64,  3_f64,  7_f64,
-    ///     9_f64, 9_f64,  2_f64,  13_f64
+    ///     9_f64, 9_f64,  2_f64,  13_f64,
     /// );
     ///
     /// assert_eq!(matrix.determinant(), 7854_f64);
@@ -6317,16 +6178,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector4,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6335,7 +6194,7 @@ where
     /// let expected = Vector4::new(0_f64, -1_f64, 1_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6362,16 +6221,14 @@ where
     ///
     /// In this example the rotation is in the **zx-plane**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector4,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6380,7 +6237,7 @@ where
     /// let expected = Vector4::new(1_f64, 0_f64, -1_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6407,16 +6264,14 @@ where
     ///
     /// In this example the rotation is in the **xy-plane**.
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector4,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -6425,7 +6280,7 @@ where
     /// let expected = Vector4::new(-1_f64, 1_f64, 0_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6451,18 +6306,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Radians,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Unit,
-    /// #     Vector4,
     /// #     Vector3,
+    /// #     Vector4,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Radians,
     /// # };
     /// #
     /// let axis: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_z());
@@ -6472,7 +6325,7 @@ where
     /// let expected = Vector4::new(0_f64, 1_f64, 0_f64, 1_f64);
     /// let result = matrix * vector;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6542,9 +6395,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let left = -4_f64;
     /// let right = 4_f64;
@@ -6556,7 +6407,7 @@ where
     ///     1_f64 / 4_f64,  0_f64,          0_f64,            0_f64,
     ///     0_f64,          1_f64 / 2_f64,  0_f64,            0_f64,
     ///     0_f64,          0_f64,         -2_f64 / 99_f64,   0_f64,
-    ///     0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64
+    ///     0_f64,          0_f64,         -101_f64 / 99_f64, 1_f64,
     /// );
     /// let result = Matrix4x4::from_orthographic(left, right, bottom, top, near, far);
     ///
@@ -6633,9 +6484,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let left = -4_f64;
     /// let right = 4_f64;
@@ -6647,7 +6496,7 @@ where
     ///     1_f64 / 4_f64,  0_f64,          0_f64,             0_f64,
     ///     0_f64,          2_f64 / 5_f64,  0_f64,             0_f64,
     ///     0_f64,          1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
-    ///     0_f64,          0_f64,         -200_f64 / 99_f64,  0_f64
+    ///     0_f64,          0_f64,         -200_f64 / 99_f64,  0_f64,
     /// );
     /// let result = Matrix4x4::from_perspective(left, right, bottom, top, near, far);
     ///
@@ -6731,15 +6580,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f32);
     /// let aspect_ratio = 800_f32 / 600_f32;
@@ -6749,11 +6592,11 @@ where
     ///     1.0322863_f32, 0_f32,          0_f32,          0_f32,
     ///     0_f32,         1.3763818_f32,  0_f32,          0_f32,
     ///     0_f32,         0_f32,         -1.002002_f32,  -1_f32,
-    ///     0_f32,         0_f32,         -0.2002002_f32,  0_f32
+    ///     0_f32,         0_f32,         -0.2002002_f32,  0_f32,
     /// );
     /// let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-6);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-6, relative_all <= f32::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -6807,15 +6650,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -6827,16 +6668,17 @@ where
     ///      -1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       0_f64,                     1_f64,  0_f64,                     0_f64,
-    ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
+    ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64,
     /// );
     /// let result = Matrix4x4::look_to_lh(&eye, &direction, &up);
     /// let unit_z = Vector4::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_relative_eq!(
     ///     (result * direction.to_homogeneous()).normalize(),
     ///     unit_z,
-    ///     epsilon = 1e-10,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[rustfmt::skip]
@@ -6874,15 +6716,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -6894,16 +6734,17 @@ where
     ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///      0_f64,                     1_f64,  0_f64,                     0_f64,
-    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
+    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64,
     /// );
     /// let result = Matrix4x4::look_to_rh(&eye, &direction, &up);
     /// let minus_unit_z = -Vector4::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_relative_eq!(
     ///     (result * direction.to_homogeneous()).normalize(),
     ///     minus_unit_z,
-    ///     epsilon = 1e-10
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
     /// );
     /// ```
     #[rustfmt::skip]
@@ -6941,15 +6782,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -6960,14 +6799,19 @@ where
     ///      -1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       1_f64 / f64::sqrt(2_f64),  0_f64,  1_f64 / f64::sqrt(2_f64),  0_f64,
     ///       0_f64,                     1_f64,  0_f64,                     0_f64,
-    ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64
+    ///      -1_f64 / f64::sqrt(2_f64), -3_f64, -3_f64 / f64::sqrt(2_f64),  1_f64,
     /// );
     /// let result = Matrix4x4::look_at_lh(&eye, &target, &up);
     /// let direction = (target - eye).to_homogeneous();
     /// let unit_z = Vector4::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!((result * direction).normalize(), unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     (result * direction).normalize(),
+    ///     unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -6987,15 +6831,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,  
     /// # };
     /// # use core::f64;
     /// #
@@ -7006,14 +6848,19 @@ where
     ///      1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///     -1_f64 / f64::sqrt(2_f64),  0_f64, -1_f64 / f64::sqrt(2_f64),  0_f64,
     ///      0_f64,                     1_f64,  0_f64,                     0_f64,
-    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64
+    ///      1_f64 / f64::sqrt(2_f64), -3_f64,  3_f64 / f64::sqrt(2_f64),  1_f64,
     /// );
     /// let result = Matrix4x4::look_at_rh(&eye, &target, &up);
     /// let direction = (target - eye).to_homogeneous();
     /// let minus_unit_z = -Vector4::unit_z();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!((result * direction).normalize(), minus_unit_z, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     (result * direction).normalize(),
+    ///     minus_unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -7034,14 +6881,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4,
     /// #     Matrix4x4,
     /// #     Point3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
+    /// #     Vector4,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -7058,9 +6903,9 @@ where
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -7098,15 +6943,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Matrix4x4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -7123,9 +6966,9 @@ where
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -7163,15 +7006,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// #     Vector4,
     /// #     Matrix4x4,
-    /// #     Point3,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Point3,
+    /// #     Vector3,
+    /// #     Vector4
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -7188,9 +7029,9 @@ where
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, direction, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, -direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -7211,15 +7052,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Normed,
+    /// #     Point3,
     /// #     Vector3,
     /// #     Vector4,
-    /// #     Matrix4x4,
-    /// #     Point3,
-    /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let eye = Point3::new(-2_f64, 3_f64, -4_f64);
@@ -7236,9 +7075,9 @@ where
     /// let unit_z = Vector4::unit_z();
     /// let minus_unit_z = -unit_z;
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result * unit_z, -direction, epsilon = 1e-10);
-    /// assert_relative_eq!(result * minus_unit_z, direction, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * unit_z, -direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -7258,28 +7097,24 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64, 4_f64, 7_f64,  8_f64,
     ///     2_f64, 5_f64, 8_f64,  4_f64,
     ///     5_f64, 6_f64, 11_f64, 4_f64,
-    ///     9_f64, 3_f64, 13_f64, 5_f64
+    ///     9_f64, 3_f64, 13_f64, 5_f64,
     /// );
     /// let expected = Matrix4x4::new(
     ///      17_f64 / 60_f64, -41_f64 / 30_f64,  21_f64 / 20_f64, -1_f64 / 5_f64,
     ///      7_f64 / 30_f64,  -16_f64 / 15_f64,  11_f64 / 10_f64, -2_f64 / 5_f64,
     ///     -13_f64 / 36_f64,  25_f64 / 18_f64, -13_f64 / 12_f64,  1_f64 / 3_f64,
-    ///      13_f64 / 45_f64, -23_f64 / 45_f64,  4_f64 / 15_f64,  -1_f64 / 15_f64
+    ///      13_f64 / 45_f64, -23_f64 / 45_f64,  4_f64 / 15_f64,  -1_f64 / 15_f64,
     /// );
     /// let result = matrix.inverse().unwrap();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -7358,15 +7193,13 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// #
     /// let matrix = Matrix4x4::new(
     ///     1_f64,  2_f64,  3_f64,  4_f64,
     ///     5_f64,  6_f64,  7_f64,  8_f64,
     ///     9_f64,  10_f64, 11_f64, 12_f64,
-    ///     13_f64, 14_f64, 15_f64, 16_f64
+    ///     13_f64, 14_f64, 15_f64, 16_f64,
     /// );
     ///
     /// assert_eq!(matrix.determinant(), 0_f64);
@@ -7374,7 +7207,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(&self) -> bool {
-        ulps_ne!(self.determinant(), S::zero())
+        ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::machine_epsilon(), ulps_all <= S::default_ulps())
     }
 }
 
@@ -7384,15 +7217,13 @@ impl<S> Matrix1x2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x2,
-    /// # };
+    /// # use cglinalg_core::Matrix1x2;
     /// #
     /// let c0r0 = 1_i32;
     /// let c1r0 = 2_i32;
     /// let matrix = Matrix1x2::new(
     ///     c0r0,
-    ///     c1r0
+    ///     c1r0,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7416,9 +7247,7 @@ impl<S> Matrix1x3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x3,
-    /// # };
+    /// # use cglinalg_core::Matrix1x3;
     /// #
     /// let c0r0 = 1_i32;
     /// let c1r0 = 2_i32;
@@ -7426,7 +7255,7 @@ impl<S> Matrix1x3<S> {
     /// let matrix = Matrix1x3::new(
     ///     c0r0,
     ///     c1r0,
-    ///     c2r0
+    ///     c2r0,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7452,9 +7281,7 @@ impl<S> Matrix1x4<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix1x4,
-    /// # };
+    /// # use cglinalg_core::Matrix1x4;
     /// #
     /// let c0r0 = 1_i32;
     /// let c1r0 = 2_i32;
@@ -7464,7 +7291,7 @@ impl<S> Matrix1x4<S> {
     ///     c0r0,
     ///     c1r0,
     ///     c2r0,
-    ///     c3r0
+    ///     c3r0,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7492,9 +7319,7 @@ impl<S> Matrix2x3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x3,
-    /// # };
+    /// # use cglinalg_core::Matrix2x3;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32;
     /// let c1r0 = 3_i32; let c1r1 = 4_i32;
@@ -7502,7 +7327,7 @@ impl<S> Matrix2x3<S> {
     /// let matrix = Matrix2x3::new(
     ///     c0r0, c0r1,
     ///     c1r0, c1r1,
-    ///     c2r0, c2r1
+    ///     c2r0, c2r1,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7535,15 +7360,13 @@ impl<S> Matrix3x2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x2,
-    /// # };
+    /// # use cglinalg_core::Matrix3x2;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32; let c0r2 = 3_i32;
     /// let c1r0 = 4_i32; let c1r1 = 5_i32; let c1r2 = 6_i32;
     /// let matrix = Matrix3x2::new(
     ///     c0r0, c0r1, c0r2,
-    ///     c1r0, c1r1, c1r2
+    ///     c1r0, c1r1, c1r2,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7574,9 +7397,7 @@ impl<S> Matrix2x4<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix2x4,
-    /// # };
+    /// # use cglinalg_core::Matrix2x4;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32;
     /// let c1r0 = 3_i32; let c1r1 = 4_i32;
@@ -7586,7 +7407,7 @@ impl<S> Matrix2x4<S> {
     ///     c0r0, c0r1,
     ///     c1r0, c1r1,
     ///     c2r0, c2r1,
-    ///     c3r0, c3r1
+    ///     c3r0, c3r1,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7623,9 +7444,7 @@ impl<S> Matrix4x2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x2,
-    /// # };
+    /// # use cglinalg_core::Matrix4x2;
     /// #
     /// let c0r0 = 1_i32;
     /// let c0r1 = 2_i32;
@@ -7637,7 +7456,7 @@ impl<S> Matrix4x2<S> {
     /// let c1r3 = 8_i32;
     /// let matrix = Matrix4x2::new(
     ///     c0r0, c0r1, c0r2, c0r3,
-    ///     c1r0, c1r1, c1r2, c1r3
+    ///     c1r0, c1r1, c1r2, c1r3,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7670,9 +7489,7 @@ impl<S> Matrix3x4<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix3x4,
-    /// # };
+    /// # use cglinalg_core::Matrix3x4;
     /// #
     /// let c0r0 = 1_i32;  let c0r1 = 2_i32;  let c0r2 = 3_i32;
     /// let c1r0 = 4_i32;  let c1r1 = 5_i32;  let c1r2 = 6_i32;
@@ -7682,7 +7499,7 @@ impl<S> Matrix3x4<S> {
     ///     c0r0, c0r1, c0r2,
     ///     c1r0, c1r1, c1r2,
     ///     c2r0, c2r1, c2r2,
-    ///     c3r0, c3r1, c3r2
+    ///     c3r0, c3r1, c3r2,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -7719,9 +7536,7 @@ impl<S> Matrix4x3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x3,
-    /// # };
+    /// # use cglinalg_core::Matrix4x3;
     /// #
     /// let c0r0 = 1_i32; let c0r1 = 2_i32;  let c0r2 = 3_i32;  let c0r3 = 4_i32;
     /// let c1r0 = 5_i32; let c1r1 = 6_i32;  let c1r2 = 7_i32;  let c1r3 = 8_i32;
@@ -7729,7 +7544,7 @@ impl<S> Matrix4x3<S> {
     /// let matrix = Matrix4x3::new(
     ///     c0r0, c0r1, c0r2, c0r3,
     ///     c1r0, c1r1, c1r2, c1r3,
-    ///     c2r0, c2r1, c2r2, c2r3
+    ///     c2r0, c2r1, c2r2, c2r3,
     /// );
     ///
     /// assert_eq!(matrix[0][0], c0r0);
@@ -8494,7 +8309,7 @@ where
         }
     }
 }
-
+/*
 impl<S, const R: usize, const C: usize> approx::AbsDiffEq for Matrix<S, R, C>
 where
     S: SimdScalarFloat,
@@ -8563,6 +8378,329 @@ where
         }
 
         result
+    }
+}
+*/
+impl<S, const R: usize, const C: usize> approx_cmp::AbsDiffEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Matrix<<S as approx_cmp::AbsDiffEq>::Tolerance, R, C>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::abs_diff_eq(&self.data[c][r], &other.data[c][r], &max_abs_diff.data[c][r]);
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AbsDiffAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::abs_diff_all_eq(&self.data[c][r], &other.data[c][r], max_abs_diff);
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertAbsDiffEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Matrix<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, R, C>;
+    type DebugTolerance = Matrix<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(
+            &self.data,
+            &other.data,
+        );
+
+        Matrix::from(result)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Matrix::from(result)
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertAbsDiffAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Matrix<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Matrix::from(result)
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::RelativeEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Matrix<<S as approx_cmp::RelativeEq>::Tolerance, R, C>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::relative_eq(
+                    &self.data[c][r],
+                    &other.data[c][r],
+                    &max_abs_diff.data[c][r],
+                    &max_relative.data[c][r],
+                );
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::RelativeAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::relative_all_eq(&self.data[c][r], &other.data[c][r], max_abs_diff, max_relative);
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertRelativeEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Matrix<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, R, C>;
+    type DebugTolerance = Matrix<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.data, &other.data);
+
+        Matrix::from(result)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Matrix::from(result)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(
+            &self.data,
+            &other.data,
+            &max_relative.data,
+        );
+
+        Matrix::from(result)
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertRelativeAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Matrix<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Matrix::from(result)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(
+            &self.data,
+            &other.data,
+            max_relative,
+        );
+
+        Matrix::from(result)
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::UlpsEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type Tolerance = Matrix<<S as approx_cmp::UlpsEq>::Tolerance, R, C>;
+    type UlpsTolerance = Matrix<<S as approx_cmp::UlpsEq>::UlpsTolerance, R, C>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::ulps_eq(
+                    &self.data[c][r],
+                    &other.data[c][r],
+                    &max_abs_diff.data[c][r],
+                    &max_ulps.data[c][r],
+                );
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::UlpsAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for c in 0..C {
+            for r in 0..R {
+                result &= S::ulps_all_eq(&self.data[c][r], &other.data[c][r], max_abs_diff, max_ulps);
+            }
+        }
+
+        result
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertUlpsEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type DebugAbsDiff = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, R, C>;
+    type DebugUlpsDiff = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, R, C>;
+    type DebugTolerance = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, R, C>;
+    type DebugUlpsTolerance = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let data = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.data, &other.data);
+
+        Matrix::from(data)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.data, &other.data);
+
+        Matrix { data, }
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Matrix { data, }
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(
+            &self.data,
+            &other.data,
+            &max_ulps.data,
+        );
+
+        Matrix { data, }
+    }
+}
+
+impl<S, const R: usize, const C: usize> approx_cmp::AssertUlpsAllEq for Matrix<S, R, C>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Matrix<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, R, C>;
+    type AllDebugUlpsTolerance = Matrix<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, R, C>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Matrix::from(result)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(
+            &self.data,
+            &other.data,
+            max_ulps,
+        );
+
+        Matrix { data, }
     }
 }
 

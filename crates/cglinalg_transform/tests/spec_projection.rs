@@ -1,4 +1,4 @@
-extern crate approx;
+extern crate approx_cmp;
 extern crate cglinalg_core;
 extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
@@ -6,7 +6,7 @@ extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_core::{
     Point2,
     Point3,
@@ -390,7 +390,7 @@ where
     let lhs = (m * p3).z;
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -411,7 +411,7 @@ where
     let lhs = (m * v3).z;
     let rhs = -S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -432,7 +432,7 @@ where
     let lhs = (m * p3).z;
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -453,7 +453,7 @@ where
     let lhs = (m * v3).z;
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -541,7 +541,7 @@ where
     let diff_start = projected_start.contract();
     let diff_end = projected_end.contract();
 
-    prop_assert!(relative_eq!(diff_start, diff_end, epsilon = tolerance));
+    prop_assert!(relative_eq!(diff_start, diff_end, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -563,7 +563,7 @@ where
     let diff_start = projected_start.contract();
     let diff_end = projected_end.contract();
 
-    prop_assert!(relative_eq!(diff_start, diff_end, epsilon = tolerance));
+    prop_assert!(relative_eq!(diff_start, diff_end, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }

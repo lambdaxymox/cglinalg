@@ -51,14 +51,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(0_f64, 0_f64);
@@ -72,14 +70,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -87,7 +83,7 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     -1_f64 / f64::sqrt(2_f64),
     ///      1_f64 / f64::sqrt(2_f64),
-    ///      0_f64
+    ///      0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -104,14 +100,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(0_f64, 0_f64);
@@ -125,14 +119,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -140,7 +132,7 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     -1_f64 / f64::sqrt(2_f64),
     ///      1_f64 / f64::sqrt(2_f64),
-    ///      0_f64
+    ///      0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -158,14 +150,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(0_f64, 0_f64);
@@ -179,14 +169,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -194,7 +182,7 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     -1_f64 / f64::sqrt(2_f64),
     ///      1_f64 / f64::sqrt(2_f64),
-    ///      0_f64
+    ///      0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -211,14 +199,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(0_f64, 0_f64);
@@ -232,14 +218,12 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -247,7 +231,7 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     -1_f64 / f64::sqrt(2_f64),
     ///      1_f64 / f64::sqrt(2_f64),
-    ///      0_f64
+    ///      0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
@@ -269,16 +253,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let direction = Unit::from_value(Vector2::unit_x());
@@ -298,25 +278,21 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -345,14 +321,14 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -367,17 +343,13 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let direction = Unit::from_value(Vector2::unit_x());
@@ -397,26 +369,22 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -445,14 +413,14 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -471,12 +439,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear = Shear2::identity();
     /// let vertices = [
@@ -494,12 +458,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear = Shear3::identity();
     /// let vertices = [
@@ -582,46 +542,42 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// # use core::f64;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(3_f64, 3_f64);
     /// let direction = Unit::from_value(Vector2::new(
     ///     f64::sqrt(9_f64 / 10_f64),
-    ///     f64::sqrt(1_f64 / 10_f64)
+    ///     f64::sqrt(1_f64 / 10_f64),
     /// ));
     /// let normal = Unit::from_value(Vector2::new(
     ///     -f64::sqrt(1_f64 / 10_f64),
-    ///      f64::sqrt(9_f64 / 10_f64)
+    ///      f64::sqrt(9_f64 / 10_f64),
     /// ));
     /// let shear = Shear2::from_affine_shear(shear_factor, &origin, &direction, &normal);
     /// let shear_inv = shear.inverse();
     /// let point = Point2::new(1_f64, 2_f64);
     ///
-    /// assert_relative_eq!((shear * shear_inv) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((shear_inv * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * shear_inv) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear_inv * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let other_shear_inv1 = Shear2::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
     /// let other_shear_inv2 = Shear2::from_affine_shear(shear_factor, &origin, &direction, &(-normal));
     /// let other_shear_inv3 = Shear2::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
     ///
-    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// // The inverse of the shearing transformation is not unique.
     /// assert_ne!(other_shear_inv1, shear_inv);
@@ -632,17 +588,13 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -650,26 +602,26 @@ where
     /// let direction = Unit::from_value(Vector3::new(
     ///     f64::sqrt(1_f64 / 2_f64),
     ///     f64::sqrt(1_f64 / 2_f64),
-    ///     0_f64
+    ///     0_f64,
     /// ));
     /// let normal = Unit::from_value(Vector3::unit_z());
     /// let shear = Shear3::from_affine_shear(shear_factor, &origin, &direction, &normal);
     /// let shear_inv = shear.inverse();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     ///
-    /// assert_relative_eq!((shear * shear_inv) * point, point);
-    /// assert_relative_eq!((shear_inv * shear) * point, point);
+    /// assert_relative_eq!((shear * shear_inv) * point, point, abs_diff_all <= f64::EPSILON, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear_inv * shear) * point, point, abs_diff_all <= f64::EPSILON, relative_all <= f64::EPSILON);
     ///
     /// let other_shear_inv1 = Shear3::from_affine_shear(shear_factor, &origin, &(-direction), &normal);
     /// let other_shear_inv2 = Shear3::from_affine_shear(shear_factor, &origin, &direction, &(-normal));
     /// let other_shear_inv3 = Shear3::from_affine_shear(-shear_factor, &origin, &(-direction), &(-normal));
     ///
-    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, epsilon = 1e-10);
-    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, epsilon = 1e-10);
+    /// assert_relative_eq!((shear * other_shear_inv1) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv1 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear * other_shear_inv2) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv2 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((shear * other_shear_inv3) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!((other_shear_inv3 * shear) * point, point, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// // The inverse of the shearing transformation is not unique.
     /// assert_ne!(other_shear_inv1, shear_inv);
@@ -694,16 +646,12 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let direction = Unit::from_value(Vector2::unit_x());
@@ -723,25 +671,21 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -770,14 +714,14 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -795,17 +739,13 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let direction = Unit::from_value(Vector2::unit_x());
@@ -825,26 +765,22 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 8_f64;
@@ -873,14 +809,14 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -910,17 +846,13 @@ where
     /// Shearing a rotated square parallel to the line `y == (1 / 2) * x` along the
     /// line `y == (1 / 2) * x`.
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// # use core::f64;
     /// #
     /// let shear_factor = 4_f64;
@@ -956,10 +888,10 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
@@ -971,24 +903,22 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_f64;
     /// let direction = Unit::from_value(Vector3::unit_x());
@@ -1059,17 +989,13 @@ where
     /// Shearing along the **x-axis** with a non-zero origin on the **x-axis**.
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 15_f64;
     /// let origin = Point2::new(-2_f64, 0_f64);
@@ -1090,10 +1016,10 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Point2::new( 1_f64, 0_f64),
@@ -1103,25 +1029,21 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// # use core::f64;
     /// #
     /// let shear_factor = 7_f64;
@@ -1142,27 +1064,27 @@ where
     /// let expected = [
     ///     Point2::new(
     ///          (1_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-    ///          (3_f64 / f64::sqrt(5_f64)) + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///          (3_f64 / f64::sqrt(5_f64)) + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
     ///     ),
     ///     Point2::new(
     ///         -(3_f64 / f64::sqrt(5_f64)) + (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-    ///          (1_f64 / f64::sqrt(5_f64))  + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///          (1_f64 / f64::sqrt(5_f64))  + (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
     ///     ),
     ///     Point2::new(
     ///         -(1_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-    ///         -(3_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///         -(3_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
     ///     ),
     ///     Point2::new(
     ///          (3_f64 / f64::sqrt(5_f64)) - (2_f64 / f64::sqrt(5_f64)) * shear_factor,
-    ///         -(1_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64
+    ///         -(1_f64 / f64::sqrt(5_f64)) - (1_f64 / f64::sqrt(5_f64)) * shear_factor + 1_f64,
     ///     ),
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
@@ -1174,27 +1096,23 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// # use core::f64;
     /// #
     /// let shear_factor = 15_f64;
@@ -1228,14 +1146,14 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result[1], expected[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result[2], expected[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result[3], expected[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result[4], expected[4], epsilon = 1e-10);
-    /// assert_relative_eq!(result[5], expected[5], epsilon = 1e-10);
-    /// assert_relative_eq!(result[6], expected[6], epsilon = 1e-10);
-    /// assert_relative_eq!(result[7], expected[7], epsilon = 1e-10);
+    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Point3::new( 1_f64,  1_f64, 0_f64),
@@ -1247,11 +1165,11 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], epsilon = 1e-10);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], epsilon = 1e-10);
+    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_affine_shear(shear_factor: S, origin: &Point<S, N>, direction: &Unit<Vector<S, N>>, normal: &Unit<Vector<S, N>>) -> Self {
@@ -1276,7 +1194,7 @@ where
         )
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Shear<S, N>
 where
     S: SimdScalarFloat,
@@ -1332,7 +1250,7 @@ where
             && Vector::ulps_eq(&self.normal, &other.normal, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Shear<S, N>
 where
     S: SimdScalarSigned,
@@ -1441,12 +1359,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_i32;
     /// let shear = Shear2::from_shear_xy(shear_factor);
@@ -1493,12 +1407,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_i32;
     /// let shear = Shear2::from_shear_yx(shear_factor);
@@ -1548,18 +1458,14 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear2;
     /// #
     /// let shear_factor = 4_f64;
     /// let origin = Point2::new(0_f64, -3_f64);
@@ -1569,14 +1475,24 @@ where
     /// let expected = Matrix3x3::new(
     ///     1_f64,                0_f64, 0_f64,
     ///     shear_factor,         1_f64, 0_f64,
-    ///     3_f64 * shear_factor, 0_f64, 1_f64
+    ///     3_f64 * shear_factor, 0_f64, 1_f64,
     /// );
     /// let result = shear.to_affine_matrix();
     ///
     /// assert_eq!(result, expected);
     ///
-    /// assert_relative_eq!(result.trace(), 3_f64);
-    /// assert_relative_eq!(result.determinant(), 1_f64);
+    /// assert_relative_eq!(
+    ///     result.trace(),
+    ///     3_f64,
+    ///     abs_diff_all <= f64::EPSILON,
+    ///     relative_all <= f64::EPSILON,
+    /// );
+    /// assert_relative_eq!(
+    ///     result.determinant(),
+    ///     1_f64,
+    ///     abs_diff_all <= f64::EPSILON,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix3x3<S> {
@@ -1591,18 +1507,16 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear2,
-    /// #     Transform2,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Point2,
-    /// #     Vector2,
     /// #     Unit,
+    /// #     Vector2,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::{
+    /// #     Shear2,
+    /// #     Transform2,
     /// # };
     /// #
     /// let shear_factor = 4_f64;
@@ -1613,7 +1527,7 @@ where
     /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
     ///     1_f64,                0_f64, 0_f64,
     ///     shear_factor,         1_f64, 0_f64,
-    ///     3_f64 * shear_factor, 0_f64, 1_f64
+    ///     3_f64 * shear_factor, 0_f64, 1_f64,
     /// ));
     /// let result = shear.to_transform();
     ///
@@ -1717,12 +1631,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_xy(shear_factor);
@@ -1779,12 +1689,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_xz(shear_factor);
@@ -1841,12 +1747,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_yx(shear_factor);
@@ -1903,12 +1805,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_yz(shear_factor);
@@ -1965,12 +1863,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_zx(shear_factor);
@@ -2027,12 +1921,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_i32;
     /// let shear = Shear3::from_shear_zy(shear_factor);
@@ -2092,18 +1982,14 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_transform::Shear3;
     /// #
     /// let shear_factor = 8_f64;
     /// let origin = Point3::new(3_f64, 3_f64, -3_f64);
@@ -2114,14 +2000,14 @@ where
     ///     1_f64,                0_f64, 0_f64, 0_f64,
     ///     0_f64,                1_f64, 0_f64, 0_f64,
     ///     shear_factor,         0_f64, 1_f64, 0_f64,
-    ///     3_f64 * shear_factor, 0_f64, 0_f64, 1_f64
+    ///     3_f64 * shear_factor, 0_f64, 0_f64, 1_f64,
     /// );
     /// let result = shear.to_affine_matrix();
     ///
     /// assert_eq!(result, expected);
     ///
-    /// assert_relative_eq!(result.trace(), 4_f64, epsilon = 1e-10);
-    /// assert_relative_eq!(result.determinant(), 1_f64, epsilon = 1e-10);
+    /// assert_relative_eq!(result.trace(), 4_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result.determinant(), 1_f64, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_affine_matrix(&self) -> Matrix4x4<S> {
@@ -2136,18 +2022,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Shear3,
-    /// #     Transform3,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Point3,
-    /// #     Vector3,
     /// #     Unit,
+    /// #     Vector3,
     /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::{
+    /// #     Shear3,
+    /// #     Transform3,
     /// # };
     /// #
     /// let shear_factor = 8_f64;
@@ -2159,7 +2043,7 @@ where
     ///     1_f64,                0_f64, 0_f64, 0_f64,
     ///     0_f64,                1_f64, 0_f64, 0_f64,
     ///     shear_factor,         0_f64, 1_f64, 0_f64,
-    ///     3_f64 * shear_factor, 0_f64, 0_f64, 1_f64
+    ///     3_f64 * shear_factor, 0_f64, 0_f64, 1_f64,
     /// ));
     /// let result = shear.to_transform();
     ///
@@ -2248,5 +2132,596 @@ where
         let rhs = other.to_transform();
 
         lhs * rhs
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ShearTol<S, const N: usize> {
+    shear_factor: S,
+    origin: Vector<S, N>,
+    direction: Vector<S, N>,
+    normal: Vector<S, N>,
+}
+
+impl<S, const N: usize> ShearTol<S, N> {
+    #[inline]
+    pub const fn from_parts(shear_factor: S, origin: Vector<S, N>, direction: Vector<S, N>, normal: Vector<S, N>) -> Self {
+        Self { shear_factor, origin, direction, normal }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ShearDiff<S, const N: usize> {
+    shear_factor: S,
+    origin: Vector<S, N>,
+    direction: Vector<S, N>,
+    normal: Vector<S, N>,
+}
+
+impl<S, const N: usize> ShearDiff<S, N> {
+    #[inline]
+    const fn from_parts(shear_factor: S, origin: Vector<S, N>, direction: Vector<S, N>, normal: Vector<S, N>) -> Self {
+        Self { shear_factor, origin, direction, normal }
+    }
+}
+
+
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ShearTol<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::AbsDiffEq::abs_diff_eq(lhs_shear_factor, rhs_shear_factor, &max_abs_diff.shear_factor)
+            && approx_cmp::AbsDiffEq::abs_diff_eq(lhs_origin, rhs_origin, &max_abs_diff.origin)
+            && approx_cmp::AbsDiffEq::abs_diff_eq(lhs_direction, rhs_direction, &max_abs_diff.direction)
+            && approx_cmp::AbsDiffEq::abs_diff_eq(lhs_normal, rhs_normal, &max_abs_diff.normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(lhs_shear_factor, rhs_shear_factor, max_abs_diff)
+            && approx_cmp::AbsDiffAllEq::abs_diff_all_eq(lhs_origin, rhs_origin, max_abs_diff)
+            && approx_cmp::AbsDiffAllEq::abs_diff_all_eq(lhs_direction, rhs_direction, max_abs_diff)
+            && approx_cmp::AbsDiffAllEq::abs_diff_all_eq(lhs_normal, rhs_normal, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ShearDiff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ShearTol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(lhs, rhs)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(lhs, rhs)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(lhs, rhs)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(lhs, rhs)
+        };
+
+        ShearDiff::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.shear_factor)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.origin)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.direction)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.normal)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ShearTol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ShearTol<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::RelativeEq::relative_eq(lhs_shear_factor, rhs_shear_factor, &max_abs_diff.shear_factor, &max_relative.shear_factor)
+            && approx_cmp::RelativeEq::relative_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_relative.origin)
+            && approx_cmp::RelativeEq::relative_eq(lhs_direction, rhs_direction, &max_abs_diff.direction, &max_relative.direction)
+            && approx_cmp::RelativeEq::relative_eq(lhs_normal, rhs_normal, &max_abs_diff.normal, &max_relative.normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::RelativeAllEq::relative_all_eq(lhs_shear_factor, rhs_shear_factor, max_abs_diff, max_relative)
+            && approx_cmp::RelativeAllEq::relative_all_eq(lhs_origin, rhs_origin, max_abs_diff, max_relative)
+            && approx_cmp::RelativeAllEq::relative_all_eq(lhs_direction, rhs_direction, max_abs_diff, max_relative)
+            && approx_cmp::RelativeAllEq::relative_all_eq(lhs_normal, rhs_normal, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ShearDiff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ShearTol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertRelativeEq::debug_abs_diff(lhs, rhs)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertRelativeEq::debug_abs_diff(lhs, rhs)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertRelativeEq::debug_abs_diff(lhs, rhs)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertRelativeEq::debug_abs_diff(lhs, rhs)
+        };
+
+        ShearDiff::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.shear_factor)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.origin)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.direction)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.normal)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(lhs, rhs, &max_relative.shear_factor)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(lhs, rhs, &max_relative.origin)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(lhs, rhs, &max_relative.direction)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(lhs, rhs, &max_relative.normal)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ShearTol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(lhs, rhs, max_relative)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(lhs, rhs, max_relative)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(lhs, rhs, max_relative)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(lhs, rhs, max_relative)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ShearTol<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = ShearTol<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::UlpsEq::ulps_eq(lhs_shear_factor, rhs_shear_factor, &max_abs_diff.shear_factor, &max_ulps.shear_factor)
+            && approx_cmp::UlpsEq::ulps_eq(lhs_origin, rhs_origin, &max_abs_diff.origin, &max_ulps.origin)
+            && approx_cmp::UlpsEq::ulps_eq(lhs_direction, rhs_direction, &max_abs_diff.direction, &max_ulps.direction)
+            && approx_cmp::UlpsEq::ulps_eq(lhs_normal, rhs_normal, &max_abs_diff.normal, &max_ulps.normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        let lhs_shear_factor = &self.shear_factor();
+        let rhs_shear_factor = &other.shear_factor();
+        let lhs_origin = &self.origin();
+        let rhs_origin = &other.origin();
+        let lhs_direction = &self.direction();
+        let rhs_direction = &other.direction();
+        let lhs_normal = &self.normal();
+        let rhs_normal = &other.normal();
+
+        approx_cmp::UlpsAllEq::ulps_all_eq(lhs_shear_factor, rhs_shear_factor, max_abs_diff, max_ulps)
+            && approx_cmp::UlpsAllEq::ulps_all_eq(lhs_origin, rhs_origin, max_abs_diff, max_ulps)
+            && approx_cmp::UlpsAllEq::ulps_all_eq(lhs_direction, rhs_direction, max_abs_diff, max_ulps)
+            && approx_cmp::UlpsAllEq::ulps_all_eq(lhs_normal, rhs_normal, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ShearDiff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = ShearDiff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = ShearTol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = ShearTol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsEq::debug_abs_diff(lhs, rhs)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsEq::debug_abs_diff(lhs, rhs)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsEq::debug_abs_diff(lhs, rhs)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsEq::debug_abs_diff(lhs, rhs)
+        };
+
+        ShearDiff::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(lhs, rhs)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(lhs, rhs)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(lhs, rhs)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(lhs, rhs)
+        };
+
+        ShearDiff::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.shear_factor)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.origin)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.direction)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(lhs, rhs, &max_abs_diff.normal)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(lhs, rhs, &max_ulps.shear_factor)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(lhs, rhs, &max_ulps.origin)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(lhs, rhs, &max_ulps.direction)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(lhs, rhs, &max_ulps.normal)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Shear<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ShearTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = ShearTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(lhs, rhs, max_abs_diff)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let shear_factor = {
+            let lhs = &self.shear_factor();
+            let rhs = &other.shear_factor();
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(lhs, rhs, max_ulps)
+        };
+        let origin = {
+            let lhs = &self.origin();
+            let rhs = &other.origin();
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(lhs, rhs, max_ulps)
+        };
+        let direction = {
+            let lhs = &self.direction();
+            let rhs = &other.direction();
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(lhs, rhs, max_ulps)
+        };
+        let normal = {
+            let lhs = &self.normal();
+            let rhs = &other.normal();
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(lhs, rhs, max_ulps)
+        };
+
+        ShearTol::from_parts(shear_factor, origin, direction, normal)
     }
 }

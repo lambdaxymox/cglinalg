@@ -4,7 +4,7 @@ extern crate cglinalg_trigonometry;
 
 #[cfg(test)]
 mod isometry2_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix3x3,
         Point2,
@@ -45,7 +45,7 @@ mod isometry2_tests {
         let expected = Vector2::new(-2_f64, 1_f64);
         let result = isometry.apply_vector(&vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -55,7 +55,7 @@ mod isometry2_tests {
         let expected = Vector2::unit_y();
         let result = isometry.apply_vector(&vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -87,7 +87,7 @@ mod isometry2_tests {
         let expected = unit_y.into_inner();
         let result = isometry.apply_vector(&unit_x.into_inner());
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -99,7 +99,7 @@ mod isometry2_tests {
         let expected = Point2::new(0_f64, 203_f64);
         let result = isometry.apply_point(&point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -130,11 +130,11 @@ mod isometry2_tests {
         let expected = point;
         let result = isometry_inv * (isometry * point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 
         let result = isometry * (isometry_inv * point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -188,7 +188,7 @@ mod isometry2_tests {
 
 #[cfg(test)]
 mod isometry3_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Matrix4x4,
         Point3,
@@ -233,7 +233,7 @@ mod isometry3_tests {
         let expected = Vector3::new(-2_f64, 1_f64, 3_f64);
         let result = isometry.apply_vector(&vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -245,7 +245,7 @@ mod isometry3_tests {
         let expected = Vector3::unit_y();
         let result = isometry.apply_vector(&vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -278,7 +278,7 @@ mod isometry3_tests {
         let expected = unit_y.into_inner();
         let result = isometry.apply_vector(&unit_x.into_inner());
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -290,7 +290,7 @@ mod isometry3_tests {
         let expected = Point3::new(0_f64, 203_f64, 0_f64);
         let result = isometry.apply_point(&point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -324,11 +324,11 @@ mod isometry3_tests {
         let expected = point;
         let result = isometry_inv * (isometry * point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 
         let result = isometry * (isometry_inv * point);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]

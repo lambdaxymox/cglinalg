@@ -100,9 +100,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,   
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected: Option<Vector4<f64>> = Some(Vector4::new(1_f64, 2_f64, 3_f64, 4_f64));
@@ -142,9 +140,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,   
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let fill_value = 3_f64;
     /// let result = Vector3::from_fill(fill_value);
@@ -163,9 +159,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,  
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected: Vector4<f64> = Vector4::new(2_f64, 3_f64, 4_f64, 5_f64);
@@ -194,9 +188,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector: Vector3<i32> = Vector3::zero();
     ///
@@ -214,9 +206,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let zero: Vector4<i32> = Vector4::zero();
     /// let non_zero = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -240,9 +230,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
@@ -271,9 +259,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let v1 = Vector3::new(0_f64, 1_f64, 4_f64);
     /// let v2 = Vector3::new(5_f64, 8_f64, 3_f64);
@@ -298,9 +284,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let mut result = Vector3::new(0_f64, 1_f64, 4_f64);
     /// let other = Vector3::new(5_f64, 8_f64, 3_f64);
@@ -327,9 +311,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let mut result = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);
     /// let expected = -result;
@@ -355,19 +337,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.norm_squared();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn norm_squared(&self) -> S {
@@ -380,9 +358,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
     /// let vector2 = Vector3::new(-3_f64, 1_f64, 2_f64);
@@ -403,19 +379,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.magnitude_squared();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn magnitude_squared(&self) -> S {
@@ -432,15 +404,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     L1Norm,
     /// #     L2Norm,
     /// #     LinfNorm,
     /// #     LpNorm,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
@@ -452,7 +422,12 @@ where
     /// assert_eq!(vector.apply_norm(&l1_norm), 6_f64);
     /// assert_eq!(vector.apply_norm(&l2_norm), f64::sqrt(14_f64));
     /// assert_eq!(vector.apply_norm(&linf_norm), 3_f64);
-    /// assert_relative_eq!(vector.apply_norm(&lp_norm), 3.07738488539406275, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     vector.apply_norm(&lp_norm),
+    ///     3.07738488539406275,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn apply_norm(&self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
@@ -465,15 +440,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     L1Norm,
     /// #     L2Norm,
     /// #     LinfNorm,
     /// #     LpNorm,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector1 = Vector3::new(0_f64, -5_f64, 6_f64);
@@ -486,7 +459,12 @@ where
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &l1_norm), 13_f64);
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &l2_norm), f64::sqrt(61_f64));
     /// assert_eq!(vector1.apply_metric_distance(&vector2, &linf_norm), 6_f64);
-    /// assert_relative_eq!(vector1.apply_metric_distance(&vector2, &lp_norm), 6.18390068614692783, epsilon = 1e-10);
+    /// assert_relative_eq!(
+    ///     vector1.apply_metric_distance(&vector2, &lp_norm),
+    ///     6.18390068614692783,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn apply_metric_distance(&self, other: &Self, norm: &impl Norm<Vector<S, N>, Output = S>) -> S {
@@ -499,9 +477,7 @@ where
     ///
     /// An example computing the **L1** norm of a vector of [`f64`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector = Vector3::new(-2_f64, 7_f64, 8_f64);
     /// let expected = 17_f64;
@@ -512,9 +488,7 @@ where
     ///
     /// An example of computing the **L1** norm of a vector of [`i32`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector = Vector3::new(-2_i32, 7_i32, 8_i32);
     /// let expected = 17_i32;
@@ -544,9 +518,7 @@ where
     ///
     /// An example of computing the **L-infinity** norm of a vector of [`f64`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector = Vector4::new(1_f64, 100_f64, 3_f64, 4_f64);
     /// let expected = 100_f64;
@@ -557,9 +529,7 @@ where
     ///
     /// An example of computing the **L-infinity** norm of a vector of [`i32`] scalars.
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector = Vector4::new(1_i32, 100_i32, 3_i32, 4_i32);
     /// let expected = 100_i32;
@@ -588,19 +558,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.norm();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn norm(&self) -> S {
@@ -613,9 +579,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector1 = Vector3::new(1_f64, 4_f64, 6_f64);
     /// let vector2 = Vector3::new(1_f64, 8_f64, -2_f64);
@@ -636,19 +600,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.magnitude();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn magnitude(&self) -> S {
@@ -662,19 +622,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64;
     /// let result = vector.l2_norm();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn l2_norm(&self) -> S {
@@ -687,19 +643,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let value = 1_f64 / f64::sqrt(3_f64);
     /// let vector = Vector3::from_fill(value);
     /// let expected = 1_f64 / f64::powf(3_f64, 3_f64 / 10_f64);
     /// let result = vector.lp_norm(5);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn lp_norm(&self, p: u32) -> S {
@@ -841,9 +793,7 @@ where
     /// # Example (Finite Vector)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let v = Vector4::new(1_f64, 2_f64, 3_f64, 4_f64);
     ///
@@ -853,9 +803,7 @@ where
     /// # Example (Not A Finite Vector)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let w = Vector4::new(1_f64, f64::NAN, f64::NEG_INFINITY, 4_f64);
     ///
@@ -901,8 +849,8 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Normed,
+    /// #     Vector3,
     /// # };
     /// #
     /// let vector = Vector3::new(1_f64 / 2_f64, f64::sqrt(3_f64) / 2_f64, 2_f64);
@@ -927,12 +875,10 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Normed,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Vector2,
     /// # };
     /// #
     /// let vector = Vector2::new(1_f64, 1_f64);
@@ -940,8 +886,8 @@ where
     /// let expected = Vector2::new(7_f64 / 5_f64, 1_f64 / 5_f64);
     /// let result = vector.reflect(&normal);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
-    /// assert_relative_eq!(result.norm(), expected.norm(), epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result.norm(), expected.norm(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn reflect(&self, normal: &Self) -> Self {
@@ -962,9 +908,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let v1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
@@ -995,9 +939,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let v1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let v2 = Vector3::new(-1_f64, 5_f64, 0_f64);
@@ -1258,7 +1200,7 @@ where
     }
 }
 
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Vector<S, N>
 where
     S: SimdScalarFloat,
@@ -1323,6 +1265,328 @@ where
         result
     }
 }
+*/
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::AbsDiffEq::abs_diff_eq(&self.data[i], &other.data[i], &max_abs_diff.data[i]);
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.data[i], &other.data[i], max_abs_diff);
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(
+            &self.data,
+            &other.data,
+        );
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Vector::from(result)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Vector::from(result)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::RelativeEq::relative_eq(
+                &self.data[i],
+                &other.data[i],
+                &max_abs_diff.data[i],
+                &max_relative.data[i],
+            );
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::RelativeAllEq::relative_all_eq(
+                &self.data[i],
+                &other.data[i],
+                max_abs_diff,
+                max_relative,
+            );
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.data, &other.data);
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(
+            &self.data,
+            &other.data,
+            &max_relative.data,
+        );
+
+        Vector::from(result)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(
+            &self.data,
+            &other.data,
+            max_relative,
+        );
+
+        Vector::from(result)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type Tolerance = Vector<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = Vector<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::UlpsEq::ulps_eq(
+                &self.data[i],
+                &other.data[i],
+                &max_abs_diff.data[i],
+                &max_ulps.data[i],
+            );
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        // PERFORMANCE: The const loop should get unrolled during optimization.
+        let mut result = true;
+        for i in 0..N {
+            result &= approx_cmp::UlpsAllEq::ulps_all_eq(
+                &self.data[i],
+                &other.data[i],
+                max_abs_diff,
+                max_ulps,
+            );
+        }
+
+        result
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = Vector<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let result = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.data, &other.data);
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.data, &other.data);
+
+        Vector { data, }
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let data = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(
+            &self.data,
+            &other.data,
+            &max_abs_diff.data,
+        );
+
+        Vector { data, }
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let data = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(
+            &self.data,
+            &other.data,
+            &max_ulps.data,
+        );
+
+        Vector { data, }
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Vector<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = Vector<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let result = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(
+            &self.data,
+            &other.data,
+            max_abs_diff,
+        );
+
+        Vector::from(result)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let data = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(
+            &self.data,
+            &other.data,
+            max_ulps,
+        );
+
+        Vector { data, }
+    }
+}
+
 
 impl<S, const N: usize> Normed for Vector<S, N>
 where
@@ -1818,9 +2082,7 @@ impl<S> Vector1<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// # };
+    /// # use cglinalg_core::Vector1;
     /// #
     /// let x = 1_i32;
     /// let vector = Vector1::new(x);
@@ -1843,9 +2105,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// # };
+    /// # use cglinalg_core::Vector1;
     /// #
     /// let vector: Vector1<i32> = Vector1::unit_x();
     ///
@@ -1866,9 +2126,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector1,
-    /// # };
+    /// # use cglinalg_core::Vector1;
     /// #
     /// let vector = Vector1::new(1_i32);
     ///
@@ -1886,9 +2144,7 @@ impl<S> Vector2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
     /// #
     /// let x = 1_i32;
     /// let y = 2_i32;
@@ -1913,9 +2169,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
     /// #
     /// let vector: Vector2<i32> = Vector2::unit_x();
     ///
@@ -1933,9 +2187,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
     /// #
     /// let vector: Vector2<i32> = Vector2::unit_y();
     ///
@@ -1954,9 +2206,7 @@ impl<S> Vector3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let x = 1_i32;
     /// let y = 2_i32;
@@ -1983,9 +2233,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_x();
     ///
@@ -2004,9 +2252,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_y();
     ///
@@ -2025,9 +2271,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector: Vector3<i32> = Vector3::unit_z();
     ///
@@ -2052,9 +2296,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,  
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let vector2 = Vector3::new(4_f64, 5_f64, 6_f64);
@@ -2110,9 +2352,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
     /// #
     /// let u = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let v = Vector3::new(6_f64, 87_f64, 222_f64);
@@ -2141,9 +2381,7 @@ impl<S> Vector4<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let x = 1_i32;
     /// let y = 2_i32;
@@ -2172,9 +2410,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_x();
     ///
@@ -2194,9 +2430,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_y();
     ///
@@ -2216,9 +2450,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_z();
     ///
@@ -2238,9 +2470,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector4,
-    /// # };
+    /// # use cglinalg_core::Vector4;
     /// #
     /// let vector: Vector4<i32> = Vector4::unit_w();
     ///

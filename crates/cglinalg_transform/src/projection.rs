@@ -30,8 +30,8 @@ use core::ops;
 /// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device
 /// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
-/// The underlying matrix is identical to the one used by OpenGL, provided here for
-/// reference
+/// The underlying matrix is identical to the one used by OpenGL, provided here
+/// for reference
 /// ```text
 /// | m[0, 0]  0         m[2, 0]  0       |
 /// | 0        m[1, 1]   m[2, 1]  0       |
@@ -96,15 +96,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -114,12 +108,12 @@ where
     /// let far = 100_f64;
     /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     ///
-    /// assert_relative_eq!(perspective.left(),   left,   epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.right(),  right,  epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.bottom(), bottom, epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.top(),    top,    epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.near(),   near,   epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.far(),    far,    epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.bottom(), bottom, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.top(),    top,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.near(),   near,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.far(),    far,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
@@ -134,15 +128,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -154,7 +142,7 @@ where
     /// let expected = near;
     /// let result = perspective.near();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn near(&self) -> S {
@@ -172,15 +160,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -192,7 +174,7 @@ where
     /// let expected = far;
     /// let result = perspective.far();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn far(&self) -> S {
@@ -210,15 +192,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -230,7 +206,7 @@ where
     /// let expected = right;
     /// let result = perspective.right();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn right(&self) -> S {
@@ -249,15 +225,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -269,7 +239,7 @@ where
     /// let expected = left;
     /// let result = perspective.left();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn left(&self) -> S {
@@ -288,15 +258,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -308,7 +272,7 @@ where
     /// let expected = top;
     /// let result = perspective.top();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn top(&self) -> S {
@@ -327,15 +291,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -347,7 +305,7 @@ where
     /// let expected = bottom;
     /// let result = perspective.bottom();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn bottom(&self) -> S {
@@ -364,15 +322,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -385,11 +337,11 @@ where
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
     ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
-    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     /// );
     /// let result = perspective.matrix();
     ///
-    /// assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix4x4<S> {
@@ -401,15 +353,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -422,7 +368,7 @@ where
     /// let expected = Point3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -440,15 +386,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -461,7 +401,7 @@ where
     /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
     /// let result = perspective.project_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -474,20 +414,14 @@ where
     /// Unproject a point from normalized device coordinates back to camera
     /// view space.
     ///
-    /// This is the inverse operation of `project_point`.
+    /// This is the inverse operation of [`project_point`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -501,7 +435,7 @@ where
     /// let projected_point = perspective.project_point(&point);
     /// let result = perspective.unproject_point(&projected_point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -548,20 +482,14 @@ where
     /// Unproject a vector from normalized device coordinates back to
     /// camera view space.
     ///
-    /// This is the inverse operation of `project_vector`.
+    /// This is the inverse operation of [`project_vector`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Perspective3;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -575,7 +503,7 @@ where
     /// let projected_vector = perspective.project_vector(&vector);
     /// let result = perspective.unproject_vector(&projected_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -624,18 +552,10 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Perspective3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -648,11 +568,11 @@ where
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
     ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
-    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     /// );
     /// let result = perspective.to_projective_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
@@ -664,19 +584,13 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
     /// # use cglinalg_transform::{
     /// #     Perspective3,
     /// #     Transform3,
     /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let left = -3_f64;
     /// let right = 3_f64;
@@ -689,11 +603,11 @@ where
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
     ///     0_f64,         0_f64,         -101_f64 / 99_f64, -1_f64,
-    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64
+    ///     0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     /// ));
     /// let result = perspective.to_transform();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
@@ -726,7 +640,7 @@ where
         perspective.to_projective_matrix()
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for Perspective3<S>
 where
     S: SimdScalarFloat,
@@ -773,7 +687,7 @@ where
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S> ops::Mul<Point3<S>> for Perspective3<S>
 where
     S: SimdScalarFloat,
@@ -871,6 +785,263 @@ where
 }
 
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Perspective3Tol<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> From<Matrix4x4<S>> for Perspective3Tol<S> {
+    #[inline]
+    fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> From<&Matrix4x4<S>> for Perspective3Tol<S>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(matrix: &Matrix4x4<S>) -> Self {
+        Self { matrix: *matrix }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Perspective3Diff<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> Perspective3Diff<S> {
+    #[inline]
+    const fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> approx_cmp::AbsDiffEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Perspective3Tol<<S as approx_cmp::AbsDiffEq>::Tolerance>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.matrix, &other.matrix, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Perspective3Diff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = Perspective3Tol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Perspective3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Perspective3Tol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Perspective3Tol<<S as approx_cmp::RelativeEq>::Tolerance>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_relative.matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Perspective3Diff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = Perspective3Tol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Perspective3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Perspective3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.matrix, &other.matrix, &max_relative.matrix);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Perspective3Tol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Perspective3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.matrix, &other.matrix, max_relative);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Perspective3Tol<<S as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = Perspective3Tol<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_ulps.matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Perspective3Diff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = Perspective3Diff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = Perspective3Tol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = Perspective3Tol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Perspective3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.matrix, &other.matrix);
+
+        Perspective3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Perspective3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.matrix, &other.matrix, &max_ulps.matrix);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Perspective3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Perspective3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = Perspective3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Perspective3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.matrix, &other.matrix, max_ulps);
+
+        Perspective3Tol::from(matrix)
+    }
+}
+
+
+
 /// A perspective projection transformation for converting from camera space to
 /// normalized device coordinates based on the perspective field of view model.
 ///
@@ -895,8 +1066,8 @@ where
 /// The normalized device coordinates this transformation maps to are
 /// `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
-/// The underlying matrix is identical to the one used by OpenGL, provided here for
-/// reference
+/// The underlying matrix is identical to the one used by OpenGL, provided here
+/// for reference
 /// ```text
 /// | m[0, 0] 0         0        0       |
 /// | 0       m[1, 1]   0        0       |
@@ -946,15 +1117,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect_ratio = 800_f64 / 600_f64;
@@ -962,10 +1127,10 @@ where
     /// let far = 100_f64;
     /// let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     ///
-    /// assert_relative_eq!(perspective.vfov(),         vfov.into(),  epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio, epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.near(),         near,         epsilon = 1e-10);
-    /// assert_relative_eq!(perspective.far(),          far,          epsilon = 1e-10);
+    /// assert_relative_eq!(perspective.vfov(),         vfov.into(),  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.near(),         near,         abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(perspective.far(),          far,          abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     pub fn new<A>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self
     where
@@ -983,15 +1148,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect_ratio = 800_f64 / 600_f64;
@@ -1001,7 +1160,7 @@ where
     /// let expected = vfov.into();
     /// let result = perspective.vfov();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn vfov(&self) -> Radians<S> {
@@ -1010,7 +1169,7 @@ where
         // | m[0, 0]  0         0        0       |
         // | 0        m[1, 1]   0        0       |
         // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1              0 |
+        // | 0        0        -1        0       |
         // ```
         // where
         // ```text
@@ -1025,7 +1184,7 @@ where
         // m[1, 1] := 1 / tan(vfov / 2)
         //     <==> tan(vfov / 2) == 1 / m[1, 1]
         //     <==> vfov / 2 == atan(1 / m[1, 1])
-        //     <==> vfov = 2 * atan(1 / m[1, 1])
+        //     <==> vfov == 2 * atan(1 / m[1, 1])
         // ```
         // so that `vfov == 2 * atan(1 / m[1, 1])`.
         let one = S::one();
@@ -1042,15 +1201,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect_ratio = 800_f64 / 600_f64;
@@ -1060,7 +1213,7 @@ where
     /// let expected = near;
     /// let result = perspective.near();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn near(&self) -> S {
@@ -1069,7 +1222,7 @@ where
         // | m[0, 0]  0         0        0       |
         // | 0        m[1, 1]   0        0       |
         // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1              0 |
+        // | 0        0        -1        0       |
         // ```
         // where
         // ```text
@@ -1124,15 +1277,9 @@ where
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect_ratio = 800_f64 / 600_f64;
@@ -1142,7 +1289,7 @@ where
     /// let expected = far;
     /// let result = perspective.far();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn far(&self) -> S {
@@ -1151,7 +1298,7 @@ where
         // | m[0, 0]  0         0        0       |
         // | 0        m[1, 1]   0        0       |
         // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1              0 |
+        // | 0        0        -1        0       |
         // ```
         // where
         // ```text
@@ -1209,12 +1356,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// #
     /// let vfov = Degrees(72_f64);
     /// let aspect_ratio = 800_f64 / 600_f64;
@@ -1233,7 +1376,7 @@ where
         // | m[0, 0]  0         0        0       |
         // | 0        m[1, 1]   0        0       |
         // | 0        0         m[2, 2]  m[3, 2] |
-        // | 0        0        -1              0 |
+        // | 0        0        -1        0       |
         // ```
         // where
         // ```text
@@ -1260,15 +1403,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
@@ -1279,7 +1416,7 @@ where
     /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.right();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn right(&self) -> S {
@@ -1295,15 +1432,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
@@ -1314,7 +1445,7 @@ where
     /// let expected = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     /// let result = perspective.left();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn left(&self) -> S {
@@ -1328,15 +1459,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
@@ -1347,7 +1472,7 @@ where
     /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.top();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn top(&self) -> S {
@@ -1363,15 +1488,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::Degrees;
     /// # use core::f64;
     /// #
     /// let vfov = Degrees(72_f64);
@@ -1382,7 +1501,7 @@ where
     /// let expected = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     /// let result = perspective.bottom();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn bottom(&self) -> S {
@@ -1394,15 +1513,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::PerspectiveFov3;
     /// # use cglinalg_trigonometry::{
     /// #     Angle,
     /// #     Degrees,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1419,7 +1534,7 @@ where
     ///     c0r0,  0_f64, 0_f64,  0_f64,
     ///     0_f64, c1r1,  0_f64,  0_f64,
     ///     0_f64, 0_f64, c2r2,  -1_f64,
-    ///     0_f64, 0_f64, c3r2,   0_f64
+    ///     0_f64, 0_f64, c3r2,   0_f64,
     /// );
     /// let result = perspective.matrix();
     ///
@@ -1435,19 +1550,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Point3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1460,7 +1571,7 @@ where
     /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     pub fn project_point(&self, point: &Point3<S>) -> Point3<S> {
         let inverse_w = -S::one() / point.z;
@@ -1477,19 +1588,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1502,7 +1609,7 @@ where
     /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn project_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1515,24 +1622,20 @@ where
     /// Unproject a point from normalized device coordinates back to camera
     /// view space.
     ///
-    /// This is the inverse operation of `project_point`.
+    /// This is the inverse operation of [`project_point`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Point3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1546,7 +1649,7 @@ where
     /// let expected = point;
     /// let result = perspective.unproject_point(&projected_point);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn unproject_point(&self, point: &Point3<S>) -> Point3<S> {
@@ -1601,24 +1704,20 @@ where
     /// Unproject a vector from normalized device coordinates back to
     /// camera view space.
     ///
-    /// This is the inverse operation of `project_vector`.
+    /// This is the inverse operation of [`project_vector`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_trigonometry::{
-    /// #     Angle,
-    /// #     Degrees,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// # use cglinalg_transform::PerspectiveFov3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1632,7 +1731,7 @@ where
     /// let expected = vector;
     /// let result = perspective.unproject_vector(&projected_vector);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn unproject_vector(&self, vector: &Vector3<S>) -> Vector3<S> {
@@ -1689,18 +1788,12 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     PerspectiveFov3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::PerspectiveFov3;
     /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
     /// #     Angle,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1717,7 +1810,7 @@ where
     ///     c0r0,  0_f64, 0_f64,  0_f64,
     ///     0_f64, c1r1,  0_f64,  0_f64,
     ///     0_f64, 0_f64, c2r2,  -1_f64,
-    ///     0_f64, 0_f64, c3r2,   0_f64
+    ///     0_f64, 0_f64, c3r2,   0_f64,
     /// );
     /// let result = perspective.to_projective_matrix();
     ///
@@ -1733,19 +1826,15 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_transform::{
     /// #     PerspectiveFov3,
     /// #     Transform3,
     /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
     /// # use cglinalg_trigonometry::{
-    /// #     Degrees,
     /// #     Angle,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
+    /// #     Degrees,
     /// # };
     /// #
     /// let vfov = Degrees(90_f64);
@@ -1762,7 +1851,7 @@ where
     ///     c0r0,  0_f64, 0_f64,  0_f64,
     ///     0_f64, c1r1,  0_f64,  0_f64,
     ///     0_f64, 0_f64, c2r2,  -1_f64,
-    ///     0_f64, 0_f64, c3r2,   0_f64
+    ///     0_f64, 0_f64, c3r2,   0_f64,
     /// ));
     /// let result = perspective.to_transform();
     ///
@@ -1799,7 +1888,7 @@ where
         perspective.to_projective_matrix()
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for PerspectiveFov3<S>
 where
     S: SimdScalarFloat,
@@ -1846,7 +1935,7 @@ where
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S> ops::Mul<Point3<S>> for PerspectiveFov3<S>
 where
     S: SimdScalarFloat,
@@ -1943,6 +2032,262 @@ where
     }
 }
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct PerspectiveFov3Tol<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> From<Matrix4x4<S>> for PerspectiveFov3Tol<S> {
+    #[inline]
+    fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> From<&Matrix4x4<S>> for PerspectiveFov3Tol<S>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(matrix: &Matrix4x4<S>) -> Self {
+        Self { matrix: *matrix }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct PerspectiveFov3Diff<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> PerspectiveFov3Diff<S> {
+    #[inline]
+    const fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> approx_cmp::AbsDiffEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = PerspectiveFov3Tol<<S as approx_cmp::AbsDiffEq>::Tolerance>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.matrix, &other.matrix, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = PerspectiveFov3Diff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        PerspectiveFov3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = PerspectiveFov3Tol<<S as approx_cmp::RelativeEq>::Tolerance>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_relative.matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = PerspectiveFov3Diff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        PerspectiveFov3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.matrix, &other.matrix, &max_relative.matrix);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.matrix, &other.matrix, max_relative);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = PerspectiveFov3Tol<<S as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = PerspectiveFov3Tol<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_ulps.matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = PerspectiveFov3Diff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = PerspectiveFov3Diff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        PerspectiveFov3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.matrix, &other.matrix);
+
+        PerspectiveFov3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.matrix, &other.matrix, &max_ulps.matrix);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for PerspectiveFov3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = PerspectiveFov3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.matrix, &other.matrix, max_ulps);
+
+        PerspectiveFov3Tol::from(matrix)
+    }
+}
+
+
 
 /// An orthographic projection with arbitrary `left`, `right`,
 /// `top`, `bottom`, `near`, and `far` planes.
@@ -1960,8 +2305,8 @@ where
 /// normalized device coordinates this transformation maps to are
 /// `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
-/// The underlying matrix is identical to the one used by OpenGL. We provide
-/// it here for reference
+/// The underlying matrix is identical to the one used by OpenGL, provided here
+/// for reference
 /// ```text
 /// | m[0, 0]  0        0        m[3, 0] |
 /// | 0        m[1, 1]  0        m[3, 1] |
@@ -2022,15 +2367,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2041,12 +2380,12 @@ where
     /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(2_f64, 3_f64, 30_f64);
     ///
-    /// assert_relative_eq!(orthographic.left(),   left,   epsilon = 1e-10);
-    /// assert_relative_eq!(orthographic.right(),  right,  epsilon = 1e-10);
-    /// assert_relative_eq!(orthographic.bottom(), bottom, epsilon = 1e-10);
-    /// assert_relative_eq!(orthographic.top(),    top,    epsilon = 1e-10);
-    /// assert_relative_eq!(orthographic.near(),   near,   epsilon = 1e-10);
-    /// assert_relative_eq!(orthographic.far(),    far,    epsilon = 1e-10);
+    /// assert_relative_eq!(orthographic.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(orthographic.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(orthographic.bottom(), bottom, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(orthographic.top(),    top,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(orthographic.near(),   near,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(orthographic.far(),    far,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
@@ -2061,15 +2400,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2082,7 +2415,7 @@ where
     /// let expected = near;
     /// let result = orthographic.near();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn near(&self) -> S {
@@ -2100,15 +2433,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2121,7 +2448,7 @@ where
     /// let expected = far;
     /// let result = orthographic.far();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn far(&self) -> S {
@@ -2139,15 +2466,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2160,7 +2481,7 @@ where
     /// let expected = right;
     /// let result = orthographic.right();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn right(&self) -> S {
@@ -2178,15 +2499,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2199,7 +2514,7 @@ where
     /// let expected = left;
     /// let result = orthographic.left();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn left(&self) -> S {
@@ -2217,15 +2532,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2238,7 +2547,7 @@ where
     /// let expected = top;
     /// let result = orthographic.top();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn top(&self) -> S {
@@ -2256,15 +2565,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2277,7 +2580,7 @@ where
     /// let expected = bottom;
     /// let result = orthographic.bottom();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn bottom(&self) -> S {
@@ -2293,12 +2596,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2311,7 +2610,7 @@ where
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
     ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
-    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64,
     /// );
     /// let result = orthographic.matrix();
     ///
@@ -2327,12 +2626,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2361,12 +2656,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2393,17 +2684,13 @@ where
     /// Unproject a point from normalized devices coordinates back to camera
     /// view space.
     ///
-    /// This is the inverse operation of `project_point`.
+    /// This is the inverse operation of [`project_point`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2436,17 +2723,13 @@ where
     /// Unproject a vector from normalized device coordinates back to
     /// camera view space.
     ///
-    /// This is the inverse operation of `project_vector`.
+    /// This is the inverse operation of [`project_vector`].
     ///
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2478,15 +2761,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Orthographic3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Orthographic3;
     /// #
     /// let left = -6_f64;
     /// let right = 6_f64;
@@ -2499,7 +2776,7 @@ where
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
     ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
-    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64,
     /// );
     /// let result = orthographic.to_projective_matrix();
     ///
@@ -2515,15 +2792,11 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
     /// # use cglinalg_transform::{
     /// #     Orthographic3,
     /// #     Transform3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// #
     /// let left = -6_f64;
@@ -2537,7 +2810,7 @@ where
     ///     1_f64 / 6_f64, 0_f64,          0_f64,           0_f64,
     ///     0_f64,         1_f64 / 4_f64,  0_f64,           0_f64,
     ///     0_f64,         0_f64,         -1_f64 / 50_f64,  0_f64,
-    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64
+    ///     0_f64,         0_f64,         -51_f64 / 50_f64, 1_f64,
     /// ));
     /// let result = orthographic.to_transform();
     ///
@@ -2574,7 +2847,7 @@ where
         orthographic.to_projective_matrix()
     }
 }
-
+/*
 impl<S> approx::AbsDiffEq for Orthographic3<S>
 where
     S: SimdScalarFloat,
@@ -2621,6 +2894,7 @@ where
         Matrix4x4::ulps_eq(&self.matrix, &other.matrix, epsilon, max_ulps)
     }
 }
+*/
 
 impl<S> ops::Mul<Point3<S>> for Orthographic3<S>
 where
@@ -2715,5 +2989,260 @@ where
     #[inline]
     fn mul(self, other: &'a Vector3<S>) -> Self::Output {
         self.project_vector(other)
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Orthographic3Tol<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> From<Matrix4x4<S>> for Orthographic3Tol<S> {
+    #[inline]
+    fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> From<&Matrix4x4<S>> for Orthographic3Tol<S>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(matrix: &Matrix4x4<S>) -> Self {
+        Self { matrix: *matrix }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct Orthographic3Diff<S> {
+    matrix: Matrix4x4<S>,
+}
+
+impl<S> Orthographic3Diff<S> {
+    #[inline]
+    const fn from(matrix: Matrix4x4<S>) -> Self {
+        Self { matrix }
+    }
+}
+
+impl<S> approx_cmp::AbsDiffEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Orthographic3Tol<<S as approx_cmp::AbsDiffEq>::Tolerance>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.matrix, &other.matrix, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Orthographic3Diff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Orthographic3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Orthographic3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Orthographic3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Orthographic3Tol<<S as approx_cmp::RelativeEq>::Tolerance>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_relative.matrix)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Orthographic3Diff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Orthographic3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Orthographic3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.matrix, &other.matrix, &max_relative.matrix);
+
+        Orthographic3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Orthographic3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.matrix, &other.matrix, max_relative);
+
+        Orthographic3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Orthographic3Tol<<S as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = Orthographic3Tol<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.matrix, &other.matrix, &max_abs_diff.matrix, &max_ulps.matrix)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.matrix, &other.matrix, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Orthographic3Diff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = Orthographic3Diff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = Orthographic3Tol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.matrix, &other.matrix);
+
+        Orthographic3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.matrix, &other.matrix);
+
+        Orthographic3Diff::from(matrix)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.matrix, &other.matrix, &max_abs_diff.matrix);
+
+        Orthographic3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.matrix, &other.matrix, &max_ulps.matrix);
+
+        Orthographic3Tol::from(matrix)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Orthographic3<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Orthographic3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = Orthographic3Tol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.matrix, &other.matrix, max_abs_diff);
+
+        Orthographic3Tol::from(matrix)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let matrix = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.matrix, &other.matrix, max_ulps);
+
+        Orthographic3Tol::from(matrix)
     }
 }

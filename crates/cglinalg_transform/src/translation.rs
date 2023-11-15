@@ -72,13 +72,11 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
+    /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let vector = Vector2::new(1_f64, 2_f64);
     /// let translation = Translation2::from_vector(&vector);
@@ -92,13 +90,11 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
+    /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let vector = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let translation = Translation3::from_vector(&vector);
@@ -119,12 +115,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let vector1 = Vector2::new(1_f64, 2_f64);
     /// let vector2 = Vector2::new(3_f64, 4_f64);
@@ -140,12 +134,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector3,
     /// #     Point3,
+    /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let vector1 = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let vector2 = Vector3::new(7_f64, 9_f64, 11_f64);
@@ -168,12 +160,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let point1 = Point2::new(1_f64, 2_f64);
     /// let point2 = Point2::new(3_f64, 4_f64);
@@ -188,12 +176,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
     /// let point2 = Point3::new(7_f64, 9_f64, 11_f64);
@@ -220,12 +204,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let distance = Vector2::new(1_f64, 2_f64);
     /// let translation = Translation2::from_vector(&distance);
@@ -238,12 +218,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let translation = Translation3::from_vector(&distance);
@@ -262,12 +238,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let mut result = Translation2::new(1_f64, 2_f64);
     /// let expected = Translation2::new(-1_f64, -2_f64);
@@ -279,12 +251,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let mut result = Translation3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Translation3::new(-1_f64, -2_f64, -3_f64);
@@ -303,12 +271,10 @@ where
     ///
     /// ```
     /// # use cglinalg_core::{
-    /// #     Vector2,
     /// #     Point2,
+    /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let distance = Vector2::new(4_f64, 8_f64);
     /// let translation = Translation2::from_vector(&distance);
@@ -326,9 +292,7 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let translation = Translation3::from_vector(&distance);
@@ -348,12 +312,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let distance = Vector2::new(4_f64, 8_f64);
     /// let translation = Translation2::from_vector(&distance);
@@ -367,12 +327,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
     /// let translation = Translation3::from_vector(&distance);
@@ -396,9 +352,7 @@ where
     /// #     Point2,
     /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let distance = Vector2::new(13_f64, 30_f64);
     /// let translation = Translation2::from_vector(&distance);
@@ -417,9 +371,7 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let distance = Vector3::new(1_f64, 2_f64, 3_f64);
     /// let translation = Translation3::from_vector(&distance);
@@ -440,12 +392,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let distance = Vector2::new(13_f64, 30_f64);
     /// let translation = Translation2::from_vector(&distance);
@@ -457,12 +405,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let distance = Vector3::new(100_f64, 200_f64, 300_f64);
     /// let translation = Translation3::from_vector(&distance);
@@ -483,12 +427,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let translation = Translation2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
@@ -499,12 +439,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let translation = Translation3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
@@ -516,17 +452,33 @@ where
         Self { vector: Vector::zero() }
     }
 
+    /// Get the underlying shift vector for a translation.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Translation2;
+    /// #
+    /// let vector = Vector2::new(1_i32, 2_i32);
+    /// let translation = Translation2::from_vector(&vector);
+    /// let expected = &vector;
+    /// let result = translation.vector();
+    /// 
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub const fn vector(&self) -> &Vector<S, N> {
+        &self.vector
+    }
+
     /// Convert a translation into its equivalent shift vector.
     ///
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let translation = Translation2::new(1_f64, 2_f64);
     /// let shift = translation.to_vector();
@@ -540,12 +492,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
     /// let shift = translation.to_vector();
@@ -572,18 +520,14 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let translation = Translation2::new(1_f64, 2_f64);
     /// let expected = Matrix3x3::new(
     ///     1_f64, 0_f64, 0_f64,
     ///     0_f64, 1_f64, 0_f64,
-    ///     1_f64, 2_f64, 1_f64
+    ///     1_f64, 2_f64, 1_f64,
     /// );
     /// let result = translation.to_affine_matrix();
     ///
@@ -593,12 +537,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
     /// let expected = Matrix4x4::new(
@@ -627,12 +567,10 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
+    /// # use cglinalg_core::Matrix3x3;
     /// # use cglinalg_transform::{
-    /// #     Translation2,
     /// #     Transform2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
+    /// #     Translation2,
     /// # };
     /// #
     /// let translation = Translation2::new(1_f64, 2_f64);
@@ -649,12 +587,10 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
+    /// # use cglinalg_core::Matrix4x4;
     /// # use cglinalg_transform::{
-    /// #     Translation3,
     /// #     Transform3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
+    /// #     Translation3,
     /// # };
     /// #
     /// let translation = Translation3::new(1_f64, 2_f64, 3_f64);
@@ -713,7 +649,7 @@ where
         transform.to_affine_matrix()
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Translation<S, N>
 where
     S: SimdScalarFloat,
@@ -760,6 +696,7 @@ where
         Vector::ulps_eq(&self.vector, &other.vector, epsilon, max_ulps)
     }
 }
+*/
 
 impl<S, const N: usize> ops::Mul<Vector<S, N>> for Translation<S, N>
 where
@@ -918,18 +855,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix3x3,
-    /// # };
+    /// # use cglinalg_core::Matrix3x3;
+    /// # use cglinalg_transform::Translation2;
     /// #
     /// let translation = Translation2::new(5_i32, 7_i32);
     /// let expected = Matrix3x3::new(
     ///     1_i32, 0_i32, 0_i32,
     ///     0_i32, 1_i32, 0_i32,
-    ///     5_i32, 7_i32, 1_i32
+    ///     5_i32, 7_i32, 1_i32,
     /// );
     /// let result = translation.to_affine_matrix();
     ///
@@ -952,19 +885,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Translation3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Matrix4x4,
-    /// # };
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Translation3;
     /// #
     /// let translation = Translation3::new(5_i32, 7_i32, 11_i32);
     /// let expected = Matrix4x4::new(
     ///     1_i32, 0_i32, 0_i32,  0_i32,
     ///     0_i32, 1_i32, 0_i32,  0_i32,
     ///     0_i32, 0_i32, 1_i32,  0_i32,
-    ///     5_i32, 7_i32, 11_i32, 1_i32
+    ///     5_i32, 7_i32, 11_i32, 1_i32,
     /// );
     /// let result = translation.to_affine_matrix();
     ///
@@ -975,5 +904,262 @@ where
         Self {
             vector: Vector3::new(x, y, z),
         }
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct TranslationTol<S, const N: usize> {
+    vector: Vector<S, N>,
+}
+
+impl<S, const N: usize> From<Vector<S, N>> for TranslationTol<S, N> {
+    #[inline]
+    fn from(vector: Vector<S, N>) -> Self {
+        Self { vector }
+    }
+}
+
+impl<S, const N: usize> From<&Vector<S, N>> for TranslationTol<S, N>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(vector: &Vector<S, N>) -> Self {
+        Self { vector: *vector }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct TranslationDiff<S, const N: usize> {
+    vector: Vector<S, N>,
+}
+
+impl<S, const N: usize> TranslationDiff<S, N> {
+    #[inline]
+    const fn from(vector: Vector<S, N>) -> Self {
+        Self { vector }
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = TranslationTol<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.vector, &other.vector, &max_abs_diff.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.vector, &other.vector, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = TranslationDiff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = TranslationTol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.vector, &other.vector);
+
+        TranslationDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        TranslationTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = TranslationTol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        TranslationTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = TranslationTol<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.vector, &other.vector, &max_abs_diff.vector, &max_relative.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.vector, &other.vector, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = TranslationDiff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = TranslationTol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.vector, &other.vector);
+
+        TranslationDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        TranslationTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.vector, &other.vector, &max_relative.vector);
+
+        TranslationTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = TranslationTol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        TranslationTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.vector, &other.vector, max_relative);
+
+        TranslationTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = TranslationTol<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = TranslationTol<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.vector, &other.vector, &max_abs_diff.vector, &max_ulps.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.vector, &other.vector, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = TranslationDiff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = TranslationDiff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = TranslationTol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = TranslationTol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.vector, &other.vector);
+
+        TranslationDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let vector = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.vector, &other.vector);
+
+        TranslationDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        TranslationTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let vector = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.vector, &other.vector, &max_ulps.vector);
+
+        TranslationTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Translation<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = TranslationTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = TranslationTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        TranslationTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let vector = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.vector, &other.vector, max_ulps);
+
+        TranslationTol::from(vector)
     }
 }

@@ -19,16 +19,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     EulerAngles,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let euler_angles = {
@@ -59,7 +55,7 @@ where
     /// };
     /// let result = Matrix3x3::from_euler_angles(&euler_angles);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -86,16 +82,12 @@ where
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     EulerAngles,
     /// #     Matrix4x4,
     /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let euler_angles = {
@@ -134,7 +126,7 @@ where
     /// };
     /// let result = euler_angles.to_affine_matrix();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]

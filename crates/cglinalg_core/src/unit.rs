@@ -25,12 +25,10 @@ impl<T> Unit<T> {
     /// # Example
     ///
     /// ```
+    /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
     /// #     Unit,
     /// #     Vector3,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
     /// # };
     /// # use core::f64;
     /// #
@@ -42,7 +40,7 @@ impl<T> Unit<T> {
     /// );
     /// let result = Unit::from_value(vector).into_inner();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn into_inner(self) -> T {
@@ -191,7 +189,7 @@ where
         Self::try_from_value_with_norm(value, threshold).map(|(unit, _)| unit)
     }
 }
-
+/*
 impl<T> approx::AbsDiffEq for Unit<T>
 where
     T: approx::AbsDiffEq,
@@ -236,5 +234,197 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         T::ulps_eq(&self.value, &other.value, epsilon, max_ulps)
+    }
+}
+*/
+impl<T> approx_cmp::AbsDiffEq for Unit<T>
+where
+    T: approx_cmp::AbsDiffEq,
+{
+    type Tolerance = <T as approx_cmp::AbsDiffEq>::Tolerance;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.value, &other.value, max_abs_diff)
+    }
+}
+
+impl<T> approx_cmp::AbsDiffAllEq for Unit<T>
+where
+    T: approx_cmp::AbsDiffAllEq,
+{
+    type AllTolerance = <T as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.value, &other.value, max_abs_diff)
+    }
+}
+
+impl<T> approx_cmp::AssertAbsDiffEq for Unit<T>
+where
+    T: approx_cmp::AssertAbsDiffEq,
+{
+    type DebugAbsDiff = <T as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff;
+    type DebugTolerance = <T as approx_cmp::AssertAbsDiffEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.value, &other.value)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+}
+
+impl<T> approx_cmp::AssertAbsDiffAllEq for Unit<T>
+where
+    T: approx_cmp::AssertAbsDiffAllEq,
+{
+    type AllDebugTolerance = <T as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+}
+
+impl<T> approx_cmp::RelativeEq for Unit<T>
+where
+    T: approx_cmp::RelativeEq,
+{
+    type Tolerance = <T as approx_cmp::RelativeEq>::Tolerance;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.value, &other.value, max_abs_diff, max_relative)
+    }
+}
+
+impl<T> approx_cmp::RelativeAllEq for Unit<T>
+where
+    T: approx_cmp::RelativeAllEq,
+{
+    type AllTolerance = <T as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.value, &other.value, max_abs_diff, max_relative)
+    }
+}
+
+impl<T> approx_cmp::AssertRelativeEq for Unit<T>
+where
+    T: approx_cmp::AssertRelativeEq,
+{
+    type DebugAbsDiff = <T as approx_cmp::AssertRelativeEq>::DebugAbsDiff;
+    type DebugTolerance = <T as approx_cmp::AssertRelativeEq>::DebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertRelativeEq::debug_abs_diff(&self.value, &other.value)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.value, &other.value, max_relative)
+    }
+}
+
+impl<A> approx_cmp::AssertRelativeAllEq for Unit<A>
+where
+    A: approx_cmp::AssertRelativeAllEq,
+{
+    type AllDebugTolerance = <A as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.value, &other.value, max_relative)
+    }
+}
+
+impl<T> approx_cmp::UlpsEq for Unit<T>
+where
+    T: approx_cmp::UlpsEq,
+{
+    type Tolerance = <T as approx_cmp::UlpsEq>::Tolerance;
+    type UlpsTolerance = <T as approx_cmp::UlpsEq>::UlpsTolerance;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.value, &other.value, max_abs_diff, max_ulps)
+    }
+}
+
+impl<T> approx_cmp::UlpsAllEq for Unit<T>
+where
+    T: approx_cmp::UlpsAllEq,
+{
+    type AllTolerance = <T as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <T as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.value, &other.value, max_abs_diff, max_ulps)
+    }
+}
+
+impl<T> approx_cmp::AssertUlpsEq for Unit<T>
+where
+    T: approx_cmp::AssertUlpsEq,
+{
+    type DebugAbsDiff = <T as approx_cmp::AssertUlpsEq>::DebugAbsDiff;
+    type DebugUlpsDiff = <T as approx_cmp::AssertUlpsEq>::DebugUlpsDiff;
+    type DebugTolerance = <T as approx_cmp::AssertUlpsEq>::DebugTolerance;
+    type DebugUlpsTolerance = <T as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertUlpsEq::debug_abs_diff(&self.value, &other.value)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.value, &other.value)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.value, &other.value, max_ulps)
+    }
+}
+
+impl<T> approx_cmp::AssertUlpsAllEq for Unit<T>
+where
+    T: approx_cmp::AssertUlpsAllEq,
+{
+    type AllDebugTolerance = <T as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance;
+    type AllDebugUlpsTolerance = <T as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.value, &other.value, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.value, &other.value, max_ulps)
     }
 }

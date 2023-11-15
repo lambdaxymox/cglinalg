@@ -2,7 +2,7 @@ extern crate cglinalg_transform;
 extern crate cglinalg_trigonometry;
 
 
-use approx::assert_relative_eq;
+use approx_cmp::assert_relative_eq;
 use cglinalg_core::{
     Matrix4x4,
     Point3,
@@ -68,12 +68,12 @@ fn test_perspective_projection_rectangular_parameters() {
     let far = 100_f64;
     let perspective = Perspective3::new(left, right, bottom, top, near, far);
 
-    assert_relative_eq!(perspective.left(),   left,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.right(),  right,  epsilon = 1e-10);
-    assert_relative_eq!(perspective.bottom(), bottom, epsilon = 1e-10);
-    assert_relative_eq!(perspective.top(),    top,    epsilon = 1e-10);
-    assert_relative_eq!(perspective.near(),   near,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.far(),    far,    epsilon = 1e-10);
+    assert_relative_eq!(perspective.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.bottom(), bottom, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.top(),    top,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.near(),   near,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.far(),    far,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[rustfmt::skip]
@@ -96,7 +96,7 @@ fn test_perspective_projection_fov_matrix() {
     );
     let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[rustfmt::skip]
@@ -120,7 +120,7 @@ fn test_perspective_projection_fov_transformation() {
     let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let result = perspective.matrix();
 
-    assert_relative_eq!(result, &expected, epsilon = 1e-10);
+    assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[rustfmt::skip]
@@ -136,12 +136,12 @@ fn test_perspective_projection_fov_rectangular_parameters() {
     let expected_bottom = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     let expected_top = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
 
-    assert_relative_eq!(perspective.left(),   expected_left,   epsilon = 1e-10);
-    assert_relative_eq!(perspective.right(),  expected_right,  epsilon = 1e-10);
-    assert_relative_eq!(perspective.bottom(), expected_bottom, epsilon = 1e-10);
-    assert_relative_eq!(perspective.top(),    expected_top,    epsilon = 1e-10);
-    assert_relative_eq!(perspective.near(),   near,            epsilon = 1e-10);
-    assert_relative_eq!(perspective.far(),    far,             epsilon = 1e-10);
+    assert_relative_eq!(perspective.left(),   expected_left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.right(),  expected_right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.bottom(), expected_bottom, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.top(),    expected_top,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.near(),   near,            abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.far(),    far,             abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[rustfmt::skip]
@@ -154,10 +154,10 @@ fn test_perspective_projection_fov_fov_parameters() {
     let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
     let expected_vfov = vfov.into();
 
-    assert_relative_eq!(perspective.vfov(),         expected_vfov, epsilon = 1e-10);
-    assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio,  epsilon = 1e-10);
-    assert_relative_eq!(perspective.near(),         near,          epsilon = 1e-10);
-    assert_relative_eq!(perspective.far(),          far,           epsilon = 1e-10);
+    assert_relative_eq!(perspective.vfov(),         expected_vfov, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.aspect_ratio(), aspect_ratio,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.near(),         near,          abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(perspective.far(),          far,           abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -172,7 +172,7 @@ fn test_perspective_projection_fov_unproject_point() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -187,7 +187,7 @@ fn test_perspective_projection_fov_unproject_vector() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -203,7 +203,7 @@ fn test_perspective_projection_unproject_point() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -219,7 +219,7 @@ fn test_perspective_projection_unproject_vector() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-8);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
 #[rustfmt::skip]
@@ -274,12 +274,12 @@ fn test_orthographic_projection_rectangular_parameters() {
     let far = 100_f64;
     let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
 
-    assert_relative_eq!(orthographic.left(),   left,   epsilon = 1e-10);
-    assert_relative_eq!(orthographic.right(),  right,  epsilon = 1e-10);
-    assert_relative_eq!(orthographic.bottom(), bottom, epsilon = 1e-10);
-    assert_relative_eq!(orthographic.top(),    top,    epsilon = 1e-10);
-    assert_relative_eq!(orthographic.near(),   near,   epsilon = 1e-10);
-    assert_relative_eq!(orthographic.far(),    far,    epsilon = 1e-10);
+    assert_relative_eq!(orthographic.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(orthographic.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(orthographic.bottom(), bottom, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(orthographic.top(),    top,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(orthographic.near(),   near,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    assert_relative_eq!(orthographic.far(),    far,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -295,7 +295,7 @@ fn test_orthographic_projection_unproject_point() {
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
 
 #[test]
@@ -311,5 +311,5 @@ fn test_orthographic_projection_unproject_vector() {
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
 
-    assert_relative_eq!(result, expected, epsilon = 1e-10);
+    assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }

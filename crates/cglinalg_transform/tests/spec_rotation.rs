@@ -1,4 +1,4 @@
-extern crate approx;
+extern crate approx_cmp;
 extern crate cglinalg_core;
 extern crate cglinalg_numeric;
 extern crate cglinalg_transform;
@@ -6,7 +6,7 @@ extern crate cglinalg_trigonometry;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_core::{
     Const,
     DimMul,
@@ -200,7 +200,10 @@ fn prop_approx_rotation2_matrix_determinant_one<S>(r: Rotation2<S>, tolerance: S
 where
     S: SimdScalarFloat,
 {
-    prop_assert!(relative_eq!(r.matrix().determinant(), S::one(), epsilon = tolerance));
+    let lhs = r.matrix().determinant();
+    let rhs = S::one();
+
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -215,7 +218,10 @@ fn prop_approx_rotation3_matrix_determinant_one<S>(r: Rotation3<S>, tolerance: S
 where
     S: SimdScalarFloat,
 {
-    prop_assert!(relative_eq!(r.matrix().determinant(), S::one(), epsilon = tolerance));
+    let lhs = r.matrix().determinant();
+    let rhs = S::one();
+
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -238,7 +244,7 @@ where
     let lhs = (r * v).norm();
     let rhs = v.norm();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -258,9 +264,9 @@ where
     let lhs = r * r.inverse();
     let rhs = r.inverse() * r;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
-    prop_assert!(relative_eq!(lhs, identity, epsilon = tolerance));
-    prop_assert!(relative_eq!(rhs, identity, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(lhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
+    prop_assert!(relative_eq!(rhs, identity, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -286,12 +292,12 @@ where
     let lhs = r * (r.inverse() * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     let lhs = r.inverse() * (r * p);
     let rhs = p;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -317,12 +323,12 @@ where
     let lhs = r * (r.inverse() * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     let lhs = r.inverse() * (r * v);
     let rhs = v;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance, max_relative = max_relative));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= max_relative));
 
     Ok(())
 }
@@ -348,7 +354,7 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -376,7 +382,7 @@ where
     let lhs = r1 * r2;
     let rhs = r3;
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -396,7 +402,7 @@ where
     let lhs = (r.angle() - angle) / Radians(S::two_pi());
     let rhs = lhs.round();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }

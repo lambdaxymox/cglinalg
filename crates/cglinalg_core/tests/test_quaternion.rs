@@ -227,7 +227,7 @@ mod modulus_tests {
 
 #[cfg(test)]
 mod slerp_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -259,7 +259,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -283,7 +283,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.2_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -307,7 +307,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -331,7 +331,7 @@ mod slerp_tests {
         );
         let result = q1.slerp(&q2, 0.5_f64);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -382,7 +382,7 @@ mod slerp_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Unit,
@@ -396,7 +396,7 @@ mod arg_tests {
     #[test]
     fn test_quaternion_arg() {
         let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
-        let expected = core::f64::consts::FRAC_PI_2;
+        let expected = f64::consts::FRAC_PI_2;
         let result = q.arg();
 
         assert_eq!(result, expected);
@@ -430,7 +430,7 @@ mod arg_tests {
         let expected = f64::consts::FRAC_PI_4;
         let result = quaternion.arg();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -441,7 +441,7 @@ mod arg_tests {
         let expected = f64::consts::FRAC_PI_2;
         let result = quaternion.arg();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -452,7 +452,7 @@ mod arg_tests {
         let expected = f64::consts::FRAC_PI_4;
         let result = quaternion.arg();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -463,7 +463,7 @@ mod arg_tests {
         let expected = f64::consts::FRAC_PI_2;
         let result = quaternion.arg();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -475,7 +475,7 @@ mod arg_tests {
         // The principal argument is half of the angle of rotation.
         let principal_arg_q = q.arg();
 
-        assert_relative_eq!(principal_arg_q, f64::consts::FRAC_PI_8, epsilon = 1e-10);
+        assert_relative_eq!(principal_arg_q, f64::consts::FRAC_PI_8, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 
         for k in 0..100 {
             let _k = k as f64;
@@ -485,14 +485,14 @@ mod arg_tests {
             let expected = principal_arg_q;
             let result = new_q.arg();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-10);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 }
 
 #[cfg(test)]
 mod exp_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -514,11 +514,11 @@ mod exp_tests {
     fn test_quaternion_exp_power_times_pi() {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let sgn_qv = Quaternion::from_parts(0_f64, q.v / q.v.norm());
-        let pi = core::f64::consts::PI;
+        let pi = f64::consts::PI;
         let expected = -Quaternion::identity();
         let result = (sgn_qv * pi).exp();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -528,7 +528,7 @@ mod exp_tests {
         let result = (unit_x * pi_over_two).exp();
         let expected = unit_x;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -538,7 +538,7 @@ mod exp_tests {
         let result = (unit_y * pi_over_two).exp();
         let expected = unit_y;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -548,7 +548,7 @@ mod exp_tests {
         let result = (unit_z * pi_over_two).exp();
         let expected = unit_z;
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -569,7 +569,7 @@ mod exp_tests {
         let result = (unit_x * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -580,7 +580,7 @@ mod exp_tests {
         let result = (unit_y * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -591,7 +591,7 @@ mod exp_tests {
         let result = (unit_z * pi).exp();
         let expected = Quaternion::from_parts(-1_f64, zero_vector);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -600,7 +600,7 @@ mod exp_tests {
         let expected = Quaternion::identity();
         let result = (-q).exp() * q.exp();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -615,11 +615,12 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
     };
+    use core::f64;
 
 
     #[test]
@@ -640,9 +641,9 @@ mod logarithm_tests {
         let exp_j = j.exp();
         let exp_k = k.exp();
 
-        assert_relative_eq!(exp_i.ln(), i, epsilon = 1e-8);
-        assert_relative_eq!(exp_j.ln(), j, epsilon = 1e-8);
-        assert_relative_eq!(exp_k.ln(), k, epsilon = 1e-8);
+        assert_relative_eq!(exp_i.ln(), i, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+        assert_relative_eq!(exp_j.ln(), j, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+        assert_relative_eq!(exp_k.ln(), k, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -650,7 +651,7 @@ mod logarithm_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi_over_2 = core::f64::consts::FRAC_PI_2;
+        let pi_over_2 = f64::consts::FRAC_PI_2;
 
         assert_eq!(i.ln(), i * pi_over_2);
         assert_eq!(j.ln(), j * pi_over_2);
@@ -661,7 +662,7 @@ mod logarithm_tests {
     fn test_quaternion_logarithm2() {
         let q = 2_f64 * Quaternion::unit_y() - 5_f64 * Quaternion::unit_z();
         let sqrt_29 = f64::sqrt(29_f64);
-        let pi_over_2 = core::f64::consts::FRAC_PI_2;
+        let pi_over_2 = f64::consts::FRAC_PI_2;
         let expected_s = sqrt_29.ln();
         let expected_v = (2_f64 * Vector3::unit_y() - 5_f64 * Vector3::unit_z()) * pi_over_2 / sqrt_29;
         let expected = Quaternion::from_parts(expected_s, expected_v);
@@ -684,7 +685,7 @@ mod logarithm_tests {
         let i = Quaternion::<f64>::unit_x();
         let j = Quaternion::<f64>::unit_y();
         let k = Quaternion::<f64>::unit_z();
-        let pi_over_2 = core::f64::consts::FRAC_PI_2;
+        let pi_over_2 = f64::consts::FRAC_PI_2;
 
         assert_eq!((-i).ln(), -i * pi_over_2);
         assert_eq!((-j).ln(), -j * pi_over_2);
@@ -694,7 +695,7 @@ mod logarithm_tests {
 
 #[cfg(test)]
 mod exp_ln_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Unit,
@@ -712,7 +713,7 @@ mod exp_ln_tests {
         let expected = Quaternion::zero();
         let result = quaternion.exp().ln();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -722,7 +723,7 @@ mod exp_ln_tests {
         let expected = Quaternion::zero();
         let result = quaternion.exp().ln();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -732,7 +733,7 @@ mod exp_ln_tests {
         let expected = Quaternion::zero();
         let result = quaternion.exp().ln();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
 
@@ -748,7 +749,7 @@ mod exp_ln_tests {
             let expected = quaternion;
             let result = quaternion.exp().ln();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-10);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 
@@ -764,7 +765,7 @@ mod exp_ln_tests {
             let expected = quaternion;
             let result = quaternion.exp().ln();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-10);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 
@@ -780,14 +781,14 @@ mod exp_ln_tests {
             let expected = quaternion;
             let result = quaternion.exp().ln();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-10);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 }
 
 #[cfg(test)]
 mod power_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::Quaternion;
     use core::f64;
 
@@ -809,7 +810,7 @@ mod power_tests {
         let expected = q;
         let result = q.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -819,7 +820,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = i.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -829,7 +830,7 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = j.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -839,13 +840,13 @@ mod power_tests {
         let expected = Quaternion::new(-1_f64, 0_f64, 0_f64, 0_f64);
         let result = k.powf(exponent);
 
-        assert_relative_eq!(result, expected, epsilon = 1e-8);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod rotation_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Unit,
@@ -865,7 +866,7 @@ mod rotation_tests {
         let expected = Quaternion::from_axis_angle(&unit_z, Radians::full_turn_div_4());
         let result = Quaternion::rotation_between_axis(&unit_x, &unit_y).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -887,7 +888,7 @@ mod rotation_tests {
         let expected = Quaternion::from_axis_angle(&Unit::from_value(unit_z), Radians::full_turn_div_4());
         let result = Quaternion::rotation_between(&unit_x, &unit_y).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -943,7 +944,7 @@ mod inverse_tests {
 
 #[cfg(test)]
 mod division_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -965,7 +966,7 @@ mod division_tests {
      
         let result = result.unwrap();
      
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -983,7 +984,7 @@ mod division_tests {
      
         let result = result.unwrap();
      
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -998,7 +999,7 @@ mod division_tests {
         );
         let result = q.div_left(&scalar).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1013,7 +1014,7 @@ mod division_tests {
         );
         let result = q.div_right(&scalar).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1022,12 +1023,12 @@ mod division_tests {
         let v = Quaternion::from_pure(Vector3::new(2_f64, 5_f64, 3_f64));
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let expected = Quaternion::new(
-            31_f64 / 38_f64,
+             31_f64 / 38_f64,
             -13_f64 / 38_f64, -3_f64 / 38_f64, 1_f64 / 38_f64,
         );
         let result = q.div_left(&v).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1041,17 +1042,18 @@ mod division_tests {
         );
         let result = q.div_right(&v).unwrap();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod square_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
     };
+    use core::f64;
 
 
     #[test]
@@ -1091,7 +1093,7 @@ mod square_tests {
     #[test]
     fn test_square_quaternions_one_unit_two_sphere_xy_plane() {
         let q = Quaternion::from_real(-1_f64);
-        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        let pi_over_eight = f64::consts::FRAC_PI_8;
         for i in 0..64 {
             let angle = (i as f64) * pi_over_eight;
             let cos_angle = angle.cos();
@@ -1099,14 +1101,14 @@ mod square_tests {
             let vector = Vector3::new(cos_angle, sin_angle, 0_f64);
             let sqrt_q = Quaternion::from_pure(vector);
 
-            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+            assert_relative_eq!(sqrt_q.squared(), q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 
     #[test]
     fn test_square_quaternions_one_unit_two_sphere_yz_plane() {
         let q = Quaternion::from_real(-1_f64);
-        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        let pi_over_eight = f64::consts::FRAC_PI_8;
         for i in 0..64 {
             let angle = (i as f64) * pi_over_eight;
             let cos_angle = angle.cos();
@@ -1114,14 +1116,14 @@ mod square_tests {
             let vector = Vector3::new(0_f64, cos_angle, sin_angle);
             let sqrt_q = Quaternion::from_pure(vector);
 
-            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+            assert_relative_eq!(sqrt_q.squared(), q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 
     #[test]
     fn test_square_quaternions_one_unit_two_sphere_zx_plane() {
         let q = Quaternion::from_real(-1_f64);
-        let pi_over_eight = core::f64::consts::FRAC_PI_8;
+        let pi_over_eight = f64::consts::FRAC_PI_8;
         for i in 0..64 {
             let angle = (i as f64) * pi_over_eight;
             let cos_angle = angle.cos();
@@ -1129,14 +1131,14 @@ mod square_tests {
             let vector = Vector3::new(cos_angle, 0_f64, sin_angle);
             let sqrt_q = Quaternion::from_pure(vector);
 
-            assert_relative_eq!(sqrt_q.squared(), q, epsilon = 1e-10);
+            assert_relative_eq!(sqrt_q.squared(), q, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
         }
     }
 }
 
 #[cfg(test)]
 mod square_root_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -1157,7 +1159,7 @@ mod square_root_tests {
         let expected = Quaternion::from_real(f64::sqrt(scalar_part));
         let result = scalar.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1166,7 +1168,7 @@ mod square_root_tests {
         let scalar = Quaternion::from_real(scalar_part);
         let sqrt_scalar = scalar.sqrt();
 
-        assert_relative_eq!(sqrt_scalar * sqrt_scalar, scalar, epsilon = 1e-10);
+        assert_relative_eq!(sqrt_scalar * sqrt_scalar, scalar, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1176,7 +1178,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(3_f64, qv) * (1_f64 / f64::sqrt(6_f64));
         let result = q.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1192,7 +1194,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1208,7 +1210,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = q.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1224,7 +1226,7 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = quaternion.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1244,13 +1246,13 @@ mod square_root_tests {
         let expected = Quaternion::from_parts(expected_s, expected_v);
         let result = quaternion.sqrt();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-10);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_cos_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -1289,7 +1291,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::from_real(angle.cos());
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -1301,7 +1303,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::zero();
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -1310,7 +1312,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::zero();
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -1322,7 +1324,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::from_real(-1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -1331,7 +1333,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::from_real(-1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -1343,7 +1345,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::from_real(1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -1352,7 +1354,7 @@ mod trigonometry_cos_tests {
             let expected = Quaternion::from_real(1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -1371,7 +1373,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1389,7 +1391,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1407,7 +1409,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1425,7 +1427,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1443,7 +1445,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1461,7 +1463,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1479,7 +1481,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1497,7 +1499,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1515,7 +1517,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1533,7 +1535,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1551,7 +1553,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1569,7 +1571,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1587,7 +1589,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1605,7 +1607,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1623,7 +1625,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1641,7 +1643,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1659,7 +1661,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1677,7 +1679,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1695,7 +1697,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1713,7 +1715,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1731,7 +1733,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1749,7 +1751,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1767,7 +1769,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1785,7 +1787,7 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1803,13 +1805,13 @@ mod trigonometry_cos_tests {
         };
         let result = quaternion.cos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_acos_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -1853,7 +1855,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1871,7 +1873,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1889,7 +1891,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1907,7 +1909,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1925,7 +1927,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1943,7 +1945,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1961,7 +1963,7 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1979,13 +1981,13 @@ mod trigonometry_acos_tests {
         };
         let result = quaternion.acos();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_sin_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -2024,7 +2026,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::from_real(angle.sin());
             let result = quaternion.sin();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -2036,7 +2038,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::zero();
             let result = quaternion.sin();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -2045,7 +2047,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::zero();
             let result = quaternion.sin();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -2057,7 +2059,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::from_real(1_f64);
             let result = quaternion.sin();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -2066,7 +2068,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::from_real(-1_f64);
             let result = quaternion.sin();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -2078,7 +2080,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::from_real(1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
 
         for i in 0..400 {
@@ -2087,7 +2089,7 @@ mod trigonometry_sin_tests {
             let expected = Quaternion::from_real(1_f64);
             let result = quaternion.cos();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-12);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-12, relative_all <= f64::EPSILON);
         }
     }
 
@@ -2106,7 +2108,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2124,7 +2126,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2142,7 +2144,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2160,7 +2162,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2178,7 +2180,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2196,7 +2198,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2214,7 +2216,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2232,7 +2234,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2250,7 +2252,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2268,7 +2270,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2286,7 +2288,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2304,7 +2306,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2322,7 +2324,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2340,7 +2342,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2358,7 +2360,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2376,7 +2378,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2394,7 +2396,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2412,7 +2414,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2430,7 +2432,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2448,7 +2450,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2466,7 +2468,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2484,7 +2486,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2502,7 +2504,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2520,7 +2522,7 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2538,13 +2540,13 @@ mod trigonometry_sin_tests {
         };
         let result = quaternion.sin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_asin_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -2588,7 +2590,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2606,7 +2608,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2624,7 +2626,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2642,7 +2644,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2660,7 +2662,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2678,7 +2680,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2696,7 +2698,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2714,7 +2716,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2732,7 +2734,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2750,7 +2752,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2768,7 +2770,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2786,7 +2788,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2804,7 +2806,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2822,7 +2824,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2840,7 +2842,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2858,7 +2860,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2876,7 +2878,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2894,7 +2896,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2912,7 +2914,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2930,7 +2932,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2948,7 +2950,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2966,7 +2968,7 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -2984,13 +2986,13 @@ mod trigonometry_asin_tests {
         };
         let result = quaternion.asin();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_tan_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -3029,7 +3031,7 @@ mod trigonometry_tan_tests {
             let expected = Quaternion::from_real(angle.tan());
             let result = quaternion.tan();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -3048,7 +3050,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3076,7 +3078,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3104,7 +3106,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3122,7 +3124,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3140,7 +3142,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3158,7 +3160,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3176,7 +3178,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3203,7 +3205,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3230,7 +3232,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3257,7 +3259,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3284,7 +3286,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3311,7 +3313,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3338,7 +3340,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3356,7 +3358,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3374,7 +3376,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3392,7 +3394,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3410,7 +3412,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3428,7 +3430,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3446,7 +3448,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3464,7 +3466,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3482,7 +3484,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3500,7 +3502,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3518,7 +3520,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3536,7 +3538,7 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3554,13 +3556,13 @@ mod trigonometry_tan_tests {
         };
         let result = quaternion.tan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_atan_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -3614,7 +3616,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3642,7 +3644,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3660,7 +3662,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3678,7 +3680,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3696,7 +3698,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3723,7 +3725,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3750,7 +3752,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3777,7 +3779,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3804,7 +3806,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3831,7 +3833,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3858,7 +3860,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3876,7 +3878,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3894,7 +3896,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3912,7 +3914,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3930,7 +3932,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3948,7 +3950,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3966,7 +3968,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3984,7 +3986,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4002,7 +4004,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4020,7 +4022,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4038,7 +4040,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4056,7 +4058,7 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4074,13 +4076,13 @@ mod trigonometry_atan_tests {
         };
         let result = quaternion.atan();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_cosh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -4119,7 +4121,7 @@ mod trigonometry_cosh_tests {
             let expected = Quaternion::from_real(angle.cosh());
             let result = quaternion.cosh();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -4138,7 +4140,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4156,7 +4158,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4174,7 +4176,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4192,7 +4194,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4210,7 +4212,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4228,7 +4230,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4246,7 +4248,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4264,7 +4266,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4282,7 +4284,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4300,7 +4302,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4318,7 +4320,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4336,7 +4338,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4354,7 +4356,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4372,7 +4374,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4390,7 +4392,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4408,7 +4410,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4426,7 +4428,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4444,7 +4446,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4462,7 +4464,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4480,7 +4482,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4498,7 +4500,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4516,7 +4518,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4534,7 +4536,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4552,7 +4554,7 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4570,13 +4572,13 @@ mod trigonometry_cosh_tests {
         };
         let result = quaternion.cosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_acosh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -4620,7 +4622,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4638,7 +4640,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4656,7 +4658,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4674,7 +4676,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4692,7 +4694,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4711,7 +4713,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4730,7 +4732,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4748,7 +4750,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4766,7 +4768,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4784,7 +4786,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4802,7 +4804,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4820,7 +4822,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4838,7 +4840,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4858,7 +4860,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4878,7 +4880,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4898,7 +4900,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4918,7 +4920,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4938,7 +4940,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4958,7 +4960,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4978,7 +4980,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -4998,7 +5000,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5018,7 +5020,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5038,7 +5040,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5058,7 +5060,7 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5078,13 +5080,13 @@ mod trigonometry_acosh_tests {
         };
         let result = quaternion.acosh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_sinh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -5123,7 +5125,7 @@ mod trigonometry_sinh_tests {
             let expected = Quaternion::from_real(angle.sinh());
             let result = quaternion.sinh();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -5142,7 +5144,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5160,7 +5162,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5178,7 +5180,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5196,7 +5198,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5214,7 +5216,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5232,7 +5234,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5250,7 +5252,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5268,7 +5270,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5286,7 +5288,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5304,7 +5306,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5322,7 +5324,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5340,7 +5342,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5358,7 +5360,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5376,7 +5378,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5394,7 +5396,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5412,7 +5414,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5430,7 +5432,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5448,7 +5450,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5466,7 +5468,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5484,7 +5486,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5502,7 +5504,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5520,7 +5522,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5538,7 +5540,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5556,7 +5558,7 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5574,13 +5576,13 @@ mod trigonometry_sinh_tests {
         };
         let result = quaternion.sinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_asinh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -5624,7 +5626,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5642,7 +5644,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5660,7 +5662,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5678,7 +5680,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5696,7 +5698,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5714,7 +5716,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5732,7 +5734,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5750,7 +5752,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5768,7 +5770,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5786,7 +5788,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5804,7 +5806,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5822,7 +5824,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5840,7 +5842,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5858,7 +5860,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5876,7 +5878,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5894,7 +5896,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5912,7 +5914,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5930,7 +5932,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5948,7 +5950,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5966,7 +5968,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -5984,7 +5986,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6002,7 +6004,7 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6020,13 +6022,13 @@ mod trigonometry_asinh_tests {
         };
         let result = quaternion.asinh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-15);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
     }
 }
 
 #[cfg(test)]
 mod trigonometry_tanh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -6065,7 +6067,7 @@ mod trigonometry_tanh_tests {
             let expected = Quaternion::from_real(angle.tanh());
             let result = quaternion.tanh();
 
-            assert_relative_eq!(result, expected, epsilon = 1e-15);
+            assert_relative_eq!(result, expected, abs_diff_all <= 1e-15, relative_all <= f64::EPSILON);
         }
     }
 
@@ -6084,7 +6086,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6112,7 +6114,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6140,7 +6142,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6158,7 +6160,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6176,7 +6178,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6194,7 +6196,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6212,7 +6214,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6239,7 +6241,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6266,7 +6268,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6293,7 +6295,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6320,7 +6322,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6347,7 +6349,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6374,7 +6376,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6392,7 +6394,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6410,7 +6412,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6428,7 +6430,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6446,7 +6448,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6464,7 +6466,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6482,7 +6484,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6500,7 +6502,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6518,7 +6520,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6536,7 +6538,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6554,7 +6556,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6572,7 +6574,7 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6590,14 +6592,14 @@ mod trigonometry_tanh_tests {
         };
         let result = quaternion.tanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 }
 
 
 #[cfg(test)]
 mod trigonometry_atanh_tests {
-    use approx::assert_relative_eq;
+    use approx_cmp::assert_relative_eq;
     use cglinalg_core::{
         Quaternion,
         Vector3,
@@ -6641,7 +6643,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6659,7 +6661,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6677,7 +6679,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6695,7 +6697,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6713,7 +6715,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6740,7 +6742,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6767,7 +6769,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6794,7 +6796,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6821,7 +6823,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6848,7 +6850,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6875,7 +6877,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6893,7 +6895,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6911,7 +6913,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6929,7 +6931,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6947,7 +6949,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6965,7 +6967,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -6983,7 +6985,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7001,7 +7003,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7019,7 +7021,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7037,7 +7039,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7055,7 +7057,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7073,7 +7075,7 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -7091,6 +7093,6 @@ mod trigonometry_atanh_tests {
         };
         let result = quaternion.atanh();
 
-        assert_relative_eq!(result, expected, epsilon = 1e-13);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-13, relative_all <= f64::EPSILON);
     }
 }

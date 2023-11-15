@@ -81,9 +81,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,   
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z: Complex<u32> = Complex::new(1_u32, 2_u32);
     /// let expected: Option<Complex<i32>> = Some(Complex::new(1_i32, 2_i32));
@@ -118,9 +116,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     ///
@@ -136,9 +132,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     ///
@@ -155,9 +149,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,  
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z: Complex<f32> = Complex::new(1_f32, 2_f32);
     /// let expected: Complex<f64> = Complex::new(-2_f64, -3_f64);
@@ -185,9 +177,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::from_real(1_i32);
     ///
@@ -206,9 +196,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::from_imaginary(1_i32);
     ///
@@ -225,9 +213,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let zero: Complex<i32> = Complex::zero();
     /// let other = Complex::new(92_i32, 137_i32);
@@ -247,9 +233,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let zero: Complex<i32> = Complex::zero();
     /// let non_zero = Complex::new(92_i32, 137_i32);
@@ -269,9 +253,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::identity();
     /// let z = Complex::new(3_i32, 7_i32);
@@ -292,9 +274,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::one();
     /// let z = Complex::new(3_i32, 7_i32);
@@ -313,9 +293,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::identity();
     ///
@@ -337,9 +315,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::one();
     ///
@@ -361,9 +337,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let unit_re: Complex<i32> = Complex::unit_re();
     /// let identity: Complex<i32> = Complex::identity();
@@ -380,9 +354,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let i: Complex<i32> = Complex::unit_im();
     ///
@@ -402,9 +374,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::from_real(2_i32);
     ///
@@ -424,9 +394,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::from_imaginary(2_i32);
     ///
@@ -457,9 +425,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -477,9 +443,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -497,9 +461,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -515,9 +477,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(3_f64, 6_f64);
@@ -535,9 +495,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(3_f64, 6_f64);
     /// let expected = Complex::new(1_f64, 2_f64);
@@ -560,9 +518,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     /// let expected = Complex::new(-3_i32, 4_i32);
@@ -585,9 +541,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_i32, 1_i32);
     /// let expected = Complex::new(-2_i32, 2_i32);
@@ -617,9 +571,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     /// let expected = Complex::new(1_i32, -2_i32);
@@ -643,9 +595,8 @@ where
     ///
     /// An example computing the **L1** norm of a [`f32`] complex number.
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
+    /// #
     /// let z = Complex::new(2_f32, -5_f32);
     ///
     /// assert_eq!(z.l1_norm(), 7_f32);
@@ -653,9 +604,8 @@ where
     ///
     /// An example computing the **L1** norm of an [`i32`] complex number.
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
+    /// #
     /// let z = Complex::new(2_i32, -5_i32);
     ///
     /// assert_eq!(z.l1_norm(), 7_i32);
@@ -676,9 +626,7 @@ where
     /// # Example (Finite Complex Number)
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     ///
@@ -688,11 +636,10 @@ where
     /// # Example (Not A Finite Complex Number)
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, f64::NAN);
+    /// 
     /// assert!(!z.is_finite());
     /// ```
     #[inline]
@@ -706,9 +653,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z1 = Complex::new(1_f64, 2_f64);
     /// let z2 = Complex::new(1_f64, f64::NAN);
@@ -728,9 +673,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z1 = Complex::new(1_f64, 2_f64);
     /// let z2 = Complex::new(1_f64, f64::NEG_INFINITY);
@@ -756,9 +699,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -776,9 +717,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -796,9 +735,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -816,9 +753,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -870,23 +805,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
+    /// # use core::f64;
     /// #
-    /// let pi = core::f64::consts::PI;
+    /// let pi = f64::consts::PI;
     /// let angle = pi / 4_f64;
     /// let z1 = Complex::from_polar_decomposition(2_f64, Radians(angle));
     /// let z2 = Complex::from_polar_decomposition(2_f64, Radians(angle + 2_f64 * pi));
     ///
-    /// assert_relative_eq!(z1, z2, epsilon = 1e-10);
-    /// assert_relative_eq!(z1.arg(), z2.arg(), epsilon = 1e-10);
+    /// assert_relative_eq!(z1, z2, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(z1.arg(), z2.arg(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn arg(self) -> S {
@@ -898,21 +828,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
+    /// # use core::f64;
     /// #
-    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let pi_over_four = f64::consts::FRAC_PI_4;
     /// let expected = Complex::new(2_f64 / f64::sqrt(2_f64), 2_f64 / f64::sqrt(2_f64));
     /// let result = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_polar_decomposition<A>(scale: S, angle: A) -> Self
@@ -928,21 +853,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
+    /// # use core::f64;
     /// #
-    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let pi_over_four = f64::consts::FRAC_PI_4;
     /// let expected = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = Complex::from_angle(Radians(pi_over_four));
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_angle<A>(angle: A) -> Self
@@ -957,12 +877,8 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// #
     /// let z = Complex::from_polar_decomposition(3_f64, Radians(2_f64));
     /// let (scale, angle) = z.polar_decomposition();
@@ -988,18 +904,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(2_f64, 5_f64);
     /// let expected = Complex::new(2.09599580151_f64, -7.08554526009_f64);
     /// let result = z.exp();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn exp(self) -> Self {
@@ -1030,14 +942,11 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
+    /// # use core::f64;
     /// #
-    /// let pi = core::f64::consts::PI;
+    /// let pi = f64::consts::PI;
     /// let z = Complex::from_polar_decomposition(
     ///     3_f64, Radians(pi / 6_f64) + Radians((2_f64 * pi))
     /// );
@@ -1064,19 +973,15 @@ where
     /// # Examples
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// # use core::f64;
     /// #
     /// let z = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let expected = Complex::new(1.440332964556895, 0.7684953440984348);
     /// let result = z.exp2();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn exp2(self) -> Self {
@@ -1089,15 +994,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -1106,7 +1005,7 @@ where
     /// let expected = Complex::new(0.6309297535714574_f64, 0.7149002168450318_f64);
     /// let result = z.log(base);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn log(self, base: S) -> Self {
@@ -1121,15 +1020,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -1137,7 +1030,7 @@ where
     /// let expected = Complex::new(1_f64, 1.1330900354567984_f64);
     /// let result = z.log2();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn log2(self) -> Self {
@@ -1150,15 +1043,9 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let angle = Radians(f64::consts::FRAC_PI_4);
@@ -1166,7 +1053,7 @@ where
     /// let expected = Complex::new(0.3010299956639812_f64, 0.3410940884604603_f64);
     /// let result = z.log10();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn log10(self) -> Self {
@@ -1223,21 +1110,17 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 4_f64);
     /// let sqrt_z = z.sqrt();
     ///
-    /// assert_relative_eq!(sqrt_z * sqrt_z, z, epsilon = 1e-10);
+    /// assert_relative_eq!(sqrt_z * sqrt_z, z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let minus_sqrt_z = -sqrt_z;
     ///
-    /// assert_relative_eq!(minus_sqrt_z * minus_sqrt_z, z, epsilon = 1e-10);
+    /// assert_relative_eq!(minus_sqrt_z * minus_sqrt_z, z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn sqrt(self) -> Self {
@@ -1254,28 +1137,22 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let z1 = Complex::unit_im();
     /// let expected1 = Complex::new(f64::sqrt(3_f64) / 2_f64, 1_f64 / 2_f64);
     /// let result1 = z1.cbrt();
     ///
-    /// assert_relative_eq!(result1, expected1, epsilon = 1e-10);
+    /// assert_relative_eq!(result1, expected1, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let z2 = Complex::from_polar_decomposition(2_f64, Radians(f64::consts::FRAC_PI_4));
     /// let expected2 = Complex::new(1.216990281178_f64, 0.326091563038_f64);
     /// let result2 = z2.cbrt();
     ///
-    /// assert_relative_eq!(result2, expected2, epsilon = 1e-10);
+    /// assert_relative_eq!(result2, expected2, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cbrt(self) -> Self {
@@ -1294,9 +1171,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(2_f64, 3_f64);
     /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
@@ -1322,9 +1197,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z: Complex<f64> = Complex::unit_im();
     ///
@@ -1332,7 +1205,7 @@ where
     /// ```
     #[inline]
     pub fn is_invertible(self) -> bool {
-        self.is_invertible_eps(S::default_epsilon())
+        self.is_invertible_eps(S::machine_epsilon())
     }
 
     #[inline]
@@ -1345,22 +1218,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let z = Complex::from_angle(Radians(f64::consts::FRAC_PI_4));
     /// let expected = Complex::from_angle(Radians(f64::consts::PI));
     /// let result = z.powu(4);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn powu(self, exponent: u32) -> Self {
@@ -1398,22 +1265,16 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
     /// let z = Complex::from_angle(Radians(f64::consts::FRAC_PI_4));
     /// let expected = Complex::from_angle(Radians(-f64::consts::PI));
     /// let result = z.powi(-4);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn powi(self, exponent: i32) -> Self {
@@ -1465,23 +1326,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use cglinalg_trigonometry::{
-    /// #     Radians,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_trigonometry::Radians;
+    /// # use core::f64;
     /// #
-    /// let pi_over_four = core::f64::consts::FRAC_PI_4;
+    /// let pi_over_four = f64::consts::FRAC_PI_4;
     /// let z = Complex::from_polar_decomposition(2_f64, Radians(pi_over_four));
     /// let exponent = 5_f64;
     /// let expected = Complex::from_polar_decomposition(32_f64, Radians(exponent * pi_over_four));
     /// let result = z.powf(exponent);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn powf(self, exponent: S) -> Self {
@@ -1503,9 +1359,7 @@ where
     /// imaginary number produces a real number.
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// # use core::f64;
     /// #
     /// // i^i == exp(-pi / 2)
@@ -1519,9 +1373,7 @@ where
     /// Exponentiating a complex number to the power of another complex number.
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
+    /// # use cglinalg_complex::Complex;
     /// # use core::f64;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
@@ -1550,18 +1402,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(2.032723007_f64, -3.051897799_f64);
     /// let result = z.cos();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cos(self) -> Self {
@@ -1576,22 +1424,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 3_f64);
     /// let expected = Complex::new(1.2631926773_f64, -1.8641615442_f64);
     /// let result = z.acos();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(-2_f64, 5_f64);
     ///
-    /// assert_relative_eq!(z1.acos().cos(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.acos().cos(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn acos(self) -> Self {
@@ -1647,18 +1491,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(3.165778513_f64, 1.959601041_f64);
     /// let result = z.sin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn sin(self) -> Self {
@@ -1675,22 +1515,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 3_f64);
     /// let expected = Complex::new(0.307603650_f64, 1.864161544_f64);
     /// let result = z.asin();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(-2_f64, 5_f64);
     ///
-    /// assert_relative_eq!(z1.asin().sin(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.asin().sin(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn asin(self) -> Self {
@@ -1707,18 +1543,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
     /// let expected = Complex::new(0.2717525853_f64, 1.0839233273_f64);
     /// let result = z.tan();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn tan(self) -> Self {
@@ -1735,22 +1567,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
     /// let expected = Complex::new(1.0172219679_f64, 0.4023594781_f64);
     /// let result = z.atan();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(-2_f64, 5_f64);
     ///
-    /// assert_relative_eq!(z1.atan().tan(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.atan().tan(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn atan(self) -> Self {
@@ -1767,18 +1595,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(0.4377136252_f64, 1.1269289521_f64);
     /// let result = z.cosh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cosh(self) -> Self {
@@ -1809,22 +1633,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(2.3309746530_f64, -1.3770031902_f64);
     /// let result = z.acosh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(2_f64, 3_f64);
     ///
-    /// assert_relative_eq!(z1.acosh().cosh(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.acosh().cosh(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn acosh(self) -> Self {
@@ -1869,18 +1689,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(0.3333601389_f64, 1.4796974784_f64);
     /// let result = z.sinh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn sinh(self) -> Self {
@@ -1907,22 +1723,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(2.3132209417_f64, -1.3696012470_f64);
     /// let result = z.asinh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(2_f64, 3_f64);
     ///
-    /// assert_relative_eq!(z1.asinh().sinh(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.asinh().sinh(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn asinh(self) -> Self {
@@ -1961,18 +1773,14 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(-3_f64, 4_f64);
     /// let expected = Complex::new(-1.0007095360_f64, 0.0049082580_f64);
     /// let result = z.tanh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn tanh(self) -> Self {
@@ -2004,22 +1812,18 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex,
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// #
     /// let z = Complex::new(-3_f64, 4_f64);
     /// let expected = Complex::new(-0.1175009073_f64, 1.4099210495_f64);
     /// let result = z.atanh();
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-8);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     ///
     /// let z1 = Complex::new(2_f64, 3_f64);
     ///
-    /// assert_relative_eq!(z1.atanh().tanh(), z1, epsilon = 1e-8);
+    /// assert_relative_eq!(z1.atanh().tanh(), z1, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn atanh(self) -> Self {
@@ -2066,19 +1870,15 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::{
-    /// #     Complex
-    /// # };
-    /// # use approx::{
-    /// #     assert_relative_eq,
-    /// # };
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_complex::Complex;
     /// # use core::f64;
     /// #
     /// let phase = f64::consts::FRAC_PI_4;
     /// let expected = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
     /// let result = Complex::cis(phase);
     ///
-    /// assert_relative_eq!(result, expected, epsilon = 1e-10);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn cis(phase: S) -> Self {
@@ -3207,7 +3007,7 @@ macro_rules! impl_scalar_complex_div_ops {
 
 impl_scalar_complex_div_ops!(i8, i16, i32, i64, i128, isize, f32, f64);
 
-
+/*
 impl<S> approx::AbsDiffEq for Complex<S>
 where
     S: SimdScalarFloat,
@@ -3252,5 +3052,248 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         S::ulps_eq(&self.re, &other.re, epsilon, max_ulps) && S::ulps_eq(&self.im, &other.im, epsilon, max_ulps)
+    }
+}
+*/
+
+impl<S> approx_cmp::AbsDiffEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Complex<<S as approx_cmp::AbsDiffEq>::Tolerance>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.re, &other.re, &max_abs_diff.re)
+            && approx_cmp::AbsDiffEq::abs_diff_eq(&self.im, &other.im, &max_abs_diff.im)
+    }
+}
+
+impl<S> approx_cmp::AbsDiffAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.re, &other.re, max_abs_diff)
+            && approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.im, &other.im, max_abs_diff)
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Complex<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff>;
+    type DebugTolerance = Complex<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        Complex::new(
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.re, &other.re),
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.im, &other.im),
+        )
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        Complex::new(
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.re, &other.re, &max_abs_diff.re),
+            approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.im, &other.im, &max_abs_diff.im),
+        )
+    }
+}
+
+impl<S> approx_cmp::AssertAbsDiffAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Complex<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        Complex::new(
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.re, &other.re, max_abs_diff),
+            approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.im, &other.im, max_abs_diff),
+        )
+    }
+}
+
+impl<S> approx_cmp::RelativeEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Complex<<S as approx_cmp::RelativeEq>::Tolerance>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.re, &other.re, &max_abs_diff.re, &max_relative.re)
+            && approx_cmp::RelativeEq::relative_eq(&self.im, &other.im, &max_abs_diff.im, &max_relative.im)
+    }
+}
+
+impl<S> approx_cmp::RelativeAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.re, &other.re, max_abs_diff, max_relative)
+            && approx_cmp::RelativeAllEq::relative_all_eq(&self.im, &other.im, max_abs_diff, max_relative)
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Complex<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff>;
+    type DebugTolerance = Complex<<S as approx_cmp::AssertRelativeEq>::DebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        Complex::new(
+            approx_cmp::AssertRelativeEq::debug_abs_diff(&self.re, &other.re),
+            approx_cmp::AssertRelativeEq::debug_abs_diff(&self.im, &other.im),
+        )
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        Complex::new(
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.re, &other.re, &max_abs_diff.re),
+            approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.im, &other.im, &max_abs_diff.im),
+        )
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        Complex::new(
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.re, &other.re, &max_relative.re),
+            approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.im, &other.im, &max_relative.im),
+        )
+    }
+}
+
+impl<S> approx_cmp::AssertRelativeAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Complex<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        Complex::new(
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.re, &other.re, max_abs_diff),
+            approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.im, &other.im, max_abs_diff),
+        )
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        Complex::new(
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.re, &other.re, max_relative),
+            approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.im, &other.im, max_relative),
+        )
+    }
+}
+
+impl<S> approx_cmp::UlpsEq for Complex<S>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type Tolerance = Complex<<S as approx_cmp::UlpsEq>::Tolerance>;
+    type UlpsTolerance = Complex<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.re, &other.re, &max_abs_diff.re, &max_ulps.re)
+            && approx_cmp::UlpsEq::ulps_eq(&self.im, &other.im, &max_abs_diff.im, &max_ulps.im)
+    }
+}
+
+impl<S> approx_cmp::UlpsAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.re, &other.re, max_abs_diff, max_ulps)
+            && approx_cmp::UlpsAllEq::ulps_all_eq(&self.im, &other.im, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsEq for Complex<S>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type DebugAbsDiff = Complex<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
+    type DebugUlpsDiff = Complex<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
+    type DebugTolerance = Complex<<S as approx_cmp::AssertUlpsEq>::DebugTolerance>;
+    type DebugUlpsTolerance = Complex<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        Complex::new(
+            approx_cmp::AssertUlpsEq::debug_abs_diff(&self.re, &other.re),
+            approx_cmp::AssertUlpsEq::debug_abs_diff(&self.im, &other.im),
+        )
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        Complex::new(
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.re, &other.re),
+            approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.im, &other.im),
+        )
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        Complex::new(
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.re, &other.re, &max_abs_diff.re),
+            approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.im, &other.im, &max_abs_diff.im),
+        )
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        Complex::new(
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.re, &other.re, &max_ulps.re),
+            approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.im, &other.im, &max_ulps.im),
+        )
+    }
+}
+
+impl<S> approx_cmp::AssertUlpsAllEq for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Complex<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance>;
+    type AllDebugUlpsTolerance = Complex<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        Complex::new(
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.re, &other.re, max_abs_diff),
+            approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.im, &other.im, max_abs_diff),
+        )
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        Complex::new(
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.re, &other.re, max_ulps),
+            approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.im, &other.im, max_ulps),
+        )
     }
 }

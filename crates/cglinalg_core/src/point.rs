@@ -99,9 +99,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,   
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point: Point3<i32> = Point3::new(1_i32, 2_i32, 3_i32);
     /// let expected: Option<Point3<f64>> = Some(Point3::new(1_f64, 2_f64, 3_f64));
@@ -127,9 +125,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let fill_value = 3_i32;
     /// let expected = Point3::new(3_i32, 3_i32, 3_i32);
@@ -150,9 +146,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,  
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let vector: Point3<i32> = Point3::new(1_i32, 2_i32, 3_i32);
     /// let expected: Point3<f64> = Point3::new(2_f64, 3_f64, 4_f64);
@@ -255,9 +249,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point1 = Point3::new(1_f64, 2_f64, 3_f64);
     /// let point2 = Point3::new(4_f64, 5_f64, 6_f64);
@@ -274,9 +266,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = 14_f64;
@@ -295,9 +285,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point1 = Point3::origin();
     /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
@@ -318,9 +306,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = 14_f64;
@@ -343,9 +329,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
@@ -364,9 +348,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point1 = Point3::origin();
     /// let point2 = Point3::new(1_f64, 1_f64, 1_f64);
@@ -387,9 +369,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
@@ -409,9 +389,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
     /// let expected = f64::sqrt(14_f64);
@@ -440,7 +418,7 @@ where
     /// ```
     /// # use cglinalg_core::{
     /// #     Point2,
-    /// #     Point3,    
+    /// #     Point3,
     /// # };
     /// #
     /// let point = Point2::new(1_i32, 2_i32);
@@ -1025,7 +1003,7 @@ where
         self.coords %= other;
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Point<S, N>
 where
     S: SimdScalarFloat,
@@ -1070,6 +1048,200 @@ where
     #[inline]
     fn ulps_eq(&self, other: &Self, epsilon: Self::Epsilon, max_ulps: u32) -> bool {
         Vector::ulps_eq(&self.coords, &other.coords, epsilon, max_ulps)
+    }
+}
+*/
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = Vector<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.coords, &other.coords, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.coords, &other.coords, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertRelativeEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.coords, &other.coords, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.coords, &other.coords, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type Tolerance = Vector<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = Vector<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    #[inline]
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.coords, &other.coords, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.coords, &other.coords, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+    S::UlpsTolerance: Sized,
+{
+    type DebugAbsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = Vector<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = Vector<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        approx_cmp::AssertUlpsEq::debug_abs_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.coords, &other.coords)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.coords, &other.coords, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Point<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = Vector<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = Vector<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.coords, &other.coords, max_abs_diff)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.coords, &other.coords, max_ulps)
     }
 }
 
@@ -1182,9 +1354,7 @@ impl<S> Point1<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point1,
-    /// # };
+    /// # use cglinalg_core::Point1;
     /// #
     /// let x = 1_i32;
     /// let point = Point1::new(x);
@@ -1203,9 +1373,7 @@ impl<S> Point2<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,
-    /// # };
+    /// # use cglinalg_core::Point2;
     /// #
     /// let x = 1_i32;
     /// let y = 2_i32;
@@ -1228,9 +1396,7 @@ impl<S> Point3<S> {
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,
-    /// # };
+    /// # use cglinalg_core::Point3;
     /// #
     /// let x = 1_i32;
     /// let y = 2_i32;

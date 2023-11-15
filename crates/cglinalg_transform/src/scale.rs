@@ -57,12 +57,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_vector = Vector2::new(5_f64, 7_f64);
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
@@ -76,12 +72,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_vector = Vector3::new(5_f64, 7_f64, 11_f64);
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
@@ -101,12 +93,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_factor = 20_f64;
     /// let scale = Scale2::from_scale(scale_factor);
@@ -120,12 +108,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_factor = 20_f64;
     /// let scale = Scale3::from_scale(scale_factor);
@@ -147,12 +131,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -168,12 +148,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -206,9 +182,7 @@ where
     /// #     Point2,
     /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -228,9 +202,7 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -262,12 +234,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point2,  
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_core::Point2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale = Scale2::identity();
     /// let point = Point2::new(1_f64, 2_f64);
@@ -278,12 +246,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Point3,  
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_core::Point3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale = Scale3::identity();
     /// let point = Point3::new(1_f64, 2_f64, 3_f64);
@@ -301,12 +265,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let expected = Vector2::new(5_f64, 7_f64);
     /// let scale = Scale2::from_nonuniform_scale(&expected);
@@ -318,12 +278,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let expected = Vector3::new(5_f64, 7_f64, 11_f64);
     /// let scale = Scale3::from_nonuniform_scale(&expected);
@@ -344,19 +300,17 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix2x2,
     /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_vector = Vector2::new(5_f64, 7_f64);
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let expected = Matrix2x2::new(
     ///     5_f64, 0_f64,
-    ///     0_f64, 7_f64
+    ///     0_f64, 7_f64,
     /// );
     /// let result = scale.to_matrix();
     ///
@@ -366,20 +320,18 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_vector = Vector3::new(5_f64, 7_f64, 11_f64);
     /// let scale = Scale3::from_nonuniform_scale(&scale_vector);
     /// let expected = Matrix3x3::new(
     ///     5_f64, 0_f64, 0_f64,
     ///     0_f64, 7_f64, 0_f64,
-    ///     0_f64, 0_f64, 11_f64
+    ///     0_f64, 0_f64, 11_f64,
     /// );
     /// let result = scale.to_matrix();
     ///
@@ -401,12 +353,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -414,7 +362,7 @@ where
     /// let scale = Scale2::from_nonuniform_scale(&scale_vector);
     /// let expected = Scale2::from_nonuniform_scale(&Vector2::new(
     ///     1_f64 / scale_x,
-    ///     1_f64 / scale_y
+    ///     1_f64 / scale_y,
     /// ));
     /// let result = scale.inverse();
     ///
@@ -424,12 +372,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #      Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -463,12 +407,8 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector2,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_core::Vector2;
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -484,12 +424,8 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_core::{
-    /// #     Vector3,
-    /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -525,9 +461,7 @@ where
     /// #     Point2,
     /// #     Vector2,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -547,9 +481,7 @@ where
     /// #     Point3,
     /// #     Vector3,
     /// # };
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let scale_x = 2_f64;
     /// let scale_y = 3_f64;
@@ -586,20 +518,18 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
     /// # };
+    /// # use cglinalg_transform::Scale2;
     /// #
     /// let vector = Vector2::new(2_f64, 3_f64);
     /// let scale = Scale2::from_nonuniform_scale(&vector);
     /// let expected = Matrix3x3::new(
     ///     2_f64, 0_f64, 0_f64,
     ///     0_f64, 3_f64, 0_f64,
-    ///     0_f64, 0_f64, 1_f64
+    ///     0_f64, 0_f64, 1_f64,
     /// );
     /// let result = scale.to_affine_matrix();
     ///
@@ -609,13 +539,11 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
     /// # };
+    /// # use cglinalg_transform::Scale3;
     /// #
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
     /// let scale = Scale3::from_nonuniform_scale(&vector);
@@ -623,7 +551,7 @@ where
     ///     2_f64, 0_f64, 0_f64, 0_f64,
     ///     0_f64, 3_f64, 0_f64, 0_f64,
     ///     0_f64, 0_f64, 4_f64, 0_f64,
-    ///     0_f64, 0_f64, 0_f64, 1_f64
+    ///     0_f64, 0_f64, 0_f64, 1_f64,
     /// );
     /// let result = scale.to_affine_matrix();
     ///
@@ -639,13 +567,13 @@ where
     /// # Example (Two Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale2,
-    /// #     Transform2,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix3x3,
     /// #     Vector2,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Scale2,
+    /// #     Transform2,
     /// # };
     /// #
     /// let vector = Vector2::new(2_f64, 3_f64);
@@ -653,7 +581,7 @@ where
     /// let expected = Transform2::from_matrix_unchecked(Matrix3x3::new(
     ///     2_f64, 0_f64, 0_f64,
     ///     0_f64, 3_f64, 0_f64,
-    ///     0_f64, 0_f64, 1_f64
+    ///     0_f64, 0_f64, 1_f64,
     /// ));
     /// let result = scale.to_transform();
     ///
@@ -663,13 +591,13 @@ where
     /// # Example (Three Dimensions)
     ///
     /// ```
-    /// # use cglinalg_transform::{
-    /// #     Scale3,
-    /// #     Transform3,
-    /// # };
     /// # use cglinalg_core::{
     /// #     Matrix4x4,
     /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::{
+    /// #     Scale3,
+    /// #     Transform3,
     /// # };
     /// #
     /// let vector = Vector3::new(2_f64, 3_f64, 4_f64);
@@ -678,7 +606,7 @@ where
     ///     2_f64, 0_f64, 0_f64, 0_f64,
     ///     0_f64, 3_f64, 0_f64, 0_f64,
     ///     0_f64, 0_f64, 4_f64, 0_f64,
-    ///     0_f64, 0_f64, 0_f64, 1_f64
+    ///     0_f64, 0_f64, 0_f64, 1_f64,
     /// ));
     /// let result = scale.to_transform();
     ///
@@ -724,7 +652,7 @@ where
         scale.to_affine_matrix()
     }
 }
-
+/*
 impl<S, const N: usize> approx::AbsDiffEq for Scale<S, N>
 where
     S: SimdScalarFloat,
@@ -771,7 +699,7 @@ where
         Vector::ulps_eq(&self.vector, &other.vector, epsilon, max_ulps)
     }
 }
-
+*/
 impl<S, const N: usize> ops::Mul<Point<S, N>> for Scale<S, N>
 where
     S: SimdScalar,
@@ -948,5 +876,261 @@ where
         Self {
             vector: Vector3::new(scale_x, scale_y, scale_z),
         }
+    }
+}
+
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ScaleTol<S, const N: usize> {
+    vector: Vector<S, N>,
+}
+
+impl<S, const N: usize> From<Vector<S, N>> for ScaleTol<S, N> {
+    #[inline]
+    fn from(vector: Vector<S, N>) -> Self {
+        Self { vector }
+    }
+}
+
+impl<S, const N: usize> From<&Vector<S, N>> for ScaleTol<S, N>
+where
+    S: Copy,
+{
+    #[inline]
+    fn from(vector: &Vector<S, N>) -> Self {
+        Self { vector: *vector }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct ScaleDiff<S, const N: usize> {
+    vector: Vector<S, N>,
+}
+
+impl<S, const N: usize> ScaleDiff<S, N> {
+    #[inline]
+    const fn from(vector: Vector<S, N>) -> Self {
+        Self { vector }
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ScaleTol<<S as approx_cmp::AbsDiffEq>::Tolerance, N>;
+
+    #[inline]
+    fn abs_diff_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> bool {
+        approx_cmp::AbsDiffEq::abs_diff_eq(&self.vector, &other.vector, &max_abs_diff.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AbsDiffAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::AbsDiffAllEq>::AllTolerance;
+
+    #[inline]
+    fn abs_diff_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> bool {
+        approx_cmp::AbsDiffAllEq::abs_diff_all_eq(&self.vector, &other.vector, max_abs_diff)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ScaleDiff<<S as approx_cmp::AssertAbsDiffEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ScaleTol<<S as approx_cmp::AssertAbsDiffEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.vector, &other.vector);
+
+        ScaleDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        ScaleTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertAbsDiffAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ScaleTol<<S as approx_cmp::AssertAbsDiffAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        ScaleTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ScaleTol<<S as approx_cmp::RelativeEq>::Tolerance, N>;
+
+    #[inline]
+    fn relative_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_relative: &Self::Tolerance) -> bool {
+        approx_cmp::RelativeEq::relative_eq(&self.vector, &other.vector, &max_abs_diff.vector, &max_relative.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::RelativeAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::RelativeAllEq>::AllTolerance;
+
+    #[inline]
+    fn relative_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_relative: &Self::AllTolerance) -> bool {
+        approx_cmp::RelativeAllEq::relative_all_eq(&self.vector, &other.vector, max_abs_diff, max_relative)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ScaleDiff<<S as approx_cmp::AssertRelativeEq>::DebugAbsDiff, N>;
+    type DebugTolerance = ScaleTol<<S as approx_cmp::AssertRelativeEq>::DebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.vector, &other.vector);
+
+        ScaleDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        ScaleTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.vector, &other.vector, &max_relative.vector);
+
+        ScaleTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertRelativeAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ScaleTol<<S as approx_cmp::AssertRelativeAllEq>::AllDebugTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        ScaleTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.vector, &other.vector, max_relative);
+
+        ScaleTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type Tolerance = ScaleTol<<S as approx_cmp::UlpsEq>::Tolerance, N>;
+    type UlpsTolerance = ScaleTol<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
+
+    fn ulps_eq(&self, other: &Self, max_abs_diff: &Self::Tolerance, max_ulps: &Self::UlpsTolerance) -> bool {
+        approx_cmp::UlpsEq::ulps_eq(&self.vector, &other.vector, &max_abs_diff.vector, &max_ulps.vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::UlpsAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllTolerance = <S as approx_cmp::UlpsAllEq>::AllTolerance;
+    type AllUlpsTolerance = <S as approx_cmp::UlpsAllEq>::AllUlpsTolerance;
+
+    #[inline]
+    fn ulps_all_eq(&self, other: &Self, max_abs_diff: &Self::AllTolerance, max_ulps: &Self::AllUlpsTolerance) -> bool {
+        approx_cmp::UlpsAllEq::ulps_all_eq(&self.vector, &other.vector, max_abs_diff, max_ulps)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type DebugAbsDiff = ScaleDiff<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
+    type DebugUlpsDiff = ScaleDiff<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;
+    type DebugTolerance = ScaleTol<<S as approx_cmp::AssertUlpsEq>::DebugTolerance, N>;
+    type DebugUlpsTolerance = ScaleTol<<S as approx_cmp::AssertUlpsEq>::DebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
+        let vector = approx_cmp::AssertUlpsEq::debug_abs_diff(&self.vector, &other.vector);
+
+        ScaleDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_diff(&self, other: &Self) -> Self::DebugUlpsDiff {
+        let vector = approx_cmp::AssertUlpsEq::debug_ulps_diff(&self.vector, &other.vector);
+
+        ScaleDiff::from(vector)
+    }
+
+    #[inline]
+    fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
+        let vector = approx_cmp::AssertUlpsEq::debug_abs_diff_tolerance(&self.vector, &other.vector, &max_abs_diff.vector);
+
+        ScaleTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_tolerance(&self, other: &Self, max_ulps: &Self::UlpsTolerance) -> Self::DebugUlpsTolerance {
+        let vector = approx_cmp::AssertUlpsEq::debug_ulps_tolerance(&self.vector, &other.vector, &max_ulps.vector);
+
+        ScaleTol::from(vector)
+    }
+}
+
+impl<S, const N: usize> approx_cmp::AssertUlpsAllEq for Scale<S, N>
+where
+    S: SimdScalarFloat,
+{
+    type AllDebugTolerance = ScaleTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugTolerance, N>;
+    type AllDebugUlpsTolerance = ScaleTol<<S as approx_cmp::AssertUlpsAllEq>::AllDebugUlpsTolerance, N>;
+
+    #[inline]
+    fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
+        let vector = approx_cmp::AssertUlpsAllEq::debug_abs_diff_all_tolerance(&self.vector, &other.vector, max_abs_diff);
+
+        ScaleTol::from(vector)
+    }
+
+    #[inline]
+    fn debug_ulps_all_tolerance(&self, other: &Self, max_ulps: &Self::AllUlpsTolerance) -> Self::AllDebugUlpsTolerance {
+        let vector = approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.vector, &other.vector, max_ulps);
+
+        ScaleTol::from(vector)
     }
 }

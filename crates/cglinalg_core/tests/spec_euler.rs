@@ -3,7 +3,7 @@ extern crate cglinalg_numeric;
 extern crate proptest;
 
 
-use approx::relative_eq;
+use approx_cmp::relative_eq;
 use cglinalg_core::EulerAngles;
 use cglinalg_numeric::SimdScalarFloat;
 use cglinalg_trigonometry::{
@@ -69,7 +69,7 @@ where
     let lhs = matrix.inverse().unwrap();
     let rhs = matrix.transpose();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -90,7 +90,7 @@ where
     let lhs = matrix.inverse().unwrap();
     let rhs = matrix.transpose();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -111,7 +111,7 @@ where
     let lhs = matrix.determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
@@ -132,7 +132,7 @@ where
     let lhs = matrix.determinant();
     let rhs = S::one();
 
-    prop_assert!(relative_eq!(lhs, rhs, epsilon = tolerance));
+    prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::machine_epsilon()));
 
     Ok(())
 }
