@@ -2925,10 +2925,7 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Vector2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
@@ -2940,11 +2937,7 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line, expected_in_line, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4144,10 +4137,7 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Vector3::new( 1_f64, 0_f64, 1_f64),
@@ -4157,9 +4147,7 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line, expected_in_line, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
@@ -4214,10 +4202,7 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Vector3::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64, 1_f64),
@@ -4229,11 +4214,7 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane, expected_in_plane, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4802,7 +4783,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * direction.normalize(), unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * direction.normalize(),
+    ///     unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4849,7 +4835,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * direction.normalize(), minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * direction.normalize(),
+    ///     minus_unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[rustfmt::skip]
     #[inline]
@@ -4899,7 +4890,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * direction, unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * direction,
+    ///     unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_lh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -4940,7 +4936,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * direction, minus_unit_z, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * direction,
+    ///     minus_unit_z,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_rh(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -4978,7 +4979,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * unit_z, direction.normalize(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * unit_z,
+    ///     direction.normalize(),
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_lh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -5016,7 +5022,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * minus_unit_z, direction.normalize(), abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * minus_unit_z,
+    ///     direction.normalize(),
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_to_rh_inv(direction: &Vector3<S>, up: &Vector3<S>) -> Self {
@@ -5058,7 +5069,12 @@ where
     /// let unit_z = Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * unit_z,
+    ///     direction,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_lh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5100,7 +5116,12 @@ where
     /// let minus_unit_z = -Vector3::unit_z();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result * minus_unit_z, direction, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(
+    ///     result * minus_unit_z,
+    ///     direction,
+    ///     abs_diff_all <= 1e-10,
+    ///     relative_all <= f64::EPSILON,
+    /// );
     /// ```
     #[inline]
     pub fn look_at_rh_inv(eye: &Point3<S>, target: &Point3<S>, up: &Vector3<S>) -> Self {
@@ -5924,14 +5945,7 @@ where
     /// ];
     /// let result = vertices.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Vector4::new( 1_f64,  1_f64, 0_f64, 1_f64),
@@ -5943,11 +5957,7 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|v| matrix * v);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane, expected_in_plane, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]

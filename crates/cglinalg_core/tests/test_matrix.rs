@@ -1124,10 +1124,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices_xy.map(|v| rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -1183,10 +1180,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -1235,11 +1229,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -3114,14 +3104,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3217,14 +3200,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3328,15 +3304,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[8], expected[8], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -3753,10 +3721,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -3838,10 +3803,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3897,11 +3859,7 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| matrix * v);
     
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -6495,14 +6453,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices_xz.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], vertices[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], vertices[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], vertices[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], vertices[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], vertices[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], vertices[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], vertices[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], vertices[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, vertices, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -6615,14 +6566,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| matrix * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]

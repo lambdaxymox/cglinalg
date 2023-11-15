@@ -278,10 +278,7 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -321,14 +318,7 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -369,10 +359,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -409,18 +396,11 @@ where
     ///     Point3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     ///     Point3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     ///     Point3::new(-1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
-    ///     Point3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),  
+    ///     Point3::new( 1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 - (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     /// ];
     /// let result = vertices.map(|p| shear.apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -671,10 +651,7 @@ where
     /// ];
     /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -710,18 +687,11 @@ where
     ///     Vector3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     ///     Vector3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor,  1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     ///     Vector3::new(-1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
-    ///     Vector3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),  
+    ///     Vector3::new( 1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64 + (1_f64 / f64::sqrt(2_f64)) * shear_factor, -1_f64),
     /// ];
     /// let result = vertices.map(|v| shear.inverse_apply_vector(&v));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector<S, N>) -> Vector<S, N> {
@@ -765,10 +735,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -809,14 +776,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear.inverse_apply_point(&p));
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point<S, N>) -> Point<S, N> {
@@ -888,10 +848,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64))),
@@ -903,11 +860,7 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[3], expected_in_line[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[4], expected_in_line[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line, expected_in_line, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -1016,10 +969,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_line = [
     ///     Point2::new( 1_f64, 0_f64),
@@ -1029,9 +979,7 @@ where
     /// let expected_in_line = vertices_in_line;
     /// let result_in_line = vertices_in_line.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_line[0], expected_in_line[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[1], expected_in_line[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_line[2], expected_in_line[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_line, expected_in_line, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// Shearing along the line `y == (1 / 2) * x + 1` using the origin `(2, 2)`.
@@ -1081,10 +1029,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Point2::new( 1_f64 / f64::sqrt(5_f64),  1_f64 / (2_f64 * f64::sqrt(5_f64)) + 1_f64),
@@ -1096,11 +1041,7 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane, expected_in_plane, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     ///
     /// # Example (Three Dimensions)
@@ -1146,14 +1087,7 @@ where
     /// ];
     /// let result = vertices.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     ///
     /// let vertices_in_plane = [
     ///     Point3::new( 1_f64,  1_f64, 0_f64),
@@ -1165,11 +1099,7 @@ where
     /// let expected_in_plane = vertices_in_plane;
     /// let result_in_plane = vertices_in_plane.map(|p| shear * p);
     ///
-    /// assert_relative_eq!(result_in_plane[0], expected_in_plane[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[1], expected_in_plane[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[2], expected_in_plane[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[3], expected_in_plane[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-    /// assert_relative_eq!(result_in_plane[4], expected_in_plane[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// assert_relative_eq!(result_in_plane, expected_in_plane, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn from_affine_shear(shear_factor: S, origin: &Point<S, N>, direction: &Unit<Vector<S, N>>, normal: &Unit<Vector<S, N>>) -> Self {

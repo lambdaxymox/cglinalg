@@ -819,10 +819,7 @@ mod shear2_noncoordinate_plane_tests {
         let expected = vertices;
         let result = rotated_vertices.map(|v| translation * rotation * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -833,8 +830,7 @@ mod shear2_noncoordinate_plane_tests {
         let rotated_origin = Point2::new(f64::sqrt(5_f64), 0_f64);
         let result_rotated_translated_origin = translation * rotation * rotated_origin;
 
-        assert_relative_eq!(result_rotated_translated_origin[0], origin[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result_rotated_translated_origin[1], origin[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result_rotated_translated_origin, origin, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[test]
@@ -899,10 +895,7 @@ mod shear2_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| shear.apply_vector(&v));
     
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -965,11 +958,7 @@ mod shear2_noncoordinate_plane_tests {
         let expected = vertices;
         let result = vertices.map(|v| shear.apply_vector(&v));
     
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 }
 
@@ -3742,14 +3731,7 @@ mod shear3_noncoordinate_plane_tests {
         ];
         let result = vertices_xz.map(|vertex_xz| translation * rotation * vertex_xz);
 
-        assert_relative_eq!(result[0], vertices[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], vertices[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], vertices[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], vertices[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], vertices[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], vertices[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], vertices[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], vertices[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, vertices, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
@@ -3846,14 +3828,7 @@ mod shear3_noncoordinate_plane_tests {
         ];
         let result = vertices.map(|v| shear * v);
 
-        assert_relative_eq!(result[0], expected[0], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[1], expected[1], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[2], expected[2], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[3], expected[3], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[4], expected[4], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[5], expected[5], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[6], expected[6], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
-        assert_relative_eq!(result[7], expected[7], abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+        assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
 
     #[rustfmt::skip]
