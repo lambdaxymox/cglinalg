@@ -2603,12 +2603,12 @@ where
     /// #
     /// let matrix = Matrix1x1::new(5_f64);
     /// let expected = Matrix1x1::new(1_f64 / 5_f64);
-    /// let result = matrix.inverse().unwrap();
+    /// let result = matrix.try_inverse().unwrap();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
+    pub fn try_inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det.is_zero() {
             None
@@ -2636,6 +2636,27 @@ where
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+    }
+
+    /// Compute the inverse of a square matrix.
+    /// 
+    /// # Safety
+    /// 
+    /// Panics if the [`Matrix`] is not invertible.
+    /// 
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix1x1;
+    /// #
+    /// let matrix = Matrix1x1::new(5_f64);
+    /// let expected = Matrix1x1::new(1_f64 / 5_f64);
+    /// let result = matrix.inverse();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 }
 
@@ -3203,13 +3224,13 @@ where
     ///      5_f64 / 7_f64, -3_f64 / 7_f64,
     ///     -1_f64 / 7_f64,  2_f64 / 7_f64,
     /// );
-    /// let result = matrix.inverse().unwrap();
+    /// let result = matrix.try_inverse().unwrap();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
+    pub fn try_inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det.is_zero() {
             None
@@ -3243,6 +3264,35 @@ where
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+    }
+
+    /// Compute the inverse of a square matrix.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the [`Matrix`] is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix2x2;
+    /// #
+    /// let matrix = Matrix2x2::new(
+    ///     2_f64, 3_f64,
+    ///     1_f64, 5_f64,
+    /// );
+    /// let expected = Matrix2x2::new(
+    ///      5_f64 / 7_f64, -3_f64 / 7_f64,
+    ///     -1_f64 / 7_f64,  2_f64 / 7_f64,
+    /// );
+    /// let result = matrix.inverse();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 }
 
@@ -5246,13 +5296,13 @@ where
     ///     -18_f64 / 12_f64,  24_f64 / 12_f64, -6_f64 / 12_f64,
     ///      13_f64 / 12_f64, -14_f64 / 12_f64,  3_f64 / 12_f64,
     /// );
-    /// let result = matrix.inverse().unwrap();
+    /// let result = matrix.try_inverse().unwrap();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
+    pub fn try_inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det.is_zero() {
             None
@@ -5296,6 +5346,37 @@ where
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+    }
+
+    /// Compute the inverse of a square matrix.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the [`Matrix`] is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix3x3;
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     1_f64, 4_f64, 7_f64,
+    ///     2_f64, 5_f64, 8_f64,
+    ///     5_f64, 6_f64, 11_f64,
+    /// );
+    /// let expected = Matrix3x3::new(
+    ///     -7_f64 / 12_f64,   2_f64 / 12_f64,   3_f64 / 12_f64,
+    ///     -18_f64 / 12_f64,  24_f64 / 12_f64, -6_f64 / 12_f64,
+    ///      13_f64 / 12_f64, -14_f64 / 12_f64,  3_f64 / 12_f64,
+    /// );
+    /// let result = matrix.inverse();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 }
 
@@ -7126,13 +7207,13 @@ where
     ///     -13_f64 / 36_f64,  25_f64 / 18_f64, -13_f64 / 12_f64,  1_f64 / 3_f64,
     ///      13_f64 / 45_f64, -23_f64 / 45_f64,  4_f64 / 15_f64,  -1_f64 / 15_f64,
     /// );
-    /// let result = matrix.inverse().unwrap();
+    /// let result = matrix.try_inverse().unwrap();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
+    pub fn try_inverse(&self) -> Option<Self> {
         let det = self.determinant();
         if det.is_zero() {
             None
@@ -7222,6 +7303,39 @@ where
     #[inline]
     pub fn is_invertible(&self) -> bool {
         ulps_ne!(self.determinant(), S::zero(), abs_diff_all <= S::default_epsilon(), ulps_all <= S::default_max_ulps())
+    }
+    
+    /// Compute the inverse of a square matrix.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the [`Matrix`] is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     1_f64, 4_f64, 7_f64,  8_f64,
+    ///     2_f64, 5_f64, 8_f64,  4_f64,
+    ///     5_f64, 6_f64, 11_f64, 4_f64,
+    ///     9_f64, 3_f64, 13_f64, 5_f64,
+    /// );
+    /// let expected = Matrix4x4::new(
+    ///      17_f64 / 60_f64, -41_f64 / 30_f64,  21_f64 / 20_f64, -1_f64 / 5_f64,
+    ///      7_f64 / 30_f64,  -16_f64 / 15_f64,  11_f64 / 10_f64, -2_f64 / 5_f64,
+    ///     -13_f64 / 36_f64,  25_f64 / 18_f64, -13_f64 / 12_f64,  1_f64 / 3_f64,
+    ///      13_f64 / 45_f64, -23_f64 / 45_f64,  4_f64 / 15_f64,  -1_f64 / 15_f64,
+    /// );
+    /// let result = matrix.inverse();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 }
 

@@ -521,7 +521,7 @@ mod matrix2x2_tests {
              5_f64, -1_f64,
             -1_f64,  5_f64,
         );
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
@@ -535,7 +535,7 @@ mod matrix2x2_tests {
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix2x2<f64> = Matrix2x2::identity().inverse().unwrap();
+        let result: Matrix2x2<f64> = Matrix2x2::identity().try_inverse().unwrap();
         let expected: Matrix2x2<f64> = Matrix2x2::identity();
 
         assert_eq!(result, expected);
@@ -545,7 +545,7 @@ mod matrix2x2_tests {
     fn test_inverse_diagonal_matrix() {
         let matrix = 4_f64 * Matrix2x2::identity();
         let expected = (1_f64 / 4_f64) * Matrix2x2::identity();
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -580,7 +580,7 @@ mod matrix2x2_tests {
             4_f32, 8_f32,
         );
 
-        assert!(matrix.inverse().is_none());
+        assert!(matrix.try_inverse().is_none());
     }
 
     #[rustfmt::skip]
@@ -590,7 +590,7 @@ mod matrix2x2_tests {
             36.84_f64, 427.46_f64,
             7.47_f64,  61.89_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix2x2::identity();
 
         assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -603,7 +603,7 @@ mod matrix2x2_tests {
             36.84_f64, 427.46_f64,
             7.47_f64,  61.89_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix2x2::identity();
 
         assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);        
@@ -617,8 +617,8 @@ mod matrix2x2_tests {
             23.43_f64, 23.5724_f64,
         );
         let constant: f64 = 4_f64;
-        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
-        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+        let constant_times_matrix_inverse = (constant * matrix).try_inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.try_inverse().unwrap();
 
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
@@ -630,8 +630,8 @@ mod matrix2x2_tests {
             80_f64,    426.1_f64,
             23.43_f64, 23.5724_f64,
         );
-        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
-        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+        let matrix_transpose_inverse = matrix.transpose().try_inverse().unwrap();
+        let matrix_inverse_transpose = matrix.try_inverse().unwrap().transpose();
 
         assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
@@ -643,7 +643,7 @@ mod matrix2x2_tests {
             80_f64,    426.1_f64,
             23.43_f64, 23.5724_f64,
         );
-        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let result = matrix.try_inverse().unwrap().try_inverse().unwrap();
         let expected = matrix;
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -1100,7 +1100,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         let rotation_angle = rotation_angle();
         let computed_rotation = Matrix2x2::from_angle(rotation_angle);
         let expected = rotation_inv();
-        let result = computed_rotation.inverse().unwrap();
+        let result = computed_rotation.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
@@ -1821,7 +1821,7 @@ mod matrix3x3_tests {
             -1_f64,  6_f64, -1_f64,
             -1_f64, -1_f64,  6_f64,
         );
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
@@ -1833,7 +1833,7 @@ mod matrix3x3_tests {
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix3x3<f64> = Matrix3x3::identity().inverse().unwrap();
+        let result: Matrix3x3<f64> = Matrix3x3::identity().try_inverse().unwrap();
         let expected: Matrix3x3<f64> = Matrix3x3::identity();
 
         assert_eq!(result, expected);
@@ -1843,7 +1843,7 @@ mod matrix3x3_tests {
     fn test_inverse_diagonal_matrix() {
         let matrix = 4_f64 * Matrix3x3::identity();
         let expected = (1_f64 / 4_f64) * Matrix3x3::identity();
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -1881,7 +1881,7 @@ mod matrix3x3_tests {
             4_f32, 5_f32, 6_f32,
         );
 
-        assert!(matrix.inverse().is_none());
+        assert!(matrix.try_inverse().is_none());
     }
 
     #[rustfmt::skip]
@@ -1892,7 +1892,7 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64,
             81.439_f64, 12.19_f64,   43.36_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix3x3::identity();
 
         assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -1907,8 +1907,8 @@ mod matrix3x3_tests {
             81.439_f64, 12.19_f64,   43.36_f64,
         );
         let constant = 4_f64;
-        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
-        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+        let constant_times_matrix_inverse = (constant * matrix).try_inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.try_inverse().unwrap();
 
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
@@ -1921,8 +1921,8 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64,
             81.439_f64, 12.19_f64,   43.36_f64,
         );
-        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
-        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+        let matrix_transpose_inverse = matrix.transpose().try_inverse().unwrap();
+        let matrix_inverse_transpose = matrix.try_inverse().unwrap().transpose();
 
         assert_eq!(matrix_transpose_inverse, matrix_inverse_transpose);
     }
@@ -1935,7 +1935,7 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64,
             81.439_f64, 12.19_f64,   43.36_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix3x3::identity();
 
         assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -1949,7 +1949,7 @@ mod matrix3x3_tests {
             23.43_f64,  23.5724_f64, 1.27_f64,
             81.439_f64, 12.19_f64,   43.36_f64,
         );
-        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let result = matrix.try_inverse().unwrap().try_inverse().unwrap();
         let expected = matrix;
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -2981,7 +2981,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let rotation_angle_z_xy = rotation_angle_z_xy();
         let expected = rotation_z_xy_inv();
         let result_inv = Matrix3x3::from_angle_z(rotation_angle_z_xy);
-        let result = result_inv.inverse().unwrap();
+        let result = result_inv.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
@@ -3000,7 +3000,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         let rotation_angle_y_zx = rotation_angle_y_zx();
         let expected = rotation_y_zx_inv();
         let result_inv = Matrix3x3::from_angle_y(rotation_angle_y_zx);
-        let result = result_inv.inverse().unwrap();
+        let result = result_inv.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
@@ -4553,7 +4553,7 @@ mod matrix4x4_tests {
             -1_f64, -1_f64,  7_f64, -1_f64,
             -1_f64, -1_f64, -1_f64,  7_f64,
         );
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
@@ -4565,7 +4565,7 @@ mod matrix4x4_tests {
 
     #[test]
     fn test_identity_inverse_is_identity() {
-        let result: Matrix4x4<f64> = Matrix4x4::identity().inverse().unwrap();
+        let result: Matrix4x4<f64> = Matrix4x4::identity().try_inverse().unwrap();
         let expected: Matrix4x4<f64> = Matrix4x4::identity();
 
         assert_eq!(result, expected);
@@ -4575,7 +4575,7 @@ mod matrix4x4_tests {
     fn test_inverse_diagonal_matrix() {
         let matrix = 4_f64 * Matrix4x4::identity();
         let expected = (1_f64 / 4_f64) * Matrix4x4::identity();
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -4617,7 +4617,7 @@ mod matrix4x4_tests {
             9_f64,  10_f64, 11_f64, 12_f64,
         );
 
-        assert!(matrix.inverse().is_none());
+        assert!(matrix.try_inverse().is_none());
     }
 
     #[rustfmt::skip]
@@ -4629,7 +4629,7 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
-        let result = matrix.inverse().unwrap();
+        let result = matrix.try_inverse().unwrap();
         let expected = Matrix4x4::new(
              0.01146093272878252_f64,  -0.06212100841992658_f64, -0.02771783718075694_f64,    0.07986947998777854_f64,
             -0.00148039611514755_f64,   0.004464130960444646_f64, 0.003417891441120325_f64,  -0.005915083057511776_f64,
@@ -4649,7 +4649,7 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix4x4::identity();
 
         assert_relative_eq!(matrix * matrix_inverse, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -4665,8 +4665,8 @@ mod matrix4x4_tests {
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
         let constant: f64 = 4_f64;
-        let constant_times_matrix_inverse = (constant * matrix).inverse().unwrap();
-        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.inverse().unwrap();
+        let constant_times_matrix_inverse = (constant * matrix).try_inverse().unwrap();
+        let constant_inverse_times_matrix_inverse = (1_f64 / constant) * matrix.try_inverse().unwrap();
 
         assert_eq!(constant_times_matrix_inverse, constant_inverse_times_matrix_inverse);
     }
@@ -4680,8 +4680,8 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
-        let matrix_transpose_inverse = matrix.transpose().inverse().unwrap();
-        let matrix_inverse_transpose = matrix.inverse().unwrap().transpose();
+        let matrix_transpose_inverse = matrix.transpose().try_inverse().unwrap();
+        let matrix_inverse_transpose = matrix.try_inverse().unwrap().transpose();
 
         assert_relative_eq!(matrix_transpose_inverse, matrix_inverse_transpose, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     }
@@ -4695,7 +4695,7 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
-        let matrix_inverse = matrix.inverse().unwrap();
+        let matrix_inverse = matrix.try_inverse().unwrap();
         let identity = Matrix4x4::identity();
 
         assert_relative_eq!(matrix_inverse * matrix, identity, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -4710,7 +4710,7 @@ mod matrix4x4_tests {
             72_f64,     936.5_f64,   413.80_f64,  50.311_f64,
             37.698_f64, 311.8_f64,   60.81_f64,   73.839_f64,
         );
-        let result = matrix.inverse().unwrap().inverse().unwrap();
+        let result = matrix.try_inverse().unwrap().try_inverse().unwrap();
         let expected = matrix;
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
@@ -6284,7 +6284,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     fn test_from_affine_shear_translation_inv() {
         let translation = translation();
         let expected = translation_inv();
-        let result = translation.inverse().unwrap();
+        let result = translation.try_inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -6339,7 +6339,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     fn test_from_affine_shear_rotation_inv() {
         let expected = rotation_inv();
         let rotation = rotation();
-        let result = rotation.inverse().unwrap();
+        let result = rotation.try_inverse().unwrap();
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }

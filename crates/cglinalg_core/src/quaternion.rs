@@ -1087,7 +1087,7 @@ where
     /// let p: Quaternion<f64> = Quaternion::unit_x();
     /// let expected : Quaternion<f64> = Quaternion::unit_y();
     /// let q = Quaternion::from_axis_angle(&axis, angle);
-    /// let q_inv = q.inverse().unwrap();
+    /// let q_inv = q.try_inverse().unwrap();
     /// let result = q * p * q_inv;
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -1552,21 +1552,21 @@ where
     /// let zero_quat: Quaternion<f64> = Quaternion::zero();
     ///
     /// assert!(zero_quat.is_zero());
-    /// assert!(zero_quat.inverse().is_none());
+    /// assert!(zero_quat.try_inverse().is_none());
     ///
     /// let quaternion = Quaternion::new(1_f64, 1_f64, 0_f64, 0_f64);
     /// let expected = Some(Quaternion::new(1_f64 / 2_f64, -1_f64 / 2_f64, 0_f64, 0_f64));
-    /// let result = quaternion.inverse();
+    /// let result = quaternion.try_inverse();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
-        self.inverse_eps(S::default_epsilon())
+    pub fn try_inverse(&self) -> Option<Self> {
+        self.try_inverse_eps(S::default_epsilon())
     }
 
     #[inline]
-    fn inverse_eps(&self, threshold: S) -> Option<Self> {
+    fn try_inverse_eps(&self, threshold: S) -> Option<Self> {
         let norm_squared = self.norm_squared();
         if norm_squared <= threshold * threshold {
             None
@@ -1603,6 +1603,33 @@ where
     #[inline]
     fn is_invertible_eps(&self, threshold: S) -> bool {
         self.norm_squared() >= threshold * threshold
+    }
+
+    /// Compute the inverse of a quaternion.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the [`Quaternion`] is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::Quaternion;
+    /// #
+    /// let zero_quat: Quaternion<f64> = Quaternion::zero();
+    ///
+    /// assert!(zero_quat.is_zero());
+    /// assert!(zero_quat.try_inverse().is_none());
+    ///
+    /// let quaternion = Quaternion::new(1_f64, 1_f64, 0_f64, 0_f64);
+    /// let expected = Quaternion::new(1_f64 / 2_f64, -1_f64 / 2_f64, 0_f64, 0_f64);
+    /// let result = quaternion.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 
     /// Compute the principal (value of the) argument of a quaternion.
@@ -2133,7 +2160,7 @@ where
     /// ```
     #[inline]
     pub fn div_left(&self, left: &Self) -> Option<Self> {
-        left.inverse().map(|left_inv| left_inv * self)
+        left.try_inverse().map(|left_inv| left_inv * self)
     }
 
     /// Compute the right quotient of two quaternions.
@@ -2167,7 +2194,7 @@ where
     /// ```
     #[inline]
     pub fn div_right(&self, right: &Self) -> Option<Self> {
-        right.inverse().map(|right_inv| self * right_inv)
+        right.try_inverse().map(|right_inv| self * right_inv)
     }
 
     /// Calculate the inner product of two quaternions.

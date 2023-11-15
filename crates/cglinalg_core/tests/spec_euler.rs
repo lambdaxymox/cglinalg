@@ -66,7 +66,7 @@ where
     A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_matrix();
-    let lhs = matrix.inverse().unwrap();
+    let lhs = matrix.try_inverse().unwrap();
     let rhs = matrix.transpose();
 
     prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
@@ -87,7 +87,7 @@ where
     A: Angle<Dimensionless = S>,
 {
     let matrix = euler_angles.to_affine_matrix();
-    let lhs = matrix.inverse().unwrap();
+    let lhs = matrix.try_inverse().unwrap();
     let rhs = matrix.transpose();
 
     prop_assert!(relative_eq!(lhs, rhs, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));

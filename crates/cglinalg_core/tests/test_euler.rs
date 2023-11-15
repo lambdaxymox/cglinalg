@@ -183,7 +183,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse1() {
     let matrix = matrix_yz * matrix_zx * matrix_xy;
     let euler_angles = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let expected = matrix.transpose();
-    let result = euler_angles.to_matrix().inverse().unwrap();
+    let result = euler_angles.to_matrix().try_inverse().unwrap();
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
@@ -199,7 +199,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse2() {
     let matrix = matrix_yz * matrix_zx * matrix_xy;
     let euler_angles = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let expected = matrix.transpose();
-    let result = euler_angles.to_matrix().inverse().unwrap();
+    let result = euler_angles.to_matrix().try_inverse().unwrap();
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
@@ -215,7 +215,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse3() {
     let matrix = matrix_yz * matrix_zx * matrix_xy;
     let euler_angles = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let expected = matrix.transpose();
-    let result = euler_angles.to_affine_matrix().inverse().unwrap();
+    let result = euler_angles.to_affine_matrix().try_inverse().unwrap();
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
@@ -231,7 +231,7 @@ fn test_euler_angles_to_matrix_rotation_matrix_inverse4() {
     let matrix = matrix_yz * matrix_zx * matrix_xy;
     let euler_angles = EulerAngles::new(roll_yz, yaw_zx, pitch_xy);
     let expected = matrix.transpose();
-    let result = euler_angles.to_affine_matrix().inverse().unwrap();
+    let result = euler_angles.to_affine_matrix().try_inverse().unwrap();
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }

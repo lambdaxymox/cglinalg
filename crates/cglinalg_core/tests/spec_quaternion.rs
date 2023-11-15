@@ -508,7 +508,7 @@ where
     prop_assume!(q.is_invertible());
 
     let one = Quaternion::identity();
-    let q_inv = q.inverse().unwrap();
+    let q_inv = q.try_inverse().unwrap();
 
     prop_assert!(relative_eq!(q * q_inv, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!(relative_eq!(q_inv * q, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));

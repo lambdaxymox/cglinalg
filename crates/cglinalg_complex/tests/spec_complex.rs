@@ -587,7 +587,7 @@ where
     prop_assume!(z.is_finite());
     prop_assume!(z.is_invertible());
     let one = Complex::one();
-    let z_inv = z.inverse().unwrap();
+    let z_inv = z.try_inverse().unwrap();
 
     prop_assert!(relative_eq!(z * z_inv, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));
     prop_assert!(relative_eq!(z_inv * z, one, abs_diff_all <= tolerance, relative_all <= S::default_epsilon()));

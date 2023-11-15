@@ -913,7 +913,7 @@ mod inverse_tests {
         let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
         let norm = 30_f64;
         let expected = Quaternion::new(1_f64, -2_f64, -3_f64, -4_f64) / norm;
-        let result = quaternion.inverse().unwrap();
+        let result = quaternion.try_inverse().unwrap();
 
         assert_eq!(result, expected);
     }
@@ -929,7 +929,7 @@ mod inverse_tests {
     fn test_univertible_quaternion() {
         let quaternion: Quaternion<f64> = Quaternion::zero();
         let expected = None;
-        let result = quaternion.inverse();
+        let result = quaternion.try_inverse();
 
         assert_eq!(result, expected);
     }

@@ -635,13 +635,43 @@ where
     ///     2_f64,  3_f64, 1_f64,
     /// );
     /// let transform = Transform2::from_matrix_unchecked(matrix);
-    /// let transform_inv = transform.inverse().unwrap();
+    /// let transform_inv = transform.try_inverse().unwrap();
     ///
     /// assert_eq!(transform * transform_inv, Transform2::identity());
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
-        self.matrix.inverse().map(|matrix| Self { matrix })
+    pub fn try_inverse(&self) -> Option<Self> {
+        self.matrix.try_inverse().map(|matrix| Self { matrix })
+    }
+
+    /// Compute the inverse of the transformation.
+    /// 
+    /// # Safety
+    /// 
+    /// Panics if the transformation is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix3x3,
+    /// #     Point2,
+    /// # };
+    /// # use cglinalg_transform::Transform2;
+    /// #
+    /// let matrix = Matrix3x3::new(
+    ///     0_f64, -1_f64, 0_f64,
+    ///     1_f64,  0_f64, 0_f64,
+    ///     2_f64,  3_f64, 1_f64,
+    /// );
+    /// let transform = Transform2::from_matrix_unchecked(matrix);
+    /// let transform_inv = transform.inverse();
+    ///
+    /// assert_eq!(transform * transform_inv, Transform2::identity());
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 
     /// Apply the inverse of the transformation to a vector.
@@ -670,7 +700,7 @@ where
     /// ```
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector2<S>) -> Option<Vector2<S>> {
-        self.inverse().map(|matrix_inverse| matrix_inverse.apply_vector(vector))
+        self.try_inverse().map(|matrix_inverse| matrix_inverse.apply_vector(vector))
     }
 
     /// Apply the inverse of the transformation to a point.
@@ -699,7 +729,7 @@ where
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point2<S>) -> Option<Point2<S>> {
-        self.inverse().map(|matrix_inverse| matrix_inverse.apply_point(point))
+        self.try_inverse().map(|matrix_inverse| matrix_inverse.apply_point(point))
     }
 }
 
@@ -725,13 +755,44 @@ where
     ///     2_f64,  3_f64, 4_f64, 1_f64,
     /// );
     /// let transform = Transform3::from_matrix_unchecked(matrix);
-    /// let transform_inv = transform.inverse().unwrap();
+    /// let transform_inv = transform.try_inverse().unwrap();
     ///
     /// assert_eq!(transform * transform_inv, Transform3::identity());
     /// ```
     #[inline]
-    pub fn inverse(&self) -> Option<Self> {
-        self.matrix.inverse().map(|matrix| Self { matrix })
+    pub fn try_inverse(&self) -> Option<Self> {
+        self.matrix.try_inverse().map(|matrix| Self { matrix })
+    }
+
+    /// Compute the inverse of the transformation.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the transformation is not invertible.
+    /// 
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_transform::Transform3;
+    /// #
+    /// let matrix = Matrix4x4::new(
+    ///     0_f64, -1_f64, 0_f64, 0_f64,
+    ///     1_f64,  0_f64, 0_f64, 0_f64,
+    ///     0_f64,  0_f64, 1_f64, 0_f64,
+    ///     2_f64,  3_f64, 4_f64, 1_f64,
+    /// );
+    /// let transform = Transform3::from_matrix_unchecked(matrix);
+    /// let transform_inv = transform.inverse();
+    ///
+    /// assert_eq!(transform * transform_inv, Transform3::identity());
+    /// ```
+    #[inline]
+    pub fn inverse(&self) -> Self {
+        self.try_inverse().unwrap()
     }
 
     /// Apply the inverse of the transformation to a vector.
@@ -762,7 +823,7 @@ where
     /// ```
     #[inline]
     pub fn inverse_apply_vector(&self, vector: &Vector3<S>) -> Option<Vector3<S>> {
-        self.inverse().map(|matrix_inverse| matrix_inverse.apply_vector(vector))
+        self.try_inverse().map(|matrix_inverse| matrix_inverse.apply_vector(vector))
     }
 
     /// Apply the inverse of the transformation to a point.
@@ -793,7 +854,7 @@ where
     /// ```
     #[inline]
     pub fn inverse_apply_point(&self, point: &Point3<S>) -> Option<Point3<S>> {
-        self.inverse().map(|matrix_inverse| matrix_inverse.apply_point(point))
+        self.try_inverse().map(|matrix_inverse| matrix_inverse.apply_point(point))
     }
 }
 

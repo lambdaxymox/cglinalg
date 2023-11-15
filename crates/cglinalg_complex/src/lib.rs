@@ -1175,12 +1175,12 @@ where
     /// #
     /// let z = Complex::new(2_f64, 3_f64);
     /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
-    /// let result = z.inverse();
+    /// let result = z.try_inverse();
     ///
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn inverse(self) -> Option<Self> {
+    pub fn try_inverse(self) -> Option<Self> {
         let norm_squared = self.norm_squared();
         if norm_squared.is_zero() {
             None
@@ -1209,8 +1209,30 @@ where
     }
 
     #[inline]
-    fn is_invertible_eps(self, epsilon: S) -> bool {
-        self.norm_squared() >= epsilon * epsilon
+    fn is_invertible_eps(self, threshold: S) -> bool {
+        self.norm_squared() >= threshold * threshold
+    }
+
+    /// Calculate the multiplicative inverse of a complex number.
+    ///
+    /// # Safety
+    /// 
+    /// Panics if the complex number is not invertible.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_complex::Complex;
+    /// #
+    /// let z = Complex::new(2_f64, 3_f64);
+    /// let expected = Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64);
+    /// let result = z.inverse();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn inverse(self) -> Self {
+        self.try_inverse().unwrap()
     }
 
     /// Compute the power of a complex number to an unsigned integer power.
