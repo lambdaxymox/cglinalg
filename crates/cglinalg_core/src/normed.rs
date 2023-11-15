@@ -519,10 +519,10 @@ where
 /// a set of scalars `S` if each instance `norm` of the type `Self` satisfies the
 /// following properties.
 /// ```text
-/// (1) forall v in V. norm.norm(v) >= 0
-/// (2) forall v in V. norn.norm(v) == 0 ==> v == 0
-/// (3) forall v in V. forall c in S. norm.norm(v * c) == norm.norm(v) * abs(c)
-/// (4) forall v1, v2 in V. norm.norm(v1 + v2) <= norm.norm(v1) + norm.norm(v2)
+/// (1) forall v :: V. norm.norm(v) >= 0
+/// (2) forall v :: V. norn.norm(v) == 0 ==> v == 0
+/// (3) forall v :: V. forall c :: S. norm.norm(v * c) == norm.norm(v) * abs(c)
+/// (4) forall v1 :: V. forall v2 :: V. norm.norm(v1 + v2) <= norm.norm(v1) + norm.norm(v2)
 /// ```
 pub trait Norm<V> {
     type Output: SimdScalarSigned;

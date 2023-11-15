@@ -1370,7 +1370,7 @@ where
 /// A pure unit quaternion is a quaternion with scalar part `0`, whose vector part
 /// is a unit vector. Pure unit quaternions satisfy the following relationship.
 /// ```text
-/// forall q in H. norm(q) == 1 and scalar(q) == 0 ==> squared(q) == -1
+/// forall q :: H. norm(q) == 1 and scalar(q) == 0 ==> squared(q) == -1
 /// ```
 /// There are infinitely many solutions to the quaternion polynomial equation
 /// ```text

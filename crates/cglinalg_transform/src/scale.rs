@@ -34,13 +34,13 @@ pub type Scale3<S> = Scale<S, 3>;
 /// component `i` of `v`. The scale transformation `S` acts on a vector `v`
 /// as follows
 /// ```text
-/// forall i in 0..N. (Sv)[i] := s[i] * v[i]
+/// forall i :: [0..N]. (Sv)[i] := s[i] * v[i]
 /// ```
 /// where `N` is the dimensionality of the vector `v`. In particular, in
 /// Euclidean space, the scale transformation `S` acts as a diagonal matrix
 /// where
 /// ```text
-/// forall i in 0..N. S[i][i] := s[i]
+/// forall i :: [0..N]. S[i][i] := s[i]
 /// ```
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

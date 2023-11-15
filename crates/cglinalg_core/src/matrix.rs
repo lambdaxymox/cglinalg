@@ -689,7 +689,7 @@ where
     ///
     /// Given a matrix `m`, the transpose of `m` is the matrix `m_tr` such that
     /// ```text
-    /// forall c in 0..C. forall r in 0..R. m_tr[c][r] == m[r][c]
+    /// forall c :: [0..C]. forall r :: [0..R]. m_tr[c][r] == m[r][c]
     /// ```
     /// in other words, every column of `m_tr` is a row of `m`, and every row of
     /// `m_tr` is a column of `m`.
@@ -735,7 +735,7 @@ where
     /// particular, the **(R row, C column)** zero matrix is the matrix `zero`
     /// such that
     /// ```text
-    /// forall c in 0..C. forall r in 0..R. zero[c][r] == 0
+    /// forall c :: [0..C]. forall r :: [0..R]. zero[c][r] == 0
     /// ```
     ///
     /// # Example
@@ -784,7 +784,7 @@ where
     /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows
     /// and `columns` such that
     /// ```text
-    /// forall c in 0..C. forall r in 0..R. m3[c][r] := m1[c][r] * m2[c][r]
+    /// forall c :: [0..C]. forall r :: [0..R]. m3[c][r] := m1[c][r] * m2[c][r]
     /// ```
     ///
     /// # Example
@@ -1190,8 +1190,8 @@ where
     /// and the off-diagonal elements are zero. In particular, the identity
     /// matrix is the matrix `identity` such that
     /// ```text
-    /// forall i in 0..N. identity[i][i] == 1
-    /// forall i, j in 0..N. i != j ==> identity[i][j] == 0
+    /// forall i :: [0..N]. identity[i][i] == 1
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> identity[i][j] == 0
     /// ```
     /// In other words, every off-diagonal element is zero.
     ///
@@ -1256,8 +1256,8 @@ where
     /// each element along the diagonal is equal to `value`. The resulting
     /// matrix `matrix` satisfies the predicate
     /// ```text
-    /// forall i in 0..N. matrix[i][i] == value
-    /// forall i, j in 0..N. i != j ==> matrix[i][j] == 0
+    /// forall i :: [0..N]. matrix[i][i] == value
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
     /// ```
     /// In other words, every off-diagonal element is zero.
     ///
@@ -1293,8 +1293,8 @@ where
     /// The resulting matrix `matrix` satisfies the predicate. Given a vector of
     /// length `N` `diagonal`
     /// ```text
-    /// forall i in 0..N. m[i][i] == diangonal[i]
-    /// forall i, j in 0..N. i != j ==> matrix[i][j] == 0
+    /// forall i :: [0..N]. m[i][i] == diangonal[i]
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
     /// ```
     /// In other words, every off-diagonal element is zero.
     ///
@@ -1334,7 +1334,7 @@ where
     /// The resulting vector is a vector of all elements of the matrix `matrix`
     /// on the diagonal. It is the vector `diagonal` such that
     /// ```text
-    /// forall i in 0..N. diagonal[i] == matrix[i][i]
+    /// forall i :: [0..N]. diagonal[i] == matrix[i][i]
     /// ```
     ///
     /// # Example
@@ -1445,8 +1445,12 @@ where
     /// Determine whether a matrix is symmetric.
     ///
     /// A matrix is symmetric when element `(i, j)` is equal to element `(j, i)`
-    /// for each row `i` and column `j`. Otherwise, it is not a symmetric matrix.
-    /// Every diagonal matrix is a symmetric matrix.
+    /// for each row `i` and column `j`. More precisely, let `m` be a 
+    /// (`R` row, `C` column) matrix. Then `m` is symmetric provided that
+    /// ```text
+    /// forall c :: [0..C]. forall r :: [0..R]. m[c][r] == m[r][c]
+    /// ```
+    /// and `m` is asymmetric otherwise.
     ///
     /// # Example
     ///
@@ -2111,14 +2115,14 @@ where
     /// component of a vector will be scaled by the same factor. In particular,
     /// given a vector `v`, the resulting matrix `m` satisfies
     /// ```text
-    /// forall i in 0..(N - 1). (m * v)[i] == scale * v[i]
+    /// forall i :: [0..(N - 1)]. (m * v)[i] == scale * v[i]
     /// ```
     /// where `scale` is the uniform scaling factor, and `N` is the dimensionality
     /// of the matrix. Moreover, the matrix `m` has a form that satisfies
     /// ```text
-    /// forall i in 0..(N - 1). m[i][i] == scale
+    /// forall i :: [0..(N - 1)]. m[i][i] == scale
     /// m[N - 1][N - 1] == 1
-    /// forall i, j in 0..N. i != j ==> m[i][j] == 0
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> m[i][j] == 0
     /// ```
     /// The uniform affine scaling matrix has the general form
     /// ```text
@@ -2231,14 +2235,14 @@ where
     /// scaling matrix corresponding to `scale`. The matrix `m` satisfies the
     /// following: given a vector `v`
     /// ```text
-    /// forall i in 0..(N - 1). (m * v)[i] == scale[i] * v[i]
+    /// forall i :: [0..(N - 1)]. (m * v)[i] == scale[i] * v[i]
     /// ```
     /// where `N` is the dimensionality of `m`. Since `m` is affine, `v` has
     /// dimension `N - 1`. Morever, the matrix `m` has a form that satisfies
     /// ```text
-    /// forall i in 0..(N - 1). m[i][i] == scale[i]
+    /// forall i :: [0..(N - 1)]. m[i][i] == scale[i]
     /// m[N - 1][N - 1] == 1
-    /// forall i, j in 0..N. i != j ==> m[i][j] == 0
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> m[i][j] == 0
     /// ```
     /// The affine scaling matrix has the general form
     /// ```text
@@ -2359,7 +2363,7 @@ where
     /// translation matrix corresponding to `distance`. Then the matrix `m` satisfies
     /// the following: given a vector `v`
     /// ```text
-    /// forall i in 0..(N - 1). (m * v)[i] == v[i] + distance[i]
+    /// forall i :: [0..(N - 1)]. (m * v)[i] == v[i] + distance[i]
     /// ```
     /// where `N` is the dimensionality of `m`. Since `m` is affine, `distance`
     /// and `v` have dimensionality `N - 1`. Moreover, form of the matrix `m` is all `
@@ -2367,9 +2371,9 @@ where
     /// column, where each row except the last is the corresponding entry of `distance`.
     /// More precisely, the form of the matrix `m` satisfies
     /// ```text
-    /// forall i in 0..N. m[i][i] == 1
-    /// forall r in 0..(N - 1). m[N - 1][r] == distance[r]
-    /// forall c in 0..(N - 1). forall r in 0..N. c != r ==> m[c][r] == 0
+    /// forall i :: [0..N]. m[i][i] == 1
+    /// forall r :: [0..(N - 1)]. m[N - 1][r] == distance[r]
+    /// forall c :: [0..(N - 1)]. forall r :: [0..N]. c != r ==> m[c][r] == 0
     /// ```
     /// Note that we are indexing in column-major order, so that the last constraint clause
     /// indicates that every entry except the last one in the bottom row is zero. In
