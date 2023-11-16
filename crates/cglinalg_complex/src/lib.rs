@@ -3179,7 +3179,6 @@ where
 impl<S> approx_cmp::UlpsEq for Complex<S>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type Tolerance = Complex<<S as approx_cmp::UlpsEq>::Tolerance>;
     type UlpsTolerance = Complex<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
@@ -3208,7 +3207,6 @@ where
 impl<S> approx_cmp::AssertUlpsEq for Complex<S>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type DebugAbsDiff = Complex<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
     type DebugUlpsDiff = Complex<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;

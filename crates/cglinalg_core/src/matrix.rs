@@ -8647,7 +8647,6 @@ where
 impl<S, const R: usize, const C: usize> approx_cmp::UlpsEq for Matrix<S, R, C>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type Tolerance = Matrix<<S as approx_cmp::UlpsEq>::Tolerance, R, C>;
     type UlpsTolerance = Matrix<<S as approx_cmp::UlpsEq>::UlpsTolerance, R, C>;
@@ -8690,7 +8689,6 @@ where
 impl<S, const R: usize, const C: usize> approx_cmp::AssertUlpsEq for Matrix<S, R, C>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type DebugAbsDiff = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, R, C>;
     type DebugUlpsDiff = Matrix<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, R, C>;

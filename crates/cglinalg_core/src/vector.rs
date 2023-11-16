@@ -1362,7 +1362,6 @@ where
 impl<S, const N: usize> approx_cmp::UlpsEq for Vector<S, N>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type Tolerance = Vector<<S as approx_cmp::UlpsEq>::Tolerance, N>;
     type UlpsTolerance = Vector<<S as approx_cmp::UlpsEq>::UlpsTolerance, N>;
@@ -1401,7 +1400,6 @@ where
 impl<S, const N: usize> approx_cmp::AssertUlpsEq for Vector<S, N>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type DebugAbsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff, N>;
     type DebugUlpsDiff = Vector<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff, N>;

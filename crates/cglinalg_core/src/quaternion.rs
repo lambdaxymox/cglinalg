@@ -4523,7 +4523,6 @@ where
 impl<S> approx_cmp::UlpsEq for Quaternion<S>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type Tolerance = Vector4<<S as approx_cmp::UlpsEq>::Tolerance>;
     type UlpsTolerance = Vector4<<S as approx_cmp::UlpsEq>::UlpsTolerance>;
@@ -4550,7 +4549,6 @@ where
 impl<S> approx_cmp::AssertUlpsEq for Quaternion<S>
 where
     S: SimdScalarFloat,
-    S::UlpsTolerance: Sized,
 {
     type DebugAbsDiff = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugAbsDiff>;
     type DebugUlpsDiff = Vector4<<S as approx_cmp::AssertUlpsEq>::DebugUlpsDiff>;
