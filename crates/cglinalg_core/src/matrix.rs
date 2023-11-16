@@ -8522,16 +8522,16 @@ where
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.data, &other.data);
+        let data = approx_cmp::AssertAbsDiffEq::debug_abs_diff(&self.data, &other.data);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
+        let data = approx_cmp::AssertAbsDiffEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 }
 
@@ -8543,9 +8543,9 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
+        let data = approx_cmp::AssertAbsDiffAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 }
 
@@ -8603,23 +8603,23 @@ where
 
     #[inline]
     fn debug_abs_diff(&self, other: &Self) -> Self::DebugAbsDiff {
-        let result = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.data, &other.data);
+        let data = approx_cmp::AssertRelativeEq::debug_abs_diff(&self.data, &other.data);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 
     #[inline]
     fn debug_abs_diff_tolerance(&self, other: &Self, max_abs_diff: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
+        let data = approx_cmp::AssertRelativeEq::debug_abs_diff_tolerance(&self.data, &other.data, &max_abs_diff.data);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 
     #[inline]
     fn debug_relative_tolerance(&self, other: &Self, max_relative: &Self::Tolerance) -> Self::DebugTolerance {
-        let result = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.data, &other.data, &max_relative.data);
+        let data = approx_cmp::AssertRelativeEq::debug_relative_tolerance(&self.data, &other.data, &max_relative.data);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 }
 
@@ -8631,16 +8631,16 @@ where
 
     #[inline]
     fn debug_abs_diff_all_tolerance(&self, other: &Self, max_abs_diff: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
+        let data = approx_cmp::AssertRelativeAllEq::debug_abs_diff_all_tolerance(&self.data, &other.data, max_abs_diff);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 
     #[inline]
     fn debug_relative_all_tolerance(&self, other: &Self, max_relative: &Self::AllTolerance) -> Self::AllDebugTolerance {
-        let result = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.data, &other.data, max_relative);
+        let data = approx_cmp::AssertRelativeAllEq::debug_relative_all_tolerance(&self.data, &other.data, max_relative);
 
-        Matrix::from(result)
+        Matrix::from(data)
     }
 }
 
