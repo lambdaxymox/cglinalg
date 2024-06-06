@@ -27,8 +27,8 @@ use core::ops;
 /// perspective camera faces the **negative z-axis** with the **positive x-axis**
 /// going to the right, and the **positive y-axis** going up. The perspective view
 /// volume is the frustum contained in
-/// `[left, right] x [bottom, top] x [-far, -near]`. The resulting clip space has 
-/// a left-handed coordinate system. The normalized device coordinates this 
+/// `[left, right] x [bottom, top] x [-far, -near]`. The resulting clip space has
+/// a left-handed coordinate system. The normalized device coordinates this
 /// transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// The underlying matrix is identical to the one used by OpenGL, provided here
@@ -2207,8 +2207,8 @@ where
 /// projection transformation with a right-handed coordinate system where the
 /// orthographic camera faces the **negative z-axis** with the **positive x-axis**
 /// going to the right, and the **positive y-axis** going up. The orthographic view
-/// volume is the box `[left, right] x [bottom, top] x [-far, -near]`. The resulting 
-/// clip space has a left-handed coordinate system. The normalized device coordinates 
+/// volume is the box `[left, right] x [bottom, top] x [-far, -near]`. The resulting
+/// clip space has a left-handed coordinate system. The normalized device coordinates
 /// this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// The underlying matrix is identical to the one used by OpenGL, provided here

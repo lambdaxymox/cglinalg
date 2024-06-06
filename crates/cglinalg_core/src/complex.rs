@@ -1,3 +1,5 @@
+use crate::normed::Normed;
+use crate::unit::Unit;
 use cglinalg_numeric::{
     SimdCast,
     SimdScalar,
@@ -81,7 +83,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z: Complex<u32> = Complex::new(1_u32, 2_u32);
     /// let expected: Option<Complex<i32>> = Some(Complex::new(1_i32, 2_i32));
@@ -116,7 +118,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     ///
@@ -132,7 +134,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     ///
@@ -149,7 +151,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z: Complex<f32> = Complex::new(1_f32, 2_f32);
     /// let expected: Complex<f64> = Complex::new(-2_f64, -3_f64);
@@ -177,7 +179,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::from_real(1_i32);
     ///
@@ -196,7 +198,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::from_imaginary(1_i32);
     ///
@@ -213,7 +215,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let zero: Complex<i32> = Complex::zero();
     /// let other = Complex::new(92_i32, 137_i32);
@@ -233,7 +235,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let zero: Complex<i32> = Complex::zero();
     /// let non_zero = Complex::new(92_i32, 137_i32);
@@ -253,7 +255,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::identity();
     /// let z = Complex::new(3_i32, 7_i32);
@@ -274,7 +276,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::one();
     /// let z = Complex::new(3_i32, 7_i32);
@@ -293,7 +295,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::identity();
     ///
@@ -315,7 +317,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let unit_complex: Complex<i32> = Complex::one();
     ///
@@ -337,7 +339,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let unit_re: Complex<i32> = Complex::unit_re();
     /// let identity: Complex<i32> = Complex::identity();
@@ -354,7 +356,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let i: Complex<i32> = Complex::unit_im();
     ///
@@ -374,7 +376,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::from_real(2_i32);
     ///
@@ -394,7 +396,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::from_imaginary(2_i32);
     ///
@@ -425,7 +427,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -443,7 +445,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -461,7 +463,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f32, 5_f32);
     ///
@@ -477,7 +479,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(3_f64, 6_f64);
@@ -495,7 +497,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(3_f64, 6_f64);
     /// let expected = Complex::new(1_f64, 2_f64);
@@ -518,7 +520,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     /// let expected = Complex::new(-3_i32, 4_i32);
@@ -541,7 +543,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_i32, 1_i32);
     /// let expected = Complex::new(-2_i32, 2_i32);
@@ -571,7 +573,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_i32, 2_i32);
     /// let expected = Complex::new(1_i32, -2_i32);
@@ -595,7 +597,7 @@ where
     ///
     /// An example computing the **L1** norm of a [`f32`] complex number.
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f32, -5_f32);
     ///
@@ -604,7 +606,7 @@ where
     ///
     /// An example computing the **L1** norm of an [`i32`] complex number.
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_i32, -5_i32);
     ///
@@ -626,7 +628,7 @@ where
     /// # Example (Finite Complex Number)
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     ///
@@ -636,7 +638,7 @@ where
     /// # Example (Not A Finite Complex Number)
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, f64::NAN);
     ///
@@ -653,7 +655,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z1 = Complex::new(1_f64, 2_f64);
     /// let z2 = Complex::new(1_f64, f64::NAN);
@@ -673,7 +675,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z1 = Complex::new(1_f64, 2_f64);
     /// let z2 = Complex::new(1_f64, f64::NEG_INFINITY);
@@ -699,7 +701,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -717,7 +719,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -735,7 +737,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -753,7 +755,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(7_f64, 3_f64);
     ///
@@ -806,7 +808,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -829,7 +831,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -854,7 +856,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -877,7 +879,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// #
     /// let z = Complex::from_polar_decomposition(3_f64, Radians(2_f64));
@@ -905,7 +907,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f64, 5_f64);
     /// let expected = Complex::new(2.09599580151_f64, -7.08554526009_f64);
@@ -942,7 +944,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -974,7 +976,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use core::f64;
     /// #
     /// let z = Complex::new(1_f64 / f64::sqrt(2_f64), 1_f64 / f64::sqrt(2_f64));
@@ -995,7 +997,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1021,7 +1023,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1044,7 +1046,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1111,7 +1113,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 4_f64);
     /// let sqrt_z = z.sqrt();
@@ -1138,7 +1140,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1171,7 +1173,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f64, 3_f64);
     /// let expected = Some(Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64));
@@ -1197,7 +1199,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z: Complex<f64> = Complex::unit_im();
     ///
@@ -1222,7 +1224,7 @@ where
     /// # Example
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(2_f64, 3_f64);
     /// let expected = Complex::new(2_f64 / 13_f64, -3_f64 / 13_f64);
@@ -1241,7 +1243,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1288,7 +1290,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1349,7 +1351,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use cglinalg_trigonometry::Radians;
     /// # use core::f64;
     /// #
@@ -1381,7 +1383,7 @@ where
     /// imaginary number produces a real number.
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use core::f64;
     /// #
     /// // i^i == exp(-pi / 2)
@@ -1395,7 +1397,7 @@ where
     /// Exponentiating a complex number to the power of another complex number.
     ///
     /// ```
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use core::f64;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
@@ -1425,7 +1427,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(2.032723007_f64, -3.051897799_f64);
@@ -1447,7 +1449,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 3_f64);
     /// let expected = Complex::new(1.2631926773_f64, -1.8641615442_f64);
@@ -1514,7 +1516,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 2_f64);
     /// let expected = Complex::new(3.165778513_f64, 1.959601041_f64);
@@ -1538,7 +1540,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 3_f64);
     /// let expected = Complex::new(0.307603650_f64, 1.864161544_f64);
@@ -1566,7 +1568,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
     /// let expected = Complex::new(0.2717525853_f64, 1.0839233273_f64);
@@ -1590,7 +1592,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, 1_f64);
     /// let expected = Complex::new(1.0172219679_f64, 0.4023594781_f64);
@@ -1618,7 +1620,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(0.4377136252_f64, 1.1269289521_f64);
@@ -1656,7 +1658,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(2.3309746530_f64, -1.3770031902_f64);
@@ -1712,7 +1714,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(0.3333601389_f64, 1.4796974784_f64);
@@ -1746,7 +1748,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(1_f64, -5_f64);
     /// let expected = Complex::new(2.3132209417_f64, -1.3696012470_f64);
@@ -1796,7 +1798,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(-3_f64, 4_f64);
     /// let expected = Complex::new(-1.0007095360_f64, 0.0049082580_f64);
@@ -1835,7 +1837,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// #
     /// let z = Complex::new(-3_f64, 4_f64);
     /// let expected = Complex::new(-0.1175009073_f64, 1.4099210495_f64);
@@ -1893,7 +1895,7 @@ where
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
-    /// # use cglinalg_complex::Complex;
+    /// # use cglinalg_core::Complex;
     /// # use core::f64;
     /// #
     /// let phase = f64::consts::FRAC_PI_4;
@@ -3267,5 +3269,100 @@ where
             approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.re, &other.re, max_ulps),
             approx_cmp::AssertUlpsAllEq::debug_ulps_all_tolerance(&self.im, &other.im, max_ulps),
         )
+    }
+}
+
+impl<S> Normed for Complex<S>
+where
+    S: SimdScalarFloat,
+{
+    type Output = S;
+
+    fn norm_squared(&self) -> Self::Output {
+        self.modulus_squared()
+    }
+
+    fn norm(&self) -> Self::Output {
+        self.modulus()
+    }
+
+    fn scale(&self, scale: Self::Output) -> Self {
+        self * scale
+    }
+
+    #[inline]
+    fn scale_mut(&mut self, scale: Self::Output) {
+        *self = self.scale(scale);
+    }
+
+    #[inline]
+    fn unscale(&self, scale: Self::Output) -> Self {
+        self * (Self::Output::one() / scale)
+    }
+
+    #[inline]
+    fn unscale_mut(&mut self, scale: Self::Output) {
+        *self = self.unscale(scale);
+    }
+
+    fn normalize(&self) -> Self {
+        self * (Self::Output::one() / self.modulus())
+    }
+
+    fn normalize_mut(&mut self) -> Self::Output {
+        let norm = self.modulus();
+        *self = self.normalize();
+
+        norm
+    }
+
+    fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
+        let norm = self.modulus();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize())
+        }
+    }
+
+    fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
+        let norm = self.modulus();
+        if norm <= threshold {
+            None
+        } else {
+            Some(self.normalize_mut())
+        }
+    }
+
+    fn distance_squared(&self, other: &Self) -> Self::Output {
+        (self - other).modulus_squared()
+    }
+
+    fn distance(&self, other: &Self) -> Self::Output {
+        (self - other).modulus()
+    }
+}
+
+impl<S> ops::Neg for Unit<Complex<S>>
+where
+    S: SimdScalarFloat,
+{
+    type Output = Unit<Complex<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
+    }
+}
+
+impl<S> ops::Neg for &Unit<Complex<S>>
+where
+    S: SimdScalarFloat,
+{
+    type Output = Unit<Complex<S>>;
+
+    #[inline]
+    fn neg(self) -> Self::Output {
+        Unit::from_value_unchecked(-self.into_inner())
     }
 }

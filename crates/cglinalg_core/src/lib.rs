@@ -1,4 +1,4 @@
-mod complex_ops;
+mod complex;
 mod euler;
 mod matrix;
 mod matrix_euler;
@@ -12,7 +12,7 @@ mod constraint;
 mod coordinates;
 
 
-pub use complex_ops::*;
+pub use complex::*;
 pub use constraint::*;
 pub use euler::*;
 pub use matrix::*;

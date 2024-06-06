@@ -1,5 +1,5 @@
-use cglinalg_complex::Complex;
 use cglinalg_core::{
+    Complex,
     Normed,
     Quaternion,
     Unit,

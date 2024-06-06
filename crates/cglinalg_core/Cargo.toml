@@ -49,10 +49,6 @@ version = "0.20.0"
 path = "../cglinalg_trigonometry"
 version = "0.20.0"
 
-[dependencies.cglinalg_complex]
-path = "../cglinalg_complex"
-version = "0.20.0"
-
 [dependencies.approx_cmp]
 git = "https://github.com/lambdaxymox/approx_cmp/"
 version = "1.0.0"

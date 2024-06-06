@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod index_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -40,7 +40,7 @@ mod index_tests {
 #[cfg(test)]
 mod constructor_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use cglinalg_trigonometry::Radians;
 
 
@@ -160,7 +160,7 @@ mod constructor_tests {
 
 #[cfg(test)]
 mod arithmetic_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -417,7 +417,7 @@ mod arithmetic_tests {
 
 #[cfg(test)]
 mod norm_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -438,7 +438,7 @@ mod norm_tests {
 
 #[cfg(test)]
 mod conjugate_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -454,7 +454,7 @@ mod conjugate_tests {
 
 #[cfg(test)]
 mod arg_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use core::f64;
 
 
@@ -534,7 +534,7 @@ mod arg_tests {
 
 #[cfg(test)]
 mod inverse_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -590,7 +590,7 @@ mod inverse_tests {
 #[cfg(test)]
 mod exp_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
 
 
     #[test]
@@ -624,7 +624,7 @@ mod exp_tests {
 
 #[cfg(test)]
 mod logarithm_tests {
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use core::f64;
 
 
@@ -691,7 +691,7 @@ mod logarithm_tests {
 #[cfg(test)]
 mod square_root_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use cglinalg_trigonometry::Radians;
 
     use core::f64;
@@ -848,7 +848,7 @@ mod square_root_tests {
 #[cfg(test)]
 mod trigonometry_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use core::f64;
 
 
@@ -1389,7 +1389,7 @@ mod trigonometry_tests {
 #[cfg(test)]
 mod hyperbolic_trigonometry_tests {
     use approx_cmp::assert_relative_eq;
-    use cglinalg_complex::Complex;
+    use cglinalg_core::Complex;
     use core::f64;
 
 

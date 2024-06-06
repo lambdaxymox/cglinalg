@@ -2,7 +2,7 @@ use approx_cmp::{
     relative_eq,
     relative_ne,
 };
-use cglinalg_complex::Complex;
+use cglinalg_core::Complex;
 use cglinalg_numeric::{
     SimdScalar,
     SimdScalarFloat,
