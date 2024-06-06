@@ -27,8 +27,9 @@ use core::ops;
 /// perspective camera faces the **negative z-axis** with the **positive x-axis**
 /// going to the right, and the **positive y-axis** going up. The perspective view
 /// volume is the frustum contained in
-/// `[left, right] x [bottom, top] x [-near, -far]`. The normalized device
-/// coordinates this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// `[left, right] x [bottom, top] x [-far, -near]`. The resulting clip space has 
+/// a left-handed coordinate system. The normalized device coordinates this 
+/// transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// The underlying matrix is identical to the one used by OpenGL, provided here
 /// for reference
@@ -38,12 +39,12 @@ use core::ops;
 /// [ 0        0         m[2, 2]  m[3, 2] ]
 /// [ 0        0        -1        0       ]
 /// where
-/// m[0, 0] == 2 * n / (r - l)
-/// m[2, 0] == (r + l) / (r - l)
-/// m[1, 1] == 2 * n / (t - b)
-/// m[2, 1] == (t + b) / (t - b)
+/// m[0, 0] ==  2 * n / (r - l)
+/// m[2, 0] ==  (r + l) / (r - l)
+/// m[1, 1] ==  2 * n / (t - b)
+/// m[2, 1] ==  (t + b) / (t - b)
 /// m[2, 2] == -(f + n) / (f - n)
-/// m[3, 2] == - 2 * f * n / (f - n)
+/// m[3, 2] == -2 * f * n / (f - n)
 /// ```
 /// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -1015,6 +1016,7 @@ where
 /// right == aspect_ratio * top == aspect_ratio * n * tan(vfov / 2)
 /// top == near * tan(vfov / 2)
 /// ```
+/// The resulting clip space has a left-handed coordinate system.
 /// The normalized device coordinates this transformation maps to are
 /// `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
@@ -1026,10 +1028,10 @@ where
 /// [ 0       0         m[2, 2]  m[3, 2] ]
 /// [ 0       0        -1        0       ]
 /// where
-/// m[0, 0] == 1 / (aspect_ratio * tan(vfov / 2))
-/// m[1, 1] == 1 / tan(vfov / 2)
+/// m[0, 0] ==  1 / (aspect_ratio * tan(vfov / 2))
+/// m[1, 1] ==  1 / tan(vfov / 2)
 /// m[2, 2] == -(f + n) / (f - n)
-/// m[3, 2] == -2 * f * n / (f - n)
+/// m[3, 2] == -(2 * f * n) / (f - n)
 /// ```
 /// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -2205,9 +2207,9 @@ where
 /// projection transformation with a right-handed coordinate system where the
 /// orthographic camera faces the **negative z-axis** with the **positive x-axis**
 /// going to the right, and the **positive y-axis** going up. The orthographic view
-/// volume is the box `[left, right] x [bottom, top] x [-near, -far]`. The
-/// normalized device coordinates this transformation maps to are
-/// `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// volume is the box `[left, right] x [bottom, top] x [-far, -near]`. The resulting 
+/// clip space has a left-handed coordinate system. The normalized device coordinates 
+/// this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// The underlying matrix is identical to the one used by OpenGL, provided here
 /// for reference
@@ -2217,9 +2219,9 @@ where
 /// [ 0        0        m[2, 2]  m[3, 2] ]
 /// [ 0        0        0        1       ]
 /// where
-/// m[0, 0] == 2 / (r - l)
+/// m[0, 0] ==  2 / (r - l)
 /// m[3, 0] == -(r + l) / (r - l)
-/// m[1, 1] == 2 / (t - b)
+/// m[1, 1] ==  2 / (t - b)
 /// m[3, 1] == -(t + b) / (t - b)
 /// m[2, 2] == -2 / (f - n)
 /// m[3, 2] == -(f + n) / (f - n)
