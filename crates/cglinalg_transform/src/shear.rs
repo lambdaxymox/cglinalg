@@ -31,7 +31,7 @@ pub type Shear3<S> = Shear<S, 3>;
 
 /// A shearing transformation.
 ///
-/// This is the most general reflection type. The vast majority of applications
+/// This is the most general shearing type. The vast majority of applications
 /// should use [`Shear2`] or [`Shear3`] instead of this type directly.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
