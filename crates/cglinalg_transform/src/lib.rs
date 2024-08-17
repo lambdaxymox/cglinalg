@@ -21,4 +21,4 @@ pub use similarity::*;
 pub use transform::*;
 pub use translation::*;
 
-pub use isometry_ops::*;
+// pub use isometry_ops::*;

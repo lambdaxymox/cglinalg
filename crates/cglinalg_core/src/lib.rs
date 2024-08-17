@@ -16,7 +16,7 @@ pub use complex::*;
 pub use constraint::*;
 pub use euler::*;
 pub use matrix::*;
-pub use matrix_euler::*;
+// pub use matrix_euler::*;
 pub use normed::*;
 pub use point::*;
 pub use quaternion::*;
