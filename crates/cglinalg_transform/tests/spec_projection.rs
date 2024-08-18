@@ -6,11 +6,11 @@ use cglinalg_core::{
     Vector3,
 };
 use cglinalg_numeric::SimdScalarFloat;
-use cglinalg_transform::PerspectiveFov3;
 use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
+use cglinalg_transform::Perspective3;
 
 use proptest::prelude::*;
 
@@ -79,7 +79,7 @@ where
     }
 }
 
-fn strategy_perspectivefov3_from_range<S>(near: S, far: S) -> impl Strategy<Value = PerspectiveFov3<S>>
+fn strategy_perspectivefov3_from_range<S>(near: S, far: S) -> impl Strategy<Value = Perspective3<S>>
 where
     S: SimdScalarFloat + Arbitrary,
 {
@@ -109,11 +109,13 @@ where
         let vfov = Radians(rescale(_vfov, S::frac_pi_6(), S::pi()));
         let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
 
-        PerspectiveFov3::new(vfov, aspect_ratio, near, far)
+        eprintln!("GENERATED: vfov = {:?}", vfov);
+
+        Perspective3::from_vfov(vfov, aspect_ratio, near, far)
     })
 }
 
-fn strategy_perspectivefov3_line_point<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, PointLine<S>)>
+fn strategy_perspectivefov3_line_point<S>(near: S, far: S) -> impl Strategy<Value = (Perspective3<S>, PointLine<S>)>
 where
     S: SimdScalarFloat + Arbitrary,
 {
@@ -142,7 +144,7 @@ where
     any::<(S, usize, [S; 2], [S; 2])>().prop_map(move |(_vfov, _aspect_ratio_i, _point_near, _point_far)| {
         let vfov = Radians(rescale(_vfov, S::frac_pi_6(), S::pi()));
         let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
-        let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+        let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
         let one = S::one();
         let two = one + one;
         let top_near = near.abs() * Radians::tan(vfov / two);
@@ -165,7 +167,7 @@ where
     })
 }
 
-fn strategy_perspectivefov3_line_vector<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, VectorLine<S>)>
+fn strategy_perspectivefov3_line_vector<S>(near: S, far: S) -> impl Strategy<Value = (Perspective3<S>, VectorLine<S>)>
 where
     S: SimdScalarFloat + Arbitrary,
 {
@@ -194,7 +196,7 @@ where
     any::<(S, usize, [S; 2], [S; 2])>().prop_map(move |(_vfov, _aspect_ratio_i, _point_near, _point_far)| {
         let vfov = Radians(rescale(_vfov, S::frac_pi_6(), S::pi()));
         let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
-        let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+        let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
         let one = S::one();
         let two = one + one;
         let top_near = near.abs() * Radians::tan(vfov / two);
@@ -217,7 +219,7 @@ where
     })
 }
 
-fn strategy_perspectivefov3_lines_eye_point<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, PointLine<S>)>
+fn strategy_perspectivefov3_lines_eye_point<S>(near: S, far: S) -> impl Strategy<Value = (Perspective3<S>, PointLine<S>)>
 where
     S: SimdScalarFloat + Arbitrary,
 {
@@ -246,7 +248,7 @@ where
     any::<(S, usize, [S; 2], [S; 2])>().prop_map(move |(_vfov, _aspect_ratio_i, _point_near, _point_far)| {
         let vfov = Radians(rescale(_vfov, S::frac_pi_6(), S::pi()));
         let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
-        let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+        let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
         let one = S::one();
         let two = one + one;
         let top_far = far.abs() * Radians::tan(vfov / two);
@@ -263,7 +265,7 @@ where
     })
 }
 
-fn strategy_perspectivefov3_lines_eye_vector<S>(near: S, far: S) -> impl Strategy<Value = (PerspectiveFov3<S>, VectorLine<S>)>
+fn strategy_perspectivefov3_lines_eye_vector<S>(near: S, far: S) -> impl Strategy<Value = (Perspective3<S>, VectorLine<S>)>
 where
     S: SimdScalarFloat + Arbitrary,
 {
@@ -292,7 +294,7 @@ where
     any::<(S, usize, [S; 2], [S; 2])>().prop_map(move |(_vfov, _aspect_ratio_i, _point_near, _point_far)| {
         let vfov = Radians(rescale(_vfov, S::frac_pi_6(), S::pi()));
         let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
-        let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+        let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
         let one = S::one();
         let two = one + one;
         let top_far = far.abs() * Radians::tan(vfov / two);
@@ -306,6 +308,40 @@ where
         let line = VectorLine::new(start, end);
 
         (perspective, line)
+    })
+}
+
+fn strategy_perspectivefov3_from_range_positive<S>(near: S, far: S) -> impl Strategy<Value = Perspective3<S>>
+where
+    S: SimdScalarFloat + Arbitrary,
+{
+    fn rescale<S>(value: S, min_value: S, max_value: S) -> S
+    where
+        S: SimdScalarFloat,
+    {
+        min_value + (value % (max_value - min_value))
+    }
+
+    fn choose_aspect_ratio<S>(i: usize) -> S
+    where
+        S: SimdScalarFloat,
+    {
+        let three: S = cglinalg_numeric::cast(3);
+        let four: S = cglinalg_numeric::cast(4);
+        let nine: S = cglinalg_numeric::cast(9);
+        let ten: S = cglinalg_numeric::cast(10);
+        let sixteen: S = cglinalg_numeric::cast(16);
+        let twenty_one: S = cglinalg_numeric::cast(21);
+        let aspects = [four / three, sixteen / nine, sixteen / ten, twenty_one / nine];
+
+        aspects[i % aspects.len()]
+    }
+
+    any::<(S, usize)>().prop_map(move |(_vfov, _aspect_ratio_i)| {
+        let vfov = Radians(rescale(_vfov.abs(), S::frac_pi_6(), S::pi()));
+        let aspect_ratio = choose_aspect_ratio(_aspect_ratio_i);
+
+        Perspective3::from_vfov(vfov, aspect_ratio, near, far)
     })
 }
 
@@ -374,7 +410,7 @@ where
 /// ```text
 /// (m * p).z == -1
 /// ```
-fn prop_approx_perspective_projection_near_plane_point<S>(m: PerspectiveFov3<S>, p: Point2<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_perspective_projection_near_plane_point<S>(m: Perspective3<S>, p: Point2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -400,7 +436,7 @@ where
 /// ```text
 /// (m * v).z == -1
 /// ```
-fn prop_approx_perspective_projection_near_plane_vector<S>(m: PerspectiveFov3<S>, v: Vector2<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_perspective_projection_near_plane_vector<S>(m: Perspective3<S>, v: Vector2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -426,7 +462,7 @@ where
 /// ```text
 /// (m * p).z == 1
 /// ```
-fn prop_approx_perspective_projection_far_plane_point<S>(m: PerspectiveFov3<S>, p: Point2<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_perspective_projection_far_plane_point<S>(m: Perspective3<S>, p: Point2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -452,7 +488,7 @@ where
 /// ```text
 /// (m * v).z == 1
 /// ```
-fn prop_approx_perspective_projection_far_plane_vector<S>(m: PerspectiveFov3<S>, v: Vector2<S>, tolerance: S) -> Result<(), TestCaseError>
+fn prop_approx_perspective_projection_far_plane_vector<S>(m: Perspective3<S>, v: Vector2<S>, tolerance: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
 {
@@ -478,7 +514,7 @@ where
 /// (m * p1).z < (m * p2).z
 /// ```
 fn prop_perspective_projection_preserves_z_depth_ordering_point<S>(
-    m: PerspectiveFov3<S>,
+    m: Perspective3<S>,
     l: PointLine<S>,
     t1: S,
     t2: S,
@@ -511,7 +547,7 @@ where
 /// (m * v1).z < (m * v2).z
 /// ```
 fn prop_perspective_projection_preserves_z_depth_ordering_vector<S>(
-    m: PerspectiveFov3<S>,
+    m: Perspective3<S>,
     l: VectorLine<S>,
     t1: S,
     t2: S,
@@ -539,7 +575,7 @@ where
 /// The perspective projection matrix maps lines through the origin in eye
 /// space to lines parallel to the **z-axis** in normalized device coordinates.
 fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_point<S>(
-    m: PerspectiveFov3<S>,
+    m: Perspective3<S>,
     l: PointLine<S>,
     tolerance: S,
 ) -> Result<(), TestCaseError>
@@ -566,7 +602,7 @@ where
 /// The perspective projection matrix maps lines through the origin in eye
 /// space to lines parallel to the **z-axis** in normalized device coordinates.
 fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_vector<S>(
-    m: PerspectiveFov3<S>,
+    m: Perspective3<S>,
     l: VectorLine<S>,
     tolerance: S,
 ) -> Result<(), TestCaseError>
@@ -590,6 +626,96 @@ where
     Ok(())
 }
 
+/// The perspective projection matrix `left` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// left(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_left<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.left() > S::zero());
+
+    Ok(())
+}
+
+/// The perspective projection matrix `right` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// right(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_right<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.right() > S::zero());
+
+    Ok(())
+}
+
+/// The perspective projection matrix `bottom` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// bottom(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_bottom<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.bottom() > S::zero());
+
+    Ok(())
+}
+
+/// The perspective projection matrix `top` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// top(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_top<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.top() > S::zero());
+
+    Ok(())
+}
+
+/// The perspective projection matrix `near` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// near(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_near<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.near() > S::zero());
+
+    Ok(())
+}
+
+/// The perspective projection matrix `far` frustum parameter should be positive.
+///
+/// Given a perspective projection `m`
+/// ```text
+/// far(m) > 0
+/// ```
+fn prop_perspective_projection_parameter_far<S>(m: Perspective3<S>) -> Result<(), TestCaseError>
+where
+    S: SimdScalarFloat,
+{
+    prop_assert!(m.far() > S::zero());
+
+    Ok(())
+}
+
 
 #[cfg(test)]
 mod projectionfov3_f64_props {
@@ -600,7 +726,7 @@ mod projectionfov3_f64_props {
             m in super::strategy_perspectivefov3_from_range(0.1_f64, 100_f64),
             p in super::strategy_point2_any(),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let p: super::Point2<f64> = p;
             super::prop_approx_perspective_projection_near_plane_point(m, p, 1e-10)?
         }
@@ -610,7 +736,7 @@ mod projectionfov3_f64_props {
             m in super::strategy_perspectivefov3_from_range(0.1_f64, 100_f64),
             v in super::strategy_vector2_any(),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let v: super::Vector2<f64> = v;
             super::prop_approx_perspective_projection_near_plane_vector(m, v, 1e-10)?
         }
@@ -620,7 +746,7 @@ mod projectionfov3_f64_props {
             m in super::strategy_perspectivefov3_from_range(0.1_f64, 100_f64),
             p in super::strategy_point2_any(),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let p: super::Point2<f64> = p;
             super::prop_approx_perspective_projection_far_plane_point(m, p, 1e-10)?
         }
@@ -630,7 +756,7 @@ mod projectionfov3_f64_props {
             m in super::strategy_perspectivefov3_from_range(0.1_f64, 100_f64),
             v in super::strategy_vector2_any(),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let v: super::Vector2<f64> = v;
             super::prop_approx_perspective_projection_far_plane_vector(m, v, 1e-10)?
         }
@@ -641,7 +767,7 @@ mod projectionfov3_f64_props {
             t1 in super::strategy_interval(0_f64, 1_f64),
             t2 in super::strategy_interval(0_f64, 1_f64),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let l: super::PointLine<f64> = l;
             let t1: f64 = t1;
             let t2: f64 = t2;
@@ -654,7 +780,7 @@ mod projectionfov3_f64_props {
             t1 in super::strategy_interval(0_f64, 1_f64),
             t2 in super::strategy_interval(0_f64, 1_f64),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let t1: f64 = t1;
             let t2: f64 = t2;
             super::prop_perspective_projection_preserves_z_depth_ordering_vector(m, l, t1, t2)?
@@ -664,7 +790,7 @@ mod projectionfov3_f64_props {
         fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_point(
             (m, l) in super::strategy_perspectivefov3_lines_eye_point(0.1_f64, 100_f64),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let l: super::PointLine<f64> = l;
             super::prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_point(m, l, 1e-10)?
         }
@@ -673,9 +799,51 @@ mod projectionfov3_f64_props {
         fn prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_vector(
             (m, l) in super::strategy_perspectivefov3_lines_eye_vector(0.1_f64, 100_f64),
         ) {
-            let m: super::PerspectiveFov3<f64> = m;
+            let m: super::Perspective3<f64> = m;
             let l: super::VectorLine<f64> = l;
             super::prop_approx_perspective_projection_lines_through_eye_parallel_to_z_axis_vector(m, l, 1e-10)?
+        }
+    }
+}
+
+#[cfg(test)]
+mod projectionfov3_f64_frustum_parameter_props {
+    use proptest::prelude::*;
+    proptest! {
+        #[test]
+        fn prop_perspective_projection_parameter_left(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_left(m)?
+        }
+
+        #[test]
+        fn prop_perspective_projection_parameter_right(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_right(m)?
+        }
+
+        #[test]
+        fn prop_perspective_projection_parameter_bottom(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_bottom(m)?
+        }
+
+        #[test]
+        fn prop_perspective_projection_parameter_top(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_top(m)?
+        }
+
+        #[test]
+        fn prop_perspective_projection_parameter_near(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_near(m)?
+        }
+
+        #[test]
+        fn prop_perspective_projection_parameter_far(m in super::strategy_perspectivefov3_from_range_positive(0.1_f64, 100_f64)) {
+            let m: super::Perspective3<f64> = m;
+            super::prop_perspective_projection_parameter_far(m)?
         }
     }
 }

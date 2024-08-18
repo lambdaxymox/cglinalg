@@ -7,7 +7,6 @@ use cglinalg_core::{
 use cglinalg_transform::{
     Orthographic3,
     Perspective3,
-    PerspectiveFov3,
 };
 use cglinalg_trigonometry::Degrees;
 
@@ -15,9 +14,9 @@ use cglinalg_trigonometry::Degrees;
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_matrix() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 3_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -35,9 +34,9 @@ fn test_perspective_projection_matrix() {
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_transformation() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 3_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -47,7 +46,7 @@ fn test_perspective_projection_transformation() {
         0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
         0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     );
-    let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
     let result = perspective.matrix();
 
     assert_eq!(result, &expected);
@@ -56,13 +55,13 @@ fn test_perspective_projection_transformation() {
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_rectangular_parameters() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 3_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let perspective = Perspective3::new(left, right, bottom, top, near, far);
+    let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
 
     assert_relative_eq!(perspective.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_relative_eq!(perspective.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -90,7 +89,7 @@ fn test_perspective_projection_fov_matrix() {
         0_f64, 0_f64, c2r2,  -1_f64,
         0_f64, 0_f64, c3r2,   0_f64,
     );
-    let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
+    let result = Matrix4x4::from_perspective_vfov(vfov, aspect_ratio, near, far);
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
 }
@@ -113,7 +112,7 @@ fn test_perspective_projection_fov_transformation() {
         0_f64, 0_f64, c2r2,  -1_f64,
         0_f64, 0_f64, c3r2,   0_f64,
     );
-    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+    let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
     let result = perspective.matrix();
 
     assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -126,10 +125,10 @@ fn test_perspective_projection_fov_rectangular_parameters() {
     let aspect_ratio = 800_f64 / 600_f64;
     let near = 0.1_f64;
     let far = 100_f64;
-    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
-    let expected_left = -(1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    let expected_left =  (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
     let expected_right = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
-    let expected_bottom = -(1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    let expected_bottom = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
     let expected_top = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
 
     assert_relative_eq!(perspective.left(),   expected_left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -147,7 +146,7 @@ fn test_perspective_projection_fov_fov_parameters() {
     let aspect_ratio = 800_f64 / 600_f64;
     let near = 0.1_f64;
     let far = 100_f64;
-    let perspective = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+    let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
     let expected_vfov = vfov.into();
 
     assert_relative_eq!(perspective.vfov(),         expected_vfov, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -163,7 +162,7 @@ fn test_perspective_projection_fov_unproject_point() {
     let near = 0.1_f64;
     let far = 100_f64;
     let point = Point3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+    let projection = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
     let expected = point;
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -178,7 +177,7 @@ fn test_perspective_projection_fov_unproject_vector() {
     let near = 0.1_f64;
     let far = 100_f64;
     let vector = Vector3::new(-2_f64, 2_f64, -50_f64);
-    let projection = PerspectiveFov3::new(vfov, aspect_ratio, near, far);
+    let projection = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
     let expected = vector;
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -188,13 +187,13 @@ fn test_perspective_projection_fov_unproject_vector() {
 
 #[test]
 fn test_perspective_projection_unproject_point() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let projection = Perspective3::new(left, right, bottom, top, near, far);
+    let projection = Perspective3::from_frustum(left, right, bottom, top, near, far);
     let expected = Point3::new(-2_f64, 2_f64, -50_f64);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -204,13 +203,13 @@ fn test_perspective_projection_unproject_point() {
 
 #[test]
 fn test_perspective_projection_unproject_vector() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let projection = Perspective3::new(left, right, bottom, top, near, far);
+    let projection = Perspective3::from_frustum(left, right, bottom, top, near, far);
     let expected = Vector3::new(-2_f64, 2_f64, -50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
@@ -221,9 +220,9 @@ fn test_perspective_projection_unproject_vector() {
 #[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_matrix() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -241,9 +240,9 @@ fn test_orthographic_projection_matrix() {
 #[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_transformation() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -262,9 +261,9 @@ fn test_orthographic_projection_transformation() {
 #[rustfmt::skip]
 #[test]
 fn test_orthographic_projection_rectangular_parameters() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -280,9 +279,9 @@ fn test_orthographic_projection_rectangular_parameters() {
 
 #[test]
 fn test_orthographic_projection_unproject_point() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
@@ -296,9 +295,9 @@ fn test_orthographic_projection_unproject_point() {
 
 #[test]
 fn test_orthographic_projection_unproject_vector() {
-    let left = -4_f64;
+    let left = 4_f64;
     let right = 4_f64;
-    let bottom = -2_f64;
+    let bottom = 2_f64;
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;

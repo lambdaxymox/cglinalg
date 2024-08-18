@@ -6521,9 +6521,9 @@ where
     /// ```
     /// # use cglinalg_core::Matrix4x4;
     /// #
-    /// let left = -4_f64;
+    /// let left = 4_f64;
     /// let right = 4_f64;
-    /// let bottom = -2_f64;
+    /// let bottom = 2_f64;
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
@@ -6544,25 +6544,25 @@ where
         let one  = S::one();
         let two = one + one;
 
-        let c0r0 =  two / (right - left);
+        let c0r0 = two / (right - (-left));
         let c0r1 = zero;
         let c0r2 = zero;
         let c0r3 = zero;
 
         let c1r0 = zero;
-        let c1r1 = two / (top - bottom);
+        let c1r1 = two / (top - (-bottom));
         let c1r2 = zero;
         let c1r3 = zero;
 
-        let c2r0 = zero;
-        let c2r1 = zero;
+        let c2r0 =  zero;
+        let c2r1 =  zero;
         let c2r2 = -two / (far - near);
-        let c2r3 = zero;
+        let c2r3 =  zero;
 
-        let c3r0 = -(right + left) / (right - left);
-        let c3r1 = -(top + bottom) / (top - bottom);
+        let c3r0 = -(right + (-left)) / (right - (-left));
+        let c3r1 = -(top + (-bottom)) / (top - (-bottom));
         let c3r2 = -(far + near) / (far - near);
-        let c3r3 = one;
+        let c3r3 =  one;
 
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
@@ -6611,9 +6611,9 @@ where
     /// ```
     /// # use cglinalg_core::Matrix4x4;
     /// #
-    /// let left = -4_f64;
+    /// let left = 4_f64;
     /// let right = 4_f64;
-    /// let bottom = -2_f64;
+    /// let bottom = 2_f64;
     /// let top = 3_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
@@ -6634,25 +6634,25 @@ where
         let one = S::one();
         let two = one + one;
 
-        let c0r0 = (two * near) / (right - left);
+        let c0r0 = (two * near) / (right - (-left));
         let c0r1 = zero;
         let c0r2 = zero;
         let c0r3 = zero;
 
         let c1r0 = zero;
-        let c1r1 = (two * near) / (top - bottom);
+        let c1r1 = (two * near) / (top - (-bottom));
         let c1r2 = zero;
         let c1r3 = zero;
 
-        let c2r0 =  (right + left)   / (right - left);
-        let c2r1 =  (top   + bottom) / (top   - bottom);
+        let c2r0 =  (right + (-left))   / (right - (-left));
+        let c2r1 =  (top   + (-bottom)) / (top   - (-bottom));
         let c2r2 = -(far   + near)   / (far   - near);
         let c2r3 = -one;
 
-        let c3r0 = zero;
-        let c3r1 = zero;
+        let c3r0 =  zero;
+        let c3r1 =  zero;
         let c3r2 = -(two * far * near) / (far - near);
-        let c3r3 = zero;
+        let c3r3 =  zero;
 
         Self::new(
             c0r0, c0r1, c0r2, c0r3,
@@ -6720,13 +6720,13 @@ where
     ///     0_f32,         0_f32,         -1.002002_f32,  -1_f32,
     ///     0_f32,         0_f32,         -0.2002002_f32,  0_f32,
     /// );
-    /// let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
+    /// let result = Matrix4x4::from_perspective_vfov(vfov, aspect_ratio, near, far);
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-6, relative_all <= f32::EPSILON);
     /// ```
     #[rustfmt::skip]
     #[inline]
-    pub fn from_perspective_fov<A>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self
+    pub fn from_perspective_vfov<A>(vfov: A, aspect_ratio: S, near: S, far: S) -> Self
     where
         A: Into<Radians<S>>,
     {
@@ -6745,15 +6745,15 @@ where
         let c1r2 = zero;
         let c1r3 = zero;
 
-        let c2r0 = zero;
-        let c2r1 = zero;
+        let c2r0 =  zero;
+        let c2r1 =  zero;
         let c2r2 = -(far + near) / (far - near);
         let c2r3 = -one;
 
-        let c3r0 = zero;
-        let c3r1 = zero;
+        let c3r0 =  zero;
+        let c3r1 =  zero;
         let c3r2 = -(two * far * near) / (far - near);
-        let c3r3 = zero;
+        let c3r3 =  zero;
 
         Self::new(
             c0r0, c0r1, c0r2, c0r3,

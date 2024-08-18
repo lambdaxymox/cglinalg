@@ -4917,9 +4917,9 @@ mod matrix4x4_projection_tests {
     #[rustfmt::skip]
     #[test]
     fn test_from_orthographic() {
-        let left = -4_f64;
+        let left = 4_f64;
         let right = 4_f64;
-        let bottom = -2_f64;
+        let bottom = 2_f64;
         let top = 2_f64;
         let near = 1_f64;
         let far = 100_f64;
@@ -4947,7 +4947,7 @@ mod matrix4x4_projection_tests {
             0_f32,         0_f32,         -1.002002_f32, -1_f32,
             0_f32,         0_f32,         -0.2002002_f32, 0_f32,
         );
-        let result = Matrix4x4::from_perspective_fov(vfov, aspect_ratio, near, far);
+        let result = Matrix4x4::from_perspective_vfov(vfov, aspect_ratio, near, far);
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f32::EPSILON);
     }
@@ -4955,9 +4955,9 @@ mod matrix4x4_projection_tests {
     #[rustfmt::skip]
     #[test]
     fn test_from_perspective() {
-        let left = -4_f64;
+        let left = 4_f64;
         let right = 4_f64;
-        let bottom = -2_f64;
+        let bottom = 2_f64;
         let top = 3_f64;
         let near = 1_f64;
         let far = 100_f64;

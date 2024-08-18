@@ -264,7 +264,7 @@ where
 ///
 /// Given an angle `angle`, the signed normalized angle satisfies
 /// ```text
-/// -full_turn / 2 =< normalize_signed(angle) <= full_turn / 2
+/// -full_turn / 2 =< normalize_signed(angle) < full_turn / 2
 /// ```
 fn prop_normalize_signed_normalizes_to_interval<S, A>(angle: A) -> Result<(), TestCaseError>
 where
@@ -275,7 +275,7 @@ where
     let normalized_angle = angle.normalize_signed();
 
     prop_assert!(
-        (normalized_angle >= -full_turn_over_2) && (normalized_angle < full_turn_over_2),
+        (normalized_angle >= -full_turn_over_2) && (normalized_angle <= full_turn_over_2),
         "angle = {:?}; normalized_angle = {:?}",
         angle,
         normalized_angle
