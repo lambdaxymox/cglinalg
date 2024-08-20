@@ -2,6 +2,7 @@ use crate::transform::Transform3;
 use cglinalg_core::{
     Matrix4x4,
     Point3,
+    Unit,
     Vector3,
 };
 use cglinalg_numeric::SimdScalarFloat;
@@ -1589,6 +1590,270 @@ where
     #[inline]
     pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    /// Get the unit horizontal (right) direction for the view space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.view_unit_right();
+    /// let expected = Unit::from_value(Vector3::unit_x());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_right(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_x())
+    }
+
+    /// Get the unit vertical (up) direction for the view space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.view_unit_up();
+    /// let expected = Unit::from_value(Vector3::unit_y());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_up(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_y())
+    }
+
+    /// Get the unit depth direction for the view space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.view_unit_depth();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_depth(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the unit gaze direction for the view space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// The gaze direction is the direction along the depth axis that faces into
+    /// the viewing volume.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.view_unit_right();
+    /// let expected = Unit::from_value(Vector3::unit_x());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_gaze(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(-Vector3::unit_z())
+    }
+
+    /// Get the unit horizontal (right) direction for the clip space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.clip_unit_right();
+    /// let expected = Unit::from_value(Vector3::unit_x());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_right(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_x())
+    }
+
+    /// Get the unit vertical (up) direction for the clip space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.clip_unit_up();
+    /// let expected = Unit::from_value(Vector3::unit_y());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_up(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_y())
+    }
+
+    /// Get the unit depth direction for the clip space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.clip_unit_depth();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_depth(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the unit gaze direction for the clip space orthonormal frame of the
+    /// perspective projection transformation.
+    ///
+    /// The gaze direction is the direction along the depth axis that faces into
+    /// the viewing volume.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.clip_unit_gaze();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_gaze(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the clip space normalized device coordinates bounds of the
+    /// perspective projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = perspective.clip_ndc_bounds();
+    /// let expected = ((-1_f64, 1_f64), (-1_f64, 1_f64), (-1_f64, 1_f64));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_ndc_bounds(&self) -> ((S, S), (S, S), (S, S)) {
+        ((-S::one(), S::one()), (-S::one(), S::one()), (-S::one(), S::one()))
     }
 
     /// Apply the projective projection transformation to a point.
@@ -3331,6 +3596,278 @@ where
     #[inline]
     pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
+    }
+
+    /// Get the unit horizontal (right) direction for the view space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.view_unit_right();
+    /// let expected = Unit::from_value(Vector3::unit_x());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_right(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_x())
+    }
+
+    /// Get the unit vertical (up) direction for the view space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.view_unit_up();
+    /// let expected = Unit::from_value(Vector3::unit_y());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_up(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_y())
+    }
+
+    /// Get the unit depth direction for the view space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.view_unit_depth();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_depth(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the unit depth direction for the view space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// The gaze direction is the direction along the depth axis that faces into
+    /// the viewing volume.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.view_unit_gaze();
+    /// let expected = Unit::from_value(-Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn view_unit_gaze(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(-Vector3::unit_z())
+    }
+
+    /// Get the unit horizontal (right) direction for the clip space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.clip_unit_right();
+    /// let expected = Unit::from_value(Vector3::unit_x());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_right(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_x())
+    }
+
+    /// Get the unit vertical (up) direction for the clip space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.clip_unit_up();
+    /// let expected = Unit::from_value(Vector3::unit_y());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_up(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_y())
+    }
+
+    /// Get the unit depth direction for the view space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.clip_unit_depth();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_depth(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the unit depth direction for the clip space orthonormal frame of the
+    /// orthographic projection transformation.
+    ///
+    /// The gaze direction is the direction along the depth axis that faces into
+    /// the viewing volume.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::{
+    /// #     Unit,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Orthographic3;
+    /// # use core::f64;
+    /// #
+    /// let left = 5_f64;
+    /// let right = 3_f64;
+    /// let bottom = 4_f64;
+    /// let top = 4_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Orthographic3::new(left, right, bottom, top, near, far);
+    /// let result = orthographic.clip_unit_gaze();
+    /// let expected = Unit::from_value(Vector3::unit_z());
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_unit_gaze(&self) -> Unit<Vector3<S>> {
+        Unit::from_value_unchecked(Vector3::unit_z())
+    }
+
+    /// Get the clip space normalized device coordinates bounds of the
+    /// orthographic projection transformation.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use cglinalg_core::Vector3;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let orthographic = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let result = orthographic.clip_ndc_bounds();
+    /// let expected = ((-1_f64, 1_f64), (-1_f64, 1_f64), (-1_f64, 1_f64));
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
+    #[inline]
+    pub fn clip_ndc_bounds(&self) -> ((S, S), (S, S), (S, S)) {
+        ((-S::one(), S::one()), (-S::one(), S::one()), (-S::one(), S::one()))
     }
 
     /// Apply the orthographic projection transformation to a point.
