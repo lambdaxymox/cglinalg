@@ -1066,6 +1066,13 @@ where
 {
     /// Linearly interpolate between two matrices.
     ///
+    /// Let `m1` be a matrix `m1` with `R` rows and `C` columns. Let `m2` be a
+    /// matrix with `R` rows and `C` columns. Let `t` be a number in the interval
+    /// `[0, 1]`. The linear interpolation of `m1` and `m2` is defined by
+    /// ```text
+    /// lerp(m1, m2, t) := m1 + t * (m2 - m1)
+    /// ```
+    ///
     /// # Example
     ///
     /// ```
@@ -1369,7 +1376,12 @@ where
 
     /// Compute the trace of a square matrix.
     ///
-    /// The trace of a matrix is the sum of the diagonal elements.
+    /// The trace of a matrix is the sum of the diagonal elements. More precisely,
+    /// given a square matrix `m` with `N` rows and `N` columns, the **trace**
+    /// of `m` is defined to be
+    /// ```text
+    /// trace(m) := m[0][0] + m[1][1] + ... + m[i][i] + ... + m[N - 1][N - 1]
+    /// ```
     ///
     /// # Example
     ///
@@ -1402,8 +1414,14 @@ where
 {
     /// Determine whether a square matrix is a diagonal matrix.
     ///
-    /// A square matrix is a diagonal matrix if every off-diagonal
-    /// element is zero.
+    /// A square matrix is a diagonal matrix if every off-diagonal element is zero.
+    /// More precisely, given a square matrix `m` with `N` rows and `N` columns, we
+    /// say that `m` is **diagonal** provided that
+    /// ```text
+    /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> m[i][j] == m[j][i] == 0
+    /// ```
+    /// Every diagonal matrix is automatically symmetric. The zero matrix is also
+    /// a diagonal matrix. That is, we only require that off-diagonal elements be zero.
     ///
     /// # Example
     ///
@@ -1459,7 +1477,8 @@ where
     /// ```text
     /// forall c :: [0..C]. forall r :: [0..R]. m[c][r] == m[r][c]
     /// ```
-    /// and `m` is asymmetric otherwise.
+    /// and `m` is asymmetric otherwise. In particular, every diagonal matrix is
+    /// automatically symmetric.
     ///
     /// # Example
     ///
