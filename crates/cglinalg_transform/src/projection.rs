@@ -995,38 +995,133 @@ where
 }
 */
 
-/// A perspective projection transformation based on arbitrary `left`, `right`,
-/// `bottom`, `top`, `near`, and `far` planes.
+/// A perspective projection transformation.
 ///
-/// The `near` and `far` parameters are the absolute values of the positions
-/// of the **near plane** and the **far** plane, respectively, along the
-/// **negative z-axis**. In particular, the position of the **near plane** is
-/// `z == -near` and the position of the **far plane** is `z == -far`.
+/// The data type represents a perspective projection transformation that follows
+/// OpenGL's mathematical characteristics. We state these precisely below.
+/// 
+/// This parametrization is different from the standard frustum specification that 
+/// defines the location of the frustum planes directly. Instead, this parametrization 
+/// defines the frustum parameters as displacements along the relevant directions in 
+/// the view space orthonormal frame. This defines a coordinate-independent frustum 
+/// specification. The final matrix is the same.
 ///
-/// This data type represents a homogeneous matrix representing a perspective
-/// projection transformation with a right-handed coordinate system where the
-/// perspective camera faces the **negative z-axis** with the **positive x-axis**
-/// going to the right, and the **positive y-axis** going up. The perspective view
-/// volume is the frustum contained in
-/// `[left, right] x [bottom, top] x [-far, -near]`. The resulting clip space has
-/// a left-handed coordinate system. The normalized device coordinates this
-/// transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// # Vector Space Details
 ///
-/// The underlying matrix is identical to the one used by OpenGL, provided here
-/// for reference
+/// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+/// OpenGL's canonical view volume after depth normalization.
+///
+/// ## A Visual Description Of The Vector Spaces.
+/// 
+/// The **view space** is a vector space with a right-handed orthonormal frame defined 
+/// as follows.
+///
+/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **positive x-axis** is the horizontal direction and points right.
+/// * The **positive y-axis** is the vertical direction and points up.
+/// * The **positive z-axis** is the depth direction and points away from the 
+///   viewing frustum.
+/// * The **negative z-axis** is the viewing direction and points into the viewing 
+/// frustum away from the viewer.
+///
+/// The **clip space** is a vector space with a left-handed orthonormal frame defined
+/// as follows.
+/// 
+/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **positive x-axis** is the horizontal direction and points to the right.
+/// * The **positive y-axis** is the vertical direction and points up.
+/// * The **positive z-axis** is the depth direction and points into the viewing volume.
+/// * The **negative z-axis** points away from the viewing volume towards the viewer.
+/// 
+/// The **canonical view volume** is a vector space with a left-handed orthonormal 
+/// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
+///
+/// ## A Mathematically Precise Description Of The Vector Spaces.
+///
+/// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_v := [0, 0, 0]^T`.
+/// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
+///
+/// The **clip space** is the vector space `V_c := (R^3, O_c, B_c)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_c := [0, 0, 0]^T`.
+/// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
+/// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+/// 
+/// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_cvv := [0, 0, 0]^T`.
+/// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
+/// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+///
+/// # Parameter Specification
+/// 
+/// The fundamental parametrization of the perspective projection transformation
+/// is the specification based on defining the placement of the frustum bounds.
+/// We represent the frustum bounds by defining the placements with respect to the
+/// **view space** orthonormal frame vectors. More precisely, the fundamental 
+/// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+/// `near`, and `far` such that
+/// 
+/// ```text
+/// left   > 0
+/// right  > 0
+/// bottom > 0
+/// top    > 0
+/// far    > near > 0
+/// ```
+/// 
+/// where the parameters define the placement of the planes. The plane placement
+/// definitions follow.
+/// 
+/// * `left` defines the location of the **left plane** by its distance along
+///   the **negative x-axis** from the origin of the coordinate frame. 
+///   The **left plane** is a plane parallel to the **yz-plane**.
+/// * `right` defines the location of the **right plane** by its distance along
+///   the **positive x-axis** from the origin of the coordinate frame.
+///   The **right plane** is a plane parallel to the **yz-plane**.
+/// * `bottom` defines the location of the **bottom plane** by its distance along
+///   the **negative y-axis** from the origin of the coordiante frame.
+///   The **bottom plane** is a plane parallel to the **zx-plane**.
+/// * `top` defines the location of the **top plane** by its distance along
+///   the **positive y-axis** from the origin of the coordinate frame.
+///   The **top plane** is a plane parallel to the **zx-plane**.
+/// * `near` defines the location of the **near plane** by its distance along
+///   the **negative z-axis** from the origin of the coordinate frame.
+///   The **near plane** is a plane parallel to the **xy-plane**.
+/// * `far` defines the location of the **far plane** by its distance along
+///   the **negative z-axis** from the origin of the coordinate frame.
+///   The **far plane** is a plane parallel to the **xy-plane**.
+///
+/// # Matrix Representation Of The Perspective Projection Transformation
+/// 
+/// The underlying matrix is a homogeneous projective matrix with the following form
+/// 
 /// ```text
 /// [ m[0, 0]  0         m[2, 0]  0       ]
 /// [ 0        m[1, 1]   m[2, 1]  0       ]
 /// [ 0        0         m[2, 2]  m[3, 2] ]
 /// [ 0        0        -1        0       ]
-/// where
-/// m[0, 0] ==  2 * n / (r - l)
-/// m[2, 0] ==  (r + l) / (r - l)
-/// m[1, 1] ==  2 * n / (t - b)
-/// m[2, 1] ==  (t + b) / (t - b)
-/// m[2, 2] == -(f + n) / (f - n)
-/// m[3, 2] == -2 * f * n / (f - n)
 /// ```
+/// 
+/// where
+/// 
+/// ```text
+/// m[0, 0] :=  (2 * near) / (right - (-left))        == (2 * near) / (right + left)
+/// m[2, 0] :=  (right + (-left)) / (right - (-left)) == (right - left) / (right + left)
+/// m[1, 1] :=  (2 * near) / (top - (-bottom))        == (2 * near) / (top + bottom)
+/// m[2, 1] :=  (top + (-bottom)) / (top - (-bottom)) == (top - bottom) / (top + bottom)
+/// m[2, 2] := -(far + near) / (far - near)
+/// m[3, 2] := -(2 * far * near) / (far - near)
+/// ```
+/// 
 /// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective3<S> {
@@ -1037,43 +1132,136 @@ impl<S> Perspective3<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a new perspective projection transformation.
+    /// Construct a new possibly asymmetric perspective projection transformation based
+    /// on the location of the  **left plane**, **right plane**, **bottom plane**, 
+    /// **top plane**, **near plane**, and **far plane**.
     ///
-    /// The perspective projection transformation uses a right-handed
-    /// coordinate system where the **negative z-axis** is the camera view direction.
+    /// The resulting transformation represents a perspective projection transformation that 
+    /// follows OpenGL's mathematical characteristics. We state these precisely below.
+    /// 
+    /// This parametrization is different from the standard frustum specification that 
+    /// defines the location of the frustum planes directly. Instead, this parametrization 
+    /// defines the frustum parameters as displacements along the relevant directions in 
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    /// specification. The final matrix is the same.
     ///
-    /// # Parameters
+    /// # Vector Space Details
     ///
-    /// The parameters must satisfy
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// OpenGL's canonical view volume after depth normalization.
+    ///
+    /// ## A Visual Description Of The Vector Spaces.
+    /// 
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    /// as follows.
+    ///
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points away from the 
+    ///   viewing frustum.
+    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// frustum away from the viewer.
+    ///
+    /// The **clip space** is a vector space with a left-handed orthonormal frame defined
+    /// as follows.
+    /// 
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points to the right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points into the viewing volume.
+    /// * The **negative z-axis** points away from the viewing volume towards the viewer.
+    /// 
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// ## A Mathematically Precise Description Of The Vector Spaces.
+    ///
+    /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_v := [0, 0, 0]^T`.
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
+    ///
+    /// The **clip space** is the vector space `V_c := (R^3, O_c, B_c)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_c := [0, 0, 0]^T`.
+    /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
+    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// 
+    /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
+    /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
+    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// # Parameter Specification
+    /// 
+    /// The fundamental parametrization of the perspective projection transformation
+    /// is the specification based on defining the placement of the frustum bounds.
+    /// We represent the frustum bounds by defining the placements with respect to the
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// `near`, and `far` such that
+    /// 
     /// ```text
-    /// left < right
-    /// bottom < top
-    /// 0 < near < far
+    /// left   > 0
+    /// right  > 0
+    /// bottom > 0
+    /// top    > 0
+    /// far    > near > 0
     /// ```
-    /// to construct a useful perspective projection. In particular, `near` and
-    /// `far` are the respective absolute values of the placement of the near and
-    /// far planes along the **z-axis**.
+    /// 
+    /// where the parameters define the placement of the planes. The plane placement
+    /// definitions follow.
+    /// 
+    /// * `left` defines the location of the **left plane** by its distance along
+    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   The **left plane** is a plane parallel to the **yz-plane**.
+    /// * `right` defines the location of the **right plane** by its distance along
+    ///   the **positive x-axis** from the origin of the coordinate frame.
+    ///   The **right plane** is a plane parallel to the **yz-plane**.
+    /// * `bottom` defines the location of the **bottom plane** by its distance along
+    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   The **bottom plane** is a plane parallel to the **zx-plane**.
+    /// * `top` defines the location of the **top plane** by its distance along
+    ///   the **positive y-axis** from the origin of the coordinate frame.
+    ///   The **top plane** is a plane parallel to the **zx-plane**.
+    /// * `near` defines the location of the **near plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **near plane** is a plane parallel to the **xy-plane**.
+    /// * `far` defines the location of the **far plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **far plane** is a plane parallel to the **xy-plane**.
     ///
-    /// `left` is the horizontal position of the left plane in camera space.
-    /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    ///
-    /// `right` is the horizontal position of the right plane in camera space.
-    /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    ///
-    /// `bottom` is the vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    ///
-    /// `top` is the vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    ///
-    /// `near` is the distance along the **negative z-axis** of the near plane from the
-    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
-    ///
-    /// `far` the distance along the **negative z-axis** of the far plane from the
-    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
-    ///
+    /// # Matrix Representation Of The Perspective Projection Transformation
+    /// 
+    /// The underlying matrix is a homogeneous projective matrix with the following form
+    /// 
+    /// ```text
+    /// [ m[0, 0]  0         m[2, 0]  0       ]
+    /// [ 0        m[1, 1]   m[2, 1]  0       ]
+    /// [ 0        0         m[2, 2]  m[3, 2] ]
+    /// [ 0        0        -1        0       ]
+    /// ```
+    /// 
+    /// where
+    /// 
+    /// ```text
+    /// m[0, 0] :=  (2 * near) / (right - (-left))        == (2 * near) / (right + left)
+    /// m[2, 0] :=  (right + (-left)) / (right - (-left)) == (right - left) / (right + left)
+    /// m[1, 1] :=  (2 * near) / (top - (-bottom))        == (2 * near) / (top + bottom)
+    /// m[2, 1] :=  (top + (-bottom)) / (top - (-bottom)) == (top - bottom) / (top + bottom)
+    /// m[2, 2] := -(far + near) / (far - near)
+    /// m[3, 2] := -(2 * far * near) / (far - near)
+    /// ```
+    /// 
+    /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
     ///
@@ -1088,7 +1276,7 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     ///
     /// assert_relative_eq!(perspective.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_relative_eq!(perspective.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -1097,36 +1285,273 @@ where
     /// assert_relative_eq!(perspective.near(),   near,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// assert_relative_eq!(perspective.far(),    far,    abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
-    pub fn from_frustum(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
+    pub fn new(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Self {
         Self {
             matrix: Matrix4x4::from_perspective(left, right, bottom, top, near, far),
         }
     }
 
-    /// Construct a new perspective projection transformation.
+    /// Construct a perspective projection matrix based on the `near`
+    /// plane, the `far` plane and the vertical field of view angle `vfov` and
+    /// the horizontal/vertical aspect ratio `aspect_ratio`.
     ///
-    /// # Parameters
+    /// The `near` and `far` parameters are the absolute values of the positions
+    /// of the **near plane** and the **far** plane, respectively, along the
+    /// **negative z-axis**. In particular, the position of the **near plane** is
+    /// `z == -near` and the position of the **far plane** is `z == -far`. The
+    /// parameter `aspect_ratio` is the ratio of the width of the viewport to the
+    /// height of the viewport.
+    /// 
+    /// The resulting matrix represents a perspective projection transformation that 
+    /// follows OpenGL's mathematical characteristics. We state these precisely below.
+    /// 
+    /// This parametrization is different from the standard frustum specification that 
+    /// defines the location of the frustum planes directly. Instead, this parametrization 
+    /// defines the frustum parameters as displacements along the relevant directions in 
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    /// specification. The final matrix is the same.
     ///
-    /// The parameters must satisfy
+    /// # Vector Space Details
+    ///
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// OpenGL's canonical view volume after depth normalization.
+    ///
+    /// ## A Visual Description Of The Vector Spaces.
+    /// 
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    /// as follows.
+    ///
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points away from the 
+    ///   viewing frustum.
+    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// frustum away from the viewer.
+    ///
+    /// The **clip space** is a vector space with a left-handed orthonormal frame defined
+    /// as follows.
+    /// 
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points to the right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points into the viewing volume.
+    /// * The **negative z-axis** points away from the viewing volume towards the viewer.
+    /// 
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// ## A Mathematically Precise Description Of The Vector Spaces.
+    ///
+    /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_v := [0, 0, 0]^T`.
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
+    ///
+    /// The **clip space** is the vector space `V_c := (R^3, O_c, B_c)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_c := [0, 0, 0]^T`.
+    /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
+    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// 
+    /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
+    /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
+    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// # Parameter Specification
+    /// 
+    /// The fundamental parametrization of the perspective projection transformation
+    /// is the specification based on defining the placement of the frustum bounds.
+    /// We represent the frustum bounds by defining the placements with respect to the
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// `near`, and `far` such that
+    /// 
     /// ```text
-    /// 0 < near < far (along the negative z-axis)
+    /// left   > 0
+    /// right  > 0
+    /// bottom > 0
+    /// top    > 0
+    /// far    > near > 0
     /// ```
-    /// to construct a useful perspective projection. In particular, `near` and
-    /// `far` are the respective absolute values of the placement of the near and
-    /// far planes along the **z-axis**.
+    /// 
+    /// where the parameters define the placement of the planes. The plane placement
+    /// definitions follow.
+    /// 
+    /// * `left` defines the location of the **left plane** by its distance along
+    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   The **left plane** is a plane parallel to the **yz-plane**.
+    /// * `right` defines the location of the **right plane** by its distance along
+    ///   the **positive x-axis** from the origin of the coordinate frame.
+    ///   The **right plane** is a plane parallel to the **yz-plane**.
+    /// * `bottom` defines the location of the **bottom plane** by its distance along
+    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   The **bottom plane** is a plane parallel to the **zx-plane**.
+    /// * `top` defines the location of the **top plane** by its distance along
+    ///   the **positive y-axis** from the origin of the coordinate frame.
+    ///   The **top plane** is a plane parallel to the **zx-plane**.
+    /// * `near` defines the location of the **near plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **near plane** is a plane parallel to the **xy-plane**.
+    /// * `far` defines the location of the **far plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **far plane** is a plane parallel to the **xy-plane**.
+    /// 
+    /// # Matrix Representation Of The Perspective Projection Transformation
+    /// 
+    /// The underlying matrix is a homogeneous projective matrix with the following form
+    /// 
+    /// ```text
+    /// [ m[0, 0]  0         m[2, 0]  0       ]
+    /// [ 0        m[1, 1]   m[2, 1]  0       ]
+    /// [ 0        0         m[2, 2]  m[3, 2] ]
+    /// [ 0        0        -1        0       ]
+    /// ```
+    /// 
+    /// where
+    /// 
+    /// ```text
+    /// m[0, 0] :=  (2 * near) / (right - (-left))        == (2 * near) / (right + left)
+    /// m[2, 0] :=  (right + (-left)) / (right - (-left)) == (right - left) / (right + left)
+    /// m[1, 1] :=  (2 * near) / (top - (-bottom))        == (2 * near) / (top + bottom)
+    /// m[2, 1] :=  (top + (-bottom)) / (top - (-bottom)) == (top - bottom) / (top + bottom)
+    /// m[2, 2] := -(far + near) / (far - near)
+    /// m[3, 2] := -(2 * far * near) / (far - near)
+    /// ```
+    /// 
+    /// where the matrix entries are indexed in column-major order.
+    /// 
+    /// # Symmetric Vertical Field Of View Parameter Specification
+    /// 
+    /// The field of view parameters are given by 
+    /// 
+    /// * the aspect ratio `aspect_ratio`: the ratio of the width of the viewport 
+    ///   to the height of the viewport. 
+    /// * The vertical field of view angle `vfov`: the angle subtended by the 
+    ///   vertical part of the viewport from the origin.
+    /// * The near plane placement `near`: the distance of the front clipping plane 
+    ///   from the origin along the **negative z-axis**. 
+    /// * The far plane placement `far`: the distance of the rear clipping plane
+    ///   from the origin along the **negative z-axis**.
+    /// 
+    /// and they satisfy the following properties
+    /// 
+    /// ```text
+    /// aspect_ratio > 0
+    /// vfov         > 0
+    /// vfov         < pi
+    /// far          > near > 0
+    /// ```
+    /// 
+    /// The symmetric field of view parameters define a special case of the general
+    /// perspective projection matrix. The perspective view volume is contained in
+    /// `[-right, right] x [-top, top] x [-far, -near]`.
+    /// 
+    /// # Matrix Representation Of The Symmetric Field Of View Perspective Projection
+    /// 
+    /// The underlying matrix is a homogeneous projective matrix of the form
+    /// 
+    /// ```text
+    /// [ m[0, 0] 0         0        0       ]
+    /// [ 0       m[1, 1]   0        0       ]
+    /// [ 0       0         m[2, 2]  m[3, 2] ]
+    /// [ 0       0        -1        0       ]
+    /// ```
+    /// 
+    /// where
+    /// 
+    /// ```text
+    /// m[0, 0] ==  1 / (aspect_ratio * tan(vfov / 2))
+    /// m[1, 1] ==  1 / tan(vfov / 2)
+    /// m[2, 2] == -(far + near) / (far - near)
+    /// m[3, 2] == -(2 * far * near) / (far - near)
+    /// ```
+    /// 
+    /// where the matrix entries are indexed in column-major order.
+    /// 
+    /// # Symmetric Field Of View Perspective Projection Matrix Representation
+    /// 
+    /// We derive the elements of the perspective vertical field of view matrix.
+    /// We are going to relative the elements of the general frustum specification
+    /// to the tangent field of view elements. From this we can derive the special
+    /// form of the resulting matrix.
+    /// 
+    /// The aspect ratio `aspect_ratio` satisfies
+    /// 
+    /// ```text
+    /// aspect_ratio := width / height
+    ///              == (right + left) / (top + bottom)
+    ///              == (right + right) / (top + top)
+    ///              == (2 * right) / (2 * top)
+    ///              == right / top
+    /// ```
+    /// 
+    /// The tangent of the field of view angle `vfov` satisfies
+    /// 
+    /// ```text
+    /// tan(vfov / 2) == top / near
+    /// ```
+    /// 
+    /// We can now define the general frustum parameters in terms of the symmetric vertical
+    /// field of view parameters
+    /// 
+    /// ```text
+    /// right  == aspect * near * tan(vfov / 2)
+    /// left   == aspect * near * tan(vfov / 2)
+    /// top    == near * tan(vfov / 2)
+    /// bottom == near * tan(vfov / 2)
+    /// ```
+    /// 
+    /// and substituting these into the general perspective projection matrix
+    /// 
+    /// ```text
+    /// m[0, 0] == (2 * near) / (right + left)
+    ///         == (2 * near) / (2 * right)
+    ///         == near / right
+    ///         == near / (near * aspect * tan(vfov / 2))
+    ///         == 1 / (aspect * tan(vfov / 2))
+    /// m[1, 1] == (2 * near) / (top + bottom)
+    ///         == (2 * near) / (2 * top)
+    ///         == near / top
+    ///         == near / (near * tan(vfov / 2))
+    ///         == 1 / tan(vfov / 2)
+    /// m[2, 2] == -(far + near) / (far - near)
+    /// m[3, 2] == -(2 * far * near) / (far - near)
+    /// m[2, 0] == (right - left) / (right + left)
+    ///         == (right - right) / (2 * right)
+    ///         == 0
+    /// m[2, 1] == (top - left) / (top + left)
+    ///         == (top - top) / (2 * top)
+    ///         == 0
+    /// ```
+    /// 
+    /// which yields the final matrix
     ///
-    /// `vfov` is the angle of the field of view of the perspective projection.
-    ///
-    /// `aspect` is the ratio of the width of the horizontal span of the viewport to
-    /// height of the vertical span of the viewport.
-    ///
-    /// `near` is the distance along the **negative z-axis** of the near plane from the
-    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
-    ///
-    /// `far` the distance along the **negative z-axis** of the far plane from the
-    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
+    /// ```text
+    /// [ m[0, 0] 0         0        0       ]
+    /// [ 0       m[1, 1]   0        0       ]
+    /// [ 0       0         m[2, 2]  m[3, 2] ]
+    /// [ 0       0        -1        0       ]
+    /// ```
+    /// 
+    /// where
+    /// 
+    /// ```text
+    /// m[0, 0] ==  1 / (aspect_ratio * tan(vfov / 2))
+    /// m[1, 1] ==  1 / tan(vfov / 2)
+    /// m[2, 2] == -(far + near) / (far - near)
+    /// m[3, 2] == -(2 * far * near) / (far - near)
+    /// ```
+    /// 
+    /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
     ///
@@ -1384,7 +1809,7 @@ where
     /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1397,11 +1822,29 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = near;
     /// let result = perspective.near();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    /// 
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = near;
+    /// let result = perspective.near();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn near(&self) -> S {
@@ -1484,7 +1927,7 @@ where
     /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1497,11 +1940,29 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = far;
     /// let result = perspective.far();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    /// 
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = far;
+    /// let result = perspective.far();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn far(&self) -> S {
@@ -1586,7 +2047,7 @@ where
     /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1599,11 +2060,30 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = right;
     /// let result = perspective.right();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    /// 
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    /// let result = perspective.right();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn right(&self) -> S {
@@ -1661,12 +2141,11 @@ where
         // ```
         // or equivalently
         // ```text
-        // 2 * near / m[0, 0]
-        //     == (2 * near) * (1 / m[0, 0])
-        //     == right + left
-        //     == right + right / ratio
-        //     == (1 + (1 / ratio)) * right
-        //     == ((ratio + 1) / ratio) * right
+        // 2 * near / m[0, 0] == (2 * near) * (1 / m[0, 0])
+        //                    == right + left
+        //                    == right + right / ratio
+        //                    == (1 + (1 / ratio)) * right
+        //                    == ((ratio + 1) / ratio) * right
         // ```
         // We obtain
         // ```text
@@ -1686,7 +2165,7 @@ where
     /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1699,11 +2178,30 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = left;
     /// let result = perspective.left();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    /// 
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = (1_f64 / 10_f64) * (4_f64 / 3_f64) * f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64));
+    /// let result = perspective.left();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn left(&self) -> S {
@@ -1761,11 +2259,10 @@ where
         // ```
         // or equivalently
         // ```text
-        // 2 * near / m[0, 0]
-        //     == (2 * near) * (1 / m[0, 0])
-        //     == right + left
-        //     == ratio * left + left
-        //     == (ratio + 1) * left
+        // 2 * near / m[0, 0] == (2 * near) * (1 / m[0, 0])
+        //                    == right + left
+        //                    == ratio * left + left
+        //                    == (ratio + 1) * left
         // ```
         // We obtain
         // ```text
@@ -1785,7 +2282,7 @@ where
     /// frustum described by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1798,11 +2295,30 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = top;
     /// let result = perspective.top();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    /// let result = perspective.top();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn top(&self) -> S {
@@ -1860,12 +2376,11 @@ where
         // ```
         // or equivalently
         // ```text
-        // (2 * near) / m[1, 1]
-        //     == (2 * near) * (1 / m[1, 1])
-        //     == top + bottom
-        //     == top + top / ratio
-        //     == (1 + (1 / ratio)) * top
-        //     == ((ratio + 1) / ratio) * top
+        // (2 * near) / m[1, 1] == (2 * near) * (1 / m[1, 1])
+        //                      == top + bottom
+        //                      == top + top / ratio
+        //                      == (1 + (1 / ratio)) * top
+        //                      == ((ratio + 1) / ratio) * top
         // ```
         // We obtain
         // ```text
@@ -1885,7 +2400,7 @@ where
     /// frustum descibed by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1898,11 +2413,30 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = bottom;
     /// let result = perspective.bottom();
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::Degrees;
+    /// # use core::f64;
+    /// #
+    /// let vfov = Degrees(72_f64);
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 0.1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let expected = (1_f64 / 10_f64) * (f64::sqrt(5_f64 - 2_f64 * f64::sqrt(5_f64)));
+    /// let result = perspective.bottom();
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
     #[inline]
     pub fn bottom(&self) -> S {
@@ -1960,11 +2494,10 @@ where
         // ```
         // or equivalently
         // ```text
-        // (2 * near) / m[1, 1]
-        //     == (2 * near) * (1 / m[1, 1])
-        //     == top + bottom
-        //     == ratio * bottom + bottom
-        //     == (ratio + 1) * bottom
+        // (2 * near) / m[1, 1] == (2 * near) * (1 / m[1, 1])
+        //                      == top + bottom
+        //                      == ratio * bottom + bottom
+        //                      == (ratio + 1) * bottom
         // ```
         // We obtain
         // ```text
@@ -1982,7 +2515,7 @@ where
 
     /// Get the matrix that implements the perspective projection transformation.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -1995,7 +2528,7 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = Matrix4x4::new(
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
@@ -2006,6 +2539,37 @@ where
     ///
     /// assert_relative_eq!(result, &expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
+    /// let c1r1 = 1_f64 / (tan_half_vfov);
+    /// let c2r2 = -(far + near) / (far - near);
+    /// let c3r2 = (-2_f64 * far * near) / (far - near);
+    /// let expected = Matrix4x4::new(
+    ///     c0r0,  0_f64, 0_f64,  0_f64,
+    ///     0_f64, c1r1,  0_f64,  0_f64,
+    ///     0_f64, 0_f64, c2r2,  -1_f64,
+    ///     0_f64, 0_f64, c3r2,   0_f64,
+    /// );
+    /// let result = perspective.matrix();
+    ///
+    /// assert_eq!(result, &expected);
+    /// ```
     #[inline]
     pub const fn matrix(&self) -> &Matrix4x4<S> {
         &self.matrix
@@ -2013,7 +2577,7 @@ where
 
     /// Apply the projective projection transformation to a point.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2026,9 +2590,36 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 4_f64);
     /// let expected = Point3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
+    /// let result = perspective.project_point(&point);
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
+    /// let expected = Point3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_point(&point);
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -2046,7 +2637,7 @@ where
 
     /// Apply the perspective projection transformation to a vector.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2059,9 +2650,36 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 4_f64);
     /// let expected = Vector3::new(1_f64 / 12_f64, 1_f64 / 8_f64, 604_f64 / 396_f64);
+    /// let result = perspective.project_vector(&vector);
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
+    /// let expected = Vector3::new(3_f64 / 120_f64, 1_f64 / 30_f64, 3230_f64 / 2970_f64);
     /// let result = perspective.project_vector(&vector);
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -2079,7 +2697,7 @@ where
     ///
     /// This is the inverse operation of [`project_point`].
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2092,10 +2710,38 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let point = Point3::new(-1_f64, -1_f64, 4_f64);
     /// let expected = point;
     /// let projected_point = perspective.project_point(&point);
+    /// let result = perspective.unproject_point(&projected_point);
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Point3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let point = Point3::new(-1_f64, -1_f64, 30_f64);
+    /// let projected_point = perspective.project_point(&point);
+    /// let expected = point;
     /// let result = perspective.unproject_point(&projected_point);
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -2146,7 +2792,7 @@ where
     ///
     /// This is the inverse operation of [`project_vector`].
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2159,10 +2805,38 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let vector = Vector3::new(-1_f64, -1_f64, 4_f64);
     /// let expected = vector;
     /// let projected_vector = perspective.project_vector(&vector);
+    /// let result = perspective.unproject_vector(&projected_vector);
+    ///
+    /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::{
+    /// #     Matrix4x4,
+    /// #     Vector3,
+    /// # };
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let vector = Vector3::new(-1_f64, -1_f64, 30_f64);
+    /// let projected_vector = perspective.project_vector(&vector);
+    /// let expected = vector;
     /// let result = perspective.unproject_vector(&projected_vector);
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -2210,7 +2884,7 @@ where
 
     /// Convert a perspective projection to a projective matrix.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2224,7 +2898,7 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = Matrix4x4::new(
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
@@ -2235,6 +2909,38 @@ where
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_transform::Perspective3;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
+    /// let c1r1 = 1_f64 / (tan_half_vfov);
+    /// let c2r2 = -(far + near) / (far - near);
+    /// let c3r2 = (-2_f64 * far * near) / (far - near);
+    /// let expected = Matrix4x4::new(
+    ///     c0r0,  0_f64, 0_f64,  0_f64,
+    ///     0_f64, c1r1,  0_f64,  0_f64,
+    ///     0_f64, 0_f64, c2r2,  -1_f64,
+    ///     0_f64, 0_f64, c3r2,   0_f64,
+    /// );
+    /// let result = perspective.to_projective_matrix();
+    ///
+    /// assert_eq!(result, expected);
+    /// ```
     #[inline]
     pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
         self.matrix
@@ -2242,7 +2948,7 @@ where
 
     /// Convert a perspective projection to a generic transformation.
     ///
-    /// # Example
+    /// # Example (Frustum Parametrization)
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -2259,7 +2965,7 @@ where
     /// let top = 2_f64;
     /// let near = 1_f64;
     /// let far = 100_f64;
-    /// let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    /// let perspective = Perspective3::new(left, right, bottom, top, near, far);
     /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
     ///     1_f64 / 3_f64, 0_f64,          0_f64,             0_f64,
     ///     0_f64,         1_f64 / 2_f64,  0_f64,             0_f64,
@@ -2269,6 +2975,41 @@ where
     /// let result = perspective.to_transform();
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
+    /// ```
+    /// 
+    /// # Example (Field Of View Parametrization)
+    ///
+    /// ```
+    /// # use approx_cmp::assert_relative_eq;
+    /// # use cglinalg_transform::{
+    /// #     Perspective3,
+    /// #     Transform3,
+    /// # };
+    /// # use cglinalg_core::Matrix4x4;
+    /// # use cglinalg_trigonometry::{
+    /// #     Angle,
+    /// #     Degrees,
+    /// # };
+    /// #
+    /// let vfov = Degrees(90_f64);
+    /// let tan_half_vfov = (vfov / 2_f64).tan();
+    /// let aspect_ratio = 800_f64 / 600_f64;
+    /// let near = 1_f64;
+    /// let far = 100_f64;
+    /// let perspective = Perspective3::from_vfov(vfov, aspect_ratio, near, far);
+    /// let c0r0 = 1_f64 / (aspect_ratio * tan_half_vfov);
+    /// let c1r1 = 1_f64 / (tan_half_vfov);
+    /// let c2r2 = -(far + near) / (far - near);
+    /// let c3r2 = (-2_f64 * far * near) / (far - near);
+    /// let expected = Transform3::from_matrix_unchecked(Matrix4x4::new(
+    ///     c0r0,  0_f64, 0_f64,  0_f64,
+    ///     0_f64, c1r1,  0_f64,  0_f64,
+    ///     0_f64, 0_f64, c2r2,  -1_f64,
+    ///     0_f64, 0_f64, c3r2,   0_f64,
+    /// ));
+    /// let result = perspective.to_transform();
+    ///
+    /// assert_eq!(result, expected);
     /// ```
     #[inline]
     pub fn to_transform(&self) -> Transform3<S> {
@@ -3855,36 +4596,131 @@ where
 }
 */
 
-/// An orthographic projection with arbitrary `left`, `right`,
-/// `top`, `bottom`, `near`, and `far` planes.
+/// An orthographic projection transformation.
 ///
-/// The `near` and `far` parameters are the absolute values of the positions
-/// of the **near plane** and the **far** plane, respectively, along the
-/// **negative z-axis**. In particular, the position of the **near plane** is
-/// `z == -near` and the position of the **far plane** is `z == -far`.
+/// The data type represents an orthographic projection transformation that follows
+/// OpenGL's mathematical characteristics. We state these precisely below.
+/// 
+/// This parametrization is different from the standard frustum specification that 
+/// defines the location of the frustum planes directly. Instead, this parametrization 
+/// defines the frustum parameters as displacements along the relevant directions in 
+/// the view space orthonormal frame. This defines a coordinate-independent frustum 
+/// specification. The final matrix is the same.
 ///
-/// This data type represents a homogeneous matrix representing an orthographic
-/// projection transformation with a right-handed coordinate system where the
-/// orthographic camera faces the **negative z-axis** with the **positive x-axis**
-/// going to the right, and the **positive y-axis** going up. The orthographic view
-/// volume is the box `[left, right] x [bottom, top] x [-far, -near]`. The resulting
-/// clip space has a left-handed coordinate system. The normalized device coordinates
-/// this transformation maps to are `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// # Vector Space Details
 ///
-/// The underlying matrix is identical to the one used by OpenGL, provided here
-/// for reference
+/// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+/// OpenGL's canonical view volume after depth normalization.
+///
+/// ## A Visual Description Of The Vector Spaces.
+/// 
+/// The **view space** is a vector space with a right-handed orthonormal frame defined 
+/// as follows.
+///
+/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **positive x-axis** is the horizontal direction and points right.
+/// * The **positive y-axis** is the vertical direction and points up.
+/// * The **positive z-axis** is the depth direction and points away from the 
+///   viewing frustum.
+/// * The **negative z-axis** is the viewing direction and points into the viewing 
+/// frustum away from the viewer.
+///
+/// The **clip space** is a vector space with a left-handed orthonormal frame defined
+/// as follows.
+/// 
+/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **positive x-axis** is the horizontal direction and points to the right.
+/// * The **positive y-axis** is the vertical direction and points up.
+/// * The **positive z-axis** is the depth direction and points into the viewing volume.
+/// * The **negative z-axis** points away from the viewing volume towards the viewer.
+/// 
+/// The **canonical view volume** is a vector space with a left-handed orthonormal 
+/// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
+///
+/// ## A Mathematically Precise Description Of The Vector Spaces.
+///
+/// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_v := [0, 0, 0]^T`.
+/// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
+///
+/// The **clip space** is the vector space `V_c := (R^3, O_c, B_c)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_c := [0, 0, 0]^T`.
+/// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
+/// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+/// 
+/// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
+/// * The underlying vector space is `R^3`.
+/// * The **origin** is `O_cvv := [0, 0, 0]^T`.
+/// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+/// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
+/// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+///
+/// # Parameter Specification
+/// 
+/// The fundamental parametrization of the orthographic projection transformation
+/// is the specification based on defining the placement of the frustum bounds.
+/// We represent the frustum bounds by defining the placements with respect to the
+/// **view space** orthonormal frame vectors. More precisely, the fundamental 
+/// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+/// `near`, and `far` such that
+/// 
+/// ```text
+/// left   > 0
+/// right  > 0
+/// bottom > 0
+/// top    > 0
+/// far    > near > 0
+/// ```
+/// 
+/// where the parameters define the placement of the planes. The plane placement
+/// definitions follow.
+/// 
+/// * `left` defines the location of the **left plane** by its distance along
+///   the **negative x-axis** from the origin of the coordinate frame. 
+///   The **left plane** is a plane parallel to the **yz-plane**.
+/// * `right` defines the location of the **right plane** by its distance along
+///   the **positive x-axis** from the origin of the coordinate frame.
+///   The **right plane** is a plane parallel to the **yz-plane**.
+/// * `bottom` defines the location of the **bottom plane** by its distance along
+///   the **negative y-axis** from the origin of the coordiante frame.
+///   The **bottom plane** is a plane parallel to the **zx-plane**.
+/// * `top` defines the location of the **top plane** by its distance along
+///   the **positive y-axis** from the origin of the coordinate frame.
+///   The **top plane** is a plane parallel to the **zx-plane**.
+/// * `near` defines the location of the **near plane** by its distance along
+///   the **negative z-axis** from the origin of the coordinate frame.
+///   The **near plane** is a plane parallel to the **xy-plane**.
+/// * `far` defines the location of the **far plane** by its distance along
+///   the **negative z-axis** from the origin of the coordinate frame.
+///   The **far plane** is a plane parallel to the **xy-plane**.
+///
+/// # Matrix Representation Of The Orthographic Projection Transformation
+/// 
+/// The underlying matrix is a homogeneous affine matrix with the following form
+/// 
 /// ```text
 /// [ m[0, 0]  0        0        m[3, 0] ]
 /// [ 0        m[1, 1]  0        m[3, 1] ]
 /// [ 0        0        m[2, 2]  m[3, 2] ]
 /// [ 0        0        0        1       ]
+/// ```
+/// 
 /// where
-/// m[0, 0] ==  2 / (r - l)
-/// m[3, 0] == -(r + l) / (r - l)
-/// m[1, 1] ==  2 / (t - b)
-/// m[3, 1] == -(t + b) / (t - b)
-/// m[2, 2] == -2 / (f - n)
-/// m[3, 2] == -(f + n) / (f - n)
+/// 
+/// ```text
+/// m[0, 0] ==  2 / (right - (-left))                 == 2 / (right + left)
+/// m[3, 0] == -(right + (-left)) / (right - (-left)) == -(right - left) / (right + left)
+/// m[1, 1] ==  2 / (top - (-bottom))                 == 2 / (top + bottom)
+/// m[3, 1] == -(top + (-bottom)) / (top - (-bottom)) == -(top - bottom) / (top + bottom)
+/// m[2, 2] == -2 / (far - near)
+/// m[3, 2] == -(far + near) / (far - near)
 /// ```
 /// where the matrix entries are indexed in column-major order.
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -3896,39 +4732,133 @@ impl<S> Orthographic3<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a new orthographic projection.
+    /// Construct a new orthographic projection matrix.
     ///
-    /// # Parameters
+    /// The data type represents an orthographic projection transformation that follows
+    /// OpenGL's mathematical characteristics. We state these precisely below.
+    /// 
+    /// This parametrization is different from the standard frustum specification that 
+    /// defines the location of the frustum planes directly. Instead, this parametrization 
+    /// defines the frustum parameters as displacements along the relevant directions in 
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    /// specification. The final matrix is the same.
     ///
-    /// The parameters must satisfy
+    /// # Vector Space Details
+    ///
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// OpenGL's canonical view volume after depth normalization.
+    ///
+    /// ## A Visual Description Of The Vector Spaces.
+    /// 
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    /// as follows.
+    ///
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points away from the 
+    ///   viewing frustum.
+    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// frustum away from the viewer.
+    ///
+    /// The **clip space** is a vector space with a left-handed orthonormal frame defined
+    /// as follows.
+    /// 
+    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **positive x-axis** is the horizontal direction and points to the right.
+    /// * The **positive y-axis** is the vertical direction and points up.
+    /// * The **positive z-axis** is the depth direction and points into the viewing volume.
+    /// * The **negative z-axis** points away from the viewing volume towards the viewer.
+    /// 
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// ## A Mathematically Precise Description Of The Vector Spaces.
+    ///
+    /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_v := [0, 0, 0]^T`.
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
+    ///
+    /// The **clip space** is the vector space `V_c := (R^3, O_c, B_c)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_c := [0, 0, 0]^T`.
+    /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
+    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// 
+    /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
+    /// * The underlying vector space is `R^3`.
+    /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
+    /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
+    ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
+    /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
+    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    ///
+    /// # Parameter Specification
+    /// 
+    /// The fundamental parametrization of the orthographic projection transformation
+    /// is the specification based on defining the placement of the frustum bounds.
+    /// We represent the frustum bounds by defining the placements with respect to the
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// `near`, and `far` such that
+    /// 
     /// ```text
-    /// left < right
-    /// bottom < top
-    /// 0 < near < far
+    /// left   > 0
+    /// right  > 0
+    /// bottom > 0
+    /// top    > 0
+    /// far    > near > 0
     /// ```
-    /// to construct a useful orthographic projection. In particular, `near` and
-    /// `far` are the respective absolute values of the placement of the near and
-    /// far planes along the **z-axis**.
+    /// 
+    /// where the parameters define the placement of the planes. The plane placement
+    /// definitions follow.
+    /// 
+    /// * `left` defines the location of the **left plane** by its distance along
+    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   The **left plane** is a plane parallel to the **yz-plane**.
+    /// * `right` defines the location of the **right plane** by its distance along
+    ///   the **positive x-axis** from the origin of the coordinate frame.
+    ///   The **right plane** is a plane parallel to the **yz-plane**.
+    /// * `bottom` defines the location of the **bottom plane** by its distance along
+    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   The **bottom plane** is a plane parallel to the **zx-plane**.
+    /// * `top` defines the location of the **top plane** by its distance along
+    ///   the **positive y-axis** from the origin of the coordinate frame.
+    ///   The **top plane** is a plane parallel to the **zx-plane**.
+    /// * `near` defines the location of the **near plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **near plane** is a plane parallel to the **xy-plane**.
+    /// * `far` defines the location of the **far plane** by its distance along
+    ///   the **negative z-axis** from the origin of the coordinate frame.
+    ///   The **far plane** is a plane parallel to the **xy-plane**.
     ///
-    /// `left` is the horizontal position of the left plane in camera space.
-    /// The left plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    ///
-    /// `right` is the horizontal position of the right plane in camera space.
-    /// The right plane is a plane parallel to the **yz-plane** along the **x-axis**.
-    ///
-    /// `bottom` is the vertical position of the bottom plane in camera space.
-    /// The bottom plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    ///
-    /// `top` is the vertical position of the top plane in camera space.
-    /// the top plane is a plane parallel to the **zx-plane** along the **y-axis**.
-    ///
-    /// `near` is the distance along the **negative z-axis** of the near plane from the
-    /// eye in camera space. The near plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
-    ///
-    /// `far` the distance along the **negative z-axis** of the far plane from the
-    /// eye in camera space. The far plane is a plane parallel to the **xy-plane** along
-    /// the **negative z-axis**.
+    /// # Matrix Representation Of The Orthographic Projection Transformation
+    /// 
+    /// The underlying matrix is a homogeneous affine matrix with the following form
+    /// 
+    /// ```text
+    /// [ m[0, 0]  0        0        m[3, 0] ]
+    /// [ 0        m[1, 1]  0        m[3, 1] ]
+    /// [ 0        0        m[2, 2]  m[3, 2] ]
+    /// [ 0        0        0        1       ]
+    /// ```
+    /// 
+    /// where
+    /// 
+    /// ```text
+    /// m[0, 0] ==  2 / (right - (-left))                 == 2 / (right + left)
+    /// m[3, 0] == -(right + (-left)) / (right - (-left)) == -(right - left) / (right + left)
+    /// m[1, 1] ==  2 / (top - (-bottom))                 == 2 / (top + bottom)
+    /// m[3, 1] == -(top + (-bottom)) / (top - (-bottom)) == -(top - bottom) / (top + bottom)
+    /// m[2, 2] == -2 / (far - near)
+    /// m[3, 2] == -(far + near) / (far - near)
+    /// ```
+    /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
     ///
@@ -4004,8 +4934,8 @@ where
         // Observe that
         // ```text
         // m[3, 2] + 1 == -[(far + near) / (far - near)] + 1
-        //              == (-(far + near) + (far - near)) / (far - near)
-        //              == -(2 * near) / (far - near)
+        //             == (-(far + near) + (far - near)) / (far - near)
+        //             == -(2 * near) / (far - near)
         // ```
         // or equivalently
         // ```text
@@ -4104,8 +5034,8 @@ where
         // Observe that
         // ```text
         // m[3, 2] + 1 == -[(far + near) / (far - near)] + 1
-        //              == (-(far + near) + (far - near)) / (far - near)
-        //              == -(2 * near) / (far - near)
+        //             == (-(far + near) + (far - near)) / (far - near)
+        //             == -(2 * near) / (far - near)
         // ```
         // or equivalently
         // ```text

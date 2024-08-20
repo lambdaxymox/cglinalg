@@ -46,7 +46,7 @@ fn test_perspective_projection_transformation() {
         0_f64,         1_f64 / 5_f64, -101_f64 / 99_f64, -1_f64,
         0_f64,         0_f64,         -200_f64 / 99_f64,  0_f64,
     );
-    let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    let perspective = Perspective3::new(left, right, bottom, top, near, far);
     let result = perspective.matrix();
 
     assert_eq!(result, &expected);
@@ -61,7 +61,7 @@ fn test_perspective_projection_rectangular_parameters() {
     let top = 3_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let perspective = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    let perspective = Perspective3::new(left, right, bottom, top, near, far);
 
     assert_relative_eq!(perspective.left(),   left,   abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     assert_relative_eq!(perspective.right(),  right,  abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
@@ -193,7 +193,7 @@ fn test_perspective_projection_unproject_point() {
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let projection = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    let projection = Perspective3::new(left, right, bottom, top, near, far);
     let expected = Point3::new(-2_f64, 2_f64, -50_f64);
     let projected_point = projection.project_point(&expected);
     let result = projection.unproject_point(&projected_point);
@@ -209,7 +209,7 @@ fn test_perspective_projection_unproject_vector() {
     let top = 2_f64;
     let near = 1_f64;
     let far = 100_f64;
-    let projection = Perspective3::from_frustum(left, right, bottom, top, near, far);
+    let projection = Perspective3::new(left, right, bottom, top, near, far);
     let expected = Vector3::new(-2_f64, 2_f64, -50_f64);
     let projected_vector = projection.project_vector(&expected);
     let result = projection.unproject_vector(&projected_vector);
