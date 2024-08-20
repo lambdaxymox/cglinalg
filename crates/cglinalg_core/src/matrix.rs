@@ -5351,9 +5351,9 @@ where
 
     /// Determine whether a square matrix has an inverse matrix.
     ///
-    /// A matrix is invertible if its determinant is not zero. 
-    /// 
-    /// More precisely, given the matrix `self`, `self` is invertible if and 
+    /// A matrix is invertible if its determinant is not zero.
+    ///
+    /// More precisely, given the matrix `self`, `self` is invertible if and
     /// only if
     /// ```text
     /// det(self) != 0
@@ -5389,7 +5389,7 @@ where
     }
 
     /// Compute the inverse of a square matrix.
-    /// 
+    ///
     /// The inverse of the matrix `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
@@ -6505,41 +6505,41 @@ where
     ///
     /// The data type represents an orthographic projection transformation that follows
     /// OpenGL's mathematical characteristics. We state these precisely below.
-    /// 
-    /// This parametrization is different from the standard frustum specification that 
-    /// defines the location of the frustum planes directly. Instead, this parametrization 
-    /// defines the frustum parameters as displacements along the relevant directions in 
-    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    ///
+    /// This parametrization is different from the standard frustum specification that
+    /// defines the location of the frustum planes directly. Instead, this parametrization
+    /// defines the frustum parameters as displacements along the relevant directions in
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum
     /// specification. The final matrix is the same.
     ///
     /// # Vector Space Details
     ///
-    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to
     /// OpenGL's canonical view volume after depth normalization.
     ///
     /// ## A Visual Description Of The Vector Spaces.
-    /// 
-    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    ///
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
-    /// * The **positive z-axis** is the depth direction and points away from the 
+    /// * The **positive z-axis** is the depth direction and points away from the
     ///   viewing frustum.
-    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// * The **negative z-axis** is the viewing direction and points into the viewing
     /// frustum away from the viewer.
     ///
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
-    /// 
+    ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
     /// * The **negative z-axis** points away from the viewing volume towards the viewer.
-    /// 
-    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    ///
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal
     /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// ## A Mathematically Precise Description Of The Vector Spaces.
@@ -6547,7 +6547,7 @@ where
     /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_v := [0, 0, 0]^T`.
-    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
     ///
@@ -6558,7 +6558,7 @@ where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
     /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
-    /// 
+    ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
@@ -6568,14 +6568,14 @@ where
     /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
-    /// 
+    ///
     /// The fundamental parametrization of the orthographic projection transformation
     /// is the specification based on defining the placement of the frustum bounds.
     /// We represent the frustum bounds by defining the placements with respect to the
-    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
-    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`,
     /// `near`, and `far` such that
-    /// 
+    ///
     /// ```text
     /// left   > 0
     /// right  > 0
@@ -6583,12 +6583,12 @@ where
     /// top    > 0
     /// far    > near > 0
     /// ```
-    /// 
+    ///
     /// where the parameters define the placement of the planes. The plane placement
     /// definitions follow.
-    /// 
+    ///
     /// * `left` defines the location of the **left plane** by its distance along
-    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   the **negative x-axis** from the origin of the coordinate frame.
     ///   The **left plane** is a plane parallel to the **yz-plane**.
     /// * `right` defines the location of the **right plane** by its distance along
     ///   the **positive x-axis** from the origin of the coordinate frame.
@@ -6607,18 +6607,18 @@ where
     ///   The **far plane** is a plane parallel to the **xy-plane**.
     ///
     /// # Matrix Representation Of The Orthographic Projection Transformation
-    /// 
+    ///
     /// The underlying matrix is a homogeneous affine matrix with the following form
-    /// 
+    ///
     /// ```text
     /// [ m[0, 0]  0        0        m[3, 0] ]
     /// [ 0        m[1, 1]  0        m[3, 1] ]
     /// [ 0        0        m[2, 2]  m[3, 2] ]
     /// [ 0        0        0        1       ]
     /// ```
-    /// 
+    ///
     /// where
-    /// 
+    ///
     /// ```text
     /// m[0, 0] ==  2 / (right - (-left))                 == 2 / (right + left)
     /// m[3, 0] == -(right + (-left)) / (right - (-left)) == -(right - left) / (right + left)
@@ -6686,46 +6686,46 @@ where
     }
 
     /// Construct a new possibly asymmetric perspective projection matrix based
-    /// on the location of the  **left plane**, **right plane**, **bottom plane**, 
+    /// on the location of the  **left plane**, **right plane**, **bottom plane**,
     /// **top plane**, **near plane**, and **far plane**.
     ///
-    /// The resulting matrix represents a perspective projection transformation that 
+    /// The resulting matrix represents a perspective projection transformation that
     /// follows OpenGL's mathematical characteristics. We state these precisely below.
-    /// 
-    /// This parametrization is different from the standard frustum specification that 
-    /// defines the location of the frustum planes directly. Instead, this parametrization 
-    /// defines the frustum parameters as displacements along the relevant directions in 
-    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    ///
+    /// This parametrization is different from the standard frustum specification that
+    /// defines the location of the frustum planes directly. Instead, this parametrization
+    /// defines the frustum parameters as displacements along the relevant directions in
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum
     /// specification. The final matrix is the same.
     ///
     /// # Vector Space Details
     ///
-    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to
     /// OpenGL's canonical view volume after depth normalization.
     ///
     /// ## A Visual Description Of The Vector Spaces.
-    /// 
-    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    ///
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
-    /// * The **positive z-axis** is the depth direction and points away from the 
+    /// * The **positive z-axis** is the depth direction and points away from the
     ///   viewing frustum.
-    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// * The **negative z-axis** is the viewing direction and points into the viewing
     /// frustum away from the viewer.
     ///
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
-    /// 
+    ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
     /// * The **negative z-axis** points away from the viewing volume towards the viewer.
-    /// 
-    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    ///
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal
     /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// ## A Mathematically Precise Description Of The Vector Spaces.
@@ -6733,7 +6733,7 @@ where
     /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_v := [0, 0, 0]^T`.
-    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
     ///
@@ -6744,7 +6744,7 @@ where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
     /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
-    /// 
+    ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
@@ -6754,14 +6754,14 @@ where
     /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
-    /// 
+    ///
     /// The fundamental parametrization of the perspective projection transformation
     /// is the specification based on defining the placement of the frustum bounds.
     /// We represent the frustum bounds by defining the placements with respect to the
-    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
-    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`,
     /// `near`, and `far` such that
-    /// 
+    ///
     /// ```text
     /// left   > 0
     /// right  > 0
@@ -6769,12 +6769,12 @@ where
     /// top    > 0
     /// far    > near > 0
     /// ```
-    /// 
+    ///
     /// where the parameters define the placement of the planes. The plane placement
     /// definitions follow.
-    /// 
+    ///
     /// * `left` defines the location of the **left plane** by its distance along
-    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   the **negative x-axis** from the origin of the coordinate frame.
     ///   The **left plane** is a plane parallel to the **yz-plane**.
     /// * `right` defines the location of the **right plane** by its distance along
     ///   the **positive x-axis** from the origin of the coordinate frame.
@@ -6793,18 +6793,18 @@ where
     ///   The **far plane** is a plane parallel to the **xy-plane**.
     ///
     /// # Matrix Representation Of The Perspective Projection Transformation
-    /// 
+    ///
     /// The underlying matrix is a homogeneous projective matrix with the following form
-    /// 
+    ///
     /// ```text
     /// [ m[0, 0]  0         m[2, 0]  0       ]
     /// [ 0        m[1, 1]   m[2, 1]  0       ]
     /// [ 0        0         m[2, 2]  m[3, 2] ]
     /// [ 0        0        -1        0       ]
     /// ```
-    /// 
+    ///
     /// where
-    /// 
+    ///
     /// ```text
     /// m[0, 0] :=  (2 * near) / (right - (-left))        == (2 * near) / (right + left)
     /// m[2, 0] :=  (right + (-left)) / (right - (-left)) == (right - left) / (right + left)
@@ -6813,7 +6813,7 @@ where
     /// m[2, 2] := -(far + near) / (far - near)
     /// m[3, 2] := -(2 * far * near) / (far - near)
     /// ```
-    /// 
+    ///
     /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
@@ -6882,44 +6882,44 @@ where
     /// `z == -near` and the position of the **far plane** is `z == -far`. The
     /// parameter `aspect_ratio` is the ratio of the width of the viewport to the
     /// height of the viewport.
-    /// 
-    /// The resulting matrix represents a perspective projection transformation that 
+    ///
+    /// The resulting matrix represents a perspective projection transformation that
     /// follows OpenGL's mathematical characteristics. We state these precisely below.
-    /// 
-    /// This parametrization is different from the standard frustum specification that 
-    /// defines the location of the frustum planes directly. Instead, this parametrization 
-    /// defines the frustum parameters as displacements along the relevant directions in 
-    /// the view space orthonormal frame. This defines a coordinate-independent frustum 
+    ///
+    /// This parametrization is different from the standard frustum specification that
+    /// defines the location of the frustum planes directly. Instead, this parametrization
+    /// defines the frustum parameters as displacements along the relevant directions in
+    /// the view space orthonormal frame. This defines a coordinate-independent frustum
     /// specification. The final matrix is the same.
     ///
     /// # Vector Space Details
     ///
-    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to 
+    /// The matrix transforms from OpenGL's view space to OpenGL's clip space that maps to
     /// OpenGL's canonical view volume after depth normalization.
     ///
     /// ## A Visual Description Of The Vector Spaces.
-    /// 
-    /// The **view space** is a vector space with a right-handed orthonormal frame defined 
+    ///
+    /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
-    /// * The **positive z-axis** is the depth direction and points away from the 
+    /// * The **positive z-axis** is the depth direction and points away from the
     ///   viewing frustum.
-    /// * The **negative z-axis** is the viewing direction and points into the viewing 
+    /// * The **negative z-axis** is the viewing direction and points into the viewing
     /// frustum away from the viewer.
     ///
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
-    /// 
+    ///
     /// * The origin of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
     /// * The **negative z-axis** points away from the viewing volume towards the viewer.
-    /// 
-    /// The **canonical view volume** is a vector space with a left-handed orthonormal 
+    ///
+    /// The **canonical view volume** is a vector space with a left-handed orthonormal
     /// frame identical to the clip space with bounds `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// ## A Mathematically Precise Description Of The Vector Spaces.
@@ -6927,7 +6927,7 @@ where
     /// The **view space** is the vector space `V_v := (R^3, O_v, B_v)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_v := [0, 0, 0]^T`.
-    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where 
+    /// * The **basis** is `B_v := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_v, B_v)` has a right-handed orientation.
     ///
@@ -6938,7 +6938,7 @@ where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
     /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
-    /// 
+    ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
     /// * The **origin** is `O_cvv := [0, 0, 0]^T`.
@@ -6948,14 +6948,14 @@ where
     /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
-    /// 
+    ///
     /// The fundamental parametrization of the perspective projection transformation
     /// is the specification based on defining the placement of the frustum bounds.
     /// We represent the frustum bounds by defining the placements with respect to the
-    /// **view space** orthonormal frame vectors. More precisely, the fundamental 
-    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`, 
+    /// **view space** orthonormal frame vectors. More precisely, the fundamental
+    /// parametrization is given by the parameters `left`, `right`, `bottom`, `top`,
     /// `near`, and `far` such that
-    /// 
+    ///
     /// ```text
     /// left   > 0
     /// right  > 0
@@ -6963,12 +6963,12 @@ where
     /// top    > 0
     /// far    > near > 0
     /// ```
-    /// 
+    ///
     /// where the parameters define the placement of the planes. The plane placement
     /// definitions follow.
-    /// 
+    ///
     /// * `left` defines the location of the **left plane** by its distance along
-    ///   the **negative x-axis** from the origin of the coordinate frame. 
+    ///   the **negative x-axis** from the origin of the coordinate frame.
     ///   The **left plane** is a plane parallel to the **yz-plane**.
     /// * `right` defines the location of the **right plane** by its distance along
     ///   the **positive x-axis** from the origin of the coordinate frame.
@@ -6985,20 +6985,20 @@ where
     /// * `far` defines the location of the **far plane** by its distance along
     ///   the **negative z-axis** from the origin of the coordinate frame.
     ///   The **far plane** is a plane parallel to the **xy-plane**.
-    /// 
+    ///
     /// # Matrix Representation Of The Perspective Projection Transformation
-    /// 
+    ///
     /// The underlying matrix is a homogeneous projective matrix with the following form
-    /// 
+    ///
     /// ```text
     /// [ m[0, 0]  0         m[2, 0]  0       ]
     /// [ 0        m[1, 1]   m[2, 1]  0       ]
     /// [ 0        0         m[2, 2]  m[3, 2] ]
     /// [ 0        0        -1        0       ]
     /// ```
-    /// 
+    ///
     /// where
-    /// 
+    ///
     /// ```text
     /// m[0, 0] :=  (2 * near) / (right - (-left))        == (2 * near) / (right + left)
     /// m[2, 0] :=  (right + (-left)) / (right - (-left)) == (right - left) / (right + left)
@@ -7007,66 +7007,66 @@ where
     /// m[2, 2] := -(far + near) / (far - near)
     /// m[3, 2] := -(2 * far * near) / (far - near)
     /// ```
-    /// 
+    ///
     /// where the matrix entries are indexed in column-major order.
-    /// 
+    ///
     /// # Symmetric Vertical Field Of View Parameter Specification
-    /// 
-    /// The field of view parameters are given by 
-    /// 
-    /// * the aspect ratio `aspect_ratio`: the ratio of the width of the viewport 
-    ///   to the height of the viewport. 
-    /// * The vertical field of view angle `vfov`: the angle subtended by the 
+    ///
+    /// The field of view parameters are given by
+    ///
+    /// * the aspect ratio `aspect_ratio`: the ratio of the width of the viewport
+    ///   to the height of the viewport.
+    /// * The vertical field of view angle `vfov`: the angle subtended by the
     ///   vertical part of the viewport from the origin.
-    /// * The near plane placement `near`: the distance of the front clipping plane 
-    ///   from the origin along the **negative z-axis**. 
+    /// * The near plane placement `near`: the distance of the front clipping plane
+    ///   from the origin along the **negative z-axis**.
     /// * The far plane placement `far`: the distance of the rear clipping plane
     ///   from the origin along the **negative z-axis**.
-    /// 
+    ///
     /// and they satisfy the following properties
-    /// 
+    ///
     /// ```text
     /// aspect_ratio > 0
     /// vfov         > 0
     /// vfov         < pi
     /// far          > near > 0
     /// ```
-    /// 
+    ///
     /// The symmetric field of view parameters define a special case of the general
     /// perspective projection matrix. The perspective view volume is contained in
     /// `[-right, right] x [-top, top] x [-far, -near]`.
-    /// 
+    ///
     /// # Matrix Representation Of The Symmetric Field Of View Perspective Projection
-    /// 
+    ///
     /// The underlying matrix is a homogeneous projective matrix of the form
-    /// 
+    ///
     /// ```text
     /// [ m[0, 0] 0         0        0       ]
     /// [ 0       m[1, 1]   0        0       ]
     /// [ 0       0         m[2, 2]  m[3, 2] ]
     /// [ 0       0        -1        0       ]
     /// ```
-    /// 
+    ///
     /// where
-    /// 
+    ///
     /// ```text
     /// m[0, 0] ==  1 / (aspect_ratio * tan(vfov / 2))
     /// m[1, 1] ==  1 / tan(vfov / 2)
     /// m[2, 2] == -(far + near) / (far - near)
     /// m[3, 2] == -(2 * far * near) / (far - near)
     /// ```
-    /// 
+    ///
     /// where the matrix entries are indexed in column-major order.
-    /// 
+    ///
     /// # Symmetric Field Of View Perspective Projection Matrix Representation
-    /// 
+    ///
     /// We derive the elements of the perspective vertical field of view matrix.
     /// We are going to relative the elements of the general frustum specification
     /// to the tangent field of view elements. From this we can derive the special
     /// form of the resulting matrix.
-    /// 
+    ///
     /// The aspect ratio `aspect_ratio` satisfies
-    /// 
+    ///
     /// ```text
     /// aspect_ratio := width / height
     ///              == (right + left) / (top + bottom)
@@ -7074,25 +7074,25 @@ where
     ///              == (2 * right) / (2 * top)
     ///              == right / top
     /// ```
-    /// 
+    ///
     /// The tangent of the field of view angle `vfov` satisfies
-    /// 
+    ///
     /// ```text
     /// tan(vfov / 2) == top / near
     /// ```
-    /// 
+    ///
     /// We can now define the general frustum parameters in terms of the symmetric vertical
     /// field of view parameters
-    /// 
+    ///
     /// ```text
     /// right  == aspect * near * tan(vfov / 2)
     /// left   == aspect * near * tan(vfov / 2)
     /// top    == near * tan(vfov / 2)
     /// bottom == near * tan(vfov / 2)
     /// ```
-    /// 
+    ///
     /// and substituting these into the general perspective projection matrix
-    /// 
+    ///
     /// ```text
     /// m[0, 0] == (2 * near) / (right + left)
     ///         == (2 * near) / (2 * right)
@@ -7113,7 +7113,7 @@ where
     ///         == (top - top) / (2 * top)
     ///         == 0
     /// ```
-    /// 
+    ///
     /// which yields the final matrix
     ///
     /// ```text
@@ -7122,16 +7122,16 @@ where
     /// [ 0       0         m[2, 2]  m[3, 2] ]
     /// [ 0       0        -1        0       ]
     /// ```
-    /// 
+    ///
     /// where
-    /// 
+    ///
     /// ```text
     /// m[0, 0] ==  1 / (aspect_ratio * tan(vfov / 2))
     /// m[1, 1] ==  1 / tan(vfov / 2)
     /// m[2, 2] == -(far + near) / (far - near)
     /// m[3, 2] == -(2 * far * near) / (far - near)
     /// ```
-    /// 
+    ///
     /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example

@@ -6,11 +6,11 @@ use cglinalg_core::{
     Vector3,
 };
 use cglinalg_numeric::SimdScalarFloat;
+use cglinalg_transform::Perspective3;
 use cglinalg_trigonometry::{
     Angle,
     Radians,
 };
-use cglinalg_transform::Perspective3;
 
 use proptest::prelude::*;
 
