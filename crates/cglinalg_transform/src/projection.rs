@@ -33,7 +33,7 @@ use core::ops;
 /// The **view space** is a vector space with a right-handed orthonormal frame defined
 /// as follows.
 ///
-/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
 /// * The **positive x-axis** is the horizontal direction and points right.
 /// * The **positive y-axis** is the vertical direction and points up.
 /// * The **positive z-axis** is the depth direction and points away from the
@@ -44,7 +44,7 @@ use core::ops;
 /// The **clip space** is a vector space with a left-handed orthonormal frame defined
 /// as follows.
 ///
-/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
 /// * The **positive x-axis** is the horizontal direction and points to the right.
 /// * The **positive y-axis** is the vertical direction and points up.
 /// * The **positive z-axis** is the depth direction and points into the viewing volume.
@@ -68,7 +68,7 @@ use core::ops;
 /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
 ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
 /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
-/// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+/// * The **view volume** is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
 ///
 /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
 /// * The underlying vector space is `R^3`.
@@ -76,7 +76,7 @@ use core::ops;
 /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
 ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
 /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
-/// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// * The **view volume** is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// # Parameter Specification
 ///
@@ -105,7 +105,7 @@ use core::ops;
 ///   the **positive x-axis** from the origin of the coordinate frame.
 ///   The **right plane** is a plane parallel to the **yz-plane**.
 /// * `bottom` defines the location of the **bottom plane** by its distance along
-///   the **negative y-axis** from the origin of the coordiante frame.
+///   the **negative y-axis** from the origin of the coordinate frame.
 ///   The **bottom plane** is a plane parallel to the **zx-plane**.
 /// * `top` defines the location of the **top plane** by its distance along
 ///   the **positive y-axis** from the origin of the coordinate frame.
@@ -172,7 +172,7 @@ where
     /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points away from the
@@ -183,7 +183,7 @@ where
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
@@ -207,7 +207,7 @@ where
     /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
-    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// * The **view volume** is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
     ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
@@ -215,7 +215,7 @@ where
     /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
-    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// * The **view volume** is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
     ///
@@ -244,7 +244,7 @@ where
     ///   the **positive x-axis** from the origin of the coordinate frame.
     ///   The **right plane** is a plane parallel to the **yz-plane**.
     /// * `bottom` defines the location of the **bottom plane** by its distance along
-    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   the **negative y-axis** from the origin of the coordinate frame.
     ///   The **bottom plane** is a plane parallel to the **zx-plane**.
     /// * `top` defines the location of the **top plane** by its distance along
     ///   the **positive y-axis** from the origin of the coordinate frame.
@@ -338,7 +338,7 @@ where
     /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points away from the
@@ -349,7 +349,7 @@ where
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
@@ -373,7 +373,7 @@ where
     /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
-    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// * The **view volume** is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
     ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
@@ -381,7 +381,7 @@ where
     /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
-    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// * The **view volume** is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
     ///
@@ -410,7 +410,7 @@ where
     ///   the **positive x-axis** from the origin of the coordinate frame.
     ///   The **right plane** is a plane parallel to the **yz-plane**.
     /// * `bottom` defines the location of the **bottom plane** by its distance along
-    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   the **negative y-axis** from the origin of the coordinate frame.
     ///   The **bottom plane** is a plane parallel to the **zx-plane**.
     /// * `top` defines the location of the **top plane** by its distance along
     ///   the **positive y-axis** from the origin of the coordinate frame.
@@ -454,9 +454,9 @@ where
     ///   to the height of the viewport.
     /// * The vertical field of view angle `vfov`: the angle subtended by the
     ///   vertical part of the viewport from the origin.
-    /// * The near plane placement `near`: the distance of the front clipping plane
+    /// * The **near plane** placement `near`: the distance of the front clipping plane
     ///   from the origin along the **negative z-axis**.
-    /// * The far plane placement `far`: the distance of the rear clipping plane
+    /// * The **far plane** placement `far`: the distance of the rear clipping plane
     ///   from the origin along the **negative z-axis**.
     ///
     /// and they satisfy the following properties
@@ -603,9 +603,9 @@ where
     /// 
     /// The aspect ratio is the ratio of the width of the viewing plane of the view 
     /// volume to the height of the viewing plane of the view volume. More precisely,
-    /// given a perspective projection `p` with right plane `right`, left plane 
-    /// `left`, top plane `top`, and bottom plane `bottom`, the aspect ratio is 
-    /// given by
+    /// given a perspective projection `p` with **right plane** `right`, **left plane**
+    /// `left`, **top plane** `top`, and **bottom plane** `bottom`, the **aspect ratio** 
+    /// is given by
     /// 
     /// ```text
     /// aspect_ratio(p) := width(p) / height(p) == (right + left) / (top + bottom)
@@ -714,9 +714,9 @@ where
         // where `y_hat` is the view space up direction, and `z_hat` is the
         // direction of the viewer in view space. In particular, the direction
         // of the gaze direction `-z_hat` is the opposite the direction of the
-        // viewer. The vector `top_v` is the position of the top plane parallel
-        // to the **yz-plane**. The vector `bottom_v` is the position of the bottom
-        // plane parallel to the **yz-plane**.
+        // viewer. The vector `top_v` is the position of the **top plane** parallel
+        // to the **yz-plane**. The vector `bottom_v` is the position of the 
+        // **bottom plane** parallel to the **yz-plane**.
         //
         // Next, we derive the formulae for the tangents of the angles `angle_vfov_t`
         // and `angle_vfov_b` in terms of frustum parameters. The cosine and sine
@@ -832,7 +832,7 @@ where
         Radians(vfov)
     }
 
-    /// Get the position of the near plane of the viewing
+    /// Get the position of the **near plane** of the viewing
     /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
@@ -950,7 +950,7 @@ where
         ((one - ratio) / (two * ratio)) * self.matrix[3][2]
     }
 
-    /// Get the position of the far plane of the viewing
+    /// Get the position of the **far plane** of the viewing
     /// frustum described by the perspective projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
@@ -1070,7 +1070,7 @@ where
         ((one - ratio) / two) * self.matrix[3][2]
     }
 
-    /// Get the position of the right plane of the viewing
+    /// Get the position of the **right plane** of the viewing
     /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
@@ -1188,7 +1188,7 @@ where
         ((two * near) * (ratio / (ratio + one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the left plane of the viewing
+    /// Get the position of the **left plane** of the viewing
     /// frustum described by the perspective projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
@@ -1305,7 +1305,7 @@ where
         ((two * near) * (one / (ratio + one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the top plane of the viewing
+    /// Get the position of the **top plane** of the viewing
     /// frustum described by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
@@ -1423,7 +1423,7 @@ where
         ((two * near) * (ratio / (ratio + one))) * (one / self.matrix[1][1])
     }
 
-    /// Get the position of the bottom plane of the viewing
+    /// Get the position of the **bottom plane** of the viewing
     /// frustum descibed by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
@@ -2708,7 +2708,7 @@ where
 /// The **view space** is a vector space with a right-handed orthonormal frame defined
 /// as follows.
 ///
-/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
 /// * The **positive x-axis** is the horizontal direction and points right.
 /// * The **positive y-axis** is the vertical direction and points up.
 /// * The **positive z-axis** is the depth direction and points away from the
@@ -2719,7 +2719,7 @@ where
 /// The **clip space** is a vector space with a left-handed orthonormal frame defined
 /// as follows.
 ///
-/// * The origin of the coordinate system is `[0, 0, 0]^T`.
+/// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
 /// * The **positive x-axis** is the horizontal direction and points to the right.
 /// * The **positive y-axis** is the vertical direction and points up.
 /// * The **positive z-axis** is the depth direction and points into the viewing volume.
@@ -2743,7 +2743,7 @@ where
 /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
 ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
 /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
-/// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+/// * The **view volume** is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
 ///
 /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
 /// * The underlying vector space is `R^3`.
@@ -2751,7 +2751,7 @@ where
 /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
 ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
 /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
-/// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+/// * The **view volume** is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
 ///
 /// # Parameter Specification
 ///
@@ -2780,7 +2780,7 @@ where
 ///   the **positive x-axis** from the origin of the coordinate frame.
 ///   The **right plane** is a plane parallel to the **yz-plane**.
 /// * `bottom` defines the location of the **bottom plane** by its distance along
-///   the **negative y-axis** from the origin of the coordiante frame.
+///   the **negative y-axis** from the origin of the coordinate frame.
 ///   The **bottom plane** is a plane parallel to the **zx-plane**.
 /// * `top` defines the location of the **top plane** by its distance along
 ///   the **positive y-axis** from the origin of the coordinate frame.
@@ -2844,7 +2844,7 @@ where
     /// The **view space** is a vector space with a right-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points away from the
@@ -2855,7 +2855,7 @@ where
     /// The **clip space** is a vector space with a left-handed orthonormal frame defined
     /// as follows.
     ///
-    /// * The origin of the coordinate system is `[0, 0, 0]^T`.
+    /// * The **origin** of the coordinate system is `[0, 0, 0]^T`.
     /// * The **positive x-axis** is the horizontal direction and points to the right.
     /// * The **positive y-axis** is the vertical direction and points up.
     /// * The **positive z-axis** is the depth direction and points into the viewing volume.
@@ -2879,7 +2879,7 @@ where
     /// * The **basis** is `B_c := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_c, B_c)` has a left-handed orientation.
-    /// * The view volume is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
+    /// * The **view volume** is parametrized by `[-left, right] x [-bottom, top] x [near, far]`.
     ///
     /// The **canonical view volume** is the vector space `V_cvv := (R^3, O_cvv, B_cvv)` where
     /// * The underlying vector space is `R^3`.
@@ -2887,7 +2887,7 @@ where
     /// * The **basis** is `B_cvv := { [1, 0, 0]^T, [0, 1, 0]^T, [0, 0, 1]^T }` where
     ///   `x_hat := [1, 0, 0]^T`, `y_hat := [0, 1, 0]^T`, and `z_hat := [0, 0, 1]^T`.
     /// * The orthonormal frame `(O_cvv, B_cvv)` has a left-handed orientation.
-    /// * The Canonical View Volume is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
+    /// * The **view volume** is parametrized by `[-1, 1] x [-1, 1] x [-1, 1]`.
     ///
     /// # Parameter Specification
     ///
@@ -2916,7 +2916,7 @@ where
     ///   the **positive x-axis** from the origin of the coordinate frame.
     ///   The **right plane** is a plane parallel to the **yz-plane**.
     /// * `bottom` defines the location of the **bottom plane** by its distance along
-    ///   the **negative y-axis** from the origin of the coordiante frame.
+    ///   the **negative y-axis** from the origin of the coordinate frame.
     ///   The **bottom plane** is a plane parallel to the **zx-plane**.
     /// * `top` defines the location of the **top plane** by its distance along
     ///   the **positive y-axis** from the origin of the coordinate frame.
@@ -2949,6 +2949,7 @@ where
     /// m[2, 2] == -2 / (far - near)
     /// m[3, 2] == -(far + near) / (far - near)
     /// ```
+    /// 
     /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
@@ -2980,7 +2981,7 @@ where
         }
     }
 
-    /// Get the position of the near plane of the viewing
+    /// Get the position of the **near plane** of the viewing
     /// volume described by the orthographic projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
@@ -3080,7 +3081,7 @@ where
         (-two * (one / (ratio - one))) * (one / self.matrix[2][2])
     }
 
-    /// Get the position of the far plane of the viewing
+    /// Get the position of the **far plane** of the viewing
     /// volume described by the orthographic projection of the plane
     /// parallel to the **xy-plane** positioned along the **negative z-axis**.
     ///
@@ -3181,7 +3182,7 @@ where
         (-two * (ratio / (ratio - one))) * (one / self.matrix[2][2])
     }
 
-    /// Get the position of the right plane of the viewing
+    /// Get the position of the **right plane** of the viewing
     /// volume described by the orthographic projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
@@ -3281,7 +3282,7 @@ where
         (two * (ratio / (ratio + one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the left plane of the viewing
+    /// Get the position of the **left plane** of the viewing
     /// volume described by the orthographic projection of the plane
     /// parallel to the **yz-plane** positioned along the **positive x-axis**.
     ///
@@ -3380,7 +3381,7 @@ where
         (two * (one / (ratio + one))) * (one / self.matrix[0][0])
     }
 
-    /// Get the position of the top plane of the viewing
+    /// Get the position of the **top plane** of the viewing
     /// volume described by the orthographic projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
@@ -3479,7 +3480,7 @@ where
         (two * (ratio / (ratio + one))) * (one / self.matrix[1][1])
     }
 
-    /// Get the position of the bottom plane of the viewing
+    /// Get the position of the **bottom plane** of the viewing
     /// volume descibed by the orthographic projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
