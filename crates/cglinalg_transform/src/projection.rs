@@ -599,9 +599,19 @@ where
         }
     }
 
-    /// Get the aspect ratio. The aspect ratio is the ratio of the
-    /// width of the viewing plane of the view volume to the height of the
-    /// viewing plane of the view volume.
+    /// Get the aspect ratio of the viewport represented by the perspective projection. 
+    /// 
+    /// The aspect ratio is the ratio of the width of the viewing plane of the view 
+    /// volume to the height of the viewing plane of the view volume. More precisely,
+    /// given a perspective projection `p` with right plane `right`, left plane 
+    /// `left`, top plane `top`, and bottom plane `bottom`, the aspect ratio is 
+    /// given by
+    /// 
+    /// ```text
+    /// aspect_ratio(p) := width(p) / height(p) == (right + left) / (top + bottom)
+    /// ```
+    /// 
+    /// where `top > 0`, `bottom > 0`, `right > 0`, and `left > 0`.
     ///
     /// # Example
     ///
