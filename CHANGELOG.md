@@ -6,6 +6,18 @@ Change log dates follow the ISO 8601 standard (YEAR-MONTH-DAY).
 
 ## [Unreleased]
 
+## [0.21.0] - 2024-08-26
+Redesign projection matrix specification.
+
+### Added
+- Added much more documentation on the mathematical properties of the projection 
+transformations.
+
+### Changed
+- Changed the way frustum projections are specified such that all plane parameters
+  (left, right, bottom, top, near, far) are positive, so that the frustum parametrization
+  is coordinate-system invariant.
+
 ## [0.20.0] - 2023-11-15
 Integate a new approximate comparison library.
 
