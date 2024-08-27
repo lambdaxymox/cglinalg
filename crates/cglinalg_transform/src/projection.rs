@@ -599,18 +599,18 @@ where
         }
     }
 
-    /// Get the aspect ratio of the viewport represented by the perspective projection. 
-    /// 
-    /// The aspect ratio is the ratio of the width of the viewing plane of the view 
+    /// Get the aspect ratio of the viewport represented by the perspective projection.
+    ///
+    /// The aspect ratio is the ratio of the width of the viewing plane of the view
     /// volume to the height of the viewing plane of the view volume. More precisely,
     /// given a perspective projection `p` with **right plane** `right`, **left plane**
-    /// `left`, **top plane** `top`, and **bottom plane** `bottom`, the **aspect ratio** 
+    /// `left`, **top plane** `top`, and **bottom plane** `bottom`, the **aspect ratio**
     /// is given by
-    /// 
+    ///
     /// ```text
     /// aspect_ratio(p) := width(p) / height(p) == (right + left) / (top + bottom)
     /// ```
-    /// 
+    ///
     /// where `top > 0`, `bottom > 0`, `right > 0`, and `left > 0`.
     ///
     /// # Example
@@ -715,7 +715,7 @@ where
         // direction of the viewer in view space. In particular, the direction
         // of the gaze direction `-z_hat` is the opposite the direction of the
         // viewer. The vector `top_v` is the position of the **top plane** parallel
-        // to the **yz-plane**. The vector `bottom_v` is the position of the 
+        // to the **yz-plane**. The vector `bottom_v` is the position of the
         // **bottom plane** parallel to the **yz-plane**.
         //
         // Next, we derive the formulae for the tangents of the angles `angle_vfov_t`
@@ -2949,7 +2949,7 @@ where
     /// m[2, 2] == -2 / (far - near)
     /// m[3, 2] == -(far + near) / (far - near)
     /// ```
-    /// 
+    ///
     /// where the matrix entries are indexed in column-major order.
     ///
     /// # Example
