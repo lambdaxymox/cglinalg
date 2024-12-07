@@ -2233,7 +2233,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
+    pub const fn to_projective_matrix(&self) -> Matrix4x4<S> {
         self.matrix
     }
 
@@ -2303,7 +2303,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_transform(&self) -> Transform3<S> {
+    pub const fn to_transform(&self) -> Transform3<S> {
         Transform3::from_matrix_unchecked(self.matrix)
     }
 }
@@ -4081,7 +4081,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_projective_matrix(&self) -> Matrix4x4<S> {
+    pub const fn to_projective_matrix(&self) -> Matrix4x4<S> {
         self.matrix
     }
 
@@ -4115,7 +4115,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn to_transform(&self) -> Transform3<S> {
+    pub const fn to_transform(&self) -> Transform3<S> {
         Transform3::from_matrix_unchecked(self.matrix)
     }
 }

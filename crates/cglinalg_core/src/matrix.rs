@@ -170,7 +170,7 @@ impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
 
     /// Get a mutable pointer to the underlying array.
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
+    pub const fn as_mut_ptr(&mut self) -> *mut S {
         &mut self.data[0][0]
     }
 }
@@ -404,7 +404,7 @@ where
     /// assert_eq!(matrix[2][0], c2[0]); assert_eq!(matrix[2][1], c2[1]); assert_eq!(matrix[2][2], c2[2]);
     /// ```
     #[inline]
-    pub fn from_columns(columns: &[Vector<S, R>; C]) -> Self {
+    pub const fn from_columns(columns: &[Vector<S, R>; C]) -> Self {
         let data_ptr = unsafe { &*(columns as *const [Vector<S, R>; C] as *const [[S; R]; C]) };
 
         Self { data: *data_ptr }

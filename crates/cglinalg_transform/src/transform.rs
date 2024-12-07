@@ -179,7 +179,7 @@ where
     /// assert_eq!(result, &expected);
     /// ```
     #[inline]
-    pub fn matrix_mut(&mut self) -> &mut Matrix<S, NPLUS1, NPLUS1> {
+    pub const fn matrix_mut(&mut self) -> &mut Matrix<S, NPLUS1, NPLUS1> {
         &mut self.matrix
     }
 

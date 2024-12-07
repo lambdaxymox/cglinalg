@@ -91,7 +91,7 @@ impl<S> Quaternion<S> {
 
     /// Get a mutable pointer to the underlying array.
     #[inline]
-    pub fn as_mut_ptr(&mut self) -> *mut S {
+    pub const fn as_mut_ptr(&mut self) -> *mut S {
         self.coords.as_mut_ptr()
     }
 
