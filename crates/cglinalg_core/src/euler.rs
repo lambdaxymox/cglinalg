@@ -216,7 +216,9 @@ where
         Euler::new(A::zero(), A::zero(), A::zero())
     }
 
-    /// Test whether an Euler angle is self.
+    /// Test whether a set of Euler angles is zero.
+    /// 
+    /// A set of Euler angles is zero if and only if each Euler angle is zero.
     ///
     /// # Example
     ///

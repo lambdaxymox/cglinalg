@@ -629,7 +629,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
     /// Compute the fused multiply-add of `self` with `a` and `b`.
     ///
     /// Given a floating point number `self`, and floating point numbers `a` and
-    /// `b`, the fused multiply-add operation is given by
+    /// `b`, the **fused multiply-add** operation is given by
     /// ```text
     /// mul_add(self, a, b) := (self * a) + b
     /// ```
@@ -853,7 +853,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
 
     /// Compute the hyperbolic sine of `self`.
     ///
-    /// Given a floating point number `x`, the hyperbolic sine of `x` is given
+    /// Given a floating point number `x`, the **hyperbolic sine** of `x` is given
     /// by
     /// ```text
     /// sinh(x) := (1 / 2) * (exp(x) - exp(-x))
@@ -877,7 +877,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
 
     /// Compute the hyperbolic cosine of `self`.
     ///
-    /// Given a floating point number `x`, the hyperbolic cosine of `x` is given
+    /// Given a floating point number `x`, the **hyperbolic cosine** of `x` is given
     /// by
     /// ```text
     /// cosh(x) := (1 / 2) * (exp(x) + exp(-x))
@@ -901,7 +901,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
 
     /// Compute the hyperbolic tangent of `self`
     ///
-    /// Given a floating point number `x`, the hyperbolic tangent of `x` is given
+    /// Given a floating point number `x`, the **hyperbolic tangent** of `x` is given
     /// by
     /// ```text
     /// tanh(x) := (exp(x) - exp(-x)) / (exp(x) + exp(-x))
@@ -1115,7 +1115,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
 
     /// Compute the exponential of the number `self`.
     ///
-    /// The exponential function is defined as follows. Given a floating point
+    /// The **exponential** function is defined as follows. Given a floating point
     /// number `x`
     /// ```text
     /// exp(x) = e^x
@@ -1138,7 +1138,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
 
     /// Compute the exponential of the number `self` with respect to base 2.
     ///
-    /// Given a floating point number `x`
+    /// Given a floating point number `x`, the `epx2` function is defined by
     /// ```text
     /// exp2(x) := 2^x
     /// ```

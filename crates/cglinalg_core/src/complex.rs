@@ -390,7 +390,7 @@ where
 
     /// Determine whether a complex number is imaginary.
     ///
-    /// A complex number is an imaginary number if its real part is zero, i.e.
+    /// A complex number is imaginary if its real part is zero, i.e.
     /// it lies on the imaginary line in the complex plane.
     ///
     /// # Example
@@ -410,19 +410,18 @@ where
 
     /// Calculate the squared modulus of a complex number.
     ///
-    /// The modulus of a complex number is its Euclidean norm, defined as follows.
+    /// The **modulus** of a complex number is its Euclidean norm, defined as follows.
     /// Given a complex number `z`
     /// ```text
     /// modulus(z) := sqrt(re(z) * re(z) + im(z) * im(z))
     /// ```
     /// where `re(z)` is the real part of `z`, and `im(z)` is the imaginary part
-    /// of `z`. The squared modulus of `z` is then defined to be
+    /// of `z`. The **squared modulus** of `z` is then defined to be
     /// ```text
     /// modulus_squared(z) := modulus(z) * modulus(z)
     ///                    == sqrt(re(z) * re(z) + im(z) * im(z)) * sqrt(re(z) * re(z) + im(z) * im(z))
     ///                    == re(z) * re(z) + im(z) * im(z)
     /// ```
-    ///
     ///
     /// # Example
     ///
@@ -474,7 +473,7 @@ where
         self.modulus_squared()
     }
 
-    /// Scale a complex number `self` by multiplying it by the scalar `scale`.
+    /// Scale a complex number `self` by multiplying `self` by the scalar `scale`.
     ///
     /// # Example
     ///
@@ -492,7 +491,7 @@ where
         Self::new(self.re * scale, self.im * scale)
     }
 
-    /// Unscale a complex number `self` by dividing it by the scalar `scale`.
+    /// Unscale a complex number `self` by dividing `self` by the scalar `scale`.
     ///
     /// # Example
     ///
@@ -512,7 +511,7 @@ where
 
     /// Compute the square of the complex number `self`.
     ///
-    /// Given a complex number `z`, the square of `z` is given by
+    /// Given a complex number `z`, the **square** of `z` is given by
     /// ```text
     /// squared(z) := z * z
     /// ```
@@ -533,9 +532,9 @@ where
         self * self
     }
 
-    /// Compute the cube of the complex number `self`
+    /// Compute the cube of the complex number `self`.
     ///
-    /// Given a complex number `z`, the cube of `z` is given by
+    /// Given a complex number `z`, the **cube** of `z` is given by
     /// ```text
     /// cubed(z) := z * z * z
     /// ```
@@ -563,7 +562,7 @@ where
 {
     /// Calculate the complex conjugate of a complex number.
     ///
-    /// Given a complex number `z`, the complex conjugate of `z`
+    /// Given a complex number `z`, the **complex conjugate** of `z`
     /// is `z` with the sign of the imaginary part flipped, i.e.
     /// let `z := a + ib`, then `z* := a - ib`. Stated as a function, we have
     /// ```text
@@ -690,7 +689,7 @@ where
 
     /// Calculate the modulus of a complex number.
     ///
-    /// The modulus of a complex number is its Euclidean norm, defined as follows.
+    /// The **modulus** of a complex number is its Euclidean norm, defined as follows.
     /// Given a complex number `z`
     /// ```text
     /// modulus(z) := sqrt(re(z) * re(z) + im(z) * im(z))
@@ -779,7 +778,7 @@ where
     /// if `|z| == |z1|` and `angle1 == angle + 2 * pi * n1` where `n1` is an integer.
     /// In order to resolve this ambiguity and make equality of complex numbers in polar
     /// form well-defined, we restrict our choice of angle to be `-pi < angle <= pi`
-    /// (notice the open lower bound). This angle is called the principal argument of `z`,
+    /// (notice the open lower bound). This angle is called the **principal argument** of `z`,
     /// the value returned by the function. Indeed, let `angle` be the principal
     /// argument of `z`, and let `angle1` be the argument of `z1` that we defined
     /// earlier, such that `angle1 == angle + 2 * pi * n1` for some integer `n1`.
@@ -895,7 +894,7 @@ where
 
     /// Compute the exponential of a complex number.
     ///
-    /// Given a complex number `z := a + ib`, the exponential of z is given by
+    /// Given a complex number `z := a + ib`, the **exponential** of `z` is given by
     /// ```text
     /// exp(z) := exp(a + ib)
     ///        == exp(a) * exp(ib)
@@ -925,7 +924,7 @@ where
 
     /// Calculate the principal value of the natural logarithm of a complex number.
     ///
-    /// Given a complex number `z`, the principal value of the natural logarithm
+    /// Given a complex number `z`, the **principal value of the natural logarithm**
     /// of `z` is the logarithm whose imaginary part lies in `-pi < Im(z) <= pi`
     /// (notice the open lower bound). The natural logarithm of zero is undefined
     /// since there is no complex number `w` satisfying `exp(w) = 0`.
@@ -1371,7 +1370,7 @@ where
     /// Calculate the power of a complex number where the exponent is a complex
     /// number.
     ///
-    /// The complex power of a complex number `z` raised to the power of a complex
+    /// The **complex power** of a complex number `z` raised to the power of a complex
     /// number `w` is given by
     /// ```text
     /// powc(z, w) := exp(w * ln(z))

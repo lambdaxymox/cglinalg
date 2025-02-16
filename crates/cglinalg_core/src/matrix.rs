@@ -689,9 +689,9 @@ where
     ///
     /// Given a matrix `m`, the transpose of `m` is the matrix `m_tr` such that
     /// ```text
-    /// forall c :: [0..C]. forall r :: [0..R]. m_tr[c][r] == m[r][c]
+    /// forall c :: [0..C]. forall r :: [0..R]. m_tr[c][r] == m[r][c].
     /// ```
-    /// in other words, every column of `m_tr` is a row of `m`, and every row of
+    /// In other words, every column of `m_tr` is a row of `m`, and every row of
     /// `m_tr` is a column of `m`.
     ///
     /// # Example
@@ -778,10 +778,10 @@ where
         result
     }
 
-    /// Compute the product of two matrices component-wise.
+    /// Compute the component-wise product of two matrices.
     ///
     /// Given two matrices `m1` and `m2` with `rows` rows and `columns` columns,
-    /// the component product of `m1` and `m2` is a matrix `m3` with `rows` rows
+    /// the **component-wise product** of `m1` and `m2` is a matrix `m3` with `rows` rows
     /// and `columns` such that
     /// ```text
     /// forall c :: [0..C]. forall r :: [0..R]. m3[c][r] := m1[c][r] * m2[c][r]
@@ -909,7 +909,7 @@ where
     ///
     /// The function `tr_mul` satisfies the following property: Given a matrix
     /// `m2` with `R1` rows and `C1` columns, and a matrix `m2` with `R2` rows
-    /// and `C2` columns, such that `R1 == R2`, the transpose product of `m1`
+    /// and `C2` columns, such that `R1 == R2`, the **transpose product** of `m1`
     /// and `m2` is given by
     /// ```text
     /// tr_mul(m1, m2) := transpose(m1) * m2
@@ -970,8 +970,8 @@ where
     /// Compute the dot product between the transpose of `self` and `other`.
     ///
     /// Given a matrix `m1` with `R1` rows and `C1` columns, and a matrix `m2` with
-    /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the transpose
-    /// dot product of `m1` and `m2` is given by
+    /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the 
+    /// **transpose dot product** of `m1` and `m2` is given by
     /// ```text
     /// tr_dot(m1, m2) := dot(transpose(m1), m2)
     /// ```
@@ -1068,7 +1068,7 @@ where
     ///
     /// Let `m1` be a matrix `m1` with `R` rows and `C` columns. Let `m2` be a
     /// matrix with `R` rows and `C` columns. Let `t` be a number in the interval
-    /// `[0, 1]`. The linear interpolation of `m1` and `m2` is defined by
+    /// `[0, 1]`. The **linear interpolation** of `m1` and `m2` is defined by
     /// ```text
     /// lerp(m1, m2, t) := m1 + t * (m2 - m1)
     /// ```
@@ -1196,10 +1196,12 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero. In particular, the identity
     /// matrix is the matrix `identity` such that
+    /// 
     /// ```text
     /// forall i :: [0..N]. identity[i][i] == 1
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> identity[i][j] == 0
     /// ```
+    /// 
     /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
@@ -1229,8 +1231,16 @@ where
 
     /// Determine whether a matrix is an identity matrix.
     ///
-    /// An identity matrix is a matrix where the diagonal elements are one
-    /// and the off-diagonal elements are zero.
+    /// An identity matrix is a diagonal matrix where every diagonal element
+    /// is `1`. The resulting matrix satisfies the predicate
+    /// 
+    /// ```text
+    /// forall i :: [0..N]. matrix[i][i] == 1
+    /// forall i :: [0..N]. forall j :: [0..N]. i 1= j ==> matrix[i][j] == 0
+    /// ```
+    /// 
+    /// In other words, every on-diagonal element is one and every off-diagonal element is 
+    /// zero.
     ///
     /// # Example
     ///
@@ -1262,10 +1272,12 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`. The resulting
     /// matrix `matrix` satisfies the predicate
+    /// 
     /// ```text
     /// forall i :: [0..N]. matrix[i][i] == value
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
     /// ```
+    /// 
     /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
@@ -1297,8 +1309,8 @@ where
     /// Construct a new diagonal matrix from a vector of values
     /// representing the elements along the diagonal.
     ///
-    /// The resulting matrix `matrix` satisfies the predicate. Given a vector of
-    /// length `N` `diagonal`
+    /// The resulting matrix `matrix` satisfies the following. Given a vector
+    /// `diagonal` of length `N`
     /// ```text
     /// forall i :: [0..N]. m[i][i] == diangonal[i]
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
@@ -2621,12 +2633,12 @@ where
 {
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists
-    /// such that
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
     /// ```
-    /// Not every square matrix has an inverse.
+    /// provided that `m` exists. Not every square matrix has an inverse.
     ///
     /// # Example
     ///
@@ -2656,6 +2668,18 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// `self` is **invertible** if and only if
+    /// ```text
+    /// det(self) != 0
+    /// ```
+    /// where `det(self)` is the determinant of `self`.
+    ///
     /// # Example
     ///
     /// ```
@@ -2678,9 +2702,15 @@ where
 
     /// Compute the inverse of a square matrix.
     ///
+    /// The **inverse** of the matrix `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique.
+    ///
     /// # Safety
     ///
-    /// Panics if the [`Matrix`] is not invertible.
+    /// Panics if the matrix is not invertible.
     ///
     /// ```
     /// # use approx_cmp::assert_relative_eq;
@@ -3241,12 +3271,12 @@ where
 
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists
-    /// such that
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
     /// ```
-    /// Not every square matrix has an inverse.
+    /// provided that `m` exists. Not every square matrix has an inverse.
     ///
     /// # Example
     ///
@@ -3286,6 +3316,18 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// `self` is **invertible** if and only if
+    /// ```text
+    /// det(self) != 0
+    /// ```
+    /// where `det(self)` is the determinant of `self`.
+    ///
     /// # Example
     ///
     /// ```
@@ -3311,9 +3353,15 @@ where
 
     /// Compute the inverse of a square matrix.
     ///
+    /// The **inverse** of the matrix `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique.
+    ///
     /// # Safety
     ///
-    /// Panics if the [`Matrix`] is not invertible.
+    /// Panics if the matrix is not invertible.
     ///
     /// # Example
     ///
@@ -4360,7 +4408,7 @@ where
     ///
     /// # Discussion
     ///
-    /// The reflection of a point is defined as follows. Let `M` be the plane of
+    /// The **reflection** of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
     /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
@@ -4636,7 +4684,7 @@ where
     /// vector in the **xy-plane** by an angle `angle`.
     ///
     /// This is the affine matrix counterpart to the 2x2 matrix function
-    /// `from_angle`.
+    /// [`Matrix2x2::from_angle`].
     ///
     /// # Example
     ///
@@ -5048,7 +5096,7 @@ where
     /// **left-handed** coordinate transformation.
     ///
     /// The function maps the **positive z-axis** to the direction `direction`.
-    /// This function is the inverse of [`look_to_lh`].
+    /// This function is the inverse of [`Matrix3x3::look_to_lh`].
     ///
     /// # Example
     ///
@@ -5091,7 +5139,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The function maps the **negative z-axis** to the direction `direction`.
-    /// This function is the inverse of [`look_to_rh`].
+    /// This function is the inverse of [`Matrix3x3::look_to_rh`].
     ///
     /// # Example
     ///
@@ -5132,10 +5180,10 @@ where
     /// the direction `target - eye` into the coordinate system of an observer
     /// located at the origin facing the **positive z-axis**.
     ///
-    /// The function maps the direction `target - eyey` to the **positive z-axis**
+    /// The function maps the direction `target - eye` to the **positive z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **left-handed** coordinate transformation.
-    /// This function is the inverse of [`look_at_lh`].
+    /// This function is the inverse of [`Matrix3x3::look_at_lh`].
     ///
     /// # Example
     ///
@@ -5182,7 +5230,7 @@ where
     /// The function maps the direction `target - eye` to the **negative z-axis**
     /// in the new coordinate system. This corresponds to a rotation matrix.
     /// This transformation is a **right-handed** coordinate transformation.
-    /// This function is the inverse of [`look_at_rh`].
+    /// This function is the inverse of [`Matrix3x3::look_at_rh`].
     ///
     /// # Example
     ///
@@ -5316,12 +5364,12 @@ where
 
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists
-    /// such that
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
     /// ```
-    /// Not every square matrix has an inverse.
+    /// provided that `m` exists. Not every square matrix has an inverse.
     ///
     /// # Example
     ///
@@ -5372,16 +5420,17 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
-    /// More precisely, given the matrix `self`, `self` is invertible if and
-    /// only if
-    /// ```text
-    /// det(self) != 0
-    /// ```
-    /// The inverse of the matrix `self` is a matrix `m` such that
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
-    /// where `1` denotes the identity matrix. The matrix `m` is unique.
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// `self` is **invertible** if and only if
+    /// ```text
+    /// det(self) != 0
+    /// ```
+    /// where `det(self)` is the determinant of `self`.
     ///
     /// # Example
     ///
@@ -5409,7 +5458,7 @@ where
 
     /// Compute the inverse of a square matrix.
     ///
-    /// The inverse of the matrix `self` is a matrix `m` such that
+    /// The **inverse** of the matrix `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
@@ -5417,7 +5466,7 @@ where
     ///
     /// # Safety
     ///
-    /// Panics if the [`Matrix`] is not invertible.
+    /// Panics if the matrix is not invertible.
     ///
     /// # Example
     ///
@@ -6165,7 +6214,7 @@ where
     ///
     /// # Discussion
     ///
-    /// The reflection of a point is defined as follows. Let `M` be the plane of
+    /// The **reflection** of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
     /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
@@ -6332,8 +6381,8 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a three-dimensional affine rotation matrix rotating a vector around the
-    /// **x-axis** by an angle `angle` radians/degrees.
+    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// around the **x-axis** by an angle `angle` radians/degrees.
     ///
     /// # Example
     ///
@@ -7663,12 +7712,12 @@ where
 
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self` Compute the matrix `m` if it exists
-    /// such that
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
     /// ```
-    /// Not every square matrix has an inverse.
+    /// provided that `m` exists. Not every square matrix has an inverse.
     ///
     /// # Example
     ///
@@ -7766,6 +7815,18 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// `self` is **invertible** if and only if
+    /// ```text
+    /// det(self) != 0
+    /// ```
+    /// where `det(self)` is the determinant of `self`.
+    ///
     /// # Example
     ///
     /// ```
@@ -7793,9 +7854,15 @@ where
 
     /// Compute the inverse of a square matrix.
     ///
+    /// The **inverse** of the matrix `self` is a matrix `m` such that
+    /// ```text
+    /// self * m == m * self == 1
+    /// ```
+    /// where `1` denotes the identity matrix. The matrix `m` is unique.
+    ///
     /// # Safety
     ///
-    /// Panics if the [`Matrix`] is not invertible.
+    /// Panics if the matrix is not invertible.
     ///
     /// # Example
     ///

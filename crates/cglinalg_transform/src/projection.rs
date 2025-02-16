@@ -1986,7 +1986,7 @@ where
     /// Unproject a point from normalized device coordinates back to camera
     /// view space.
     ///
-    /// This is the inverse operation of [`project_point`].
+    /// This is the inverse operation of [`Perspective3::project_point`].
     ///
     /// # Example (Frustum Parametrization)
     ///
@@ -2081,7 +2081,7 @@ where
     /// Unproject a vector from normalized device coordinates back to
     /// camera view space.
     ///
-    /// This is the inverse operation of [`project_vector`].
+    /// This is the inverse operation of [`Perspective3::project_vector`].
     ///
     /// # Example (Frustum Parametrization)
     ///
@@ -3944,7 +3944,7 @@ where
     /// Unproject a point from normalized devices coordinates back to camera
     /// view space.
     ///
-    /// This is the inverse operation of [`project_point`].
+    /// This is the inverse operation of [`Orthographic3::project_point`].
     ///
     /// # Example
     ///
@@ -4002,7 +4002,7 @@ where
     /// Unproject a vector from normalized device coordinates back to
     /// camera view space.
     ///
-    /// This is the inverse operation of [`project_vector`].
+    /// This is the inverse operation of [`Orthographic3::project_vector`].
     ///
     /// # Example
     ///

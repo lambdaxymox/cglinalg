@@ -248,10 +248,10 @@ where
         result
     }
 
-    /// Compute the product of two vectors component-wise.
+    /// Compute the component-wise product of two vectors.
     ///
-    /// Given `N`-dimensional vectors `v1` and `v2`, the component product of `v1` and `v2` is a
-    /// `N`-dimensional vector `v3` such that
+    /// Given `N`-dimensional vectors `v1` and `v2`, the **component-wise product** of `v1` 
+    /// and `v2` is a `N`-dimensional vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := v1[i] * v2[i]
     /// ```
@@ -279,7 +279,7 @@ where
         result
     }
 
-    /// Compute the product of two vectors component-wise mutably in place.
+    /// Compute the component-wise product of two vectors mutably in place.
     ///
     /// # Example
     ///
@@ -899,8 +899,8 @@ where
 
     /// Compute the component-wise minimum of two vectors.
     ///
-    /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
-    /// such that
+    /// Given two vectors `v1` and `v2`, the **component-wise minimum** of `v1` and `v2` is 
+    /// a vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := min(v1[i], v2[i])
     /// ```
@@ -930,8 +930,8 @@ where
 
     /// Compute the component-wise maximum of two vectors.
     ///
-    /// Given two vectors `v1` and `v2`, the minimum of `v1` and `v2` is a vector `v3`
-    /// such that
+    /// Given two vectors `v1` and `v2`, the **component-wise maximum** of `v1` and `v2` is 
+    /// a vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := max(v1[i], v2[i])
     /// ```

@@ -574,12 +574,12 @@ where
     /// Calculate the squared modulus of a quaternion.
     ///
     /// The modulus of a quaternion is the **L2** norm of the quaternion when
-    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is
+    /// considered as a vector. Given a quaternion `q`, the **modulus** of `q` is
     /// ```text
     /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
     /// ```
     /// where `scalar(q)` is the scalar part of `q`, and `vector(q)` is the vector
-    /// part of `q`. The squared modulus of `q` is then defined to be
+    /// part of `q`. The **squared modulus** of `q` is then defined to be
     /// ```text
     /// modulus_squared(q) := scalar(q) * scalar(q) + dot(vector(q), vector(q))
     /// ```
@@ -709,14 +709,15 @@ impl<S> Quaternion<S>
 where
     S: SimdScalarSigned,
 {
-    /// Compute the conjugate of a quaternion.
+    /// Compute the quaternionic conjugate of a quaternion.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
-    /// the conjugate of `q` is the quaternion `q* := s - v`. Stated as a function,
+    /// the **quaternionic conjugate** of `q` is the quaternion `q* := s - v`. Stated as a function,
     /// we have
     /// ```text
     /// conjugate(s + v) := s - v
     /// ```
+    /// The quaternionic conjugate is also called the **conjugate**.
     ///
     /// # Example
     ///
@@ -739,15 +740,16 @@ where
         Self::from_parts(self.scalar(), -self.vector())
     }
 
-    /// Compute the conjugate of a quaternion, replacing the original value
+    /// Compute the quaternionic conjugate of a quaternion, replacing the original value
     /// with the conjugated one.
     ///
     /// Given a quaternion `q := s + v` where `s` is a scalar and `v` is a vector,
-    /// the conjugate of `q` is the quaternion `q* := s - v`. Stated as a function,
+    /// the **quaternionic conjugate** of `q` is the quaternion `q* := s - v`. Stated as a function,
     /// we have
     /// ```text
     /// conjugate(s + v) := s - v
     /// ```
+    /// The quaternionic conjugate is also called the **conjugate**.
     ///
     /// # Example
     ///
@@ -777,7 +779,7 @@ where
 
     /// Compute the square of a quaternion.
     ///
-    /// Given a quaternion `q`, the square of `q` is the product of
+    /// Given a quaternion `q`, the **square** of `q` is the product of
     /// `q` with itself. In particular, given a quaternion `q`
     /// ```text
     /// squared(q) := q * q
@@ -862,7 +864,7 @@ where
     /// Calculate the modulus of a quaternion.
     ///
     /// The modulus of a quaternion is the **L2** norm of the quaternion when
-    /// considered as a vector. Given a quaternion `q`, the modulus of `q` is
+    /// considered as a vector. Given a quaternion `q`, the **modulus** of `q` is
     /// ```text
     /// modulus(q) := sqrt(scalar(q) * scalar(q) + dot(vector(q), vector(q)))
     /// ```
@@ -1609,7 +1611,7 @@ where
     ///
     /// # Safety
     ///
-    /// Panics if the [`Quaternion`] is not invertible.
+    /// Panics if the quaternion is not invertible.
     ///
     /// # Example
     ///
@@ -1694,7 +1696,7 @@ where
 
     /// Calculate the natural exponential of a quaternion.
     ///
-    /// The natural exponential of a quaternion `q := s + v` where s is the
+    /// The **natural exponential** of a quaternion `q := s + v` where s is the
     /// scalar part of `q` and `v` is the vector part of `q` is defined by
     /// ```text
     /// exp(q) := exp(s) * (cos(|v|) + sgn(v) * sin(|v|))
@@ -1814,7 +1816,7 @@ where
     ///
     /// Like the natural logarithm of a complex number, the natural
     /// logarithm of a quaternion has multiple possible values. We define the
-    /// principal value of the quaternion natural logarithm for a quaternion
+    /// **principal value of the quaternionic natural logarithm** for a quaternion
     /// `q` by
     /// ```text
     /// Ln(q) := ln(|q|) + sgn(vector(q)) * Arg(q)
@@ -1940,7 +1942,7 @@ where
     ///
     /// The principal value of the square root of a quaternion is defined as
     /// follows. Let `q := s + v` where `s` is the scalar part of `q` and `v` is the
-    /// vector part of `q`. The principal value for the square root of `q` is
+    /// vector part of `q`. The **principal value of the square root** of `q` is
     /// given by
     /// ```text
     /// sqrt(q) := sqrt(|q|) * ( cos(|Arg(q) / 2|) + sgn(v) * sin(|Arg(q) / 2|) )
@@ -2131,7 +2133,7 @@ where
 
     /// Compute the left quotient of two quaternions.
     ///
-    /// Given quaternions `q := self` and `p := left`, the left quotient of
+    /// Given quaternions `q := self` and `p := left`, the **left quotient** of
     /// `q` by `p` is given by
     /// ```text
     /// div_left(q, p) := p_inv * q
@@ -2165,7 +2167,7 @@ where
 
     /// Compute the right quotient of two quaternions.
     ///
-    /// Given quaternions `q := self` and `p := right`, the right quotient of
+    /// Given quaternions `q := self` and `p := right`, the **right quotient** of
     /// `q` by `p` is given by
     /// ```text
     /// div_right(q, p) := q * p_inv
@@ -2966,7 +2968,7 @@ where
     /// Compute the rejection of the quaternion `self` from the quaternion
     /// `other`.
     ///
-    /// Given quaternions `q` and `p`, the projection of `q` onto `p` is the
+    /// Given quaternions `q` and `p`, the **projection** of `q` onto `p` is the
     /// component of the quaternion `q` that is parallel to the quaternion `p`.
     /// We can decompose the quaternion `q` as follows
     /// ```text
@@ -3114,7 +3116,7 @@ where
 
     /// Compute the quaternionic cosine of `self`.
     ///
-    /// The quaternionic cosine is defined as follows. Given a quaternion
+    /// The **quaternionic cosine** is defined as follows. Given a quaternion
     /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`
     /// ```text                               
@@ -3196,7 +3198,7 @@ where
 
     /// Compute the quaternionic sine of `self`.
     ///
-    /// The quaternionic sine is defined as follows. Given a quaternion
+    /// The **quaternionic sine** is defined as follows. Given a quaternion
     /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`
     /// ```text                               
@@ -3278,7 +3280,7 @@ where
 
     /// Compute the quaternionic tangent of `self`.
     ///
-    /// The quaternionic tangent is defined as follows. Given a quaternion
+    /// The **quaternionic tangent** is defined as follows. Given a quaternion
     /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`, and `q != (n * (1 / 2)) * pi` where `n` is an integer, then
     /// ```text
@@ -3377,7 +3379,7 @@ where
 
     /// Compute the quaternionic hyperbolic cosine of `self`.
     ///
-    /// The quaternionic hyperbolic cosine is defined as follows. Given a
+    /// The **quaternionic hyperbolic cosine** is defined as follows. Given a
     /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is
     /// the vector part of `q`
     /// ```text                               
@@ -3453,7 +3455,7 @@ where
 
     /// Compute the quaternionic hyperbolic sine of `self`.
     ///
-    /// The quaternionic hyperbolic sine is defined as follows. Given a
+    /// The **quaternionic hyperbolic sine** is defined as follows. Given a
     /// quaternion `q := s + v` where `s` is the scalar part of `q` and `v` is
     /// the vector part of `q`
     /// ```text                               
@@ -3529,7 +3531,7 @@ where
 
     /// Compute the quaternionic hyperbolic tangent of `self`.
     ///
-    /// The quaternionic hyperbolic tangent is defined as follows. Given a quaternion
+    /// The **quaternionic hyperbolic tangent** is defined as follows. Given a quaternion
     /// `q := s + v` where `s` is the scalar part of `q` and `v` is the vector
     /// part of `q`, and `q != ((n + (1 / 2)) * pi) * (v / |v|)` where `n` is an
     /// integer, then

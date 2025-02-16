@@ -1386,7 +1386,7 @@ where
     /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **positive z-axis** to `direction`.
-    /// This function is the inverse of [`look_to_lh`].
+    /// This function is the inverse of [`Rotation3::look_to_lh`].
     ///
     /// # Example
     ///
@@ -1425,7 +1425,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **negative z-axis** to `direction`.
-    /// This function is the inverse of [`look_to_rh`].
+    /// This function is the inverse of [`Rotation3::look_to_rh`].
     ///
     /// # Example
     ///
@@ -1464,7 +1464,7 @@ where
     /// **left-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **positive z-axis** to `target - eye`.
-    /// This function is the inverse of [`look_at_lh`].
+    /// This function is the inverse of [`Rotation3::look_at_lh`].
     ///
     /// # Example
     ///
@@ -1506,7 +1506,7 @@ where
     /// **right-handed** coordinate transformation.
     ///
     /// The resulting transformation maps the **negative z-axis** to `target - eye`.
-    /// This function is the inverse of [`look_at_rh`].
+    /// This function is the inverse of [`Rotation3::look_at_rh`].
     ///
     /// # Example
     ///
@@ -1656,7 +1656,7 @@ where
         }
     }
 
-    /// Extract Euler angles from a rotation matrix, in units of radians.
+    /// Extract Euler angles from a rotation matrix, in units of [`Radians`].
     ///
     /// We explain the method because the formulas are not exactly obvious.
     ///
@@ -1782,6 +1782,7 @@ where
     /// This gives us the Euler angles for the rotation matrix.
     ///
     /// ### Note
+    /// 
     /// The method here is just one method of extracting Euler angles. More than one
     /// set of Euler angles can generate the same axis and rotation.
     ///

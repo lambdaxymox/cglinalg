@@ -31,12 +31,12 @@ pub type Translation3<S> = Translation<S, 3>;
 /// In a Euclidean setting, translations preserve differences between two points
 /// and acts as the identity on vectors. That is, a translation `T` that acts as
 /// follows.
-/// Let `p` be a **point** in Euclidean space. Then
+/// Let `p` be a point in Euclidean space. Then
 /// ```text
 /// T(p) := p + t
 /// ```
 /// where `t` is the vector corresponding to the translation `T` displacing the
-/// point `p` by an amount `t`. Let `v` be a **vector** in Euclidean space. Then
+/// point `p` by an amount `t`. Let `v` be a vector in Euclidean space. Then
 /// ```text
 /// T(v) == v
 /// ```

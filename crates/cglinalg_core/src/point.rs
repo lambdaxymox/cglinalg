@@ -261,7 +261,7 @@ where
         self.coords.dot(&other.coords)
     }
 
-    /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// Calculate the squared norm of a point with respect to the **L2** (Euclidean) norm.
     ///
     /// # Example
     ///
@@ -279,7 +279,7 @@ where
         self.coords.norm_squared()
     }
 
-    /// Calculate the squared metric distance between two [`Point`]s with respect
+    /// Calculate the squared metric distance between two points with respect
     /// to the metric induced by the **L2** norm.
     ///
     /// # Example
@@ -299,7 +299,7 @@ where
         self.coords.metric_distance_squared(&other.coords)
     }
 
-    /// Calculate the squared norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// Calculate the squared norm of a point with respect to the **L2** (Euclidean) norm.
     ///
     /// This is a synonym for [`Point::norm_squared`].
     ///
@@ -324,7 +324,7 @@ impl<S, const N: usize> Point<S, N>
 where
     S: SimdScalarFloat,
 {
-    /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// Calculate the norm of a point with respect to the **L2** (Euclidean) norm.
     ///
     /// # Example
     ///
@@ -342,7 +342,7 @@ where
         self.coords.norm()
     }
 
-    /// Calculate the metric distance between two [`Point`]s with respect
+    /// Calculate the metric distance between two points with respect
     /// to the metric induced by the **L2** norm.
     ///
     /// # Example
@@ -362,7 +362,7 @@ where
         self.coords.metric_distance(&other.coords)
     }
 
-    /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// Calculate the norm of a point with respect to the **L2** (Euclidean) norm.
     ///
     /// This is a synonym for [`Point::norm`].
     ///
@@ -382,7 +382,7 @@ where
         self.norm()
     }
 
-    /// Calculate the norm of a [`Point`] with respect to the **L2** (Euclidean) norm.
+    /// Calculate the norm of a point with respect to the **L2** (Euclidean) norm.
     ///
     /// This is a synonym for [`Point::norm`].
     ///

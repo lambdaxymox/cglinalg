@@ -495,8 +495,8 @@ where
     /// The general shearing transformation is defined geometrically by a shearing
     /// plane `S`, a point `Q` in `S` which defines the origin for the affine frame
     /// of the shearing transformation, a shearing direction `v` inside `S`, a normal
-    /// vector `n` perpendicular to `S`, and a shearing factor `m`. The shearing
-    /// transformation is defined geometrically by
+    /// vector `n` perpendicular to `S`, and a shearing factor `m`. The 
+    /// **shearing transformation** is defined geometrically by
     /// ```text
     /// H(p) := p + (m * dot(p - Q, n)) * v
     /// ```

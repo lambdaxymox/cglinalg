@@ -210,7 +210,7 @@ where
     ///
     /// # Discussion
     ///
-    /// The reflection of a point is defined as follows. Let `M` be the plane of
+    /// The **reflection** of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
     /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
@@ -323,7 +323,7 @@ where
     ///
     /// # Discussion
     ///
-    /// The reflection of a point is defined as follows. Let `M` be the plane of
+    /// The **reflection** of a point is defined as follows. Let `M` be the plane of
     /// reflection, also known as the **mirror plane**. Let `n` be a vector normal
     /// to the mirror plane `M`. Since `n` is normal to `M`, reflected points are
     /// reflected in a direction parallel to `n`, i.e. perpendicular to the mirror
