@@ -331,8 +331,11 @@ where
 
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
-    /// Determine whether this matrix is a square matrix.
+    /// Determine whether the matrix `self` is a square matrix.
     ///
+    /// A matrix is said to be a **square matrix** if the number of rows
+    /// equals the number of columns.
+    /// 
     /// # Example
     ///
     /// ```
@@ -1376,7 +1379,7 @@ where
     /// assert_eq!(result, expected);
     /// ```
     #[inline]
-    pub fn diagonal(&self) -> Vector4<S> {
+    pub fn diagonal(&self) -> Vector<S, N> {
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut result = Vector::zero();
         for i in 0..N {
