@@ -6,8 +6,12 @@ Change log dates follow the ISO 8601 standard (YEAR-MONTH-DAY).
 
 ## [Unreleased]
 
+## [0.22.0] - 2025-03-13
+- Migrate to Rust Edition 2024. 
+- Fix benchmark internals to reflect changes between Edition 2021 and Edition 2024.
+
 ## [0.21.0] - 2024-08-26
-Redesign projection matrix specification.
+- Redesign projection matrix specification.
 
 ### Added
 - Added much more documentation on the mathematical properties of the projection 
