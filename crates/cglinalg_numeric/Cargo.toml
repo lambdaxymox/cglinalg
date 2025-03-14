@@ -1,7 +1,7 @@
 [package]
 name = "cglinalg_numeric"
 version = "0.21.1"
-edition = "2021"
+edition = "2024"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
 categories = [
@@ -43,7 +43,7 @@ std = []
 
 [dependencies.approx_cmp]
 git = "https://github.com/lambdaxymox/approx_cmp/"
-version = "1.0.0"
+version = "2.0.0"
 features = ["core"]
 
 [dependencies.num-traits]

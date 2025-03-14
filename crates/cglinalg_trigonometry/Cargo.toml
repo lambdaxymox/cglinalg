@@ -1,7 +1,7 @@
 [package]
 name = "cglinalg_trigonometry"
 version = "0.21.1"
-edition = "2021"
+edition = "2024"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
 categories = [
@@ -47,14 +47,14 @@ version = "0.21.1"
 
 [dependencies.approx_cmp]
 git = "https://github.com/lambdaxymox/approx_cmp/"
-version = "1.0.0"
+version = "2.0.0"
 features = ["core"]
 
 [dev-dependencies]
-proptest = "1.5.0"
+proptest = "1.6.0"
 criterion = "0.5.1"
-rand = "0.8.5"
-rand_isaac = "0.3.0"
+rand = "0.9.0"
+rand_isaac = "0.4.0"
 
 # [profile.release]
 # opt-level = 2

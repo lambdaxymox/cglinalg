@@ -14,7 +14,7 @@ use criterion::{
     criterion_main,
 };
 use rand::{
-    distributions::Standard,
+    distr::StandardUniform,
     prelude::Distribution,
     Rng,
 };
@@ -23,68 +23,68 @@ use rand_isaac::IsaacRng;
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    rng.gen()
+    rng.random()
 }
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Matrix2x2::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
+    Matrix2x2::new(rng.random(), rng.random(), rng.random(), rng.random())
 }
 
 fn gen_matrix3x3<S>() -> Matrix3x3<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
     Matrix3x3::new(
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
     )
 }
 
 fn gen_matrix4x4<S>() -> Matrix4x4<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
     Matrix4x4::new(
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
-        rng.gen(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
+        rng.random(),
     )
 }
 

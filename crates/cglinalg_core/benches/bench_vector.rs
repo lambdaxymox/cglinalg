@@ -16,7 +16,7 @@ use criterion::{
     criterion_main,
 };
 use rand::{
-    distributions::Standard,
+    distr::StandardUniform,
     prelude::Distribution,
     Rng,
 };
@@ -25,52 +25,52 @@ use rand_isaac::IsaacRng;
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    rng.gen()
+    rng.random()
 }
 
 fn gen_vector1<S>() -> Vector1<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Vector1::new(rng.gen())
+    Vector1::new(rng.random())
 }
 
 fn gen_vector2<S>() -> Vector2<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Vector2::new(rng.gen(), rng.gen())
+    Vector2::new(rng.random(), rng.random())
 }
 
 fn gen_vector3<S>() -> Vector3<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Vector3::new(rng.gen(), rng.gen(), rng.gen())
+    Vector3::new(rng.random(), rng.random(), rng.random())
 }
 
 fn gen_vector4<S>() -> Vector4<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Vector4::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
+    Vector4::new(rng.random(), rng.random(), rng.random(), rng.random())
 }
 
 

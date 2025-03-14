@@ -13,7 +13,7 @@ use criterion::{
     criterion_main,
 };
 use rand::{
-    distributions::Standard,
+    distr::StandardUniform,
     prelude::Distribution,
     Rng,
 };
@@ -22,22 +22,22 @@ use rand_isaac::IsaacRng;
 
 fn gen_scalar<S>() -> S
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    rng.gen()
+    rng.random()
 }
 
 fn gen_quaternion<S>() -> Quaternion<S>
 where
-    Standard: Distribution<S>,
+    StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
     let mut rng = IsaacRng::seed_from_u64(0);
 
-    Quaternion::new(rng.gen(), rng.gen(), rng.gen(), rng.gen())
+    Quaternion::new(rng.random(), rng.random(), rng.random(), rng.random())
 }
 
 macro_rules! bench_binop(
