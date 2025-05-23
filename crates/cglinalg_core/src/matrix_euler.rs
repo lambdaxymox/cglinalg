@@ -9,7 +9,6 @@ use cglinalg_trigonometry::{
     Radians,
 };
 
-
 impl<S> Matrix3x3<S>
 where
     S: SimdScalarFloat,

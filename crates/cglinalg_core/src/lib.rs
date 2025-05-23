@@ -11,7 +11,6 @@ mod vector;
 mod constraint;
 mod coordinates;
 
-
 pub use complex::*;
 pub use constraint::*;
 pub use euler::*;

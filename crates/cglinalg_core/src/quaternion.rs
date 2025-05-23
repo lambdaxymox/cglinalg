@@ -23,7 +23,6 @@ use cglinalg_trigonometry::{
 use core::fmt;
 use core::ops;
 
-
 /// A stack-allocated quaternion.
 ///
 /// A quaternion is a generalization of vectors in three dimensions that
@@ -2297,7 +2296,6 @@ where
         (self * other - other * self) * one_half
     }
 
-
     /// Construct a quaternion that rotates the shortest angular distance
     /// between two vectors.
     ///
@@ -2400,7 +2398,6 @@ where
             Some(Self::identity())
         }
     }
-
 
     /// Construct a quaternion corresponding to a rotation of an observer  
     /// standing at the origin facing the direction `direction` to an observer
@@ -4236,7 +4233,6 @@ macro_rules! impl_scalar_quaternion_mul_ops {
 
 impl_scalar_quaternion_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
-
 impl<S> ops::Div<S> for Quaternion<S>
 where
     S: SimdScalar,
@@ -4402,7 +4398,6 @@ where
         self.coords %= other;
     }
 }
-
 
 impl<S> approx_cmp::AbsDiffEq for Quaternion<S>
 where
@@ -4651,11 +4646,7 @@ where
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.coords.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
+        if norm <= threshold { None } else { Some(self.normalize()) }
     }
 
     #[inline]

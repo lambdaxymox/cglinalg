@@ -13,7 +13,6 @@ use cglinalg_transform::{
 
 use proptest::prelude::*;
 
-
 fn strategy_vector_any<S, const N: usize>() -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -52,7 +51,6 @@ where
 {
     strategy_vector_any::<S, N>().prop_map(|vector| Translation::from_vector(&vector))
 }
-
 
 /// Translations preserve the differences between points.
 ///
@@ -141,7 +139,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod translation2_i32_point_props {

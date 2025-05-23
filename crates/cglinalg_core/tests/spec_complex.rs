@@ -11,7 +11,6 @@ use cglinalg_numeric::{
 
 use proptest::prelude::*;
 
-
 fn strategy_complex_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Complex<S>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -295,7 +294,6 @@ fn strategy_complex_f64_asinh() -> impl Strategy<Value = Complex<f64>> {
 fn strategy_complex_f64_atanh() -> impl Strategy<Value = Complex<f64>> {
     strategy_complex_polar_from_range(f64::EPSILON, 100_f64, 0_f64, f64::frac_pi_2())
 }
-
 
 /// A scalar `0` times a complex number should be a zero complex number.
 ///
@@ -1367,7 +1365,6 @@ where
     Ok(())
 }
 
-
 /// The principal argument of two complex numbers that differ only by a phase factor
 /// of `2 * pi * k` for some integer `k` have the same argument up to a sign factor.
 ///
@@ -1816,7 +1813,6 @@ where
 
     Ok(())
 }
-
 
 /// The tangent of a complex number with real part zero equals i times the
 /// hyperbolic tangent of the imaginary part.
@@ -2377,7 +2373,6 @@ where
     Ok(())
 }
 
-
 /// The hyperbolic cosine and hyperbolic arccosine functions satisfy the
 /// following relation.
 ///
@@ -2449,7 +2444,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod complex_f64_arithmetic_props {
@@ -2819,7 +2813,6 @@ mod complex_f64_conjugation_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod complex_i32_conjugation_props {

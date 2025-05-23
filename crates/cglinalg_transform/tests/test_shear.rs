@@ -756,14 +756,12 @@ mod shear2_noncoordinate_plane_tests {
         )
     }
 
-
     #[rustfmt::skip]
     fn shear_matrix_xy() -> Shear2<f64> {
         let shear_factor = shear_factor();
 
         Shear2::from_shear_xy(shear_factor)
     }
-
 
     #[test]
     fn test_from_affine_shear_rotation_angle() {
@@ -978,7 +976,7 @@ mod shear3_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_point() {
@@ -1801,7 +1799,7 @@ mod shear3_inverse_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_point() {
@@ -2633,7 +2631,7 @@ mod shear3_coordinate_plane_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_point() {
@@ -3502,7 +3500,6 @@ mod shear3_noncoordinate_plane_tests {
             0_f64,        0_f64, 0_f64, 1_f64,
         )
     }
-
 
     #[test]
     fn test_from_affine_shear_rotation_angle_x_yz() {

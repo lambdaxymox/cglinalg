@@ -8,7 +8,6 @@ use cglinalg_trigonometry::{
 
 use proptest::prelude::*;
 
-
 fn strategy_radians_any<S>() -> impl Strategy<Value = Radians<S>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -284,7 +283,6 @@ where
     Ok(())
 }
 
-
 #[cfg(test)]
 mod radians_f64_arithmetic_props {
     use proptest::prelude::*;
@@ -362,7 +360,6 @@ mod radians_f64_normalize_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod degrees_f64_arithmetic_props {

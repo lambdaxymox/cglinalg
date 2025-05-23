@@ -13,12 +13,11 @@ use criterion::{
     criterion_main,
 };
 use rand::{
+    Rng,
     distr::StandardUniform,
     prelude::Distribution,
-    Rng,
 };
 use rand_isaac::IsaacRng;
-
 
 fn gen_scalar<S>() -> S
 where
@@ -148,7 +147,6 @@ bench_unop!(quaternion_norm_f32, f32, Quaternion<f32>, gen_quaternion, norm);
 bench_unop!(quaternion_normalize_f32, f32, Quaternion<f32>, gen_quaternion, normalize);
 bench_unop!(quaternion_inverse_f32, f32, Quaternion<f32>, gen_quaternion, try_inverse);
 bench_unop!(quaternion_sqrt_f32, f32, Quaternion<f32>, gen_quaternion, sqrt);
-
 
 criterion_group!(
     quaternion_benches,

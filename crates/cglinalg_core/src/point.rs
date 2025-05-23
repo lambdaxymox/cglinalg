@@ -28,7 +28,6 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A point is a location in a one-dimensional Euclidean space.
 pub type Point1<S> = Point<S, 1>;
 
@@ -37,7 +36,6 @@ pub type Point2<S> = Point<S, 2>;
 
 /// A point is a location in a three-dimensional Euclidean space.
 pub type Point3<S> = Point<S, 3>;
-
 
 /// A point is a location in a one-dimensional Euclidean space.
 #[repr(C)]
@@ -880,7 +878,6 @@ where
     }
 }
 
-
 macro_rules! impl_scalar_point_mul_ops {
     ($($Lhs:ty),* $(,)*) => {$(
         impl<const N: usize> ops::Mul<Point<$Lhs, N>> for $Lhs {
@@ -908,7 +905,6 @@ macro_rules! impl_scalar_point_mul_ops {
 }
 
 impl_scalar_point_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-
 
 impl<S, const N: usize> ops::Neg for Point<S, N>
 where
@@ -1003,7 +999,6 @@ where
         self.coords %= other;
     }
 }
-
 
 impl<S, const N: usize> approx_cmp::AbsDiffEq for Point<S, N>
 where
@@ -1252,11 +1247,7 @@ where
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.coords.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
+        if norm <= threshold { None } else { Some(self.normalize()) }
     }
 
     #[inline]
@@ -1298,7 +1289,6 @@ where
         Unit::from_value_unchecked(-self.into_inner())
     }
 }
-
 
 impl<S> Point1<S> {
     /// Construct a new point in Euclidean space.
@@ -1476,7 +1466,6 @@ impl_coords_deref!(Point2, PointCoordsXY);
 impl_coords!(PointCoordsXYZ, { x, y, z });
 impl_coords_deref!(Point3, PointCoordsXYZ);
 
-
 macro_rules! impl_as_ref_ops {
     ($PointType:ty, $RefType:ty) => {
         impl<S> AsRef<$RefType> for $PointType {
@@ -1499,7 +1488,6 @@ impl_as_ref_ops!(Point1<S>, S);
 impl_as_ref_ops!(Point1<S>, (S,));
 impl_as_ref_ops!(Point2<S>, (S, S));
 impl_as_ref_ops!(Point3<S>, (S, S, S));
-
 
 macro_rules! impl_swizzle {
     ($name:ident() => $PointN:ident => $Output:ident { $($i:expr),+ }) => {

@@ -3,7 +3,6 @@ use cglinalg_numeric::{
     SimdScalarSigned,
 };
 
-
 /// A type implementing this trait acts as a vector with a notion of norm (magnitude, length).
 ///
 /// Examples of types that can be made into Euclidean normed spaces include

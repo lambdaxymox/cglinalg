@@ -1,7 +1,6 @@
 use core::fmt;
 use core::ops;
 
-
 /// Cast a value from one primitive numeric type to another primitive numeric
 /// type without checking that the result failed.
 ///
@@ -76,7 +75,6 @@ where
 }
 
 impl<T> SimdCast for T where T: num_traits::NumCast {}
-
 
 /// A data type with this trait has the properties of a
 /// set of scalar numbers underlying vector and matrix
@@ -1564,7 +1562,6 @@ macro_rules! impl_simd_scalar_signed_ord_integer {
 
 impl_simd_scalar_signed_ord_integer!(i8, i16, i32, i64, i128, isize);
 
-
 macro_rules! impl_simd_scalar_signed_ord_float {
     ($($ScalarType:ty),* $(,)*) => {$(
         impl SimdScalarSigned for $ScalarType {
@@ -1621,7 +1618,6 @@ macro_rules! impl_simd_scalar_signed_ord_float {
 
 impl_simd_scalar_signed_ord_float!(f32, f64);
 
-
 macro_rules! impl_simd_scalar_bounded {
     ($ScalarType:ty, $min_value:expr, $max_value:expr) => {
         impl SimdScalarBounded for $ScalarType {
@@ -1647,7 +1643,6 @@ impl_simd_scalar_bounded!(isize, isize::MIN, isize::MAX);
 
 impl_simd_scalar_bounded!(f32, f32::MIN, f32::MAX);
 impl_simd_scalar_bounded!(f64, f64::MIN, f64::MAX);
-
 
 macro_rules! impl_simd_scalar_float {
     ($ScalarType:ty, $IntegerType:ty) => {

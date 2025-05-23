@@ -16,7 +16,7 @@ mod isometry2_tests {
         Angle,
         Degrees,
     };
-    
+
     #[test]
     fn test_isometry_apply_point() {
         let vector = Vector2::new(1_f64, 2_f64);
@@ -198,7 +198,7 @@ mod isometry3_tests {
         Angle,
         Degrees,
     };
-    
+
     #[test]
     fn test_isometry_apply_point() {
         let vector = Vector3::new(1_f64, 2_f64, 3_f64);

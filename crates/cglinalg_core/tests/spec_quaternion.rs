@@ -15,7 +15,6 @@ use cglinalg_numeric::{
 
 use proptest::prelude::*;
 
-
 fn strategy_quaternion_polar_from_range<S>(min_scale: S, max_scale: S, min_angle: S, max_angle: S) -> impl Strategy<Value = Quaternion<S>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -211,7 +210,6 @@ fn strategy_quaternion_f64_sqrt_product() -> impl Strategy<Value = Quaternion<f6
     strategy_quaternion_polar_from_range(min_scale, max_scale, min_angle, max_angle)
 }
 
-
 /// A scalar `0` times a quaternion should be a zero quaternion.
 ///
 /// Given a quaternion `q`, it satisfies
@@ -228,7 +226,6 @@ where
 
     Ok(())
 }
-
 
 /// A scalar `0` times a quaternion should be zero.
 ///
@@ -284,7 +281,6 @@ where
     Ok(())
 }
 
-
 /// Multiplying a quaternion by a scalar `1` should give the original
 /// quaternion.
 ///
@@ -302,7 +298,6 @@ where
 
     Ok(())
 }
-
 
 /// Multiplying a quaternion by a scalar `1` should give the original
 /// quaternion.
@@ -1722,7 +1717,6 @@ where
     Ok(())
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_arithmetic_props {
     use proptest::prelude::*;
@@ -1764,7 +1758,6 @@ mod quaternion_f64_arithmetic_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_arithmetic_props {
@@ -1808,7 +1801,6 @@ mod quaternion_i32_arithmetic_props {
     }
 }
 
-
 #[cfg(test)]
 mod complex_f64_add_props {
     use proptest::prelude::*;
@@ -1846,7 +1838,6 @@ mod complex_f64_add_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_add_props {
@@ -1898,7 +1889,6 @@ mod quaternion_i32_add_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_sub_props {
     use proptest::prelude::*;
@@ -1926,7 +1916,6 @@ mod quaternion_f64_sub_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_sub_props {
@@ -1956,7 +1945,6 @@ mod quaternion_i32_sub_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_mul_props {
     use proptest::prelude::*;
@@ -1984,7 +1972,6 @@ mod quaternion_f64_mul_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_mul_props {
@@ -2031,7 +2018,6 @@ mod quaternion_i32_mul_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_distributive_props {
@@ -2098,7 +2084,6 @@ mod quaternion_i32_distributive_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_dot_product_props {
@@ -2186,7 +2171,6 @@ mod quaternion_i32_dot_product_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_conjugation_props {
     use proptest::prelude::*;
@@ -2215,7 +2199,6 @@ mod quaternion_f64_conjugation_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_conjugation_props {
@@ -2246,7 +2229,6 @@ mod quaternion_i32_conjugation_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_modulus_squared_props {
     use proptest::prelude::*;
@@ -2267,7 +2249,6 @@ mod quaternion_f64_modulus_squared_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_modulus_squared_synonym_props {
     use proptest::prelude::*;
@@ -2284,7 +2265,6 @@ mod quaternion_f64_modulus_squared_synonym_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_modulus_squared_props {
@@ -2316,7 +2296,6 @@ mod quaternion_i32_modulus_squared_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_i32_modulus_squared_synonym_props {
     use proptest::prelude::*;
@@ -2334,7 +2313,6 @@ mod quaternion_i32_modulus_squared_synonym_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_f64_modulus_props {
@@ -2354,7 +2332,6 @@ mod quaternion_f64_modulus_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_l1_norm_props {
     use proptest::prelude::*;
@@ -2372,7 +2349,6 @@ mod quaternion_f64_l1_norm_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_i32_l1_norm_props {
@@ -2406,7 +2382,6 @@ mod quaternion_i32_l1_norm_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_modulus_synonym_props {
     use proptest::prelude::*;
@@ -2429,7 +2404,6 @@ mod quaternion_f64_modulus_synonym_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_f64_exp_prop {
@@ -2455,7 +2429,6 @@ mod quaternion_f64_exp_prop {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_ln_props {
     use proptest::prelude::*;
@@ -2474,7 +2447,6 @@ mod quaternion_f64_ln_props {
     }
 }
 
-
 #[cfg(test)]
 mod quaternion_f64_exp_ln_props {
     use proptest::prelude::*;
@@ -2486,7 +2458,6 @@ mod quaternion_f64_exp_ln_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_f64_arg_props {
@@ -2506,7 +2477,6 @@ mod quaternion_f64_arg_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod quaternion_f64_sqrt_props {

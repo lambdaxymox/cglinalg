@@ -14,12 +14,11 @@ use criterion::{
     criterion_main,
 };
 use rand::{
+    Rng,
     distr::StandardUniform,
     prelude::Distribution,
-    Rng,
 };
 use rand_isaac::IsaacRng;
-
 
 fn gen_scalar<S>() -> S
 where
@@ -188,7 +187,6 @@ bench_unop!(matrix4x4_transpose_f32, f32, Matrix4x4<f32>, gen_matrix4x4, transpo
 bench_unop!(matrix2x2_inverse_f32, f32, Matrix2x2<f32>, gen_matrix2x2, try_inverse);
 bench_unop!(matrix3x3_inverse_f32, f32, Matrix3x3<f32>, gen_matrix3x3, try_inverse);
 bench_unop!(matrix4x4_inverse_f32, f32, Matrix4x4<f32>, gen_matrix4x4, try_inverse);
-
 
 criterion_group!(
     matrix_benchmarks,

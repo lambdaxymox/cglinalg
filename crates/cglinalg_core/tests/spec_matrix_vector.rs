@@ -23,7 +23,6 @@ use cglinalg_numeric::SimdScalarSigned;
 
 use proptest::prelude::*;
 
-
 fn strategy_matrix_signed_from_abs_range<S, const R: usize, const C: usize>(
     min_value: S,
     max_value: S,
@@ -154,7 +153,6 @@ where
 
     Ok(())
 }
-
 
 macro_rules! exact_multiplication_props {
     ($TestModuleName:ident, $MatrixType:ident, $VectorType:ident, $ScalarType:ty, $MatrixGen:ident, $VectorGen:ident) => {
@@ -295,7 +293,6 @@ exact_multiplication_props!(
     strategy_matrix_i32_any,
     strategy_vector_i32_any
 );
-
 
 macro_rules! exact_row_vector_vector_dot_product_props {
     ($TestModuleName:ident, $MatrixType:ident, $VectorType:ident, $ScalarType:ty, $MatrixGen:ident, $VectorGen:ident) => {

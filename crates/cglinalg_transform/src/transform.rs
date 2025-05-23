@@ -22,13 +22,11 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A generic two-dimensional transformation in homogeneous coordinates.
 pub type Transform2<S> = Transform<S, 2, 3>;
 
 /// A generic three-dimensional transformation in homogeneous coordinates.
 pub type Transform3<S> = Transform<S, 3, 4>;
-
 
 /// A generic transformation in homogeneous coordinates.
 #[repr(C)]
@@ -857,7 +855,6 @@ where
         self.try_inverse().map(|matrix_inverse| matrix_inverse.apply_point(point))
     }
 }
-
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct TransformTol<S, const N: usize, const NPLUS1: usize>

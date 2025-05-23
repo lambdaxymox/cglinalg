@@ -26,13 +26,11 @@ use cglinalg_trigonometry::Radians;
 use core::fmt;
 use core::ops;
 
-
 /// A similarity transformation in two dimensions.
 pub type Similarity2<S> = Similarity<S, 2>;
 
 /// A similarity transformation in three dimensions.
 pub type Similarity3<S> = Similarity<S, 3>;
-
 
 /// A similarity transformation is a transformation consisting of a scaling,
 /// a rotation, and a translation. The similarity transformation applies the
@@ -1365,7 +1363,6 @@ where
     }
 }
 
-
 impl<S> Similarity2<S>
 where
     S: SimdScalarFloat,
@@ -1814,7 +1811,6 @@ where
         Self::from_isometry(&isometry)
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

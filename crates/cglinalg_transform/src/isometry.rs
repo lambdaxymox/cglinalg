@@ -32,13 +32,11 @@ use cglinalg_trigonometry::{
 use core::fmt;
 use core::ops;
 
-
 /// An isometry in two dimensions.
 pub type Isometry2<S> = Isometry<S, 2>;
 
 /// An isometry in three dimensions.
 pub type Isometry3<S> = Isometry<S, 3>;
-
 
 /// An isometry (i.e. rigid body transformation) is a transformation whose motion
 /// does not distort the shape of an object.
@@ -1032,7 +1030,6 @@ where
     }
 }
 
-
 impl<S> Isometry2<S>
 where
     S: SimdScalarFloat,
@@ -1779,7 +1776,6 @@ where
         Self::from_parts(&translation, &rotation)
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

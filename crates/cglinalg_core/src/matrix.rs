@@ -47,7 +47,6 @@ use cglinalg_trigonometry::{
 use core::fmt;
 use core::ops;
 
-
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type Matrix1x1<S> = Matrix<S, 1, 1>;
 
@@ -87,7 +86,6 @@ pub type Matrix3x4<S> = Matrix<S, 3, 4>;
 /// A stack-allocated **(4 row, 3 column)** matrix in column-major order.
 pub type Matrix4x3<S> = Matrix<S, 4, 3>;
 
-
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type RowVector1<S> = Matrix1x1<S>;
 
@@ -100,7 +98,6 @@ pub type RowVector3<S> = Matrix1x3<S>;
 /// A stack-allocated **(1 row, 4 column)** matrix in column-major order.
 pub type RowVector4<S> = Matrix1x4<S>;
 
-
 /// A stack-allocated **(1 row, 1 column)** matrix in column-major order.
 pub type Matrix1<S> = Matrix1x1<S>;
 
@@ -112,7 +109,6 @@ pub type Matrix3<S> = Matrix3x3<S>;
 
 /// A stack-allocated **(4 row, 4 column)** matrix in column-major order.
 pub type Matrix4<S> = Matrix4x4<S>;
-
 
 #[inline(always)]
 fn dot_array_col<S, const R1: usize, const C1: usize, const R2: usize>(arr: &[[S; R1]; C1], col: &[S; R2], r: usize) -> S
@@ -128,7 +124,6 @@ where
 
     result
 }
-
 
 /// A stack-allocated **(R row, C column)** matrix in column-major order.
 #[repr(C)]
@@ -329,13 +324,12 @@ where
     }
 }
 
-
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
     /// Determine whether the matrix `self` is a square matrix.
     ///
     /// A matrix is said to be a **square matrix** if the number of rows
     /// equals the number of columns.
-    /// 
+    ///
     /// # Example
     ///
     /// ```
@@ -973,7 +967,7 @@ where
     /// Compute the dot product between the transpose of `self` and `other`.
     ///
     /// Given a matrix `m1` with `R1` rows and `C1` columns, and a matrix `m2` with
-    /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the 
+    /// `R2` rows and `C2` columns, such that `C1 == R2` and `R1 == C2`, the
     /// **transpose dot product** of `m1` and `m2` is given by
     /// ```text
     /// tr_dot(m1, m2) := dot(transpose(m1), m2)
@@ -1199,12 +1193,12 @@ where
     /// An identity matrix is a matrix where the diagonal elements are one
     /// and the off-diagonal elements are zero. In particular, the identity
     /// matrix is the matrix `identity` such that
-    /// 
+    ///
     /// ```text
     /// forall i :: [0..N]. identity[i][i] == 1
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> identity[i][j] == 0
     /// ```
-    /// 
+    ///
     /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
@@ -1236,13 +1230,13 @@ where
     ///
     /// An identity matrix is a diagonal matrix where every diagonal element
     /// is `1`. The resulting matrix satisfies the predicate
-    /// 
+    ///
     /// ```text
     /// forall i :: [0..N]. matrix[i][i] == 1
     /// forall i :: [0..N]. forall j :: [0..N]. i 1= j ==> matrix[i][j] == 0
     /// ```
-    /// 
-    /// In other words, every on-diagonal element is one and every off-diagonal element is 
+    ///
+    /// In other words, every on-diagonal element is one and every off-diagonal element is
     /// zero.
     ///
     /// # Example
@@ -1275,12 +1269,12 @@ where
     /// Construct a new diagonal matrix from a given value where
     /// each element along the diagonal is equal to `value`. The resulting
     /// matrix `matrix` satisfies the predicate
-    /// 
+    ///
     /// ```text
     /// forall i :: [0..N]. matrix[i][i] == value
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
     /// ```
-    /// 
+    ///
     /// In other words, every off-diagonal element is zero.
     ///
     /// # Example
@@ -1570,7 +1564,6 @@ where
         write!(formatter, "]")
     }
 }
-
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C>
 where
@@ -1885,7 +1878,6 @@ where
     }
 }
 
-
 #[derive(Copy, Clone, Debug)]
 pub struct L1MatrixNorm {}
 
@@ -2019,21 +2011,13 @@ where
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
+        if norm <= threshold { None } else { Some(self.normalize()) }
     }
 
     #[inline]
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
         let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize_mut())
-        }
+        if norm <= threshold { None } else { Some(self.normalize_mut()) }
     }
 
     #[inline]
@@ -2562,7 +2546,6 @@ where
     }
 }
 
-
 impl<S> Matrix1x1<S> {
     /// Construct a new matrix from its elements.
     ///
@@ -2636,7 +2619,7 @@ where
 {
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix
     /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
@@ -2671,12 +2654,12 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
-    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix
     /// `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
-    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix
     /// `self` is **invertible** if and only if
     /// ```text
     /// det(self) != 0
@@ -2730,7 +2713,6 @@ where
         self.try_inverse().unwrap()
     }
 }
-
 
 impl<S> Matrix2x2<S> {
     /// Construct a new matrix from its elements.
@@ -3274,7 +3256,7 @@ where
 
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix
     /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
@@ -3319,12 +3301,12 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
-    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix
     /// `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
-    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix
     /// `self` is **invertible** if and only if
     /// ```text
     /// det(self) != 0
@@ -5367,7 +5349,7 @@ where
 
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix
     /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
@@ -5423,12 +5405,12 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
-    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix
     /// `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
-    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix
     /// `self` is **invertible** if and only if
     /// ```text
     /// det(self) != 0
@@ -6384,7 +6366,7 @@ impl<S> Matrix4x4<S>
 where
     S: SimdScalarFloat,
 {
-    /// Construct a three-dimensional affine rotation matrix rotating a vector 
+    /// Construct a three-dimensional affine rotation matrix rotating a vector
     /// around the **x-axis** by an angle `angle` radians/degrees.
     ///
     /// # Example
@@ -7712,10 +7694,9 @@ where
         Self::look_to_rh_inv(eye, &(target - eye), up)
     }
 
-
     /// Compute the inverse of a square matrix, if the inverse exists.
     ///
-    /// Given a square matrix `self`, the **inverse** of `self` is the matrix 
+    /// Given a square matrix `self`, the **inverse** of `self` is the matrix
     /// `m` such that
     /// ```text
     /// m * self == self * m == 1.
@@ -7818,12 +7799,12 @@ where
     ///
     /// A matrix is invertible if its determinant is not zero.
     ///
-    /// More precisely, given the matrix `self`, the **inverse** of the matrix 
+    /// More precisely, given the matrix `self`, the **inverse** of the matrix
     /// `self` is a matrix `m` such that
     /// ```text
     /// self * m == m * self == 1
     /// ```
-    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix 
+    /// where `1` denotes the identity matrix. The matrix `m` is unique. The matrix
     /// `self` is **invertible** if and only if
     /// ```text
     /// det(self) != 0
@@ -8303,7 +8284,6 @@ impl_coords_deref!(Matrix3x4, View3x4);
 impl_coords_deref!(Matrix4x2, View4x2);
 impl_coords_deref!(Matrix4x3, View4x3);
 
-
 impl<S, const R: usize, const C: usize> ops::Add<Matrix<S, R, C>> for Matrix<S, R, C>
 where
     S: SimdScalar,
@@ -8624,7 +8604,6 @@ where
     }
 }
 
-
 macro_rules! impl_scalar_matrix_mul_ops {
     ($($Lhs:ty),* $(,)*) => {$(
         impl<const R: usize, const C: usize> ops::Mul<Matrix<$Lhs, R, C>> for $Lhs {
@@ -8698,7 +8677,6 @@ macro_rules! impl_scalar_matrix_mul_ops {
 }
 
 impl_scalar_matrix_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-
 
 impl<S, const R: usize, const C: usize> ops::Mul<Vector<S, C>> for Matrix<S, R, C>
 where
@@ -8888,7 +8866,6 @@ where
     }
 }
 
-
 impl<S, const R: usize, const C: usize> ops::AddAssign<Matrix<S, R, C>> for Matrix<S, R, C>
 where
     S: SimdScalar,
@@ -8993,7 +8970,6 @@ where
         }
     }
 }
-
 
 impl<S, const R: usize, const C: usize> approx_cmp::AbsDiffEq for Matrix<S, R, C>
 where

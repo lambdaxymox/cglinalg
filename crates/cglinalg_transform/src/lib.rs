@@ -10,7 +10,6 @@ mod translation;
 
 mod isometry_ops;
 
-
 pub use isometry::*;
 pub use projection::*;
 pub use reflection::*;

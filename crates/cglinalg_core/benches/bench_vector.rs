@@ -16,12 +16,11 @@ use criterion::{
     criterion_main,
 };
 use rand::{
+    Rng,
     distr::StandardUniform,
     prelude::Distribution,
-    Rng,
 };
 use rand_isaac::IsaacRng;
-
 
 fn gen_scalar<S>() -> S
 where
@@ -72,7 +71,6 @@ where
 
     Vector4::new(rng.random(), rng.random(), rng.random(), rng.random())
 }
-
 
 macro_rules! bench_binop(
     ($name: ident, $scalar_type:ty, $type1:ty, $type2:ty, $generator_t1:ident, $generator_t2:ident, $binop:ident) => {

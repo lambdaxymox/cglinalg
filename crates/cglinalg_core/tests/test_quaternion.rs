@@ -43,7 +43,7 @@ mod lerp_tests {
         Normed,
         Quaternion,
     };
-    
+
     #[test]
     fn test_nlerp() {
         let q1 = Quaternion::new(0_f64, 0_f64, 0_f64, 0_f64);
@@ -92,7 +92,7 @@ mod arithmetic_tests {
         Quaternion,
         Vector3,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_unit_axis_quaternions() {
@@ -227,7 +227,7 @@ mod slerp_tests {
         Angle,
         Degrees,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_slerp_upper_right_quadrant() {
@@ -381,7 +381,7 @@ mod arg_tests {
     use cglinalg_trigonometry::Radians;
 
     use core::f64;
-    
+
     #[test]
     fn test_quaternion_arg() {
         let q = Quaternion::new(0_f64, 1_f64, 1_f64, 1_f64);
@@ -493,7 +493,7 @@ mod exp_tests {
     };
 
     use core::f64;
-    
+
     #[test]
     fn test_quaternion_exp_zero() {
         let zero_quat: Quaternion<f64> = Quaternion::zero();
@@ -614,7 +614,7 @@ mod logarithm_tests {
         Vector3,
     };
     use core::f64;
-    
+
     #[test]
     fn test_quaternion_logarithm_log_one_should_be_zero() {
         let q = Quaternion::<f64>::identity();
@@ -696,7 +696,7 @@ mod exp_ln_tests {
     use cglinalg_trigonometry::Radians;
 
     use core::f64;
-    
+
     #[test]
     fn test_quaternion_ln_exp_pi_i() {
         let pi = f64::consts::PI;
@@ -726,7 +726,6 @@ mod exp_ln_tests {
 
         assert_relative_eq!(result, expected, abs_diff_all <= 1e-10, relative_all <= f64::EPSILON);
     }
-
 
     #[test]
     fn test_quaternion_ln_exp_inside_principal_branch_xy() {
@@ -782,7 +781,7 @@ mod power_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Quaternion;
     use core::f64;
-    
+
     #[test]
     fn test_quaternion_with_zero_exponent_is_one() {
         let q = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -846,7 +845,7 @@ mod rotation_tests {
         Angle,
         Radians,
     };
-    
+
     #[test]
     fn test_rotation_between_unit_vectors() {
         let unit_x: Unit<Vector3<f64>> = Unit::from_value(Vector3::unit_x());
@@ -895,7 +894,7 @@ mod rotation_tests {
 #[cfg(test)]
 mod inverse_tests {
     use cglinalg_core::Quaternion;
-    
+
     #[test]
     fn test_inverse() {
         let quaternion = Quaternion::new(1_f64, 2_f64, 3_f64, 4_f64);
@@ -937,7 +936,7 @@ mod division_tests {
         Quaternion,
         Vector3,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_div_left() {
@@ -1041,7 +1040,7 @@ mod square_tests {
         Vector3,
     };
     use core::f64;
-    
+
     #[test]
     fn test_square_pure_quaternion() {
         let modulus = f64::sqrt(14_f64);
@@ -1129,7 +1128,7 @@ mod square_root_tests {
         Quaternion,
         Vector3,
     };
-    
+
     #[test]
     fn test_square_root_zero() {
         let zero: Quaternion<f64> = Quaternion::zero();
@@ -1249,7 +1248,7 @@ mod trigonometry_cos_tests {
     };
 
     use core::f64;
-    
+
     // const SQRT_2: f64 = 1.41421356237309505_f64;
     const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -1268,7 +1267,6 @@ mod trigonometry_cos_tests {
     const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-
 
     #[test]
     fn test_quaternion_cos_real() {
@@ -1826,7 +1824,6 @@ mod trigonometry_acos_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-
 
     #[test]
     fn test_quaternion_acos1() {
@@ -2539,7 +2536,7 @@ mod trigonometry_asin_tests {
     };
 
     use core::f64;
-    
+
     const SQRT_2: f64 = 1.41421356237309505_f64;
     const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -2558,7 +2555,7 @@ mod trigonometry_asin_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_asin1() {
         let quaternion = {
@@ -3551,7 +3548,7 @@ mod trigonometry_atan_tests {
     };
 
     use core::f64;
-    
+
     const SQRT_2: f64 = 1.41421356237309505_f64;
     const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -3570,7 +3567,7 @@ mod trigonometry_atan_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_atan1() {
         let quaternion = {
@@ -4582,7 +4579,7 @@ mod trigonometry_acosh_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_acosh1() {
         let quaternion = {
@@ -5563,7 +5560,7 @@ mod trigonometry_asinh_tests {
     };
 
     use core::f64;
-    
+
     const SQRT_2: f64 = 1.41421356237309505_f64;
     // const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -5582,7 +5579,7 @@ mod trigonometry_asinh_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_asinh1() {
         let quaternion = {
@@ -6007,7 +6004,7 @@ mod trigonometry_tanh_tests {
     };
 
     use core::f64;
-    
+
     const SQRT_2: f64 = 1.41421356237309505_f64;
     const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -6026,7 +6023,7 @@ mod trigonometry_tanh_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_tanh_real() {
         let base_angle = 0_f64;
@@ -6575,7 +6572,7 @@ mod trigonometry_atanh_tests {
     };
 
     use core::f64;
-    
+
     const SQRT_2: f64 = 1.41421356237309505_f64;
     // const SQRT_3: f64 = 1.73205080756887729_f64;
     const COS_1: f64 = 0.54030230586813972_f64;
@@ -6594,7 +6591,7 @@ mod trigonometry_atanh_tests {
     // const COSH_SQRT_2: f64 = 2.17818355660857086_f64;
     // const SINH_SQRT_2: f64 = 1.93506682217435665_f64;
     // const TANH_SQRT_2: f64 = 0.88838556158566054_f64;
-    
+
     #[test]
     fn test_quaternion_atanh1() {
         let quaternion = {

@@ -26,13 +26,11 @@ use cglinalg_trigonometry::{
 use core::fmt;
 use core::ops;
 
-
 /// A rotation matrix in two dimensions.
 pub type Rotation2<S> = Rotation<S, 2>;
 
 /// A rotation matrix in three dimensions.
 pub type Rotation3<S> = Rotation<S, 3>;
-
 
 /// A rotation matrix.
 ///
@@ -1782,7 +1780,7 @@ where
     /// This gives us the Euler angles for the rotation matrix.
     ///
     /// ### Note
-    /// 
+    ///
     /// The method here is just one method of extracting Euler angles. More than one
     /// set of Euler angles can generate the same axis and rotation.
     ///
@@ -1927,7 +1925,6 @@ where
         Rotation3::from_euler_angles(euler_angles)
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

@@ -8,7 +8,6 @@ use cglinalg_core::{
     Vector4,
 };
 
-
 #[test]
 fn test_unit_vector1_unit_x() {
     let unit_x: Vector2<f64> = Vector2::unit_x();

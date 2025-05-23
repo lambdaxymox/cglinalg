@@ -23,7 +23,6 @@ use cglinalg_transform::{
 
 use proptest::prelude::*;
 
-
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -268,7 +267,6 @@ fn strategy_point_i32_any<const N: usize>() -> impl Strategy<Value = Point<i32, 
     strategy_point_signed_from_abs_range(min_value, max_value)
 }
 
-
 /// The trace of an affine shear matrix is always `N + 1` where `N` is the dimensionality
 /// of the shearing transformation.
 ///
@@ -434,7 +432,6 @@ where
     Ok(())
 }
 
-
 #[cfg(test)]
 mod shear2_f64_props {
     use proptest::prelude::*;
@@ -476,7 +473,6 @@ mod shear3_f64_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod shear2_i32_apply_props {
@@ -523,7 +519,6 @@ mod shear2_i32_apply_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod shear3_i32_apply_props {

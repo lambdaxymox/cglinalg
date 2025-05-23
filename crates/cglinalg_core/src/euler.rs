@@ -11,7 +11,6 @@ use cglinalg_trigonometry::{
 
 use core::fmt;
 
-
 /// A data type storing a set of Euler angles for representing a rotation about
 /// an arbitrary axis in three dimensions.
 ///
@@ -217,7 +216,7 @@ where
     }
 
     /// Test whether a set of Euler angles is zero.
-    /// 
+    ///
     /// A set of Euler angles is zero if and only if each Euler angle is zero.
     ///
     /// # Example
@@ -586,7 +585,6 @@ where
         Self::from_matrix(&rotation_matrix)
     }
 }
-
 
 impl<A> approx_cmp::AbsDiffEq for Euler<A>
 where

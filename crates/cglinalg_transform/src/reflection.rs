@@ -15,13 +15,11 @@ use cglinalg_numeric::SimdScalarFloat;
 use core::fmt;
 use core::ops;
 
-
 /// A reflection transformation in two dimensions.
 pub type Reflection2<S> = Reflection<S, 2>;
 
 /// A reflection transformation in three dimensions.
 pub type Reflection3<S> = Reflection<S, 3>;
-
 
 /// A reflection transformation about a mirror plane.
 ///
@@ -710,7 +708,6 @@ where
     }
 }
 
-
 impl<S> Reflection2<S>
 where
     S: SimdScalarFloat,
@@ -804,7 +801,6 @@ where
         transformation.to_affine_matrix()
     }
 }
-
 
 impl<S> Reflection3<S>
 where
@@ -901,7 +897,6 @@ where
         transformation.to_affine_matrix()
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

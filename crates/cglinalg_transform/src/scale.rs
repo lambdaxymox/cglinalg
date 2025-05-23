@@ -18,13 +18,11 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A two-dimensional scaling transformation.
 pub type Scale2<S> = Scale<S, 2>;
 
 /// A three-dimensional scaling transformation.
 pub type Scale3<S> = Scale<S, 3>;
-
 
 /// The scale transformation which supports nonuniform scaling.
 ///
@@ -805,7 +803,6 @@ where
     }
 }
 
-
 impl<S> Scale2<S>
 where
     S: SimdScalar,
@@ -831,7 +828,6 @@ where
         }
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

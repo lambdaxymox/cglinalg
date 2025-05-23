@@ -5,7 +5,7 @@ mod translation2_tests {
         Vector2,
     };
     use cglinalg_transform::Translation2;
-    
+
     #[test]
     fn test_translate_point() {
         let point = Point2::new(1_f64, 2_f64);

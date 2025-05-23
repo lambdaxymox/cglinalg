@@ -17,7 +17,6 @@ use cglinalg_numeric::{
 use core::fmt;
 use proptest::prelude::*;
 
-
 fn strategy_vector_any<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -57,7 +56,6 @@ fn strategy_quaternion_f64_any() -> impl Strategy<Value = Quaternion<f64>> {
 fn strategy_complex_f64_any() -> impl Strategy<Value = Complex<f64>> {
     strategy_vector_f64_any::<2>().prop_map(|vector| Complex::new(vector[0], vector[1]))
 }
-
 
 /// The unit data type normalizes the input value `value`.
 ///
@@ -170,7 +168,6 @@ where
 
     Ok(())
 }
-
 
 macro_rules! unit_props {
     ($TestModuleName:ident, $UnitType:ident, $ScalarType:ty, $Generator:ident) => {

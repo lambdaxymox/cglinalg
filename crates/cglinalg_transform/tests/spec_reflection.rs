@@ -17,7 +17,6 @@ use cglinalg_transform::{
 
 use proptest::prelude::*;
 
-
 fn strategy_reflection2_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = Reflection2<S>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -176,7 +175,6 @@ fn strategy_point_f64_any<const N: usize>() -> impl Strategy<Value = Point<f64, 
     strategy_point_signed_from_abs_range(min_value, max_value)
 }
 
-
 /// The determinant of a reflection matrix is negative one.
 ///
 /// Given a reflection `R`
@@ -301,7 +299,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod reflection2_invariant_props {

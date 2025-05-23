@@ -24,7 +24,6 @@ use cglinalg_trigonometry::Radians;
 
 use proptest::prelude::*;
 
-
 fn strategy_rotation2_from_range<S>(min_angle: S, max_angle: S) -> impl Strategy<Value = Rotation2<S>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -180,7 +179,6 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
 
     strategy_angle_signed_from_abs_range(min_value, max_value)
 }
-
 
 /// Rotation matrices always have a determinant of one.
 ///
@@ -438,7 +436,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod rotation2_determinant_props {

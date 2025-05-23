@@ -222,7 +222,7 @@ mod similarity3_tests {
         Radians,
     };
     use core::f64;
-    
+
     #[test]
     fn test_from_rotation() {
         let axis = Unit::from_value(Vector3::unit_z());

@@ -14,7 +14,6 @@ use cglinalg_trigonometry::{
 use core::fmt;
 use core::ops;
 
-
 /// A complex number in Cartesian form.
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -2885,7 +2884,6 @@ macro_rules! impl_scalar_complex_add_ops {
 
 impl_scalar_complex_add_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
-
 macro_rules! impl_scalar_complex_sub_ops {
     ($($Lhs:ty),* $(,)*) => {$(
         impl ops::Sub<Complex<$Lhs>> for $Lhs {
@@ -2928,7 +2926,6 @@ macro_rules! impl_scalar_complex_sub_ops {
 
 impl_scalar_complex_sub_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
-
 macro_rules! impl_scalar_complex_mul_ops {
     ($($Lhs:ty),* $(,)*) => {$(
         impl ops::Mul<Complex<$Lhs>> for $Lhs {
@@ -2970,7 +2967,6 @@ macro_rules! impl_scalar_complex_mul_ops {
 }
 
 impl_scalar_complex_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
-
 
 macro_rules! impl_scalar_complex_div_ops {
     ($($Lhs:ty),* $(,)*) => {$(
@@ -3029,7 +3025,6 @@ macro_rules! impl_scalar_complex_div_ops {
 }
 
 impl_scalar_complex_div_ops!(i8, i16, i32, i64, i128, isize, f32, f64);
-
 
 impl<S> approx_cmp::AbsDiffEq for Complex<S>
 where
@@ -3317,20 +3312,12 @@ where
 
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.modulus();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
+        if norm <= threshold { None } else { Some(self.normalize()) }
     }
 
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
         let norm = self.modulus();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize_mut())
-        }
+        if norm <= threshold { None } else { Some(self.normalize_mut()) }
     }
 
     fn distance_squared(&self, other: &Self) -> Self::Output {

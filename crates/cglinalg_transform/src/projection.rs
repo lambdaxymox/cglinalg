@@ -11,7 +11,6 @@ use cglinalg_trigonometry::Radians;
 use core::fmt;
 use core::ops;
 
-
 /// A perspective projection transformation.
 ///
 /// The data type represents a perspective projection transformation that follows
@@ -2430,7 +2429,6 @@ where
     }
 }
 
-
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Perspective3Tol<S> {
@@ -2685,7 +2683,6 @@ where
         Perspective3Tol::from(matrix)
     }
 }
-
 
 /// An orthographic projection transformation.
 ///

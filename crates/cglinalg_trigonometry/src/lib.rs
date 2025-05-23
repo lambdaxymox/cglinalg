@@ -8,7 +8,6 @@ use core::f64;
 use core::fmt;
 use core::ops;
 
-
 /// Implement trigonometry for typed angles.
 ///
 /// Making the units of the angles strongly typed enables us to make a careful
@@ -787,7 +786,6 @@ where
     }
 }
 
-
 macro_rules! impl_approx_cmp_angle {
     ($T:ident) => {
         impl<S> approx_cmp::AbsDiffEq for $T<S>
@@ -986,7 +984,6 @@ macro_rules! impl_approx_cmp_angle {
 
 impl_approx_cmp_angle!(Degrees);
 impl_approx_cmp_angle!(Radians);
-
 
 impl<S> ops::Add<Degrees<S>> for Degrees<S>
 where

@@ -21,13 +21,11 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A shearing transformation in two dimensions.
 pub type Shear2<S> = Shear<S, 2>;
 
 /// A shearing transformation in three dimensions.
 pub type Shear3<S> = Shear<S, 3>;
-
 
 /// A shearing transformation.
 ///
@@ -495,7 +493,7 @@ where
     /// The general shearing transformation is defined geometrically by a shearing
     /// plane `S`, a point `Q` in `S` which defines the origin for the affine frame
     /// of the shearing transformation, a shearing direction `v` inside `S`, a normal
-    /// vector `n` perpendicular to `S`, and a shearing factor `m`. The 
+    /// vector `n` perpendicular to `S`, and a shearing factor `m`. The
     /// **shearing transformation** is defined geometrically by
     /// ```text
     /// H(p) := p + (m * dot(p - Q, n)) * v
@@ -1221,7 +1219,6 @@ where
     }
 }
 
-
 impl<S> Shear2<S>
 where
     S: SimdScalarSigned,
@@ -1492,7 +1489,6 @@ where
         lhs * rhs
     }
 }
-
 
 impl<S> Shear3<S>
 where
@@ -2009,7 +2005,6 @@ where
     }
 }
 
-
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct ShearTol<S, const N: usize> {
@@ -2051,7 +2046,6 @@ impl<S, const N: usize> ShearDiff<S, N> {
         }
     }
 }
-
 
 impl<S, const N: usize> approx_cmp::AbsDiffEq for Shear<S, N>
 where

@@ -26,7 +26,6 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A stack-allocated one-dimensional vector.
 pub type Vector1<S> = Vector<S, 1>;
 
@@ -38,7 +37,6 @@ pub type Vector3<S> = Vector<S, 3>;
 
 /// A stack-allocated four-dimensional vector.
 pub type Vector4<S> = Vector<S, 4>;
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -250,7 +248,7 @@ where
 
     /// Compute the component-wise product of two vectors.
     ///
-    /// Given `N`-dimensional vectors `v1` and `v2`, the **component-wise product** of `v1` 
+    /// Given `N`-dimensional vectors `v1` and `v2`, the **component-wise product** of `v1`
     /// and `v2` is a `N`-dimensional vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := v1[i] * v2[i]
@@ -778,7 +776,6 @@ where
     }
 }
 
-
 impl<S, const N: usize> Vector<S, N>
 where
     S: SimdScalarFloat,
@@ -899,7 +896,7 @@ where
 
     /// Compute the component-wise minimum of two vectors.
     ///
-    /// Given two vectors `v1` and `v2`, the **component-wise minimum** of `v1` and `v2` is 
+    /// Given two vectors `v1` and `v2`, the **component-wise minimum** of `v1` and `v2` is
     /// a vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := min(v1[i], v2[i])
@@ -930,7 +927,7 @@ where
 
     /// Compute the component-wise maximum of two vectors.
     ///
-    /// Given two vectors `v1` and `v2`, the **component-wise maximum** of `v1` and `v2` is 
+    /// Given two vectors `v1` and `v2`, the **component-wise maximum** of `v1` and `v2` is
     /// a vector `v3` such that
     /// ```text
     /// forall i :: [0..N]. v3[i] := max(v1[i], v2[i])
@@ -1083,11 +1080,7 @@ where
     /// ```
     #[inline]
     pub fn from_homogeneous(&self) -> Option<Vector<S, NMINUS1>> {
-        if self.data[N - 1].is_zero() {
-            Some(self.contract())
-        } else {
-            None
-        }
+        if self.data[N - 1].is_zero() { Some(self.contract()) } else { None }
     }
 }
 
@@ -1186,7 +1179,6 @@ impl_vector_index_ops!(ops::RangeTo<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFrom<usize>, [S]);
 impl_vector_index_ops!(ops::RangeFull, [S]);
 
-
 impl<S, const N: usize> fmt::Display for Vector<S, N>
 where
     S: fmt::Display,
@@ -1199,7 +1191,6 @@ where
         write!(formatter, "{}]", self.data[N - 1])
     }
 }
-
 
 impl<S, const N: usize> approx_cmp::AbsDiffEq for Vector<S, N>
 where
@@ -1457,7 +1448,6 @@ where
     }
 }
 
-
 impl<S, const N: usize> Normed for Vector<S, N>
 where
     S: SimdScalarFloat,
@@ -1510,21 +1500,13 @@ where
     #[inline]
     fn try_normalize(&self, threshold: Self::Output) -> Option<Self> {
         let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize())
-        }
+        if norm <= threshold { None } else { Some(self.normalize()) }
     }
 
     #[inline]
     fn try_normalize_mut(&mut self, threshold: Self::Output) -> Option<Self::Output> {
         let norm = self.norm();
-        if norm <= threshold {
-            None
-        } else {
-            Some(self.normalize_mut())
-        }
+        if norm <= threshold { None } else { Some(self.normalize_mut()) }
     }
 
     #[inline]
@@ -1604,7 +1586,6 @@ macro_rules! impl_scalar_vector_mul_ops {
 
 impl_scalar_vector_mul_ops!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize, f32, f64);
 
-
 macro_rules! impl_vector_scalar_binary_ops {
     ($OpType:ident, $op:ident) => {
         impl<S, const N: usize> ops::$OpType<S> for Vector<S, N>
@@ -1648,7 +1629,6 @@ macro_rules! impl_vector_scalar_binary_ops {
 impl_vector_scalar_binary_ops!(Mul, mul);
 impl_vector_scalar_binary_ops!(Div, div);
 impl_vector_scalar_binary_ops!(Rem, rem);
-
 
 impl<S, const N: usize> ops::Add<Vector<S, N>> for Vector<S, N>
 where
@@ -1944,7 +1924,6 @@ where
         Unit::from_value_unchecked(-self.into_inner())
     }
 }
-
 
 impl<S> Vector1<S> {
     /// Construct a new vector.
@@ -2244,7 +2223,6 @@ where
     }
 }
 
-
 impl<S> Vector4<S> {
     /// Construct a new vector.
     ///
@@ -2517,7 +2495,6 @@ impl_coords_deref!(Vector3, VectorCoordsXYZ);
 impl_coords!(VectorCoordsXYZW, { x, y, z, w });
 impl_coords_deref!(Vector4, VectorCoordsXYZW);
 
-
 macro_rules! impl_as_ref_ops {
     ($VecType:ty, $RefType:ty) => {
         impl<S> AsRef<$RefType> for $VecType {
@@ -2541,7 +2518,6 @@ impl_as_ref_ops!(Vector1<S>, (S,));
 impl_as_ref_ops!(Vector2<S>, (S, S));
 impl_as_ref_ops!(Vector3<S>, (S, S, S));
 impl_as_ref_ops!(Vector4<S>, (S, S, S, S));
-
 
 macro_rules! impl_swizzle {
     ($name:ident() => $VectorN:ident => $Output:ident { $($i:expr),+ }) => {
@@ -2606,7 +2582,6 @@ impl_swizzle!(zyz() => Vector3 => Vector3 { 2, 1, 2 });
 impl_swizzle!(zzx() => Vector3 => Vector3 { 2, 2, 0 });
 impl_swizzle!(zzy() => Vector3 => Vector3 { 2, 2, 1 });
 impl_swizzle!(zzz() => Vector3 => Vector3 { 2, 2, 2 });
-
 
 impl_swizzle!(x() => Vector4 => Vector1 { 0 });
 impl_swizzle!(y() => Vector4 => Vector1 { 1 });
@@ -2694,7 +2669,6 @@ impl_swizzle!(wwx() => Vector4 => Vector3 { 3, 3, 0 });
 impl_swizzle!(wwy() => Vector4 => Vector3 { 3, 3, 1 });
 impl_swizzle!(wwz() => Vector4 => Vector3 { 3, 3, 2 });
 impl_swizzle!(www() => Vector4 => Vector3 { 3, 3, 3 });
-
 
 impl_swizzle!(xxxx() => Vector4 => Vector4 { 0, 0, 0, 0 });
 impl_swizzle!(xxxy() => Vector4 => Vector4 { 0, 0, 0, 1 });

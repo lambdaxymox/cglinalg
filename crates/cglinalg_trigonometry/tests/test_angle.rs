@@ -42,7 +42,7 @@ mod conversion_tests {
 #[cfg(test)]
 mod degrees_arithmetic_tests {
     use cglinalg_trigonometry::Degrees;
-    
+
     #[test]
     fn test_addition() {
         let angle1 = Degrees(30_f64);
@@ -515,7 +515,7 @@ mod degree_angle_tests {
         Degrees,
     };
     use core::f64;
-    
+
     #[test]
     fn test_full_turn() {
         let expected = Degrees(360_f64);

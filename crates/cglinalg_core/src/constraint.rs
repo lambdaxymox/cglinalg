@@ -8,22 +8,18 @@ pub trait DimSub<D1: Dim, D2: Dim>: Dim {
     type Output: Dim;
 }
 
-
 pub trait DimMul<D1: Dim, D2: Dim>: Dim {
     type Output: Dim;
 }
-
 
 #[derive(Clone, Debug)]
 pub enum Const<const D: usize> {}
 
 impl<const D: usize> Dim for Const<D> {}
 
-
 pub trait DimEq<D1: Dim, D2: Dim> {
     type Representative: Dim;
 }
-
 
 pub enum ShapeConstraint {}
 
@@ -32,7 +28,6 @@ impl<D: Dim> DimEq<D, D> for ShapeConstraint {
 }
 
 impl Dim for ShapeConstraint {}
-
 
 pub trait CanMultiply<R1: Dim, C1: Dim, R2: Dim, C2: Dim>: DimEq<C1, R2> + DimEq<R2, C1> {}
 
@@ -69,7 +64,6 @@ where
 {
 }
 
-
 macro_rules! impl_dim_add {
     ($D1:expr, $D2:expr) => {
         impl DimAdd<Const<$D1>, Const<$D2>> for ShapeConstraint {
@@ -94,7 +88,6 @@ impl_dim_add!(4, 1);
 impl_dim_add!(4, 2);
 impl_dim_add!(4, 3);
 impl_dim_add!(4, 4);
-
 
 macro_rules! impl_dim_sub {
     ($D1:expr, $D2:expr) => {
@@ -121,7 +114,6 @@ impl_dim_sub!(4, 2);
 impl_dim_sub!(4, 3);
 impl_dim_sub!(4, 4);
 
-
 macro_rules! impl_dim_mul {
     ($D1:expr, $D2:expr) => {
         impl DimMul<Const<$D1>, Const<$D2>> for ShapeConstraint {
@@ -146,7 +138,6 @@ impl_dim_mul!(4, 1);
 impl_dim_mul!(4, 2);
 impl_dim_mul!(4, 3);
 impl_dim_mul!(4, 4);
-
 
 pub trait DimLt<D1: Dim, D2: Dim>: Dim {}
 
@@ -177,11 +168,9 @@ impl_dim_lt!(3, 4);
 // impl_dim_lt!(4, 3);
 // impl_dim_lt!(4, 4);
 
-
 #[cfg(test)]
 mod constraint_tests {
     use super::*;
-
 
     fn dim_lt<const M: usize, const N: usize>() -> bool
     where
@@ -217,7 +206,6 @@ mod constraint_tests {
     {
         M * N == MN
     }
-
 
     #[test]
     fn test_dim_lt() {

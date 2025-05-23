@@ -680,7 +680,7 @@ mod vector3_tests {
         Vector3,
         Vector4,
     };
-    
+
     #[test]
     fn test_components1() {
         let vector = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -1054,7 +1054,7 @@ mod vector4_tests {
         Vector3,
         Vector4,
     };
-    
+
     #[test]
     fn test_components1() {
         let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);

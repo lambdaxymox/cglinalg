@@ -28,7 +28,6 @@ use cglinalg_trigonometry::Radians;
 
 use proptest::prelude::*;
 
-
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarFloat + Arbitrary,
@@ -214,7 +213,6 @@ fn strategy_angle_f64_any() -> impl Strategy<Value = Radians<f64>> {
     strategy_angle_signed_from_abs_range(min_value, max_value)
 }
 
-
 /// Isometries preserve vector norms.
 ///
 /// Given an isometry `M` and a vector `v`
@@ -398,7 +396,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod isometry2_f64_invariant_props {

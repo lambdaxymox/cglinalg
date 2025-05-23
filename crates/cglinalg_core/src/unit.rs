@@ -4,7 +4,6 @@ use cglinalg_numeric::SimdScalarFloat;
 use core::fmt;
 use core::ops;
 
-
 /// A type that represents unit normalized values.
 ///
 /// This type enforces the requirement that values have a unit norm. This
@@ -222,7 +221,6 @@ where
         Self::try_from_value_with_norm(value, threshold).map(|(unit, _)| unit)
     }
 }
-
 
 impl<T> approx_cmp::AbsDiffEq for Unit<T>
 where

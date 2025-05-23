@@ -19,7 +19,6 @@ use cglinalg_transform::{
 
 use proptest::prelude::*;
 
-
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -118,7 +117,6 @@ fn strategy_scale_f64_any<const N: usize>() -> impl Strategy<Value = Scale<f64, 
 
     strategy_scale_signed_from_abs_range(min_value, max_value)
 }
-
 
 /// The composition of scaling transformations is commutative.
 ///
@@ -352,7 +350,6 @@ where
     Ok(())
 }
 
-
 #[cfg(test)]
 mod scale2_i32_composition_props {
     use proptest::prelude::*;
@@ -532,7 +529,6 @@ mod scale3_f64_composition_props {
         }
     }
 }
-
 
 #[cfg(test)]
 mod scale3_i32_composition_pointwise_props {

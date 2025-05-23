@@ -16,7 +16,6 @@ use proptest::prelude::*;
 
 use core::f64;
 
-
 #[derive(Copy, Clone, Debug, PartialEq)]
 struct PointLine<S> {
     start: Point3<S>,
@@ -401,7 +400,6 @@ where
     any::<S>().prop_map(move |value| rescale(value, min_value, max_value))
 }
 
-
 /// The perspective projection matrix maps every point on the near plane
 /// to a `z` position of `-1` in normalized device coordinates.
 ///
@@ -715,7 +713,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod projectionfov3_f64_props {

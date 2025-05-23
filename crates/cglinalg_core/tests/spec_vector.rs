@@ -15,7 +15,6 @@ use cglinalg_numeric::{
 
 use proptest::prelude::*;
 
-
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -76,7 +75,6 @@ where
     })
 }
 
-
 fn strategy_scalar_f64_any() -> impl Strategy<Value = f64> {
     let min_value = f64::sqrt(f64::EPSILON);
     let max_value = f64::sqrt(f64::MAX) / f64::sqrt(2_f64);
@@ -125,7 +123,6 @@ fn strategy_lp_norm_degree() -> impl Strategy<Value = u32> {
     })
 }
 
-
 fn strategy_scalar1_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
 }
@@ -142,7 +139,6 @@ fn strategy_scalar4_i32_l1_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
 
-
 fn strategy_scalar1_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<1>()
 }
@@ -158,7 +154,6 @@ fn strategy_scalar3_i32_linf_norm() -> impl Strategy<Value = i32> {
 fn strategy_scalar4_i32_linf_norm() -> impl Strategy<Value = i32> {
     strategy_scalar_i32_max_safe_square_root::<4>()
 }
-
 
 /// A vector times a scalar zero should be a zero vector.
 ///
@@ -1137,7 +1132,6 @@ where
     Ok(())
 }
 
-
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1181,7 +1175,6 @@ exact_arithmetic_props!(vector1_f64_arithmetic_props, Vector1, f64, strategy_vec
 exact_arithmetic_props!(vector2_f64_arithmetic_props, Vector2, f64, strategy_vector_any);
 exact_arithmetic_props!(vector3_f64_arithmetic_props, Vector3, f64, strategy_vector_any);
 exact_arithmetic_props!(vector4_f64_arithmetic_props, Vector4, f64, strategy_vector_any);
-
 
 macro_rules! exact_add_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
@@ -1232,7 +1225,6 @@ exact_add_props!(vector2_i32_add_props, Vector2, i32, strategy_vector_any);
 exact_add_props!(vector3_i32_add_props, Vector3, i32, strategy_vector_any);
 exact_add_props!(vector4_i32_add_props, Vector4, i32, strategy_vector_any);
 
-
 macro_rules! approx_add_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1274,7 +1266,6 @@ approx_add_props!(vector2_f64_add_props, Vector2, f64, strategy_vector_any);
 approx_add_props!(vector3_f64_add_props, Vector3, f64, strategy_vector_any);
 approx_add_props!(vector4_f64_add_props, Vector4, f64, strategy_vector_any);
 
-
 macro_rules! exact_sub_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1308,7 +1299,6 @@ exact_sub_props!(vector1_i32_sub_props, Vector1, i32, strategy_vector_any);
 exact_sub_props!(vector2_i32_sub_props, Vector2, i32, strategy_vector_any);
 exact_sub_props!(vector3_i32_sub_props, Vector3, i32, strategy_vector_any);
 exact_sub_props!(vector4_i32_sub_props, Vector4, i32, strategy_vector_any);
-
 
 macro_rules! approx_sub_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
@@ -1344,7 +1334,6 @@ approx_sub_props!(vector2_f64_sub_props, Vector2, f64, strategy_vector_any);
 approx_sub_props!(vector3_f64_sub_props, Vector3, f64, strategy_vector_any);
 approx_sub_props!(vector4_f64_sub_props, Vector4, f64, strategy_vector_any);
 
-
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -1374,7 +1363,6 @@ exact_mul_props!(vector2_i32_mul_props, Vector2, i32, strategy_vector_any, strat
 exact_mul_props!(vector3_i32_mul_props, Vector3, i32, strategy_vector_any, strategy_scalar_i32_any);
 exact_mul_props!(vector4_i32_mul_props, Vector4, i32, strategy_vector_any, strategy_scalar_i32_any);
 
-
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1395,7 +1383,6 @@ approx_mul_props!(vector1_f64_mul_props, Vector1, f64, strategy_vector_any);
 approx_mul_props!(vector2_f64_mul_props, Vector2, f64, strategy_vector_any);
 approx_mul_props!(vector3_f64_mul_props, Vector3, f64, strategy_vector_any);
 approx_mul_props!(vector4_f64_mul_props, Vector4, f64, strategy_vector_any);
-
 
 macro_rules! exact_distributive_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
@@ -1467,7 +1454,6 @@ exact_distributive_props!(
     strategy_vector_any,
     strategy_scalar_i32_any
 );
-
 
 macro_rules! exact_dot_product_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
@@ -1560,7 +1546,6 @@ exact_dot_product_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! exact_cross_product_props {
     ($TestModuleName:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -1617,7 +1602,6 @@ macro_rules! exact_cross_product_props {
 }
 
 exact_cross_product_props!(vector3_i32_cross_product_props, i32, strategy_vector_any, strategy_scalar_i32_any);
-
 
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
@@ -1677,7 +1661,6 @@ exact_norm_squared_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1698,7 +1681,6 @@ exact_norm_squared_synonym_props!(vector1_i32_norm_squared_synonym_props, Vector
 exact_norm_squared_synonym_props!(vector2_i32_norm_squared_synonym_props, Vector2, i32, strategy_vector_any);
 exact_norm_squared_synonym_props!(vector3_i32_norm_squared_synonym_props, Vector3, i32, strategy_vector_any);
 exact_norm_squared_synonym_props!(vector4_i32_norm_squared_synonym_props, Vector4, i32, strategy_vector_any);
-
 
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
@@ -1755,7 +1737,6 @@ approx_norm_squared_props!(
     1e-20
 );
 
-
 macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {
         #[cfg(test)]
@@ -1776,7 +1757,6 @@ approx_norm_squared_synonym_props!(vector1_f64_norm_squared_synonym_props, Vecto
 approx_norm_squared_synonym_props!(vector2_f64_norm_squared_synonym_props, Vector2, f64, strategy_vector_any);
 approx_norm_squared_synonym_props!(vector3_f64_norm_squared_synonym_props, Vector3, f64, strategy_vector_any);
 approx_norm_squared_synonym_props!(vector4_f64_norm_squared_synonym_props, Vector4, f64, strategy_vector_any);
-
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
@@ -1832,7 +1812,6 @@ approx_norm_props!(
     strategy_any_scalar_f64,
     1e-8
 );
-
 
 macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
@@ -1899,7 +1878,6 @@ exact_l1_norm_props!(
     strategy_scalar4_i32_l1_norm
 );
 
-
 macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
         #[cfg(test)]
@@ -1954,7 +1932,6 @@ approx_l1_norm_props!(
     strategy_any_scalar_f64,
     1e-8
 );
-
 
 macro_rules! approx_lp_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $DegreeGen:ident, $tolerance:expr) => {
@@ -2014,7 +1991,6 @@ approx_lp_norm_props!(
     strategy_lp_norm_degree,
     1e-6
 );
-
 
 macro_rules! exact_linf_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident) => {
@@ -2080,7 +2056,6 @@ exact_linf_norm_props!(
     strategy_vector_i32_max_safe_square_root,
     strategy_scalar4_i32_linf_norm
 );
-
 
 macro_rules! approx_linf_norm_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident, $ScalarGen:ident, $tolerance:expr) => {
@@ -2150,7 +2125,6 @@ approx_linf_norm_props!(
     strategy_scalar_f64_any,
     1e-8
 );
-
 
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $VectorType:ident, $ScalarType:ty, $VectorGen:ident) => {

@@ -10,7 +10,6 @@ use cglinalg_numeric::SimdScalarFloat;
 
 use core::ops;
 
-
 impl<S, const N: usize> ops::Mul<Translation<S, N>> for Rotation<S, N>
 where
     S: SimdScalarFloat,

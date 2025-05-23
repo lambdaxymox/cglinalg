@@ -5,7 +5,7 @@ mod matrix2x2_tests {
         Matrix2x2,
         Vector2,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
@@ -741,7 +741,7 @@ mod matrix2x2_rotation_tests {
         Angle,
         Radians,
     };
-    
+
     #[test]
     fn test_from_angle() {
         let matrix: Matrix2x2<f64> = Matrix2x2::from_angle(Radians::full_turn_div_4());
@@ -795,7 +795,7 @@ mod matrix2x2_reflection_tests {
         Unit,
         Vector2,
     };
-    
+
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
@@ -908,7 +908,7 @@ mod matrix2x2_shear_tests {
         Unit,
         Vector2,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
@@ -1021,7 +1021,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-    
+
     fn shear_factor() -> f64 {
         5_f64
     }
@@ -1063,7 +1063,6 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
 
         Matrix2x2::new(1_f64, 0_f64, shear_factor, 1_f64)
     }
-
 
     #[test]
     fn test_from_shear_rotation_angle() {
@@ -1238,7 +1237,7 @@ mod matrix3x3_tests {
         Vector2,
         Vector3,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
@@ -2121,7 +2120,7 @@ mod matrix3x3_rotation_tests {
         Angle,
         Radians,
     };
-    
+
     #[test]
     fn test_from_angle_x() {
         let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -2264,7 +2263,7 @@ mod matrix3x3_reflection_tests {
         Vector2,
         Vector3,
     };
-    
+
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
@@ -2463,7 +2462,7 @@ mod matrix3x3_shear_tests {
         Unit,
         Vector3,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
@@ -2834,7 +2833,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-    
+
     fn shear_factor() -> f64 {
         15_f64
     }
@@ -2934,7 +2933,6 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
             shear_factor, 0_f64, 1_f64,
         )
     }
-
 
     #[test]
     fn test_from_shear_rotation_angle_z_xy() {
@@ -3324,7 +3322,7 @@ mod matrix3x3_affine_shear_tests {
         Vector2,
         Vector3,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy1() {
@@ -3683,7 +3681,6 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
             0_f64,        0_f64, 1_f64
         )
     }
-
 
     #[test]
     fn test_from_affine_shear_rotation_angle() {
@@ -4884,7 +4881,7 @@ mod matrix4x4_projection_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Matrix4x4;
     use cglinalg_trigonometry::Degrees;
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_orthographic() {
@@ -4959,7 +4956,7 @@ mod matrix4x4_rotation_tests {
         Angle,
         Radians,
     };
-    
+
     #[test]
     fn test_from_angle_x() {
         let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -5255,7 +5252,7 @@ mod matrix4x4_affine_shear_tests {
         Vector3,
         Vector4,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
@@ -5692,7 +5689,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         Vector3,
         Vector4,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
@@ -6119,7 +6116,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-    
+
     fn shear_factor() -> f64 {
         11_f64
     }
@@ -6202,7 +6199,6 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         )
     }
 
-
     #[rustfmt::skip]
     fn rotation() -> Matrix4x4<f64> {
         let c0r0 = f64::sqrt(4_f64 / 17_f64);
@@ -6274,7 +6270,6 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
             0_f64,        0_f64, 0_f64, 1_f64,
         )
     }
-
 
     #[test]
     fn test_rotation_angle_x_yz() {
@@ -6811,7 +6806,7 @@ mod matrix1x2_tests {
         Vector1,
         Vector2,
     };
-    
+
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix1x2::new(1_i32, 2_i32);
@@ -8594,7 +8589,7 @@ mod matrix4x2_tests {
         Vector2,
         Vector4,
     };
-    
+
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {

@@ -35,7 +35,6 @@ use cglinalg_numeric::{
 
 use proptest::prelude::*;
 
-
 fn strategy_scalar_signed_from_abs_range<S>(min_value: S, max_value: S) -> impl Strategy<Value = S>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -119,7 +118,6 @@ fn strategy_scalar_i32_any() -> impl Strategy<Value = i32> {
 
     strategy_scalar_signed_from_abs_range(min_value, max_value)
 }
-
 
 /// A zero matrix should act as the additive unit element for matrices
 /// over their underlying scalars.
@@ -396,7 +394,6 @@ where
     Ok(())
 }
 
-
 /// Matrix multiplication over exact scalars is associative.
 ///
 /// Given matrices `m1`, `m2`, and `m3`
@@ -417,7 +414,6 @@ where
 
     Ok(())
 }
-
 
 /// Matrix multiplication is distributive over matrix addition.
 ///
@@ -460,7 +456,6 @@ where
 
     Ok(())
 }
-
 
 /// Matrix multiplication is compatible with scalar multiplication.
 ///
@@ -527,7 +522,6 @@ where
     Ok(())
 }
 
-
 /// The transpose of the product of two matrices equals the product
 /// of the transposes of the two matrices swapped.
 ///
@@ -545,7 +539,6 @@ where
 
     Ok(())
 }
-
 
 /// Swapping rows is commutative in the row arguments.
 ///
@@ -1387,7 +1380,6 @@ where
     Ok(())
 }
 
-
 fn prop_tr_mul_equals_transpose_mul<S, const R1: usize, const C1: usize, const R2: usize, const C2: usize, const C1C2: usize>(
     m1: Matrix<S, R1, C1>,
     m2: Matrix<S, R2, C2>,
@@ -1422,7 +1414,6 @@ where
 
     Ok(())
 }
-
 
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
@@ -1464,7 +1455,6 @@ approx_arithmetic_props!(matrix1x1_f64_arithmetic_props, Matrix2x2, f64, strateg
 approx_arithmetic_props!(matrix2x2_f64_arithmetic_props, Matrix2x2, f64, strategy_matrix_f64_any);
 approx_arithmetic_props!(matrix3x3_f64_arithmetic_props, Matrix3x3, f64, strategy_matrix_f64_any);
 approx_arithmetic_props!(matrix4x4_f64_arithmetic_props, Matrix4x4, f64, strategy_matrix_f64_any);
-
 
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
@@ -1521,7 +1511,6 @@ exact_arithmetic_props!(matrix2x4_i32_arithmetic_props, Matrix2x4, i32, strategy
 exact_arithmetic_props!(matrix4x2_i32_arithmetic_props, Matrix4x2, i32, strategy_matrix_i32_any);
 exact_arithmetic_props!(matrix3x4_i32_arithmetic_props, Matrix3x4, i32, strategy_matrix_i32_any);
 exact_arithmetic_props!(matrix4x3_i32_arithmetic_props, Matrix4x3, i32, strategy_matrix_i32_any);
-
 
 macro_rules! approx_scalar_multiplication_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -1586,7 +1575,6 @@ approx_scalar_multiplication_props!(
     strategy_matrix_f64_any,
     strategy_scalar_f64_any
 );
-
 
 macro_rules! exact_scalar_multiplication_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -1681,7 +1669,6 @@ exact_scalar_multiplication_props!(
     strategy_matrix_i32_any,
     strategy_scalar_i32_any
 );
-
 
 macro_rules! exact_multiplication_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -1782,7 +1769,6 @@ exact_multiplication_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! approx_multiplication_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
         #[cfg(test)]
@@ -1815,7 +1801,6 @@ approx_multiplication_props!(matrix1x1_f64_matrix_multiplication_props, Matrix1x
 approx_multiplication_props!(matrix2x2_f64_matrix_multiplication_props, Matrix2x2, f64, strategy_matrix_f64_any);
 approx_multiplication_props!(matrix3x3_f64_matrix_multiplication_props, Matrix3x3, f64, strategy_matrix_f64_any);
 approx_multiplication_props!(matrix4x4_f64_matrix_multiplication_props, Matrix4x4, f64, strategy_matrix_f64_any);
-
 
 macro_rules! exact_transposition_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -1883,7 +1868,6 @@ exact_transposition_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! approx_transposition_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -1949,7 +1933,6 @@ approx_transposition_props!(
     strategy_matrix_f64_any,
     strategy_scalar_f64_any
 );
-
 
 macro_rules! swap_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $UpperBound:expr) => {
@@ -2042,7 +2025,6 @@ swap_props!(matrix1x1_swap_props, Matrix1x1, i32, strategy_matrix_i32_any, 1);
 swap_props!(matrix2x2_swap_props, Matrix2x2, i32, strategy_matrix_i32_any, 2);
 swap_props!(matrix3x3_swap_props, Matrix3x3, i32, strategy_matrix_i32_any, 3);
 swap_props!(matrix4x4_swap_props, Matrix4x4, i32, strategy_matrix_i32_any, 4);
-
 
 macro_rules! exact_dot_product_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -2176,7 +2158,6 @@ exact_dot_product_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! exact_l1_norm_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -2285,7 +2266,6 @@ exact_l1_norm_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! approx_l1_norm_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -2379,7 +2359,6 @@ approx_l1_norm_props!(
     strategy_matrix_f64_any,
     strategy_scalar_f64_any
 );
-
 
 macro_rules! exact_linf_norm_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -2489,7 +2468,6 @@ exact_linf_norm_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! approx_linf_norm_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -2583,7 +2561,6 @@ approx_linf_norm_props!(
     strategy_matrix_f64_any,
     strategy_scalar_f64_any
 );
-
 
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -2686,7 +2663,6 @@ exact_norm_squared_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -2775,7 +2751,6 @@ norm_synonym_props!(
     strategy_scalar_f64_any
 );
 
-
 macro_rules! norm_squared_synonym_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -2863,7 +2838,6 @@ norm_squared_synonym_props!(
     strategy_matrix_i32_norm,
     strategy_scalar_i32_any
 );
-
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -2959,7 +2933,6 @@ approx_norm_props!(
     strategy_scalar_f64_any
 );
 
-
 macro_rules! exact_trace_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -3025,7 +2998,6 @@ exact_trace_props!(
     strategy_matrix_i32_any,
     strategy_scalar_i32_any
 );
-
 
 macro_rules! approx_trace_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident, $ScalarGen:ident) => {
@@ -3093,7 +3065,6 @@ approx_trace_props!(
     strategy_scalar_f64_any
 );
 
-
 macro_rules! exact_row_vector_dot_product_props {
     ($TestModuleName:ident, $MatrixType:ident, $ScalarType:ty, $MatrixGen:ident) => {
         #[cfg(test)]
@@ -3135,7 +3106,6 @@ exact_row_vector_dot_product_props!(
     i32,
     strategy_matrix_i32_any
 );
-
 
 macro_rules! exact_tr_mul_props {
     ($TestModuleName:ident, $MatrixType1:ident, $MatrixType2:ident, $ScalarType:ty, $MatrixGen1:ident, $MatrixGen2:ident) => {
@@ -3267,7 +3237,6 @@ exact_tr_mul_props!(
     strategy_matrix_i32_any,
     strategy_matrix_i32_any
 );
-
 
 macro_rules! exact_tr_dot_props {
     ($TestModuleName:ident, $MatrixType1:ident, $MatrixType2:ident, $ScalarType:ty, $MatrixGen1:ident, $MatrixGen2:ident) => {

@@ -12,12 +12,11 @@ use criterion::{
     criterion_main,
 };
 use rand::{
+    Rng,
     distr::StandardUniform,
     prelude::Distribution,
-    Rng,
 };
 use rand_isaac::IsaacRng;
-
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S>
 where
@@ -173,7 +172,6 @@ bench_binop!(
     gen_vector4,
     mul
 );
-
 
 criterion_group!(
     matrix_mul_benchmarks,

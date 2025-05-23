@@ -17,13 +17,11 @@ use cglinalg_numeric::{
 use core::fmt;
 use core::ops;
 
-
 /// A two-dimensional translation in homogeneous coordinates.
 pub type Translation2<S> = Translation<S, 2>;
 
 /// A three-dimensional translation in homogeneous coordinates.
 pub type Translation3<S> = Translation<S, 3>;
-
 
 /// A translation in homogeneous coordinates.
 ///
@@ -858,7 +856,6 @@ where
         }
     }
 }
-
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, PartialEq)]

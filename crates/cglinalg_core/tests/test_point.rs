@@ -6,7 +6,7 @@ mod point1_tests {
         Vector1,
         Vector2,
     };
-    
+
     #[test]
     fn test_components1() {
         let point = Point1::new(1_i32);

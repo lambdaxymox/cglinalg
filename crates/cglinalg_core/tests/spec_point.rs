@@ -20,7 +20,6 @@ use cglinalg_numeric::{
 
 use proptest::prelude::*;
 
-
 fn strategy_point_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Point<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -118,7 +117,6 @@ fn strategy_point_i32_max_safe_square_root<const N: usize>() -> impl Strategy<Va
     strategy_point_signed_from_abs_range(min_value, max_value)
 }
 
-
 /// A scalar `1` acts like a multiplicative identity element.
 ///
 /// Given a vector `p`
@@ -204,7 +202,6 @@ where
 
     Ok(())
 }
-
 
 /// Point and vector addition should be compatible.
 ///
@@ -515,7 +512,6 @@ where
     Ok(())
 }
 
-
 macro_rules! exact_mul_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -544,7 +540,6 @@ exact_mul_props!(point1_i32_mul_props, Point1, i32, strategy_point_any, strategy
 exact_mul_props!(point2_i32_mul_props, Point2, i32, strategy_point_any, strategy_scalar_i32_any);
 exact_mul_props!(point3_i32_mul_props, Point3, i32, strategy_point_any, strategy_scalar_i32_any);
 
-
 macro_rules! approx_mul_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
         #[cfg(test)]
@@ -564,7 +559,6 @@ macro_rules! approx_mul_props {
 approx_mul_props!(point1_f64_mul_props, Point1, f64, strategy_point_any);
 approx_mul_props!(point2_f64_mul_props, Point2, f64, strategy_point_any);
 approx_mul_props!(point3_f64_mul_props, Point3, f64, strategy_point_any);
-
 
 macro_rules! exact_arithmetic_props {
     ($TestModuleName:ident, $PointType:ident, $VectorType:ident, $ScalarType:ty, $PointGen:ident, $VectorGen:ident) => {
@@ -640,7 +634,6 @@ exact_arithmetic_props!(
     strategy_point_any,
     strategy_vector_any
 );
-
 
 macro_rules! approx_arithmetic_props {
     ($TestModuleName:ident, $PointType:ident, $VectorType:ident, $ScalarType:ty, $PointGen:ident, $VectorGen:ident, $tolerance:expr) => {
@@ -720,7 +713,6 @@ approx_arithmetic_props!(
     1e-7
 );
 
-
 macro_rules! exact_norm_squared_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $ScalarGen:ident) => {
         #[cfg(test)]
@@ -772,7 +764,6 @@ exact_norm_squared_props!(
     strategy_scalar_i32_any
 );
 
-
 macro_rules! approx_norm_squared_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $input_tolerance:expr, $output_tolerance:expr) => {
         #[cfg(test)]
@@ -820,7 +811,6 @@ approx_norm_squared_props!(
     1e-20
 );
 
-
 macro_rules! approx_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
         #[cfg(test)]
@@ -841,7 +831,6 @@ approx_norm_squared_synonym_props!(point1_f64_norm_squared_synonym_props, Point1
 approx_norm_squared_synonym_props!(point2_f64_norm_squared_synonym_props, Point2, f64, strategy_point_any);
 approx_norm_squared_synonym_props!(point3_f64_norm_squared_synonym_props, Point3, f64, strategy_point_any);
 
-
 macro_rules! exact_norm_squared_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {
         #[cfg(test)]
@@ -861,7 +850,6 @@ macro_rules! exact_norm_squared_synonym_props {
 exact_norm_squared_synonym_props!(point1_i32_norm_squared_synonym_props, Point1, i32, strategy_point_any);
 exact_norm_squared_synonym_props!(point2_i32_norm_squared_synonym_props, Point2, i32, strategy_point_any);
 exact_norm_squared_synonym_props!(point3_i32_norm_squared_synonym_props, Point3, i32, strategy_point_any);
-
 
 macro_rules! approx_norm_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident, $tolerance:expr) => {
@@ -888,7 +876,6 @@ macro_rules! approx_norm_props {
 approx_norm_props!(point1_f64_norm_props, Point1, f64, strategy_point_any, 1e-8);
 approx_norm_props!(point2_f64_norm_props, Point2, f64, strategy_point_any, 1e-8);
 approx_norm_props!(point3_f64_norm_props, Point3, f64, strategy_point_any, 1e-8);
-
 
 macro_rules! norm_synonym_props {
     ($TestModuleName:ident, $PointType:ident, $ScalarType:ty, $PointGen:ident) => {

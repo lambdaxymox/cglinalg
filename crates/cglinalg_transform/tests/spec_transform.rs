@@ -24,7 +24,6 @@ use cglinalg_transform::{
 
 use proptest::prelude::*;
 
-
 fn strategy_vector_signed_from_abs_range<S, const N: usize>(min_value: S, max_value: S) -> impl Strategy<Value = Vector<S, N>>
 where
     S: SimdScalarSigned + Arbitrary,
@@ -159,7 +158,6 @@ fn strategy_transform3_i32_any() -> impl Strategy<Value = Transform3<i32>> {
     strategy_transform3_signed_from_abs_range(min_value, max_value)
 }
 
-
 /// The composition of homogeneous transformations is associative over exact
 /// scalars.
 ///
@@ -245,7 +243,6 @@ where
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod transform2_i32_composition_props {
