@@ -6,8 +6,7 @@ mod scale2_tests {
         Vector2,
     };
     use cglinalg_transform::Scale2;
-
-
+    
     #[test]
     fn test_scale_point() {
         let point = Point2::new(1_f64, 2_f64);
@@ -61,8 +60,7 @@ mod scale3_tests {
         Vector3,
     };
     use cglinalg_transform::Scale3;
-
-
+    
     #[test]
     fn test_scale_point() {
         let point = Point3::new(1_f64, 2_f64, 3_f64);
@@ -114,7 +112,6 @@ mod scale2_composition_tests {
     use cglinalg_core::Vector2;
     use cglinalg_transform::Scale2;
 
-
     #[test]
     fn test_scale_multiplication_nonuniform() {
         let scale_vector1 = Vector2::new(1_f64, 2_f64);
@@ -134,8 +131,7 @@ mod scale3_composition_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Vector3;
     use cglinalg_transform::Scale3;
-
-
+    
     #[test]
     fn test_scale_multiplication_nonuniform() {
         let scale_vector1 = Vector3::new(1_f64, 2_f64, 10_f64);

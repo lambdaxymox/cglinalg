@@ -5,8 +5,7 @@ mod matrix2x2_tests {
         Matrix2x2,
         Vector2,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
@@ -730,7 +729,6 @@ mod matrix2x2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix2x2_rotation_tests {
     use approx_cmp::assert_relative_eq;
@@ -743,8 +741,7 @@ mod matrix2x2_rotation_tests {
         Angle,
         Radians,
     };
-
-
+    
     #[test]
     fn test_from_angle() {
         let matrix: Matrix2x2<f64> = Matrix2x2::from_angle(Radians::full_turn_div_4());
@@ -790,7 +787,6 @@ mod matrix2x2_rotation_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix2x2_reflection_tests {
     use approx_cmp::assert_relative_eq;
@@ -799,8 +795,7 @@ mod matrix2x2_reflection_tests {
         Unit,
         Vector2,
     };
-
-
+    
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
@@ -906,7 +901,6 @@ mod matrix2x2_reflection_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix2x2_shear_tests {
     use cglinalg_core::{
@@ -914,8 +908,7 @@ mod matrix2x2_shear_tests {
         Unit,
         Vector2,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
@@ -1015,7 +1008,6 @@ mod matrix2x2_shear_tests {
     }
 }
 
-
 /// Shearing about the line `y == (1 / 2) * x`.
 #[cfg(test)]
 mod matrix2x2_shear_noncoordinate_plane_tests {
@@ -1029,8 +1021,7 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
-
+    
     fn shear_factor() -> f64 {
         5_f64
     }
@@ -1239,7 +1230,6 @@ mod matrix2x2_shear_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_tests {
     use approx_cmp::assert_relative_eq;
@@ -1248,8 +1238,7 @@ mod matrix3x3_tests {
         Vector2,
         Vector3,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
@@ -2117,7 +2106,6 @@ mod matrix3x3_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_rotation_tests {
     use approx_cmp::assert_relative_eq;
@@ -2133,8 +2121,7 @@ mod matrix3x3_rotation_tests {
         Angle,
         Radians,
     };
-
-
+    
     #[test]
     fn test_from_angle_x() {
         let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -2267,7 +2254,6 @@ mod matrix3x3_rotation_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_reflection_tests {
     use approx_cmp::assert_relative_eq;
@@ -2278,8 +2264,7 @@ mod matrix3x3_reflection_tests {
         Vector2,
         Vector3,
     };
-
-
+    
     /// Construct a reflection matrix test case for reflection about the **x-axis**.
     /// In two dimensions there is an ambiguity in the orientation of the line 
     /// segment; there are two possible normal vectors for the line.
@@ -2471,7 +2456,6 @@ mod matrix3x3_reflection_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_shear_tests {
     use cglinalg_core::{
@@ -2479,8 +2463,7 @@ mod matrix3x3_shear_tests {
         Unit,
         Vector3,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy() {
@@ -2836,7 +2819,6 @@ mod matrix3x3_shear_tests {
     }
 }
 
-
 /// Shearing along the plane `(1 / sqrt(3)) * x + (1 / sqrt(3)) * y - z == 0`
 /// with direction `[sqrt(3 / 10), sqrt(3 / 10), sqrt(4 / 10)]` and normal
 /// `[-sqrt(2 / 10), -sqrt(2 / 10), sqrt(6 / 10)]`.
@@ -2852,8 +2834,7 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
-
+    
     fn shear_factor() -> f64 {
         15_f64
     }
@@ -3334,7 +3315,6 @@ mod matrix3x3_shear_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_affine_shear_tests {
     use cglinalg_core::{
@@ -3344,8 +3324,7 @@ mod matrix3x3_affine_shear_tests {
         Vector2,
         Vector3,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy1() {
@@ -3497,7 +3476,6 @@ mod matrix3x3_affine_shear_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x3_affine_shear_coordinate_plane_tests {
     use cglinalg_core::{
@@ -3507,7 +3485,6 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
         Vector2,
         Vector3,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -3632,7 +3609,6 @@ mod matrix3x3_affine_shear_coordinate_plane_tests {
     }
 }
 
-
 /// Shearing along the plane `(1 / 2) * x + 1 - y == 0`
 /// with origin `[2, 2]`, direction `[2 / sqrt(5), 1 / sqrt(5)]`, and
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
@@ -3650,7 +3626,6 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
 
     fn shear_factor() -> f64 {
         7_f64
@@ -3914,7 +3889,6 @@ mod matrix3x3_affine_shear_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_tests {
     use approx_cmp::assert_relative_eq;
@@ -3923,7 +3897,6 @@ mod matrix4x4_tests {
         Vector3,
         Vector4,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -4906,14 +4879,12 @@ mod matrix4x4_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_projection_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Matrix4x4;
     use cglinalg_trigonometry::Degrees;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_orthographic() {
@@ -4973,7 +4944,6 @@ mod matrix4x4_projection_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_rotation_tests {
     use approx_cmp::assert_relative_eq;
@@ -4989,8 +4959,7 @@ mod matrix4x4_rotation_tests {
         Angle,
         Radians,
     };
-
-
+    
     #[test]
     fn test_from_angle_x() {
         let angle: Radians<f64> = Radians::full_turn_div_4();
@@ -5179,7 +5148,6 @@ mod matrix4x4_rotation_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_reflection_tests {
     use cglinalg_core::{
@@ -5189,7 +5157,6 @@ mod matrix4x4_reflection_tests {
         Vector3,
         Vector4,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -5279,7 +5246,6 @@ mod matrix4x4_reflection_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_affine_shear_tests {
     use cglinalg_core::{
@@ -5289,8 +5255,7 @@ mod matrix4x4_affine_shear_tests {
         Vector3,
         Vector4,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
@@ -5718,7 +5683,6 @@ mod matrix4x4_affine_shear_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_affine_shear_coordinate_plane_tests {
     use cglinalg_core::{
@@ -5728,8 +5692,7 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
         Vector3,
         Vector4,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
@@ -6139,7 +6102,6 @@ mod matrix4x4_affine_shear_coordinate_plane_tests {
     }
 }
 
-
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
 /// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`,
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
@@ -6157,8 +6119,7 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
-
+    
     fn shear_factor() -> f64 {
         11_f64
     }
@@ -6712,7 +6673,6 @@ mod matrix4x4_affine_shear_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x4_trace_determinant_tests {
     use approx_cmp::assert_relative_eq;
@@ -6843,7 +6803,6 @@ mod matrix4x4_trace_determinant_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix1x2_tests {
     use cglinalg_core::{
@@ -6852,8 +6811,7 @@ mod matrix1x2_tests {
         Vector1,
         Vector2,
     };
-
-
+    
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix1x2::new(1_i32, 2_i32);
@@ -7041,7 +6999,6 @@ mod matrix1x3_tests {
         Vector1,
         Vector3,
     };
-
 
     #[test]
     fn test_matrix_components1() {
@@ -7234,7 +7191,6 @@ mod matrix1x4_tests {
         Vector4,
     };
 
-
     #[test]
     fn test_matrix_components1() {
         let matrix = Matrix1x4::new(1_i32, 2_i32, 3_i32, 4_i32);
@@ -7420,7 +7376,6 @@ mod matrix1x4_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix2x3_tests {
     use cglinalg_core::{
@@ -7431,7 +7386,6 @@ mod matrix2x3_tests {
         Vector2,
         Vector3,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -7819,7 +7773,6 @@ mod matrix2x3_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x2_tests {
     use cglinalg_core::{
@@ -7830,7 +7783,6 @@ mod matrix3x2_tests {
         Vector2,
         Vector3,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -8189,7 +8141,6 @@ mod matrix3x2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix2x4_tests {
     use cglinalg_core::{
@@ -8200,7 +8151,6 @@ mod matrix2x4_tests {
         Vector2,
         Vector4,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -8634,7 +8584,6 @@ mod matrix2x4_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x2_tests {
     use cglinalg_core::{
@@ -8645,8 +8594,7 @@ mod matrix4x2_tests {
         Vector2,
         Vector4,
     };
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_matrix_components1() {
@@ -9012,7 +8960,6 @@ mod matrix4x2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix3x4_tests {
     use cglinalg_core::{
@@ -9023,7 +8970,6 @@ mod matrix3x4_tests {
         Vector3,
         Vector4,
     };
-
 
     #[rustfmt::skip]
     #[test]
@@ -9475,7 +9421,6 @@ mod matrix3x4_tests {
     }
 }
 
-
 #[cfg(test)]
 mod matrix4x3_tests {
     use cglinalg_core::{
@@ -9486,7 +9431,6 @@ mod matrix4x3_tests {
         Vector3,
         Vector4,
     };
-
 
     #[rustfmt::skip]
     #[test]

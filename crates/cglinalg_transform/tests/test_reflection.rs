@@ -7,8 +7,7 @@ mod reflection2_tests {
         Vector2,
     };
     use cglinalg_transform::Reflection2;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_reflection_normal_x_basis_vectors() {
@@ -267,8 +266,7 @@ mod reflection3_tests {
         Vector3,
     };
     use cglinalg_transform::Reflection3;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_reflection_normal_x_basis_vectors() {

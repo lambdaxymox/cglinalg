@@ -6,7 +6,6 @@ mod conversion_tests {
     };
     use core::f64;
 
-
     #[rustfmt::skip]
     #[test]
     fn convert_radians_to_degrees() {
@@ -43,8 +42,7 @@ mod conversion_tests {
 #[cfg(test)]
 mod degrees_arithmetic_tests {
     use cglinalg_trigonometry::Degrees;
-
-
+    
     #[test]
     fn test_addition() {
         let angle1 = Degrees(30_f64);
@@ -188,7 +186,6 @@ mod radians_arithmetic_tests {
 
     const PI: Radians<f64> = Radians(f64::consts::PI);
 
-
     #[test]
     fn test_addition() {
         let angle1 = PI / 6_f64;
@@ -331,7 +328,6 @@ mod radian_angle_tests {
         Radians,
     };
     use core::f64;
-
 
     #[test]
     fn test_full_turn() {
@@ -519,8 +515,7 @@ mod degree_angle_tests {
         Degrees,
     };
     use core::f64;
-
-
+    
     #[test]
     fn test_full_turn() {
         let expected = Degrees(360_f64);

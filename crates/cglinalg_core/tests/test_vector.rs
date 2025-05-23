@@ -5,7 +5,6 @@ mod vector1_tests {
         Vector2,
     };
 
-
     #[test]
     fn test_components1() {
         let vector = Vector1::new(1_i32);
@@ -315,7 +314,6 @@ mod vector1_tests {
     }
 }
 
-
 #[cfg(test)]
 mod vector2_tests {
     use cglinalg_core::{
@@ -323,7 +321,6 @@ mod vector2_tests {
         Vector2,
         Vector3,
     };
-
 
     #[test]
     fn test_components1() {
@@ -676,7 +673,6 @@ mod vector2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod vector3_tests {
     use cglinalg_core::{
@@ -684,8 +680,7 @@ mod vector3_tests {
         Vector3,
         Vector4,
     };
-
-
+    
     #[test]
     fn test_components1() {
         let vector = Vector3::new(1_i32, 2_i32, 3_i32);
@@ -1053,15 +1048,13 @@ mod vector3_tests {
     }
 }
 
-
 #[cfg(test)]
 mod vector4_tests {
     use cglinalg_core::{
         Vector3,
         Vector4,
     };
-
-
+    
     #[test]
     fn test_components1() {
         let vector = Vector4::new(1_i32, 2_i32, 3_i32, 4_i32);

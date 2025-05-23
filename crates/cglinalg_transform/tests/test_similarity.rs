@@ -19,7 +19,6 @@ mod similarity2_tests {
     };
     use core::f64;
 
-
     #[test]
     fn test_from_translation() {
         let translation = Translation2::new(1_f64, 2_f64);
@@ -202,7 +201,6 @@ mod similarity2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod similarity3_tests {
     use approx_cmp::assert_relative_eq;
@@ -224,8 +222,7 @@ mod similarity3_tests {
         Radians,
     };
     use core::f64;
-
-
+    
     #[test]
     fn test_from_rotation() {
         let axis = Unit::from_value(Vector3::unit_z());

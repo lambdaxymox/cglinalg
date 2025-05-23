@@ -8,8 +8,7 @@ mod rotation2_tests {
     };
     use cglinalg_transform::Rotation2;
     use cglinalg_trigonometry::Degrees;
-
-
+    
     #[test]
     fn test_rotate_point1() {
         let point = Point2::new(3_f64, 0_f64);
@@ -172,7 +171,6 @@ mod rotation2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod rotation3_tests {
     use approx_cmp::assert_relative_eq;
@@ -187,8 +185,7 @@ mod rotation3_tests {
         Degrees,
         Radians,
     };
-
-
+    
     #[test]
     fn test_from_angle_x_rotation_should_not_rotate_x_axis() {
         let rotation = Rotation3::from_angle_x(Degrees(70_f64));
@@ -737,7 +734,6 @@ mod rotation3_tests {
     }
 }
 
-
 #[cfg(test)]
 mod rotation3_euler_angle_tests {
     use approx_cmp::assert_relative_eq;
@@ -747,8 +743,7 @@ mod rotation3_euler_angle_tests {
         Angle,
         Radians,
     };
-
-
+    
     #[test]
     fn test_euler_angles_from_matrix_roll_yz() {
         let roll_yz: Radians<f64> = Radians::full_turn_div_6();

@@ -7,7 +7,6 @@ mod shear2_tests {
     };
     use cglinalg_transform::Shear2;
 
-
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_point() {
@@ -276,7 +275,6 @@ mod shear2_inverse_tests {
         Vector2,
     };
     use cglinalg_transform::Shear2;
-
 
     #[rustfmt::skip]
     #[test]
@@ -553,7 +551,6 @@ mod shear2_coordinate_plane_tests {
     };
     use cglinalg_transform::Shear2;
 
-
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy() {
@@ -679,7 +676,6 @@ mod shear2_coordinate_plane_tests {
     }
 }
 
-
 /// Shearing along the plane `(1 / 2) * x + 1 - y == 0`
 /// with origin `[2, 2]`, direction `[2 / sqrt(5), 1 / sqrt(5)]`, and
 /// normal `[-1 / sqrt(5), 2 / sqrt(5)]`.
@@ -701,7 +697,6 @@ mod shear2_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
 
     fn shear_factor() -> f64 {
         7_f64
@@ -974,7 +969,6 @@ mod shear2_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod shear3_tests {
     use approx_cmp::assert_relative_eq;
@@ -984,8 +978,7 @@ mod shear3_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_point() {
@@ -1799,7 +1792,6 @@ mod shear3_tests {
     }
 }
 
-
 #[cfg(test)]
 mod shear3_inverse_tests {
     use approx_cmp::assert_relative_eq;
@@ -1809,8 +1801,7 @@ mod shear3_inverse_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_shear_xy_inverse_point() {
@@ -2634,7 +2625,6 @@ mod shear3_inverse_tests {
     }
 }
 
-
 #[cfg(test)]
 mod shear3_coordinate_plane_tests {
     use cglinalg_core::{
@@ -2643,8 +2633,7 @@ mod shear3_coordinate_plane_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_from_affine_shear_xy_point() {
@@ -3294,7 +3283,6 @@ mod shear3_coordinate_plane_tests {
     }
 }
 
-
 /// Shearing along the plane `(1 / 2) * x + (1 / 3) * y - z + 1 == 0`
 /// with origin `[2, 3, 3]`, direction `[2 / sqrt(17), 3 / sqrt(17), 2 / sqrt(17)]`,
 /// and normal `[0, -2 / sqrt(13), 3 / sqrt(13)]`.
@@ -3316,7 +3304,6 @@ mod shear3_noncoordinate_plane_tests {
         Angle,
         Radians,
     };
-
 
     fn shear_factor() -> f64 {
         11_f64
@@ -3919,7 +3906,6 @@ mod shear3_noncoordinate_plane_tests {
     }
 }
 
-
 #[cfg(test)]
 mod shear3_trace_determinant_tests {
     use approx_cmp::assert_relative_eq;
@@ -3930,7 +3916,6 @@ mod shear3_trace_determinant_tests {
         Vector3,
     };
     use cglinalg_transform::Shear3;
-
 
     fn shear_factor() -> f64 {
         -372203_f64

@@ -9,7 +9,6 @@ use cglinalg_trigonometry::{
     Radians,
 };
 
-
 #[rustfmt::skip]
 #[test]
 fn test_to_matrix() {
@@ -40,7 +39,6 @@ fn test_to_matrix() {
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
 }
 
-
 #[test]
 fn test_to_matrix_zero_euler_angles_is_identity() {
     let euler: Euler<Radians<f64>> = Euler::zero();
@@ -49,7 +47,6 @@ fn test_to_matrix_zero_euler_angles_is_identity() {
 
     assert_eq!(result, expected);
 }
-
 
 #[rustfmt::skip]
 #[test]
@@ -89,7 +86,6 @@ fn test_to_affine_matrix() {
 
     assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);  
 }
-
 
 #[test]
 fn test_to_affine_matrix_zero_euler_angles_is_identity() {

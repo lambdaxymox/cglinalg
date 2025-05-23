@@ -6,8 +6,7 @@ mod point1_tests {
         Vector1,
         Vector2,
     };
-
-
+    
     #[test]
     fn test_components1() {
         let point = Point1::new(1_i32);
@@ -176,7 +175,6 @@ mod point1_tests {
     }
 }
 
-
 #[cfg(test)]
 mod point2_tests {
     use cglinalg_core::{
@@ -186,7 +184,6 @@ mod point2_tests {
         Vector2,
         Vector3,
     };
-
 
     #[test]
     fn test_components1() {
@@ -369,7 +366,6 @@ mod point2_tests {
     }
 }
 
-
 #[cfg(test)]
 mod point3_tests {
     use cglinalg_core::{
@@ -378,7 +374,6 @@ mod point3_tests {
         Vector3,
         Vector4,
     };
-
 
     #[test]
     fn test_components1() {

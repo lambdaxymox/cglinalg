@@ -10,7 +10,6 @@ use cglinalg_transform::{
 };
 use cglinalg_trigonometry::Degrees;
 
-
 #[rustfmt::skip]
 #[test]
 fn test_perspective_projection_matrix() {

@@ -1,8 +1,7 @@
 #[cfg(test)]
 mod index_tests {
     use cglinalg_core::Complex;
-
-
+    
     #[test]
     fn test_as_ref() {
         let z = Complex::new(1_i32, 2_i32);
@@ -36,14 +35,12 @@ mod index_tests {
     }
 }
 
-
 #[cfg(test)]
 mod constructor_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Complex;
     use cglinalg_trigonometry::Radians;
-
-
+    
     #[test]
     fn test_from_angle1() {
         let angle = Radians(0_f64);
@@ -157,12 +154,10 @@ mod constructor_tests {
     }
 }
 
-
 #[cfg(test)]
 mod arithmetic_tests {
     use cglinalg_core::Complex;
-
-
+    
     #[test]
     fn test_addition_complex_complex() {
         let z1 = Complex::new(1_i32, 3_i32);
@@ -419,7 +414,6 @@ mod arithmetic_tests {
 mod norm_tests {
     use cglinalg_core::Complex;
 
-
     #[test]
     fn test_unit_re_should_have_unit_norm() {
         let one: Complex<f64> = Complex::unit_re();
@@ -435,12 +429,10 @@ mod norm_tests {
     }
 }
 
-
 #[cfg(test)]
 mod conjugate_tests {
     use cglinalg_core::Complex;
-
-
+    
     #[test]
     fn test_conjugate() {
         let z = Complex::new(1_i32, 2_i32);
@@ -451,13 +443,11 @@ mod conjugate_tests {
     }
 }
 
-
 #[cfg(test)]
 mod arg_tests {
     use cglinalg_core::Complex;
     use core::f64;
-
-
+    
     #[test]
     fn test_arg_unit_im() {
         let i: Complex<f64> = Complex::unit_im();
@@ -531,11 +521,9 @@ mod arg_tests {
     }
 }
 
-
 #[cfg(test)]
 mod inverse_tests {
     use cglinalg_core::Complex;
-
 
     #[test]
     fn test_inverse_zero() {
@@ -586,13 +574,11 @@ mod inverse_tests {
     }
 }
 
-
 #[cfg(test)]
 mod exp_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Complex;
-
-
+    
     #[test]
     fn test_exp_zero() {
         let zero: Complex<f64> = Complex::zero();
@@ -621,13 +607,11 @@ mod exp_tests {
     }
 }
 
-
 #[cfg(test)]
 mod logarithm_tests {
     use cglinalg_core::Complex;
     use core::f64;
-
-
+    
     #[test]
     fn test_natural_logarithm1() {
         let one: Complex<f64> = Complex::one();
@@ -687,7 +671,6 @@ mod logarithm_tests {
     }
 }
 
-
 #[cfg(test)]
 mod square_root_tests {
     use approx_cmp::assert_relative_eq;
@@ -695,8 +678,7 @@ mod square_root_tests {
     use cglinalg_trigonometry::Radians;
 
     use core::f64;
-
-
+    
     #[test]
     fn test_square_root_zero() {
         let zero: Complex<f64> = Complex::zero();
@@ -844,14 +826,12 @@ mod square_root_tests {
     }
 }
 
-
 #[cfg(test)]
 mod trigonometry_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Complex;
     use core::f64;
-
-
+    
     const _0_I_0: Complex<f64> = Complex::new(0_f64, 0_f64);
     const _1_I_0: Complex<f64> = Complex::new(1_f64, 0_f64);
     const _0_I_1: Complex<f64> = Complex::new(0_f64, 1_f64);
@@ -873,8 +853,7 @@ mod trigonometry_tests {
     const _FRAC_PI_2_I_0: Complex<f64> = Complex::new(f64::consts::FRAC_PI_2, 0_f64);
     const _PI_I_0: Complex<f64> = Complex::new(f64::consts::PI, 0_f64);
     const _2_PI_I_0: Complex<f64> = Complex::new(2_f64 * f64::consts::PI, 0_f64);
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_complex_cos() {
@@ -1385,13 +1364,11 @@ mod trigonometry_tests {
     }
 }
 
-
 #[cfg(test)]
 mod hyperbolic_trigonometry_tests {
     use approx_cmp::assert_relative_eq;
     use cglinalg_core::Complex;
     use core::f64;
-
 
     const _0_I_0: Complex<f64> = Complex::new(0_f64, 0_f64);
     const _1_I_0: Complex<f64> = Complex::new(1_f64, 0_f64);
@@ -1416,8 +1393,7 @@ mod hyperbolic_trigonometry_tests {
     const _2_PI_I_0: Complex<f64> = Complex::new(2_f64 * f64::consts::PI, 0_f64);
 
     const _INF_I_INF: Complex<f64> = Complex::new(f64::INFINITY, f64::INFINITY);
-
-
+    
     #[rustfmt::skip]
     #[test]
     fn test_complex_cosh() {

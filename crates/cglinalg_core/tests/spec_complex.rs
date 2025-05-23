@@ -1156,7 +1156,7 @@ where
 }
 
 /// The exponential of the sum of two complex numbers is the product of the
-/// exponentials of the two complex numbers.
+/// exponential of each of the two complex numbers.
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
@@ -1567,7 +1567,7 @@ where
 ///
 /// Given complex numbers `z1` and `z2`
 /// ```text
-/// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(zqrt(z2))
+/// modulus(sqrt(z1 * z2)) == modulus(sqrt(z1)) * modulus(sqrt(z2))
 /// ```
 fn prop_approx_square_root_product_modulus<S>(z1: Complex<S>, z2: Complex<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
@@ -1730,7 +1730,7 @@ where
     S: SimdScalarFloat,
 {
     let lhs = (-z).sin();
-    let rhs = -(z.sin());
+    let rhs = -z.sin();
 
     prop_assert!(relative_eq!(
         lhs,
@@ -1805,7 +1805,7 @@ where
     S: SimdScalarFloat,
 {
     let lhs = (-z).tan();
-    let rhs = -(z.tan());
+    let rhs = -z.tan();
 
     prop_assert!(relative_eq!(
         lhs,
