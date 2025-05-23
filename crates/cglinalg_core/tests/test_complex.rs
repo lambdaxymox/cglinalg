@@ -653,7 +653,7 @@ mod logarithm_tests {
         let i: Complex<f64> = Complex::unit_im();
         let pi_over_two = f64::consts::FRAC_PI_2;
         let expected = i * pi_over_two;
-        let result = (i).ln();
+        let result = i.ln();
 
         assert_eq!(result, expected);
     }

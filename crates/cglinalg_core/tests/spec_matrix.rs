@@ -320,7 +320,7 @@ where
 /// ```text
 /// c_matrix * m == m * c_matrix
 /// ```
-/// Note that we diverse from traditional formalisms of matrix arithmetic
+/// Note that we diverge from traditional formalisms of matrix arithmetic
 /// in that we allow multiplication of matrices by scalars on the left-hand
 /// side as well as the right-hand side.
 fn prop_scalar_matrix_multiplication_commutative<S, const N: usize, const NN: usize>(c: S, m: Matrix<S, N, N>) -> Result<(), TestCaseError>

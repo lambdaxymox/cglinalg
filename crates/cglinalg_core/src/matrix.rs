@@ -138,7 +138,7 @@ pub struct Matrix<S, const R: usize, const C: usize> {
 }
 
 impl<S, const R: usize, const C: usize> Matrix<S, R, C> {
-    /// Returns the length of the underlying array storing the matrix omponents.
+    /// Returns the length of the underlying array storing the matrix components.
     #[inline]
     pub const fn len(&self) -> usize {
         R * C
@@ -515,7 +515,7 @@ where
     #[allow(clippy::needless_range_loop)]
     #[inline]
     pub fn row(&self, r: usize) -> Vector<S, C> {
-        // SAFETY: Every location gets written into with a value value of type `S`.
+        // SAFETY: Every location gets written into with a value of type `S`.
         // PERFORMANCE: The const loop should get unrolled during optimization.
         let mut data: [S; C] = unsafe { core::mem::zeroed() };
         for c in 0..C {
@@ -1315,7 +1315,7 @@ where
     /// The resulting matrix `matrix` satisfies the following. Given a vector
     /// `diagonal` of length `N`
     /// ```text
-    /// forall i :: [0..N]. m[i][i] == diangonal[i]
+    /// forall i :: [0..N]. m[i][i] == diagonal[i]
     /// forall i :: [0..N]. forall j :: [0..N]. i != j ==> matrix[i][j] == 0
     /// ```
     /// In other words, every off-diagonal element is zero.
@@ -4465,7 +4465,7 @@ where
     ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
     ///      [  0                    0                    0                    1                   ]
     /// ```
-    /// which correspond exactly the how the respective matrices are implemented.
+    /// which correspond exactly to how the respective matrices are implemented.
     ///
     /// # Example (Line Through The Origin)
     ///
@@ -6271,7 +6271,7 @@ where
     ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
     ///      [  0                    0                    0                    1                   ]
     /// ```
-    /// which correspond exactly the how the respective matrices are implemented.
+    /// which correspond exactly to how the respective matrices are implemented.
     ///
     /// # Example
     ///

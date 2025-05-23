@@ -456,7 +456,7 @@ pub trait SimdScalarBounded: SimdScalar + SimdScalarOrd {
 
 /// A trait representing number types that can be approximately compared.
 ///
-/// This trait exists primarily to put together all of the traits exposed by
+/// This trait exists primarily to put together all the traits exposed by
 /// the [`approx_cmp`] crate in one place.
 ///
 /// # Examples
@@ -1275,7 +1275,7 @@ pub trait SimdScalarFloat: SimdScalarSigned + SimdScalarOrd + SimdScalarBounded 
     fn is_nan(self) -> bool;
 
     /// Returns `true` if the floating point number is neither zero,
-    /// infinite, subnormal, or `NaN`. The function returns `false` otherwise.
+    /// infinite, subnormal, nor `NaN`. The function returns `false` otherwise.
     ///
     /// # Examples
     ///

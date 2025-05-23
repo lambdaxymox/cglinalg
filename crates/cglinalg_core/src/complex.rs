@@ -594,7 +594,7 @@ where
     ///
     /// # Examples
     ///
-    /// An example computing the **L1** norm of a [`f32`] complex number.
+    /// An example computing the **L1** norm of a floating point complex number.
     /// ```
     /// # use cglinalg_core::Complex;
     /// #
@@ -603,7 +603,7 @@ where
     /// assert_eq!(z.l1_norm(), 7_f32);
     /// ```
     ///
-    /// An example computing the **L1** norm of an [`i32`] complex number.
+    /// An example computing the **L1** norm of an integer complex number.
     /// ```
     /// # use cglinalg_core::Complex;
     /// #
@@ -621,7 +621,7 @@ impl<S> Complex<S>
 where
     S: SimdScalarFloat,
 {
-    /// Returns `true` if all of the elements of a complex number are finite.
+    /// Returns `true` if every element of a complex number is finite.
     /// Otherwise, it returns `false`.
     ///
     /// # Example (Finite Complex Number)
@@ -771,9 +771,9 @@ where
     /// ```text
     /// z := |z| * exp(i * angle) := |z| * (cos(angle) + i * sin(angle))
     /// ```
-    /// Consequently there is an ambiguity in choosing the angle for `z` in its
+    /// Consequently, there is an ambiguity in choosing the angle for `z` in its
     /// polar form; two complex numbers in polar form are equal if they have
-    /// identical norms and they differ by a factor of `2 * pi` in their
+    /// identical norms, and they differ by a factor of `2 * pi` in their
     /// arguments. Let `z1` be another complex number. Then `z == z1` if and only
     /// if `|z| == |z1|` and `angle1 == angle + 2 * pi * n1` where `n1` is an integer.
     /// In order to resolve this ambiguity and make equality of complex numbers in polar
@@ -930,8 +930,8 @@ where
     /// since there is no complex number `w` satisfying `exp(w) = 0`.
     ///
     /// We need the notion of the principal value because given the polar form of
-    /// a complex number `z`, the are infinitely many angles that have the same
-    /// natural logarithm, since they haven identical cosines and sines. We need a
+    /// a complex number `z`, there are infinitely many angles that have the same
+    /// natural logarithm, since they have identical cosines and sines. We need a
     /// way to choose a single canonical value in order to make the natural logarithm
     /// well-defined. That canonical value is the principal value. The principal value
     /// has the form
@@ -949,7 +949,7 @@ where
     /// #
     /// let pi = f64::consts::PI;
     /// let z = Complex::from_polar_decomposition(
-    ///     3_f64, Radians(pi / 6_f64) + Radians((2_f64 * pi))
+    ///     3_f64, Radians(pi / 6_f64) + Radians(2_f64 * pi)
     /// );
     /// let expected = Complex::new(z.norm().ln(), pi / 6_f64);
     /// let result = z.ln();
@@ -1105,7 +1105,7 @@ where
     ///
     ///    == -w
     /// ```
-    /// Thus the complex number square root is indeed a proper square root with two
+    /// Thus, the complex number square root is indeed a proper square root with two
     /// solutions given by `p` and `-p`. We illustrate this with an example.
     ///
     /// # Example
@@ -1283,7 +1283,7 @@ where
         result
     }
 
-    /// Compute the power of a complex number to an signed integer power.
+    /// Compute the power of a complex number to a signed integer power.
     ///
     /// # Example
     ///

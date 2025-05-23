@@ -59,7 +59,7 @@ impl<S> Quaternion<S> {
         }
     }
 
-    /// The length of the the underlying array storing the quaternion components.
+    /// The length of the underlying array storing the quaternion components.
     #[inline]
     pub const fn len(&self) -> usize {
         self.coords.len()
@@ -826,7 +826,7 @@ impl<S> Quaternion<S>
 where
     S: SimdScalarSigned,
 {
-    /// Calculate the norm of a quaternion qith respect to the **L1** norm.
+    /// Calculate the norm of a quaternion with respect to the **L1** norm.
     ///
     /// # Examples
     ///
@@ -1028,7 +1028,7 @@ where
     ///
     /// # Example
     ///
-    /// Construct a quaternion for performing a 30 degree rotation about the **z-axis**.
+    /// Construct a quaternion for performing a thirty-degree rotation about the **z-axis**.
     /// ```
     /// # use approx_cmp::assert_relative_eq;
     /// # use cglinalg_core::{
@@ -1205,7 +1205,7 @@ where
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
-    /// The following example shows the result of converting an unit
+    /// The following example shows the result of converting a unit
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1293,7 +1293,7 @@ where
     ///
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
-    /// The following example shows the result of converting an unit
+    /// The following example shows the result of converting a unit
     /// quaternion to its matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1375,7 +1375,7 @@ where
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
-    /// The following example shows the result of converting an unit
+    /// The following example shows the result of converting a unit
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1476,7 +1476,7 @@ where
     /// assert_relative_eq!(result, expected, abs_diff_all <= 1e-8, relative_all <= f64::EPSILON);
     /// ```
     ///
-    /// The following example shows the result of converting an unit
+    /// The following example shows the result of converting a unit
     /// quaternion to its affine matrix form using the Euler-Rodrigues formula.
     ///
     /// # Example
@@ -1543,7 +1543,7 @@ where
     /// Compute the inverse of a quaternion.
     ///
     /// If the quaternion `self` has zero norm, it does not have an
-    /// inverse. In this case the function return `None`. Otherwise it returns
+    /// inverse. In this case the function return `None`. Otherwise, it returns
     /// the inverse of `self`.
     ///
     /// # Example
@@ -1580,7 +1580,7 @@ where
     /// Determine whether a quaternion is invertible.
     ///
     /// If the quaternion `self` has zero norm, it does not have an
-    /// inverse. In this case the function return `None`. Otherwise it returns
+    /// inverse. In this case the function return `None`. Otherwise, it returns
     /// the inverse of `self`.
     ///
     /// # Example
@@ -1928,7 +1928,7 @@ where
         (self.ln() * exponent).exp()
     }
 
-    /// Calculate the prinicipal value of the square root of a quaternion.
+    /// Calculate the principal value of the square root of a quaternion.
     ///
     /// If the input quaternion is a negative real quaternion, the function
     /// returns a pure quaternion with zero real-part
@@ -1937,7 +1937,7 @@ where
     /// ```
     /// When `scalar(q) < 0` and `|vector(q)| == 0`, the square root does not have a
     /// unique value, so we return a canonically chosen value on the **x-axis** of
-    /// the vector part, so that it is analagous to the square root of a complex
+    /// the vector part, so that it is analogous to the square root of a complex
     /// number with negative real part and zero imaginary part.
     ///
     /// The principal value of the square root of a quaternion is defined as
@@ -1951,7 +1951,7 @@ where
     ///
     /// # Derivation Of The Square Root Formula
     ///
-    /// The formula for the principal value for the square root of a quaterion is derived
+    /// The formula for the principal value for the square root of a quaternion is derived
     /// as follows. Given a quaternion `q`, the square root of `q` is a quaternion `p`
     /// such that `p * p == q`. The formula for `sqrt(q)` is given by the following
     /// formula.
@@ -2003,7 +2003,7 @@ where
     ///
     ///    == -p
     /// ```
-    /// Thus the quaternion square root is indeed a proper square root with two
+    /// Thus, the quaternion square root is indeed a proper square root with two
     /// solutions given by `p` and `-p`. We illustrate this with an example.
     ///
     /// # Example
@@ -2070,7 +2070,7 @@ where
     /// centered at zero in the pure quaternion subspace[1].
     ///
     /// In conclusion, not only can a quaternion have multiple square roots,
-    /// it can have infintitely many square roots.
+    /// it can have infinitely many square roots.
     ///
     /// # Example
     ///
@@ -2804,7 +2804,7 @@ where
     /// Spherically linearly interpolate between two unit quaternions.
     ///
     /// In the case where the angle between quaternions is 180 degrees, the
-    /// slerp function is not well defined because we can rotate about any axis
+    /// slerp function is not well-defined because we can rotate about any axis
     /// normal to the plane swept out by the quaternions to get from one to the
     /// other. The vector normal to the quaternions is not unique in this case.
     ///
@@ -2862,7 +2862,7 @@ where
             // negate one of the quaternions to take the short way around
             // instead of the long way around.
             let _result = -self;
-            (_result, (_result).dot(other))
+            (_result, _result.dot(other))
         } else {
             let _result = *self;
             (_result, _result.dot(other))
@@ -2878,7 +2878,7 @@ where
         }
 
         // If `result == -other` then the angle between them is 180 degrees.
-        // In this case the slerp function is not well defined because we can
+        // In this case the slerp function is not well-defined because we can
         // rotate around any axis normal to the plane swept out by `result` and
         // `other`.
         //

@@ -1424,7 +1424,7 @@ where
     }
 
     /// Get the position of the **bottom plane** of the viewing
-    /// frustum descibed by the perspective projection of the plane
+    /// frustum described by the perspective projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example (Frustum Parametrization)
@@ -3481,7 +3481,7 @@ where
     }
 
     /// Get the position of the **bottom plane** of the viewing
-    /// volume descibed by the orthographic projection of the plane
+    /// volume described by the orthographic projection of the plane
     /// parallel to the **zx-plane** positioned along the **positive y-axis**.
     ///
     /// # Example
@@ -4085,7 +4085,7 @@ where
         self.matrix
     }
 
-    /// Convert a orthographic projection to a generic transformation.
+    /// Convert an orthographic projection to a generic transformation.
     ///
     /// # Example
     ///

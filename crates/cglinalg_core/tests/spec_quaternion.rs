@@ -1322,7 +1322,7 @@ where
 /// ```text
 /// sqrt(q) * sqrt(q) == q
 /// ```
-/// When `vector(q) == 0`, the quaterion square root is not well-defined.
+/// When `vector(q) == 0`, the quaternion square root is not well-defined.
 fn prop_approx_square_root_quaternion_squared<S>(q: Quaternion<S>, tolerance: S, max_relative: S) -> Result<(), TestCaseError>
 where
     S: SimdScalarFloat,
@@ -1445,9 +1445,9 @@ where
     Ok(())
 }
 
-/// The quaternionic cosine and quaternionic sine satisfu the following relation.
+/// The quaternionic cosine and quaternionic sine satisfy the following relation.
 ///
-/// Given a quaternion `q` and the identity quaterion `1`
+/// Given a quaternion `q` and the identity quaternion `1`
 /// ```text
 /// cos(q) * cos(q) + sin(q) + sin(q) == 1
 /// ```
@@ -1646,7 +1646,7 @@ where
     Ok(())
 }
 
-/// The quaterionic hyperbolic tangent satisfies the following relation.
+/// The quaternionic hyperbolic tangent satisfies the following relation.
 ///
 /// Given a quaternion `q` and the identity quaternion `1`
 /// ```text

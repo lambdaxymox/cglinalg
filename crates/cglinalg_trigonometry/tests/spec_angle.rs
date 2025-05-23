@@ -128,7 +128,7 @@ where
 /// Given a typed angle `angle`
 /// ```text
 /// recovered_angle := acos(cos(angle))
-/// cos(recoved_angle) == cos(angle)
+/// cos(recovered_angle) == cos(angle)
 /// ```
 fn prop_approx_cosine_and_arccosine_inverses<S, A>(angle: A, tolerance: S) -> Result<(), TestCaseError>
 where

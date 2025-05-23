@@ -4,7 +4,7 @@ use cglinalg_numeric::{
 };
 
 
-/// A type with this trait acts as a vector with a notion of norm (magnitude, length).
+/// A type implementing this trait acts as a vector with a notion of norm (magnitude, length).
 ///
 /// Examples of types that can be made into Euclidean normed spaces include
 /// vectors, quaternions, complex numbers, points, and scalar numbers. In the
@@ -23,7 +23,7 @@ use cglinalg_numeric::{
 /// assert_eq!(vector.norm_squared(), 30_f64);
 /// assert_eq!(vector.norm(), 30_f64.sqrt());
 ///
-/// // Nomalizing a vector.
+/// // Normalizing a vector.
 /// let vector = Vector4::new(1_f64, 1_f64, 1_f64, 1_f64);
 /// let expected = vector / 2_f64;
 /// let result = vector.normalize();
@@ -208,7 +208,7 @@ where
     /// ```
     fn scale_mut(&mut self, scale: Self::Output);
 
-    /// Scale a vector to by a factor `1 / scale`.
+    /// Scale a vector by a factor of `1 / scale`.
     ///
     /// This function multiples each element of a vector by `1 / scale.`
     ///
@@ -513,7 +513,7 @@ where
     fn distance(&self, other: &Self) -> Self::Output;
 }
 
-/// A type this this trait acts as a vector norm on instances of its input types.
+/// A type implementing this trait acts as a vector norm on instances of its input types.
 ///
 /// We say that a type `Self` is a norm on elements of a vector type `V` over
 /// a set of scalars `S` if each instance `norm` of the type `Self` satisfies the

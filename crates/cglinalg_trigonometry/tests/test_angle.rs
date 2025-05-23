@@ -156,7 +156,7 @@ mod degrees_arithmetic_tests {
     }
 
     /// The remainder of an angle by a modulus larger than the modulus should be
-    /// smaller then the modulus. That is, angles satisfy
+    /// smaller than the modulus. That is, angles satisfy
     /// ```text
     /// For each angle > modulus, angle (mod modulus) < modulus.
     /// ```
@@ -299,7 +299,7 @@ mod radians_arithmetic_tests {
     }
 
     /// The remainder of an angle by a modulus larger than the modulus should be
-    /// smaller then the modulus. That is, angles satisfy
+    /// smaller than the modulus. That is, angles satisfy
     /// ```text
     /// For each angle > modulus, angle (mod modulus) < modulus.
     /// ```

@@ -246,7 +246,7 @@ where
     /// Construct a rotation matrix from a set of Euler angles.
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
-    /// of three axial rotations: one for each axis in thee dimensions
+    /// of three axial rotations: one for each axis in three dimensions
     /// (`x`, `y`, `z`). The rotation matrix described by Euler angles can be
     /// decomposed into a product of rotation matrices about each axis: let
     /// `R_x(roll)`, `R_y(yaw)`, and `R_z(pitch)` denote the rotations about
@@ -357,7 +357,7 @@ where
     /// Construct an affine rotation matrix from a set of Euler angles.
     ///
     /// A set of Euler angles describes an arbitrary rotation as a sequence
-    /// of three axial rotations: one for each axis in thee dimensions **(x, y, z)**.
+    /// of three axial rotations: one for each axis in three dimensions **(x, y, z)**.
     /// The rotation matrix described by Euler angles can be decomposed into a
     /// product of rotation matrices about each axis: let `R_x(roll)`, `R_y(yaw)`,
     /// and `R_z(pitch)` denote the rotations about the

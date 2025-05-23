@@ -548,7 +548,7 @@ where
     Ok(())
 }
 
-/// Complexs have a multiplicative unit element.
+/// Complex numbers have a multiplicative unit element.
 ///
 /// Given a complex number `z`, and the unit complex number `1`, we have
 /// ```text
@@ -1228,7 +1228,7 @@ where
     Ok(())
 }
 
-/// The principal value of the complex logarithm satisfiess the following relation.
+/// The principal value of the complex logarithm satisfies the following relation.
 ///
 /// Given non-zero complex numbers `z1` and `z2`, there is an integer `k` such that
 /// ```text
@@ -1242,7 +1242,7 @@ where
 ///         == |z1| * |z2| * exp(i * Arg(z1)) * exp(i * Arg(z2))
 ///         == |z1| * |z2| * exp(i * (Arg(z1) + Arg(z2)))
 /// ```
-/// Thus if the sum of principal arguments of `z1` and `z2` lie in the principal
+/// Thus, if the sum of principal arguments of `z1` and `z2` lie in the principal
 /// branch of the complex numbers, i.e. `Arg(z1) + Arg(z2) in (-pi, pi]`, we see
 /// that
 /// ```text
@@ -1316,7 +1316,7 @@ where
 }
 
 /// The complex exponential and the principal value of the complex logarithm
-/// satisfy the folowing relation.
+/// satisfy the following relation.
 ///
 /// Given a complex number `z`
 /// ```text
@@ -1511,7 +1511,7 @@ where
     Ok(())
 }
 
-/// The square of the principal value of the square root of a the negation of a
+/// The square of the principal value of the square root of the negation of a
 /// complex number is negation of the original complex number.
 ///
 /// Given a complex number `z`

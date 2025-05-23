@@ -41,7 +41,7 @@ pub type Translation3<S> = Translation<S, 3>;
 /// T(v) == v
 /// ```
 /// Because `v` is a vector and not a point, `v` describes the **difference**
-/// between two points, rather than an arbitary position in Euclidean space. Indeed,
+/// between two points, rather than an arbitrary position in Euclidean space. Indeed,
 /// let `E^N` be `N`-dimensional Euclidean space with origin `O`. Let `p` and `q` be
 /// points in `E^N`, and `v := p - q` be the difference between them. Then in
 /// homogeneous coordinates, and by the linearity of `T`

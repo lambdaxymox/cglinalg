@@ -171,7 +171,7 @@ where
 {
     /// The preferred origin of the Euclidean vector space.
     ///
-    /// In theory, an Euclidean space does not have a clearly defined origin. In
+    /// In theory, a Euclidean space does not have a clearly defined origin. In
     /// practice, it is useful to have a reference point in which to express the others
     /// as translations of it. By default, we define the origin as `[0, 0, 0]`.
     ///

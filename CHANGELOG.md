@@ -23,7 +23,7 @@ transformations.
   is coordinate-system invariant.
 
 ## [0.20.0] - 2023-11-15
-Integate a new approximate comparison library.
+Integrate a new approximate comparison library.
 
 ### Added
 - Introduced various `try_inverse` functions that return an `Option<Self>` for 
@@ -47,14 +47,14 @@ Some small project level improvements.
 - Add `rustfmt` linting settings.
 
 ### Changed
-- Move the the changelog to the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
+- Move the changelog to the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
 
 ## [0.19.0] - 2023-10-23
 Major API and library redesign. Massive improvements in documentation quality
 and testing quality in `cglinalg_transform`.
 
 ### Added
-- Expand and immprove the test suite for the `cglinalg_transform` subcrate.
+- Expand and improve the test suite for the `cglinalg_transform` subcrate.
 - Added property tests to every transformation in the `cglinalg_transform` subcrate.
 - Introduced a type level constraint system for constraining the dimensions of matrices.
 - Added vector space norms for matrix data types.

@@ -39,14 +39,14 @@ pub type Rotation3<S> = Rotation<S, 3>;
 /// This is the most general rotation type. The vast majority of applications
 /// should use [`Rotation2`] or [`Rotation3`] instead of this type directly.
 ///
-/// Two-dimensional rotations are different than three-dimensional rotations
+/// Two-dimensional rotations are different from three-dimensional rotations
 /// because mathematically we cannot define an axis of rotation in two
-/// dimensions. Instead we have to talk about rotating in the **xy-plane** by an
+/// dimensions. Instead, we have to talk about rotating in the **xy-plane** by an
 /// angle. In low-dimensional settings, the notion of rotation axis is
 /// only well-defined in three dimensions because dimension three is the
 /// only dimension where every plane is guaranteed to have a normal vector.
 ///
-/// If one wants to talk about rotating a vector in the the **xy-plane** about a
+/// If one wants to talk about rotating a vector in the **xy-plane** about a
 /// normal vector, we are implicitly rotating about the **z-axis** in
 /// three dimensions.
 #[repr(C)]

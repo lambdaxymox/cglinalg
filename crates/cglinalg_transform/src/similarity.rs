@@ -1541,7 +1541,7 @@ where
         Self::from_isometry(&isometry)
     }
 
-    /// Construct an similarity transformation that transforms
+    /// Construct a similarity transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing
     /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **positive z-axis**.
@@ -1593,7 +1593,7 @@ where
         Self::from_isometry(&isometry)
     }
 
-    /// Construct an similarity transformation that transforms
+    /// Construct a similarity transformation that transforms
     /// a coordinate system of an observer located at the position `eye` facing
     /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **negative z-axis**.

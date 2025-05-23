@@ -1401,7 +1401,7 @@ where
     /// transformation is a **left-handed** coordinate transformation.
     ///
     /// The resulting isometry maps the direction `direction` to the
-    /// **positive z-axis** and locates position `eye` to the the origin.
+    /// **positive z-axis** and locates position `eye` to the origin.
     ///
     /// # Example
     ///
@@ -1496,7 +1496,7 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an coordinate transformation that transforms the
+    /// Construct a coordinate transformation that transforms the
     /// coordinate system of an observer located at the position `eye` facing
     /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **positive z-axis**.
@@ -1547,7 +1547,7 @@ where
         Self::from_parts(&translation, &rotation)
     }
 
-    /// Construct an coordinate transformation that transforms the
+    /// Construct a coordinate transformation that transforms the
     /// coordinate system of an observer located at the position `eye` facing
     /// the direction of the target `target` into the coordinate system of an
     /// observer located at the origin facing the **negative z-axis**.

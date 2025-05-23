@@ -4032,7 +4032,7 @@ mod shear3_trace_determinant_tests {
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
-    /// but numerically the shearing transformation is not always well behaved.
+    /// but numerically the shearing transformation is not always well-behaved.
     #[test]
     fn test_shear_matrix_determinant() {
         let shear = shear_transformation();
@@ -4044,7 +4044,7 @@ mod shear3_trace_determinant_tests {
     }
 
     /// Mathematically, the shearing transformation has a determinant of `1`,
-    /// but numerically the shearing transformation is not always well behaved.
+    /// but numerically the shearing transformation is not always well-behaved.
     #[test]
     fn test_shear_expected_matrix_determinant() {
         let matrix = expected_matrix();

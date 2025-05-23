@@ -264,7 +264,7 @@ where
     ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
     ///      [  0                    0                    0                    1                   ]
     /// ```
-    /// which correspond exactly the how the respective matrices are implemented.
+    /// which correspond exactly to how the respective matrices are implemented.
     ///
     /// # Example (Two Dimensions)
     ///
@@ -377,7 +377,7 @@ where
     ///      [ -2 * n.z * n.x       -2 * n.z * n.y        1 - 2 * n.z * n.z    2 * dot(Q, n) * n.z ]
     ///      [  0                    0                    0                    1                   ]
     /// ```
-    /// which correspond exactly the how the respective matrices are implemented.
+    /// which correspond exactly to how the respective matrices are implemented.
     ///
     /// # Example (Two Dimensions)
     ///

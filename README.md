@@ -22,7 +22,7 @@ The library is designed with the following goals in mind:
   generic over their scalars so they can operate on multiple scalar types.
 * **Speed And Efficiency** -- Operations should be fast and efficient. SIMD 
   instructions and architecture specific optimizations should be used where 
-  possible. Moreover the library should compile fast.
+  possible. Moreover, the library should compile fast.
 
 ## Getting Started
 To use the library in your project, add **cglinalg** as a dependency in your 
@@ -36,7 +36,7 @@ your `main.rs` file
 ```rust
 extern crate cglinalg;
 ```
-The library aims to be as platform agnostic as possible. By default, the library 
+The library aims to be as platform-agnostic as possible. By default, the library 
 supports any environment that supports the standard library `std`, but because 
 the library does not require any allocations, it also supports environments built
 on either `core` or `alloc`. `std` is the default support feature, but you can add
@@ -58,7 +58,7 @@ application domains that make heavy use of computer graphics. It includes the
 most common linear algebra operations for implementing rendering algorithms, 
 real-time collision detection, etc. All data types are designed to be exportable 
 to external interfaces such as foreign function interfaces or external hardware. 
-This serves the **cglinalg** goal to be a platform agnostic foundation for 
+This serves the **cglinalg** goal to be a platform-agnostic foundation for 
 computer graphics applications in other languages and ecosystems as well. 
 Specific features of the library include:
 * Basic linear algebra with matrices and vectors up to dimension four.
@@ -67,7 +67,7 @@ Specific features of the library include:
 * An optional transformation system for working with affine and projective 
   transformations on points and vectors. This library distinguishes points from 
   vectors and locations in space vs. displacements in space. This matters when 
-  working with working with affine transformations in homogeneous coordinates.
+  working with affine transformations in homogeneous coordinates.
 * Transformations including translation, reflection, shear, scale, 
   and rotation operations.
 * Orthographic projections and perspective projections for camera models.
