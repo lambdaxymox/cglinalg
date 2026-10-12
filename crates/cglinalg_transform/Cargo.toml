@@ -60,10 +60,10 @@ path = "../cglinalg_core"
 version = "0.22.0"
 
 [dev-dependencies]
-proptest = "1.6.0"
-criterion = "0.5.1"
-rand = "0.9.0"
-rand_isaac = "0.4.0"
+proptest = "1.12.0"
+criterion = "0.8.2"
+rand = "0.10.3"
+rand_isaac = "0.5.1"
 
 # [profile.release]
 # opt-level = 2
