@@ -22,7 +22,6 @@ use crate::vector::{
     Vector,
     Vector2,
     Vector3,
-    Vector4,
 };
 use crate::{
     impl_coords,
