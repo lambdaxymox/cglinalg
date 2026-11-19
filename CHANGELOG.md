@@ -6,6 +6,9 @@ Change log dates follow the ISO 8601 standard (YEAR-MONTH-DAY).
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-11-19
+- Remove `rand_isaac` in favor of `chacha20` for generating benchmark cases.
+
 ## [0.22.0] - 2025-03-13
 - Migrate to Rust Edition 2024. 
 - Fix benchmark internals to reflect changes between Edition 2021 and Edition 2024.

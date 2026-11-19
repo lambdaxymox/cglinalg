@@ -1,6 +1,6 @@
 [package]
 name = "cglinalg_core"
-version = "0.22.0"
+version = "0.23.0"
 edition = "2024"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 description = "A low-dimensional linear algebra library for real-time computer graphics."
@@ -41,11 +41,11 @@ std = []
 
 [dependencies.cglinalg_numeric]
 path = "../cglinalg_numeric"
-version = "0.22.0"
+version = "0.23.0"
 
 [dependencies.cglinalg_trigonometry]
 path = "../cglinalg_trigonometry"
-version = "0.22.0"
+version = "0.23.0"
 
 [dependencies.approx_cmp]
 git = "https://github.com/lambdaxymox/approx_cmp/"
