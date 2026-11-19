@@ -13,30 +13,33 @@ use criterion::{
     criterion_main,
 };
 use rand::{
-    Rng,
     distr::StandardUniform,
     prelude::Distribution,
 };
-use rand_isaac::IsaacRng;
+use chacha20::ChaCha20Rng;
 
 fn gen_scalar<S>() -> S
 where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    rng.random()
+    StandardUniform.sample(&mut rng)
 }
 
+#[rustfmt::skip]
 fn gen_quaternion<S>() -> Quaternion<S>
 where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    Quaternion::new(rng.random(), rng.random(), rng.random(), rng.random())
+    Quaternion::new(
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng), StandardUniform.sample(&mut rng), StandardUniform.sample(&mut rng)
+    )
 }
 
 macro_rules! bench_binop(

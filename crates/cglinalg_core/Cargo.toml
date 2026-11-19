@@ -56,7 +56,7 @@ features = ["core"]
 proptest = "1.12.0"
 criterion = "0.8.2"
 rand = "0.10.4"
-rand_isaac = "0.5.1"
+chacha20 = { version = "0.10.2", features = ["rng"] }
 
 # [profile.release]
 # opt-level = 2

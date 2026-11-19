@@ -12,20 +12,24 @@ use criterion::{
     criterion_main,
 };
 use rand::{
-    Rng,
     distr::StandardUniform,
     prelude::Distribution,
 };
-use rand_isaac::IsaacRng;
+use chacha20::ChaCha20Rng;
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S>
 where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    Matrix2x2::new(rng.random(), rng.random(), rng.random(), rng.random())
+    Matrix2x2::new(
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+    )
 }
 
 fn gen_matrix3x3<S>() -> Matrix3x3<S>
@@ -33,18 +37,18 @@ where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
     Matrix3x3::new(
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
     )
 }
 
@@ -53,25 +57,25 @@ where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
     Matrix4x4::new(
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
-        rng.random(),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
     )
 }
 
@@ -80,9 +84,9 @@ where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    Vector2::new(rng.random(), rng.random())
+    Vector2::new(StandardUniform.sample(&mut rng), StandardUniform.sample(&mut rng))
 }
 
 fn gen_vector3<S>() -> Vector3<S>
@@ -90,9 +94,13 @@ where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    Vector3::new(rng.random(), rng.random(), rng.random())
+    Vector3::new(
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+    )
 }
 
 fn gen_vector4<S>() -> Vector4<S>
@@ -100,9 +108,14 @@ where
     StandardUniform: Distribution<S>,
 {
     use rand::SeedableRng;
-    let mut rng = IsaacRng::seed_from_u64(0);
+    let mut rng = ChaCha20Rng::seed_from_u64(0);
 
-    Vector4::new(rng.random(), rng.random(), rng.random(), rng.random())
+    Vector4::new(
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+        StandardUniform.sample(&mut rng),
+    )
 }
 
 macro_rules! bench_binop(
