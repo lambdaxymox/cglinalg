@@ -3,21 +3,24 @@ use cglinalg_core::{
     Matrix3x3,
     Matrix4x4,
 };
+
+use criterion::{
+    criterion_group,
+    criterion_main,
+};
+
+use chacha20::ChaCha20Rng;
+use rand::{
+    distr::StandardUniform,
+    prelude::Distribution,
+};
+
 use core::ops::{
     Add,
     Div,
     Mul,
     Sub,
 };
-use criterion::{
-    criterion_group,
-    criterion_main,
-};
-use rand::{
-    distr::StandardUniform,
-    prelude::Distribution,
-};
-use chacha20::ChaCha20Rng;
 
 fn gen_scalar<S>() -> S
 where

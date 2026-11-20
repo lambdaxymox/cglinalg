@@ -6,16 +6,19 @@ use cglinalg_core::{
     Vector3,
     Vector4,
 };
-use core::ops::Mul;
+
 use criterion::{
     criterion_group,
     criterion_main,
 };
+
+use chacha20::ChaCha20Rng;
 use rand::{
     distr::StandardUniform,
     prelude::Distribution,
 };
-use chacha20::ChaCha20Rng;
+
+use core::ops::Mul;
 
 fn gen_matrix2x2<S>() -> Matrix2x2<S>
 where
